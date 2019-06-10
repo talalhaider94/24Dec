@@ -1,29 +1,32 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br><h2 style="color:#565656">T Configurations</h2><br>
+    <br>
+    <h2 style="color:#565656">T Configurations</h2><br>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
-    </div><br/>
+    </div><br />
     <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions">
       <thead style="background: #E6E6E6">
-      <tr>
-        <th>Key</th>
-        <th>Value</th>
-        <th>Action</th>
-      </tr>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+          <th>Action</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of ConfigTableBodyData; index as i">
-        <td>{{row.key}}</td>
-        <td>{{row.value}}</td>
-        <td align="center"><button class="btn btn-primary" data-toggle="modal" data-target="#configKpiModal">Update</button></td>
-      </tr>
+        <tr *ngFor="let row of ConfigTableBodyData; index as i">
+          <td>{{row.key}}</td>
+          <td>{{row.value}}</td>
+          <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+              data-target="#configModal">Update</button></td>
+        </tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div id="archivedKpiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -35,20 +38,18 @@
       <div class="modal-body">
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
-          <tr>
-            <th>REFERENTI_INPUT</th>
-            <th>REFERENTI_1</th>
-            <th>REFERENTI_2</th>
-            <th>REFERENTI_3</th>
-          </tr>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+              <th>Action</th>
+            </tr>
           </thead>
           <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+            <tr>
+              <td>{{modalData.key}}</td>
+              <td><input type="text" class="form-control"[(ngModel)]="modalData.value"></td>
+              <td align="center"><button (click)="updateConfig()" class="btn btn-primary">Update</button></td>
+            </tr>
           </tbody>
         </table>
       </div>

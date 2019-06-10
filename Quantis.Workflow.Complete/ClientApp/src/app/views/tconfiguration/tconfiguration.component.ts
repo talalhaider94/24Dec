@@ -24,6 +24,11 @@ export class TConfigurationComponent implements OnInit {
     // }]
   };
 
+  modalData = {
+    key: '',
+    value: ''
+  };
+
   ConfigTableBodyData: any = [
     {
       key: 'key',
@@ -38,15 +43,30 @@ export class TConfigurationComponent implements OnInit {
   ngOnInit() {
   }
 
+  populateModalData(data) {
+    this.modalData.key = data.key;
+    this.modalData.value = data.value;
+  }
+
+  updateConfig() {
+    this.apiService.updateConfig(this.modalData).subscribe((data: any) => {
+      this.getCOnfigurations(); // this should refresh the main table on page
+    });
+  }
+
+  getCOnfigurations() {
+    this.apiService.getConfigurations().subscribe((data) =>{
+      this.ConfigTableBodyData = data;
+      console.log('Configs ', data);
+    });
+  }
+
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.getConfigTableRef(this.datatableElement).then((dataTable_Ref)=>{
       this.setUpDataTableDependencies(dataTable_Ref);
     });
-    this.apiService.getConfigurations().subscribe((data) =>{
-      this.ConfigTableBodyData = data;
-      console.log('Configs ', data);
-    })
+    this.getCOnfigurations();
   }
 
   getConfigTableRef(datatableElement: DataTableDirective): any {
