@@ -3,12 +3,18 @@ using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.DTOs.API;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
     public class CatalogKpiMapper : MappingService<CatalogKpiDTO, T_CatalogKPI>
     {
+        private readonly WorkFlowPostgreSqlContext _dbcontext;
+        public CatalogKpiMapper(WorkFlowPostgreSqlContext dbcontext)
+        {
+            _dbcontext = dbcontext;
+        }
         public override CatalogKpiDTO GetDTO(T_CatalogKPI e)
         {
             return new CatalogKpiDTO()
@@ -99,6 +105,17 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.supply = o.supply;
             e.primary_contract_party = o.primary_contract_party;
             e.secondary_contract_party = o.secondary_contract_party;
+            if (e.id == 0)
+            {
+                var bsikpi = _dbcontext.ViewCatalogKPI.Single(p => p.global_rule_id_bsi == o.global_rule_id_bsi);
+                if (bsikpi != null)
+                {
+                    e.kpi_name_bsi = bsikpi.kpi_name_bsi;
+                    e.global_rule_id_bsi = bsikpi.global_rule_id_bsi;
+                    e.sla_id_bsi = bsikpi.sla_id_bsi;
+                    e.sla_version_id = bsikpi.sla_version_id;
+                }
+            }
             return e;
         }
     }

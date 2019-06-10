@@ -11,7 +11,7 @@ namespace Quantis.WorkFlow.Models.Information
         public int id { get; set; }
         public string name { get; set; }
         public string code { get; set; }
-        public DateTime create_on { get; set; }
+        public DateTime created_on { get; set; }
         public virtual IList<T_RolePermission> RolePermissions { get; set; }
     }
     public class T_Permission_Configuration : IEntityTypeConfiguration<T_Permission>

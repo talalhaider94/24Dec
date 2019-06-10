@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Quantis.WorkFlow.Services.DTOs.API
+namespace Quantis.WorkFlow.Models
 {
-    public class CatalogKpiDTO
+    public class vw_CatalogKPI
     {
         public int id { get; set; }
         public string short_name { get; set; }
@@ -51,5 +53,13 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int global_rule_id_bsi { get; set; }
         public int sla_id_bsi { get; set; }
         public int sla_version_id { get; set; }
+    }
+    public class vw_CatalogKPI_Configuration : IEntityTypeConfiguration<vw_CatalogKPI>
+    {
+        public void Configure(EntityTypeBuilder<vw_CatalogKPI> builder)
+        {
+            builder.ToTable("v_catalog_kpis");
+            builder.HasKey(o => new { o.id_kpi, o.id });
+        }
     }
 }

@@ -47,8 +47,12 @@ namespace Quantis.WorkFlow.Models
         public string wf_last_sent { get; set; }
         public string rm_last_sent { get; set; }
         public string supply { get; set; }
-        public string primary_contract_party { get; set; }
-        public string secondary_contract_party { get; set; }
+        public int primary_contract_party { get; set; }
+        public int? secondary_contract_party { get; set; }
+        public string kpi_name_bsi { get; set; }
+        public int global_rule_id_bsi { get; set; }
+        public int sla_id_bsi { get; set; }
+        public int sla_version_id { get; set; }
         public virtual T_Form Form { get; set; }
 
     }

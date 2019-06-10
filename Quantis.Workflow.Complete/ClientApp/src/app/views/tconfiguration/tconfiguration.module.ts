@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { TConfigurationComponent } from './tconfiguration.component';
 import { TConfigurationRoutingModule } from './tconfiguration-routing.module';
 import {DataTablesModule} from 'angular-datatables';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import {DataTablesModule} from 'angular-datatables';
   imports: [
     CommonModule,
     TConfigurationRoutingModule,
-    DataTablesModule
+    DataTablesModule,
+    FormsModule
   ]
 })
 export class TConfigurationModule { }
