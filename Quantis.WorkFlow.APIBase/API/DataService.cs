@@ -651,7 +651,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
 
-                    var whereclause = " where (interval_kpi >=:interval_kpi and interval_kpi < ( :interval_kpi + interval '1 month') )";
+                    var whereclause = " where (interval_kpi >=:interval_kpi and interval_kpi < ( date :interval_kpi + interval '1 month') )";
                     var sp = @"select * from a_rules";
                     if ( (month != null) && (year != null))
                     {
