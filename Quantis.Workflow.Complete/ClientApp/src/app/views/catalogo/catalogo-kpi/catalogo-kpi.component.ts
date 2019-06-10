@@ -47,6 +47,17 @@ export class CatalogoKpiComponent implements OnInit {
     // "defaultContent": '<input type="checkbox" />'
     // }]
   };
+
+  modalData = {
+    contract: '',
+    id_kpi: '',
+    short_name: '',
+    source_type: '',
+    tracking_period: '',
+    wf_last_sent: '',
+    rm_last_sent: ''
+  };
+
   kpiTableHeadData = [
     {
       ABILITATO: 'ABILITATO',
@@ -71,12 +82,12 @@ export class CatalogoKpiComponent implements OnInit {
       id_kpi: 'id kpi',
       id_form: 'id form',
       kpi_description: 'kpi description',
-      kpi_computing_description: 'kpi computing description',
-      source_type: 'source type',
-      computing_mode: 'computing mode',
-      tracking_period: 'tracking period',
+      source_type: 'source_type',
+      tracking_period: 'tracking_period',
+      wf_last_sent: 'wf_last_sent',
+      rm_last_sent: 'rm_last_sent',
       measure_unit: 'measure unit',
-      contract: 'contract',
+      contract: 'contract'
     }
   ];
 
@@ -103,6 +114,30 @@ export class CatalogoKpiComponent implements OnInit {
 
 
   ngOnInit() {
+  }
+
+
+  populateModalData(data) {
+    this.modalData.contract = data.contract;
+    this.modalData.id_kpi = data.id_kpi;
+    this.modalData.short_name = data.short_name;
+    this.modalData.source_type = data.source_type;
+    this.modalData.tracking_period = data.tracking_period;
+    this.modalData.wf_last_sent = data.wf_last_sent;
+    this.modalData.rm_last_sent = data.rm_last_sent;
+  }
+
+  updateKpi() {
+    this.apiService.updateCatalogKpi(this.modalData).subscribe((data: any) => {
+      this.getKpis(); // this should refresh the main table on page
+    });
+  }
+
+  getKpis() {
+    this.apiService.getCatalogoKpis().subscribe((data) =>{
+      this.kpiTableBodyData = data;
+      console.log('Kpis ', data);
+    });
   }
 
   // tslint:disable-next-line:use-life-cycle-interface

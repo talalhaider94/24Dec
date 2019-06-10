@@ -4,19 +4,30 @@
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
     </div><br/>
-    <table class="table table-bordered" #ArchivedkpiTable>
+    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions">
       <thead style="background: #E6E6E6">
       <tr>
+        <th>KPI ID</th>
         <th>KPI Name</th>
+        <th>Interval</th>
         <th>Value</th>
+        <th>Ticket ID</th>
+        <th>Close Timestamp Ticket</th>
+        <th>Archived</th>
         <th>Action</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>name</td>
-        <td>value</td>
-        <td align="center"><button class="btn btn-primary" data-toggle="modal" data-target="#archivedKpiModal">View</button></td>
+      <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
+        <td>{{row.id_kpi}}</td>
+        <td>{{row.name_kpi}}</td>
+        <td>{{row.interval_kpi}}</td>
+        <td>{{row.value_kpi}}</td>
+        <td>{{row.ticket_id}}</td>
+        <td>{{row.close_timestamp_ticket}}</td>
+        <td>{{row.archived}}</td>
+        <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+            data-target="#archivedKpiModal">View</button></td>
       </tr>
       </tbody>
     </table>
@@ -33,20 +44,32 @@
         </button>
       </div>
       <div class="modal-body">
+        <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
           <tr>
+            <th>KPI ID</th>
             <th>KPI Name</th>
+            <th>Interval</th>
             <th>Value</th>
+            <th>Ticket ID</th>
+            <th>Close Timestamp Ticket</th>
+            <th>Archived</th>
           </tr>
           </thead>
           <tbody>
           <tr>
-            <td>name</td>
-            <td>value</td>
+            <td>{{modalData.id_kpi}}</td>
+            <td>{{modalData.name_kpi}}</td>
+            <td>{{modalData.interval_kpi}}</td>
+            <td>{{modalData.value_kpi}}</td>
+            <td>{{modalData.ticket_id}}</td>
+            <td>{{modalData.close_timestamp_ticket}}</td>
+            <td>{{modalData.archived}}</td>
           </tr>
           </tbody>
         </table>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">

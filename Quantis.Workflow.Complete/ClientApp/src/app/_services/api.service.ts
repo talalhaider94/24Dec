@@ -40,8 +40,39 @@ export class ApiService {
       );
   }
 
+
+  getArchivedKpis() {
+    return this.http.get('https://api.myjson.com/bins/lp589')
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
   updateConfig(config) {
     return this.http.post('http://10.10.10.102/api/information/AddUpdateConfiguration', config, Headers.setHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
+  updateCatalogUtenti(config) {
+    return this.http.post('http://10.10.10.102/api/data/AddUpdateUser', config, Headers.setHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
+  updateCatalogKpi(config) {
+    return this.http.post('http://10.10.10.102/api/data/AddUpdateKpi', config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
