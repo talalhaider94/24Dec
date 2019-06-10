@@ -50,6 +50,5 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string kpi_name_bsi { get; set; }
         public int global_rule_id_bsi { get; set; }
         public int sla_id_bsi { get; set; }
-        public int sla_version_id { get; set; }
     }
 }

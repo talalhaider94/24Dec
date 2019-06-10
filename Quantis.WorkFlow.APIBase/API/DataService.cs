@@ -441,7 +441,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 var dto = new KPIOnlyContractDTO()
                 {
                     contract = kpi.CatalogKPI.contract,
-                    id_kpi = kpi.CatalogKPI.id_kpi
+                    id_kpi = kpi.CatalogKPI.id_kpi,
+                    global_rule_id = kpi.CatalogKPI.global_rule_id_bsi,
+                    kpi_name_bsi = kpi.CatalogKPI.kpi_name_bsi,
+                    target = kpi.CatalogKPI.target
                 };
                 return dto;
 
@@ -654,7 +657,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
 
-                    var whereclause = " where (interval_kpi >=:interval_kpi and interval_kpi < ( :interval_kpi + interval '1 month') )";
+                    var whereclause = " where (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
                     var sp = @"select * from a_rules";
                     if ( (month != null) && (year != null))
                     {
