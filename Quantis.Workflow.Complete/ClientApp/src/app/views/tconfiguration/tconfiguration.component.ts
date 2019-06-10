@@ -46,7 +46,7 @@ export class TConfigurationComponent implements OnInit {
   populateModalData(data) {
     this.modalData.key = data.key;
     this.modalData.value = data.value;
-  } 
+  }
 
   updateConfig() {
     this.apiService.updateConfig(this.modalData).subscribe((data: any) => {
