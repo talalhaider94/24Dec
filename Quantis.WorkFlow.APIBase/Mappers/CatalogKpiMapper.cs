@@ -113,7 +113,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                     e.kpi_name_bsi = bsikpi.kpi_name_bsi;
                     e.global_rule_id_bsi = bsikpi.global_rule_id_bsi;
                     e.sla_id_bsi = bsikpi.sla_id_bsi;
-                    e.sla_version_id = bsikpi.sla_version_id;
                 }
             }
             return e;
