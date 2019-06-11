@@ -5,7 +5,7 @@
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
     </div><br />
-    <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions">
+    <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
         <tr>
           <th>Key</th>
