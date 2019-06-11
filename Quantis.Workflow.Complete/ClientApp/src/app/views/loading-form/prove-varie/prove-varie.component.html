@@ -77,7 +77,7 @@
 
 <!-- TABELLA FORM SCELTO VISTA ADMINISRATOR -->
 <!-- FORM TABLE CHOSEN VIEW ADMINISRATOR -->
-<div *ngIf='mostraTabella && vai && daje'>
+<div *ngIf='mostraTabella && vai && daje && isAdmin'>
   <!-- <label>admin</label>
 <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>     -->
      
@@ -265,7 +265,7 @@
 
 <!-- TABELLA FORM SCELTO USERS SECONDARIO -->
 <!-- FORM CHOSEN SECONDARY USERS TABLE -->
-<div *ngIf='mostraTabella && vai && !daje'>
+<div *ngIf='mostraTabella && vai && !daje && !isAdmin'>
 <!--     
     <label>admin</label>
     <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'> -->
