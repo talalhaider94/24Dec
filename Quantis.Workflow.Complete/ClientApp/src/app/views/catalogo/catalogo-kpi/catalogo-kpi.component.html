@@ -4,14 +4,14 @@
     <br><h2 style="color:#565656">KPI</h2><br>
     <div class="row">
       <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1/>
-      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2/>
-      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3/>
+      <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2/>
+      <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3/>
       <span>&nbsp;&nbsp;</span>
-      <select class="form-control" style="width:15%;" #searchCol4><option value="">All</option></select>
+      <select class="form-control" style="width:15%;" #searchCol4><option value="">Tutti i Contratti</option></select>
       <span>&nbsp;&nbsp;</span>
-      <select class="form-control" style="width:15%;" #searchCol5><option value="">All</option></select>
+      <select class="form-control" style="width:15%;" #searchCol5><option value="">Tutte le Frequenze</option></select>
       <span>&nbsp;&nbsp;</span>
-      <button #btnExportCSV>CSV Export</button>
+      <button class="ml-5" #btnExportCSV>CSV Export</button>
     </div><br/>
     <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead>

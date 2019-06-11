@@ -20,8 +20,8 @@ export class CatalogoUtentiComponent implements OnInit {
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
   dtOptions: DataTables.Settings = {
-    'dom': 'rtip',
-    'pagingType': 'full_numbers'
+    // 'dom': 'rtip',
+    // 'pagingType': 'full_numbers'
   };
 
 
@@ -45,7 +45,9 @@ export class CatalogoUtentiComponent implements OnInit {
       STRUTTURA: 'STRUTTURA',
       MAIL: 'MAIL',
       USERID: 'USERID',
-      RESPONSABILE: 'RESPONSABILE'
+      RESPONSABILE: 'RESPONSABILE',
+      USER_ADMIN: 'USER_ADMIN',
+      USER_SADMIN: 'USER_SADMIN'
     }
   ]
 

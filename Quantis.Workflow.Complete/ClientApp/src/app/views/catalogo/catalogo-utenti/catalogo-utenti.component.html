@@ -18,6 +18,8 @@
             <th>MAIL</th>
             <th>USER ID</th>
             <th>RESPONSABILE</th>
+            <th>USER ADMIN</th>
+            <th>USER SADMIN</th>
             <th>ACTION</th>
           </tr>
         </thead>
@@ -30,6 +32,8 @@
             <td>{{row.mail}}</td>
             <td>{{row.userid}}</td>
             <td>{{row.manager}}</td>
+            <td>{{row.user_admin}}</td>
+            <td>{{row.user_sadmin}}</td>
             <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                  data-target="#utentiModal">Update</button></td>
           </tr>
@@ -52,36 +56,22 @@
         <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
-          <tr>
-            <th>BSI ACCOUNT</th>
-            <th>NOME</th>
-            <th>COGNOME</th>
-            <th>STRUTTURA</th>
-            <th>MAIL</th>
-            <th>USER ID</th>
-            <th>RESPONSABILE</th>
-            <th>ACTION</th>
-          </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>{{modalData.BSI_ACCOUNT}}</td>
-            <td><input type="text" class="form-control"[(ngModel)]="modalData.NOME"></td>
-            <td><input type="text" class="form-control"[(ngModel)]="modalData.COGNOME"></td>
-            <td><input type="text" class="form-control"[(ngModel)]="modalData.STRUTTURA"></td>
-            <td><input type="text" class="form-control"[(ngModel)]="modalData.MAIL"></td>
-            <td>{{modalData.USERID}}</td>
-            <td><input type="text" class="form-control"[(ngModel)]="modalData.RESPONSABILE"></td>
-            <td align="center"><button (click)="updateUtenti()" class="btn btn-primary">Update</button></td>
-          </tr>
+          <tr><th>BSI ACCOUNT</th><td>{{modalData.BSI_ACCOUNT}}</td></tr>
+          <tr><th>NOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.NOME"></td></tr>
+          <tr><th>COGNOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.COGNOME"></td></tr>
+          <tr><th>STRUTTURA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.STRUTTURA"></td></tr>
+          <tr><th>MAIL</th><td><input type="text" class="form-control"[(ngModel)]="modalData.MAIL"></td></tr>
+          <tr><th>USER ID</th><td>{{modalData.USERID}}</td></tr>
+          <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.RESPONSABILE"></td></tr>
           </tbody>
         </table>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button (click)="updateUtenti()" class="btn btn-success">Salva</button>
       </div>
     </div>
   </div>
