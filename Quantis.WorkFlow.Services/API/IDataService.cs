@@ -39,6 +39,7 @@ namespace Quantis.WorkFlow.Services.API
 
         LoginResultDTO Login(string username, string password);
         bool SumbitForm(SubmitFormDTO dto);
+        bool SubmitAttachment(List<FormAttachmentDTO> dto);
 
         int ArchiveKPIs(ArchiveKPIDTO dto);
         bool ResetPassword(string username, string email);
