@@ -128,7 +128,7 @@ export const navItems: NavData[] = [
       },
       {
         name: 'Utente',
-        url: '/coming-soon',
+        url: '/loading-form/user',
         icon: 'fa fa-circle-thin'
       },
     ]

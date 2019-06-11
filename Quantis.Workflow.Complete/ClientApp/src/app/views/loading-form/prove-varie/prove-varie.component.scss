@@ -2,6 +2,10 @@
   padding: 10px;
   margin-bottom: 15px;
 }
+
+input:focus {
+  box-shadow: none !important;
+}
 .container_upload .btn{
  margin-top: 10px;
 }
@@ -92,11 +96,6 @@ td, th {
 .my-drop-zone { border: dotted 3px lightgray; }
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }
-
-
-p{
-  font-size: 22px;
-}
 
 cutoff{
   color:grey;

@@ -5,6 +5,7 @@ import { LoadingFormRoutingModule } from './loading-form-routing.module';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
+import { DataTablesModule } from 'angular-datatables';
 
 import {
   MatSidenavModule,
@@ -42,13 +43,15 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { FileUploadModule } from 'ng2-file-upload';
+import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
 
 
 @NgModule({
   declarations: [ 
     LoadingFormComponent,
     LoadingFormDetailComponent,
-    ProveVarieComponent ],
+    ProveVarieComponent,
+    LoadingFormUserComponent ],
   imports: [
     CommonModule,
     LoadingFormRoutingModule,
@@ -87,7 +90,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     MatSlideToggleModule,
     MatSnackBarModule,
     MatStepperModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DataTablesModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},

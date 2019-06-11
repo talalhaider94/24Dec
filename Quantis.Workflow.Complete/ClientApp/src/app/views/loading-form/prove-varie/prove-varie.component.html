@@ -1,4 +1,4 @@
-<div *ngIf='!vai' id="loader" class="text-center">
+<div *ngIf='!vai || loading' id="loader" class="text-center">
   <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 
@@ -78,8 +78,8 @@
 <!-- TABELLA FORM SCELTO VISTA ADMINISRATOR -->
 <!-- FORM TABLE CHOSEN VIEW ADMINISRATOR -->
 <div *ngIf='mostraTabella && vai && daje'>
-  <label>admin</label>
-<input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>    
+  <!-- <label>admin</label>
+<input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>     -->
      
 <div class="centrato">
   <div class="row" style="display: contents" >
@@ -90,144 +90,174 @@
 
 
       <form [formGroup]="myInputForm" novalidate (ngSubmit)="save(myInputForm)">
-        <div formArrayName="valories">
-          <!-- Danial: loop over form fields -->
-          <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
-            <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
-              <div>
-                <div  class="my-form col-sm-12">
-                  <mat-form-field appearance="outline" >
-                    <mat-label>{{arrayFormElements[i].name}}</mat-label>
-                    <input matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"    formControlName="valoreUtente">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div>
-                <div class="my-form col-xs-3" ></div>
-                <div id="divDate" class="row">
-                  <div  class="my-form col-sm-6">
-                    <mat-form-field appearance="outline">
-                      <mat-label>min Date</mat-label>
-                      <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]" class="form-control"   formControlName="valoreMin" >
-                      <mat-datepicker-toggle matSuffix [for]="pickerb"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerb></mat-datepicker>
+          <div formArrayName="valories">
+            <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
+              
+              <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="bg-white panel-body" [formGroupName]="i">
+                
+                <!-- <div>
+                  <div class="form-group col-xs-3" ></div>
+                  <div  class="form-group col-xs-6">
+                    <mat-form-field appearance="outline" >
+                      <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                      <input matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"    formControlName="valoreUtente">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                   </div>
-                  <div  class="my-form col-sm-6">  
+                  <div class="form-group col-xs-3" ></div>
+                </div> -->
+                
+                  <div class="row" id="divDate">
+                    <div class="col-sm-12">
+                      <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>min Date</mat-label>
+                        <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]" class="form-control"   formControlName="valoreMin" >
+                        <mat-datepicker-toggle matSuffix [for]="pickerb"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerb></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">  
+                      <mat-form-field appearance="outline">
+                        <mat-label>max Date</mat-label>
+                        <input matInput [(ngModel)]="maxDate[i]"  [min]="minDate[i]"  [matDatepicker]="pickera" class="form-control"   formControlName="valoreMax" >
+                        <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
+                        <mat-datepicker #pickera></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+              </div>
+  
+  
+              <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="bg-white panel-body" [formGroupName]="i">
+                <!-- <div>
+                  <div class="form-group col-xs-3" ></div>
+                  <div class="form-group col-xs-6">
                     <mat-form-field appearance="outline">
-                      <mat-label>max Date</mat-label>
-                      <input matInput [(ngModel)]="maxDate[i]"  [min]="minDate[i]"  [matDatepicker]="pickera" class="form-control"   formControlName="valoreMax" >
-                      <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
-                      <mat-datepicker #pickera></mat-datepicker>
+                      <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                      <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" matInput placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
+                      <input *ngIf="arrayFormElements[i].type!='string'" matInput [min]="numeroMin[i]" [max]="numeroMax[i]" [(ngModel)]="numero[i]" type="number" placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                     </mat-form-field>
                   </div>
-                </div>
-                <div class="my-form col-xs-3" ></div>
-              </div>
-            </div>
-
-
-            <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i">
-              <div>
-                <div class="my-form col-sm-12">
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{arrayFormElements[i].name}}</mat-label>
-                    <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" matInput placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
-                    <input *ngIf="arrayFormElements[i].type!='string'" matInput [min]="numeroMin[i]" [max]="numeroMax[i]" [(ngModel)]="numero[i]" type="number" placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div>
+                  <div class="form-group col-xs-3" ></div>
+                </div> -->
                 <div class="row">
-                  <div class="my-form col-sm-6">
-                    <mat-form-field  appearance="outline">
-                      <mat-label>inserisci numero minimo</mat-label>
-                      <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="inserisci numero minimo" class="form-control"   formControlName="valoreMin">
-                    </mat-form-field>
-                  </div>
-                  <div class="my-form col-sm-6">
-                    <mat-form-field  appearance="outline">
-                      <mat-label>inserisci numero massimo</mat-label>
-                      <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="inserisci numero massimo" class="form-control"   formControlName="valoreMax">
-                    </mat-form-field>
-                  </div>
+                    <div class="col-sm-12">
+                        <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field  appearance="outline">
+                        <mat-label>inserisci numero minimo</mat-label>
+                        <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="inserisci numero minimo" class="form-control"   formControlName="valoreMin">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                      <mat-form-field  appearance="outline">
+                        <mat-label>inserisci numero massimo</mat-label>
+                        <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="inserisci numero massimo" class="form-control"   formControlName="valoreMax">
+                      </mat-form-field>
+                    </div>
                 </div>
               </div>
+  
             </div>
-
           </div>
-        </div>
-
-        <div *ngIf="erroriArray.length>0">
-          <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
-        </div>
-
-        <div class="row" style="display: contents">
-          <div formArrayName="campiConfronto" class="panel panel-default">
-              <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body bg-white" [formGroupName]="i" >
-                <div  class="my-form col-xs-3">
+  
+          <div *ngIf="erroriArray.length>0">
+            <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
+          </div> 
+          <div class="row" style="display: contents">
+            <div formArrayName="campiConfronto" class="panel panel-default">
+                <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body" [formGroupName]="i" >
+                  <div  class="form-group col-xs-3">
+                      <mat-form-field appearance="outline">
+                        <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
+                          <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
+                              
+                          <mat-option *ngFor="let element of arrayFormElements " [value]="element" >{{element.name}}</mat-option>
+                          
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+                 
+    
+                 
+                  <div  class="form-group col-xs-3">
                     <mat-form-field appearance="outline">
-                      <!-- Danial: error in console can not read property value of campo1 -->
-                      <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
-                        <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
-                            
-                        <mat-option *ngFor="let element of arrayFormElements " [value]="element" >{{element.name}}</mat-option>
-                        
+                      <mat-select placeholder="confronto"    formControlName="segno" disableRipple>
+                        <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
                       </mat-select>
                     </mat-form-field>
+                  </div>
+                
+                  <div  class="form-group col-xs-3">
+                    <mat-form-field appearance="outline">
+                      <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
+                          <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>  
+                        <mat-option *ngFor="let element of arraySecondo[i]" [value]="element" >{{element.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+    
+                  <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
                 </div>
-               
-  
-               
-                <div  class="my-form col-xs-3">
-                  <mat-form-field appearance="outline">
-                    <mat-select placeholder="confronto"    formControlName="segno" disableRipple>
-                      <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              
-                <div  class="my-form col-xs-3">
-                  <mat-form-field appearance="outline">
-                    <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
-                        <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>  
-                      <mat-option *ngFor="let element of arraySecondo[i]" [value]="element" >{{element.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-  
-                <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
               </div>
             </div>
-          </div>
+<!--     
+            <div class="margin-20">
+              <a (click)="addComparisonForm('')" style="cursor: pointer">
+                Add another Comparison +
+              </a>
+            </div> -->
+            <!--inserita data di cut off
+              <div>
+                <div class="form-group col-xs-3" ></div>
+                <div  class="form-group col-xs-6">
+                  <mat-form-field appearance="outline" >
+                    <mat-label>Data validità della rule</mat-label>
+                    <input matInput [(ngModel)] ="dataValidita" [matDatepicker]="thisPicker" placeholder="inserisci data" class="form-control"   formControlName="valoreUtente">
+                    <mat-datepicker-toggle matSuffix [for]="thisPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #thisPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="form-group col-xs-3" ></div>
+              </div>
+              <div>
+                <div id="divDate" >             
+                    <label style="width:40%">data minima: </label>{{minDate[i]|date}}
+                    <label  style="width:40%">data massima: </label>{{maxDate[i]|date}}
+                </div>
+              </div>-->
   
-          <div class="margin-20">
-            <a (click)="addComparisonForm('')" style="cursor: pointer">
-              Add another Comparison +
-            </a>
-          </div>
-        <table>
-          <tr>
-            <td>
-                <button mat-button  class="btn btn-primary pull-left">
-                    <mat-icon>file_upload</mat-icon>
-                    carica file
-                  </button>
-            </td>
-            <td>
-
-          <div class="margin-20">
-              <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">Submit</button>
-            </div>
-            <div class="clearfix"></div>
-        </td>
-        </tr>
-        </table>
-
-
-      </form>
+          <!--<button mat-button color="warn" (click)="onClick()">
+            <mat-icon>file_upload</mat-icon>
+            {{text}}
+          </button>-->
+          <table>
+            <tr>
+              <!-- <td>
+                  <button mat-button  class="btn btn-primary pull-left">
+                      <mat-icon>file_upload</mat-icon>
+                      carica file
+                    </button>
+              </td> -->
+              <td>
+  
+            <div class="margin-20">
+                <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">
+                  <span *ngIf="loading" class="fa fa-spinner fa-spin"></span>Submit</button>
+              </div>
+              <div class="clearfix"></div>
+          </td>
+          </tr>
+          </table>
+  
+  
+        </form>
     </div>
   </div>
 </div>
@@ -236,9 +266,9 @@
 <!-- TABELLA FORM SCELTO USERS SECONDARIO -->
 <!-- FORM CHOSEN SECONDARY USERS TABLE -->
 <div *ngIf='mostraTabella && vai && !daje'>
-    
+<!--     
     <label>admin</label>
-    <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>
+    <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'> -->
     <div class="centrato">
       <div class="row" style="display: contents" >
         <div>
@@ -251,47 +281,40 @@
             <div formArrayName="valories">
               <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
          
-                <!-- Danial : here property type is undeined need to investigate -->
-                <div *ngIf="arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
-                  <div>
-                    <div class="my-form col-xs-3" ></div>
-                    <div  class="my-form col-sm-6">
+                <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-sm-12">
                       <mat-form-field appearance="outline" >
                         <mat-label>{{arrayFormElements[i].name}}</mat-label>
-                        <input disabled matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"   formControlName="valoreUtente">
+                        <input matInput [(ngModel)] ="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="picker" placeholder="inserisci data" class="form-control"   formControlName="valoreUtente">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
                     </div>
-                    <div class="my-form col-xs-3" ></div>
-                  </div>
-                  <div>
-                    <div id="divDate" >             
-                        <label style="width:40%">data minima: </label>{{minDate[i]|date}}
-                        <label  style="width:40%">data massima: </label>{{maxDate[i]|date}}
+                    <div id="divDate" class="col-sm-12">
+                      <label style="width:40%">data minima: {{minDate[i]|date}}</label>
+                      <label  style="width:40%">data massima: {{maxDate[i]|date}}</label>
                     </div>
                   </div>
                 </div>
     
     
-                <div *ngIf="arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i" >
-                  <div>
-                    <div class="my-form col-xs-3" ></div>
-                    <div class="my-form col-sm-6">
+                <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i" >
+                  <div class="row">
+                    <div class="col-sm-12">
                       <mat-form-field appearance="outline" >
                         <mat-label>{{arrayFormElements[i].name}}</mat-label>
                         <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" matInput placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                         <input *ngIf="arrayFormElements[i].type!='string'" matInput [min]="numeroMin[i]" [max]="numeroMax[i]" [(ngModel)]="numero[i]" type="number" placeholder="Placeholder" class="form-control"   formControlName="valoreUtente">
                       </mat-form-field>
                     </div>
-                    <div class="my-form col-xs-3" ></div>
-                  </div>
-                  <div>     
-                    <div >                 
-                          <label  style="width:40%">valore minimo: </label>{{numeroMin[i]}}
-                          <label style="width:40%">valore massimo: </label>{{numeroMax[i]}}                  
-                    </div>               
-                  </div>
+                    <div class="col-sm-6">                 
+                      <label>valore minimo: {{numeroMin[i]}}</label>                 
+                    </div>   
+                    <div class="col-sm-6">                 
+                      <label>valore massimo: {{numeroMax[i]}}</label>                  
+                    </div>   
+                  </div>               
                 </div>
     
               </div>
@@ -300,38 +323,52 @@
             <div *ngIf="erroriArray.length>0">
               <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
             </div>
-    
-            <br/>
+            <table class="table table-responsive-sm table-hover table-outline bg-white">
+                <thead>
+                  <tr>
+                    <th>Nome Contratto</th>
+                    <th>ID Kpi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf='listaKpiPerForm.length === 0'>
+                    <td colspan="2">Form KPI not found.</td>
+                  </tr>
+                  <tr *ngFor='let kpi of listaKpiPerForm'>
+                    <td>{{kpi.contract}}</td>
+                    <td>{{kpi.id_kpi}}</td>
+                  </tr>
+                </tbody>
+              </table>
+  
             <div class="container_upload bg-white">
               <div class="row">
            
-                  <div class="col-md-6">
-           
-                      <h3>Select files</h3>
-           
+                  <div class="col-sm-12 mb-3">
+                      <h5>Select files</h5>
+<!--            
                       <div ng2FileDrop
                            [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
                            (fileOver)="fileOverBase($event)"
                            [uploader]="uploader"
                            class="well my-drop-zone">
                           Base drop zone
-                      </div>
-                      Multiple
+                      </div> -->
+                      <!-- Multiple -->
                       <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
-                      <button (click)='cliccato()'></button>
-                      Single
-                      <input type="file" ng2FileSelect [uploader]="uploader" />
+                      <!-- <button (click)='cliccato()'></button> -->
+                      <!-- Single
+                      <input type="file" ng2FileSelect [uploader]="uploader" /> -->
                   </div>
            
-                  <div class="col-md-12" style="margin-bottom: 40px">
-           
-                      <h3>Upload queue</h3>
+                  <div class="col-sm-12">
+                      <h5>Upload queue</h5>
                       <p>Queue length: {{ uploader?.queue?.length }}</p>
            
-                      <table class="table">
+                      <table class="table table-responsive-sm table-hover table-outline mb-3">
                           <thead>
                           <tr>
-                              <th width="50%">Name</th>
+                              <th>Name</th>
                               <th>Size</th>
                               <th>Progress</th>
                               <th>Status</th>
@@ -373,7 +410,7 @@
                       <div>
                           <div>
                               Queue progress:
-                              <div class="progress" style="">
+                              <div class="progress mt-2">
                                   <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
                               </div>
                           </div>
@@ -396,31 +433,21 @@
               </div>
            
           </div>
-            <table style="margin-bottom:15px">
-              <tr style="border-style:1px black">
-                  <th>Nome Contratto</th>
-                  <th>ID Kpi</th>
-              </tr>
-              
-              <tr *ngFor='let element of listaKpiPerForm'>
-                <td>{{element.contract}}</td>
-                <td>{{element.id_kpi}}</td>
-              </tr>
-            </table>
-
             
             <table>
               <tr>
-                <td>
+                <!-- <td>
                     <button mat-button  class="btn btn-primary pull-left"    (click)="onClick()">
                         <mat-icon>file_upload</mat-icon>
                         carica file
                       </button>
-                </td>
+                </td> -->
                 <td>
     
               <div class="margin-20">
-                  <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">Submit</button>
+                  <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Submit
+                  </button>
                 </div>
                 <div class="clearfix"></div>
             </td>
