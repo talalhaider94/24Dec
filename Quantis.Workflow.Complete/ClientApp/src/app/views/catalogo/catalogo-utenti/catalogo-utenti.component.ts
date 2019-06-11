@@ -24,6 +24,17 @@ export class CatalogoUtentiComponent implements OnInit {
     'pagingType': 'full_numbers'
   };
 
+
+  modalData = {
+    BSI_ACCOUNT: '',
+    NOME: '',
+    COGNOME: '',
+    STRUTTURA: '',
+    MAIL: '',
+    USERID: '',
+    RESPONSABILE: ''
+  };
+
   UtentiTableBodyData: any = [
     {
       id: '1',
@@ -44,6 +55,29 @@ export class CatalogoUtentiComponent implements OnInit {
     ngOnInit() {
     }
 
+
+  populateModalData(data) {
+    this.modalData.BSI_ACCOUNT = data.ca_bsi_account;
+    this.modalData.NOME = data.name;
+    this.modalData.COGNOME = data.surname;
+    this.modalData.STRUTTURA = data.organization;
+    this.modalData.MAIL = data.mail;
+    this.modalData.USERID = data.userid;
+    this.modalData.RESPONSABILE = data.manager;
+  }
+
+  updateUtenti() {
+    this.apiService.updateCatalogUtenti(this.modalData).subscribe((data: any) => {
+      this.getUsers(); // this should refresh the main table on page
+    });
+  }
+
+  getUsers() {
+    this.apiService.getCatalogoUsers().subscribe((data) =>{
+      this.UtentiTableBodyData = data;
+      console.log('Configs ', data);
+    });
+  }
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{

@@ -16,7 +16,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string Reference2 { get; set; }
         public string Reference3 { get; set; }
         public string Period { get; set; }
-        public string primary_contract_party { get; set; }
-        public string secondary_contract_party { get; set; }
+        public int primary_contract_party { get; set; }
+        public int? secondary_contract_party { get; set; }
     }
 }

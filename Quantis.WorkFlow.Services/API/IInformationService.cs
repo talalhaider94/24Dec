@@ -20,8 +20,8 @@ namespace Quantis.WorkFlow.Services.API
         List<BaseNameCodeDTO> GetRolesByUserId(int userid);
         List<BaseNameCodeDTO> GetPermissionsByUserId(int userid);
         List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId);
-        void AssignRolesToUser(HttpContext context,List<int> roleIds);
-        void AssignPermissionsToRoles(int roleId, List<int> permissionIds);
+        void AssignRolesToUser(MultipleRecordsDTO dto);
+        void AssignPermissionsToRoles(MultipleRecordsDTO dto);
 
 
 

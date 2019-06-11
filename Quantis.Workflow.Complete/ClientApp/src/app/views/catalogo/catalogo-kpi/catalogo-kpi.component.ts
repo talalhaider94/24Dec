@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
+import { Subject } from 'rxjs';
 
 declare var $;
 let $this;
@@ -40,13 +41,25 @@ export class CatalogoKpiComponent implements OnInit {
 
 
   dtOptions: DataTables.Settings = {
-    'dom': 'rtip',
+    //'dom': 'rtip',
     // "columnDefs": [{
     // "targets": [0,2],
     // "data": null,
     // "defaultContent": '<input type="checkbox" />'
     // }]
   };
+
+  modalData = {
+    contract: '',
+    id_kpi: '',
+    short_name: '',
+    source_type: '',
+    tracking_period: '',
+    wf_last_sent: '',
+    rm_last_sent: ''
+  };
+
+  dtTrigger: Subject<any> = new Subject();
   kpiTableHeadData = [
     {
       ABILITATO: 'ABILITATO',
@@ -66,17 +79,17 @@ export class CatalogoKpiComponent implements OnInit {
   kpiTableBodyData: any = [
     {
       id: '1',
-      short_name: 'short name',
-      group_type: 'group type',
-      id_kpi: 'id kpi',
-      id_form: 'id form',
-      kpi_description: 'kpi description',
-      kpi_computing_description: 'kpi computing description',
-      source_type: 'source type',
-      computing_mode: 'computing mode',
-      tracking_period: 'tracking period',
-      measure_unit: 'measure unit',
-      contract: 'contract',
+      short_name: '',
+      group_type: '',
+      id_kpi: '',
+      id_form: '',
+      kpi_description: '',
+      source_type: '',
+      tracking_period: '',
+      wf_last_sent: '',
+      rm_last_sent: '',
+      measure_unit: '',
+      contract: ''
     }
   ];
 
@@ -105,27 +118,74 @@ export class CatalogoKpiComponent implements OnInit {
   ngOnInit() {
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
-  ngAfterViewInit() {
-    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref) => {
-      this.setUpDataTableDependencies(dataTable_Ref);
-    });
-    this.apiService.getCatalogoKpis().subscribe((data) => {
-      this.kpiTableBodyData = data;
-      console.log('kpis ', data);
+
+  populateModalData(data) {
+    this.modalData.contract = data.contract;
+    this.modalData.id_kpi = data.id_kpi;
+    this.modalData.short_name = data.short_name;
+    this.modalData.source_type = data.source_type;
+    this.modalData.tracking_period = data.tracking_period;
+    this.modalData.wf_last_sent = data.wf_last_sent;
+    this.modalData.rm_last_sent = data.rm_last_sent;
+  }
+
+  updateKpi() {
+    this.apiService.updateCatalogKpi(this.modalData).subscribe((data: any) => {
+      this.getKpis(); // this should refresh the main table on page
     });
   }
 
-  getKpiTableRef(datatableElement: DataTableDirective): any {
-    return datatableElement.dtInstance;
-    // .then((dtInstance: DataTables.Api) => {
-    //     console.log(dtInstance);
+  // getKpis() {
+  //   this.apiService.getCatalogoKpis().subscribe((data) =>{
+  //     this.kpiTableBodyData = data;
+  //     console.log('Kpis ', data);
+  //   });
+  // }
+
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+
+    this.setUpDataTableDependencies();
+    this.getKpis();
+    this.apiService.getCatalogoKpis().subscribe((data:any)=>{
+      this.kpiTableBodyData = data;
+      this.rerender();
+    });
+    // this.getKpiTableRef(this.datatableElement).then((dataTable_Ref) => {
+    //   this.setUpDataTableDependencies(dataTable_Ref);
+    // });
+    // this.apiService.getCatalogoKpis().subscribe((data) => {
+    //   this.kpiTableBodyData = data;
+    //   console.log('kpis ', data);
     // });
   }
 
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  // getKpiTableRef(datatableElement: DataTableDirective): any {
+  //   return datatableElement.dtInstance;
+  //   // .then((dtInstance: DataTables.Api) => {
+  //   //     console.log(dtInstance);
+  //   // });
+  // }
 
 
-  setUpDataTableDependencies(datatable_Ref) {
+
+  setUpDataTableDependencies() {
 
     // let datatable_Ref = $(this.block.nativeElement).DataTable({
     //   'dom': 'rtip'
@@ -133,26 +193,34 @@ export class CatalogoKpiComponent implements OnInit {
 
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      datatable_Ref
-        .columns( 4 )
-        .search( this.value )
-        .draw();
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        datatable_Ref
+          .columns(4)
+          .search(this.value)
+          .draw();
+      });
     });
 
 
 
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
         .columns( 5 )
         .search( this.value )
         .draw();
     });
+    });
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
         .columns( 10 )
         .search( this.value )
         .draw();
     });
+    });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
     datatable_Ref.columns(3).every( function () {
       const that = this;
 
@@ -172,7 +240,10 @@ export class CatalogoKpiComponent implements OnInit {
         .each( function ( d ) {
           select.append( $('<option value="' + d + '">' + d + '</option>') );
         } );
-    } );
+    });
+    });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
     datatable_Ref.columns(9).every( function () {
       const that = this;
 
@@ -192,59 +263,58 @@ export class CatalogoKpiComponent implements OnInit {
         .each( function ( d ) {
           select.append( $('<option value="' + d + '">' + d + '</option>') );
         } );
-    } );
+    });
+    });
 
 
     // export only what is visible right now (filters & paginationapplied)
     $(this.btnExportCSV.nativeElement).click(function (event) {
       event.preventDefault();
-      // $this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
-      $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+      });
     });
   }
 
   table2csv(oTable, exportmode, tableElm) {
-    let csv = '';
-    const headers = [];
-    const rows = [];
+    var csv = '';
+    var headers = [];
+    var rows = [];
 
     // Get header names
-    $(tableElm + ' thead').find('th').each(function() {
-      const $th = $(this);
-      const text = $th.text();
-      const header = '"' + text + '"';
+    $(tableElm+' thead').find('th').each(function() {
+      var $th = $(this);
+      var text = $th.text();
+      var header = '"' + text + '"';
       // headers.push(header); // original code
-      // tslint:disable-next-line:max-line-length
-      if (text != '') { headers.push(header); } // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
     });
-    csv += headers.join(',') + '\n';
+    csv += headers.join(',') + "\n";
 
     // get table data
-    if (exportmode == 'full') { // total data
-      const totalRows = oTable.data().length;
-      for (let i = 0; i < totalRows; i++) {
-        let row = oTable.row(i).data();
-        console.log(row);
+    if (exportmode == "full") { // total data
+      var totalRows = oTable.data().length;
+      for(let i = 0; i < totalRows; i++) {
+        var row = oTable.row(i).data();
         row = $this.strip_tags(row);
         rows.push(row);
       }
     } else { // visible rows only
-      $(tableElm + ' tbody tr:visible').each(function(index) {
-        const row = [];
-        $(this).find('td').each(function() {
-          const $td = $(this);
-          const text = $td.text();
-          const cell = '"' + text + '"';
+      $(tableElm+' tbody tr:visible').each(function(index) {
+        var row = [];
+        $(this).find('td').each(function(){
+          var $td = $(this);
+          var text = $td.text();
+          var cell = '"' +text+ '"';
           row.push(cell);
         });
         rows.push(row);
-      });
+      })
     }
-    csv += rows.join('\n');
-    console.log(csv);
-    const blob = new Blob([csv], {type: 'text/plain;charset=utf-8'});
-    // saveAs(csv, "myfile.txt")
-    saveAs(blob, 'myfile.txt');
+    csv += rows.join("\n");
+    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    //saveAs(csv, "myfile-csv.csv")
+    saveAs(blob, "KpiTable.csv");
   }
 
   strip_tags(html) {
@@ -253,6 +323,9 @@ export class CatalogoKpiComponent implements OnInit {
     return tmp.textContent || tmp.innerText;
   }
 
-
+  getKpis(){
+    this.apiService.getCatalogoKpis().subscribe((data: any) => {
+    });
+  }
 
 }

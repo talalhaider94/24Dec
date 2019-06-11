@@ -309,9 +309,9 @@ namespace Quantis.WorkFlow.APIBase.API
                       "zz_cned_string4",
                       dto.Period,
                       "zz_primary_contract_party",
-                      dto.primary_contract_party,
+                      dto.primary_contract_party+"",
                       "zz_secondary_contract_party",
-                      dto.secondary_contract_party
+                      dto.secondary_contract_party+""
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
                 ret= parseTickets(ticket).FirstOrDefault();
@@ -551,7 +551,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 using (var client = new HttpClient())
                 {
-                    List<string> data = new List<string>() { dto.primary_contract_party, dto.secondary_contract_party, dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
+                    List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
                     client.BaseAddress = new Uri(_dataService.GetBSIServerURL());
                     var response = client.PostAsJsonAsync("api/UploadKPI/UploadKPI", data).Result;
                     if (response.IsSuccessStatusCode)

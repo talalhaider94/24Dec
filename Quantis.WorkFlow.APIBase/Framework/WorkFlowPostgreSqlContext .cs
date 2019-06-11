@@ -25,6 +25,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_CatalogUser> CatalogUsers { get; set; }
         public DbSet<T_Session> Sessions { get; set; }
         public DbSet<T_CatalogKPI> CatalogKpi { get; set; }
+        public DbSet<vw_CatalogKPI> ViewCatalogKPI { get; set; }
         public DbSet<T_APIDetail> ApiDetails { get; set; }
         public DbSet<T_FormAttachment> FormAttachments { get; set; }
         public DbSet<T_FormLog> FormLogs { get; set; }
@@ -49,6 +50,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_CatalogUser_Configuration());
             builder.ApplyConfiguration(new T_Session_Configuration());
             builder.ApplyConfiguration(new T_CatalogKPI_Configuration());
+            builder.ApplyConfiguration(new vw_CatalogKPI_Configuration());
             builder.ApplyConfiguration(new T_APIDetail_Configuration());
             builder.ApplyConfiguration(new T_FormAttachment_Configuration());
             builder.ApplyConfiguration(new T_FormLog_Configuration());
@@ -75,6 +77,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_CatalogUser>();
             updateUpdatedProperty<T_Session>();
             updateUpdatedProperty<T_CatalogKPI>();
+            updateUpdatedProperty<vw_CatalogKPI>();
             updateUpdatedProperty<T_APIDetail>();
             updateUpdatedProperty<T_FormAttachment>();
             updateUpdatedProperty<T_FormLog>();

@@ -158,17 +158,16 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public void AssignRolesToUser(HttpContext context,List<int> roleIds)
+        public void AssignRolesToUser(MultipleRecordsDTO dto)
         {
             try
             {
-                var user = context.User as AuthUser;
-                var roles=_dbcontext.UserRoles.Where(o => o.user_id == user.UserId);
+                var roles=_dbcontext.UserRoles.Where(o => o.user_id == dto.Id);
                 _dbcontext.UserRoles.RemoveRange(roles.ToArray());
-                var userroles = roleIds.Select(o => new T_UserRole()
+                var userroles = dto.Ids.Select(o => new T_UserRole()
                 {
                     role_id = o,
-                    user_id = user.UserId
+                    user_id = dto.Id
                 });
                 _dbcontext.UserRoles.AddRange(userroles.ToArray());
                 _dbcontext.SaveChanges();
@@ -179,15 +178,15 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public void AssignPermissionsToRoles(int roleId, List<int> permissionIds)
+        public void AssignPermissionsToRoles(MultipleRecordsDTO dto)
         {
             try
             {
-                var permissions = _dbcontext.RolePermissions.Where(o => o.role_id == roleId);
+                var permissions = _dbcontext.RolePermissions.Where(o => o.role_id == dto.Id);
                 _dbcontext.RolePermissions.RemoveRange(permissions.ToArray());
-                var rolepermissions = permissionIds.Select(o => new T_RolePermission()
+                var rolepermissions = dto.Ids.Select(o => new T_RolePermission()
                 {
-                    role_id = roleId,
+                    role_id = dto.Id,
                     permission_id=o
                 });
                 _dbcontext.RolePermissions.AddRange(rolepermissions.ToArray());
