@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
+import { Subject } from 'rxjs';
 
 declare var $;
 var $this;
@@ -16,12 +17,6 @@ export class TConfigurationComponent implements OnInit {
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
   dtOptions: DataTables.Settings = {
-    'dom': 'rtip',
-    // "columnDefs": [{
-    // "targets": [0,2],
-    // "data": null,
-    // "defaultContent": '<input type="checkbox" />'
-    // }]
   };
 
   modalData = {
@@ -29,6 +24,7 @@ export class TConfigurationComponent implements OnInit {
     value: ''
   };
 
+  dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
       key: 'key',
@@ -54,39 +50,54 @@ export class TConfigurationComponent implements OnInit {
     });
   }
 
-  getCOnfigurations() {
-    this.apiService.getConfigurations().subscribe((data) =>{
-      this.ConfigTableBodyData = data;
-      console.log('Configs ', data);
-    });
-  }
-
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
-    this.getConfigTableRef(this.datatableElement).then((dataTable_Ref)=>{
-      this.setUpDataTableDependencies(dataTable_Ref);
+    this.dtTrigger.next();
+
+    this.setUpDataTableDependencies();
+    this.getCOnfigurations1();
+
+    this.apiService.getConfigurations().subscribe((data:any)=>{
+      this.ConfigTableBodyData = data;
+      this.rerender();
     });
-    this.getCOnfigurations();
   }
 
-  getConfigTableRef(datatableElement: DataTableDirective): any {
-    return datatableElement.dtInstance;
-    // .then((dtInstance: DataTables.Api) => {
-    //     console.log(dtInstance);
-    // });
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
-  setUpDataTableDependencies(datatable_Ref){
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  // getConfigTableRef(datatableElement: DataTableDirective): any {
+  //   return datatableElement.dtInstance;
+  //   // .then((dtInstance: DataTables.Api) => {
+  //   //     console.log(dtInstance);
+  //   // });
+  // }
+
+  setUpDataTableDependencies(){
     // let datatable_Ref = $(this.block.nativeElement).DataTable({
     //   'dom': 'rtip'
     // });
 
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
         .columns( 0 )
         .search( this.value )
         .draw();
+    });
     });
 
   }
@@ -97,5 +108,16 @@ export class TConfigurationComponent implements OnInit {
     return tmp.textContent||tmp.innerText;
   }
 
+  getCOnfigurations() {
+    this.apiService.getConfigurations().subscribe((data) =>{
+      this.ConfigTableBodyData = data;
+      console.log('Configs ', data);
+    });
+  }
 
+  getCOnfigurations1() {
+    this.apiService.getConfigurations().subscribe((data: any) => {
+    });
+
+  }
 }

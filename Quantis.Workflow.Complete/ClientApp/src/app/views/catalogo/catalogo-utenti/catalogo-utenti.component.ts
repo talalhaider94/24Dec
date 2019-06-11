@@ -20,8 +20,8 @@ export class CatalogoUtentiComponent implements OnInit {
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
   dtOptions: DataTables.Settings = {
-    'dom': 'rtip',
-    'pagingType': 'full_numbers'
+    // 'dom': 'rtip',
+    // 'pagingType': 'full_numbers'
   };
 
 
@@ -32,7 +32,9 @@ export class CatalogoUtentiComponent implements OnInit {
     STRUTTURA: '',
     MAIL: '',
     USERID: '',
-    RESPONSABILE: ''
+    RESPONSABILE: '',
+    USER_ADMIN: '',
+    USER_SADMIN: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -45,7 +47,9 @@ export class CatalogoUtentiComponent implements OnInit {
       STRUTTURA: 'STRUTTURA',
       MAIL: 'MAIL',
       USERID: 'USERID',
-      RESPONSABILE: 'RESPONSABILE'
+      RESPONSABILE: 'RESPONSABILE',
+      USER_ADMIN: 'USER_ADMIN',
+      USER_SADMIN: 'USER_SADMIN'
     }
   ]
 
@@ -65,6 +69,8 @@ export class CatalogoUtentiComponent implements OnInit {
     this.modalData.MAIL = data.mail;
     this.modalData.USERID = data.userid;
     this.modalData.RESPONSABILE = data.manager;
+    this.modalData.USER_ADMIN = data.user_admin;
+    this.modalData.USER_SADMIN = data.user_sadmin;
   }
 
   updateUtenti() {
