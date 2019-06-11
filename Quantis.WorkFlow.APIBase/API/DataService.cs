@@ -528,8 +528,30 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw e;
                 }
             };
-            
+        }
 
+        public bool SubmitAttachment(List<FormAttachmentDTO> dto)
+        {
+            using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
+            {
+                try
+                {
+                    List<T_FormAttachment> attachments = new List<T_FormAttachment>();
+                    foreach (var attach in dto)
+                    {
+                        attachments.Add(_fromAttachmentMapper.GetEntity(attach, new T_FormAttachment()));
+                    }
+                    _dbcontext.FormAttachments.AddRange(attachments.ToArray());
+                    _dbcontext.SaveChanges(false);
+                    dbContextTransaction.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+                    throw e;
+                }
+            };
         }
 
         public string GetBSIServerURL()
@@ -664,7 +686,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         sp += whereclause;
                     }
-                    if ( (filterByKpiId != null) )
+                    if (id_kpi > 0 )
                     {
                         sp += filterByKpiId;
                     }
