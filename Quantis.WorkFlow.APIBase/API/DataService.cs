@@ -649,7 +649,7 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
         
-        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year)
+        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi)
         {
             try
             {
@@ -657,11 +657,16 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
 
-                    var whereclause = " where (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
-                    var sp = @"select * from a_rules";
+                    var whereclause = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
+                    var filterByKpiId = " and id_kpi = :id_kpi";
+                    var sp = @"select * from a_rules where 1=1";
                     if ( (month != null) && (year != null))
                     {
                         sp += whereclause;
+                    }
+                    if ( (filterByKpiId != null) )
+                    {
+                        sp += filterByKpiId;
                     }
                     
                     var command = new NpgsqlCommand(sp, con);
@@ -670,7 +675,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse(month), Int32.Parse("01")));
                     }
-
+                    if ((filterByKpiId != null))
+                    {
+                        command.Parameters.AddWithValue(":id_kpi", id_kpi);
+                    }
                     using (var reader = command.ExecuteReader())
                     {
                         List<ARulesDTO> list = new List<ARulesDTO>();
@@ -681,7 +689,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.id_kpi = reader.GetInt32(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
                             arules.interval_kpi = reader.GetDateTime(reader.GetOrdinal("interval_kpi"));
-                            arules.value_kpi = reader.GetInt32(reader.GetOrdinal("value_kpi"));
+                            arules.value_kpi = reader.GetDouble(reader.GetOrdinal("value_kpi"));
                             arules.ticket_id = reader.GetInt32(reader.GetOrdinal("ticket_id"));
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
