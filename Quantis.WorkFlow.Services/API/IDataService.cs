@@ -43,7 +43,7 @@ namespace Quantis.WorkFlow.Services.API
         int ArchiveKPIs(ArchiveKPIDTO dto);
         bool ResetPassword(string username, string email);
 
-        List<ARulesDTO> GetAllArchiveKPIs(string month, string year);
+        List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi);
         List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
 
         string GetUserIdByUserName(string name);

@@ -161,9 +161,9 @@ namespace Quantis.WorkFlow.Controllers
         }
 
         [HttpGet("GetAllArchivedKPIs")]
-        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year)
+        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, int id_kpi)
         {
-            return _dataAPI.GetAllArchiveKPIs(month, year);
+            return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi);
         }
 
         [HttpGet("GetDetailsArchivedKPI")]
