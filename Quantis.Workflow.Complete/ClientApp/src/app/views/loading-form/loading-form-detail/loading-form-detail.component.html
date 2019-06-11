@@ -10,12 +10,12 @@
         <div class="card-body">
 
            <form [formGroup]="dynamicForm" (ngSubmit)="AddLoadingFormSubmit(dynamicForm)" class="form-horizontal">
-              <div formArrayName="items" *ngFor="let item of dynamicForm.get('items').controls; let i = index;">
+              <div formArrayName="items" *ngFor="let item of dynamicForm.get('items'); let i = index;">
               <div [formGroupName]="i">
                 <input type="number" formControlName="min" placeholder="Min">
                 <input type="number" formControlName="max" placeholder="Max">
               </div>
-              Chosen name: {{ dynamicForm.controls.items.controls[i].controls.name.value }}
+              Chosen name: {{ dynamicForm.items[i].name.value }}
             </div>
 <!--             
             <div class="form-group row">
