@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
+import { Subject } from 'rxjs';
 
 declare var $;
 var $this;
@@ -15,12 +16,6 @@ export class ArchivedKpiComponent implements OnInit {
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
   dtOptions: DataTables.Settings = {
-    'dom': 'rtip',
-    // "columnDefs": [{
-    // "targets": [0,2],
-    // "data": null,
-    // "defaultContent": '<input type="checkbox" />'
-    // }]
   };
 
   modalData = {
@@ -33,6 +28,7 @@ export class ArchivedKpiComponent implements OnInit {
     archived: ''
   };
 
+  dtTrigger: Subject<any> = new Subject();
   ArchivedKpiBodyData: any = [
     {
       id_kpi: 'id_kpi',
@@ -61,36 +57,50 @@ export class ArchivedKpiComponent implements OnInit {
     this.modalData.archived = data.archived;
   }
 
-  getKpis() {
-    this.apiService.getArchivedKpis().subscribe((data) =>{
-      this.ArchivedKpiBodyData = data;
-      console.log('Archived Kpis ', data);
-    });
-  }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
-    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref) => {
-      this.setUpDataTableDependencies(dataTable_Ref);
-    });
-    this.apiService.getArchivedKpis().subscribe((data) => {
+    this.dtTrigger.next();
+
+    this.setUpDataTableDependencies();
+    this.getKpis1();
+
+    this.apiService.getArchivedKpis().subscribe((data:any)=>{
       this.ArchivedKpiBodyData = data;
-      console.log('kpis ', data);
+      this.rerender();
     });
   }
 
-  getKpiTableRef(datatableElement: DataTableDirective): any {
-    return datatableElement.dtInstance;
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
-  setUpDataTableDependencies(datatable_Ref){
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  // getKpiTableRef(datatableElement: DataTableDirective): any {
+  //   return datatableElement.dtInstance;
+  // }
+
+  setUpDataTableDependencies(){
 
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
         .columns( 0 )
         .search( this.value )
         .draw();
+    });
     });
 
   }
@@ -101,5 +111,16 @@ export class ArchivedKpiComponent implements OnInit {
     return tmp.textContent||tmp.innerText;
   }
 
+  getKpis() {
+    this.apiService.getArchivedKpis().subscribe((data) =>{
+      this.ArchivedKpiBodyData = data;
+      console.log('Archived Kpis ', data);
+    });
+  }
+
+  getKpis1() {
+    this.apiService.getArchivedKpis().subscribe((data: any) => {
+    });
+  }
 
 }
