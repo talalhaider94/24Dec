@@ -1,8 +1,11 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br><h2 style="color:#565656">ARCHIVED KPI</h2><br>
+    <h4 style="color:#565656; margin-left:12%">Periodo:</h4>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
+      <select class="form-control ml-3" style="width:15%;" #searchCol2><option value="">Month</option><option value="may">May</option></select>
+      <select class="form-control ml-1" style="width:15%;" #searchCol3><option value="">Year</option><option value="">2019</option></select>
     </div><br/>
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
