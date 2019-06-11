@@ -1,3 +1,6 @@
+<div class="text-center" *ngIf="loading">
+    <span class="fa fa-spinner fa-spin fa-3x text-primary text-center"></span>  
+</div>
 <div class="row justify-content-md-center">
     <div class="col-md-6 col-sm-offset-3">
       <div class="card">
@@ -5,7 +8,16 @@
           <strong>{{formName}}</strong>
         </div>
         <div class="card-body">
-          <form [formGroup]="addLoadingForm" (ngSubmit)="AddLoadingFormSubmit()" class="form-horizontal">
+
+           <form [formGroup]="dynamicForm" (ngSubmit)="AddLoadingFormSubmit(dynamicForm)" class="form-horizontal">
+              <div formArrayName="items" *ngFor="let item of dynamicForm.get('items').controls; let i = index;">
+              <div [formGroupName]="i">
+                <input type="number" formControlName="min" placeholder="Min">
+                <input type="number" formControlName="max" placeholder="Max">
+              </div>
+              Chosen name: {{ dynamicForm.controls.items.controls[i].controls.name.value }}
+            </div>
+<!--             
             <div class="form-group row">
               <label class="col-md-4 col-form-label"><strong>Nome Camppo</strong> </label>
               <div class="col-md-8">
@@ -22,7 +34,7 @@
                 <label class="col-md-4 col-form-label" for="date-input">Date Input</label>
                 <div class="col-md-8">
                   <input class="form-control" id="date-input" type="date" name="date-input" placeholder="date">
-                  <!-- <span class="help-block">Please enter a valid date</span> -->
+                  <span class="help-block">Please enter a valid date</span>
                 </div>
             </div>
             <div class="form-group row">
@@ -46,7 +58,7 @@
                   <label class="form-check-label" for="inline-checkbox1"></label>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group row">
               <label class="col-md-4 col-form-label" for="file-multiple-input">Documenti Presenti</label>
@@ -63,11 +75,11 @@
               </div>
               
             </div>
-          </form>
-        </div>
-        <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Invia</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Anula</button>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Invia</button>
+                <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Anula</button>
+            </div>
+          </form> 
         </div>
       </div>
     </div>

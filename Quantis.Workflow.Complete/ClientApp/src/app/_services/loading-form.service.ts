@@ -43,7 +43,12 @@ export class LoadingFormService {
   }
   // form submitted by Admin from Loading form
   createForm(form): Observable<any> {
-    const createFormEndPoint = `${environment.API_URL}/Data/AddUpdateForm`;
+    const createFormEndPoint = `${environment.API_URL}/Data/AddUpdateFormRule`;
     return this.http.post(createFormEndPoint,form, Headers.setHeaders('POST'));
+  }
+
+  getFormRuleByFormId(formId: number): Observable<any> {
+    const getFormRuleByFormIdEndPoint = `${environment.API_URL}/Data/GetFormRuleByFormId/${formId}`;
+    return this.http.get(getFormRuleByFormIdEndPoint, Headers.setHeaders('GET'));
   }
 }
