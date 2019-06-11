@@ -8,7 +8,7 @@
 <!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
           <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">CSV Export</button>
       </div><br/>
-      <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions">
+      <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #E6E6E6">
         <tr>
             <th>BSI ACCOUNT</th>

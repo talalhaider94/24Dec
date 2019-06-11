@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
+import { Subject } from 'rxjs';
 
 declare var $;
 var $this;
@@ -17,7 +18,6 @@ export class CatalogoUtentiComponent implements OnInit {
   @ViewChild('searchCol2') searchCol2: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-
 
   dtOptions: DataTables.Settings = {
     'dom': 'rtip',
@@ -35,6 +35,7 @@ export class CatalogoUtentiComponent implements OnInit {
     RESPONSABILE: ''
   };
 
+  dtTrigger: Subject<any> = new Subject();
   UtentiTableBodyData: any = [
     {
       id: '1',
@@ -72,52 +73,66 @@ export class CatalogoUtentiComponent implements OnInit {
     });
   }
 
-  getUsers() {
-    this.apiService.getCatalogoUsers().subscribe((data) =>{
-      this.UtentiTableBodyData = data;
-      console.log('Configs ', data);
-    });
-  }
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
-    this.getKpiTableRef(this.datatableElement).then((dataTable_Ref)=>{
-      this.setUpDataTableDependencies(dataTable_Ref);
-    });
-    this.apiService.getCatalogoUsers().subscribe((data)=>{
+    this.dtTrigger.next();
+
+    this.setUpDataTableDependencies();
+    this.getUsers();
+
+    this.apiService.getCatalogoUsers().subscribe((data:any)=>{
       this.UtentiTableBodyData = data;
-      console.log('kpis ', data);
-    })
+      this.rerender();
+    });
   }
 
-  getKpiTableRef(datatableElement: DataTableDirective): any {
-    return datatableElement.dtInstance;
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
-  setUpDataTableDependencies(datatable_Ref){
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  // getKpiTableRef(datatableElement: DataTableDirective): any {
+  //   return datatableElement.dtInstance;
+  // }
+
+  setUpDataTableDependencies(){
       // #column3_search is a <input type="text"> element
       $(this.searchCol1.nativeElement).on( 'keyup', function () {
+        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
             .columns( 1 )
             .search( this.value )
             .draw();
       });
+      });
       $(this.searchCol2.nativeElement).on( 'keyup', function () {
+        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
             .columns( 2 )
             .search( this.value )
             .draw();
       });
-   
-   
+      });
+
       // export only what is visible right now (filters & paginationapplied)
       $(this.btnExportCSV.nativeElement).click(function (event) {
           event.preventDefault();
-          //$this.table2csv(datatable_Ref, 'visible', 'table.dataTables-reports');
-          $this.table2csv(datatable_Ref, 'full', 'table.dataTables-reports');
+          $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+          $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+        });
       });
     }
-  
-  
+
     table2csv(oTable, exportmode, tableElm) {
       var csv = '';
       var headers = [];
@@ -165,5 +180,9 @@ export class CatalogoUtentiComponent implements OnInit {
       tmp.innerHTML = html;
       return tmp.textContent||tmp.innerText;
     }
-    
+
+  getUsers() {
+    this.apiService.getCatalogoUsers().subscribe((data: any) => {
+    });
+  }
   }
