@@ -4,6 +4,10 @@
     <h2 style="color:#565656">CONFIGURAZIONI</h2><br>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
+      <button style="margin-left:80%" class="btn btn-success" data-toggle="modal"
+              data-target="#addConfigModal">
+        Add New
+      </button>
     </div><br />
     <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
@@ -61,6 +65,43 @@
       </div>
       <div class="modal-footer">
         <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="classTable" class="table table-bordered">
+          <thead style="background: #E6E6E6">
+          <tr>
+            <th>Key</th>
+            <th>Owner</th>
+            <th>Value</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button  class="btn btn-success">Add</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
