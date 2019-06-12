@@ -77,7 +77,7 @@
 
 <!-- TABELLA FORM SCELTO VISTA ADMINISRATOR -->
 <!-- FORM TABLE CHOSEN VIEW ADMINISRATOR -->
-<div *ngIf='mostraTabella && vai && daje'>
+<div *ngIf='mostraTabella && vai && daje && isAdmin'>
   <!-- <label>admin</label>
 <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'>     -->
      
@@ -237,25 +237,14 @@
             <mat-icon>file_upload</mat-icon>
             {{text}}
           </button>-->
-          <table>
-            <tr>
-              <!-- <td>
-                  <button mat-button  class="btn btn-primary pull-left">
-                      <mat-icon>file_upload</mat-icon>
-                      carica file
-                    </button>
-              </td> -->
-              <td>
   
-            <div class="margin-20">
-                <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">
-                  <span *ngIf="loading" class="fa fa-spinner fa-spin"></span>Submit</button>
+          <div class="row">
+              <div class="col-sm-12">
+                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
+                      <span *ngIf="loading" class="fa fa-spinner fa-spin"></span>Salva</button>
+                      <a [routerLink]="['/loading-form/admin']" class="btn btn-info text-white">Annulla</a>
               </div>
-              <div class="clearfix"></div>
-          </td>
-          </tr>
-          </table>
-  
+          </div>
   
         </form>
     </div>
@@ -265,7 +254,7 @@
 
 <!-- TABELLA FORM SCELTO USERS SECONDARIO -->
 <!-- FORM CHOSEN SECONDARY USERS TABLE -->
-<div *ngIf='mostraTabella && vai && !daje'>
+<div *ngIf='mostraTabella && vai && !daje && !isAdmin'>
 <!--     
     <label>admin</label>
     <input type="checkbox" *ngIf='isAdmin' [(ngModel)]='daje'> -->
@@ -326,8 +315,9 @@
             <table class="table table-responsive-sm table-hover table-outline bg-white">
                 <thead>
                   <tr>
-                    <th>Nome Contratto</th>
-                    <th>ID Kpi</th>
+                    <th>Contract</th>
+                    <th>KPI Name BSI</th>
+                    <th>Target</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -336,7 +326,8 @@
                   </tr>
                   <tr *ngFor='let kpi of listaKpiPerForm'>
                     <td>{{kpi.contract}}</td>
-                    <td>{{kpi.id_kpi}}</td>
+                    <td>{{kpi.kpi_name_bsi}}</td>
+                    <td>{{kpi.target}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -433,28 +424,14 @@
               </div>
            
           </div>
-            
-            <table>
-              <tr>
-                <!-- <td>
-                    <button mat-button  class="btn btn-primary pull-left"    (click)="onClick()">
-                        <mat-icon>file_upload</mat-icon>
-                        carica file
-                      </button>
-                </td> -->
-                <td>
-    
-              <div class="margin-20">
-                  <button type="submit" class="btn btn-primary pull-right" [disabled]="!myInputForm.valid">
-                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Submit
+          <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
-                </div>
-                <div class="clearfix"></div>
-            </td>
-            </tr>
-            </table>
-
-    
+                  <a [routerLink]="['/loading-form/user']" class="btn btn-info text-white">Annulla</a>
+            </div>
+          </div>      
           </form>
         </div>
       </div>

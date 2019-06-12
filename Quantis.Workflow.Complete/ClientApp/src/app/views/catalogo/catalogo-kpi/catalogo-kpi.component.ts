@@ -335,8 +335,7 @@ export class CatalogoKpiComponent implements OnInit {
     }
     csv += rows.join("\n");
     var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-    //saveAs(csv, "myfile-csv.csv")
-    saveAs(blob, "KpiTable.csv");
+    saveAs(blob, 'KpiTable.csv');
   }
 
   strip_tags(html) {
