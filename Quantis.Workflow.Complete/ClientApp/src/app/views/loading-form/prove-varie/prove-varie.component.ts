@@ -9,7 +9,7 @@ import { FormAttachments,FormField, UserSubmitLoadingForm, Form, FileUploadModel
 import * as moment from 'moment';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 export class FormClass{
   form_id:number;
@@ -112,6 +112,7 @@ export class ProveVarieComponent implements OnInit {
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
+    private router: Router,
     ) {}
 
   initInputForm(){
@@ -230,9 +231,11 @@ export class ProveVarieComponent implements OnInit {
       formToSend.form_body = JSON.stringify(arrayControlli);
       console.log('FINAL SENDING FORM', formToSend);
       this.loadingFormService.createForm(formToSend).subscribe(data => {
+        
         this.toastr.success('Form has been submitted', 'Success');
         console.log('FINAL CREATE FORM SUCCESS', data);
         this.loading = false;
+        this.router.navigate(['/loading-form/admin']);
       }, error => {
         this.toastr.error(error.message, 'Error');
         console.error('FINAL CREATE FORM ERROR', error);
@@ -430,7 +433,9 @@ export class ProveVarieComponent implements OnInit {
 
     this.loadingFormService.getKpiByFormId(numero).subscribe(data => {
       console.log('getKpiByFormId', data);
-      if(!!data) {
+      if(!!data && typeof data === "object" && !Array.isArray(data)) {
+        this.listaKpiPerForm.push(data);
+      } else if(!!data && Array.isArray(data)){
         data.forEach(element => {
           this.listaKpiPerForm.push(element);
         });
