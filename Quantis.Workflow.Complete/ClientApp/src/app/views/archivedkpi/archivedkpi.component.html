@@ -1,6 +1,6 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br><h2 style="color:#565656">ARCHIVED KPI</h2><br>
+    <br><h2 style="color:#565656">KPI ARCHIVIATI</h2><br>
     <h4 style="color:#565656; margin-left:12%">Periodo:</h4>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
@@ -9,15 +9,15 @@
     </div><br/>
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
-      <tr>
-        <th>KPI Name</th>
-        <th>Interval</th>
-        <th>Value</th>
-        <th>Ticket ID</th>
-        <th>Close Timestamp Ticket</th>
-        <th>Archived</th>
-        <th>Action</th>
-      </tr>
+        <tr>
+          <th>Nome KPI</th>
+          <th>Intervallo</th>
+          <th>Valore</th>
+          <th>Ticket ID</th>
+          <th>Chiusura Ticket</th>
+          <th>Archiviato</th>
+          <th>Azione</th>
+        </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
@@ -28,7 +28,7 @@
         <td>{{row.close_timestamp_ticket}}</td>
         <td>{{row.archived}}</td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-            data-target="#archivedKpiModal">View</button></td>
+            data-target="#archivedKpiModal">Vedi</button></td>
       </tr>
       </tbody>
     </table>
@@ -48,14 +48,14 @@
         <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
-          <tr>
-            <th>KPI Name</th>
-            <th>Interval</th>
-            <th>Value</th>
-            <th>Ticket ID</th>
-            <th>Close Timestamp Ticket</th>
-            <th>Archived</th>
-          </tr>
+            <tr>
+              <th>Nome KPI</th>
+              <th>Intervallo</th>
+              <th>Valore</th>
+              <th>Ticket ID</th>
+              <th>Chiusura Ticket</th>
+              <th>Archiviato</th>
+            </tr>
           </thead>
           <tbody>
           <tr>
@@ -72,7 +72,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
+          Chiudi
         </button>
       </div>
     </div>

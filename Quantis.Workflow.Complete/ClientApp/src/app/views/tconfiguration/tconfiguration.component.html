@@ -1,16 +1,16 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br>
-    <h2 style="color:#565656">T Configurations</h2><br>
+    <h2 style="color:#565656">CONFIGURAZIONI</h2><br>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
     </div><br />
     <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
         <tr>
-          <th>Key</th>
-          <th>Value</th>
-          <th>Action</th>
+          <th>Chiave</th>
+          <th>Valore</th>
+          <th>Azione</th>
         </tr>
       </thead>
       <tbody>
@@ -18,7 +18,7 @@
           <td>{{row.key}}</td>
           <td>{{row.value}}</td>
           <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-              data-target="#configModal">Update</button></td>
+              data-target="#configModal">Modifica</button></td>
         </tr>
       </tbody>
     </table>
@@ -39,23 +39,23 @@
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
             <tr>
-              <th>Key</th>
-              <th>Value</th>
-              <th>Action</th>
+              <th>Chiave</th>
+              <th>Valore</th>
+              <th>Azione</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{modalData.key}}</td>
               <td><input type="text" class="form-control"[(ngModel)]="modalData.value"></td>
-              <td align="center"><button (click)="updateConfig()" class="btn btn-primary">Update</button></td>
+              <td align="center"><button (click)="updateConfig()" class="btn btn-primary">Modifica</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
+          Chiudi
         </button>
       </div>
     </div>
