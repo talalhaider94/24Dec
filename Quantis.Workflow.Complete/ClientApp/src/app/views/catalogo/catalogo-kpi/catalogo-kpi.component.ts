@@ -293,6 +293,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.btnExportCSV.nativeElement).click(function (event) {
       event.preventDefault();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+
         $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
       });
     });
@@ -335,7 +336,8 @@ export class CatalogoKpiComponent implements OnInit {
     }
     csv += rows.join("\n");
     var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, 'KpiTable.csv');
+    //saveAs(csv, "myfile-csv.csv")
+    saveAs(blob, "ExportKPITable.csv");
   }
 
   strip_tags(html) {
