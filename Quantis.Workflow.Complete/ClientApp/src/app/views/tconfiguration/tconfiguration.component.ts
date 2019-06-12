@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -56,7 +57,10 @@ export class TConfigurationComponent implements OnInit {
     }
   ]
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+  ) {
     $this = this;
   }
 
@@ -70,9 +74,15 @@ export class TConfigurationComponent implements OnInit {
   }
 
   updateConfig() {
-    this.apiService.updateConfig(this.modalData).subscribe((data: any) => {
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.updateConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
-    });
+      this.toastr.success('Valore Aggiornato', 'Success');
+      $('#configModal').modal('toggle').hide();
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+      $('#configModal').modal('toggle').hide();
+      });
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
