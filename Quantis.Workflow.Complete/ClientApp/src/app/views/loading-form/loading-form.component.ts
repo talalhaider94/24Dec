@@ -28,6 +28,28 @@ export class LoadingFormComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
     };
     this.loadingFormService.getLoadingForms().pipe(first()).subscribe(data => {
       this.loadingForms = data;

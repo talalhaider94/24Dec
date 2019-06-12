@@ -43,14 +43,14 @@ export class LoginComponent implements OnInit{
   onLoginFormSubmit() {
     this.submitted = true;
     if (this.loginForm.invalid) {
-        this.toastr.error('Please fill the form correctly.', 'Error');
+      this.toastr.error('Inserisci i campi in maniera corretta.', 'Error');
         return;
     } else {
       const { userName, password } = this.f;
       this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
         this.router.navigate([this.returnUrl]);
-        this.toastr.success('You are loggedin successfully', 'Success');
+        this.toastr.success('Login eseguito con successo.', 'Success');
         this.loading = false;
       }, error => {
         console.log('onLoginFormSubmit: error', error);

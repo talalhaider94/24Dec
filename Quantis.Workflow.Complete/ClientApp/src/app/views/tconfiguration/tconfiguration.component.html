@@ -1,24 +1,30 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br>
-    <h2 style="color:#565656">T Configurations</h2><br>
+    <h2 style="color:#565656">CONFIGURAZIONI</h2><br>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Key" #searchCol1 />
     </div><br />
     <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
         <tr>
-          <th>Key</th>
-          <th>Value</th>
-          <th>Action</th>
+          <th>Chiave</th>
+          <th>Owner</th>
+          <th>Valore</th>
+          <th>Azione</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of ConfigTableBodyData; index as i">
           <td>{{row.key}}</td>
+          <td>{{row.owner}}</td>
           <td>{{row.value}}</td>
-          <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-              data-target="#configModal">Aggiorna</button></td>
+          <td align="center">
+            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                    data-target="#configModal">
+              Modifica
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -40,13 +46,15 @@
           <thead style="background: #E6E6E6">
             <tr>
               <th>Key</th>
+              <th>Owner</th>
               <th>Value</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{modalData.key}}</td>
-              <td><input type="text" class="form-control"[(ngModel)]="modalData.value"></td>
+              <td>{{modalData.owner}}</td>
+              <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
             </tr>
           </tbody>
         </table>
