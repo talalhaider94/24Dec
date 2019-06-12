@@ -157,19 +157,19 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
-  // getKpis() {
-  //   this.apiService.getCatalogoKpis().subscribe((data) =>{
-  //     this.kpiTableBodyData = data;
-  //     console.log('Kpis ', data);
-  //   });
-  // }
+  getKpis() {
+    this.apiService.getCatalogoKpis().subscribe((data) =>{
+      this.kpiTableBodyData = data;
+      console.log('Kpis ', data);
+    });
+  }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-    this.getKpis();
+    this.getKpis1();
     this.apiService.getCatalogoKpis().subscribe((data:any)=>{
       this.kpiTableBodyData = data;
       this.rerender();
@@ -344,7 +344,7 @@ export class CatalogoKpiComponent implements OnInit {
     return tmp.textContent || tmp.innerText;
   }
 
-  getKpis(){
+  getKpis1(){
     this.apiService.getCatalogoKpis().subscribe((data: any) => {
     });
   }
