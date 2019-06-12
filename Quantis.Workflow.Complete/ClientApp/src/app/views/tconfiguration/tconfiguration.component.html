@@ -83,25 +83,12 @@
         </button>
       </div>
       <div class="modal-body">
-        <table id="classTable" class="table table-bordered">
-          <thead style="background: #E6E6E6">
-          <tr>
-            <th>Key</th>
-            <th>Owner</th>
-            <th>Value</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
-          </tr>
-          </tbody>
-        </table>
+        <label><b>Enter Chiave</b></label><input type="text" class="form-control" placeholder="Enter Chiave" /><br>
+        <label><b>Enter Owner</b></label><input type="text" class="form-control" placeholder="Enter Owner" /><br>
+        <label><b>Enter Valore</b></label><input type="text" class="form-control" placeholder="Enter Valore" />
       </div>
       <div class="modal-footer">
-        <button  class="btn btn-success">Add</button>
+        <button class="btn btn-success">Add</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
