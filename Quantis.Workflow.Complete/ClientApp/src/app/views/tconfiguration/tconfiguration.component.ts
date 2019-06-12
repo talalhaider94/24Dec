@@ -43,14 +43,16 @@ export class TConfigurationComponent implements OnInit {
 
   modalData = {
     key: '',
-    value: ''
+    value: '',
+    owner: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
       key: 'key',
-      value: 'value'
+      value: 'value',
+      owner: 'owner'
     }
   ]
 
@@ -63,6 +65,7 @@ export class TConfigurationComponent implements OnInit {
 
   populateModalData(data) {
     this.modalData.key = data.key;
+    this.modalData.owner = data.owner;
     this.modalData.value = data.value;
   }
 
