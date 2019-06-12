@@ -690,7 +690,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         sp += filterByKpiId;
                     }
-                    
+                    sp += " order by interval_kpi asc";
                     var command = new NpgsqlCommand(sp, con);
 
                     if ((month != null) && (year != null))
