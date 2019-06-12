@@ -81,7 +81,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var confs = _dbcontext.Configurations.Where(o=>o.isvisible);
+                var confs = _dbcontext.Configurations.Where(o=>o.isvisible).OrderBy(o => o.key);
                 var dtos = _configurationMapper.GetDTOs(confs.ToList());
                 return dtos;
             }

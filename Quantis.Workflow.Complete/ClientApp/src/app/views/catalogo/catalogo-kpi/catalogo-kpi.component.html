@@ -11,7 +11,7 @@
       <span>&nbsp;&nbsp;</span>
       <select class="form-control" style="width:15%;" #searchCol5><option value="">Tutte le Frequenze</option></select>
       <span>&nbsp;&nbsp;</span>
-      <button class="ml-5" #btnExportCSV>CSV Export</button>
+      <button class="ml-5" #btnExportCSV>Esporta CSV</button>
     </div><br/>
     <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead>
@@ -19,7 +19,7 @@
         <th>ABILITATO</th>
         <th>REMINDER</th>
         <th>WORKFLOW</th>
-        <th>CONTRACT</th>
+        <th>CONTRATTO</th>
         <th>ID KPI</th>
         <th>TITOLO BREVE</th>
         <th>CARICAMENTO</th>
@@ -28,7 +28,7 @@
         <th>DATA WM</th>
         <th>REFERENTI</th>
         <th>CALCOLO</th>
-        <th>ACTION</th>
+        <th>AZIONI</th>
       </tr>
       </thead>
       <tbody>
@@ -46,7 +46,7 @@
         <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal"    (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
         <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal"    (click)="coloBtn(row.kpi_description)" ><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                   data-target="#kpiModal">Update</button></td>
+                                   data-target="#kpiModal">Modifica</button></td>
       </tr>
       </tbody>
     </table>
@@ -85,7 +85,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" >
-          Close
+          Chiudi
         </button>
       </div>
     </div>
@@ -106,7 +106,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
+          Chiudi
         </button>
       </div>
     </div>
@@ -133,7 +133,7 @@
             <tr><th>ABILITATO</th><td align="center"><input type="checkbox"/></td></tr>
             <tr><th>REMINDER</th><td align="center"><input type="checkbox"/></td></tr>
             <tr><th>WORKFLOW</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>CONTRACT</th><td><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
+            <tr><th>CONTRATTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
             <tr><th>ID KPI</th><td><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
             <tr><th>TITOLO BREVE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
             <tr><th>CARICAMENTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
@@ -146,8 +146,8 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button (click)="updateKpi()" class="btn btn-success">Aggiorna</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        <button (click)="updateKpi()" class="btn btn-success">Salva</button>
       </div>
     </div>
   </div>

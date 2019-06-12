@@ -147,6 +147,13 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.SumbitForm(dto);
         }
 
+        [HttpPost("SubmitAttachment")]
+        [DisableRequestSizeLimit]
+        public bool SubmitAttachment([FromBody]List<FormAttachmentDTO> dto)
+        {
+            return _dataAPI.SubmitAttachment(dto);
+        }
+
         [HttpPost("ArchiveKPIs")]
         public int ArchiveKPIs([FromBody]ArchiveKPIDTO dto)
         {

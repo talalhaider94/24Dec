@@ -9,15 +9,14 @@
                   <tr>
                     <th class="text-center">No.</th>
                     <th class="text-center">Form ID</th>
-                    <th class="text-center">Form Name</th>
-                    <th class="text-center">Group Name</th>
-                    <th class="text-center">Cutoff</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center">Nome Form</th>
+                    <th class="text-center">Gruppo</th>
+                    <th class="text-center">Azione</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngIf="loadingForms.length === 0 && !loading">
-                    <td colspan="6"><strong>No Loading Form found.</strong></td>
+                    <td colspan="6"><strong>Nessun Loading Form Trovato.</strong></td>
                   </tr>
                   <tr *ngIf="loading" class="text-center">
                       <td colspan="6">
@@ -36,9 +35,6 @@
                     </td>
                     <td>
                       <div class="text-center">{{ loadingForm.user_group_name || 'N/A' }}</div>
-                    </td>
-                    <td>
-                      <div class="text-center">{{ loadingForm.cutoff }}</div>
                     </td>
                     <td>
                       <div class="text-center">

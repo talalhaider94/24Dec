@@ -6,7 +6,7 @@
           <input type="text" class="form-control ml-3 mr-1" style="width:20%;" placeholder="nome" #searchCol1/>
           <input type="text" class="form-control ml-1 mr-3" style="width:20%;" placeholder="cognone" #searchCol2/>
 <!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
-          <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">CSV Export</button>
+          <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
       </div><br/>
       <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #E6E6E6">
@@ -20,7 +20,7 @@
             <th>RESPONSABILE</th>
             <th>USER ADMIN</th>
             <th>USER SADMIN</th>
-            <th>ACTION</th>
+            <th>AZIONE</th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +35,7 @@
             <td>{{row.user_admin}}</td>
             <td>{{row.user_sadmin}}</td>
             <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                 data-target="#utentiModal">Update</button></td>
+                 data-target="#utentiModal">Modifica</button></td>
           </tr>
           </tbody>
       </table>
@@ -72,8 +72,8 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button (click)="updateUtenti()" class="btn btn-success">Aggiorna</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        <button (click)="updateUtenti()" class="btn btn-success">Salva</button>
       </div>
     </div>
   </div>
