@@ -18,7 +18,7 @@
           <td>{{row.key}}</td>
           <td>{{row.value}}</td>
           <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-              data-target="#configModal">Update</button></td>
+              data-target="#configModal">Aggiorna</button></td>
         </tr>
       </tbody>
     </table>
@@ -41,22 +41,19 @@
             <tr>
               <th>Key</th>
               <th>Value</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{modalData.key}}</td>
               <td><input type="text" class="form-control"[(ngModel)]="modalData.value"></td>
-              <td align="center"><button (click)="updateConfig()" class="btn btn-primary">Update</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Close
-        </button>
+        <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>

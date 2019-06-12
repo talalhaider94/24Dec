@@ -35,7 +35,7 @@
             <td>{{row.user_admin}}</td>
             <td>{{row.user_sadmin}}</td>
             <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                 data-target="#utentiModal">Update</button></td>
+                 data-target="#utentiModal">Aggiorna</button></td>
           </tr>
           </tbody>
       </table>
@@ -72,8 +72,8 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button (click)="updateUtenti()" class="btn btn-success">Aggiorna</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        <button (click)="updateUtenti()" class="btn btn-success">Salva</button>
       </div>
     </div>
   </div>
