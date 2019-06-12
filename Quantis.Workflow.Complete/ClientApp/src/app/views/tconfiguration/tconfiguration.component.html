@@ -39,24 +39,21 @@
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
             <tr>
-              <th>Chiave</th>
-              <th>Valore</th>
-              <th>Azione</th>
+              <th>Key</th>
+              <th>Value</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{modalData.key}}</td>
               <td><input type="text" class="form-control"[(ngModel)]="modalData.value"></td>
-              <td align="center"><button (click)="updateConfig()" class="btn btn-primary">Modifica</button></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          Chiudi
-        </button>
+        <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>
