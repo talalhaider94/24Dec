@@ -32,8 +32,8 @@
             <td>{{row.mail}}</td>
             <td>{{row.userid}}</td>
             <td>{{row.manager}}</td>
-            <td>{{row.user_admin}}</td>
-            <td>{{row.user_sadmin}}</td>
+            <td align="center"><input type="checkbox" [ngModel]="row.user_admin" /></td>
+            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>
             <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                  data-target="#utentiModal">Aggiorna</button></td>
           </tr>
@@ -65,8 +65,9 @@
           <tr><th>MAIL</th><td><input type="text" class="form-control"[(ngModel)]="modalData.MAIL"></td></tr>
           <tr><th>USER ID</th><td>{{modalData.USERID}}</td></tr>
           <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.RESPONSABILE"></td></tr>
-          <tr><th>USER ADMIN</th><td>{{modalData.USER_ADMIN}}</td></tr>
-          <tr><th>USER ADMIN</th><td>{{modalData.USER_SADMIN}}</td></tr>
+<!--          <tr><th>USER ADMIN</th><td>{{modalData.USER_ADMIN}}</td></tr>-->
+          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.USER_ADMIN" /></td></tr>
+          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.USER_SADMIN" /></td></tr>
           </tbody>
         </table>
         </div>
