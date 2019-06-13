@@ -21,7 +21,7 @@ namespace Quantis.WorkFlow.Services.API
         List<PageDTO> GetAllPages();
         PageDTO GetPageById(int Id);
         bool AddUpdatePage(PageDTO dto);
-
+        List<FormAttachmentDTO> GetAttachmentsByFormId(int formId);
         List<GroupDTO> GetAllGroups();
         GroupDTO GetGroupById(int Id);
         bool AddUpdateGroup(GroupDTO dto);
