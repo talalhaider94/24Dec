@@ -282,12 +282,12 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
         }
-        public List<CatalogKPILVDTO> GetAllKpis()
+        public List<CatalogKpiDTO> GetAllKpis() //public List<CatalogKPILVDTO> GetAllKpis()
         {
             try
             {
-                var kpis = _dbcontext.ViewCatalogKPI.ToList();
-                return _vw_catalogKpiMapper.GetDTOs(kpis.ToList());
+                var kpis = _dbcontext.CatalogKpi.ToList(); //viewCatalogKPI
+                return _catalogKpiMapper.GetDTOs(kpis.ToList()); //return _vw_catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
             {
