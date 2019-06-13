@@ -16,17 +16,13 @@ let $this;
 })
 export class CatalogoKpiComponent implements OnInit {
 
-<<<<<<< HEAD
-=======
-
-
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
   ) {
     $this = this;
   }
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
+
   public des = '';
   public ref: any[] ;
   public reft: string;
@@ -113,16 +109,12 @@ export class CatalogoKpiComponent implements OnInit {
     contract: '',
     wf_last_sent: '',
     rm_last_sent: '',
-<<<<<<< HEAD
-    id: ''
-=======
     supply: '',
     primary_contract_party: '',
     secondary_contract_party: '',
     kpi_name_bsi: '',
     global_rule_id_bsi: '',
-    sla_id_bsi: '',
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
+    sla_id_bsi: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -180,13 +172,6 @@ export class CatalogoKpiComponent implements OnInit {
     }
   }
 
-  constructor(
-    private apiService: ApiService,
-    private toastr: ToastrService,
-  ) {
-    $this = this;
-  }
-
   ngOnInit() {
   }
 
@@ -230,29 +215,23 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.contract = data.contract;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
-<<<<<<< HEAD
-    this.modalData.id = data.id;
-=======
     this.modalData.supply = data.supply;
     this.modalData.primary_contract_party = data.primary_contract_party;
     this.modalData.secondary_contract_party = data.secondary_contract_party;
     this.modalData.kpi_name_bsi = data.kpi_name_bsi;
     this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
     this.modalData.sla_id_bsi = data.sla_id_bsi;
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
   }
 
   updateKpi() {
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getKpis(); // this should refresh the main table on page
-<<<<<<< HEAD
       this.toastr.success('Valore Aggiornato', 'Success');
       $('#kpiModal').modal('toggle').hide();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       $('#kpiModal').modal('toggle').hide();
-=======
     });
   }
 
@@ -269,24 +248,9 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-<<<<<<< HEAD
     this.getKpis1();
-
-    this.apiService.getCatalogoKpis().subscribe((data:any)=>{
-=======
     this.getKpis();
-    /*this.apiService.getCatalogoKpis().subscribe((data:any)=>{
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
-      this.kpiTableBodyData = data;
-      this.rerender();
-    });*/
-    // this.getKpiTableRef(this.datatableElement).then((dataTable_Ref) => {
-    //   this.setUpDataTableDependencies(dataTable_Ref);
-    // });
-    // this.apiService.getCatalogoKpis().subscribe((data) => {
-    //   this.kpiTableBodyData = data;
-    //   console.log('kpis ', data);
-    // });
+    //this.rerender();
   }
 
   ngOnDestroy(): void {
@@ -304,15 +268,6 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
-  // getKpiTableRef(datatableElement: DataTableDirective): any {
-  //   return datatableElement.dtInstance;
-  //   // .then((dtInstance: DataTables.Api) => {
-  //   //     console.log(dtInstance);
-  //   // });
-  // }
-
-
-
   setUpDataTableDependencies() {
 
     // let datatable_Ref = $(this.block.nativeElement).DataTable({
@@ -323,7 +278,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-          .columns(4)
+          .columns(1)
           .search(this.value)
           .draw();
       });
@@ -334,7 +289,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
-        .columns( 5 )
+        .columns( 2 )
         .search( this.value )
         .draw();
     });
@@ -342,14 +297,14 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
-        .columns( 10 )
+        .columns( 2 )
         .search( this.value )
         .draw();
     });
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-    datatable_Ref.columns(3).every( function () {
+    datatable_Ref.columns(0).every( function () {
       const that = this;
 
       // Create the select list and search operation
@@ -372,7 +327,7 @@ export class CatalogoKpiComponent implements OnInit {
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-    datatable_Ref.columns(7).every( function () {
+    datatable_Ref.columns(4).every( function () {
       const that = this;
 
       // Create the select list and search operation
@@ -452,18 +407,12 @@ export class CatalogoKpiComponent implements OnInit {
     return tmp.textContent || tmp.innerText;
   }
 
-<<<<<<< HEAD
-  getKpis() {
-    this.apiService.getCatalogoKpis().subscribe((data) =>{
-      this.kpiTableBodyData = data;
-      console.log('Configs ', data);
+  getKpis1() {
+    this.apiService.getCatalogoKpis().subscribe((data: any) => {
     });
   }
 
-  getKpis1(){
-=======
   getKpis(){
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
     this.apiService.getCatalogoKpis().subscribe((data: any) => {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);

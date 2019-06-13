@@ -48,18 +48,6 @@ export class CatalogoUtentiComponent implements OnInit {
   };
 
   modalData = {
-<<<<<<< HEAD
-    BSI_ACCOUNT: '',
-    NOME: '',
-    COGNOME: '',
-    STRUTTURA: '',
-    MAIL: '',
-    USERID: '',
-    RESPONSABILE: '',
-    USER_ADMIN: '',
-    USER_SADMIN: '',
-    id: ''
-=======
     id: '',
     ca_bsi_account: '',
     name: '',
@@ -70,7 +58,6 @@ export class CatalogoUtentiComponent implements OnInit {
     manager: '',
     user_admin: '',
     user_sadmin: ''
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -89,14 +76,10 @@ export class CatalogoUtentiComponent implements OnInit {
     }
   ]
 
-<<<<<<< HEAD
-  constructor(private apiService: ApiService,private toastr: ToastrService) {
-=======
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
   ) {
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
     $this = this;
   }
   
@@ -104,18 +87,6 @@ export class CatalogoUtentiComponent implements OnInit {
   }
 
   populateModalData(data) {
-<<<<<<< HEAD
-    this.modalData.BSI_ACCOUNT = data.ca_bsi_account;
-    this.modalData.NOME = data.name;
-    this.modalData.COGNOME = data.surname;
-    this.modalData.STRUTTURA = data.organization;
-    this.modalData.MAIL = data.mail;
-    this.modalData.USERID = data.userid;
-    this.modalData.RESPONSABILE = data.manager;
-    this.modalData.USER_ADMIN = data.user_admin;
-    this.modalData.USER_SADMIN = data.user_sadmin;
-    this.modalData.id = data.id;
-=======
     this.modalData.id = data.id;
     this.modalData.ca_bsi_account = data.ca_bsi_account;
     this.modalData.name = data.name;
@@ -126,7 +97,6 @@ export class CatalogoUtentiComponent implements OnInit {
     this.modalData.manager = data.manager;
     this.modalData.user_admin = data.user_admin;
     this.modalData.user_sadmin = data.user_sadmin;
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
   }
 
   updateUtenti() {
@@ -146,12 +116,9 @@ export class CatalogoUtentiComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-<<<<<<< HEAD
+
     this.getUsers1();
-=======
-    //this.getUsers1();
     this.getUsers();
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
 
     /*this.apiService.getCatalogoUsers().subscribe((data:any)=>{
       this.UtentiTableBodyData = data;
@@ -254,7 +221,7 @@ export class CatalogoUtentiComponent implements OnInit {
       return tmp.textContent||tmp.innerText;
     }
 
-<<<<<<< HEAD
+
   getUsers1() {
     this.apiService.getCatalogoUsers().subscribe((data: any) => {
     });
@@ -264,19 +231,8 @@ export class CatalogoUtentiComponent implements OnInit {
     this.apiService.getCatalogoUsers().subscribe((data) =>{
       this.UtentiTableBodyData = data;
       console.log('Configs ', data);
-    });
-  }
-=======
-  getUsers() {
-    this.apiService.getCatalogoUsers().subscribe((data) => {
-      this.UtentiTableBodyData = data;
       this.rerender();
     });
   }
-  /*getUsers1() {
-    this.apiService.getCatalogoUsers().subscribe((data: any) => {
-    });
-  }*/
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
 
   }
