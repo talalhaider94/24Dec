@@ -13,6 +13,8 @@ using System.Net.Http;
 using System.Xml;
 using System.Net;
 using System.IO;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -553,10 +555,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
                     client.BaseAddress = new Uri(_dataService.GetBSIServerURL());
-                    var response = client.PostAsJsonAsync("api/UploadKPI/UploadKPI", data).Result;
+                    var dataAsString = JsonConvert.SerializeObject(data);
+                    var content = new StringContent(dataAsString);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var response = client.PostAsync("api/UploadKPI/UploadKPI", content).Result;
+                    //var response = client.PostAsJsonAsync("api/UploadKPI/UploadKPI", data).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        if (response.Content.ReadAsAsync<bool>().Result)
+                        if (response.Content.ReadAsStringAsync().Result=="True")
                         {
                             return true;
                         }
