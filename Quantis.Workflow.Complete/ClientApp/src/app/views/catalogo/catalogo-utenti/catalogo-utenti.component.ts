@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -13,7 +14,7 @@ var $this;
   styleUrls: ['./catalogo-utenti.component.scss']
 })
 export class CatalogoUtentiComponent implements OnInit {
-  @ViewChild('kpiTable') block: ElementRef;
+  @ViewChild('UserTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
@@ -44,75 +45,84 @@ export class CatalogoUtentiComponent implements OnInit {
         sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
       }
     }
-
   };
 
-
   modalData = {
-    BSI_ACCOUNT: '',
-    NOME: '',
-    COGNOME: '',
-    STRUTTURA: '',
-    MAIL: '',
-    USERID: '',
-    RESPONSABILE: '',
-    USER_ADMIN: '',
-    USER_SADMIN: ''
+    id: '',
+    ca_bsi_account: '',
+    name: '',
+    surname: '',
+    organization: '',
+    mail: '',
+    userid: '',
+    manager: '',
+    user_admin: '',
+    user_sadmin: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
   UtentiTableBodyData: any = [
     {
       id: '1',
-      BSI_ACCOUNT: 'BSI ACCOUNT',
-      NOME: 'NOME',
-      COGNOME: 'COGNOME',
-      STRUTTURA: 'STRUTTURA',
-      MAIL: 'MAIL',
-      USERID: 'USERID',
-      RESPONSABILE: 'RESPONSABILE',
-      USER_ADMIN: 'USER_ADMIN',
-      USER_SADMIN: 'USER_SADMIN'
+      ca_bsi_account: 'BSI ACCOUNT',
+      name: 'NOME',
+      surname: 'COGNOME',
+      organization: 'STRUTTURA',
+      mail: 'MAIL',
+      userid: 'USERID',
+      manager: 'RESPONSABILE',
+      user_admin: 'USER_ADMIN',
+      user_sadmin: 'USER_SADMIN'
     }
   ]
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+  ) {
     $this = this;
   }
   
-    ngOnInit() {
-    }
-
+  ngOnInit() {
+  }
 
   populateModalData(data) {
-    this.modalData.BSI_ACCOUNT = data.ca_bsi_account;
-    this.modalData.NOME = data.name;
-    this.modalData.COGNOME = data.surname;
-    this.modalData.STRUTTURA = data.organization;
-    this.modalData.MAIL = data.mail;
-    this.modalData.USERID = data.userid;
-    this.modalData.RESPONSABILE = data.manager;
-    this.modalData.USER_ADMIN = data.user_admin;
-    this.modalData.USER_SADMIN = data.user_sadmin;
+    this.modalData.id = data.id;
+    this.modalData.ca_bsi_account = data.ca_bsi_account;
+    this.modalData.name = data.name;
+    this.modalData.surname = data.surname;
+    this.modalData.organization = data.organization;
+    this.modalData.mail = data.mail;
+    this.modalData.userid = data.userid;
+    this.modalData.manager = data.manager;
+    this.modalData.user_admin = data.user_admin;
+    this.modalData.user_sadmin = data.user_sadmin;
   }
 
   updateUtenti() {
-    this.apiService.updateCatalogUtenti(this.modalData).subscribe((data: any) => {
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.updateCatalogUtenti(this.modalData).subscribe(data => {
       this.getUsers(); // this should refresh the main table on page
+      this.toastr.success('Valore Aggiornato', 'Success');
+      $('#utentiModal').modal('toggle').hide();
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+      $('#utentiModal').modal('toggle').hide();
     });
   }
-
+ 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
+    //this.getUsers1();
     this.getUsers();
 
-    this.apiService.getCatalogoUsers().subscribe((data:any)=>{
+    /*this.apiService.getCatalogoUsers().subscribe((data:any)=>{
       this.UtentiTableBodyData = data;
       this.rerender();
-    });
+    });*/
   }
 
   ngOnDestroy(): void {
@@ -211,7 +221,14 @@ export class CatalogoUtentiComponent implements OnInit {
     }
 
   getUsers() {
-    this.apiService.getCatalogoUsers().subscribe((data: any) => {
+    this.apiService.getCatalogoUsers().subscribe((data) => {
+      this.UtentiTableBodyData = data;
+      this.rerender();
     });
   }
+  /*getUsers1() {
+    this.apiService.getCatalogoUsers().subscribe((data: any) => {
+    });
+  }*/
+
   }

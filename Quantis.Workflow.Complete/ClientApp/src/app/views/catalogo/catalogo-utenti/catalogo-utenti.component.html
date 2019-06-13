@@ -8,7 +8,7 @@
 <!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
           <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
       </div><br/>
-      <table class="table table-bordered" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <table class="table table-bordered" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #E6E6E6">
         <tr>
             <th>BSI ACCOUNT</th>
@@ -53,24 +53,23 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="table-responsive" style="background: #ffffff; padding: 10px">
+        <!-->div class="table-responsive" style="background: #ffffff; padding: 10px"-->
         <table id="classTable" class="table table-bordered">
           <thead style="background: #E6E6E6">
           </thead>
           <tbody>
-          <tr><th>BSI ACCOUNT</th><td>{{modalData.BSI_ACCOUNT}}</td></tr>
-          <tr><th>NOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.NOME"></td></tr>
-          <tr><th>COGNOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.COGNOME"></td></tr>
-          <tr><th>STRUTTURA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.STRUTTURA"></td></tr>
-          <tr><th>MAIL</th><td><input type="text" class="form-control"[(ngModel)]="modalData.MAIL"></td></tr>
-          <tr><th>USER ID</th><td>{{modalData.USERID}}</td></tr>
-          <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.RESPONSABILE"></td></tr>
-<!--          <tr><th>USER ADMIN</th><td>{{modalData.USER_ADMIN}}</td></tr>-->
-          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.USER_ADMIN" /></td></tr>
-          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.USER_SADMIN" /></td></tr>
+          <tr><th>BSI ACCOUNT</th><td>{{modalData.ca_bsi_account}}</td></tr>
+          <tr><th>NOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.name"></td></tr>
+          <tr><th>COGNOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.surname"></td></tr>
+          <tr><th>STRUTTURA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.organization"></td></tr>
+          <tr><th>MAIL</th><td><input type="text" class="form-control"[(ngModel)]="modalData.mail"></td></tr>
+          <tr><th>USER ID</th><td><input type="text" class="form-control" [(ngModel)]="modalData.userid"></td></tr>
+          <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.manager"></td></tr>
+          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_admin" /></td></tr>
+          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_sadmin" /></td></tr>
           </tbody>
         </table>
-        </div>
+        <!--div-->
       </div>
       <div class="modal-footer">
         <button (click)="updateUtenti()" class="btn btn-success">Aggiorna</button>
