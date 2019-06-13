@@ -1,6 +1,4 @@
-before_script:
-  - echo "hello world"
-  
+image: docker:latest
 rspec:
   script:
     - echo "hello world"
