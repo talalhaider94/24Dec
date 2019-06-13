@@ -96,12 +96,12 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.AddUpdateGroup(dto);
         }
         [HttpGet("GetAllKpis")]
-        public List<CatalogKpiDTO> GetAllKpis()//public List<CatalogKPILVDTO> GetAllKpis()
+        public List<CatalogKpiDTO> GetAllKpis()
         {
             return _dataAPI.GetAllKpis();
         }
         [HttpGet("GetKpiById/{id}")]
-        public CatalogKPILVDTO GetKpiById(int id)
+        public CatalogKpiDTO GetKpiById(int id)
         {
             return _dataAPI.GetKpiById(id);
         }

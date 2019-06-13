@@ -27,7 +27,7 @@ namespace Quantis.WorkFlow.Services.API
         bool AddUpdateGroup(GroupDTO dto);
 
         List<CatalogKpiDTO> GetAllKpis(); //List<CatalogKPILVDTO> GetAllKpis(); 
-        CatalogKPILVDTO GetKpiById(int Id);
+        CatalogKpiDTO GetKpiById(int Id);
         bool AddUpdateKpi(CatalogKpiDTO dto);
         KPIOnlyContractDTO GetKpiByFormId(int Id);
 

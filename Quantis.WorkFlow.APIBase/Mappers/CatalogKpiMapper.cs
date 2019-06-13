@@ -107,12 +107,12 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.secondary_contract_party = o.secondary_contract_party;
             if (e.id == 0)
             {
-                var bsikpi = _dbcontext.ViewCatalogKPI.Single(p => p.global_rule_id_bsi == o.global_rule_id_bsi);
-                if (bsikpi != null)
+                var rule = _dbcontext.Rules.Where(p => p.global_rule_id == o.global_rule_id_bsi).OrderBy(p=>p.sla_version_id).LastOrDefault();
+
+                if (rule != null)
                 {
-                    e.kpi_name_bsi = bsikpi.kpi_name_bsi;
-                    e.global_rule_id_bsi = bsikpi.global_rule_id_bsi;
-                    e.sla_id_bsi = bsikpi.sla_id_bsi;
+                    e.kpi_name_bsi = rule.rule_name;
+                    e.global_rule_id_bsi = rule.global_rule_id;
                 }
             }
             return e;
