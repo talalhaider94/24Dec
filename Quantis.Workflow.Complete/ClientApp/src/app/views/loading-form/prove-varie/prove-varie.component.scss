@@ -1,103 +1,11 @@
-.bg-white {
-  padding: 10px;
-  margin-bottom: 15px;
-}
-
 input:focus {
   box-shadow: none !important;
 }
-.container_upload .btn{
- margin-top: 10px;
-}
-.centrato {
-  margin: auto;
-  width: 60%;
-  padding: 10px;
+
+.col-form-label {
+  border-right: 1px solid #ccc;
 }
 
-.centratoa  {
-  margin: auto;
-  margin-top: 1px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  border: 3px solid #afafab ;
-  padding: 10px;
-}
-
-.loader{
-  margin: auto;
-  padding: 10px;
-  //position: absolute;
-  top: 38%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-#loader{
-  height: 100%;
-}
-
-.vertical-center {
-  margin: 0;
-  
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-table {
-  width: 100%;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-td, th {
-  width: 25%;
-}
-
-
-
-
-
-.upload-btn-wrapper {
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-}
-
-.upload-btn-wrapper input[type=file] {
-  font-size: 100px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-}
-
-.contenitore{
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.3em;
-  display: grid;
-  grid-template-columns: 30% auto;
-  a{
-      color: white;
-  }
-
-  
-}
-
-.my-drop-zone { border: dotted 3px lightgray; }
-.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
-.another-file-over-class { border: dotted 3px green; }
-
-cutoff{
-  color:grey;
-  cursor: not-allowed;
+.mat-form-field-wrapper {
+  padding: 0 !important;
 }
