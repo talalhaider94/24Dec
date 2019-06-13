@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 let $this;
@@ -15,20 +16,12 @@ let $this;
 })
 export class CatalogoKpiComponent implements OnInit {
 
-
-
-  constructor(private apiService: ApiService) {
-    $this = this;
-  }
   public des = '';
   public ref: any[] ;
   public reft: string;
   public ref1: string;
   public ref2: string;
   public ref3: string;
-
-
-
 
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
@@ -38,7 +31,6 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-
 
   dtOptions: DataTables.Settings = {
     //'dom': 'rtip',
@@ -78,7 +70,8 @@ export class CatalogoKpiComponent implements OnInit {
     source_type: '',
     tracking_period: '',
     wf_last_sent: '',
-    rm_last_sent: ''
+    rm_last_sent: '',
+    id: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -136,6 +129,12 @@ export class CatalogoKpiComponent implements OnInit {
     }
   }
 
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+  ) {
+    $this = this;
+  }
 
   ngOnInit() {
   }
@@ -149,18 +148,18 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.tracking_period = data.tracking_period;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
+    this.modalData.id = data.id;
   }
 
   updateKpi() {
-    this.apiService.updateCatalogKpi(this.modalData).subscribe((data: any) => {
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getKpis(); // this should refresh the main table on page
-    });
-  }
-
-  getKpis() {
-    this.apiService.getCatalogoKpis().subscribe((data) =>{
-      this.kpiTableBodyData = data;
-      console.log('Kpis ', data);
+      this.toastr.success('Valore Aggiornato', 'Success');
+      $('#kpiModal').modal('toggle').hide();
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+      $('#kpiModal').modal('toggle').hide();
     });
   }
 
@@ -170,6 +169,7 @@ export class CatalogoKpiComponent implements OnInit {
 
     this.setUpDataTableDependencies();
     this.getKpis1();
+
     this.apiService.getCatalogoKpis().subscribe((data:any)=>{
       this.kpiTableBodyData = data;
       this.rerender();
@@ -344,6 +344,13 @@ export class CatalogoKpiComponent implements OnInit {
     const tmp = document.createElement('div');
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText;
+  }
+
+  getKpis() {
+    this.apiService.getCatalogoKpis().subscribe((data) =>{
+      this.kpiTableBodyData = data;
+      console.log('Configs ', data);
+    });
   }
 
   getKpis1(){

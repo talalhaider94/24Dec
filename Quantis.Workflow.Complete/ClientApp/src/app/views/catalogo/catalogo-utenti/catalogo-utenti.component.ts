@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -57,7 +58,8 @@ export class CatalogoUtentiComponent implements OnInit {
     USERID: '',
     RESPONSABILE: '',
     USER_ADMIN: '',
-    USER_SADMIN: ''
+    USER_SADMIN: '',
+    id: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -76,7 +78,7 @@ export class CatalogoUtentiComponent implements OnInit {
     }
   ]
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService,private toastr: ToastrService) {
     $this = this;
   }
   
@@ -94,11 +96,18 @@ export class CatalogoUtentiComponent implements OnInit {
     this.modalData.RESPONSABILE = data.manager;
     this.modalData.USER_ADMIN = data.user_admin;
     this.modalData.USER_SADMIN = data.user_sadmin;
+    this.modalData.id = data.id;
   }
 
   updateUtenti() {
-    this.apiService.updateCatalogUtenti(this.modalData).subscribe((data: any) => {
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.updateCatalogUtenti(this.modalData).subscribe(data => {
       this.getUsers(); // this should refresh the main table on page
+      this.toastr.success('Valore Aggiornato', 'Success');
+      $('#utentiModal').modal('toggle').hide();
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+      $('#utentiModal').modal('toggle').hide();
     });
   }
 
@@ -107,7 +116,7 @@ export class CatalogoUtentiComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-    this.getUsers();
+    this.getUsers1();
 
     this.apiService.getCatalogoUsers().subscribe((data:any)=>{
       this.UtentiTableBodyData = data;
@@ -210,8 +219,16 @@ export class CatalogoUtentiComponent implements OnInit {
       return tmp.textContent||tmp.innerText;
     }
 
-  getUsers() {
+  getUsers1() {
     this.apiService.getCatalogoUsers().subscribe((data: any) => {
     });
   }
+
+  getUsers() {
+    this.apiService.getCatalogoUsers().subscribe((data) =>{
+      this.UtentiTableBodyData = data;
+      console.log('Configs ', data);
+    });
+  }
+
   }

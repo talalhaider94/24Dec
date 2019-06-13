@@ -16,9 +16,6 @@
     <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead>
       <tr>
-        <th>ABILITATO</th>
-        <th>REMINDER</th>
-        <th>WORKFLOW</th>
         <th>CONTRATTO</th>
         <th>ID KPI</th>
         <th>TITOLO BREVE</th>
@@ -26,6 +23,9 @@
         <th>FREQUENZA</th>
         <th>DATA WF</th>
         <th>DATA WM</th>
+        <th>ABILITATO</th>
+        <th>REMINDER</th>
+        <th>WORKFLOW</th>
         <th>REFERENTI</th>
         <th>CALCOLO</th>
         <th>AZIONI</th>
@@ -33,9 +33,6 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of kpiTableBodyData; index as i">
-        <td align="center">&#10006;</td>
-        <td align="center">&#10006;</td>
-        <td align="center">&#10006;</td>
 <!--        <td align="center"><input type="checkbox"/></td>-->
         <td>{{row.contract}}</td>
         <td>{{row.id_kpi}}</td>
@@ -44,6 +41,9 @@
         <td>{{row.tracking_period}}</td>
         <td>{{row.wf_last_sent}}</td>
         <td>{{row.rm_last_sent}}</td>
+        <td align="center">&#10006;</td>
+        <td align="center">&#10006;</td>
+        <td align="center">&#10006;</td>
         <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal"    (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
         <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal"    (click)="coloBtn(row.kpi_description)" ><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
@@ -153,3 +153,4 @@
     </div>
   </div>
 </div>
+
