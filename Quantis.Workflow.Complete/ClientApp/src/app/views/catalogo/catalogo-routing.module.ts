@@ -16,14 +16,14 @@ const routes: Routes = [
     path: 'kpi',
     component: CatalogoKpiComponent,
     data: {
-      title: 'Kpi'
+      title: 'Catalogo KPI'
     }
   },
   {
     path: 'utenti',
     component: CatalogoUtentiComponent,
     data: {
-      title: 'Utenti'
+      title: 'Catalogo Utenti'
     }
   }
 ];
