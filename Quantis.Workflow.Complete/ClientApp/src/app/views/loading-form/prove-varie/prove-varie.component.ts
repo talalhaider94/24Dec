@@ -115,6 +115,16 @@ export class ProveVarieComponent implements OnInit {
     private router: Router,
     ) {}
 
+  ngOnInit() {
+    const currentUser = this.authService.getUser();
+    this.isAdmin = currentUser.isadmin;
+    //this.tornaIndietro(); // means come back
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.formId = params.get("formId");
+      this.formName = params.get("formName");
+      this.prendiDatiForm(+this.formId, this.formName);
+      });
+    }
   initInputForm(){
     return this.fb.group({
       valoreUtente:[''], // user value
@@ -152,6 +162,9 @@ export class ProveVarieComponent implements OnInit {
 
 
     save(model:any) {
+      if(!!model.value.termsCheck) {
+        this.toastr.info('Inserire nota per dati non pervenuti.')
+      }
       this.loading = true;
       console.log('ADMIN FORM SAVE MODEL', model.value);
       //elementi da mettere nel json
@@ -243,7 +256,12 @@ export class ProveVarieComponent implements OnInit {
       });
     }
 
-    saveUser(){
+    saveUser(model: any){
+      debugger;
+      if(!!model.value.termsCheck) {
+        this.toastr.info('Inserire nota per dati non pervenuti.')
+      }
+      this.loading = true;
       var formFields:FormField;
       var userSubmit:UserSubmitLoadingForm = new UserSubmitLoadingForm();
       var userAttachments:FormAttachments;
@@ -323,11 +341,9 @@ export class ProveVarieComponent implements OnInit {
       userSubmit.empty_form = false;  
       userSubmit.period = String(periodRaw);    
       userSubmit.year =  Number(moment(dataAttuale).format('YY'));
-      debugger
       this.loadingFormService.submitForm(userSubmit).subscribe(data => {
         this.loading = false;
         console.log('USER FORM SUBMIT SUCCESS', data);
-        debugger;
         if(!data) {
           this.toastr.error('There was an error while submitting form', 'Error');  
           return;
@@ -336,7 +352,6 @@ export class ProveVarieComponent implements OnInit {
         }
       }, error => {
         this.loading = false;
-        debugger;
         console.log('USER FORM SUBMIT ERROR', error);
         this.toastr.error(error.error.error, 'Error');
       });
@@ -395,22 +410,11 @@ export class ProveVarieComponent implements OnInit {
       }      
     }
 
-
-  ngOnInit() {
-   const currentUser = this.authService.getUser();
-   this.isAdmin = currentUser.isadmin;
-   //this.tornaIndietro(); // means come back
-   this.activatedRoute.paramMap.subscribe(params => {
-    this.formId = params.get("formId");
-    this.formName = params.get("formName");
-    this.prendiDatiForm(+this.formId, this.formName);
-  })
-   
-  }
   // means take data forms
   // Danial: this method is invoked when a row is clicked.
   // and generates form fields dynamically
   prendiDatiForm(numero:number,nome:string){
+    this.loading = true;
     const currentUser = this.authService.getUser();
     // since I put the filters first by comparison,
     // when the max and min filters go I go to
@@ -428,10 +432,12 @@ export class ProveVarieComponent implements OnInit {
       // means comparison fields
       campiConfronto: this.fb.array([
         //this.initComparisonForm(array)
-      ])
+      ]),
+      termsCheck: '',
     });
 
     this.loadingFormService.getKpiByFormId(numero).subscribe(data => {
+      
       console.log('getKpiByFormId', data);
       if(!!data && typeof data === "object" && !Array.isArray(data)) {
         this.listaKpiPerForm.push(data);
@@ -440,12 +446,15 @@ export class ProveVarieComponent implements OnInit {
           this.listaKpiPerForm.push(element);
         });
       }
+      this.loading = false;
     }, error => {
+      this.loading = false;
       setTimeout(() => this.toastr.error(error.error.error.message, 'KPI Form Error'), 2000);
       console.log('getKpiByFormId', error)
     });
 
     this.loadingFormService.getFormRuleByFormId(numero).subscribe(data => {
+      this.loading = false;
       console.log('getFormRuleByFormId', data);
       JSON.parse(data.form_body).forEach((element,index) => {
         console.log(element);
@@ -467,6 +476,7 @@ export class ProveVarieComponent implements OnInit {
         }
       });
     }, error => {
+      this.loading = false;
       setTimeout(() => this.toastr.error(error.error.error.message, 'Form Rule Error'),0);
       console.log('getFormRuleByFormId', error)
     });
@@ -489,6 +499,7 @@ export class ProveVarieComponent implements OnInit {
     }
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
+      this.loading = false;
       let jsonForm = data;
       console.log('DYNAMIC FORM FIELDS : jsonForm', jsonForm);
       this.arrayFormElements = jsonForm[0].reader_configuration.inputformatfield;
@@ -499,6 +510,7 @@ export class ProveVarieComponent implements OnInit {
       console.log('AFTER VALORIES LOOP',<FormArray>this.myInputForm.controls['valories']);
       this.numeroForm=numero;
     }, error => {
+      this.loading = false;
       this.toastr.error(error.error.message, 'Error')
       console.log('getFormById', error)
     }); 

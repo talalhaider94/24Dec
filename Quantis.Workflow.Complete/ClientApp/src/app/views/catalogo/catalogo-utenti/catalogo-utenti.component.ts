@@ -14,7 +14,7 @@ var $this;
   styleUrls: ['./catalogo-utenti.component.scss']
 })
 export class CatalogoUtentiComponent implements OnInit {
-  @ViewChild('kpiTable') block: ElementRef;
+  @ViewChild('UserTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
@@ -45,11 +45,10 @@ export class CatalogoUtentiComponent implements OnInit {
         sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
       }
     }
-
   };
 
-
   modalData = {
+<<<<<<< HEAD
     BSI_ACCOUNT: '',
     NOME: '',
     COGNOME: '',
@@ -60,33 +59,52 @@ export class CatalogoUtentiComponent implements OnInit {
     USER_ADMIN: '',
     USER_SADMIN: '',
     id: ''
+=======
+    id: '',
+    ca_bsi_account: '',
+    name: '',
+    surname: '',
+    organization: '',
+    mail: '',
+    userid: '',
+    manager: '',
+    user_admin: '',
+    user_sadmin: ''
+>>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
   };
 
   dtTrigger: Subject<any> = new Subject();
   UtentiTableBodyData: any = [
     {
       id: '1',
-      BSI_ACCOUNT: 'BSI ACCOUNT',
-      NOME: 'NOME',
-      COGNOME: 'COGNOME',
-      STRUTTURA: 'STRUTTURA',
-      MAIL: 'MAIL',
-      USERID: 'USERID',
-      RESPONSABILE: 'RESPONSABILE',
-      USER_ADMIN: 'USER_ADMIN',
-      USER_SADMIN: 'USER_SADMIN'
+      ca_bsi_account: 'BSI ACCOUNT',
+      name: 'NOME',
+      surname: 'COGNOME',
+      organization: 'STRUTTURA',
+      mail: 'MAIL',
+      userid: 'USERID',
+      manager: 'RESPONSABILE',
+      user_admin: 'USER_ADMIN',
+      user_sadmin: 'USER_SADMIN'
     }
   ]
 
+<<<<<<< HEAD
   constructor(private apiService: ApiService,private toastr: ToastrService) {
+=======
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+  ) {
+>>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
     $this = this;
   }
   
-    ngOnInit() {
-    }
-
+  ngOnInit() {
+  }
 
   populateModalData(data) {
+<<<<<<< HEAD
     this.modalData.BSI_ACCOUNT = data.ca_bsi_account;
     this.modalData.NOME = data.name;
     this.modalData.COGNOME = data.surname;
@@ -97,6 +115,18 @@ export class CatalogoUtentiComponent implements OnInit {
     this.modalData.USER_ADMIN = data.user_admin;
     this.modalData.USER_SADMIN = data.user_sadmin;
     this.modalData.id = data.id;
+=======
+    this.modalData.id = data.id;
+    this.modalData.ca_bsi_account = data.ca_bsi_account;
+    this.modalData.name = data.name;
+    this.modalData.surname = data.surname;
+    this.modalData.organization = data.organization;
+    this.modalData.mail = data.mail;
+    this.modalData.userid = data.userid;
+    this.modalData.manager = data.manager;
+    this.modalData.user_admin = data.user_admin;
+    this.modalData.user_sadmin = data.user_sadmin;
+>>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
   }
 
   updateUtenti() {
@@ -110,18 +140,23 @@ export class CatalogoUtentiComponent implements OnInit {
       $('#utentiModal').modal('toggle').hide();
     });
   }
-
+ 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
+<<<<<<< HEAD
     this.getUsers1();
+=======
+    //this.getUsers1();
+    this.getUsers();
+>>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
 
-    this.apiService.getCatalogoUsers().subscribe((data:any)=>{
+    /*this.apiService.getCatalogoUsers().subscribe((data:any)=>{
       this.UtentiTableBodyData = data;
       this.rerender();
-    });
+    });*/
   }
 
   ngOnDestroy(): void {
@@ -219,6 +254,7 @@ export class CatalogoUtentiComponent implements OnInit {
       return tmp.textContent||tmp.innerText;
     }
 
+<<<<<<< HEAD
   getUsers1() {
     this.apiService.getCatalogoUsers().subscribe((data: any) => {
     });
@@ -230,5 +266,17 @@ export class CatalogoUtentiComponent implements OnInit {
       console.log('Configs ', data);
     });
   }
+=======
+  getUsers() {
+    this.apiService.getCatalogoUsers().subscribe((data) => {
+      this.UtentiTableBodyData = data;
+      this.rerender();
+    });
+  }
+  /*getUsers1() {
+    this.apiService.getCatalogoUsers().subscribe((data: any) => {
+    });
+  }*/
+>>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
 
   }

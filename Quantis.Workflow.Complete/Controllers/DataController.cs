@@ -96,12 +96,12 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.AddUpdateGroup(dto);
         }
         [HttpGet("GetAllKpis")]
-        public List<CatalogKPILVDTO> GetAllKpis()
+        public List<CatalogKpiDTO> GetAllKpis()
         {
             return _dataAPI.GetAllKpis();
         }
         [HttpGet("GetKpiById/{id}")]
-        public CatalogKPILVDTO GetKpiById(int id)
+        public CatalogKpiDTO GetKpiById(int id)
         {
             return _dataAPI.GetKpiById(id);
         }
@@ -152,6 +152,11 @@ namespace Quantis.WorkFlow.Controllers
         public bool SubmitAttachment([FromBody]List<FormAttachmentDTO> dto)
         {
             return _dataAPI.SubmitAttachment(dto);
+        }
+        [HttpGet("GetAttachmentsByFormId")]
+        public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
+        {
+            return _dataAPI.GetAttachmentsByFormId(formId);
         }
 
         [HttpPost("ArchiveKPIs")]

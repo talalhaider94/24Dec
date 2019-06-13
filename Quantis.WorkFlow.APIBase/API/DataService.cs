@@ -30,7 +30,6 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<UserDTO, T_CatalogUser> _userMapper;
         private readonly IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
-        private readonly IMappingService<CatalogKPILVDTO, vw_CatalogKPI> _vw_catalogKpiMapper;
         private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
         private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;        
         private readonly IOracleDataService _oracleAPI;
@@ -49,7 +48,6 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<CatalogKpiDTO, T_CatalogKPI> catalogKpiMapper,
             IMappingService<ApiDetailsDTO, T_APIDetail> apiMapper,
             IMappingService<FormAttachmentDTO, T_FormAttachment> fromAttachmentMapper,
-            IMappingService<CatalogKPILVDTO, vw_CatalogKPI> vw_catalogKpiMapper,
             IConfiguration configuration,
             ISMTPService smtpService,
             IOracleDataService oracleAPI,
@@ -62,7 +60,6 @@ namespace Quantis.WorkFlow.APIBase.API
             _userMapper = userMapper;
             _formRuleMapper = formRuleMapper;
             _catalogKpiMapper = catalogKpiMapper;
-            _vw_catalogKpiMapper = vw_catalogKpiMapper;
             _apiMapper = apiMapper;
             _oracleAPI = oracleAPI;
             _fromAttachmentMapper = fromAttachmentMapper;
@@ -282,12 +279,12 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
         }
-        public List<CatalogKPILVDTO> GetAllKpis()
+        public List<CatalogKpiDTO> GetAllKpis()
         {
             try
             {
-                var kpis = _dbcontext.ViewCatalogKPI.ToList();
-                return _vw_catalogKpiMapper.GetDTOs(kpis.ToList());
+                var kpis = _dbcontext.CatalogKpi.ToList();
+                return _catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
             {
@@ -373,12 +370,12 @@ namespace Quantis.WorkFlow.APIBase.API
 
         }
 
-        public CatalogKPILVDTO GetKpiById(int Id)
+        public CatalogKpiDTO GetKpiById(int Id)
         {
             try
             {
-                var kpi = _dbcontext.ViewCatalogKPI.FirstOrDefault(o => o.id == Id);
-                return _vw_catalogKpiMapper.GetDTO(kpi);
+                var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                return _catalogKpiMapper.GetDTO(kpi);
             }
             catch (Exception e)
             {
@@ -504,13 +501,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         };
                         _dbcontext.NotifierLogs.Add(notifier_log);
                     }
-                    List<T_FormAttachment> attachments = new List<T_FormAttachment>();
-                    foreach(var attach in dto.attachments)
-                    {
-                        attachments.Add(_fromAttachmentMapper.GetEntity(attach, new T_FormAttachment()));
-                    }
-                    _dbcontext.FormAttachments.AddRange(attachments.ToArray());
-                    _dbcontext.SaveChanges(false);
                     if(CallFormAdapter(new FormAdapterDTO() { formID = dto.form_id, localID = dto.locale_id, forms = dto.inputs }))
                     {
                         dbContextTransaction.Commit();
@@ -529,7 +519,19 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             };
         }
-
+        public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
+        {
+            try
+            {
+                var ents=_dbcontext.FormAttachments.Where(o => o.form_id == formId);
+                var dtos = _fromAttachmentMapper.GetDTOs(ents.ToList());
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public bool SubmitAttachment(List<FormAttachmentDTO> dto)
         {
             using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())

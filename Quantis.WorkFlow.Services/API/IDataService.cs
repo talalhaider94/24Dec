@@ -21,13 +21,13 @@ namespace Quantis.WorkFlow.Services.API
         List<PageDTO> GetAllPages();
         PageDTO GetPageById(int Id);
         bool AddUpdatePage(PageDTO dto);
-
+        List<FormAttachmentDTO> GetAttachmentsByFormId(int formId);
         List<GroupDTO> GetAllGroups();
         GroupDTO GetGroupById(int Id);
         bool AddUpdateGroup(GroupDTO dto);
 
-        List<CatalogKPILVDTO> GetAllKpis();
-        CatalogKPILVDTO GetKpiById(int Id);
+        List<CatalogKpiDTO> GetAllKpis(); //List<CatalogKPILVDTO> GetAllKpis(); 
+        CatalogKpiDTO GetKpiById(int Id);
         bool AddUpdateKpi(CatalogKpiDTO dto);
         KPIOnlyContractDTO GetKpiByFormId(int Id);
 

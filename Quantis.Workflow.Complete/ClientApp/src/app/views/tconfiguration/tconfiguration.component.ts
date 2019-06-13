@@ -90,12 +90,12 @@ export class TConfigurationComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-    this.getCOnfigurations1();
+    this.getCOnfigurations();
 
-    this.apiService.getConfigurations().subscribe((data:any)=>{
+    /*this.apiService.getConfigurations().subscribe((data:any)=>{
       this.ConfigTableBodyData = data;
       this.rerender();
-    });
+    });*/
   }
 
   ngOnDestroy(): void {
@@ -147,12 +147,13 @@ export class TConfigurationComponent implements OnInit {
     this.apiService.getConfigurations().subscribe((data) =>{
       this.ConfigTableBodyData = data;
       console.log('Configs ', data);
+      this.rerender();
     });
   }
 
-  getCOnfigurations1() {
+ /* getCOnfigurations1() {
     this.apiService.getConfigurations().subscribe((data: any) => {
     });
 
-  }
+  }*/
 }
