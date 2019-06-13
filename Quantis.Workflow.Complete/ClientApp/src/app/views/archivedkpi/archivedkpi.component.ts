@@ -50,6 +50,8 @@ export class ArchivedKpiComponent implements OnInit {
     archived: ''
   };
 
+  kpisData = [];
+
   dtTrigger: Subject<any> = new Subject();
   ArchivedKpiBodyData: any = [
     {
@@ -70,13 +72,17 @@ export class ArchivedKpiComponent implements OnInit {
   }
 
   populateModalData(data) {
-    this.modalData.id_kpi = data.id_kpi;
-    this.modalData.name_kpi = data.name_kpi;
-    this.modalData.interval_kpi = data.interval_kpi;
-    this.modalData.value_kpi = data.value_kpi;
-    this.modalData.ticket_id = data.ticket_id;
-    this.modalData.close_timestamp_ticket = data.close_timestamp_ticket;
-    this.modalData.archived = data.archived;
+    // this.modalData.id_kpi = data.id_kpi;
+    // this.modalData.name_kpi = data.name_kpi;
+    // this.modalData.interval_kpi = data.interval_kpi;
+    // this.modalData.value_kpi = data.value_kpi;
+    // this.modalData.ticket_id = data.ticket_id;
+    // this.modalData.close_timestamp_ticket = data.close_timestamp_ticket;
+    // this.modalData.archived = data.archived;
+    this.apiService.getAllArchivedKpis(data.id_kpi).subscribe((kpis: any) => {
+      this.kpisData = kpis;
+    });
+
   }
 
 
@@ -118,11 +124,11 @@ export class ArchivedKpiComponent implements OnInit {
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
+        datatable_Ref
+          .columns( 0 )
+          .search( this.value )
+          .draw();
+      });
     });
 
   }

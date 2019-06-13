@@ -504,13 +504,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         };
                         _dbcontext.NotifierLogs.Add(notifier_log);
                     }
-                    List<T_FormAttachment> attachments = new List<T_FormAttachment>();
-                    foreach(var attach in dto.attachments)
-                    {
-                        attachments.Add(_fromAttachmentMapper.GetEntity(attach, new T_FormAttachment()));
-                    }
-                    _dbcontext.FormAttachments.AddRange(attachments.ToArray());
-                    _dbcontext.SaveChanges(false);
                     if(CallFormAdapter(new FormAdapterDTO() { formID = dto.form_id, localID = dto.locale_id, forms = dto.inputs }))
                     {
                         dbContextTransaction.Commit();
@@ -529,7 +522,19 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             };
         }
-
+        public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
+        {
+            try
+            {
+                var ents=_dbcontext.FormAttachments.Where(o => o.form_id == formId);
+                var dtos = _fromAttachmentMapper.GetDTOs(ents.ToList());
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public bool SubmitAttachment(List<FormAttachmentDTO> dto)
         {
             using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
