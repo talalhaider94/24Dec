@@ -51,12 +51,11 @@ deploy_job:
     # Assuming your tag is Rev1.0.0.1, and your last commit message is 'First commit'
     # the artifact files will be copied to:
     # P:\Projects\YourApp\Builds\Rev1.0.0.1 - First commit\
-    - '$commitSubject = git log -1 --pretty=%s'
-    - '$deployFolder = $($env:DEPLOY_FOLDER) + "\" + $($env:CI_BUILD_TAG) + " - " + $commitSubject + "\"'
-
+    #- '$commitSubject = git log -1 --pretty=%s'
+    #- '$deployFolder = $($env:DEPLOY_FOLDER) + "\" + $($env:CI_BUILD_TAG) + " - " + $commitSubject + "\"'
+    - 'echo "Deployed"'
     # xcopy takes care of recursively creating required folders
-    - 'xcopy /y ".\$env:EXE_RELEASE_FOLDER\YourApp.exe" "$deployFolder"'
+    #- 'xcopy /y ".\$env:EXE_RELEASE_FOLDER\YourApp.exe" "$deployFolder"'
 
   dependencies:
     - build_job
-  
