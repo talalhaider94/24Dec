@@ -26,13 +26,9 @@ variables:
   EXE_RELEASE_FOLDER: 'BsiAddOn\bin\Release'
   TEST_FOLDER: 'Tests\bin\Release'
   DEPLOY_FOLDER: '\Projects\BsiAddOn\Builds'
-  NUGET_PATH: 'C:\NuGet\nuget.exe'
-  MSBUILD_PATH: 'C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe'
-  NUNIT_PATH: 'C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe'
 
 stages:
   - build
-  - test
   - deploy
 
 build_job:
@@ -45,19 +41,6 @@ build_job:
     expire_in: 1 week # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
       - '$env:EXE_RELEASE_FOLDER\YourApp.exe' # saving exe to copy to deploy folder
-
-test_job:
-  stage: test
-  only:
-    - tags
-  script:
-    - 'echo "Testing"' # running NUnit tests
-  artifacts:
-    expire_in: 1 week # save gitlab server space, we copy the files we need to deploy folder later on
-    paths:
-      - '.\TestResult.xml' # saving NUnit results to copy to deploy folder
-  dependencies:
-    - build_job
 
 deploy_job:
   stage: deploy
@@ -73,9 +56,7 @@ deploy_job:
 
     # xcopy takes care of recursively creating required folders
     - 'xcopy /y ".\$env:EXE_RELEASE_FOLDER\YourApp.exe" "$deployFolder"'
-    - 'xcopy /y ".\TestResult.xml" "$deployFolder"'
 
   dependencies:
     - build_job
-    - test_job
   
