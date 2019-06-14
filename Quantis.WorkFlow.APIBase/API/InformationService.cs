@@ -103,7 +103,48 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public void AddUpdateRole(BaseNameCodeDTO dto)
+        {
+            try
+            {
+                if (dto.Id == 0)
+                {
+                    var role = new T_Role();
+                    role.name = dto.Name;
+                    role.code = dto.Code;
+                    _dbcontext.Roles.Add(role);
+                    _dbcontext.SaveChanges();
+                }
+                else
+                {
+                    var role = _dbcontext.Roles.Single(o => o.id == dto.Id);
+                    role.name = dto.Name;
+                    role.code = dto.Code;
+                    _dbcontext.SaveChanges();
+                }                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void DeleteRole(int roleId)
+        {
+            try
+            {
+                var userroles = _dbcontext.UserRoles.Where(o => o.role_id == roleId);
+                _dbcontext.UserRoles.RemoveRange(userroles.ToArray());
+                var rolepermissions = _dbcontext.RolePermissions.Where(o => o.role_id == roleId);
+                _dbcontext.RolePermissions.RemoveRange(rolepermissions.ToArray());
+                var role = _dbcontext.Roles.Single(o => o.id == roleId);
+                _dbcontext.Roles.Remove(role);
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<BaseNameCodeDTO> GetAllPermissions()
         {
             try
