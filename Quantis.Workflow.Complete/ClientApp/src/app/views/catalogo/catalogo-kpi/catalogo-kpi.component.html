@@ -144,17 +144,16 @@
           </thead>
           <tbody>
 
-            <tr><th>CONTRATTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
-            <tr><th>ID KPI</th><td><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
-            <tr><th>TITOLO BREVE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
-            <tr><th>CARICAMENTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
-            <tr><th>FREQUENZA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
-            <tr><th>DATA WF</th><td><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
-            <tr><th>DATA WM</th><td><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
-            <tr><th>ABILITATO</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>REMINDER</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>WORKFLOW</th><td align="center"><input type="checkbox"/></td></tr>
-
+            <tr><th>CONTRATTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
+            <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
+            <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
+            <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
+            <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
+            <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
+            <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
+            <tr><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
+            <tr><td align="center"><input type="checkbox"/></td><td align="center"><input type="checkbox" /></td><td align="center"><input type="checkbox" /></td></tr>
+            <!-- by Giacomo: I prefer to have the checkboxes on the same row -->
           </tbody>
         </table>
         </div>
