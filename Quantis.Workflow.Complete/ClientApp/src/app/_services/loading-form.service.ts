@@ -51,4 +51,9 @@ export class LoadingFormService {
     const getFormRuleByFormIdEndPoint = `${environment.API_URL}/Data/GetFormRuleByFormId/${formId}`;
     return this.http.get(getFormRuleByFormIdEndPoint, Headers.setHeaders('GET'));
   }
+  getAttachmentsByFormId(formId: number): Observable<any> {
+    const getAttachmentsByFormIdEndPoint = `${environment.API_URL}/Data/GetAttachmentsByFormId/${formId}`;
+    return this.http.get(getAttachmentsByFormIdEndPoint, Headers.setHeaders('GET'));
+  }
+   
 }

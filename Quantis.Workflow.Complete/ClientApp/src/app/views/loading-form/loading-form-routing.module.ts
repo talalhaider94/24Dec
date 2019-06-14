@@ -4,6 +4,8 @@ import { LoadingFormComponent } from './loading-form.component';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
+import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -23,24 +25,24 @@ const routes: Routes = [
                 }
             },
             {
-                path: 'form/:formId/:formName',
-                component: LoadingFormDetailComponent,
-                data: {
-                    title: 'Form Detail'
-                }
-            },
-            {
-                path: 'admin2/:formId/:formName',
-                component: ProveVarieComponent,
-                data: {
-                    title: 'Admin 2'
-                }
-            },
-            {
-                path: 'user',
+                path: 'utente',
                 component: LoadingFormUserComponent,
                 data: {
-                    title: 'User'
+                    title: 'Utente'
+                }
+            },
+            {
+                path: 'admin/:formId/:formName',
+                component: LoadingFormAdminComponent,
+                data: {
+                    title: 'Admin'
+                }
+            },
+            {
+                path: 'utente/:formId/:formName',
+                component: ProveVarieComponent,
+                data: {
+                    title: 'Utente'
                 }
             },
         ],

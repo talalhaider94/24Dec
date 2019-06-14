@@ -837,6 +837,27 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<TUserDTO> GetAllTUsers()
+        {
+            try
+            {
+                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false);
+                var dtos = usr.Select(o => new TUserDTO()
+                {
+                    user_email = o.user_email,
+                    user_id = o.user_id,
+                    user_locale_id = o.user_locale_id,
+                    user_name = o.user_name,
+                    user_status = o.user_status
+                }).ToList();
+                return dtos;
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         #region privateFunctions
 
         private bool CallFormAdapter(FormAdapterDTO dto)
@@ -851,7 +872,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 var response =client.PostAsync("api/FormAdapter/RunAdapter", content).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    if (response.Content.ReadAsStringAsync().Result == "2")
+                    var res = response.Content.ReadAsStringAsync().Result;
+                    if ( res== "2" || res=="1" || res=="3")
                     {
                         return true;
                     }

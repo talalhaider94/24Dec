@@ -42,7 +42,16 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetAllRoles();
         }
-
+        [HttpPost("AddUpdateRole")]
+        public void AddUpdateRole([FromBody]BaseNameCodeDTO dto)
+        {
+            _infomationAPI.AddUpdateRole(dto);
+        }
+        [HttpGet("DeleteRole")]
+        public void DeleteRole(int roleId)
+        {
+            _infomationAPI.DeleteRole(roleId);
+        }
         [HttpGet("GetAllPermissions")]
         public List<BaseNameCodeDTO> GetAllPermissions()
         {

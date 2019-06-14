@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_Rule> Rules { get; set; }
         public DbSet<T_RolePermission> RolePermissions { get; set; }
         public DbSet<T_Permission> Permissions { get; set; }
+        public DbSet<T_User> TUsers { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -59,6 +60,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_RolePermission_Configuration());
             builder.ApplyConfiguration(new T_Permission_Configuration());
             builder.ApplyConfiguration(new T_Rule_Configuration());
+            builder.ApplyConfiguration(new T_User_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -86,6 +88,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_RolePermission>();
             updateUpdatedProperty<T_Permission>();
             updateUpdatedProperty<T_Rule>();
+            updateUpdatedProperty<T_User>();
             return base.SaveChanges();
         }
 
