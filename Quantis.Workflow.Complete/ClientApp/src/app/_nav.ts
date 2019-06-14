@@ -123,7 +123,7 @@ export const navItems: NavData[] = [
       },
       {
         name: 'Utente',
-        url: '/loading-form/user',
+        url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o'
       },
     ]

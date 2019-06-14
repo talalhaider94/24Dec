@@ -44,6 +44,7 @@ import {
 } from '@angular/material';
 import { FileUploadModule } from 'ng2-file-upload';
 import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
+import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.
     LoadingFormComponent,
     LoadingFormDetailComponent,
     ProveVarieComponent,
-    LoadingFormUserComponent ],
+    LoadingFormUserComponent,
+    LoadingFormAdminComponent ],
   imports: [
     CommonModule,
     LoadingFormRoutingModule,
