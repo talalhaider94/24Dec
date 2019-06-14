@@ -1,5 +1,7 @@
 stages:
     - build
+    - publish
+    - deploy
     
 before_script:
     - "ls"
@@ -9,3 +11,17 @@ build:
     stage: build
     script:
         - "dotnet build"
+
+publish:
+    stage:publish
+    script:
+        - "dotnet publish -c Release -o ./Publish"
+    dependencies:
+    - build
+    
+deploy:
+    stage: deploy
+    script:
+        - "systemctl stop supervisord"
+
+
