@@ -135,7 +135,7 @@
                 </div>
               </div>
               <div formArrayName="valories">
-                <div *ngFor="let control of myInputForm.controls.valories.controls; let i=index"
+                <div *ngFor="let control of myInputForm.valories; let i=index"
                   class="panel panel-default">
                   <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'"
                     class="panel-body bg-white" [formGroupName]="i">
