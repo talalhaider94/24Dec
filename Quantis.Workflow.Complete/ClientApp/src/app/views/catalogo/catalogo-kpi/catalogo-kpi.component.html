@@ -154,7 +154,7 @@
             <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
             <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
             <tr><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
-            <tr><td align="center"><input type="checkbox" [checked]="modalData.enable == 'true'"/></td><td align="center"><input type="checkbox" [checked]="modalData.enable_wf == 'true'" /></td><td align="center"><input type="checkbox" [checked]="modalData.enable_rm == 'true'"/></td></tr>
+            <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable"/></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_wf"/></td></tr>
             <!-- by Giacomo: I prefer to have the checkboxes on the same row -->
           </tbody>
         </table>
