@@ -23,19 +23,19 @@
     <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead>
         <tr>
-          <th>CONTRATTO</th>
-          <th>ID KPI</th>
-          <th>TITOLO BREVE</th>
-          <th>CARICAMENTO</th>
-          <th>FREQUENZA</th>
-          <th>DATA WF</th>
-          <th>DATA WM</th>
-          <th>ABILITATO</th>
-          <th>REMINDER</th>
-          <th>WORKFLOW</th>
-          <th>REFERENTI</th>
-          <th>CALCOLO</th>
-          <th>AZIONI</th>
+          <th style="text-align:center">CONTRATTO</th>
+          <th style="text-align:center">ID KPI</th>
+          <th style="text-align:center">TITOLO BREVE</th>
+          <th style="text-align:center">CARICAMENTO</th>
+          <th style="text-align:center">FREQUENZA</th>
+          <th style="text-align:center">DATA WF</th>
+          <th style="text-align:center">DATA WM</th>
+          <th style="text-align:center">ABILITATO</th>
+          <th style="text-align:center">REMINDER</th>
+          <th style="text-align:center">WORKFLOW</th>
+          <th style="text-align:center">REFERENTI</th>
+          <th style="text-align:center">CALCOLO</th>
+          <th style="text-align:center">AZIONI</th>
           <th>hide</th>
         </tr>
       </thead>
@@ -49,9 +49,11 @@
           <td>{{row.tracking_period}}</td>
           <td>{{row.wf_last_sent}}</td>
           <td>{{row.rm_last_sent}}</td>
-          <td align="center">&#10006;</td>
-          <td align="center">&#10006;</td>
-          <td align="center">&#10006;</td>
+          <td align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
+          <td align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
+          <td align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
+          <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
+          <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
           <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
           <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
           <td align="center">
@@ -144,17 +146,16 @@
           </thead>
           <tbody>
 
-            <tr><th>CONTRATTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
-            <tr><th>ID KPI</th><td><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
-            <tr><th>TITOLO BREVE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
-            <tr><th>CARICAMENTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
-            <tr><th>FREQUENZA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
-            <tr><th>DATA WF</th><td><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
-            <tr><th>DATA WM</th><td><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
-            <tr><th>ABILITATO</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>REMINDER</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>WORKFLOW</th><td align="center"><input type="checkbox"/></td></tr>
-
+            <tr><th>CONTRATTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
+            <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
+            <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
+            <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
+            <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
+            <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
+            <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
+            <tr><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
+            <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable"/></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_wf"/></td></tr>
+            <!-- by Giacomo: I prefer to have the checkboxes on the same row -->
           </tbody>
         </table>
         </div>
