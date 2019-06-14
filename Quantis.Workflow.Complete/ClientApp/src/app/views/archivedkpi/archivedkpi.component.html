@@ -4,24 +4,8 @@
     <h4 style="color:#565656; margin-left:12%">Periodo:</h4>
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
-      <select class="form-control ml-3" style="width:15%;" #searchCol2>
-<<<<<<< HEAD
-        <option value="0">Mese</option>
-        <option value="jan">Gennaio</option>
-        <option value="feb">Febbraio</option>
-        <option value="mar">Marzo</option>
-        <option value="apr">Aprile</option>
-        <option value="may">Maggio</option>
-        <option value="jun">Giugno</option>
-        <option value="jul">Luglio</option>
-        <option value="aug">Agosto</option>
-        <option value="sep">Settembre</option>
-        <option value="oct">Ottobre</option>
-        <option value="nov">Novembre</option>
-        <option value="dec">Dicembre</option>
-=======
-
-        <option value="0">Mese</option>
+      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" #searchCol2>
+        <option value="">Mese</option>
         <option value="01">Gennaio</option>
         <option value="02">Febbraio</option>
         <option value="03">Marzo</option>
@@ -34,10 +18,14 @@
         <option value="10">Ottobre</option>
         <option value="11">Novembre</option>
         <option value="12">Dicembre</option>
-
->>>>>>> 7dbd2d79906c7e79531d7fe664754280628512c6
       </select>
-      <select class="form-control ml-1" style="width:15%;" #searchCol3><option value="">Anno</option><option value="">2019</option></select>
+      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" #searchCol3>
+        <option value="">Anno</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+      </select>
+      <button type="button" class="btn btn-primary ml-3" (click)="populateDateFilter()">Filter</button>
     </div><br/>
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">

@@ -64,6 +64,8 @@ export class ArchivedKpiComponent implements OnInit {
       archived: 'archived'
     }
   ]
+  monthVar: any;
+  yearVar: any;
   constructor(private apiService: ApiService) {
     $this = this;
   }
@@ -81,6 +83,14 @@ export class ArchivedKpiComponent implements OnInit {
     // this.modalData.archived = data.archived;
     this.apiService.getAllArchivedKpis(data.id_kpi).subscribe((kpis: any) => {
       this.kpisData = kpis;
+    });
+
+  }
+
+  populateDateFilter() {
+    this.apiService.getDateKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
+      this.ArchivedKpiBodyData = data;
+      this.rerender();
     });
 
   }
