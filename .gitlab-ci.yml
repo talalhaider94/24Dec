@@ -8,10 +8,10 @@ before_script:
 build:
     stage: build
     script:
-        - "dotnet publish -c Release -o ./Publish"
+        - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
-        - "mv /opt/WorkFlowAPI/dotnetcore_modules/ /opt/WorkFlowAPI/dotnetcore_modules_backup"
+        - "mv /opt/WorkFlowAPI/dotnetcore_modules/ /opt/WorkFlowAPI/dotnetcore_modules_backup/"
         - "mkdir /opt/WorkFlowAPI/dotnetcore_modules/" 
-        - "cp -a ./Publish/. /opt/WorkFlowAPI/dotnetcore_modules/"
+        - "cp -a /opt/WorkFlowAPI/DotnetPublish/. /opt/WorkFlowAPI/dotnetcore_modules/"
         - "systemctl start supervisord"
 
