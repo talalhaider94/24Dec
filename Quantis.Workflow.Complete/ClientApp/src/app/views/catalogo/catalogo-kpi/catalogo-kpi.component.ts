@@ -351,18 +351,21 @@ export class CatalogoKpiComponent implements OnInit {
       event.preventDefault();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
 
-        $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+        $this.table2csv(datatable_Ref, 'full', '.kpiTable');
       });
     });
   }
 
+  isNumber(val){
+    return !isNaN(val);
+  }
   table2csv(oTable, exportmode, tableElm) {
     var csv = '';
     var headers = [];
     var rows = [];
 
     // Get header names
-    $(tableElm+' thead').find('th').each(function() {
+    $(tableElm+' thead').find('th:not(.notExportCsv)').each(function() {
       var $th = $(this);
       var text = $th.text();
       var header = '"' + text + '"';
@@ -375,14 +378,15 @@ export class CatalogoKpiComponent implements OnInit {
     if (exportmode == "full") { // total data
       var totalRows = oTable.data().length;
       for(let i = 0; i < totalRows; i++) {
-        var row = oTable.row(i).data();
-        row = $this.strip_tags(row);
-        rows.push(row);
+        //var row = oTable.row(i).data();
+        //row = $this.strip_tags(row);
+        //rows.push(row);
+        rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
       }
     } else { // visible rows only
       $(tableElm+' tbody tr:visible').each(function(index) {
         var row = [];
-        $(this).find('td').each(function(){
+        $(this).find('td:not(.notExportCsv)').each(function(){
           var $td = $(this);
           var text = $td.text();
           var cell = '"' +text+ '"';
@@ -393,7 +397,6 @@ export class CatalogoKpiComponent implements OnInit {
     }
     csv += rows.join("\n");
     var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-    //saveAs(csv, "myfile-csv.csv")
     saveAs(blob, "ExportKPITable.csv");
   }
 
