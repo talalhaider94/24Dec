@@ -26,7 +26,7 @@
                         <mat-datepicker #pickerb></mat-datepicker>
                       </mat-form-field>
                     </div>
-                    <div class="col-sm-6">  
+                    <div class="col-sm-6">
                       <mat-form-field appearance="outline">
                         <mat-label>max Date</mat-label>
                         <input matInput [(ngModel)]="maxDate[i]"  [min]="minDate[i]"  [matDatepicker]="pickera" class="form-control"   formControlName="valoreMax" >
@@ -60,7 +60,7 @@
 
           <div *ngIf="erroriArray.length>0">
             <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
-          </div> 
+          </div>
 
           <div class="row">
             <div formArrayName="campiConfronto" class="panel panel-default">
@@ -69,9 +69,9 @@
                       <mat-form-field appearance="outline">
                         <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
                           <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
-                              
+
                           <mat-option *ngFor="let element of arrayFormElements " [value]="element" >{{element.name}}</mat-option>
-                          
+
                         </mat-select>
                       </mat-form-field>
                   </div>
@@ -83,20 +83,20 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                
+
                   <div class="form-group col-xs-3">
                     <mat-form-field appearance="outline">
                       <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
-                          <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>  
+                          <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>
                         <mat-option *ngFor="let element of arraySecondo[i]" [value]="element" >{{element.name}}</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
-    
+
                   <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
                 </div>
               </div>
-            </div>  
+            </div>
           <div class="row mb-3 align-items-center pt-3">
             <div class="col-sm-5">
               <div class="form-check form-check-inline" bis_skin_checked="1">
@@ -116,7 +116,6 @@
   </div>
 </div>
 </div> -->
-
 <!-- FORM CHOSEN SECONDARY USERS TABLE -->
 <div>
   <div class="container">
@@ -135,17 +134,17 @@
                 </div>
               </div>
               <div formArrayName="valories">
-                <div *ngFor="let control of myInputForm.valories; let i=index"
-                  class="panel panel-default">
+                <div *ngFor="let control of myInputForm.controls.valories.controls; let i=index"
+                     class="panel panel-default">
                   <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'"
-                    class="panel-body bg-white" [formGroupName]="i">
+                       class="panel-body bg-white" [formGroupName]="i">
                     <div class="row align-items-center mb-2">
                       <div class="col-md-4 col-form-label">
                         <label>{{arrayFormElements[i].name}}</label>
                       </div>
                       <div class="col-sm-8">
                         <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
-                          placeholder="inserisci data" class="form-control" formControlName="valoreUtente">
+                               placeholder="inserisci data" class="form-control" formControlName="valoreUtente">
                       </div>
                       <!-- <div id="divDate" class="col-sm-12">
                               <label>data minima: {{minDate[i]|date}}</label>
@@ -154,24 +153,24 @@
                     </div>
                   </div>
                   <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'"
-                    class="panel-body bg-white" [formGroupName]="i">
+                       class="panel-body bg-white" [formGroupName]="i">
                     <div class="row align-items-center mb-2">
                       <div class="col-md-4 col-form-label">
                         <label>{{arrayFormElements[i].name}}</label>
                       </div>
                       <div class="col-sm-8">
                         <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]"
-                          [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input"
-                          class="form-control" formControlName="valoreUtente">
+                               [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input"
+                               class="form-control" formControlName="valoreUtente">
                         <input type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]"
-                          [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
-                          class="form-control" formControlName="valoreUtente">
+                               [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
+                               class="form-control" formControlName="valoreUtente">
                       </div>
-                      <!-- <div class="col-sm-6">                 
-                              <label>valore minimo: {{numeroMin[i]}}</label>                 
-                            </div>   
-                            <div class="col-sm-6">                 
-                              <label>valore massimo: {{numeroMax[i]}}</label>                  
+                      <!-- <div class="col-sm-6">
+                              <label>valore minimo: {{numeroMin[i]}}</label>
+                            </div>
+                            <div class="col-sm-6">
+                              <label>valore massimo: {{numeroMax[i]}}</label>
                             </div>    -->
                     </div>
                   </div>
@@ -287,7 +286,7 @@
                   <td>{{ item?.file?.name }}</td>
                   <td nowrap>
                     <button type="button" class="btn-success btn-xs" (click)="item.upload()"
-                      [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                            [disabled]="item.isReady || item.isUploading || item.isSuccess">
                       <span class="glyphicon glyphicon-upload"></span> Upload
                     </button>
                     <button type="button" class="btn-danger btn-xs" (click)="item.remove()">
