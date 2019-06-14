@@ -23,6 +23,11 @@ deploy:
     stage: deploy
     script:
         - "systemctl stop supervisord"
+        - "mv /opt/WorkFlowAPI/dotnetcore_modules/ /opt/WorkFlowAPI/dotnetcore_modules_backup"
+        - "mkdir /opt/WorkFlowAPI/dotnetcore_modules/" 
+        - "cp ./Publish/* /opt/WorkFlowAPI/dotnetcore_modules/"
+        - "systemctl start supervisord"
+        
     dependencies:
     - publish
 
