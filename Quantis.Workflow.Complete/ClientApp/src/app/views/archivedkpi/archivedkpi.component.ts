@@ -110,10 +110,10 @@ export class ArchivedKpiComponent implements OnInit {
   }
 
 
-  ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  //   // Do not forget to unsubscribe the event
+  //   this.dtTrigger.unsubscribe();
+  // }
 
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
