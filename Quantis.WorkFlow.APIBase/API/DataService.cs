@@ -15,9 +15,10 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Net;
-using System.Web.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -844,10 +845,13 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var con = GetBSIServerURL();
                 client.BaseAddress = new Uri(con);
-                var response = client.PostAsJsonAsync("api/FormAdapter/RunAdapter", dto).Result;
+                var dataAsString = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(dataAsString);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response =client.PostAsync("api/FormAdapter/RunAdapter", content).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    if (response.Content.ReadAsAsync<string>().Result == "2")
+                    if (response.Content.ReadAsStringAsync().Result == "2")
                     {
                         return true;
                     }

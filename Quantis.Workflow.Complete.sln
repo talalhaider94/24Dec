@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.WorkFlow.Complete", "Quantis.Workflow.Complete\Quantis.WorkFlow.Complete.csproj", "{152AEFBD-20D4-4EFE-9785-A4B3EEA6AEB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.WorkFlow.Complete", "Quantis.Workflow.Complete\Quantis.Workflow.Complete.csproj", "{152AEFBD-20D4-4EFE-9785-A4B3EEA6AEB9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkflowApplication", "WorkflowApplication", "{92199B3B-ABCC-488C-B43B-9B32B9B87A7E}"
 EndProject
