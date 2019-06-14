@@ -42,7 +42,7 @@ export class CatalogoKpiComponent implements OnInit {
   dtOptions: DataTables.Settings = {
     //'dom': 'rtip',
     "columnDefs": [{
-      "targets": [13,14,15,16],
+      "targets": [13],
       "visible": false,
       "searchable": true
     }],
@@ -132,9 +132,6 @@ export class CatalogoKpiComponent implements OnInit {
       DATA_WM: 'DATA_WM',
       REFERENTI: 'REFERENTI',
       CALCOLO: 'CALCOLO',
-      hide: 'hidden',
-      hide: 'hidden',
-      hide: 'hidden',
       hide: 'hidden'
     }];
 
@@ -297,7 +294,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
-        .columns([ 13,14,15,16] )
+        .columns(13)
         .search( this.value )
         .draw();
     });
