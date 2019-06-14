@@ -36,7 +36,7 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol3') searchCol3: ElementRef;
   @ViewChild('searchCol4') searchCol4: ElementRef;
   @ViewChild('searchCol5') searchCol5: ElementRef;
-  @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
+  @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
   dtOptions: DataTables.Settings = {
@@ -347,10 +347,10 @@ export class CatalogoKpiComponent implements OnInit {
 
 
     // export only what is visible right now (filters & paginationapplied)
-    $(this.btnExportCSV.nativeElement).click(function (event) {
+    $(this.btnExporta.nativeElement).click(function (event) {
       event.preventDefault();
+      event.stopPropagation();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-
         $this.table2csv(datatable_Ref, 'full', '.kpiTable');
       });
     });

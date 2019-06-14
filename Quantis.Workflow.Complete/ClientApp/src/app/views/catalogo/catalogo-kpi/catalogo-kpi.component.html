@@ -18,7 +18,7 @@
           <option value="ANNUALE">ANNUALE</option>
         </select>
         <span>&nbsp;&nbsp;</span>
-        <button class="ml-5" #btnExportCSV>Esporta CSV</button>
+        <button class="ml-5" #btnExporta>Esporta CSV</button>
       </div><br/>
       <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
@@ -36,7 +36,7 @@
             <th class="notExportCsv" style="text-align:center">REFERENTI</th>
             <th class="notExportCsv" style="text-align:center">CALCOLO</th>
             <th class="notExportCsv" style="text-align:center">AZIONI</th>
-            <th>hide</th>
+            <th class="notExportCsv">hide</th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +62,7 @@
                 Modifica
               </button>
             </td>
-            <td>{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
+            <td class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
           </tr>
         </tbody>
       </table>
