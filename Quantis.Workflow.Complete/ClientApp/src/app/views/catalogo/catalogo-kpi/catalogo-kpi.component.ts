@@ -41,11 +41,11 @@ export class CatalogoKpiComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {
     //'dom': 'rtip',
-    // "columnDefs": [{
-    // "targets": [0,2],
-    // "data": null,
-    // "defaultContent": '<input type="checkbox" />'
-    // }]
+    "columnDefs": [{
+      "targets": [13],
+      "visible": false,
+      "searchable": true
+    }],
     language: {
       processing: "Elaborazione...",
       search: "Cerca:",
@@ -131,7 +131,8 @@ export class CatalogoKpiComponent implements OnInit {
       DATA_WF: 'DATA_WF',
       DATA_WM: 'DATA_WM',
       REFERENTI: 'REFERENTI',
-      CALCOLO: 'CALCOLO'
+      CALCOLO: 'CALCOLO',
+      hide: 'hidden'
     }];
 
   kpiTableBodyData: any = [
@@ -147,7 +148,11 @@ export class CatalogoKpiComponent implements OnInit {
       wf_last_sent: '',
       rm_last_sent: '',
       measure_unit: '',
-      contract: ''
+      contract: '',
+      referent: '',
+      referent_1: '',
+      referent_2: '',
+      referent_3: ''
     }
   ];
 
@@ -235,14 +240,6 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
-  /*getKpis() {
-    this.apiService.getCatalogoKpis().subscribe((data) =>{
-      this.kpiTableBodyData = data;
-      console.log('Kpis ', data);
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
-    });
-  }*/
-
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
@@ -297,7 +294,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref
-        .columns( 2 )
+        .columns(13)
         .search( this.value )
         .draw();
     });
@@ -339,13 +336,12 @@ export class CatalogoKpiComponent implements OnInit {
         } );
 
       // Get the search data for the first column and add to the select list
-      this
-        .cache( 'search' )
-        .sort()
-        .unique()
+      /*this
+        .cache('search')
+        .unique();
         .each( function ( d ) {
           select.append( $('<option value="' + d + '">' + d + '</option>') );
-        } );
+        } );*/
     });
     });
 

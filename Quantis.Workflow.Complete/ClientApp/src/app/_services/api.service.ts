@@ -77,6 +77,11 @@ export class ApiService {
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
 
+  getDateKpis(month, year): Observable<any> {
+    const getDateKpisEndPoint = `http://10.10.10.102/api/data/getallarchivedkpis?month=${month}&year=${year}`;
+    return this.http.get(getDateKpisEndPoint, Headers.setHeaders('GET'));
+  }
+
   updateConfig(config) {
     return this.http.post('http://10.10.10.102/api/information/AddUpdateConfiguration', config, Headers.setHeaders('POST'))
       .pipe(
