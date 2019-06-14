@@ -9,46 +9,65 @@
       <span>&nbsp;&nbsp;</span>
       <select class="form-control" style="width:15%;" #searchCol4><option value="">Tutti i Contratti</option></select>
       <span>&nbsp;&nbsp;</span>
-      <select class="form-control" style="width:15%;" #searchCol5><option value="">Tutte le Frequenze</option></select>
+      <select class="form-control" style="width:15%;" #searchCol5>
+        <option value="">Tutte le Frequenze</option>
+        <option value="MENSILE">MENSILE</option>
+        <option value="TRIMESTRALE">TRIMESTRALE</option>
+        <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+        <option value="SEMESTRALE">SEMESTRALE</option>
+        <option value="ANNUALE">ANNUALE</option>
+      </select>
       <span>&nbsp;&nbsp;</span>
       <button class="ml-5" #btnExportCSV>Esporta CSV</button>
     </div><br/>
     <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead>
-      <tr>
-        <th>CONTRATTO</th>
-        <th>ID KPI</th>
-        <th>TITOLO BREVE</th>
-        <th>CARICAMENTO</th>
-        <th>FREQUENZA</th>
-        <th>DATA WF</th>
-        <th>DATA WM</th>
-        <th>ABILITATO</th>
-        <th>REMINDER</th>
-        <th>WORKFLOW</th>
-        <th>REFERENTI</th>
-        <th>CALCOLO</th>
-        <th>AZIONI</th>
-      </tr>
+        <tr>
+          <th>CONTRATTO</th>
+          <th>ID KPI</th>
+          <th>TITOLO BREVE</th>
+          <th>CARICAMENTO</th>
+          <th>FREQUENZA</th>
+          <th>DATA WF</th>
+          <th>DATA WM</th>
+          <th>ABILITATO</th>
+          <th>REMINDER</th>
+          <th>WORKFLOW</th>
+          <th>REFERENTI</th>
+          <th>CALCOLO</th>
+          <th>AZIONI</th>
+          <th>hide</th>
+          <th>hide</th>
+          <th>hide</th>
+          <th>hide</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of kpiTableBodyData; index as i">
-<!--        <td align="center"><input type="checkbox"/></td>-->
-        <td>{{row.contract}}</td>
-        <td>{{row.id_kpi}}</td>
-        <td>{{row.short_name}}</td>
-        <td>{{row.source_type}}</td>
-        <td>{{row.tracking_period}}</td>
-        <td>{{row.wf_last_sent}}</td>
-        <td>{{row.rm_last_sent}}</td>
-        <td align="center">&#10006;</td>
-        <td align="center">&#10006;</td>
-        <td align="center">&#10006;</td>
-        <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal"    (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-        <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal"    (click)="coloBtn(row.kpi_description)" ><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
-        <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                   data-target="#kpiModal">Modifica</button></td>
-      </tr>
+        <tr *ngFor="let row of kpiTableBodyData; index as i">
+          <!--        <td align="center"><input type="checkbox"/></td>-->
+          <td>{{row.contract}}</td>
+          <td>{{row.id_kpi}}</td>
+          <td>{{row.short_name}}</td>
+          <td>{{row.source_type}}</td>
+          <td>{{row.tracking_period}}</td>
+          <td>{{row.wf_last_sent}}</td>
+          <td>{{row.rm_last_sent}}</td>
+          <td align="center">&#10006;</td>
+          <td align="center">&#10006;</td>
+          <td align="center">&#10006;</td>
+          <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
+          <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
+          <td align="center">
+            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                    data-target="#kpiModal">
+              Modifica
+            </button>
+          </td>
+          <td>{{row.referent}}</td>
+          <td>{{row.referent_1}}</td>
+          <td>{{row.referent_2}}</td>
+          <td>{{row.referent_3}}</td>
+        </tr>
       </tbody>
     </table>
   </div>
