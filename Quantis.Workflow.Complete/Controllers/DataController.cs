@@ -158,7 +158,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAttachmentsByFormId(formId);
         }
-
+        [HttpGet("GetAllTUsers")]
+        public List<TUserDTO> GetAllTUsers()
+        {
+            return _dataAPI.GetAllTUsers();
+        }
         [HttpPost("ArchiveKPIs")]
         public int ArchiveKPIs([FromBody]ArchiveKPIDTO dto)
         {

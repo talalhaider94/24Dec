@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Quantis.WorkFlow.Services.DTOs.API
+{
+    public class TUserDTO
+    {
+        public int user_id { get; set; }
+        public string user_name { get; set; }
+        public int user_locale_id { get; set; }
+        public string user_status { get; set; }
+        public string user_email { get; set; }
+    }
+}
