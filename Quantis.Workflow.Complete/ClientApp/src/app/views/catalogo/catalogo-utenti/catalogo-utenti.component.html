@@ -11,16 +11,16 @@
       <table class="table table-bordered" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #E6E6E6">
         <tr>
-            <th>BSI ACCOUNT</th>
-            <th>NOME</th>
-            <th>COGNOME</th>
-            <th>STRUTTURA</th>
-            <th>MAIL</th>
-            <th>USER ID</th>
-            <th>RESPONSABILE</th>
-            <th>USER ADMIN</th>
-            <th>USER SADMIN</th>
-            <th>AZIONE</th>
+            <th style="text-align:center">BSI ACCOUNT</th>
+            <th style="text-align:center">NOME</th>
+            <th style="text-align:center">COGNOME</th>
+            <th style="text-align:center">STRUTTURA</th>
+            <th style="text-align:center">MAIL</th>
+            <th style="text-align:center">USER ID</th>
+            <th style="text-align:center">RESPONSABILE</th>
+            <th style="text-align:center">USER ADMIN</th>
+            <th style="text-align:center">USER SADMIN</th>
+            <th style="text-align:center">AZIONE</th>
           </tr>
         </thead>
         <tbody>
@@ -32,8 +32,11 @@
             <td>{{row.mail}}</td>
             <td>{{row.userid}}</td>
             <td>{{row.manager}}</td>
-            <td align="center"><input type="checkbox" [ngModel]="row.user_admin" /></td>
-            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>
+            <td align="center" *ngIf="row.user_admin; then trueBlock else falseBlock"></td>
+            <td align="center" *ngIf="row.user_sadmin; then trueBlock else falseBlock"></td>
+<!--            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>-->
+            <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
+            <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
             <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                  data-target="#utentiModal">Modifica</button></td>
           </tr>
@@ -66,7 +69,7 @@
           <tr><th>USER ID</th><td><input type="text" class="form-control" [(ngModel)]="modalData.userid"></td></tr>
           <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.manager"></td></tr>
           <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_admin" /></td></tr>
-          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_sadmin" /></td></tr>
+          <tr><th>USER SADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_sadmin" /></td></tr>
           </tbody>
         </table>
         <!--div-->
