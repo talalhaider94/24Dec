@@ -243,14 +243,6 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
-  /*getKpis() {
-    this.apiService.getCatalogoKpis().subscribe((data) =>{
-      this.kpiTableBodyData = data;
-      console.log('Kpis ', data);
->>>>>>> 823e4ba09695a8ca36410936a0bb8a1a1990c931
-    });
-  }*/
-
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();

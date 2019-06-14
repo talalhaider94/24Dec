@@ -64,6 +64,8 @@ export class ArchivedKpiComponent implements OnInit {
       archived: 'archived'
     }
   ]
+  monthVar: any;
+  yearVar: any;
   constructor(private apiService: ApiService) {
     $this = this;
   }
@@ -85,6 +87,14 @@ export class ArchivedKpiComponent implements OnInit {
 
   }
 
+  populateDateFilter() {
+    this.apiService.getDateKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
+      this.ArchivedKpiBodyData = data;
+      this.rerender();
+    });
+
+  }
+
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
@@ -100,10 +110,10 @@ export class ArchivedKpiComponent implements OnInit {
   }
 
 
-  ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  //   // Do not forget to unsubscribe the event
+  //   this.dtTrigger.unsubscribe();
+  // }
 
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {

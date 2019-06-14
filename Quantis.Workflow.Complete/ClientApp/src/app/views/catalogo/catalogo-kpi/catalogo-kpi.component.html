@@ -116,7 +116,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
+        <h5 class="modal-title" id="approveModalLabel">Descrizione Estesa</h5>
         <button type="button"   class="close" data-dismiss="modal" aria-label="Close" >
           <span aria-hidden="true">&times;</span>
         </button>
@@ -138,7 +138,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
+         <h5 class="modal-title" id="approveModalLabel">Modifica KPI</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -150,9 +150,6 @@
           </thead>
           <tbody>
 
-            <tr><th>ABILITATO</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>REMINDER</th><td align="center"><input type="checkbox"/></td></tr>
-            <tr><th>WORKFLOW</th><td align="center"><input type="checkbox"/></td></tr>
             <tr><th>CONTRATTO</th><td><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
             <tr><th>ID KPI</th><td><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
             <tr><th>TITOLO BREVE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
@@ -160,6 +157,9 @@
             <tr><th>FREQUENZA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
             <tr><th>DATA WF</th><td><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
             <tr><th>DATA WM</th><td><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
+            <tr><th>ABILITATO</th><td align="center"><input type="checkbox"/></td></tr>
+            <tr><th>REMINDER</th><td align="center"><input type="checkbox"/></td></tr>
+            <tr><th>WORKFLOW</th><td align="center"><input type="checkbox"/></td></tr>
 
           </tbody>
         </table>

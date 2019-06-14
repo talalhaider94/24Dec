@@ -12,6 +12,7 @@ using Quantis.WorkFlow.APIBase.Framework;
 using Microsoft.Extensions.Logging;
 using Quantis.WorkFlow.Services.DTOs.API;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -561,7 +562,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.GetAsync("/api/OracleCon/GetOracleConnection").Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        config = response.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+                        
+                        config = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
                     }
                     else
                     {
