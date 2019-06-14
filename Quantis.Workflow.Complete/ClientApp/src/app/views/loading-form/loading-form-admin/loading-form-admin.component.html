@@ -12,7 +12,7 @@
     <div class="col-sm-7">
       <form [formGroup]="myInputForm" novalidate (ngSubmit)="save(myInputForm)">
           <div formArrayName="valories">
-            <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
+            <div *ngFor="let language of myInputForm.valories; let i=index" class="panel panel-default" >
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="p-3 bg-white panel-body" [formGroupName]="i">
                   <div class="row" id="divDate">
                     <div class="col-sm-12">
@@ -64,7 +64,7 @@
 
           <div class="row">
             <div formArrayName="campiConfronto" class="panel panel-default">
-                <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body" [formGroupName]="i" >
+                <div *ngFor="let language of myInputForm.campiConfronto; let i=index" class="panel-body" [formGroupName]="i" >
                   <div  class="form-group col-xs-3">
                       <mat-form-field appearance="outline">
                         <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
@@ -93,7 +93,7 @@
                     </mat-form-field>
                   </div>
     
-                  <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
+                  <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.valories.length > 1" (click)="removeComparisonForm(i)"></span>
                 </div>
               </div>
             </div>  
