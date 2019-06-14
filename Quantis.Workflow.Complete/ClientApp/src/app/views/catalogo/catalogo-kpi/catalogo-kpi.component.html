@@ -49,9 +49,11 @@
           <td>{{row.tracking_period}}</td>
           <td>{{row.wf_last_sent}}</td>
           <td>{{row.rm_last_sent}}</td>
-          <td align="center">&#10006;</td>
-          <td align="center">&#10006;</td>
-          <td align="center">&#10006;</td>
+          <td align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
+          <td align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
+          <td align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
+          <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
+          <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
           <td align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
           <td align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
           <td align="center">
@@ -152,7 +154,7 @@
             <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
             <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
             <tr><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
-            <tr><td align="center"><input type="checkbox"/></td><td align="center"><input type="checkbox" /></td><td align="center"><input type="checkbox" /></td></tr>
+            <tr><td align="center"><input type="checkbox" [checked]="modalData.enable == 'true'"/></td><td align="center"><input type="checkbox" [checked]="modalData.enable_wf == 'true'" /></td><td align="center"><input type="checkbox" [checked]="modalData.enable_rm == 'true'"/></td></tr>
             <!-- by Giacomo: I prefer to have the checkboxes on the same row -->
           </tbody>
         </table>
