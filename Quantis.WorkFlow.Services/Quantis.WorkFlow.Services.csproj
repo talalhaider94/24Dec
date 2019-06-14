@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.Authorization"></Reference>
-    <Reference Include="Microsoft.AspNetCore.Http.Abstractions"></Reference>
   </ItemGroup>
 
 </Project>

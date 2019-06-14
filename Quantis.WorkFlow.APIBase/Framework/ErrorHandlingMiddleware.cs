@@ -12,7 +12,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly WorkFlowPostgreSqlContext _dbContext;
         public ErrorHandlingMiddleware(RequestDelegate next)
         {
             this.next = next;
