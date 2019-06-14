@@ -128,7 +128,7 @@ export class ProveVarieComponent implements OnInit {
 
   addInputForm() {
     console.log('addInputForm this.myInputForm 1', this.myInputForm);
-    const control = <FormArray>this.myInputForm.controls['valories'];
+    const control = <FormArray>this.myInputForm.get('valories');
     control.push(this.initInputForm());
   }
 
@@ -144,12 +144,12 @@ export class ProveVarieComponent implements OnInit {
     if (array == '') {
       array = new ControlloConfronto;
     }
-    const control = <FormArray>this.myInputForm.controls['campiConfronto']; // means comparison fields
+    const control = <FormArray>this.myInputForm.get('campiConfronto'); // means comparison fields
     control.push(this.initComparisonForm(array));
   }
 
   removeComparisonForm(i: number) {
-    const control = <FormArray>this.myInputForm.controls['campiConfronto'];
+    const control = <FormArray>this.myInputForm.get('campiConfronto');
     control.removeAt(i);
   }
 
