@@ -1,7 +1,5 @@
 stages:
     - build
-    - publish
-    - deploy
     
 before_script:
     - "ls"
@@ -9,26 +7,16 @@ before_script:
 
 build:
     stage: build
+    only:
+        - schedules
     script:
-        - "dotnet build"
-
-publish:
-    stage: publish
-    script:
-        - "dotnet publish -c Release -o ./Publish"
-    dependencies:
-    - build
-    
-deploy:
-    stage: deploy
-    script:
+        - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
-        - "mv /opt/WorkFlowAPI/dotnetcore_modules/ /opt/WorkFlowAPI/dotnetcore_modules_backup"
-        - "mkdir /opt/WorkFlowAPI/dotnetcore_modules/" 
-        - "cp ./Publish/* /opt/WorkFlowAPI/dotnetcore_modules/"
+        - "rm -rf /opt/WorkFlowAPI/dotnetcore_modules_backup"
+        - "mv /opt/WorkFlowAPI/dotnetcore_modules /opt/WorkFlowAPI/dotnetcore_modules_backup"
+        - "mkdir /opt/WorkFlowAPI/dotnetcore_modules" 
+        - "cp -a /opt/WorkFlowAPI/DotnetPublish/. /opt/WorkFlowAPI/dotnetcore_modules/"
         - "systemctl start supervisord"
-        
-    dependencies:
-    - publish
+        - "rm -rf /opt/WorkFlowAPI/DotnetPublish"
 
 
