@@ -51,12 +51,12 @@ export const navItems: NavData[] = [
       {
         name: 'Contraenti',
         url: '/coming-soon',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-th-list'
       },
       {
         name: 'Contratti',
         url: '/coming-soon',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-file-text'
       },
     ]
   },
@@ -68,73 +68,78 @@ export const navItems: NavData[] = [
       {
         name: 'KPI in Verifica',
         url: '/kpi',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-file-text-o'
       },
       {
         name: 'Ricerca',
         url: '/coming-soon',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-search'
       },
     ]
   },
   {
     name: 'Catalogo',
     url: '/catalogo',
-    icon: 'icon-doc',
+    icon: 'fa fa-folder-open-o',
     children: [
       {
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-file-archive-o'
       },
       {
         name: 'Catalogo Utenti',
         url: '/catalogo/utenti',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-address-book-o'
       },
     ]
   },
   {
     name: 'Report',
     url: '/coming-soon',
-    icon: 'icon-doc',
+    icon: 'fa fa-files-o',
     children: [
       {
         name: 'WorkFlow Reminder',
         url: '/coming-soon',
-        icon: 'fa fa-circle-thin'
+        icon: 'fa fa-check-circle-o'
       }
+    ]
+  },
+  {
+    name: 'KPI Archiviati',
+    url: '/archivedkpi',
+    icon: 'fa fa-archive'
+  },
+  {
+    name: 'Loading Form',
+    url: '/coming-soon',
+    icon: 'fa fa-pencil-square-o',
+    children: [
+      {
+        name: 'Admin',
+        url: '/loading-form/admin',
+        icon: 'fa fa-user-circle'
+      },
+      {
+        name: 'Utente',
+        url: '/loading-form/user',
+        icon: 'fa fa-user-circle-o'
+      },
     ]
   },
   {
     name: 'Configurations',
     url: '/tconfiguration',
-    icon: 'icon-doc'
-  },
-  {
-    name: 'KPI Archiviati',
-    url: '/archivedkpi',
-    icon: 'icon-doc'
-  },
-  {
-    name: 'Loading Form',
-    url: '/coming-soon',
-    icon: 'fa fa-edit',
-    children: [
-      {
-        name: 'Admin',
-        url: '/loading-form/admin',
-        icon: 'fa fa-circle-thin'
-      },
-      {
-        name: 'Utente',
-        url: '/loading-form/user',
-        icon: 'fa fa-circle-thin'
-      },
-    ]
+    icon: 'fa fa-gear'
   },
   {
     divider: true
+  },
+  {
+    title: true,
+    name: 'Version 1.0.1',
+    class: 'class-version-nav',
   },
   // {
   //   name: 'Pages',
