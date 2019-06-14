@@ -872,7 +872,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 var response =client.PostAsync("api/FormAdapter/RunAdapter", content).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    if (response.Content.ReadAsStringAsync().Result == "2")
+                    var res = response.Content.ReadAsStringAsync().Result;
+                    if ( res== "2" || res=="1" || res=="3")
                     {
                         return true;
                     }

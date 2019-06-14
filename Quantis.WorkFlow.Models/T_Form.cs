@@ -37,7 +37,7 @@ namespace Quantis.WorkFlow.Models
             builder.HasMany(o => o.Attachments).WithOne(p=>p.Form).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.FormLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.Rules).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(o => o.NotifierLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(o => o.NotifierLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q=>q.id_form);
         }
     }
 }

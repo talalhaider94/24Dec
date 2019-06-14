@@ -24,7 +24,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_notifier_logs");
             builder.HasKey(o => o.id);
-            builder.HasOne(o => o.Form).WithMany(o => o.NotifierLogs).IsRequired();
+            builder.HasOne(o => o.Form).WithMany(o => o.NotifierLogs).IsRequired().HasForeignKey(p=>p.id_form);
         }
     }
 }
