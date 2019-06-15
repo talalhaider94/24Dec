@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit{
         this.loading = false;
       }, error => {
         console.log('onLoginFormSubmit: error', error);
-        this.toastr.error(error.message, 'Error');
+        this.toastr.error(error.error.description, error.error.error);
         this.loading = false;
       })
     }
