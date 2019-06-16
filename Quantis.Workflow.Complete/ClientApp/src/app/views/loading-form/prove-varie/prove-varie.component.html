@@ -179,7 +179,6 @@
                                [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input"
                                class="form-control" formControlName="valoreUtente">
                         <input type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]"
-<<<<<<< HEAD
                           [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
                           class="form-control" formControlName="valoreUtente">
                         <div class="row">
@@ -191,17 +190,6 @@
                           </div>
                         </div>
                       </div>
-=======
-                               [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
-                               class="form-control" formControlName="valoreUtente">
-                      </div>
-                      <!-- <div class="col-sm-6">
-                              <label>valore minimo: {{numeroMin[i]}}</label>
-                            </div>
-                            <div class="col-sm-6">
-                              <label>valore massimo: {{numeroMax[i]}}</label>
-                            </div>    -->
->>>>>>> 03a744d9cebb7e45fc0267c17fe0319053902399
                     </div>
                   </div>
                 </div>
@@ -315,17 +303,8 @@
                 <tr *ngFor="let item of uploader.queue">
                   <td>{{ item?.file?.name }}</td>
                   <td nowrap>
-<<<<<<< HEAD
                     <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
                       <span class="fa fa-trash"></span>
-=======
-                    <button type="button" class="btn-success btn-xs" (click)="item.upload()"
-                            [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                      <span class="glyphicon glyphicon-upload"></span> Upload
-                    </button>
-                    <button type="button" class="btn-danger btn-xs" (click)="item.remove()">
-                      <span class="glyphicon glyphicon-trash"></span> Remove
->>>>>>> 03a744d9cebb7e45fc0267c17fe0319053902399
                     </button>
                   </td>
                 </tr>
