@@ -25,7 +25,10 @@ export class ApiService {
     const getUtentiEndPoint = `http://10.10.10.102/api/data/GetAllUsers`;
     return this.http.get(getUtentiEndPoint, Headers.setHeaders('GET'));
   }
-
+  getTUsers(): Observable<any> {
+    const getTUsersEndPoint = `http://10.10.10.102/api/data/GetAllTUsers`;
+    return this.http.get(getTUsersEndPoint, Headers.setHeaders('GET'));
+  }
   // getCatalogoKpis(){
   //   return this.http.get('https://api.myjson.com/bins/1157o5')
   //     .pipe(
