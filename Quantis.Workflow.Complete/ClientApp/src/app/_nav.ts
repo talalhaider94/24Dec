@@ -83,6 +83,11 @@ export const navItems: NavData[] = [
     icon: 'fa fa-folder-open-o',
     children: [
       {
+        name: 'Admin Utenti',
+        url: '/catalogo/admin-utenti',
+        icon: 'fa fa-address-book-o'
+      },
+      {
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
         icon: 'fa fa-file-archive-o'
