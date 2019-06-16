@@ -841,14 +841,15 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false);
+                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false && o.user_status == "ACTIVE" && o.user_organization_name != "INTERNAL");
                 var dtos = usr.Select(o => new TUserDTO()
                 {
                     user_email = o.user_email,
                     user_id = o.user_id,
                     user_locale_id = o.user_locale_id,
                     user_name = o.user_name,
-                    user_status = o.user_status
+                    user_status = o.user_status,
+                    user_organization_name = o.user_organization_name
                 }).ToList();
                 return dtos;
 
