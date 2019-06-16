@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
+import { FileSaverService } from 'ngx-filesaver';
 
 export class FormClass {
   form_id: number;
@@ -38,9 +39,12 @@ const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 export class ProveVarieComponent implements OnInit {
   formId: string = null;
   formName: string = null;
+  formRulesBody: [] = [];
   loading: boolean = false;
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
+  userLoadingFormErrors: string[] = [];
+
   public listaKpiPerForm = [];
   defaultFont = [];
   public myInputForm: FormGroup;
@@ -92,9 +96,9 @@ export class ProveVarieComponent implements OnInit {
   @Output() complete = new EventEmitter<string>();
 
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("filtro") filtro: ElementRef;
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(MatSort) sort: MatSort;
+  // @ViewChild("filtro") filtro: ElementRef;
 
   angForm: FormGroup;
   constructor(
@@ -105,19 +109,20 @@ export class ProveVarieComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
+    private _FileSaverService: FileSaverService
   ) { }
 
   ngOnInit() {
     const currentUser = this.authService.getUser();
     this.isAdmin = currentUser.isadmin;
-    //this.tornaIndietro(); // means come back
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
       this.formName = params.get("formName");
-      this.prendiDatiForm(+this.formId, this.formName);
+      this._init(+this.formId, this.formName);
       this._getAttachmentsByFormIdEndPoint(+this.formId);
     });
   }
+
   initInputForm() {
     return this.fb.group({
       valoreUtente: [''], // user value
@@ -127,7 +132,6 @@ export class ProveVarieComponent implements OnInit {
   }
 
   addInputForm() {
-    console.log('addInputForm this.myInputForm 1', this.myInputForm);
     const control = <FormArray>this.myInputForm.controls['valories'];
     control.push(this.initInputForm());
   }
@@ -157,16 +161,23 @@ export class ProveVarieComponent implements OnInit {
     if (!!model.value.termsCheck) {
       this.toastr.info('Inserire nota per dati non pervenuti.')
     }
-    this.loading = true;
     var formFields: FormField;
     var userSubmit: UserSubmitLoadingForm = new UserSubmitLoadingForm();
-    var userAttachments: FormAttachments;
     var dataAttuale = new Date();
     dataAttuale.setMonth((dataAttuale.getMonth()) - 1);
     if (dataAttuale.getMonth() == 12) {
       dataAttuale.setFullYear(dataAttuale.getFullYear() - 1);
     }
     var periodRaw = moment(dataAttuale).format('MM/YY');
+    const errorArray = this._customFormRulesValidation(this.arrayFormElements, model.value.valories, this.formRulesBody);
+    if (errorArray.length > 0) {
+      this.userLoadingFormErrors = errorArray;
+      this.toastr.error('Form fields data is not valid');
+      return false;
+    } else {
+      this.userLoadingFormErrors = [];
+    }
+
     //part where I fill in field values
     this.arrayFormElements.forEach((element, index) => {
       formFields = new FormField;
@@ -186,46 +197,7 @@ export class ProveVarieComponent implements OnInit {
       }
       userSubmit.inputs.push(formFields);
     });
-
     this.popolaUserSubmit(periodRaw, dataAttuale, userSubmit);
-    // if (this.uploader.queue.length == 0) {
-    //   // means populates User Submit
-    //   this.popolaUserSubmit(periodRaw, dataAttuale, userSubmit);
-    // } else {
-    //   console.log('USER SAVE ELSE', this.uploader);
-    //   this.uploader.queue.forEach((element, index) => {
-    //     var file = element._file;
-    //     console.log('UPLOADER FILE', file);
-    //     userAttachments = new FormAttachments;
-    //     var r = new FileReader();
-
-    //     r.onloadend = (e) => {
-    //       console.log(e);
-    //       if (r.readyState == FileReader.DONE) {
-    //         //var bytes = new Uint8Array(r.result);
-    //         var bytes: number[] = [];
-    //         var a = new Uint8Array(<ArrayBuffer>r.result);
-    //         a.forEach(data => {
-    //           bytes.push(data);
-    //         });
-    //         userAttachments.content = bytes;
-
-    //       }
-    //       // means populates User Submit
-    //       this.popolaUserSubmit(periodRaw, dataAttuale, userSubmit);
-    //     }
-    //     r.readAsArrayBuffer(file);
-    //     //      r.readAsBinaryString(file);
-    //     userAttachments.doc_name = file.name;
-    //     userAttachments.form_id = this.numeroForm;
-    //     userAttachments.form_attachment_id = 0;
-    //     userAttachments.period = moment(dataAttuale).format('MM');
-    //     userAttachments.year = dataAttuale.getFullYear();
-
-    //     userSubmit.attachments.push(userAttachments);
-    //   });
-    // }
-
   }
   // means populates User Submit
   popolaUserSubmit(periodRaw: any, dataAttuale, userSubmit) {
@@ -237,7 +209,6 @@ export class ProveVarieComponent implements OnInit {
     userSubmit.empty_form = false;
     userSubmit.period = String(periodRaw);
     userSubmit.year = Number(moment(dataAttuale).format('YY'));
-    debugger;
     this.loadingFormService.submitForm(userSubmit).subscribe(data => {
       this.loading = false;
       console.log('USER FORM SUBMIT SUCCESS', data);
@@ -255,62 +226,60 @@ export class ProveVarieComponent implements OnInit {
   }
   // means check comparison
   // segno means sign
-  checkConfronto(val1, val2, segno, elemento1, elemento2) {
-    console.log('checkConfronto val1', val1);
-    console.log('checkConfronto val2', val2);
-    console.log('checkConfronto segno', segno);
-    console.log('checkConfronto elemento1', elemento1);
-    console.log('checkConfronto elemento2', elemento2);
-    switch (segno) {
-      case '=':
-        if (val1 == val2) {
+  // checkConfronto(val1, val2, segno, elemento1, elemento2) {
+  //   console.log('checkConfronto val1', val1);
+  //   console.log('checkConfronto val2', val2);
+  //   console.log('checkConfronto segno', segno);
+  //   console.log('checkConfronto elemento1', elemento1);
+  //   console.log('checkConfronto elemento2', elemento2);
+  //   switch (segno) {
+  //     case '=':
+  //       if (val1 == val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere uguale a " + elemento2.Name);
-        }
-        break;
-      case '!=':
-        if (val1 != val2) {
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere uguale a " + elemento2.Name);
+  //       }
+  //       break;
+  //     case '!=':
+  //       if (val1 != val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere diverso di " + elemento2.Name);
-        }
-        break;
-      case '<':
-        if (val1 < val2) {
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere diverso di " + elemento2.Name);
+  //       }
+  //       break;
+  //     case '<':
+  //       if (val1 < val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere minore di " + elemento2.Name);
-        }
-        break;
-      case '>':
-        if (val1 > val2) {
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere minore di " + elemento2.Name);
+  //       }
+  //       break;
+  //     case '>':
+  //       if (val1 > val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere maggiore di " + elemento2.Name);
-        }
-        break;
-      case '>=':
-        if (val1 >= val2) {
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere maggiore di " + elemento2.Name);
+  //       }
+  //       break;
+  //     case '>=':
+  //       if (val1 >= val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere maggiore o uguale a " + elemento2.Name);
-        }
-        break;
-      case '<=':
-        if (val1 <= val2) {
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere maggiore o uguale a " + elemento2.Name);
+  //       }
+  //       break;
+  //     case '<=':
+  //       if (val1 <= val2) {
 
-        } else {
-          this.erroriArray.push(elemento1.Name + " deve essere minore o uguale a " + elemento2.Name);
-        }
-        break;
-    }
-  }
+  //       } else {
+  //         this.erroriArray.push(elemento1.Name + " deve essere minore o uguale a " + elemento2.Name);
+  //       }
+  //       break;
+  //   }
+  // }
 
-  // means take data forms
-  // Danial: this method is invoked when a row is clicked.
-  // and generates form fields dynamically
-  prendiDatiForm(numero: number, nome: string) {
+  // generates form fields dynamically
+  _init(numero: number, nome: string) {
     this.loading = true;
     // since I put the filters first by comparison,
     // when the max and min filters go I go to
@@ -352,6 +321,7 @@ export class ProveVarieComponent implements OnInit {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
       if (data) {
+        this.formRulesBody = JSON.parse(data.form_body);
         JSON.parse(data.form_body).forEach((element, index) => {
           console.log('data.form_body element', element);
           if (element.campo1 != null) {
@@ -411,17 +381,6 @@ export class ProveVarieComponent implements OnInit {
 
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource = new MatTableDataSource(this.jsonForm);
-    /* configure filter */
-    this.dataSource.filterPredicate = (data: any, filter) => (data.form_name.trim().toLowerCase().indexOf(filter.trim().toLowerCase()) !== -1);
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.paginator.firstPage();
-    }
-  }
   // means filter elements
   filtraElementi(campo, indice: number) {
     console.log('FILTER ELEMENTS', campo);
@@ -437,10 +396,6 @@ export class ProveVarieComponent implements OnInit {
     this.fileData = <File>fileInput.target.files[0];
   }
 
-  DatiNonPervenuti() {
-    alert('ueue');
-  }
-
 
   cancelFile(file: FileUploadModel) {
     this.removeFileFromArray(file);
@@ -450,57 +405,57 @@ export class ProveVarieComponent implements OnInit {
     this.removeFileFromArray(file);
   }
 
-  retryFile(file: FileUploadModel) {
-    this.uploadFile(file);
-    file.canRetry = false;
-  }
+  // retryFile(file: FileUploadModel) {
+  //   this.uploadFile(file);
+  //   file.canRetry = false;
+  // }
 
-  private uploadFile(file: FileUploadModel) {
-    const fd = new FormData();
-    fd.append(this.param, file.data);
+  // private uploadFile(file: FileUploadModel) {
+  //   const fd = new FormData();
+  //   fd.append(this.param, file.data);
 
-    const req = new HttpRequest('POST', this.target, fd, {
-      reportProgress: true
-    });
+  //   const req = new HttpRequest('POST', this.target, fd, {
+  //     reportProgress: true
+  //   });
 
-    file.inProgress = true;
-    file.sub = this.http.request(req).pipe(
-      map(event => {
-        switch (event.type) {
-          case HttpEventType.UploadProgress:
-            file.progress = Math.round(event.loaded * 100 / event.total);
-            //console.log('ciaone');
-            break;
-          case HttpEventType.Response:
-            // console.log('non saprei');
-            return event;
-        }
-      }),
-      tap(message => { }),
-      last(),
-      catchError((error: HttpErrorResponse) => {
-        file.inProgress = false;
-        file.canRetry = true;
-        return of(`${file.data.name} upload failed.`);
-      })
-    ).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-          this.removeFileFromArray(file);
-          this.complete.emit(event.body);
-        }
-      }
-    );
-  }
+  //   file.inProgress = true;
+  //   file.sub = this.http.request(req).pipe(
+  //     map(event => {
+  //       switch (event.type) {
+  //         case HttpEventType.UploadProgress:
+  //           file.progress = Math.round(event.loaded * 100 / event.total);
+  //           //console.log('ciaone');
+  //           break;
+  //         case HttpEventType.Response:
+  //           // console.log('non saprei');
+  //           return event;
+  //       }
+  //     }),
+  //     tap(message => { }),
+  //     last(),
+  //     catchError((error: HttpErrorResponse) => {
+  //       file.inProgress = false;
+  //       file.canRetry = true;
+  //       return of(`${file.data.name} upload failed.`);
+  //     })
+  //   ).subscribe(
+  //     (event: any) => {
+  //       if (typeof (event) === 'object') {
+  //         this.removeFileFromArray(file);
+  //         this.complete.emit(event.body);
+  //       }
+  //     }
+  //   );
+  // }
 
-  private uploadFiles() {
-    const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
-    fileUpload.value = '';
+  // private uploadFiles() {
+  //   const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
+  //   fileUpload.value = '';
 
-    this.files.forEach(file => {
-      this.uploadFile(file);
-    });
-  }
+  //   this.files.forEach(file => {
+  //     this.uploadFile(file);
+  //   });
+  // }
 
   private removeFileFromArray(file: FileUploadModel) {
     const index = this.files.indexOf(file);
@@ -510,28 +465,17 @@ export class ProveVarieComponent implements OnInit {
   }
 
   public uploader: FileUploader = new FileUploader({ url: URL });
-  public hasBaseDropZoneOver: boolean = false;
-  public hasAnotherDropZoneOver: boolean = false;
+  // public hasBaseDropZoneOver: boolean = false;
+  // public hasAnotherDropZoneOver: boolean = false;
 
-  public fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
+  // public fileOverBase(e: any): void {
+  //   this.hasBaseDropZoneOver = e;
+  // }
 
-  public fileOverAnother(e: any): void {
-    this.hasAnotherDropZoneOver = e;
-  }
-  // not being used
-  cliccato() {
-    this.uploader.queue.forEach((element, index) => {
-      var reader = new FileReader();
-      console.log(element._file);
-      // means test
-      console.log('prova' + reader.readAsText(element._file));
-      console.log(reader.readAsText(element._file));
-    });
-    console.log(this.uploader.queue);
-    //const blob = this.uploader as Blob;
-  }
+  // public fileOverAnother(e: any): void {
+  //   this.hasAnotherDropZoneOver = e;
+  // }
+
 
   _getAttachmentsByFormIdEndPoint(formId: number) {
     this.loadingFormService.getAttachmentsByFormId(formId).pipe().subscribe(data => {
@@ -545,4 +489,137 @@ export class ProveVarieComponent implements OnInit {
     })
   }
 
+  _customFormRulesValidation(formElements, formValues, formRules) {
+    const mapFormValues = formValues.map((value, index) => {
+      return {
+        name: formElements[index].name,
+        type: formElements[index].type,
+        value: value.valoreUtente || ''
+      }
+    });
+    const inValidRulesArray = mapFormValues.filter((value, index) => {
+      if (value.type === 'string') {
+        let rule = formRules[index];
+        let ruleMin = rule.min || 0;
+        let ruleMax = rule.max || 100;
+        const formStringValue = value.value;
+        console.log('formStringValue', formStringValue);
+        if (formStringValue.length >= ruleMin && formStringValue.length <= ruleMax) {
+          return false;
+        } else {
+          return true;
+        }
+      } else if (value.type === 'time') {
+        const formDateValue = value.value;
+        const minDate = moment(formRules[index].min);
+        const maxDate = moment(formRules[index].max);
+        let isBetween = moment(formDateValue).isBetween(minDate, maxDate);
+        return isBetween ? false : true;
+      } else if (value.type === 'real') {
+        let rule = formRules[index];
+        let ruleMin = rule.min || 0;
+        let ruleMax = rule.max || 100;
+        const formRealValue = value.value;
+        if (formRealValue >= ruleMin && formRealValue <= ruleMax) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        console.log('VALIDATION NOT HANDLES FOR VALUE', value);
+      }
+    });
+    return inValidRulesArray.map(invalidField => {
+      return `${invalidField.name} Input is not valid`;
+    })
+  }
+
+  downloadFile(base64Data, fileName) {
+    // let prefix = `data:application/pdf;base64,${base64Data}`;
+    this._FileSaverService.save(base64Data, fileName);
+  }
+
+  fileUploadUI() {
+    if (this.uploader.queue.length > 0) {
+      console.log('this.uploader', this.uploader);
+      this.uploader.queue.forEach((element, index) => {
+        let file = element._file;
+        this._getUploadedFile(file);
+      });
+    } else {
+      this.toastr.info('Please upload a file');
+    }
+  }
+
+  _getUploadedFile(file) {
+    const reader:FileReader = new FileReader();
+    // reader.onload = this._handleReaderLoaded.bind(this);
+    reader.onloadend = (function(theFile, loadingFormService, formId){
+      let fileName = theFile.name;
+      return function(readerEvent){
+        let formAttachments:FormAttachments = new FormAttachments();
+        let binaryString = readerEvent.target.result;
+        let base64Data = btoa(binaryString);  
+        formAttachments.content = base64Data;
+        formAttachments.form_attachment_id = 0;
+        formAttachments.form_id = formId;
+        formAttachments.period = '9';
+        formAttachments.year = 2019;
+        formAttachments.doc_name = fileName;
+        formAttachments.checksum = 'checksum';
+        loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
+          debugger
+        }, error => {
+          debugger
+        })   
+      };
+  })(file, this.loadingFormService, +this.formId);
+    reader.readAsBinaryString(file);
+  }
+
+  // _handleReaderLoaded(readerEvt) {
+  //   let formAttachments: FormAttachments;
+  //   let binaryString = readerEvt.target.result;
+  //   let base64Data = btoa(binaryString)
+  //   formAttachments.content = base64Data;
+  //   formAttachments.form_attachment_id = new Date().getTime();
+  //   formAttachments.form_id = +this.formId;
+  //   formAttachments.period = '';
+  //   formAttachments.year = 0;
+  //   formAttachments.doc_name = '';
+  //   formAttachments.checksum = '';
+  //   return btoa(binaryString);  
+  // }
+  // Danial: Below code is working But putting on hold
+  // changeListener($event) : void {
+  //   this.readThis($event.target);
+  // }
+  
+  // readThis(inputValue: any): void {
+  //   var file:File = inputValue.files[0];
+  //   debugger
+  //   var myReader:FileReader = new FileReader();
+  
+  //   myReader.onloadend = (e) => {
+  //     console.log('dd',myReader.result);
+  //     let formAttachments:FormAttachments = new FormAttachments();
+  //     // var userSubmit: UserSubmitLoadingForm = new UserSubmitLoadingForm();
+  //     // debugger        
+  //     formAttachments.content = myReader.result;
+  //     formAttachments.form_attachment_id = new Date().getTime();
+  //     formAttachments.form_id = +this.formId;
+  //     formAttachments.period = '';
+  //     formAttachments.year = 0;
+  //     formAttachments.doc_name = '';
+  //     formAttachments.checksum = '';
+  //     this.loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
+  //       debugger
+  //     }, error => {
+  //       debugger
+  //     }) 
+  //     // this.image = myReader.result;
+      
+  //   }
+  //   myReader.readAsDataURL(file);
+  // }
 }
