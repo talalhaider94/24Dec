@@ -91,7 +91,7 @@ export class AdminUtentiComponent implements OnInit {
     this.modalData.ca_bsi_account = data.user_name;
     this.modalData.name = data.name;
     this.modalData.surname = data.surname;
-    this.modalData.organization = data.organization;
+    this.modalData.organization = data.user_organization_name;
     this.modalData.mail = data.mail;
     this.modalData.userid = data.userid;
     this.modalData.manager = data.manager;
