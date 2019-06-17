@@ -86,7 +86,7 @@ export class ApiService {
   }
 
   updateConfig(config) {
-    return this.http.post('${environment.API_URL}/information/AddUpdateConfiguration', config, Headers.setHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateConfiguration`, config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
@@ -96,7 +96,7 @@ export class ApiService {
   }
 
   updateCatalogUtenti(config) {
-    return this.http.post('${environment.API_URL}/data/AddUpdateUser', config, Headers.setHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/data/AddUpdateUser`, config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
@@ -106,7 +106,7 @@ export class ApiService {
   }
 
   updateCatalogKpi(config) {
-    return this.http.post('${environment.API_URL}/data/AddUpdateKpi', config, Headers.setHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/data/AddUpdateKpi`, config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
