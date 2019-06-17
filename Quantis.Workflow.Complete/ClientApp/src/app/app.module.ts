@@ -7,6 +7,8 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { FileSaverModule } from 'ngx-filesaver';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -42,6 +44,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SafePipe } from './_pipes/safe.pipe';
 // import { LoadingFormComponent } from './views/loading-form/loading-form.component';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
@@ -61,7 +64,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot() // ToastrModule added
+    ToastrModule.forRoot(), // ToastrModule added
+    FileSaverModule 
   ],
   declarations: [
     AppComponent,
@@ -71,6 +75,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     RegisterComponent,
     ForgetComponent,
+    SafePipe,
     // LoadingFormComponent,
     // CommingsoonComponent
   ],

@@ -2,121 +2,6 @@
   <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 
-<!-- FORM TABLE CHOSEN VIEW ADMINISRATOR -->
-<!-- <div *ngIf='mostraTabella && vai && daje && isAdmin'>
-<div class="container mb-5">
-  <div class="row justify-content-center">
-    <div class="col-sm-12 text-center">
-      <h2>{{title}}</h2>
-    </div>
-    <div class="col-sm-7">
-      <form [formGroup]="myInputForm" novalidate (ngSubmit)="save(myInputForm)">
-          <div formArrayName="valories">
-            <div *ngFor="let language of myInputForm.controls.valories.controls; let i=index" class="panel panel-default" >
-              <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="p-3 bg-white panel-body" [formGroupName]="i">
-                  <div class="row" id="divDate">
-                    <div class="col-sm-12">
-                      <mat-label>{{arrayFormElements[i].name}}</mat-label>
-                    </div>
-                    <div class="col-sm-6">
-                      <mat-form-field appearance="outline">
-                        <mat-label>min Date</mat-label>
-                        <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]" class="form-control"   formControlName="valoreMin" >
-                        <mat-datepicker-toggle matSuffix [for]="pickerb"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerb></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                      <mat-form-field appearance="outline">
-                        <mat-label>max Date</mat-label>
-                        <input matInput [(ngModel)]="maxDate[i]"  [min]="minDate[i]"  [matDatepicker]="pickera" class="form-control"   formControlName="valoreMax" >
-                        <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
-                        <mat-datepicker #pickera></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                  </div>
-              </div>
-              <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="p-3 bg-white panel-body" [formGroupName]="i">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <mat-label>{{arrayFormElements[i].name}}</mat-label>
-                    </div>
-                    <div class="col-sm-6">
-                      <mat-form-field  appearance="outline">
-                        <mat-label>inserisci numero minimo</mat-label>
-                        <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="inserisci numero minimo" class="form-control"   formControlName="valoreMin">
-                      </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                      <mat-form-field  appearance="outline">
-                        <mat-label>inserisci numero massimo</mat-label>
-                        <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="inserisci numero massimo" class="form-control"   formControlName="valoreMax">
-                      </mat-form-field>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="erroriArray.length>0">
-            <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
-          </div>
-
-          <div class="row">
-            <div formArrayName="campiConfronto" class="panel panel-default">
-                <div *ngFor="let language of myInputForm.controls.campiConfronto.controls; let i=index" class="panel-body" [formGroupName]="i" >
-                  <div  class="form-group col-xs-3">
-                      <mat-form-field appearance="outline">
-                        <mat-select placeholder="campo 1"  formControlName="campo1" (selectionChange)="filtraElementi($event.value,i)" disableRipple>
-                          <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}</mat-option>
-
-                          <mat-option *ngFor="let element of arrayFormElements " [value]="element" >{{element.name}}</mat-option>
-
-                        </mat-select>
-                      </mat-form-field>
-                  </div>
-
-                  <div  class="form-group col-xs-3">
-                    <mat-form-field appearance="outline">
-                      <mat-select placeholder="confronto" formControlName="segno" disableRipple>
-                        <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-
-                  <div class="form-group col-xs-3">
-                    <mat-form-field appearance="outline">
-                      <mat-select    formControlName="campo2" disableRipple [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))" placeholder="campo 2">
-                          <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}</mat-option>
-                        <mat-option *ngFor="let element of arraySecondo[i]" [value]="element" >{{element.name}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-
-                  <span class="glyphicon glyphicon-remove pull-right" *ngIf="myInputForm.controls.valories.controls.length > 1" (click)="removeComparisonForm(i)"></span>
-                </div>
-              </div>
-            </div>
-          <div class="row mb-3 align-items-center pt-3">
-            <div class="col-sm-5">
-              <div class="form-check form-check-inline" bis_skin_checked="1">
-                <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
-                <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
-              </div>
-              </div>
-            <div class="col-sm-5 offset-sm-2 text-right">
-              <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
-                <span *ngIf="loading" class="fa fa-spinner fa-spin"></span>Salva
-              </button>
-              <a [routerLink]="['/loading-form/admin']" class="btn btn-info text-white">Annulla</a>
-            </div>
-          </div>
-        </form>
-    </div>
-  </div>
-</div>
-</div> -->
-<!-- FORM CHOSEN SECONDARY USERS TABLE -->
 <div>
   <div class="container">
     <div class="row">
@@ -126,6 +11,9 @@
             <strong>{{title}}</strong>
           </div>
           <div class="card-body">
+            <ul class="bg-danger pt-2 pb-2" *ngIf="userLoadingFormErrors.length > 0">
+              <li *ngFor="let error of userLoadingFormErrors"> {{ error }}</li>
+            </ul>
             <form [formGroup]="myInputForm" novalidate (ngSubmit)="saveUser(myInputForm)">
               <div class="form-group row">
                 <label class="col-md-4 col-form-label"><strong>Nome Campo</strong> </label>
@@ -143,42 +31,50 @@
                         <label>{{arrayFormElements[i].name}}</label>
                       </div>
                       <div class="col-sm-8">
-                        <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
-                               placeholder="inserisci data" class="form-control" formControlName="valoreUtente">
+                        <!-- <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
+                          placeholder="inserisci data" class="form-control" formControlName="valoreUtente"> -->
+                        <mat-form-field appearance="outline">
+                          <mat-label>Date</mat-label>
+                          <input [readonly]="!readOnlyUserForm" matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="pickera" formControlName="valoreUtente">
+                          <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
+                          <mat-datepicker #pickera></mat-datepicker>
+                        </mat-form-field>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <small>Data minima: {{minDate[i]|date}}</small>
+                          </div>
+                          <div class="col-sm-6">
+                            <small>Data massima: {{maxDate[i]|date}}</small>
+                          </div>
+                        </div>
                       </div>
-                      <!-- <div id="divDate" class="col-sm-12">
-                              <label>data minima: {{minDate[i]|date}}</label>
-                              <label>data massima: {{maxDate[i]|date}}</label>
-                            </div> -->
                     </div>
                   </div>
                   <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'"
                        class="panel-body bg-white" [formGroupName]="i">
                     <div class="row align-items-center mb-2">
-                      <div class="col-md-4 col-form-label">
+                      <div class="col-md-4 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
                         <label>{{arrayFormElements[i].name}}</label>
                       </div>
                       <div class="col-sm-8">
-                        <input *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]"
+                        <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]"
                                [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input"
                                class="form-control" formControlName="valoreUtente">
-                        <input type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]"
-                               [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
-                               class="form-control" formControlName="valoreUtente">
+                        <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]"
+                          [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
+                          class="form-control" formControlName="valoreUtente">
+                        <div class="row" *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
+                          <div class="col-sm-6">
+                            <small>Valore minimo: {{numeroMin[i]}}</small>
+                          </div>
+                          <div class="col-sm-6">
+                            <small>Valore massimo: {{numeroMax[i]}}</small>
+                          </div>
+                        </div>
                       </div>
-                      <!-- <div class="col-sm-6">
-                              <label>valore minimo: {{numeroMin[i]}}</label>
-                            </div>
-                            <div class="col-sm-6">
-                              <label>valore massimo: {{numeroMax[i]}}</label>
-                            </div>    -->
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div *ngIf="erroriArray.length>0">
-                <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
               </div>
               <div class="row mb-3 align-items-center">
                 <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
@@ -187,7 +83,7 @@
                     <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
                   </div>
                 </div>
-                <div class="col-sm-5 offset-sm-7 text-right">
+                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
                   <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
@@ -209,11 +105,11 @@
             </thead>
             <tbody>
               <tr *ngIf='listaKpiPerForm.length === 0'>
-                <td colspan="3">Form KPI not found.</td>
+                <td colspan="3">Nessun KPI Assegnato al Loading Form</td>
               </tr>
               <tr *ngFor='let kpi of listaKpiPerForm'>
                 <td>{{kpi.contract}}</td>
-                <td>{{kpi.kpi_name_bsi}}</td>
+                <td>{{kpi.id_kpi}} - {{kpi.kpi_name_bsi}}</td>
                 <td>{{kpi.target}}</td>
               </tr>
             </tbody>
@@ -221,14 +117,12 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <!-- <div class="row">
-          <div class="col-sm-12"> -->
         <div class="card">
           <div class="card-header">
             <strong>Documenti Presenti</strong>
           </div>
           <div class="card-body">
-            <table class="table table-responsive-sm table-hover table-outline mb-3">
+            <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
               <thead>
                 <tr>
                   <th>Timestamp</th>
@@ -238,7 +132,7 @@
               </thead>
               <tbody>
                 <tr *ngIf="formAttachmentsArray.length === 0">
-                  <td colspan="3">No attachments found.</td>
+                  <td colspan="3">Nessun Documento presente</td>
                 </tr>
                 <!-- <tr>
                   <td>period</td>
@@ -250,20 +144,20 @@
                 </tr> -->
 
                 <tr *ngFor="let attachment of formAttachmentsArray">
-                  <td>{{ attachment.period }}</td>
+                  <td>{{ attachment.period }}/{{ attachment.year }}</td>
                   <td>{{ attachment.doc_name }}</td>
                   <td>
-                    <a href="{{attachment.content}}" target="_blank" download><i class="fa fa-download"></i></a>
+                    <a (click)="downloadFile(attachment.content, attachment.doc_name)"><i
+                        class="fa fa-download text-primary"></i></a>
+                    <!-- <a href="data:application/pdf;base64,{{attachment.content}} | safe: 'resourceUrl'" target="_blank" download><i
+                        class="fa fa-download"></i></a> -->
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <!-- </div>
-          </div> -->
         </div>
-        <div class="bg-white pt-2 pb-2">
-
+        <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
           <div class="col-sm-12 mb-3">
             <h5>File Allegati</h5>
             <input type="file" ng2FileSelect [uploader]="uploader" multiple /><br />
@@ -285,17 +179,17 @@
                 <tr *ngFor="let item of uploader.queue">
                   <td>{{ item?.file?.name }}</td>
                   <td nowrap>
-                    <button type="button" class="btn-success btn-xs" (click)="item.upload()"
-                            [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                      <span class="glyphicon glyphicon-upload"></span> Upload
-                    </button>
-                    <button type="button" class="btn-danger btn-xs" (click)="item.remove()">
-                      <span class="glyphicon glyphicon-trash"></span> Remove
+                    <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
+                      <span class="fa fa-trash"></span>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
+              <span class="fa fa-upload" *ngIf="!fileUploading"></span>
+              <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
+            </button>
           </div>
         </div>
       </div>

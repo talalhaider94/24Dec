@@ -11,5 +11,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int user_locale_id { get; set; }
         public string user_status { get; set; }
         public string user_email { get; set; }
+        public string user_organization_name { get; set; }
+        public DateTime user_create_date { get; set; }
     }
 }

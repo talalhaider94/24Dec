@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingFormService } from '../../_services';
+import { LoadingFormService, AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -17,14 +17,17 @@ export class LoadingFormComponent implements OnInit, OnDestroy {
   datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  isAdmin: boolean = false;
   constructor(
     private router: Router,
-    private loadingFormService: LoadingFormService
+    private loadingFormService: LoadingFormService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     // Danial TODO: Some role permission logic is needed here.
     // Admin and super admin can access this
+    this.isAdmin = this.authService.getUser().isadmin;
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,

@@ -9,3 +9,12 @@ input:focus {
 .mat-form-field-wrapper {
   padding: 0 !important;
 }
+
+.card .mat-form-field {
+  width: 100% !important;
+  height: 57px;
+}
+
+.card .mat-form-field .mat-form-field-wrapper {
+  padding: 0 !important;
+}
