@@ -873,11 +873,13 @@ namespace Quantis.WorkFlow.APIBase.API
             using (var client = new HttpClient())
             {
                 var con = GetBSIServerURL();
-                client.BaseAddress = new Uri(con);
+                var apiPath = "api/FormAdapter/RunAdapter";
+                var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
+                client.BaseAddress = new Uri(output.Item1);
                 var dataAsString = JsonConvert.SerializeObject(dto);
                 var content = new StringContent(dataAsString);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var response =client.PostAsync("api/FormAdapter/RunAdapter", content).Result;
+                var response =client.PostAsync(output.Item2, content).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var res = response.Content.ReadAsStringAsync().Result;

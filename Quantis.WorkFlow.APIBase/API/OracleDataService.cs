@@ -561,18 +561,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     string basePath = bsiconf.value;
                     string apiPath = "/api/OracleCon/GetOracleConnection";
-
-                    if (Regex.Matches(basePath, "/").Count > 2)
-                    {
-                        var index=basePath.LastIndexOf('/');
-                        var newbasepath = basePath.Substring(0,index);
-                        var subpath = basePath.Substring(index);
-                        basePath = newbasepath;
-                        apiPath = subpath + apiPath;
-                    }
-                    
-                    client.BaseAddress = new Uri(basePath);
-                    var response = client.GetAsync(apiPath).Result;
+                    var output = QuantisUtilities.FixHttpURLForCall(basePath, apiPath);
+                    client.BaseAddress = new Uri(output.Item1);
+                    var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         

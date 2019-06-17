@@ -554,12 +554,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var client = new HttpClient())
                 {
                     List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
-                    client.BaseAddress = new Uri(_dataService.GetBSIServerURL());
+                    var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "api/UploadKPI/UploadKPI");
+                    client.BaseAddress = new Uri(output.Item1);
                     var dataAsString = JsonConvert.SerializeObject(data);
                     var content = new StringContent(dataAsString);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    var response = client.PostAsync("api/UploadKPI/UploadKPI", content).Result;
-                    //var response = client.PostAsJsonAsync("api/UploadKPI/UploadKPI", data).Result;
+                    var response = client.PostAsync(output.Item2, content).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         if (response.Content.ReadAsStringAsync().Result=="True")
