@@ -8,7 +8,7 @@
       <div class="col-sm-6">
         <div class="card">
           <div class="card-header">
-            <strong>{{title}}</strong>
+            <strong>{{jsonForm.description || title}}</strong>
           </div>
           <div class="card-body">
             <ul class="bg-danger pt-2 pb-2" *ngIf="userLoadingFormErrors.length > 0">
@@ -84,10 +84,10 @@
                   </div>
                 </div>
                 <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
-                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
+                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
-                  <a [routerLink]="['/loading-form/utente']" class="btn btn-info text-white">Annulla</a>
+                  <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']" class="btn btn-info text-white">Annulla</a>
                 </div>
               </div>
             </form>
