@@ -22,7 +22,7 @@ export class ApiService {
   //   );
   // }
   getCatalogoUsers(): Observable<any> {
-    const getUtentiEndPoint = `http://10.10.10.102/api/data/GetAllUsers`;
+    const getUtentiEndPoint = `${environment.API_URL}/data/GetAllUsers`;
     return this.http.get(getUtentiEndPoint, Headers.setHeaders('GET'));
   }
 
@@ -37,7 +37,7 @@ export class ApiService {
   // }
 
   getCatalogoKpis(): Observable<any> {
-    const getKpiEndPoint = `http://10.10.10.102/api/data/GetAllKpis`;
+    const getKpiEndPoint = `${environment.API_URL}api/data/GetAllKpis`;
     return this.http.get(getKpiEndPoint, Headers.setHeaders('GET'));
   }
 
@@ -52,7 +52,7 @@ export class ApiService {
   // }
 
   getConfigurations(): Observable<any> {
-    const getConfigurationsEndPoint = `http://10.10.10.102/api/Information/GetAllConfigurations`;
+    const getConfigurationsEndPoint = `${environment.API_URL}api/Information/GetAllConfigurations`;
     return this.http.get(getConfigurationsEndPoint, Headers.setHeaders('GET'));
   }
 
@@ -68,22 +68,22 @@ export class ApiService {
   // }
 
   getArchivedKpis(): Observable<any> {
-    const getArchivedKpisEndPoint = `http://10.10.10.102/api/data/getallarchivedkpis?month=05&year=2019`;
+    const getArchivedKpisEndPoint = `${environment.API_URL}api/data/getallarchivedkpis?month=05&year=2019`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
 
   getAllArchivedKpis(id): Observable<any> {
-    const getArchivedKpisEndPoint = `http://10.10.10.102/api/data/getallarchivedkpis?id_kpi=${id}`;
+    const getArchivedKpisEndPoint = `${environment.API_URL}api/data/getallarchivedkpis?id_kpi=${id}`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
 
   getDateKpis(month, year): Observable<any> {
-    const getDateKpisEndPoint = `http://10.10.10.102/api/data/getallarchivedkpis?month=${month}&year=${year}`;
+    const getDateKpisEndPoint = `${environment.API_URL}api/data/getallarchivedkpis?month=${month}&year=${year}`;
     return this.http.get(getDateKpisEndPoint, Headers.setHeaders('GET'));
   }
 
   updateConfig(config) {
-    return this.http.post('http://10.10.10.102/api/information/AddUpdateConfiguration', config, Headers.setHeaders('POST'))
+    return this.http.post('${environment.API_URL}api/information/AddUpdateConfiguration', config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
@@ -93,7 +93,7 @@ export class ApiService {
   }
 
   updateCatalogUtenti(config) {
-    return this.http.post('http://10.10.10.102/api/data/AddUpdateUser', config, Headers.setHeaders('POST'))
+    return this.http.post('${environment.API_URL}api/data/AddUpdateUser', config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
@@ -103,7 +103,7 @@ export class ApiService {
   }
 
   updateCatalogKpi(config) {
-    return this.http.post('http://10.10.10.102/api/data/AddUpdateKpi', config, Headers.setHeaders('POST'))
+    return this.http.post('${environment.API_URL}api/data/AddUpdateKpi', config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,
