@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { CatalogoKpiComponent } from './catalogo-kpi/catalogo-kpi.component';
 import { CatalogoUtentiComponent } from './catalogo-utenti/catalogo-utenti.component';
+import { AdminUtentiComponent } from './admin-utenti/admin-utenti.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,13 @@ const routes: Routes = [
     component: CatalogoUtentiComponent,
     data: {
       title: 'Catalogo Utenti'
+    }
+  },
+  {
+    path: 'admin-utenti',
+    component: AdminUtentiComponent,
+    data: {
+      title: 'Admin Utenti'
     }
   }
 ];

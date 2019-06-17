@@ -14,6 +14,7 @@ namespace Quantis.WorkFlow.Models
         public string user_status { get; set; }
         public string user_email { get; set; }
         public bool in_catalog { get; set; }
+        public string user_organization_name { get; set; }
     }
     public class T_User_Configuration : IEntityTypeConfiguration<T_User>
     {
