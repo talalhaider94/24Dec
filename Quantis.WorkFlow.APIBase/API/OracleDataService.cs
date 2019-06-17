@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Quantis.WorkFlow.Services.DTOs.API;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -558,8 +559,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(bsiconf.value);
-                    var response = client.GetAsync("/api/OracleCon/GetOracleConnection").Result;
+                    string basePath = bsiconf.value;
+                    string apiPath = "/api/OracleCon/GetOracleConnection";
+
+                    if (Regex.Matches(basePath, "/").Count > 2)
+                    {
+                        var index=basePath.LastIndexOf('/');
+                        var newbasepath = basePath.Substring(0,index);
+                        var subpath = basePath.Substring(index);
+                        basePath = newbasepath;
+                        apiPath = subpath + apiPath;
+                    }
+                    
+                    client.BaseAddress = new Uri(basePath);
+                    var response = client.GetAsync(apiPath).Result;
                     if (response.IsSuccessStatusCode)
                     {
                         
@@ -567,7 +580,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     else
                     {
-                        var e = new Exception("Connection to retrieve Orcle credentials cannot be created");
+                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}",basePath,apiPath));
                         throw e;
                     }
 
