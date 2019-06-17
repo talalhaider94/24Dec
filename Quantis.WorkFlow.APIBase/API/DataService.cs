@@ -547,26 +547,22 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public bool SubmitAttachment(List<FormAttachmentDTO> dto)
         {
-            using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
+
+            try
             {
-                try
+                List<T_FormAttachment> attachments = new List<T_FormAttachment>();
+                foreach (var attach in dto)
                 {
-                    List<T_FormAttachment> attachments = new List<T_FormAttachment>();
-                    foreach (var attach in dto)
-                    {
-                        attachments.Add(_fromAttachmentMapper.GetEntity(attach, new T_FormAttachment()));
-                    }
-                    _dbcontext.FormAttachments.AddRange(attachments.ToArray());
-                    _dbcontext.SaveChanges(false);
-                    dbContextTransaction.Commit();
-                    return true;
+                    attachments.Add(_fromAttachmentMapper.GetEntity(attach, new T_FormAttachment()));
                 }
-                catch (Exception e)
-                {
-                    dbContextTransaction.Rollback();
-                    throw e;
-                }
-            };
+                _dbcontext.FormAttachments.AddRange(attachments.ToArray());
+                _dbcontext.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public string GetBSIServerURL()
