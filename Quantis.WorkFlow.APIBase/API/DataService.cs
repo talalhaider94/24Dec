@@ -186,34 +186,39 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public bool AddUpdateUser(UserDTO dto)
         {
-            try
+            using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
             {
-                var entity = new T_CatalogUser();
-                if (dto.id > 0)
+                try
                 {
-                    entity = _dbcontext.CatalogUsers.FirstOrDefault(o => o.id == dto.id);
-                }
-                entity = _userMapper.GetEntity(dto, entity);
-
-                if (dto.id == 0)
-                {
-                    var usr = _dbcontext.TUsers.FirstOrDefault(o => dto.ca_bsi_user_id == o.user_id);
-                    if (usr != null)
+                    var entity = new T_CatalogUser();
+                    if (dto.id > 0)
                     {
-                        usr.in_catalog = true;
-                        _dbcontext.SaveChanges();
-
-                        _dbcontext.CatalogUsers.Add(entity);
+                        entity = _dbcontext.CatalogUsers.FirstOrDefault(o => o.id == dto.id);
                     }
+                    entity = _userMapper.GetEntity(dto, entity);
+
+                    if (dto.id == 0)
+                    {
+                        var usr = _dbcontext.TUsers.FirstOrDefault(o => dto.ca_bsi_user_id == o.user_id);
+                        if (usr != null)
+                        {
+                            usr.in_catalog = true;
+                            _dbcontext.SaveChanges(false);
+                            _dbcontext.CatalogUsers.Add(entity);
+                        }
+                    }
+
+                    _dbcontext.SaveChanges(false);
+                    dbContextTransaction.Commit();
+                    return true;
                 }
-                
-                _dbcontext.SaveChanges();
-                return true;
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+                    throw e;
+                }
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            
         }
 
         public bool AddUpdateWidget(WidgetDTO dto)
