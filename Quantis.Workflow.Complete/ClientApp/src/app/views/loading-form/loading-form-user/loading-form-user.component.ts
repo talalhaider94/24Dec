@@ -55,11 +55,12 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
     };
     const currentUser = this.authService.getUser();
     this.loadingFormService.getFormsByUserId(currentUser.userid).pipe(first()).subscribe(data => {
+      console.log('getFormsByUserId', data);
       this.loadingForms = data;
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
-      console.error('LoadingFormComponent', error)
+      console.error('getFormsByUserId', error);
       this.loading = false;
     })
   }

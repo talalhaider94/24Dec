@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { HttpClient, HttpRequest, HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
-import { tap, map, last, catchError } from 'rxjs/operators';
+// import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FileUploader } from 'ng2-file-upload';
 import { FormAttachments, FormField, UserSubmitLoadingForm, Form, FileUploadModel } from '../../../_models';
 import * as moment from 'moment';
@@ -44,6 +41,10 @@ export class ProveVarieComponent implements OnInit {
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
   userLoadingFormErrors: string[] = [];
+  fileUploading: boolean = false;
+  cutOff: boolean = false;
+  modifyDate: Date;
+  readOnlyUserForm: boolean = true;
 
   public listaKpiPerForm = [];
   defaultFont = [];
@@ -69,10 +70,10 @@ export class ProveVarieComponent implements OnInit {
   erroriArray: string[] = [];
   arraySecondo = new Array;
   confronti: string[] = ['<', '>', '=', '!=', '>=', '<='];
-  dataSource = new MatTableDataSource();
-  pageSizeOptions: number[] = [5, 10, 25, 100];
-  mostraTabella: boolean = false;
-  vai: boolean = false;
+  // dataSource = new MatTableDataSource();
+  // pageSizeOptions: number[] = [5, 10, 25, 100];
+  // mostraTabella: boolean = false;
+  // vai: boolean = false;
   //vai:boolean = true;
   arrayFormElements: any = [];
 
@@ -102,7 +103,6 @@ export class ProveVarieComponent implements OnInit {
 
   angForm: FormGroup;
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
     private toastr: ToastrService,
@@ -115,11 +115,37 @@ export class ProveVarieComponent implements OnInit {
   ngOnInit() {
     const currentUser = this.authService.getUser();
     this.isAdmin = currentUser.isadmin;
+    this.dtOptions2 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
       this.formName = params.get("formName");
       this._init(+this.formId, this.formName);
-      this._getAttachmentsByFormIdEndPoint(+this.formId);
+      this._getAttachmentsByFormIdEndPoint(+this.formId, true);
     });
   }
 
@@ -359,8 +385,21 @@ export class ProveVarieComponent implements OnInit {
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
-      this.jsonForm = data;
+      // mutiple forms values are coming for single form Id so picking first one.
+      this.jsonForm = data[0];
       console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
+      this.cutOff = data[0].cutoff;
+      this.modifyDate = data[0].modify_date;
+      if(data[0].cutoff) {
+        let currentDate = moment().format();
+        let isDateBefore = moment(data[0].modify_date).isBefore(currentDate);
+        // if(!this.isAdmin) {
+          if(isDateBefore) {
+            this.readOnlyUserForm = false;
+          }
+        // }
+        
+      }
       this.arrayFormElements = data[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
@@ -477,7 +516,7 @@ export class ProveVarieComponent implements OnInit {
   // }
 
 
-  _getAttachmentsByFormIdEndPoint(formId: number) {
+  _getAttachmentsByFormIdEndPoint(formId: number, shouldTrigger: boolean) {
     this.loadingFormService.getAttachmentsByFormId(formId).pipe().subscribe(data => {
       console.log('_getAttachmentsByFormIdEndPoint ==>', data);
       if (data) {
@@ -535,8 +574,10 @@ export class ProveVarieComponent implements OnInit {
   }
 
   downloadFile(base64Data, fileName) {
-    // let prefix = `data:application/pdf;base64,${base64Data}`;
-    this._FileSaverService.save(base64Data, fileName);
+    let prefix = `data:application/pdf;base64,${base64Data}`;
+    fetch(prefix).then(res => res.blob()).then(blob => {
+      this._FileSaverService.save(blob, fileName);  
+    });
   }
 
   fileUploadUI() {
@@ -552,74 +593,44 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _getUploadedFile(file) {
+    this.fileUploading  = true;
     const reader:FileReader = new FileReader();
-    // reader.onload = this._handleReaderLoaded.bind(this);
-    reader.onloadend = (function(theFile, loadingFormService, formId){
+    reader.onloadend = (function(theFile, loadingFormService, self){
       let fileName = theFile.name;
       return function(readerEvent){
         let formAttachments:FormAttachments = new FormAttachments();
         let binaryString = readerEvent.target.result;
         let base64Data = btoa(binaryString);  
+        let dateObj = self._getPeriodYear();
         formAttachments.content = base64Data;
         formAttachments.form_attachment_id = 0;
-        formAttachments.form_id = formId;
-        formAttachments.period = '9';
-        formAttachments.year = 2019;
+        formAttachments.form_id = +self.formId;
+        formAttachments.period = dateObj.period;
+        formAttachments.year = dateObj.year;
         formAttachments.doc_name = fileName;
         formAttachments.checksum = 'checksum';
         loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
-          debugger
+          console.log('submitAttachment ==>', data);
+          self.fileUploading = false;
+          if(data) {
+            self._getAttachmentsByFormIdEndPoint(+self.formId, false);
+          }
         }, error => {
-          debugger
-        })   
+          console.error('submitAttachment ==>', error);
+          self.fileUploading = false;
+          self.toastr.error('Some error occurred while uploading file');
+        });   
       };
-  })(file, this.loadingFormService, +this.formId);
-    reader.readAsBinaryString(file);
+  })(file, this.loadingFormService, this);
+    // reader.readAsDataURL(file); // returns file with base64 type prefix
+    reader.readAsBinaryString(file); // return only base64 string
   }
-
-  // _handleReaderLoaded(readerEvt) {
-  //   let formAttachments: FormAttachments;
-  //   let binaryString = readerEvt.target.result;
-  //   let base64Data = btoa(binaryString)
-  //   formAttachments.content = base64Data;
-  //   formAttachments.form_attachment_id = new Date().getTime();
-  //   formAttachments.form_id = +this.formId;
-  //   formAttachments.period = '';
-  //   formAttachments.year = 0;
-  //   formAttachments.doc_name = '';
-  //   formAttachments.checksum = '';
-  //   return btoa(binaryString);  
-  // }
-  // Danial: Below code is working But putting on hold
-  // changeListener($event) : void {
-  //   this.readThis($event.target);
-  // }
-  
-  // readThis(inputValue: any): void {
-  //   var file:File = inputValue.files[0];
-  //   debugger
-  //   var myReader:FileReader = new FileReader();
-  
-  //   myReader.onloadend = (e) => {
-  //     console.log('dd',myReader.result);
-  //     let formAttachments:FormAttachments = new FormAttachments();
-  //     // var userSubmit: UserSubmitLoadingForm = new UserSubmitLoadingForm();
-  //     // debugger        
-  //     formAttachments.content = myReader.result;
-  //     formAttachments.form_attachment_id = new Date().getTime();
-  //     formAttachments.form_id = +this.formId;
-  //     formAttachments.period = '';
-  //     formAttachments.year = 0;
-  //     formAttachments.doc_name = '';
-  //     formAttachments.checksum = '';
-  //     this.loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
-  //       debugger
-  //     }, error => {
-  //       debugger
-  //     }) 
-  //     // this.image = myReader.result;
-      
-  //   }
-  //   myReader.readAsDataURL(file);
-  // }
+  // move to helper later
+  _getPeriodYear() {
+    let currentDate = new Date();
+    return {
+      period: moment(currentDate).format('MM'),
+      year: Number(moment(currentDate).format('YYYY')) 
+    }
+  }
 }
