@@ -197,11 +197,12 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 if (dto.id == 0)
                 {
-                    var usr = _dbcontext.TUsers.FirstOrDefault(o => dto.ca_bsi_account == o.user_name);
+                    var usr = _dbcontext.TUsers.FirstOrDefault(o => dto.ca_bsi_user_id == o.user_id);
                     if (usr != null)
                     {
                         usr.in_catalog = true;
                         _dbcontext.SaveChanges();
+
                         _dbcontext.CatalogUsers.Add(entity);
                     }
                 }

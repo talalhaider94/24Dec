@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int id { get; set; }
         public string ca_bsi_account { get; set; }
+        public int ca_bsi_user_id { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
         public string organization { get; set; }
