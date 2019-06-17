@@ -115,7 +115,7 @@ export class ProveVarieComponent implements OnInit {
   ngOnInit() {
     const currentUser = this.authService.getUser();
     this.isAdmin = currentUser.isadmin;
-    this.dtOptions2 = {
+    /*this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       language: {
@@ -140,7 +140,7 @@ export class ProveVarieComponent implements OnInit {
           sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
         }
       }
-    };
+    };*/
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
       this.formName = params.get("formName");
