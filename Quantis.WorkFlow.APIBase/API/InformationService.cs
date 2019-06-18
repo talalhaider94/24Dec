@@ -68,6 +68,10 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var conf = _dbcontext.Configurations.Single(o => o.owner == owner && o.key == key);
+                if(conf == null)
+                {
+                    return null;
+                }
                 var dto = _configurationMapper.GetDTO(conf);
                 return dto;
             }

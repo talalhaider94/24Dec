@@ -38,6 +38,7 @@ const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 export class LoadingFormAdminComponent implements OnInit {
   formId: string = null;
   formName: string = null;
+  id: number = 0;
   loading: boolean = false;
   public listaKpiPerForm = [];
   defaultFont = [];
@@ -343,7 +344,7 @@ export class LoadingFormAdminComponent implements OnInit {
     this.loadingFormService.getFormRuleByFormId(numero).subscribe(data => {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
-      if(data) {
+      if (data) {
         JSON.parse(data.form_body).forEach((element, index) => {
           console.log(element);
           if (element.campo1 != null) {

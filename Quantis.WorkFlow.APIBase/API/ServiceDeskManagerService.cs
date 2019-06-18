@@ -177,12 +177,12 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public SDMTicketLVDTO GetTicketByKPIID(int Id)
+        public SDMTicketLVDTO GetTicketByID(int Id)
         {
             LogIn();
             try
             {
-                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "zz_mgnote='" + Id+"'", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "id='" + Id+"'", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                 select_a.Wait();
                 var select_result = select_a.Result.doSelectReturn;
                 return parseTickets(select_result).FirstOrDefault();
@@ -407,9 +407,9 @@ namespace Quantis.WorkFlow.APIBase.API
             return ret;
 
         }
-        public SDMTicketLVDTO TransferTicketByKPIID(int id, string status,string description)
+        public SDMTicketLVDTO TransferTicketByID(int id, string status,string description)
         {
-            var ticket = GetTicketByKPIID(id);
+            var ticket = GetTicketByID(id);
             if (ticket.Status != status)
             {
                 return ticket;
@@ -455,7 +455,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var statusa = _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
-                return GetTicketByKPIID(id);
+                return GetTicketByID(id);
             }
             catch (Exception e)
             {
@@ -466,9 +466,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
-        public SDMTicketLVDTO EscalateTicketbyKPIID(int id, string status,string description)
+        public SDMTicketLVDTO EscalateTicketbyID(int id, string status,string description)
         {
-            var ticket = GetTicketByKPIID(id);
+            var ticket = GetTicketByID(id);
             if (ticket.Status != status)
             {
                 return ticket;
@@ -514,7 +514,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var statusa= _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
-                return GetTicketByKPIID(id);
+                return GetTicketByID(id);
             }
             catch (Exception e)
             {
@@ -554,7 +554,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var client = new HttpClient())
                 {
                     List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
-                    var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "api/UploadKPI/UploadKPI");
+                    var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "/api/UploadKPI/UploadKPI");
                     client.BaseAddress = new Uri(output.Item1);
                     var dataAsString = JsonConvert.SerializeObject(data);
                     var content = new StringContent(dataAsString);
@@ -574,7 +574,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     else
                     {
-                        throw new Exception("Connection to form adaptor cannot be created");
+                        throw new Exception(string.Format("Call to Upload KPI has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                     }
 
                 }
@@ -594,7 +594,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var attributes = l.Element("Attributes").Elements("Attribute");
                 SDMTicketLVDTO dto = new SDMTicketLVDTO();
-                dto.Id = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "id").Element("AttrValue").Value;
+                dto.Id = l.Element("Handle").Value.Substring(3);
                 dto.ref_num = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "ref_num").Element("AttrValue").Value;
                 dto.Description = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "description").Element("AttrValue").Value;
                 dto.Group = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "group").Element("AttrValue").Value;

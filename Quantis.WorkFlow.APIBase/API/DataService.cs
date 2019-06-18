@@ -79,17 +79,20 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_FormRule();
-                if (dto.form_id > 0)
+                var entity = _dbcontext.FormRules.FirstOrDefault(o => o.form_id == dto.form_id);
+                if (entity == null)
                 {
-                    entity = _dbcontext.FormRules.FirstOrDefault(o => o.form_id == dto.form_id);
-                }
-                entity = _formRuleMapper.GetEntity(dto, entity);  
-                if(dto.form_id == 0)
-                {
+                    entity = new T_FormRule();
+                    entity = _formRuleMapper.GetEntity(dto, entity);
                     _dbcontext.FormRules.Add(entity);
+
+                }
+                else
+                {
+                    _formRuleMapper.GetEntity(dto, entity);
                 }
                 _dbcontext.SaveChanges();
+
                 return true;
             }
             catch (Exception e)
@@ -478,6 +481,29 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        public List<FormLVDTO> GetAllForms()
+        {
+            try
+            {
+                var forms = _dbcontext.Forms.ToList();
+                var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
+                return forms.Select(o => new FormLVDTO()
+                {
+                    create_date=o.create_date,
+                    form_description=o.form_description,
+                    form_id=o.form_id,
+                    form_name=o.form_name,
+                    form_owner_id=o.form_owner_id,
+                    modify_date=o.modify_date,
+                    reader_id=o.reader_id,
+                    day_cuttoff= (daycutoff==null)?null:daycutoff.Value
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public bool SumbitForm(SubmitFormDTO dto)
         {
@@ -495,6 +521,12 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_id = dto.user_id,
                         year = dto.year
                     };
+                    var form=_dbcontext.Forms.Single(o => o.form_id == dto.form_id);
+                    if (form != null)
+                    {
+                        form.modify_date = DateTime.Now;
+                        _dbcontext.SaveChanges(false);
+                    }
                     _dbcontext.FormLogs.Add(form_log);
                     T_NotifierLog notifier_log = _dbcontext.NotifierLogs.FirstOrDefault(o => o.id_form == form_log.id_form && o.period == form_log.period && o.year == form_log.year);
                     if (notifier_log != null)
@@ -768,7 +800,60 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
 
+        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        {
+            try
+            {
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    List<ATDtDeDTO> list = new List<ATDtDeDTO>();
+                    var tablename = "t_dt_de_3_" + year + "_" + month;
+                    //if (TableExists(tablename))
+                    //{
+                        var sp = @"select * from " + tablename + " where event_type_id = 1684 LIMIT 100";
+                        var command = new NpgsqlCommand(sp, con);
 
+                        using (var reader = command.ExecuteReader())
+                        {
+
+                            while (reader.Read())
+                            {
+
+                                //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
+
+                                ATDtDeDTO atdtde = new ATDtDeDTO();
+                                atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
+                                atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
+                                atdtde.reader_time_stamp = reader.GetDateTime(reader.GetOrdinal("reader_time_stamp"));
+                                atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
+                                atdtde.time_stamp = reader.GetDateTime(reader.GetOrdinal("time_stamp"));
+                                atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
+                                atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
+                                atdtde.create_date = reader.GetDateTime(reader.GetOrdinal("create_date"));
+                                atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                                atdtde.data = reader.GetString(reader.GetOrdinal("data"));
+                                atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
+                                atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
+                                atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
+                                atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
+                                atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
+                                atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
+
+
+                                list.Add(atdtde);
+                            }
+                        }
+                    //}
+                    return list;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year)
         {
@@ -874,7 +959,7 @@ namespace Quantis.WorkFlow.APIBase.API
             using (var client = new HttpClient())
             {
                 var con = GetBSIServerURL();
-                var apiPath = "api/FormAdapter/RunAdapter";
+                var apiPath = "/api/FormAdapter/RunAdapter";
                 var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
                 client.BaseAddress = new Uri(output.Item1);
                 var dataAsString = JsonConvert.SerializeObject(dto);
@@ -889,14 +974,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         return true;
                     }
                     else
-                    {                        
-                        return false;
+                    {
+                        throw new Exception("The return from Form Adapter is not valid value is:" +res);
 
                     }
                 }
                 else
-                {                    
-                    return false;
+                {
+                    throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}",output.Item1,output.Item2,dataAsString));
                 }
 
             }

@@ -168,10 +168,20 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.ArchiveKPIs(dto);
         }
-
+        [HttpGet("GetAllForms")]
+        public List<FormLVDTO> GetAllForms()
+        {
+            return _dataAPI.GetAllForms();
+        }
         //[Authorize(WorkFlowPermissions.USER)]
         [HttpGet("GetAllAPIs")]
         public List<ApiDetailsDTO> GetAllAPIs()
+        {
+            return _dataAPI.GetAllAPIs();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllAPIWithPermission")]
+        public List<ApiDetailsDTO> GetAllAPIWithPermission()
         {
             return _dataAPI.GetAllAPIs();
         }
@@ -181,7 +191,12 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi);
         }
-
+        
+        [HttpGet("GetRawDataByKpiID")]
+        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        {
+            return _dataAPI.GetRawDataByKpiID(id_kpi, month, year);
+        }
         [HttpGet("GetDetailsArchivedKPI")]
         public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
         {

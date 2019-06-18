@@ -13,7 +13,7 @@ namespace Quantis.WorkFlow.Services.API
         List<WidgetDTO> GetAllWidgets();
         WidgetDTO GetWidgetById(int Id);
         bool AddUpdateWidget(WidgetDTO dto);
-
+        List<FormLVDTO> GetAllForms();
         List<UserDTO> GetAllUsers();
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
@@ -46,6 +46,8 @@ namespace Quantis.WorkFlow.Services.API
 
         List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi);
         List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
+        
+        List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year);
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
