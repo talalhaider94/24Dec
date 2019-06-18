@@ -16,7 +16,7 @@
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="p-3 bg-white panel-body" [formGroupName]="i">
                   <div class="row" id="divDate">
                     <div class="col-sm-12">
-                      <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                      <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})</mat-label>
                     </div>
                     <div class="col-sm-6">
                       <mat-form-field appearance="outline">
@@ -39,7 +39,7 @@
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="p-3 bg-white panel-body" [formGroupName]="i">
                 <div class="row">
                     <div class="col-sm-12">
-                        <mat-label>{{arrayFormElements[i].name}}</mat-label>
+                        <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})</mat-label>
                     </div>
                     <div class="col-sm-6">
                       <mat-form-field  appearance="outline">
