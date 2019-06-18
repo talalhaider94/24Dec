@@ -50,15 +50,16 @@
           <thead style="background: #E6E6E6">
           </thead>
           <tbody>
-          <tr><th>BSI ACCOUNT</th><td>{{modalData.ca_bsi_account}}</td></tr>
-          <tr><th>NOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.name"></td></tr>
-          <tr><th>COGNOME</th><td><input type="text" class="form-control"[(ngModel)]="modalData.surname"></td></tr>
-          <tr><th>STRUTTURA</th><td><input type="text" class="form-control"[(ngModel)]="modalData.organization"></td></tr>
-          <tr><th>MAIL</th><td><input type="text" class="form-control"[(ngModel)]="modalData.mail"></td></tr>
-          <tr><th>USER ID</th><td><input type="text" class="form-control" [(ngModel)]="modalData.userid"></td></tr>
-          <tr><th>RESPONSABILE</th><td><input type="text" class="form-control"[(ngModel)]="modalData.manager"></td></tr>
-          <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_admin" /></td></tr>
-          <tr><th>USER SADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_sadmin" /></td></tr>
+            <tr><th>BSI ACCOUNT</th><td>{{modalData.ca_bsi_account}}</td></tr>
+            <tr><th>BSI USER ID</th><td>{{modalData.ca_bsi_user_id}}</td></tr>
+            <tr><th>NOME</th><td><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
+            <tr><th>COGNOME</th><td><input type="text" class="form-control" [(ngModel)]="modalData.surname"></td></tr>
+            <tr><th>STRUTTURA</th><td><input type="text" class="form-control" [(ngModel)]="modalData.organization"></td></tr>
+            <tr><th>MAIL</th><td><input type="text" class="form-control" [(ngModel)]="modalData.mail"></td></tr>
+            <tr><th>USER ID</th><td><input type="text" class="form-control" [(ngModel)]="modalData.userid"></td></tr>
+            <tr><th>RESPONSABILE</th><td><input type="text" class="form-control" [(ngModel)]="modalData.manager"></td></tr>
+            <tr><th>USER ADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_admin" /></td></tr>
+            <tr><th>USER SADMIN</th><td align="center"><input type="checkbox" [ngModel]="modalData.user_sadmin" /></td></tr>
           </tbody>
         </table>
         <!--div-->

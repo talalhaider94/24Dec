@@ -50,6 +50,7 @@ export class AdminUtentiComponent implements OnInit {
   modalData = {
     id: 0,
     ca_bsi_account: '',
+    ca_bsi_user_id: 0,
     name: '',
     surname: '',
     organization: '',
@@ -89,6 +90,7 @@ export class AdminUtentiComponent implements OnInit {
   populateModalData(data) {
     this.modalData.id = 0;
     this.modalData.ca_bsi_account = data.user_name;
+    this.modalData.ca_bsi_user_id = data.user_id;
     this.modalData.name = '';
     this.modalData.surname = '';
     this.modalData.organization = data.user_organization_name;
