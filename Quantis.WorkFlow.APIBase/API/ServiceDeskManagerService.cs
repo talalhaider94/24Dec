@@ -554,7 +554,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var client = new HttpClient())
                 {
                     List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
-                    var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "api/UploadKPI/UploadKPI");
+                    var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "/api/UploadKPI/UploadKPI");
                     client.BaseAddress = new Uri(output.Item1);
                     var dataAsString = JsonConvert.SerializeObject(data);
                     var content = new StringContent(dataAsString);
@@ -574,7 +574,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     else
                     {
-                        throw new Exception("Connection to form adaptor cannot be created");
+                        throw new Exception(string.Format("Call to Upload KPI has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                     }
 
                 }

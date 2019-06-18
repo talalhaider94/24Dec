@@ -959,7 +959,7 @@ namespace Quantis.WorkFlow.APIBase.API
             using (var client = new HttpClient())
             {
                 var con = GetBSIServerURL();
-                var apiPath = "api/FormAdapter/RunAdapter";
+                var apiPath = "/api/FormAdapter/RunAdapter";
                 var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
                 client.BaseAddress = new Uri(output.Item1);
                 var dataAsString = JsonConvert.SerializeObject(dto);
@@ -981,7 +981,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 else
                 {
-                    throw new Exception("Call to form adapter has failed");
+                    throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}",output.Item1,output.Item2,dataAsString));
                 }
 
             }
