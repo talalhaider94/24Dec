@@ -61,6 +61,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
                 context.Response.ContentType = "application/json";
                 return context.Response.WriteAsync(results);
             }
+            if (context.Response.StatusCode == (int)HttpStatusCode.Forbidden)
+            {
+                var results = JsonConvert.SerializeObject(new { error = "Login not found!" });
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsync(results);
+            }
             var code = HttpStatusCode.InternalServerError; // 500 if unexpected
             var result = JsonConvert.SerializeObject(new { error = "Some Error has occurred in API check logs or contact administrator" });
             context.Response.ContentType = "application/json";
