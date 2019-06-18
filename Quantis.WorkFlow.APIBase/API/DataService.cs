@@ -478,6 +478,27 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        public List<FormLVDTO> GetAllForms()
+        {
+            try
+            {
+                var forms = _dbcontext.Forms.ToList();
+                return forms.Select(o => new FormLVDTO()
+                {
+                    create_date=o.create_date,
+                    form_description=o.form_description,
+                    form_id=o.form_id,
+                    form_name=o.form_name,
+                    form_owner_id=o.form_owner_id,
+                    modify_date=o.modify_date,
+                    reader_id=o.reader_id
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public bool SumbitForm(SubmitFormDTO dto)
         {
@@ -495,6 +516,12 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_id = dto.user_id,
                         year = dto.year
                     };
+                    var form=_dbcontext.Forms.Single(o => o.form_id == dto.form_id);
+                    if (form != null)
+                    {
+                        form.modify_date = DateTime.Now;
+                        _dbcontext.SaveChanges(false);
+                    }
                     _dbcontext.FormLogs.Add(form_log);
                     T_NotifierLog notifier_log = _dbcontext.NotifierLogs.FirstOrDefault(o => o.id_form == form_log.id_form && o.period == form_log.period && o.year == form_log.year);
                     if (notifier_log != null)
