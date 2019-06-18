@@ -906,7 +906,7 @@ namespace Quantis.WorkFlow.APIBase.API
             using (var client = new HttpClient())
             {
                 var con = GetBSIServerURL();
-                var apiPath = "api/FormAdapter/RunAdapter";
+                var apiPath = "/api/FormAdapter/RunAdapter";
                 var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
                 client.BaseAddress = new Uri(output.Item1);
                 var dataAsString = JsonConvert.SerializeObject(dto);
