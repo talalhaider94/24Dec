@@ -928,7 +928,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 else
                 {
-                    throw new Exception("Call to form adapter has failed");
+                    throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}",output.Item1,output.Item2,dataAsString));
                 }
 
             }
