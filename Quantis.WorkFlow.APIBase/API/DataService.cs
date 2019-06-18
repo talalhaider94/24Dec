@@ -79,17 +79,20 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entity = new T_FormRule();
-                if (dto.form_id > 0)
+                var entity = _dbcontext.FormRules.FirstOrDefault(o => o.form_id == dto.form_id);
+                if (entity == null)
                 {
-                    entity = _dbcontext.FormRules.FirstOrDefault(o => o.form_id == dto.form_id);
-                }
-                entity = _formRuleMapper.GetEntity(dto, entity);  
-                if(dto.form_id == 0)
-                {
+                    entity = new T_FormRule();
+                    entity = _formRuleMapper.GetEntity(dto, entity);
                     _dbcontext.FormRules.Add(entity);
+
+                }
+                else
+                {
+                    _formRuleMapper.GetEntity(dto, entity);
                 }
                 _dbcontext.SaveChanges();
+
                 return true;
             }
             catch (Exception e)

@@ -23,6 +23,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
 
         public override T_FormRule GetEntity(FormRuleDTO o, T_FormRule e)
         {
+            e.form_id = o.form_id;
             e.form_body = o.form_body;
             e.end_date =o.end_date;
             e.start_date = o.start_date;
