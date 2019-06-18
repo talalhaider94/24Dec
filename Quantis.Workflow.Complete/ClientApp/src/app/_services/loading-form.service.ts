@@ -13,7 +13,7 @@ export class LoadingFormService {
   constructor(private http: HttpClient) { }
 
   getLoadingForms(): Observable<any>{
-    const loadingFormEndPoint = `${environment.API_URL}/oracle/GetForms`;
+    const loadingFormEndPoint = `${environment.API_URL}/data/GetAllForms`;
     return this.http.get(loadingFormEndPoint, Headers.setHeaders('GET'));
   }
   
