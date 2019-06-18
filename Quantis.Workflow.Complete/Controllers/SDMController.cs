@@ -31,16 +31,16 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.GetAllTickets();
         }
-        [HttpGet("TransferTicketByKPIID")]
-        public SDMTicketLVDTO TransferTicketByKPIID(int id, string status, string description)
+        [HttpGet("TransferTicketByID")]
+        public SDMTicketLVDTO TransferTicketByID(int id, string status, string description)
         {
-            return _sdmAPI.TransferTicketByKPIID(id,status, description);
+            return _sdmAPI.TransferTicketByID(id,status, description);
         }
 
-        [HttpGet("EscalateTicketbyKPIID")]
-        public SDMTicketLVDTO EscalateTicketbyKPIID(int id, string status, string description)
+        [HttpGet("EscalateTicketbyID")]
+        public SDMTicketLVDTO EscalateTicketbyID(int id, string status, string description)
         {
-            return _sdmAPI.EscalateTicketbyKPIID(id,status, description);
+            return _sdmAPI.EscalateTicketbyID(id,status, description);
         }
 
         [HttpGet("CreateTicketByKPIID")]
