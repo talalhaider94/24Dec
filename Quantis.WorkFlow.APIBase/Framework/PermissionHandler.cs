@@ -32,16 +32,16 @@ namespace Quantis.WorkFlow.APIBase.Framework
             var response = filterContext.HttpContext.Response;
             if (user == null)
             {
-                response.StatusCode = (int)HttpStatusCode.Forbidden;
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Task.CompletedTask;
             }
-            else if (user.Permissions.Contains(requirement.Permission))
+            else if (requirement.Permission== WorkFlowPermissions.BASIC_LOGIN || user.Permissions.Contains(requirement.Permission))
             {
                 context.Succeed(requirement);
             }
             else
             {
-                response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return Task.CompletedTask;
             }
             return Task.CompletedTask;

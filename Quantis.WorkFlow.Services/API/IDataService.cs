@@ -13,7 +13,7 @@ namespace Quantis.WorkFlow.Services.API
         List<WidgetDTO> GetAllWidgets();
         WidgetDTO GetWidgetById(int Id);
         bool AddUpdateWidget(WidgetDTO dto);
-
+        List<FormLVDTO> GetAllForms();
         List<UserDTO> GetAllUsers();
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);

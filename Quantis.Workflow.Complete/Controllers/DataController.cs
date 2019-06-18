@@ -168,10 +168,20 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.ArchiveKPIs(dto);
         }
-
+        [HttpGet("GetAllForms")]
+        public List<FormLVDTO> GetAllForms()
+        {
+            return _dataAPI.GetAllForms();
+        }
         //[Authorize(WorkFlowPermissions.USER)]
         [HttpGet("GetAllAPIs")]
         public List<ApiDetailsDTO> GetAllAPIs()
+        {
+            return _dataAPI.GetAllAPIs();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllAPIWithPermission")]
+        public List<ApiDetailsDTO> GetAllAPIWithPermission()
         {
             return _dataAPI.GetAllAPIs();
         }
