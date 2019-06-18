@@ -160,14 +160,14 @@ export class ProveVarieComponent implements OnInit {
       formFields.FieldType = element.type;
       switch (element.type) {
         case 'time':
-          formFields.FieldValue = this.dt[index];
+          formFields.FieldValue = this.dt[index] || '';
           break;
         case 'string':
-          formFields.FieldValue = this.stringa[index];
+          formFields.FieldValue = this.stringa[index] || '';
           break;
         default:
           // for real and integer
-          formFields.FieldValue = String(this.numero[index]);
+          formFields.FieldValue = String(this.numero[index] || '' );
           break;
       }
       userSubmit.inputs.push(formFields);
@@ -337,6 +337,10 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _customFormRulesValidation(formElements, formValues, formRules) {
+    // return if formRules are empty/not set
+    if(!formRules.length) {
+      return formRules;
+    }
     const mapFormValues = formValues.map((value, index) => {
       return {
         name: formElements[index].name,
