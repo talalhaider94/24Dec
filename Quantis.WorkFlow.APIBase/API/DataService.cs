@@ -483,6 +483,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var forms = _dbcontext.Forms.ToList();
+                var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
                 return forms.Select(o => new FormLVDTO()
                 {
                     create_date=o.create_date,
@@ -491,7 +492,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     form_name=o.form_name,
                     form_owner_id=o.form_owner_id,
                     modify_date=o.modify_date,
-                    reader_id=o.reader_id
+                    reader_id=o.reader_id,
+                    day_cuttoff= (daycutoff==null)?null:daycutoff.Value
                 }).ToList();
             }
             catch (Exception e)
