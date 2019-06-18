@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
-// import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { FileUploader } from 'ng2-file-upload';
 import { FormAttachments, FormField, UserSubmitLoadingForm, Form, FileUploadModel } from '../../../_models';
 import * as moment from 'moment';
@@ -45,7 +44,7 @@ export class ProveVarieComponent implements OnInit {
   cutOff: boolean = false;
   modifyDate: Date;
   readOnlyUserForm: boolean = true;
-
+  public uploader: FileUploader = new FileUploader({ url: URL });
   public listaKpiPerForm = [];
   defaultFont = [];
   public myInputForm: FormGroup;
@@ -70,11 +69,6 @@ export class ProveVarieComponent implements OnInit {
   erroriArray: string[] = [];
   arraySecondo = new Array;
   confronti: string[] = ['<', '>', '=', '!=', '>=', '<='];
-  // dataSource = new MatTableDataSource();
-  // pageSizeOptions: number[] = [5, 10, 25, 100];
-  // mostraTabella: boolean = false;
-  // vai: boolean = false;
-  //vai:boolean = true;
   arrayFormElements: any = [];
 
   jsonForm: any = [];
@@ -83,25 +77,6 @@ export class ProveVarieComponent implements OnInit {
   title: string = '';
   checked: boolean;
 
-
-  /** Link text */
-  @Input() text = 'Upload';
-  /** Name used in form which will be sent in HTTP request. */
-  @Input() param = 'file';
-  /** Target URL for file uploading. */
-  @Input() target = 'https://file.io';
-  /** File extension that accepted, same as 'accept' of <input type="file" />. 
-      By the default, it's set to 'image/*'. */
-  @Input() accept = 'image/*';
-  /** Allow you to add handler after its completion. Bubble up response text from remote. */
-  @Output() complete = new EventEmitter<string>();
-
-
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild("filtro") filtro: ElementRef;
-
-  angForm: FormGroup;
   constructor(
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
@@ -115,32 +90,6 @@ export class ProveVarieComponent implements OnInit {
   ngOnInit() {
     const currentUser = this.authService.getUser();
     this.isAdmin = currentUser.isadmin;
-    /*this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      language: {
-        processing: "Elaborazione...",
-        search: "Cerca:",
-        lengthMenu: "Visualizza _MENU_ elementi",
-        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-        infoEmpty: "Vista da 0 a 0 di 0 elementi",
-        infoFiltered: "(filtrati da _MAX_ elementi totali)",
-        infoPostFix: "",
-        loadingRecords: "Caricamento...",
-        zeroRecords: "La ricerca non ha portato alcun risultato.",
-        emptyTable: "Nessun dato presente nella tabella.",
-        paginate: {
-          first: "Primo",
-          previous: "Precedente",
-          next: "Seguente",
-          last: "Ultimo"
-        },
-        aria: {
-          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-        }
-      }
-    };*/
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
       this.formName = params.get("formName");
@@ -223,10 +172,10 @@ export class ProveVarieComponent implements OnInit {
       }
       userSubmit.inputs.push(formFields);
     });
-    this.popolaUserSubmit(periodRaw, dataAttuale, userSubmit);
+    this._userLoadingFormSubmit(periodRaw, dataAttuale, userSubmit);
   }
-  // means populates User Submit
-  popolaUserSubmit(periodRaw: any, dataAttuale, userSubmit) {
+
+  _userLoadingFormSubmit(periodRaw: any, dataAttuale, userSubmit) {
     this.loading = true;
     const currentUser = this.authService.getUser();
     userSubmit.locale_id = currentUser.localeid;
@@ -250,59 +199,6 @@ export class ProveVarieComponent implements OnInit {
       this.toastr.error(error.error.error, 'Error');
     });
   }
-  // means check comparison
-  // segno means sign
-  // checkConfronto(val1, val2, segno, elemento1, elemento2) {
-  //   console.log('checkConfronto val1', val1);
-  //   console.log('checkConfronto val2', val2);
-  //   console.log('checkConfronto segno', segno);
-  //   console.log('checkConfronto elemento1', elemento1);
-  //   console.log('checkConfronto elemento2', elemento2);
-  //   switch (segno) {
-  //     case '=':
-  //       if (val1 == val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere uguale a " + elemento2.Name);
-  //       }
-  //       break;
-  //     case '!=':
-  //       if (val1 != val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere diverso di " + elemento2.Name);
-  //       }
-  //       break;
-  //     case '<':
-  //       if (val1 < val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere minore di " + elemento2.Name);
-  //       }
-  //       break;
-  //     case '>':
-  //       if (val1 > val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere maggiore di " + elemento2.Name);
-  //       }
-  //       break;
-  //     case '>=':
-  //       if (val1 >= val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere maggiore o uguale a " + elemento2.Name);
-  //       }
-  //       break;
-  //     case '<=':
-  //       if (val1 <= val2) {
-
-  //       } else {
-  //         this.erroriArray.push(elemento1.Name + " deve essere minore o uguale a " + elemento2.Name);
-  //       }
-  //       break;
-  //   }
-  // }
 
   // generates form fields dynamically
   _init(numero: number, nome: string) {
@@ -335,6 +231,8 @@ export class ProveVarieComponent implements OnInit {
         data.forEach(element => {
           this.listaKpiPerForm.push(element);
         });
+      } else {
+        this.toastr.info('Nessun KPI Assegnato al Loading Form');
       }
       this.loading = false;
     }, error => {
@@ -375,7 +273,6 @@ export class ProveVarieComponent implements OnInit {
       console.log('getFormRuleByFormId', error)
     });
     // if there are no filters for this form I create an empty field
-    //array=={'campo1':'','segno':'','campo2':''}?this.initComparisonForm(array):'';
     if (array.campo1 == "" && array.segno == "" && array.campo2 == "") {
       this.initComparisonForm(array);
       console.log('IF FIELDS ARE EMPTY:', array);
@@ -393,12 +290,9 @@ export class ProveVarieComponent implements OnInit {
       if(data[0].cutoff) {
         let currentDate = moment().format();
         let isDateBefore = moment(data[0].modify_date).isBefore(currentDate);
-        // if(!this.isAdmin) {
           if(isDateBefore) {
             this.readOnlyUserForm = false;
           }
-        // }
-        
       }
       this.arrayFormElements = data[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
@@ -429,92 +323,6 @@ export class ProveVarieComponent implements OnInit {
       elemento => (elemento.Type === campo.Type) && (elemento.Name != campo.Name));
     console.log(this.arraySecondo);
   }
-
-  fileData = null;
-  fileProgress(fileInput: any) {
-    this.fileData = <File>fileInput.target.files[0];
-  }
-
-
-  cancelFile(file: FileUploadModel) {
-    this.removeFileFromArray(file);
-  }
-
-  cancelFile1(file: FileUploadModel) {
-    this.removeFileFromArray(file);
-  }
-
-  // retryFile(file: FileUploadModel) {
-  //   this.uploadFile(file);
-  //   file.canRetry = false;
-  // }
-
-  // private uploadFile(file: FileUploadModel) {
-  //   const fd = new FormData();
-  //   fd.append(this.param, file.data);
-
-  //   const req = new HttpRequest('POST', this.target, fd, {
-  //     reportProgress: true
-  //   });
-
-  //   file.inProgress = true;
-  //   file.sub = this.http.request(req).pipe(
-  //     map(event => {
-  //       switch (event.type) {
-  //         case HttpEventType.UploadProgress:
-  //           file.progress = Math.round(event.loaded * 100 / event.total);
-  //           //console.log('ciaone');
-  //           break;
-  //         case HttpEventType.Response:
-  //           // console.log('non saprei');
-  //           return event;
-  //       }
-  //     }),
-  //     tap(message => { }),
-  //     last(),
-  //     catchError((error: HttpErrorResponse) => {
-  //       file.inProgress = false;
-  //       file.canRetry = true;
-  //       return of(`${file.data.name} upload failed.`);
-  //     })
-  //   ).subscribe(
-  //     (event: any) => {
-  //       if (typeof (event) === 'object') {
-  //         this.removeFileFromArray(file);
-  //         this.complete.emit(event.body);
-  //       }
-  //     }
-  //   );
-  // }
-
-  // private uploadFiles() {
-  //   const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
-  //   fileUpload.value = '';
-
-  //   this.files.forEach(file => {
-  //     this.uploadFile(file);
-  //   });
-  // }
-
-  private removeFileFromArray(file: FileUploadModel) {
-    const index = this.files.indexOf(file);
-    if (index > -1) {
-      this.files.splice(index, 1);
-    }
-  }
-
-  public uploader: FileUploader = new FileUploader({ url: URL });
-  // public hasBaseDropZoneOver: boolean = false;
-  // public hasAnotherDropZoneOver: boolean = false;
-
-  // public fileOverBase(e: any): void {
-  //   this.hasBaseDropZoneOver = e;
-  // }
-
-  // public fileOverAnother(e: any): void {
-  //   this.hasAnotherDropZoneOver = e;
-  // }
-
 
   _getAttachmentsByFormIdEndPoint(formId: number, shouldTrigger: boolean) {
     this.loadingFormService.getAttachmentsByFormId(formId).pipe().subscribe(data => {
@@ -595,7 +403,7 @@ export class ProveVarieComponent implements OnInit {
   _getUploadedFile(file) {
     this.fileUploading  = true;
     const reader:FileReader = new FileReader();
-    reader.onloadend = (function(theFile, loadingFormService, self){
+    reader.onloadend = (function(theFile, self){
       let fileName = theFile.name;
       return function(readerEvent){
         let formAttachments:FormAttachments = new FormAttachments();
@@ -609,9 +417,11 @@ export class ProveVarieComponent implements OnInit {
         formAttachments.year = dateObj.year;
         formAttachments.doc_name = fileName;
         formAttachments.checksum = 'checksum';
-        loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
+        self.loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
           console.log('submitAttachment ==>', data);
           self.fileUploading = false;
+          self.uploader.queue.pop();
+          self.toastr.success(`${fileName} uploaded successfully.`);
           if(data) {
             self._getAttachmentsByFormIdEndPoint(+self.formId, false);
           }
@@ -621,7 +431,7 @@ export class ProveVarieComponent implements OnInit {
           self.toastr.error('Some error occurred while uploading file');
         });   
       };
-  })(file, this.loadingFormService, this);
+  })(file, this);
     // reader.readAsDataURL(file); // returns file with base64 type prefix
     reader.readAsBinaryString(file); // return only base64 string
   }

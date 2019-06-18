@@ -18,3 +18,16 @@ input:focus {
 .card .mat-form-field .mat-form-field-wrapper {
   padding: 0 !important;
 }
+
+.fa-download {
+  &:hover {
+      cursor: pointer;
+  }
+}
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  &:hover {
+    cursor: not-allowed;
+  }
+}
