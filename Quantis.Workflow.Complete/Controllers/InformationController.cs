@@ -82,7 +82,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
             _infomationAPI.AssignRolesToUser(dto);
         }
 
-        [HttpPost("AssignRolesToUser")]
+        [HttpPost("AssignPermissionsToRoles")]
         public void AssignPermissionsToRoles([FromBody]MultipleRecordsDTO dto)
         {
             _infomationAPI.AssignPermissionsToRoles(dto);

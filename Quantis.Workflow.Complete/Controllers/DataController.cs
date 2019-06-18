@@ -179,6 +179,12 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllAPIs();
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllAPIWithPermission")]
+        public List<ApiDetailsDTO> GetAllAPIWithPermission()
+        {
+            return _dataAPI.GetAllAPIs();
+        }
 
         [HttpGet("GetAllArchivedKPIs")]
         public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, int id_kpi)
