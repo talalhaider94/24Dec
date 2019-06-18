@@ -921,14 +921,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         return true;
                     }
                     else
-                    {                        
-                        return false;
+                    {
+                        throw new Exception("The return from Form Adapter is not valid value is:" +res);
 
                     }
                 }
                 else
-                {                    
-                    return false;
+                {
+                    throw new Exception("Call to form adapter has failed");
                 }
 
             }
