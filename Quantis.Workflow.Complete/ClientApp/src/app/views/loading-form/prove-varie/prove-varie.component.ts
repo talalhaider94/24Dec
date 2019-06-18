@@ -285,9 +285,9 @@ export class ProveVarieComponent implements OnInit {
       // mutiple forms values are coming for single form Id so picking first one.
       this.jsonForm = data[0];
       console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
-      this.cutOff = data[0].cutoff;
+      this.cutOff = data[0].day_cutoff;
       this.modifyDate = data[0].modify_date;
-      if(data[0].cutoff) {
+      if(data[0].day_cutoff) {
         let currentDate = moment().format();
         let isDateBefore = moment(data[0].modify_date).isBefore(currentDate);
           if(isDateBefore) {
