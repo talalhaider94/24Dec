@@ -15,17 +15,21 @@ namespace Quantis.WorkFlow.APIBase.Framework
             var PageSize = pagingInfo.Size;
             var RowCount = query.Count();
             var skip = (pagingInfo.Index - 1) * pagingInfo.Size;
-            if (pagingInfo.OrderDirection == OrderDirection.Desc)
+            if (!string.IsNullOrEmpty(pagingInfo.OrderBy))
             {
-                var results = query.OrderBy(pagingInfo.OrderBy+" DESC").Skip(skip).Take(pagingInfo.Size).ToList();
-                return new PagedList<T>(results, CurrentPage, PageSize, RowCount);
-            }
-            else
-            {
-                var results = query.OrderBy(pagingInfo.OrderBy).Skip(skip).Take(pagingInfo.Size).ToList();
-                return new PagedList<T>(results, CurrentPage, PageSize, RowCount);
+                if (pagingInfo.OrderDirection == OrderDirection.Desc)
+                {
+                    query = query.OrderBy(pagingInfo.OrderBy + " DESC");
+                }
+                else
+                {
+                    query = query.OrderBy(pagingInfo.OrderBy);
+                }
             }
             
+            var results = query.Skip(skip).Take(pagingInfo.Size).ToList();
+            return new PagedList<T>(results, CurrentPage, PageSize, RowCount);
+
         }
 
 
