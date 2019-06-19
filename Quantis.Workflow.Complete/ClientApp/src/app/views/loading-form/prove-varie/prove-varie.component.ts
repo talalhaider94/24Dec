@@ -160,14 +160,14 @@ export class ProveVarieComponent implements OnInit {
       formFields.FieldType = element.type;
       switch (element.type) {
         case 'time':
-          formFields.FieldValue = this.dt[index];
+          formFields.FieldValue = this.dt[index] || '';
           break;
         case 'string':
-          formFields.FieldValue = this.stringa[index];
+          formFields.FieldValue = this.stringa[index] || '';
           break;
         default:
           // for real and integer
-          formFields.FieldValue = String(this.numero[index]);
+          formFields.FieldValue = String(this.numero[index] || '' );
           break;
       }
       userSubmit.inputs.push(formFields);
@@ -337,6 +337,10 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _customFormRulesValidation(formElements, formValues, formRules) {
+    // return if formRules are empty/not set
+    if(!formRules.length) {
+      return formRules;
+    }
     const mapFormValues = formValues.map((value, index) => {
       return {
         name: formElements[index].name,
@@ -382,7 +386,22 @@ export class ProveVarieComponent implements OnInit {
   }
 
   downloadFile(base64Data, fileName) {
-    let prefix = `data:application/pdf;base64,${base64Data}`;
+    let extension = fileName.split('.').pop();
+    let prefix = '';
+    if(extension === 'pdf') {
+      prefix = `data:application/pdf;base64,${base64Data}`;
+    } else if(extension === 'png') {
+      prefix = `data:image/png;base64,${base64Data}`;
+    } else if(extension === 'jpg') {
+      prefix = `data:image/jpg;base64,${base64Data}`;
+    } else if(extension === 'csv') {
+      prefix = `data:application/octet-stream;base64,${base64Data}`;
+    } else if(extension === 'xlsx') {
+      prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
+    } else if(extension === 'txt') {
+      prefix = `data:text/plain;base64,${base64Data}`;
+    }
+    
     fetch(prefix).then(res => res.blob()).then(blob => {
       this._FileSaverService.save(blob, fileName);  
     });

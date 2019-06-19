@@ -191,7 +191,12 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi);
         }
-
+        
+        [HttpGet("GetRawDataByKpiID")]
+        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        {
+            return _dataAPI.GetRawDataByKpiID(id_kpi, month, year);
+        }
         [HttpGet("GetDetailsArchivedKPI")]
         public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
         {
