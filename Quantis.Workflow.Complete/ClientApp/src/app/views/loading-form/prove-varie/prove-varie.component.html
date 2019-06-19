@@ -158,9 +158,9 @@
           </div>
         </div>
         <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
-          <div class="col-sm-12 mb-3">
+          <div class="col-sm-12 mb-3 file-container">
             <h5>File Allegati</h5>
-            <input type="file" ng2FileSelect [uploader]="uploader" multiple /><br />
+            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
           </div>
 
           <div class="col-sm-12">
@@ -174,7 +174,7 @@
               </thead>
               <tbody>
                 <tr *ngIf="uploader.queue.length === 0">
-                  <td colspan="2">No file in queue</td>
+                  <td colspan="2">nessun file da caricare</td>
                 </tr>
                 <tr *ngFor="let item of uploader.queue">
                   <td>{{ item?.file?.name }}</td>
