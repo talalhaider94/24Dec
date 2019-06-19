@@ -19,7 +19,7 @@ namespace Quantis.WorkFlow.Services.Framework
         }
         public bool HasNextPage
         {
-            get { return (PageIndex + 1 < TotalPages); }
+            get { return (PageIndex < TotalPages); }
         }
 
         public PagedList(IEnumerable<T> source, int pageIndex, int pageSize, int totalRows)
