@@ -9,5 +9,7 @@ namespace Quantis.WorkFlow.Services.Framework
         DTO GetDTO(Entity e);
         Entity GetEntity(DTO o, Entity e);
         List<DTO> GetDTOs(List<Entity> e);
+        PagedList<DTO> GetPagedDTOs(PagedList<Entity> source);
+        string SortMap(string col);
     }
 }
