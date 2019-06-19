@@ -30,7 +30,7 @@ export interface NavData {
 }
 
 export const navItems: NavData[] = [
-  /*{
+  {
     name: 'Dashboard',
     url: '/dashboard',
     icon: 'icon-speedometer',
@@ -38,12 +38,12 @@ export const navItems: NavData[] = [
       variant: 'info',
       text: ''
     }
-  },*/
+  },
   {
     title: true,
     name: 'Menu',
   },
-  /*{
+  {
     name: 'Home',
     url: '/coming-soon',
     icon: 'icon-home',
@@ -59,20 +59,20 @@ export const navItems: NavData[] = [
         icon: 'fa fa-file-text'
       },
     ]
-  },*/
+  },
   {
     name: 'Workflow',
-    //url: '/coming-soon',
+    url: '/coming-soon',
     icon: 'fa fa-code-fork',
     children: [
       {
         name: 'KPI in Verifica',
-       // url: '/kpi',
+        url: '/kpi',
         icon: 'fa fa-file-text-o'
       },
       {
         name: 'Ricerca',
-       // url: '/coming-soon',
+        url: '/coming-soon',
         icon: 'fa fa-search'
       },
     ]
@@ -101,24 +101,24 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Report',
-    //url: '/coming-soon',
+    url: '/coming-soon',
     icon: 'fa fa-files-o',
     children: [
       {
         name: 'WorkFlow Reminder',
-        //url: '/coming-soon',
+        url: '/coming-soon',
         icon: 'fa fa-check-circle-o'
       }
     ]
   },
   {
-    name: 'KPI Archiviati',
+    name: 'KPI Certificati',
     url: '/archivedkpi',
     icon: 'fa fa-archive'
   },
   {
     name: 'Loading Form',
-    url: '/loading-form',
+    url: '/coming-soon',
     icon: 'fa fa-pencil-square-o',
     children: [
       {
