@@ -1085,20 +1085,20 @@ namespace Quantis.WorkFlow.APIBase.API
             var users = _dbcontext.CatalogUsers as IQueryable<T_CatalogUser>;
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
-                users = users.Where(o => o.name.IndexOf(filter.SearchText) > 0 ||
-                o.surname.IndexOf(filter.SearchText) > 0 ||
-                o.ca_bsi_account.IndexOf(filter.SearchText) > 0 ||
-                o.organization.IndexOf(filter.SearchText) > 0 ||
-                o.mail.IndexOf(filter.SearchText) > 0 ||
-                o.manager.IndexOf(filter.SearchText) > 0);
+                users = users.Where(o => o.name.Contains(filter.SearchText) ||
+                o.surname.Contains(filter.SearchText)||
+                o.ca_bsi_account.Contains(filter.SearchText) ||
+                o.organization.Contains(filter.SearchText) ||
+                o.mail.Contains(filter.SearchText) ||
+                o.manager.Contains(filter.SearchText));
             }
             if (!string.IsNullOrEmpty(filter.Name))
             {
-                users = users.Where(o => o.name.IndexOf(filter.Name) > 0);
+                users = users.Where(o => o.name.Contains(filter.Name));
             }
             if (!string.IsNullOrEmpty(filter.Surname))
             {
-                users = users.Where(o => o.surname.IndexOf(filter.Surname) > 0);
+                users = users.Where(o => o.surname.Contains(filter.Surname));
             }
             return users;
         }
