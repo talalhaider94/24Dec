@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -49,6 +50,11 @@ namespace Quantis.WorkFlow.Controllers
         public bool AddUpdateWidget([FromBody]WidgetDTO dto)
         {
             return _dataAPI.AddUpdateWidget(dto);
+        }
+        [HttpPost("GetAllPagedUsers")]
+        public PagedList<UserDTO> GetAllPagedUsers([FromBody]UserFilterDTO filter)
+        {
+            return _dataAPI.GetAllPagedUsers(filter);
         }
         [HttpGet("GetAllUsers")]
         public List<UserDTO> GetAllUsers()

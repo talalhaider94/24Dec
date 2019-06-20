@@ -140,7 +140,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[0]);
+                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[] { "attmnt", "attmnt.attmnt_name"});
                 selecta.Wait();
                 var sel = selecta.Result.doSelectReturn;
                 ret = parseAttachments(sel);
@@ -161,7 +161,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var select_a = _sdmExtClient.downloadAttachmentAsync(_sid, attachmentHandle);
+                var select_a = _sdmExtClient.downloadAttachmentAsync(_sid, "attmnt:"+attachmentHandle);
 
                 select_a.Wait();
                 var select_result = select_a.Result.Body.downloadAttachmentResult;
@@ -645,9 +645,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var attributes = l.Element("Attributes").Elements("Attribute");
                 SDMAttachmentDTO dto = new SDMAttachmentDTO();
-                dto.AttachmentHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "persistent_id").Element("AttrValue").Value;
-                dto.AttachmentName = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt_name").Element("AttrValue").Value;
-                dto.TicketHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attached_persid").Element("AttrValue").Value;
+                dto.AttachmentHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt").Element("AttrValue").Value;
+                dto.AttachmentName = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt.attmnt_name").Element("AttrValue").Value;
                 dtos.Add(dto);
             }
             return dtos;

@@ -19,7 +19,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-
 namespace Quantis.WorkFlow.APIBase.API
 {
     public class DataService:IDataService
@@ -322,7 +321,20 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
-
+        public PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter)
+        {
+            try
+            {
+                var query = CreateGetUserQuery(filter);
+                filter.OrderBy = _userMapper.SortMap(filter.OrderBy);
+                var users = query.GetPaged(filter);
+                return _userMapper.GetPagedDTOs(users);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<UserDTO> GetAllUsers()
         {
             try
@@ -636,7 +648,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 expire_time = DateTime.Now.AddMinutes(getSessionTimeOut())
                             });
                             _dbcontext.SaveChanges();
-                            _cache.Remove(res.Item1);
+                            _cache.Remove("Permission_"+res.Item1);
                             var permissions=_infomationAPI.GetPermissionsByUserId(res.Item1).Select(o => o.Code).ToList();
                             _cache.GetOrCreate("Permission_"+res.Item1, entry => permissions);
                             return new LoginResultDTO()
@@ -1067,6 +1079,28 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                 }
             }
+        }
+        private IQueryable<T_CatalogUser> CreateGetUserQuery(UserFilterDTO filter)
+        {
+            var users = _dbcontext.CatalogUsers as IQueryable<T_CatalogUser>;
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                users = users.Where(o => o.name.Contains(filter.SearchText) ||
+                o.surname.Contains(filter.SearchText)||
+                o.ca_bsi_account.Contains(filter.SearchText) ||
+                o.organization.Contains(filter.SearchText) ||
+                o.mail.Contains(filter.SearchText) ||
+                o.manager.Contains(filter.SearchText));
+            }
+            if (!string.IsNullOrEmpty(filter.Name))
+            {
+                users = users.Where(o => o.name.Contains(filter.Name));
+            }
+            if (!string.IsNullOrEmpty(filter.Surname))
+            {
+                users = users.Where(o => o.surname.Contains(filter.Surname));
+            }
+            return users;
         }
         #endregion
     }

@@ -112,7 +112,7 @@ export const navItems: NavData[] = [
     ]
   },
   {
-    name: 'KPI Archiviati',
+    name: 'KPI Certificati',
     url: '/archivedkpi',
     icon: 'fa fa-archive'
   },
