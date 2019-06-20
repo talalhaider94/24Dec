@@ -9,6 +9,8 @@ import { KPIRoutingModule } from './kpi-routing.module';
 import { RicercaComponent } from './ricerca/ricerca.component';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 @NgModule({
   imports: [
     FormsModule,
@@ -18,7 +20,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ButtonsModule.forRoot(),
     DataTablesModule,
     CommonModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   declarations: [ KPIComponent, RicercaComponent ]
 })

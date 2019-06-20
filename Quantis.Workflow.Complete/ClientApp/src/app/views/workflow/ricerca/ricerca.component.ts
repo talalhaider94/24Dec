@@ -23,6 +23,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
   // dtOptions: DataTables.Settings = {};
   dtOptions: any = {};
   dtTrigger = new Subject();
+  bsValue = new Date();
 
   constructor(
     private router: Router,
@@ -80,9 +81,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   ticketActions(ticket) {
     this.loading = true;
-    this.workFlowService.getTicketHistory().pipe(first()).subscribe(data => {
-      this.getTicketHistories = data.filter(ticketHistory => ticketHistory.id === ticket.id);
-      // this.getTicketHistories = data;
+    this.workFlowService.getTicketHistory(ticket.id).pipe(first()).subscribe(data => {
+      // this.getTicketHistories = data.filter(ticketHistory => ticketHistory.id === ticket.id);
+      if(!!data) {
+        this.getTicketHistories = data;
+      }
       this.successModal.show();
       this.loading = false;
     }, error => {
@@ -94,9 +97,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   ticketAttachments(ticket) {
     this.loading = true;
-    this.workFlowService.getAttachmentsByTicket().pipe(first()).subscribe(data => {
+    this.workFlowService.getAttachmentsByTicket(ticket.id).pipe(first()).subscribe(data => {
       // this.getTicketAttachments = data.filter(ticketAttachment => ticketAttachment.id === ticket.id);
-      this.getTicketAttachments = data;
+      if(!!data) {
+        this.getTicketAttachments = data;
+      }
       this.infoModal.show();
       this.loading = false;
     }, error => {
