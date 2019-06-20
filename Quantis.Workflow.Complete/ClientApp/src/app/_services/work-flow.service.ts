@@ -19,7 +19,7 @@ export class WorkFlowService {
   }
 
   getAttachmentsByTicket(ticketId): Observable<any>{
-    const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetTicketHistory`;
+    const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetAttachmentsByTicket`;
     const  params = new  HttpParams().set('ticketId', ticketId.toString());
     return this.http.get(ticketAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
   }
