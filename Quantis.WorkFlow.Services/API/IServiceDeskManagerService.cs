@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Microsoft.AspNetCore.Http;
 namespace Quantis.WorkFlow.Services.API
 {
     public interface IServiceDeskManagerService
     {
         List<SDMTicketLVDTO> GetAllTickets();
-        List<SDMTicketLVDTO> GetTicketDescrptionByUser(string username);
+        List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context);
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);

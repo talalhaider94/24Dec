@@ -15,6 +15,8 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -140,7 +142,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[] { "attmnt", "attmnt.attmnt_name"});
+                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[] { "attmnt", "attmnt.attmnt_name", "last_mod_dt" });
                 selecta.Wait();
                 var sel = selecta.Result.doSelectReturn;
                 ret = parseAttachments(sel);
@@ -363,13 +365,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketDescrptionByUser(string username)
+        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
             try
             {
-                var userid = _dataService.GetUserIdByUserName(username);
+                var user=context.User as AuthUser;
+                if (user == null)
+                {
+                    throw new Exception("No user Login to Get Tickets by user");
+                }
+                var userid = _dataService.GetUserIdByUserName(user.UserName);
                 if (userid != null)
                 {
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
@@ -647,6 +654,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 SDMAttachmentDTO dto = new SDMAttachmentDTO();
                 dto.AttachmentHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt").Element("AttrValue").Value;
                 dto.AttachmentName = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt.attmnt_name").Element("AttrValue").Value;
+                dto.LastModifiedDate = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "last_mod_dt").Element("AttrValue").Value;
                 dtos.Add(dto);
             }
             return dtos;
