@@ -140,7 +140,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[] { "attmnt", "attmnt.attmnt_name"});
+                var selecta = _sdmClient.doSelectAsync(_sid, "lrel_attachments_requests", "cr='cr:" + ticketId + "'", 99999, new string[] { "attmnt", "attmnt.attmnt_name", "last_mod_dt" });
                 selecta.Wait();
                 var sel = selecta.Result.doSelectReturn;
                 ret = parseAttachments(sel);
@@ -647,6 +647,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 SDMAttachmentDTO dto = new SDMAttachmentDTO();
                 dto.AttachmentHandle = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt").Element("AttrValue").Value;
                 dto.AttachmentName = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "attmnt.attmnt_name").Element("AttrValue").Value;
+                dto.LastModifiedDate = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "last_mod_dt").Element("AttrValue").Value;
                 dtos.Add(dto);
             }
             return dtos;
