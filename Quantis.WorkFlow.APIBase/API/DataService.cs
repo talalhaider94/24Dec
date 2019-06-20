@@ -1134,108 +1134,163 @@ namespace Quantis.WorkFlow.APIBase.API
                         string xml5 = HttpUtility.UrlDecode(xml);
                         XDocument xdoc = XDocument.Parse(xml3);
                         var lists = from uoslist in xdoc.Element("DataLoadingForms").Element("ControlsXml").Element("Xml").Element("Controls").Elements("Control") select uoslist;
-                        var formfields = new List<FormConfigurationDTO>();
-                        var labelList = new List<FormConfigurationDTO>();
-                        foreach (var l in lists)
+                        //var labelList = new List<FormConfigurationDTO>();
+                        var labelList = lists.Where(o=>o.Attribute("type").Value == "DLFLabel").Select(l => new{
+                            a_id = l.Attribute("id").Value,
+                            a_top = l.Attribute("top").Value,
+                            a_left = l.Attribute("left").Value,
+                            a_width = l.Attribute("width").Value,
+                            a_height = l.Attribute("height").Value,
+                            text = l.Element("text").Value,
+                            a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                            a_type = l.Attribute("type").Value
+                        }).ToList();
+                        var formfields = lists.Where(o => o.Attribute("type").Value != "DLFLabel").Select(l => new
                         {
-                            if (l.Attribute("type").Value == "DLFLabel")
-                            {
-                                labelList.Add(new FormConfigurationDTO()
-                                {
-                                    a_id = l.Attribute("id").Value,
-                                    a_top = l.Attribute("top").Value,
-                                    a_left = l.Attribute("left").Value,
-                                    a_width = l.Attribute("width").Value,
-                                    a_height = l.Attribute("height").Value,
-                                    text = l.Element("text").Value,
-                                    a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
-                                    a_type = l.Attribute("type").Value
-                                }
-                                );
-                            }
-                            else
-                            {
-                                formfields.Add(new FormConfigurationDTO()
-                                {
-                                    a_id = l.Attribute("id").Value,
-                                    //useless a_name = l.Attribute("name").Value,
-                                    a_top = l.Attribute("top").Value,
-                                    a_left = l.Attribute("left").Value,
-                                    a_width = l.Attribute("width").Value,
-                                    a_height = l.Attribute("height").Value,
-                                    a_type = l.Attribute("type").Value,
-                                    //useless a_fontColor = l.Attribute("fontColor").Value,
-                                    //useless a_fontFamily = l.Attribute("fontFamily").Value,
-                                    //useless a_fontWeight = l.Attribute("fontWeight").Value,
-                                    //useless a_fontItalic = l.Attribute("fontItalic").Value,
-                                    //useless a_textDecoration = l.Attribute("textDecoration").Value,
-                                    //useless a_fontSize = l.Attribute("fontSize").Value,
-                                    //useless a_backgrounColor = l.Attribute("backgroundColor").Value,
-                                    //useless a_isDefaultFontColor = l.Attribute("isDefaultFontColor").Value,
-                                    //useless a_isDefaultBGColor = l.Attribute("isDefaultBGColor").Value,
-                                    //useless a_text = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("text").Value : null,
-
-                                    a_dataType = l.Attribute("dataType").Value,
-                                    name = l.Element("name").Value,
-                                    text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
+                            a_id = l.Attribute("id").Value,
+                            //useless a_name = l.Attribute("name").Value,
+                            a_top = l.Attribute("top").Value,
+                            a_left = l.Attribute("left").Value,
+                            a_width = l.Attribute("width").Value,
+                            a_height = l.Attribute("height").Value,
+                            a_type = l.Attribute("type").Value,
+                            a_dataType = l.Attribute("dataType").Value,
+                            name = l.Element("name").Value,                             
+                            text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
                                           : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
 
-                                    a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
+                            a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
 
-                                    a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
+                            a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
                                                          : (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("controllerDataType").Value : null,
 
-                                    a_defaultValue = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("defaultValue").Value
-                                                   : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("defaultValue").Value : null,
+                            defaultValue = (l.Attribute("defaultValue")!=null) ? l.Element("defaultValue").Value: null,
 
-                                    a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
-                                    a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
+                            a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
+                            a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
                                                   : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("isMandatory").Value : null,
 
-                                    a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
+                            a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
                                               : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("labelId").Value : null,
 
-                                    a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
-                                    a_checkedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedValue").Value : null,
-                                    a_unCheckedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("unCheckedValue").Value : null,
+                            //a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
+                            a_checkedValue = (l.Attribute("checkedValue") != null) ? l.Element("checkedValue").Value : null,
+                            a_unCheckedValue = (l.Attribute("unCheckedValue") != null) ? l.Element("unCheckedValue").Value : null,
+                        });
+                        //foreach (var l in lists)
+                        //{
+                        //    if (l.Attribute("type").Value == "DLFLabel")
+                        //    {
+                        //        labelList.Add(new FormConfigurationDTO()
+                        //        {
+                        //            a_id = l.Attribute("id").Value,
+                        //            a_top = l.Attribute("top").Value,
+                        //            a_left = l.Attribute("left").Value,
+                        //            a_width = l.Attribute("width").Value,
+                        //            a_height = l.Attribute("height").Value,
+                        //            text = l.Element("text").Value,
+                        //            a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                        //            a_type = l.Attribute("type").Value
+                        //        }
+                        //        );
+                        //    }
+                        //    else
+                        //    {
+                        //        formfields.Add(new FormConfigurationDTO()
+                        //        {
+                        //            a_id = l.Attribute("id").Value,
+                        //            //useless a_name = l.Attribute("name").Value,
+                        //            a_top = l.Attribute("top").Value,
+                        //            a_left = l.Attribute("left").Value,
+                        //            a_width = l.Attribute("width").Value,
+                        //            a_height = l.Attribute("height").Value,
+                        //            a_type = l.Attribute("type").Value,
+                        //            //useless a_fontColor = l.Attribute("fontColor").Value,
+                        //            //useless a_fontFamily = l.Attribute("fontFamily").Value,
+                        //            //useless a_fontWeight = l.Attribute("fontWeight").Value,
+                        //            //useless a_fontItalic = l.Attribute("fontItalic").Value,
+                        //            //useless a_textDecoration = l.Attribute("textDecoration").Value,
+                        //            //useless a_fontSize = l.Attribute("fontSize").Value,
+                        //            //useless a_backgrounColor = l.Attribute("backgroundColor").Value,
+                        //            //useless a_isDefaultFontColor = l.Attribute("isDefaultFontColor").Value,
+                        //            //useless a_isDefaultBGColor = l.Attribute("isDefaultBGColor").Value,
+                        //            //useless a_text = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("text").Value : null,
+
+                        //            a_dataType = l.Attribute("dataType").Value,
+                        //            name = l.Element("name").Value,
+                        //            text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
+                        //                  : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
+
+                        //            a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
+
+                        //            a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
+                        //                                 : (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("controllerDataType").Value : null,
+
+                        //            a_defaultValue = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("defaultValue").Value
+                        //                           : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("defaultValue").Value : null,
+
+                        //            a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
+                        //            a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
+                        //                          : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("isMandatory").Value : null,
+
+                        //            a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
+                        //                      : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("labelId").Value : null,
+
+                        //            a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
+                        //            a_checkedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedValue").Value : null,
+                        //            a_unCheckedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("unCheckedValue").Value : null,
 
 
 
-                                    /*if (a_type == "DLFLabel"){
-                                          a_text = l.Attribute("text").Value,
-                                          a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
-                                      }
-                                      if (a_type == "DLFTextBox") {
-                                          a_controllerDataType = l.Attribute("controllerDataType").Value,
-                                          a_defaultValue = l.Attribute("defaultValue").Value,
-                                          a_maxLength = l.Attribute("maxLength").Value,
-                                          a_isMandatory = l.Attribute("isMandatory").Value,
-                                          a_labelId = l.Attribute("labelId").Value,
-                                       }
-                                       if (a_type == "DLFDatePicker"){
-                                          a_defaultValue = l.Attribute("defaultValue").Value,
-                                          a_showLegend = l.Attribute("showLegend").Value,
-                                          a_isMandatory = l.Attribute("isMandatory").Value,
-                                          a_labelId = l.Attribute("labelId").Value,
-                                        }
-                                        if (a_type == "DLFCheckBox"){
-                                          a_text = l.Attribute("text").Value,
-                                          a_controllerDataType = l.Attribute("controllerDataType").Value,
-                                          a_checkedStatus = l.Attribute("checkedStatus").Value,
-                                          a_checkedValue = l.Attribute("checkedValue").Value,
-                                          a_unCheckedValue = l.Attribute("unCheckedValue").Value,
-                                        } */
+                        //            /*if (a_type == "DLFLabel"){
+                        //                  a_text = l.Attribute("text").Value,
+                        //                  a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                        //              }
+                        //              if (a_type == "DLFTextBox") {
+                        //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
+                        //                  a_defaultValue = l.Attribute("defaultValue").Value,
+                        //                  a_maxLength = l.Attribute("maxLength").Value,
+                        //                  a_isMandatory = l.Attribute("isMandatory").Value,
+                        //                  a_labelId = l.Attribute("labelId").Value,
+                        //               }
+                        //               if (a_type == "DLFDatePicker"){
+                        //                  a_defaultValue = l.Attribute("defaultValue").Value,
+                        //                  a_showLegend = l.Attribute("showLegend").Value,
+                        //                  a_isMandatory = l.Attribute("isMandatory").Value,
+                        //                  a_labelId = l.Attribute("labelId").Value,
+                        //                }
+                        //                if (a_type == "DLFCheckBox"){
+                        //                  a_text = l.Attribute("text").Value,
+                        //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
+                        //                  a_checkedStatus = l.Attribute("checkedStatus").Value,
+                        //                  a_checkedValue = l.Attribute("checkedValue").Value,
+                        //                  a_unCheckedValue = l.Attribute("unCheckedValue").Value,
+                        //                } */
 
 
-                                });
-                            }
-                            
-  
-                        }
+                        //        });
+                        //    }
 
+
+                        //}
+                        var outputs = new List<FormConfigurationDTO>();
                         formfields = formfields.OrderBy(o=>Int32.Parse (o.a_top)).ToList();
                         foreach (var f in formfields)
                         {
+                            var fields = new FormConfigurationDTO()
+                            {
+                                a_dataType = f.a_dataType,
+                                a_isMandatory = f.a_isMandatory,
+                                name = f.name,
+                                a_type=f.a_type,
+                                defaultValue=f.defaultValue,
+                                
+                            };
+                            if (fields.a_type == "DLFCheckBox")
+                            {
+                                fields.Extras.Add("a_checkedValue", f.a_checkedValue);
+                                fields.Extras.Add("a_unCheckedValue", f.a_unCheckedValue);
+                            }
 
                             var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
                             (
@@ -1244,14 +1299,19 @@ namespace Quantis.WorkFlow.APIBase.API
                             ));
                             if (label != null)
                             {
-                                f.text = label.text;
+
+                                fields.text = label.text;
                                 labelList.Remove(label);
                             }
+                            outputs.Add(fields);
 
                         }
 
-                        formfields.AddRange(labelList.ToArray());
-                        return formfields;
+                        outputs.AddRange(labelList.Select(o=>new FormConfigurationDTO() {
+                            a_type=o.a_type,
+                            text=o.text
+                        }));
+                        return outputs;
                     }
 
                     throw new Exception(string.Format("Call to API has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
