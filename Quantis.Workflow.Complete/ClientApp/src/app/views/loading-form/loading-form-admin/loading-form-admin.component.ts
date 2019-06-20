@@ -1,12 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { HttpClient, HttpRequest, HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
-import { tap, map, last, catchError } from 'rxjs/operators';
-import { FileUploader } from 'ng2-file-upload';
-import { FormAttachments, FormField, UserSubmitLoadingForm, Form, FileUploadModel } from '../../../_models';
-import * as moment from 'moment';
+import { Form, FileUploadModel } from '../../../_models';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -28,8 +23,6 @@ export class ControlloConfronto {
   campo2: any = '';
 }
 
-const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
-
 @Component({
   selector: 'app-loading-form-admin',
   templateUrl: './loading-form-admin.component.html',
@@ -43,11 +36,11 @@ export class LoadingFormAdminComponent implements OnInit {
   public listaKpiPerForm = [];
   defaultFont = [];
   public myInputForm: FormGroup;
-  private files: Array<FileUploadModel> = [];
-// for filters use of arrays to be able to declare e
-// save several module variables, in this way
-// I index and make possible the dynamism of the filter fields
-// I use it for both i numbers and strings
+  // private files: Array<FileUploadModel> = [];
+  // for filters use of arrays to be able to declare e
+  // save several module variables, in this way
+  // I index and make possible the dynamism of the filter fields
+  // I use it for both i numbers and strings
   numeroMax: number[] = [];
   numeroMin: number[] = [];
   // filto per le date
@@ -64,10 +57,10 @@ export class LoadingFormAdminComponent implements OnInit {
   erroriArray: string[] = [];
   arraySecondo = new Array;
   confronti: string[] = ['<', '>', '=', '!=', '>=', '<='];
-  dataSource = new MatTableDataSource();
-  pageSizeOptions: number[] = [5, 10, 25, 100];
-  mostraTabella: boolean = false;
-  vai: boolean = false;
+  // dataSource = new MatTableDataSource();
+  // pageSizeOptions: number[] = [5, 10, 25, 100];
+  // mostraTabella: boolean = false;
+  // vai: boolean = false;
   arrayFormElements: any = [];
 
   jsonForm: any = [];
@@ -76,27 +69,7 @@ export class LoadingFormAdminComponent implements OnInit {
   title: string = '';
   checked: boolean;
 
-
-  /** Link text */
-  @Input() text = 'Upload';
-  /** Name used in form which will be sent in HTTP request. */
-  @Input() param = 'file';
-  /** Target URL for file uploading. */
-  @Input() target = 'https://file.io';
-  /** File extension that accepted, same as 'accept' of <input type="file" />. 
-      By the default, it's set to 'image/*'. */
-  @Input() accept = 'image/*';
-  /** Allow you to add handler after its completion. Bubble up response text from remote. */
-  @Output() complete = new EventEmitter<string>();
-
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("filtro") filtro: ElementRef;
-
-  angForm: FormGroup;
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
     private toastr: ToastrService,
@@ -130,11 +103,12 @@ export class LoadingFormAdminComponent implements OnInit {
   }
 
   initComparisonForm(array) {
-    return this.fb.group({
-      campo1: [{ value: array.campo1, disabled: false }], // means field
-      segno: [{ value: array.segno, disabled: false }],
-      campo2: [{ value: array.campo2, disabled: false }]
-    })
+    let a = this.fb.group({
+      campo1: [array.campo1], // means field
+      segno: [array.segno], // means sign
+      campo2: [array.campo2]
+    });
+    return a;
   }
 
   addComparisonForm(array) {
@@ -146,10 +120,20 @@ export class LoadingFormAdminComponent implements OnInit {
   }
 
   removeComparisonForm(i: number) {
-    const control = <FormArray>this.myInputForm.get('campiConfronto')['controls'];
-    control.removeAt(i);
+    const control = this.myInputForm.get('campiConfronto')['controls'];
+    control.splice(i,1); 
   }
 
+  filtraElementi(formField, index: number) {
+    console.log(formField);
+    // this.arraySecondo[indice]=new;
+    // support array
+    let arrayappoggio = new Array(this.arrayFormElements);
+    // this.arraySecondo[indice]=new Array(this.arrayFormElements);
+    console.log(this.arraySecondo);
+    this.arraySecondo = this.arrayFormElements.filter(form => (form.name !== formField.name && form.type !== formField.type));
+    console.log(this.arraySecondo);
+  }
 
   save(model: any) {
     if (!!model.value.termsCheck) {
@@ -347,7 +331,7 @@ export class LoadingFormAdminComponent implements OnInit {
       if (data) {
         JSON.parse(data.form_body).forEach((element, index) => {
           console.log(element);
-          if (element.campo1 != null) {
+          if (element.campo1 != null) { // means Forms regoles are defined 
             contatore++;
             array.campo1 = element.campo1;
             array.segno = element.segno;
@@ -355,8 +339,7 @@ export class LoadingFormAdminComponent implements OnInit {
             this.defaultFont[index] = array;
             this.addComparisonForm(array);
           } else if (element.max != null && element.max.length != 24) {
-            console.log(element.max);
-            console.log(typeof element.max === "string");
+            // type string / real / integer
             this.numeroMax[index - contatore] = element.max;
             this.numeroMin[index - contatore] = element.min;
           } else if (element.max != null && element.max.length == 24) {
@@ -379,7 +362,7 @@ export class LoadingFormAdminComponent implements OnInit {
     } else {
       console.log(array);
     }
-    
+
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
       this.jsonForm = data;

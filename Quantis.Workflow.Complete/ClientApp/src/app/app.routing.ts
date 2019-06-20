@@ -72,7 +72,7 @@ export const routes: Routes = [
         loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
       },
       {
-        path: 'kpi',
+        path: 'workflow',
         loadChildren: './views/workflow/kpi.module#KPIModule'
       },
       {

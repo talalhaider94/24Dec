@@ -1,5 +1,6 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
+using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Quantis.WorkFlow.Services.API
         List<UserDTO> GetAllUsers();
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
-
+        PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);
         List<PageDTO> GetAllPages();
         PageDTO GetPageById(int Id);
         bool AddUpdatePage(PageDTO dto);
