@@ -15,6 +15,8 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -363,13 +365,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketDescrptionByUser(string username)
+        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
             try
             {
-                var userid = _dataService.GetUserIdByUserName(username);
+                var user=context.User as AuthUser;
+                if (user == null)
+                {
+                    throw new Exception("No user Login to Get Tickets by user");
+                }
+                var userid = _dataService.GetUserIdByUserName(user.UserName);
                 if (userid != null)
                 {
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
