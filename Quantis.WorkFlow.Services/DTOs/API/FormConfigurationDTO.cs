@@ -6,27 +6,29 @@ namespace Quantis.WorkFlow.Services.DTOs.API
 {
     public class FormConfigurationDTO
     {
+        public string a_type { get; set; }
+        public string a_dataType { get; set; }
         public string a_id { get; set; }
         public string a_name { get; set; }
         public string a_top { get; set; }
         public string a_left { get; set; }
         public string a_width { get; set; }
         public string a_height { get; set; }
-        public string a_type { get; set; }
-        public string a_fontColor { get; set; }
-        public string a_fontFamily { get; set; }
-        public string a_fontWeight { get; set; }
-        public string a_fontItalic { get; set; }
-        public string a_textDecoration { get; set; }
-        public string a_fontSize { get; set; }
-        public string a_backgrounColor { get; set; }
-        public string a_isDefaultFontColor { get; set; }
-        public string a_isDefaultBGColor { get; set; }
-        public string a_dataType { get; set; }
-        
+
+        //useless public string a_fontColor { get; set; }
+        //useless public string a_fontFamily { get; set; }
+        //useless public string a_fontWeight { get; set; }
+        //useless public string a_fontItalic { get; set; }
+        //useless public string a_textDecoration { get; set; }
+        //useless public string a_fontSize { get; set; }
+        //useless public string a_backgrounColor { get; set; }
+        //useless public string a_isDefaultFontColor { get; set; }
+        //useless public string a_isDefaultBGColor { get; set; }
+        //useless public string a_text { get; set; }
+
         //if (a_type == "DLFLabel")
         //{
-        public string a_text { get; set; }
+
         public string a_isMandatoryLabel { get; set; }
         //}
         //if (a_type == "DLFTextBox")

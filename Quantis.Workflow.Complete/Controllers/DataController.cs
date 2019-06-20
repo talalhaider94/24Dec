@@ -132,7 +132,7 @@ namespace Quantis.WorkFlow.Controllers
             if (data != null) {
                 return Ok(data);
             }
-            var json = new {error = "Login Error", description = "Username o Password errati."};
+            var json = new { error = "Login Error", description = "Username o Password errati." };
             return StatusCode(StatusCodes.Status401Unauthorized, json);
         }
         [HttpGet("ResetPassword")]
@@ -191,7 +191,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi);
         }
-        
+
         [HttpGet("GetRawDataByKpiID")]
         public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
         {
@@ -201,6 +201,13 @@ namespace Quantis.WorkFlow.Controllers
         public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
         {
             return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
+        }
+
+
+        [HttpGet("GetFormConfiguration")]
+        public List<FormConfigurationDTO> GetFormConfiguration()
+        {
+            return _dataAPI.GetFormConfiguration();
         }
 
     }
