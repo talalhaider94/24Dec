@@ -1148,7 +1148,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                     a_width = l.Attribute("width").Value,
                                     a_height = l.Attribute("height").Value,
                                     text = l.Element("text").Value,
-                                    a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value
+                                    a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                                    a_type = l.Attribute("type").Value
                                 }
                                 );
                             }
@@ -1176,7 +1177,8 @@ namespace Quantis.WorkFlow.APIBase.API
 
                                     a_dataType = l.Attribute("dataType").Value,
                                     name = l.Element("name").Value,
-                                    text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value : null,
+                                    text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
+                                          : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
 
                                     a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
 
@@ -1230,24 +1232,26 @@ namespace Quantis.WorkFlow.APIBase.API
                             
   
                         }
-                        //return new ReaderConfiguration() { inputformatfield = formfields };*/
-                        foreach (var e in formfields)
+
+                        formfields = formfields.OrderBy(o=>Int32.Parse (o.a_top)).ToList();
+                        foreach (var f in formfields)
                         {
-                            if (e.a_labelId != null)
+
+                            var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
+                            (
+                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top) &&
+                            Int32.Parse(o.a_top) <= (Int32.Parse(f.a_top) + Int32.Parse(f.a_height))
+                            ));
+                            if (label != null)
                             {
-                                foreach (var l in labelList)
-                                {
-                                    if (l.a_id == e.a_labelId)
-                                    {
-                                        e.text = l.text;
-                                        labelList.Remove(l);                              
-                                    }
-                                }
+                                f.text = label.text;
+                                labelList.Remove(label);
                             }
+
                         }
 
-
-                        return  formfields;
+                        formfields.AddRange(labelList.ToArray());
+                        return formfields;
                     }
 
                     throw new Exception(string.Format("Call to API has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
