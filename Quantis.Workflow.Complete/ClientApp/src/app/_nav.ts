@@ -67,12 +67,12 @@ export const navItems: NavData[] = [
     children: [
       {
         name: 'KPI in Verifica',
-        url: '/kpi',
+        url: '/workflow/verifica',
         icon: 'fa fa-file-text-o'
       },
       {
         name: 'Ricerca',
-        url: '/coming-soon',
+        url: '/workflow/ricerca',
         icon: 'fa fa-search'
       },
     ]

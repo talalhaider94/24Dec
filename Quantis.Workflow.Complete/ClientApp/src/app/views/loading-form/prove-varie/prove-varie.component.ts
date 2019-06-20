@@ -341,6 +341,10 @@ export class ProveVarieComponent implements OnInit {
     if(!formRules.length) {
       return formRules;
     }
+    let rulesNotNull = formRules.filter(obj => ( (obj.min !== null && obj.max !== null) ));
+    if(!rulesNotNull.length) {
+      return [];
+    }
     const mapFormValues = formValues.map((value, index) => {
       return {
         name: formElements[index].name,

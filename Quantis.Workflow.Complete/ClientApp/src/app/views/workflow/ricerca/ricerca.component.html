@@ -1,0 +1,198 @@
+<div class="animated fadeIn">
+  <!-- <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="form-group row">
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-8" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-4" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-8" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-4" type="text">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-8" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-4" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-8" type="text">
+            </div>
+            <div class="col-sm-3">
+              <input class="form-control" placeholder=".col-md-4" type="text">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+              class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+
+              <thead class="thead-light">
+                <tr>
+                  <th>No.</th>
+                  <th>Rif. Num</th>
+                  <th>Sommario</th>
+                  <th>Gruppo</th>
+                  <th>Stato</th>
+                  <th>Descrizione</th>
+                  <th>KPI ID</th>
+                  <th>Riferimento 1</th>
+                  <th>Riferimento 2</th>
+                  <th>Riferimento 3</th>
+                  <th>Periodo</th>
+                  <th>Azioni</th>
+                  <th>Allegati</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="allTickets.length === 0 && !loading">
+                  <td colspan="6"><strong>No tickets found.</strong></td>
+                </tr>
+                <tr *ngIf="loading" class="text-center">
+                  <td colspan="6">
+                    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                  </td>
+                </tr>
+                <tr *ngFor="let ticket of allTickets; let i = index">
+                  <td>{{ i+1 }}</td>
+                  <td>{{ ticket.ref_num }}</td>
+                  <td>{{ ticket.summary }}</td>
+                  <td>{{ ticket.group }}</td>
+                  <td>{{ ticket.status }}</td>
+                  <td>{{ ticket.description }}</td>
+                  <td>{{ ticket.id_kpi }}</td>
+                  <td>{{ ticket.reference1 }}</td>
+                  <td>{{ ticket.reference2 }}</td>
+                  <td>{{ ticket.reference3 }}</td>
+                  <td>{{ ticket.period }}</td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                      (click)="ticketActions(ticket)">
+                      <span class="fa fa-calendar"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" (click)="ticketAttachments(ticket)">
+                      <span class="fa fa-archive"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>
+<div bsModal #successModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-success modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Attivita eseguite sul KPI</h4>
+        <button type="button" class="close" (click)="successModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- success model body table -->
+        <div class="table-responsive">
+          <table class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+            <thead class="thead-light">
+              <tr>
+                <th>DataOra</th>
+                <th>Azione</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="getTicketHistories.length === 0 && !loading">
+                <td colspan="6"><strong>No tickets found.</strong></td>
+              </tr>
+              <tr *ngIf="loading" class="text-center">
+                <td colspan="6">
+                  <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                </td>
+              </tr>
+              <tr *ngFor="let history of getTicketHistories; let i = index">
+                <td>{{ history.timestamp }}</td>
+                <td>{{ history.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- success model body table end -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="successModal.hide()">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-info" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal title</h4>
+          <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                  <!-- success model body table -->
+        <div class="table-responsive">
+            <table class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+              <thead class="thead-light">
+                <tr>
+                  <th>Allegato</th>
+                  <th>Caricato il</th>
+                  <th>Download</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="getTicketAttachments.length === 0 && !loading">
+                  <td colspan="6"><strong>No tickets found.</strong></td>
+                </tr>
+                <tr *ngIf="loading" class="text-center">
+                  <td colspan="6">
+                    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                  </td>
+                </tr>
+                <tr *ngFor="let attachment of getTicketAttachments; let i = index">
+                  <td>{{ attachment.attachmentname }}</td>
+                  <td>{{ attachment.attachmenthandle }}</td>
+                  <td>
+                      <a href="data:image/png;base64,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"
+                        target="_blank" download><i class="fa fa-download"></i></a>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- success model body table end -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="infoModal.hide()">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
