@@ -38,6 +38,10 @@ export class ApiService {
   //       )
   //     );
   // }
+  getDateKpisById(id,month,year): Observable<any>{
+    const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
+    return this.http.get(getDateKpiId,Headers.setHeaders('GET'));
+  }
 
   getCatalogoKpis(): Observable<any> {
     const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpis`;
