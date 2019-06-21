@@ -26,7 +26,7 @@ namespace Quantis.WorkFlow.Models
         public void Configure(EntityTypeBuilder<T_CatalogUser> builder)
         {
             builder.ToTable("t_catalog_users");
-            builder.HasKey(o => new { o.userid, o.id });
+            builder.HasKey(o => o.id);
         }
     }
 }
