@@ -365,10 +365,17 @@ export class ProveVarieComponent implements OnInit {
           return true;
         }
       } else if (value.type === 'time') {
+        if (!formRules[index].min || formRules[index].min === null) {
+          formRules[index].min = moment('1970/01/01');
+        }
+        if (!formRules[index].max || formRules[index].max === null) {
+          formRules[index].max = moment('2970/01/01');
+        }
         const formDateValue = value.value;
         const minDate = moment(formRules[index].min);
         const maxDate = moment(formRules[index].max);
         let isBetween = moment(formDateValue).isBetween(minDate, maxDate);
+
         return isBetween ? false : true;
       } else if (value.type === 'real') {
         let rule = formRules[index];
