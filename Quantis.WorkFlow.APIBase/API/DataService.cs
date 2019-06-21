@@ -690,7 +690,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                     List<string> listRecipients = new List<string>();
                     listRecipients.Add(email);
-                    var emailSubject = "[DashBoard] Reset Password";
+                    var emailSubject = "[KPI Management] Reset Password";
                     var emailBody = "<html>Nuova password: <b>" + randomPassword + "</b></html>";
                     return _smtpService.SendEmail(emailSubject, emailBody, listRecipients);
                 }
