@@ -30,6 +30,37 @@ namespace Quantis.WorkFlow.APIBase.API
                 _connectionstring = getConnectionString();
             }
         }
+        public List<OracleBookletDTO> GetBooklets()
+        {
+            try
+            {
+                string query = @"select document_name, document_id from T_DOCUMENT_REPOSITORY where document_file_type='docx' and document_type_id='2' order by document_name desc";                
+                using (OracleConnection con = new OracleConnection(_connectionstring))
+                {
+                    using (OracleCommand cmd = con.CreateCommand())
+                    {
+                        con.Open();
+                        cmd.BindByName = true;
+                        cmd.CommandText = query;
+                        OracleDataReader reader = cmd.ExecuteReader();
+                        List<OracleBookletDTO> res = new List<OracleBookletDTO>();
+                        while (reader.Read())
+                        {
+                            res.Add(new OracleBookletDTO()
+                            {
+                                DocumentName = (string)reader[0],
+                                DocumentId = (long)reader[1]
+                            });
+                        }
+                        return res.ToList();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<OracleCustomerDTO> GetCustomer(int id,string name)
         {
             try
