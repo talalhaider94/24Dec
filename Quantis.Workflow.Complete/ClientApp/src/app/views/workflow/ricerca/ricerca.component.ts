@@ -5,6 +5,8 @@ import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { FileSaverService } from 'ngx-filesaver';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ricerca',
@@ -28,16 +30,23 @@ export class RicercaComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
+    private _FileSaverService: FileSaverService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      // Declare the use of the extension in the dom parameter
       dom: 'Bfrtip',
-      // Configure the buttons
       buttons: [
+        {
+          extend: 'colvis',
+          text: '<i class="fa fa-file"></i> Toggle Columns',
+          titleAttr: 'Toggle Columns',
+          collectionLayout: 'fixed three-column',
+          className: 'btn btn-primary mb-3'
+        },
         {
           extend: 'csv',
           text: '<i class="fa fa-file"></i> Esporta CSV',
@@ -83,15 +92,16 @@ export class RicercaComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.workFlowService.getTicketHistory(ticket.id).pipe(first()).subscribe(data => {
       // this.getTicketHistories = data.filter(ticketHistory => ticketHistory.id === ticket.id);
-      if(!!data) {
+      if (!!data) {
         this.getTicketHistories = data;
+        console.log('ticketActions', data);
       }
       this.successModal.show();
       this.loading = false;
     }, error => {
       this.loading = false;
     });
-    
+
   }
 
 
@@ -99,8 +109,9 @@ export class RicercaComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.workFlowService.getAttachmentsByTicket(ticket.id).pipe(first()).subscribe(data => {
       // this.getTicketAttachments = data.filter(ticketAttachment => ticketAttachment.id === ticket.id);
-      if(!!data) {
+      if (!!data) {
         this.getTicketAttachments = data;
+        console.log('ticketAttachments', data);
       }
       this.infoModal.show();
       this.loading = false;
@@ -109,6 +120,35 @@ export class RicercaComponent implements OnInit, OnDestroy {
     });
   }
 
+  downloadFile(fileName, fileHandler) {
+    let extension = fileName.split('.').pop();
+    let prefix = '';
+
+    this.workFlowService.downloadAttachment(fileHandler).pipe(first()).subscribe(base64Data => {
+      if (extension === 'pdf') {
+        prefix = `data:application/pdf;base64,${base64Data}`;
+      } else if (extension === 'png') {
+        prefix = `data:image/png;base64,${base64Data}`;
+      } else if (extension === 'jpg') {
+        prefix = `data:image/jpg;base64,${base64Data}`;
+      } else if (extension === 'csv') {
+        prefix = `data:application/octet-stream;base64,${base64Data}`;
+      } else if (extension === 'xlsx') {
+        prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
+      } else if (extension === 'txt') {
+        prefix = `data:text/plain;base64,${base64Data}`;
+      } else {
+        console.log('DOWNLOADED FILE COULD BE CORRUPTED')
+        prefix = `data:text/plain;base64,${base64Data}`;
+      }
+      fetch(prefix).then(res => res.blob()).then(blob => {
+        this._FileSaverService.save(blob, fileName);
+      });
+    }, error => {
+      this.toastr.error('Error while downloading from Server.')
+      console.error('downloadFile ==>', error)
+    })
+  }
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
