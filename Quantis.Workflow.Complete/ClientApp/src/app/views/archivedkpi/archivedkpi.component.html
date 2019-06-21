@@ -65,7 +65,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Valori per KPI:</h5>
+        <h5 class="modal-title" id="approveModalLabel">Valori per KPI: {{currentKPI}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -110,56 +110,11 @@
 
 
 
-<!--<div id="datiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-      
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive" style="background: #ffffff; padding: 10px">
-        <table id="classTable" class="table table-bordered">
-           
-              <thead>
-                <tr>           
-                 <th *ngFor="let head of contratti[0] | keys">
-                   {{head}}
-                 </th>
-               
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of contratti">           
-                  <td *ngFor="let list of item | keys">{{item[list]}}</td>
-                </tr>
-              </tbody>
-           
-          </table>
-        <div *ngFor="let item of contratti | keyvalue">
-            Key: <b>{{item.key}}</b> and Value: <b>{{item.value}}</b>
-        </div>
-      <div *ngFor="let prop of contratti">
-          <div>key: {{contratti[prop]}}</div>
-          <div>value: {{contratti[prop]}}<div>
-        </div> 
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-      </div>
-    </div>
-  </div>
-</div>-->
-
-
 <div id="datiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Valori per KPI</h5>
+        <h5 class="modal-title" id="approveModalLabel">Valori per KPI: {{currentKPI}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -215,7 +170,7 @@
 
 
 
-<div id="datiTempoModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<!-->div id="datiTempoModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -271,4 +226,4 @@
         </div>
       </div>
     </div>
-  </div>
+  </div-->

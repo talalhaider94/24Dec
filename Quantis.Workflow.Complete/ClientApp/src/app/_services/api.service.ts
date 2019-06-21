@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import Headers from '../_helpers/headers';
 import {Observable} from 'rxjs';
-import {environment} from '../../environments/environment';
-
+import { environment } from '../../environments/environment';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +13,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  // getCatalogoUsers(){
-  //   return this.http.get('https://api.myjson.com/bins/p7x9t').pipe(
-  //     tap(
-  //       data => data,
-  //       error => error
-  //     )
-  //   );
-  // }
   getCatalogoUsers(): Observable<any> {
     const getUtentiEndPoint = `${environment.API_URL}/data/GetAllUsers`;
     return this.http.get(getUtentiEndPoint, Headers.setHeaders('GET'));
@@ -29,16 +21,8 @@ export class ApiService {
     const getTUsersEndPoint = `${environment.API_URL}/data/GetAllTUsers`;
     return this.http.get(getTUsersEndPoint, Headers.setHeaders('GET'));
   }
-  // getCatalogoKpis(){
-  //   return this.http.get('https://api.myjson.com/bins/1157o5')
-  //     .pipe(
-  //       tap(
-  //         data => data,
-  //         error => error
-  //       )
-  //     );
-  // }
-  getDateKpisById(id,month,year): Observable<any>{
+
+  getKpiArchivedData(id,month,year): Observable<any>{
     const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
     return this.http.get(getDateKpiId,Headers.setHeaders('GET'));
   }
@@ -48,45 +32,24 @@ export class ApiService {
     return this.http.get(getKpiEndPoint, Headers.setHeaders('GET'));
   }
 
-  // getConfigurations() {
-  //   return this.http.get('https://api.myjson.com/bins/13h29l')
-  //     .pipe(
-  //       tap(
-  //         data => data,
-  //         error => error
-  //       )
-  //     );
-  // }
-
   getConfigurations(): Observable<any> {
     const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllConfigurations`;
     return this.http.get(getConfigurationsEndPoint, Headers.setHeaders('GET'));
   }
 
-
-  // getArchivedKpis() {
-  //   return this.http.get('https://api.myjson.com/bins/lp589')
-  //     .pipe(
-  //       tap(
-  //         data => data,
-  //         error => error
-  //       )
-  //     );
-  // }
-
-  getArchivedKpis(): Observable<any> {
-    const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=05&year=2019`;
+  getArchivedKpis(month, year): Observable<any> {
+    const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
 
-  getAllArchivedKpis(id): Observable<any> {
+  getArchivedKpiById(id): Observable<any> {
     const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?id_kpi=${id}`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
 
-  getDateKpis(month, year): Observable<any> {
-    const getDateKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
-    return this.http.get(getDateKpisEndPoint, Headers.setHeaders('GET'));
+  getDataKpis(month, year): Observable<any> {
+    const getDataKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
+    return this.http.get(getDataKpisEndPoint, Headers.setHeaders('GET'));
   }
 
   updateConfig(config) {

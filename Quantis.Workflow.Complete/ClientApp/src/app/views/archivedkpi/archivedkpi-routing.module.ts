@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: ArchivedKpiComponent,
     data: {
-      title: 'KPI'
+      title: 'KPI Certificati'
     }
   }
 ];
