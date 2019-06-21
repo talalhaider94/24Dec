@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Quantis.WorkFlow.APIBase.API;
 using Quantis.WorkFlow.Services.Framework;
 using System;
@@ -12,7 +13,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
 {
     public class SMTPService :ISMTPService
     {
-        private static bool ischache = false;
         private string from;
         private string sslTrust;
         private string senderPassword;
@@ -23,25 +23,22 @@ namespace Quantis.WorkFlow.APIBase.Framework
         private bool isAuth;        
         private string notifierAlias;
         WorkFlowPostgreSqlContext _dbcontext;
+        private IMemoryCache _cache;
 
-
-        public SMTPService(WorkFlowPostgreSqlContext context)
+        public SMTPService(WorkFlowPostgreSqlContext context,IMemoryCache cache)
         {
+            _cache = cache;
             _dbcontext = context;
-            if (!ischache)
-            {
-                from = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value;
-                sslTrust = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "ssl_trust").value;
-                senderPassword = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value;
-                senderUsername = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_username").value;
-                startTlsEnable = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_start_tls_enable").value);
-                serverPort = System.Convert.ToInt32(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_port").value);
-                serverHost = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value;
-                isAuth = bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_auth").value);
-                notifierAlias = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_alias").value;
-                ischache = true;
-            }
-            
+            from = _cache.GetOrCreate("SMTP_from",p=> _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value) ;
+            sslTrust = _cache.GetOrCreate("SMTP_sslTrust", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "ssl_trust").value);
+            senderPassword = _cache.GetOrCreate("SMTP_senderPassword", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value);
+            senderUsername = _cache.GetOrCreate("SMTP_senderUsername", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_username").value);
+            startTlsEnable = _cache.GetOrCreate("SMTP_startTlsEnable", p => bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_start_tls_enable").value));
+            serverPort = _cache.GetOrCreate("SMTP_serverPort", p => System.Convert.ToInt32(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_port").value));
+            serverHost = _cache.GetOrCreate("SMTP_serverHost", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value);
+            isAuth = _cache.GetOrCreate("SMTP_isAuth", p => bool.Parse(_dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "is_auth").value));
+            notifierAlias = _cache.GetOrCreate("SMTP_notifierAlias", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_alias").value);
+
         }
 
 
