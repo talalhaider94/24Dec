@@ -40,7 +40,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.RemoveAttachment(id);
         }
-
+        [HttpGet("GetEmailHistory")]
+        public List<NotifierLogDTO> GetEmailHistory()
+        {
+            return _dataAPI.GetEmailHistory();
+        }
         [HttpGet("GetWidgetById/{id}")]
         public WidgetDTO GetWidgetById(int id)
         {

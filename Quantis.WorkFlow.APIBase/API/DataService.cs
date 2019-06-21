@@ -114,6 +114,26 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<NotifierLogDTO> GetEmailHistory()
+        {
+            try
+            {
+                var entity = _dbcontext.NotifierLogs.ToList();
+                return entity.Select(o => new NotifierLogDTO() {
+                    email_body=o.email_body,
+                    id_form=o.id_form,
+                    is_ack=o.is_ack,
+                    notify_timestamp=o.notify_timestamp,
+                    period=o.period,
+                    remind_timestamp=o.remind_timestamp,
+                    year=o.year
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public FormRuleDTO GetFormRuleByKPIID(string kpiId)
         {
             try
