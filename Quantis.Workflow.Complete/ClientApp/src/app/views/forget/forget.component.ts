@@ -41,22 +41,23 @@ export class ForgetComponent implements OnInit{
   onForgetFormSubmit() {
     this.submitted = true;
     if (this.forgetForm.invalid) {
-      this.toastr.error('Please fill the form correctly.', 'Error');
+      this.toastr.error('Compilare tutti i campi del form.', 'Error');
       return;
     } else {
       const { userName, email } = this.f;
       this.loading = true;
       this.authService.resetPassword(userName.value, email.value).pipe(first()).subscribe(result => {
         this.loading = false;
+        console.log(result)
         if(!!result){
           this.router.navigate(['/login']);
-          this.toastr.success('Please check your email for new password.', 'Success');
+          this.toastr.success('Password inviata all\'email indicata.', 'Success');
         } else {
-          this.toastr.error('User not found.', 'Error');  
+          this.toastr.error('Username o email errati.', 'Error');  
         }
       }, error => {
         console.error('onForgetFormSubmit', error)
-        this.toastr.error('Error while updating password.', 'Error');
+        this.toastr.error('Errore durante la creazione della password.', 'Error');
         this.loading = false;
       })
 
