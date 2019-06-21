@@ -18,7 +18,10 @@ export class AppComponent implements OnInit {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      this.authService.checkSession();
+      //console.log(evt.url);
+      if (evt.url !== '/forget') {
+        this.authService.checkSession();
+      }
       window.scrollTo(0, 0);
     });
   }
