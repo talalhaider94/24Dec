@@ -45,7 +45,9 @@ export class TConfigurationComponent implements OnInit {
   modalData = {
     key: '',
     value: '',
-    owner: ''
+    owner: '',
+    isenable: true,
+    description: '',
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -53,7 +55,9 @@ export class TConfigurationComponent implements OnInit {
     {
       key: 'key',
       value: 'value',
-      owner: 'owner'
+      owner: 'owner',
+      isenable: true,
+      description: 'description',
     }
   ]
 
@@ -71,6 +75,8 @@ export class TConfigurationComponent implements OnInit {
     this.modalData.key = data.key;
     this.modalData.owner = data.owner;
     this.modalData.value = data.value;
+    this.modalData.isenable = data.isenable;
+    this.modalData.description = data.description;
   }
 
   updateConfig() {
