@@ -16,5 +16,6 @@ namespace Quantis.WorkFlow.Services.API
         List<OracleUserDTO> GetUser(int id, string name);
         List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period);
         Tuple<int, int> GetUserIdLocaleIdByUserName(string username);
+        List<OracleBookletDTO> GetBooklets();
     }
 }
