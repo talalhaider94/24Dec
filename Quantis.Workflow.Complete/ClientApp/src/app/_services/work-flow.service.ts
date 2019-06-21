@@ -42,7 +42,7 @@ export class WorkFlowService {
 
   downloadAttachment(attachmentHandler): Observable<any>{
     const downloadAttachmentEndPoint = `${environment.API_URL}/sdm/DownloadAttachment`;
-    const  params = new  HttpParams().set('attachmentHandler', attachmentHandler);
+    const  params = new  HttpParams().set('attachmentHandle', attachmentHandler);
     return this.http.get(downloadAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
     // return this.http.get('assets/tempData/DownloadAttachment.json');
   }
