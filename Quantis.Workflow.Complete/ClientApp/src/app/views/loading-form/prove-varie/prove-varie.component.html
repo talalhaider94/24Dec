@@ -1,0 +1,197 @@
+<div *ngIf='loading' id="loader" class="text-center">
+  <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+</div>
+
+<div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <strong>{{jsonForm.description || title}}</strong>
+          </div>
+          <div class="card-body">
+            <ul class="bg-danger pt-2 pb-2" *ngIf="userLoadingFormErrors.length > 0">
+              <li *ngFor="let error of userLoadingFormErrors"> {{ error }}</li>
+            </ul>
+            <form [formGroup]="myInputForm" novalidate (ngSubmit)="saveUser(myInputForm)">
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label"><strong>Nome Campo</strong> </label>
+                <div class="col-md-8">
+                  <p class="form-control-static"><strong class="mt-2 d-block">Valore</strong> </p>
+                </div>
+              </div>
+              <div formArrayName="valories">
+                <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index"
+                     class="panel panel-default">
+                  <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'"
+                       class="panel-body bg-white" [formGroupName]="i">
+                    <div class="row align-items-center mb-2">
+                      <div class="col-md-4 col-form-label">
+                        <label>{{arrayFormElements[i].name}}</label>
+                      </div>
+                      <div class="col-sm-8">
+                        <!-- <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
+                          placeholder="inserisci data" class="form-control" formControlName="valoreUtente"> -->
+                        <mat-form-field appearance="outline">
+                          <mat-label>Date</mat-label>
+                          <input [readonly]="!readOnlyUserForm" matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="pickera" formControlName="valoreUtente">
+                          <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
+                          <mat-datepicker #pickera></mat-datepicker>
+                        </mat-form-field>
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <small>Data minima: {{minDate[i]|date}}</small>
+                          </div>
+                          <div class="col-sm-6">
+                            <small>Data massima: {{maxDate[i]|date}}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'"
+                       class="panel-body bg-white" [formGroupName]="i">
+                    <div class="row align-items-center mb-2">
+                      <div class="col-md-4 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
+                        <label>{{arrayFormElements[i].name}}</label>
+                      </div>
+                      <div class="col-sm-8">
+                        <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]"
+                               [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input"
+                               class="form-control" formControlName="valoreUtente">
+                        <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]"
+                          [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input"
+                          class="form-control" formControlName="valoreUtente">
+                        <div class="row" *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
+                          <div class="col-sm-6">
+                            <small>Valore minimo: {{numeroMin[i]}}</small>
+                          </div>
+                          <div class="col-sm-6">
+                            <small>Valore massimo: {{numeroMax[i]}}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
+                    <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
+                  </div>
+                </div>
+                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
+                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
+                  </button>
+                  <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']" class="btn btn-info text-white">Annulla</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-outline bg-white">
+            <thead>
+              <tr>
+                <th>Contratto</th>
+                <th>Nome KPI</th>
+                <th>Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf='listaKpiPerForm.length === 0'>
+                <td colspan="3">Nessun KPI Assegnato al Loading Form</td>
+              </tr>
+              <tr *ngFor='let kpi of listaKpiPerForm'>
+                <td>{{kpi.contract}}</td>
+                <td>{{kpi.id_kpi}} - {{kpi.kpi_name_bsi}}</td>
+                <td>{{kpi.target}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <strong>Documenti Presenti</strong>
+          </div>
+          <div class="card-body">
+            <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Nome File</th>
+                  <th>Download</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="formAttachmentsArray.length === 0">
+                  <td colspan="3">Nessun Documento presente</td>
+                </tr>
+                <!-- <tr>
+                  <td>period</td>
+                  <td>Doc Name </td>
+                  <td>
+                    <a href="data:image/png;base64,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"
+                      target="_blank" download><i class="fa fa-download"></i></a>
+                  </td>
+                </tr> -->
+
+                <tr *ngFor="let attachment of formAttachmentsArray">
+                  <td>{{ attachment.period }}/{{ attachment.year }}</td>
+                  <td>{{ attachment.doc_name }}</td>
+                  <td>
+                    <a (click)="downloadFile(attachment.content, attachment.doc_name)"><i
+                        class="fa fa-download text-primary"></i></a>
+                    <!-- <a href="data:application/pdf;base64,{{attachment.content}} | safe: 'resourceUrl'" target="_blank" download><i
+                        class="fa fa-download"></i></a> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
+          <div class="col-sm-12 mb-3 file-container">
+            <h5>File Allegati</h5>
+            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
+          </div>
+
+          <div class="col-sm-12">
+            <h5>Elenco dei File</h5>
+            <table class="table table-responsive-sm table-hover table-outline mb-3">
+              <thead>
+                <tr>
+                  <th>Nome File</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="uploader.queue.length === 0">
+                  <td colspan="2">nessun file da caricare</td>
+                </tr>
+                <tr *ngFor="let item of uploader.queue">
+                  <td>{{ item?.file?.name }}</td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
+              <span class="fa fa-upload" *ngIf="!fileUploading"></span>
+              <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

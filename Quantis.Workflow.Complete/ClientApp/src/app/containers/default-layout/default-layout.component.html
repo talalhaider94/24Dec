@@ -1,0 +1,101 @@
+<app-header
+  [navbarBrandRouterLink]="['/dashboard']"
+  [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/brand/logo.jpg', alt: 'KPI Management'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/logo.jpg', width: 30, height: 30, alt: 'KPI Management'}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'lg'">
+  <!-- <ul class="nav navbar-nav d-md-down-none">
+    <li class="nav-item px-3">
+      <a class="nav-link" href="#">Dashboard</a>
+    </li>
+  </ul> -->
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link"  href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <i class="icon-bell"></i>
+        <span class="badge badge-pill badge-danger">5</span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <a class="dropdown-item" href="#"><i class="fa fa-warning text-danger"></i>IMSIN026 - Fuori target</a>
+        <a class="dropdown-item" href="#"><i class="fa fa-warning text-danger"></i>IMSIN028 - Escalation</a>
+        <a class="dropdown-item text-center" href="#"><strong>Vedi tutti</strong></a>
+      </div>
+    </li>
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link"  href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <i class="icon-user"></i> {{currentUser.username}}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <div class="dropdown-header text-center"><strong>Settings</strong></div>
+        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+        <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Setting</a>
+        <div class="divider"></div>
+        <a class="dropdown-item" routerLink="/login" (click)='logout()'><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="true" [display]="'lg'">
+    <!-- Danial: navItems are coming from _nav.ts  -->
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <app-sidebar-minimizer></app-sidebar-minimizer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <!-- breaking change 'cui-breadcrumb' -->
+    <cui-breadcrumb>
+      <!-- <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+          <a class="btn" href="#"><i class="icon-speech"></i></a>
+          <a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>
+        </div>
+      </li> -->
+    </cui-breadcrumb>
+    <div class="container-fluid">
+      <!-- Danial: center area to display content -->
+      <router-outlet></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+  <app-aside [fixed]="true" [display]="false">
+    <tabset>
+      <tab>
+        <ng-template tabHeading><i class="icon-settings"></i></ng-template>
+        <div class="p-3">
+          <h6>Home Page</h6>
+          <p>Selezionare la Home Page da visualizzare dopo il login.</p>
+          <div class="aside-options">
+            <div class="clearfix mt-4">
+              <small><b>Contraenti</b></small>
+              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input" checked>
+                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+              </label>
+            </div>
+          </div>
+          <div class="aside-options">
+            <div class="clearfix mt-3">
+              <small><b>Contratti</b></small>
+              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input">
+                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+              </label>
+            </div>
+          </div>
+          <div class="aside-options">
+            <div class="clearfix mt-3">
+              <small><b>My Dashboard</b></small>
+              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                <input type="checkbox" class="switch-input">
+                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+  </app-aside>
+</div>
