@@ -28,6 +28,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _oracleAPI.GetCustomer(id, "");
         }
+        [HttpGet("GetBooklets")]
+        public List<OracleBookletDTO> GetBooklets()
+        {
+            return _oracleAPI.GetBooklets();
+        }
         [HttpGet("GetCustomers")]
         public List<OracleCustomerDTO> GetCustomers(string name)
         {

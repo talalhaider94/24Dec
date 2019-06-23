@@ -184,7 +184,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "id='" + Id+"'", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "id=" + Id+"", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                 select_a.Wait();
                 var select_result = select_a.Result.doSelectReturn;
                 return parseTickets(select_result).FirstOrDefault();

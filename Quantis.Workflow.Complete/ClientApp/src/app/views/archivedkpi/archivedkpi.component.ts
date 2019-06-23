@@ -1,11 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Pipe } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
-import { Subject } from 'rxjs';
+import { Subject, from, BehaviorSubject, interval } from 'rxjs';
+import { DatePipe, formatDate,getLocaleDateFormat } from '@angular/common'
+import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/render3/view/util';
+import * as moment from 'moment';
+import { first } from 'rxjs/operators';
+import { Key } from 'protractor';
 
 declare var $;
 var $this;
-
 
 @Component({
   templateUrl: './archivedkpi.component.html'
@@ -14,7 +18,7 @@ export class ArchivedKpiComponent implements OnInit {
   @ViewChild('ArchivedkpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-
+ 
   dtOptions: DataTables.Settings = {
     language: {
       processing: "Elaborazione...",
@@ -43,7 +47,7 @@ export class ArchivedKpiComponent implements OnInit {
   modalData = {
     id_kpi: '',
     name_kpi: '',
-    interval_kpi: '',
+    interval_kpi: null,
     value_kpi: '',
     ticket_id: '',
     close_timestamp_ticket: '',
@@ -51,8 +55,32 @@ export class ArchivedKpiComponent implements OnInit {
   };
 
   kpisData = [];
+  datiGrezzi=[];
+  countCampiData=[];
+  p = null;
+  monthVar: any;
+  yearVar: any;
+  id: any;
+  currentKPI = 'test';
 
+  fitroDataById: any = [
+    {
+      event_type_id: ' event_type_id  ',
+      resource_id: 'resource_id',
+      time_stamp : 'time_stamp ',
+      raw_data_id: 'raw_data_id',
+      create_date : 'create_date ',
+      data:this.datiGrezzi,
+      modify_date:'modify_date',
+      reader_id: 'reader_id',
+      event_source_type_id : 'event_source_type_id ',
+      event_state_id: 'event_state_id ',
+      partner_raw_data_id : 'partner_raw_data_id ',
+    }
+  ]
+  
   dtTrigger: Subject<any> = new Subject();
+
   ArchivedKpiBodyData: any = [
     {
       id_kpi: 'id_kpi',
@@ -64,56 +92,41 @@ export class ArchivedKpiComponent implements OnInit {
       archived: 'archived'
     }
   ]
-  monthVar: any;
-  yearVar: any;
+  
   constructor(private apiService: ApiService) {
     $this = this;
   }
 
   ngOnInit() {
+   this.monthVar = moment().subtract(1, 'month').format('MM');
+   this.yearVar = moment().subtract(1, 'month').format('YYYY');
   }
 
   populateModalData(data) {
-    // this.modalData.id_kpi = data.id_kpi;
-    // this.modalData.name_kpi = data.name_kpi;
-    // this.modalData.interval_kpi = data.interval_kpi;
-    // this.modalData.value_kpi = data.value_kpi;
-    // this.modalData.ticket_id = data.ticket_id;
-    // this.modalData.close_timestamp_ticket = data.close_timestamp_ticket;
-    // this.modalData.archived = data.archived;
-    this.apiService.getAllArchivedKpis(data.id_kpi).subscribe((kpis: any) => {
-      this.kpisData = kpis;
+    this.currentKPI = data.kpi_name;
+    this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
+    this.kpisData = kpis;
+    //console.log('pop',this.kpisData);
     });
-
   }
 
   populateDateFilter() {
-    this.apiService.getDateKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
+    this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
       this.ArchivedKpiBodyData = data;
       this.rerender();
     });
-
   }
 
-
-  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
-
     this.setUpDataTableDependencies();
-    this.getKpis1();
-
-    this.apiService.getArchivedKpis().subscribe((data:any)=>{
+    //this.getKpis1();
+    this.apiService.getDataKpis(this.monthVar, this.yearVar).subscribe((data:any)=>{
       this.ArchivedKpiBodyData = data;
       this.rerender();
     });
   }
 
-
-  // ngOnDestroy(): void {
-  //   // Do not forget to unsubscribe the event
-  //   this.dtTrigger.unsubscribe();
-  // }
 
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -125,12 +138,7 @@ export class ArchivedKpiComponent implements OnInit {
     });
   }
 
-  // getKpiTableRef(datatableElement: DataTableDirective): any {
-  //   return datatableElement.dtInstance;
-  // }
-
   setUpDataTableDependencies(){
-
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
@@ -150,15 +158,58 @@ export class ArchivedKpiComponent implements OnInit {
   }
 
   getKpis() {
-    this.apiService.getArchivedKpis().subscribe((data) =>{
+    this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data) => {
       this.ArchivedKpiBodyData = data;
-      console.log('Archived Kpis ', data);
+      Object.keys(this.fitroDataById).forEach( key => {
+        this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+      //console.log('Archived Kpis ', data);
+      })
     });
   }
 
-  getKpis1() {
+  /*getKpis1() {
     this.apiService.getArchivedKpis().subscribe((data: any) => {
     });
+  }*/
+  
+  getdati(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+      this.fitroDataById = dati;
+      Object.keys(this.fitroDataById).forEach( key => {
+        this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data); 
+    })
+    //console.log('dati',dati);
+    this.getCountCampiData();
+    });
   }
 
+
+/*spit(){
+  const [first, second] = "10AM-4PM".split('-');
+  console.log(first);
+  console.log(second);
+}*/
+
+  getDatiSecondPop(id_kpi, interval){
+    var mese=moment(interval).format('MM');
+    var anno=moment(interval).format('YYYY');
+    this.getdati(id_kpi,mese,anno);
+  }
+
+  getCountCampiData(){
+    let maxLength = 0;
+    this.fitroDataById.forEach( f => {
+      //let data = JSON.parse(f.data);
+      if(Object.keys(f.data).length > maxLength){
+        maxLength = Object.keys(f.data).length;
+      }  
+    });
+    this.countCampiData = [];
+    for(let i=1;i<= maxLength; i++){
+      this.countCampiData.push(i);
+    }
+  }
+
+
+  
 }

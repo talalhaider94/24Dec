@@ -114,6 +114,26 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<NotifierLogDTO> GetEmailHistory()
+        {
+            try
+            {
+                var entity = _dbcontext.NotifierLogs.ToList();
+                return entity.Select(o => new NotifierLogDTO() {
+                    email_body=o.email_body,
+                    id_form=o.id_form,
+                    is_ack=o.is_ack,
+                    notify_timestamp=o.notify_timestamp,
+                    period=o.period,
+                    remind_timestamp=o.remind_timestamp,
+                    year=o.year
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public FormRuleDTO GetFormRuleByKPIID(string kpiId)
         {
             try
@@ -640,28 +660,30 @@ namespace Quantis.WorkFlow.APIBase.API
                     if (password == db_password)
                     {
                         var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
-                        var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
+                        //var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
+                        var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id);
                         if (res != null)
                         {
                             _dbcontext.Sessions.Add(new T_Session()
                             {
-                                user_id = res.Item1,
+                                //user_id = res.Item1,
+                                user_id = res.user_id,
                                 user_name = usr.ca_bsi_account,
                                 login_time = DateTime.Now,
                                 session_token = token,
                                 expire_time = DateTime.Now.AddMinutes(getSessionTimeOut())
                             });
                             _dbcontext.SaveChanges();
-                            _cache.Remove("Permission_"+res.Item1);
-                            var permissions=_infomationAPI.GetPermissionsByUserId(res.Item1).Select(o => o.Code).ToList();
-                            _cache.GetOrCreate("Permission_"+res.Item1, entry => permissions);
+                            _cache.Remove("Permission_"+res.user_id);
+                            var permissions=_infomationAPI.GetPermissionsByUserId(res.user_id).Select(o => o.Code).ToList();
+                            _cache.GetOrCreate("Permission_"+res.user_id, entry => permissions);
                             return new LoginResultDTO()
                             {
                                 IsAdmin = usr.user_admin,
                                 IsSuperAdmin = usr.user_sadmin,
                                 Token = token,
-                                UserID = res.Item1,
-                                LocaleID = res.Item2,
+                                UserID = res.user_id,
+                                LocaleID = res.user_locale_id,
                                 UserEmail= usr.mail,
                                 UserName=usr.ca_bsi_account
                             };
@@ -690,7 +712,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                     List<string> listRecipients = new List<string>();
                     listRecipients.Add(email);
-                    var emailSubject = "[DashBoard] Reset Password";
+                    var emailSubject = "[KPI Management] Reset Password";
                     var emailBody = "<html>Nuova password: <b>" + randomPassword + "</b></html>";
                     return _smtpService.SendEmail(emailSubject, emailBody, listRecipients);
                 }

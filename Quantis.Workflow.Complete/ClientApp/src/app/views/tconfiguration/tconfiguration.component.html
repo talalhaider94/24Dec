@@ -9,12 +9,14 @@
         Crea Nuovo
       </button>
     </div><br />
-    <table class="table table-bordered" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <table class="table hover" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
         <tr>
           <th style="text-align:center">Chiave</th>
           <th style="text-align:center">Owner</th>
           <th style="text-align:center">Valore</th>
+          <th style="text-align:center">Abilitato</th>
+          <th style="text-align:center">Descrizione</th>
           <th style="text-align:center">Azione</th>
         </tr>
       </thead>
@@ -23,7 +25,11 @@
           <td>{{row.key}}</td>
           <td>{{row.owner}}</td>
           <td>{{row.value}}</td>
-          <td align="center">
+          <td align="center" *ngIf="row.isenable; then trueBlock else falseBlock"></td>
+          <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
+          <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
+          <td>{{row.description}}</td>
+          <td style="text-align: center">
             <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                     data-target="#configModal">
               Modifica
@@ -52,6 +58,8 @@
               <th>Key</th>
               <th>Owner</th>
               <th>Value</th>
+              <th>Abilitato</th>
+              <th>Descrizione</th>
             </tr>
           </thead>
           <tbody>
@@ -59,6 +67,8 @@
               <td>{{modalData.key}}</td>
               <td>{{modalData.owner}}</td>
               <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
+              <td><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
+              <td>{{modalData.description}}</td>
             </tr>
           </tbody>
         </table>
@@ -83,9 +93,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <label><b>Enter Chiave</b></label><input type="text" class="form-control" placeholder="Enter Chiave" /><br>
-        <label><b>Enter Owner</b></label><input type="text" class="form-control" placeholder="Enter Owner" /><br>
-        <label><b>Enter Valore</b></label><input type="text" class="form-control" placeholder="Enter Valore" />
+        <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" /><br>
+        <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" /><br>
+        <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" /><br>
+        <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" /><br>
+        <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" />
       </div>
       <div class="modal-footer">
         <button class="btn btn-success">Aggiungi</button>

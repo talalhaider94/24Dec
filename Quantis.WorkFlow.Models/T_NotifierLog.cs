@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Models
         public bool is_ack { get; set; }
         public string period { get; set; }
         public int year { get; set; }
+        public string email_body { get; set; }
         public virtual T_Form Form { get; set; }
 
     }

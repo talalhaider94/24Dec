@@ -2,6 +2,7 @@
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br><h2 style="color:#565656">KPI CERTIFICATI</h2><br>
     <h4 style="color:#565656; margin-left:12%">Periodo:</h4>
+
     <div class="row">
       <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
       <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" #searchCol2>
@@ -26,10 +27,12 @@
         <option value="2021">2021</option>
       </select>
       <button type="button" class="btn btn-primary ml-3" (click)="populateDateFilter()">Filter</button>
+      <button type="button" class="btn btn-primary ml-3" (click)="rerender()">Refresh</button>
     </div><br/>
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
       <thead style="background: #E6E6E6">
       <tr>
+        <th style="text-align:center">ID KPI</th>
         <th style="text-align:center">Nome KPI</th>
         <th style="text-align:center">Intervallo</th>
         <th style="text-align:center">Valore</th>
@@ -41,14 +44,17 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
+        <td>{{row.id_kpi}}</td>
         <td>{{row.name_kpi}}</td>
-        <td>{{row.interval_kpi | date : "yyyy-MM-dd"}}</td>
+        <td>{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
         <td>{{row.value_kpi}}</td>
         <td>{{row.ticket_id}}</td>
-        <td>{{row.close_timestamp_ticket | date : "yyyy-MM-dd"}}</td>
+        <td>{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
         <td>{{row.archived}}</td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                   data-target="#archivedKpiModal">Vedi</button></td>
+                                   data-target="#archivedKpiModal">Vedi</button>
+        <button class="btn btn-primary" data-toggle="modal" (click)="getdati(row.id_kpi)"
+                                   data-target="#datiModal">Dati</button></td>
       </tr>
       </tbody>
     </table>
@@ -59,7 +65,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Valori per KPI: #KPI_NAME</h5>
+        <h5 class="modal-title" id="approveModalLabel">Valori per KPI: {{currentKPI}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -69,22 +75,27 @@
           <table id="classTable" class="table table-bordered">
             <thead style="background: #E6E6E6">
             <tr>
+              <th style="text-align:center">ID KPI</th>
               <th style="text-align:center">Nome KPI</th>
               <th style="text-align:center">Intervallo</th>
               <th style="text-align:center">Valore</th>
               <th style="text-align:center">Ticket ID</th>
               <th style="text-align:center">Chiusura Ticket</th>
               <th style="text-align:center">Archiviato</th>
+              <th style="text-align:center">Azione</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let rec of kpisData">
+              <td>{{rec.id_kpi}}</td>
               <td>{{rec.name_kpi}}</td>
-              <td>{{rec.interval_kpi | date : "yyyy-MM-dd"}}</td>
+              <td>{{rec.interval_kpi  | amDateFormat: 'MM/YYYY'  }}</td>
               <td>{{rec.value_kpi}}</td>
               <td>{{rec.ticket_id}}</td>
-              <td>{{rec.close_timestamp_ticket | date : "yyyy-MM-dd"}}</td>
+              <td>{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
               <td>{{rec.archived}}</td>
+              <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi)"
+                data-target="#datiModal">Dati</button></td>
             </tr>
             </tbody>
           </table>
@@ -96,3 +107,123 @@
     </div>
   </div>
 </div>
+
+
+
+<div id="datiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="approveModalLabel">Valori per KPI: {{currentKPI}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive" style="background: #ffffff; padding: 10px">
+          <table id="classTable" class="table table-bordered">
+            <thead style="background: #E6E6E6">
+            <tr>
+              <th style="text-align:center">event_type_id</th>
+              <th style="text-align:center">resource_id</th>
+              <th style="text-align:center">time_stamp</th>
+              <th style="text-align:center">raw_data_id</th>
+              <th style="text-align:center">create_date</th>
+
+              <th *ngFor="let key of countCampiData" style="text-align:center">campo_{{key}}</th>
+              <th style="text-align:center">modify_date</th>
+              <th style="text-align:center">reader_id</th>
+              <th style="text-align:center">event_source_type_id </th>
+              <th style="text-align:center">event_state_id</th>
+              <th style="text-align:center">partner_raw_data_id</th>
+             
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let rec of fitroDataById | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td>{{rec.event_type_id}}</td>
+              <td>{{rec.resource_id}}</td>
+              <td>{{rec.time_stamp}}</td>
+              <td>{{rec.raw_data_id}}</td>
+              <td>{{rec.create_date}}</td>
+              <td *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
+              <td>{{rec.modify_date}}</td>
+              <td>{{rec.reader_id}}</td>
+              <td>{{rec.event_source_type_id}}</td>
+              <td>{{rec.event_state_id}}</td>
+              <td>{{rec.partner_raw_data_id}}</td>
+             
+            </tr>
+            
+            </tbody>
+            
+          </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-->div id="datiTempoModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Valori per KPI tempo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive" style="background: #ffffff; padding: 10px">
+            <table id="classTable" class="table table-bordered">
+              <thead style="background: #E6E6E6">
+              <tr>
+                <th style="text-align:center">event_type_id</th>
+                <th style="text-align:center">resource_id</th>
+                <th style="text-align:center">time_stamp</th>
+                <th style="text-align:center">raw_data_id</th>
+                <th style="text-align:center">create_date</th>
+  
+                <th *ngFor="let key of countCampiData" style="text-align:center">campo_{{key}}</th>
+                <th style="text-align:center">modify_date</th>
+                <th style="text-align:center">reader_id</th>
+                <th style="text-align:center">event_source_type_id </th>
+                <th style="text-align:center">event_state_id</th>
+                <th style="text-align:center">partner_raw_data_id</th>
+               
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let rec of fitroDataById | paginate: { itemsPerPage: 10, currentPage: p }">
+                <td>{{rec.event_type_id}}</td>
+                <td>{{rec.resource_id}}</td>
+                <td>{{rec.time_stamp}}</td>
+                <td>{{rec.raw_data_id}}</td>
+                <td>{{rec.create_date}}</td>
+                <td *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
+                <td>{{rec.modify_date}}</td>
+                <td>{{rec.reader_id}}</td>
+                <td>{{rec.event_source_type_id}}</td>
+                <td>{{rec.event_state_id}}</td>
+                <td>{{rec.partner_raw_data_id}}</td>
+               
+              </tr>
+              
+              </tbody>
+              
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div-->

@@ -38,7 +38,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.mail = o.mail;
             e.userid = o.userid;
             e.manager = o.manager;
-            e.password = o.password;
+            //e.password = o.password;
             e.user_admin = o.user_admin;
             e.user_sadmin = o.user_sadmin;
             return e;
