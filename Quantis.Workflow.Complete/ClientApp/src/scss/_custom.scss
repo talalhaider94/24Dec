@@ -13,3 +13,12 @@
 .fixed.three-column {
   padding: 10px !important;
 }
+
+.admin-form-rules {
+  .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
+  .row {
+    padding: 20px 0 !important;
+  }
+}
