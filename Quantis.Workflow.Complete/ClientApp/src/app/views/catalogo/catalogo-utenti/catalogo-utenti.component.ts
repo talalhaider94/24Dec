@@ -39,6 +39,7 @@ export class CatalogoUtentiComponent implements OnInit {
   dtOptions: DataTables.Settings = {
     // 'dom': 'rtip',
     // 'pagingType': 'full_numbers'
+    pageLength: 30,
     language: {
       processing: "Elaborazione...",
       search: "Cerca:",
@@ -87,8 +88,8 @@ export class CatalogoUtentiComponent implements OnInit {
       mail: 'MAIL',
       userid: 'USERID',
       manager: 'RESPONSABILE',
-      user_admin: 'USER_ADMIN',
-      user_sadmin: 'USER_SADMIN'
+      user_admin: '',
+      user_sadmin: ''
     }
   ]
   

@@ -14,15 +14,19 @@ namespace Quantis.WorkFlow.Services.API
         ConfigurationDTO GetConfiguration(string owner, string key);
         void AddUpdateRole(BaseNameCodeDTO dto);
         void DeleteRole(int roleId);
-        List<BaseNameCodeDTO> GetAllRoles();
-        List<BaseNameCodeDTO> GetAllPermissions();
+        List<BaseNameCodeDTO> GetAllRoles(); 
+        List<PermissionDTO> GetAllPermissions();
         List<BaseNameCodeDTO> GetRolesByUserId(int userid);
-        List<BaseNameCodeDTO> GetPermissionsByUserId(int userid);
-        List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId);
+        List<PermissionDTO> GetPermissionsByUserId(int userid);
+        List<PermissionDTO> GetPermissionsByRoleID(int roleId);
         void AssignRolesToUser(MultipleRecordsDTO dto);
         void AssignPermissionsToRoles(MultipleRecordsDTO dto);
-
-
+        List<SDMStatusDTO> GetAllSDMStatusConfigurations();
+        List<SDMGroupDTO> GetAllSDMGroupConfigurations();
+        void DeleteSDMGroupConfiguration(int id);
+        void DeleteSDMStatusConfiguration(int id);
+        void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
+        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
 
     }
 }
