@@ -53,7 +53,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
             _infomationAPI.DeleteRole(roleId);
         }
         [HttpGet("GetAllPermissions")]
-        public List<BaseNameCodeDTO> GetAllPermissions()
+        public List<PermissionDTO> GetAllPermissions()
         {
             return _infomationAPI.GetAllPermissions();
         }
@@ -65,13 +65,13 @@ namespace Quantis.WorkFlow.Complete.Controllers
         }
 
         [HttpGet("GetPermissionsByUserId")]
-        public List<BaseNameCodeDTO> GetPermissionsByUserId(int userid)
+        public List<PermissionDTO> GetPermissionsByUserId(int userid)
         {
             return _infomationAPI.GetPermissionsByUserId(userid);
         }
 
         [HttpGet("GetPermissionsByRoleID")]
-        public List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId)
+        public List<PermissionDTO> GetPermissionsByRoleID(int roleId)
         {
             return _infomationAPI.GetPermissionsByRoleID(roleId);
         }

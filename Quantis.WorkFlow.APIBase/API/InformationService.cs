@@ -149,12 +149,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<BaseNameCodeDTO> GetAllPermissions()
+        public List<PermissionDTO> GetAllPermissions()
         {
             try
             {
                 var permission = _dbcontext.Permissions.ToList();
-                return permission.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
+                return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
             {
@@ -176,13 +176,13 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<BaseNameCodeDTO> GetPermissionsByUserId(int userid)
+        public List<PermissionDTO> GetPermissionsByUserId(int userid)
         {
             try
             {
                 var roles = _dbcontext.UserRoles.Where(q => q.user_id == userid).Select(s => s.role_id).ToList();
                 var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).ToList();
-                return permission.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
+                return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
             {
@@ -190,12 +190,12 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId)
+        public List<PermissionDTO> GetPermissionsByRoleID(int roleId)
         {
             try
             {
                 var permissions = _dbcontext.RolePermissions.Include(o => o.Permission).Where(p => p.role_id == roleId).Select(o=>o.Permission);
-                return permissions.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
+                return permissions.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
             {
