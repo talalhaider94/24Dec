@@ -21,8 +21,12 @@ namespace Quantis.WorkFlow.Services.API
         List<PermissionDTO> GetPermissionsByRoleID(int roleId);
         void AssignRolesToUser(MultipleRecordsDTO dto);
         void AssignPermissionsToRoles(MultipleRecordsDTO dto);
-
-
+        List<SDMStatusDTO> GetAllSDMStatusConfigurations();
+        List<SDMGroupDTO> GetAllSDMGroupConfigurations();
+        void DeleteSDMGroupConfiguration(int id);
+        void DeleteSDMStatusConfiguration(int id);
+        void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
+        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
 
     }
 }

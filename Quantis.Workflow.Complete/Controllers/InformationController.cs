@@ -87,6 +87,36 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AssignPermissionsToRoles(dto);
         }
+        [HttpGet("GetAllSDMStatusConfigurations")]
+        public List<SDMStatusDTO> GetAllSDMStatusConfigurations()
+        {
+            return _infomationAPI.GetAllSDMStatusConfigurations();
+        }
+        [HttpGet("GetAllSDMGroupConfigurations")]
+        public List<SDMGroupDTO> GetAllSDMGroupConfigurations()
+        {
+            return _infomationAPI.GetAllSDMGroupConfigurations();
+        }
+        [HttpGet("DeleteSDMGroupConfiguration/{id}")]
+        public void DeleteSDMGroupConfiguration(int id)
+        {
+            _infomationAPI.DeleteSDMGroupConfiguration(id);
+        }
+        [HttpGet("DeleteSDMStatusConfiguration/{id}")]
+        public void DeleteSDMStatusConfiguration(int id)
+        {
+            _infomationAPI.DeleteSDMStatusConfiguration(id);
+        }
+        [HttpPost("AddUpdateSDMStatusConfiguration")]
+        public void AddUpdateSDMStatusConfiguration([FromBody]SDMStatusDTO dto)
+        {
+            _infomationAPI.AddUpdateSDMStatusConfiguration(dto);
+        }
+        [HttpPost("AddUpdateSDMGroupConfiguration")]
+        public void AddUpdateSDMGroupConfiguration([FromBody]SDMGroupDTO dto)
+        {
+            _infomationAPI.AddUpdateSDMGroupConfiguration(dto);
+        }
 
     }
 }
