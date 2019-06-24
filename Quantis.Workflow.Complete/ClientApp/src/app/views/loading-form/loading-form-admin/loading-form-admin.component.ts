@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Form, FileUploadModel } from '../../../_models';
+import { Form } from '../../../_models';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
@@ -56,7 +55,12 @@ export class LoadingFormAdminComponent implements OnInit {
 
   erroriArray: string[] = [];
   arraySecondo = new Array;
-  confronti: string[] = ['<', '>', '=', '!=', '>=', '<='];
+  confronti = new Array;
+
+  stringTypeRules: string[] = ['=', '!='];
+  integerTypeRules: string[] = ['<', '>', '=', '!=', '>=', '<='];
+  dateTypeRules: string[] = ['<', '>', '>=', '<='];
+
   // dataSource = new MatTableDataSource();
   // pageSizeOptions: number[] = [5, 10, 25, 100];
   // mostraTabella: boolean = false;
@@ -85,7 +89,7 @@ export class LoadingFormAdminComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
       this.formName = params.get("formName");
-      this.prendiDatiForm(+this.formId, this.formName);
+      this._init(+this.formId, this.formName);
     });
   }
   initInputForm() {
@@ -125,20 +129,23 @@ export class LoadingFormAdminComponent implements OnInit {
   }
 
   filtraElementi(formField, index: number) {
-    console.log(formField);
-    // this.arraySecondo[indice]=new;
-    // support array
-    let arrayappoggio = new Array(this.arrayFormElements);
-    // this.arraySecondo[indice]=new Array(this.arrayFormElements);
-    console.log(this.arraySecondo);
-    this.arraySecondo = this.arrayFormElements.filter(form => (form.name !== formField.name && form.type !== formField.type));
-    console.log(this.arraySecondo);
+    this.arraySecondo[index] = this.arrayFormElements.filter(form => (form.name !== formField.name && form.type !== formField.type));
+    if(formField.type === 'string') {
+      this.confronti[index] = this.stringTypeRules;
+    } else if(formField.type === 'integer' || formField.type === 'real') {
+      this.confronti[index] = this.integerTypeRules;
+    } else if(formField.type === 'time') {
+      this.confronti[index] = this.dateTypeRules;
+    } else {
+      console.log('Danial: Unknown/New CONDITION MISSING IN filtraElementi method')
+    }
+    
   }
 
   save(model: any) {
-    if (!!model.value.termsCheck) {
-      this.toastr.info('Inserire nota per dati non pervenuti.')
-    }
+    // if (!!model.value.termsCheck) {
+    //   this.toastr.info('Inserire nota per dati non pervenuti.')
+    // }
     this.loading = true;
     console.log('ADMIN FORM SAVE MODEL', model.value);
     //elementi da mettere nel json
@@ -285,7 +292,7 @@ export class LoadingFormAdminComponent implements OnInit {
   // means take data forms
   // Danial: this method is invoked when a row is clicked.
   // and generates form fields dynamically
-  prendiDatiForm(numero: number, nome: string) {
+  _init(numero: number, nome: string) {
     this.loading = true;
     const currentUser = this.authService.getUser();
     // since I put the filters first by comparison,
@@ -303,7 +310,7 @@ export class LoadingFormAdminComponent implements OnInit {
       ]),
       // means comparison fields
       campiConfronto: this.fb.array([
-        //this.initComparisonForm(array)
+        this.initComparisonForm(array)
       ]),
       termsCheck: '',
     });
@@ -329,6 +336,7 @@ export class LoadingFormAdminComponent implements OnInit {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
       if (data) {
+        // debugger
         JSON.parse(data.form_body).forEach((element, index) => {
           console.log(element);
           if (element.campo1 != null) { // means Forms regoles are defined 
@@ -337,7 +345,7 @@ export class LoadingFormAdminComponent implements OnInit {
             array.segno = element.segno;
             array.campo2 = element.campo2;
             this.defaultFont[index] = array;
-            this.addComparisonForm(array);
+            // this.addComparisonForm(array);
           } else if (element.max != null && element.max.length != 24) {
             // type string / real / integer
             this.numeroMax[index - contatore] = element.max;

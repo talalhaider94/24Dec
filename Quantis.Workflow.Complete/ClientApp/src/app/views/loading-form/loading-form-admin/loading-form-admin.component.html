@@ -75,10 +75,10 @@
           </div>
 
 
-          <div formArrayName="campiConfronto" class="panel panel-default">
+          <div formArrayName="campiConfronto" class="panel panel-default admin-form-rules">
             <div *ngFor="let language of myInputForm.get('campiConfronto')['controls']; let i=index"
               class="panel-body bg-white">
-              <div class="row align-items-center" [formGroupName]="i">
+              <div class="row align-items-center justify-content-center" [formGroupName]="i">
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
                     <mat-select placeholder="campo 1" formControlName="campo1"
@@ -93,8 +93,9 @@
 
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select placeholder="confronto" formControlName="segno" disableRipple>
-                      <mat-option *ngFor="let element of confronti " [value]="element">{{element}}</mat-option>
+                    <mat-select placeholder="confronto" formControlName="segno" disableRipple
+                    [disabled]="((confronti[i]!=null && confronti[i].length==0)||(confronti[i]==null))">
+                      <mat-option *ngFor="let element of confronti[i] " [value]="element">{{element}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -106,13 +107,13 @@
                       placeholder="campo 2">
                       <!-- <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}
                       </mat-option> -->
-                      <mat-option *ngFor="let element of arraySecondo" [value]="element">{{element.name}}
+                      <mat-option *ngFor="let element of arraySecondo[i]" [value]="element">{{element.name}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-1 text-center">
                   <a class="btn btn-danger btn-sm text-white" (click)="removeComparisonForm(i)"
                     *ngIf="myInputForm.get('valories')['controls'].length > 1">
                     <span class="fa fa-trash"></span>
