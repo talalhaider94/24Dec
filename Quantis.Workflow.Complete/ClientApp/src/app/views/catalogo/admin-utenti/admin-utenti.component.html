@@ -1,36 +1,40 @@
 <div style="margin-top: -20px;">
-<!--    <h2 style="color:#565656">Catalogo</h2><br>-->
-    <div class="table-responsive" style="background: #ffffff; padding: 10px">
-      <br><h2 style="color:#565656">LISTA UTENTI</h2><br>
-      <div class="row">
-          <input type="text" class="form-control ml-3 mr-1" style="width:20%;" placeholder="Nome" #searchCol1/>
-          <input type="text" class="form-control ml-1 mr-3" style="width:20%;" placeholder="Cognome" #searchCol2/>
-<!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
-          <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
-      </div><br/>
-      <table class="table table-bordered" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-        <thead style="background: #E6E6E6">
-        <tr>
-            <th style="text-align:center">USER ID</th>
-            <th style="text-align:center">USERNAME</th>
-            <th style="text-align:center">EMAIL</th>
-            <th style="text-align:center">ORGANIZZAZIONE</th>
-            <th style="text-align:center">STATUS</th>
-            <th style="text-align:center">AZIONE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of UtentiTableBodyData; index as i">
-            <td>{{row.user_id}}</td>
-            <td>{{row.user_name}}</td>
-            <td>{{row.user_email}}</td>
-            <td>{{row.user_organization_name}}</td>
-            <td>{{row.user_status}}</td>
-            <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                 data-target="#utentiModal">Modifica</button></td>
-          </tr>
-          </tbody>
-      </table>
+  <!-- <h2 style="color:#565656">Catalogo</h2><br>-->
+ <div class="table-responsive" style="background: #ffffff; padding: 10px">
+        <br><h2 style="color:#565656">LISTA UTENTI</h2><br>
+        <!--div class="row">
+            <input type="text" class="form-control ml-3 mr-1" style="width:20%;" placeholder="Nome" #searchCol1/>
+            <input type="text" class="form-control ml-1 mr-3" style="width:20%;" placeholder="Cognome" #searchCol2/>
+           <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>
+  <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
+</div--> 
+<table class="table table-bordered" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+  <thead style="background: #E6E6E6">
+    <tr>
+      <th style="text-align:center">USER ID</th>
+      <th style="text-align:center">USERNAME</th>
+      <th style="text-align:center">EMAIL</th>
+      <th style="text-align:center">ORGANIZZAZIONE</th>
+      <th style="text-align:center">STATUS</th>
+      <th style="text-align:center">AZIONE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of UtentiTableBodyData; index as i">
+      <td>{{row.user_id}}</td>
+      <td>{{row.user_name}}</td>
+      <td>{{row.user_email}}</td>
+      <td>{{row.user_organization_name}}</td>
+      <td>{{row.user_status}}</td>
+      <td align="center">
+        <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                data-target="#utentiModal">
+          Modifica
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
     </div>
   </div>
 
