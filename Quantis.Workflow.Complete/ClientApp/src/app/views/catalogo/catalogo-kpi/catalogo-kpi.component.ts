@@ -39,7 +39,17 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
-  dtOptions: DataTables.Settings = {
+  viewModel = {
+    filters: {
+      idKpi: '',
+      titoloBreve: '',
+      referenti: '',
+      tuttiContratti: '',
+      tutteLeFrequenze: ''
+    }
+  };
+
+  dtOptions = {
     //'dom': 'rtip',
     "columnDefs": [{
       "targets": [13],
@@ -135,26 +145,7 @@ export class CatalogoKpiComponent implements OnInit {
       hide: 'hidden'
     }];
 
-  kpiTableBodyData: any = [
-    {
-      id: '1',
-      short_name: '',
-      group_type: '',
-      id_kpi: '',
-      id_form: '',
-      kpi_description: '',
-      source_type: '',
-      tracking_period: '',
-      wf_last_sent: '',
-      rm_last_sent: '',
-      measure_unit: '',
-      contract: '',
-      referent: '',
-      referent_1: '',
-      referent_2: '',
-      referent_3: ''
-    }
-  ];
+  kpiTableBodyData: any = [];
 
   coloBtn( id: string): void {
     this.des = id;
@@ -285,64 +276,64 @@ export class CatalogoKpiComponent implements OnInit {
 
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 2 )
-        .search( this.value )
-        .draw();
-    });
+        datatable_Ref
+          .columns( 2 )
+          .search( this.value )
+          .draw();
+      });
     });
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns(13)
-        .search( this.value )
-        .draw();
-    });
-    });
-
-    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-    datatable_Ref.columns(0).every( function () {
-      const that = this;
-
-      // Create the select list and search operation
-      const select = $($this.searchCol4.nativeElement)
-        .on( 'change', function () {
-          that
-            .search( $(this).val() )
-            .draw();
-        } );
-
-      // Get the search data for the first column and add to the select list
-      this
-        .cache( 'search' )
-        .sort()
-        .unique()
-        .each( function ( d ) {
-          select.append( $('<option value="' + d + '">' + d + '</option>') );
-        } );
-    });
+        datatable_Ref
+          .columns(13)
+          .search( this.value )
+          .draw();
+      });
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-    datatable_Ref.columns(4).every( function () {
-      const that = this;
+      datatable_Ref.columns(0).every( function () {
+        const that = this;
 
-      // Create the select list and search operation
-      const select = $($this.searchCol5.nativeElement)
-        .on( 'change', function () {
-          that
-            .search( $(this).val() )
-            .draw();
-        } );
+        // Create the select list and search operation
+        const select = $($this.searchCol4.nativeElement)
+          .on( 'change', function () {
+            that
+              .search( $(this).val() )
+              .draw();
+          } );
 
-      // Get the search data for the first column and add to the select list
-      /*this
-        .cache('search')
-        .unique();
-        .each( function ( d ) {
-          select.append( $('<option value="' + d + '">' + d + '</option>') );
-        } );*/
+        // Get the search data for the first column and add to the select list
+        this
+          .cache( 'search' )
+          .sort()
+          .unique()
+          .each( function ( d ) {
+            select.append( $('<option value="' + d + '">' + d + '</option>') );
+          } );
+      });
     });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(4).every( function () {
+        const that = this;
+
+        // Create the select list and search operation
+        const select = $($this.searchCol5.nativeElement)
+          .on( 'change', function () {
+            that
+              .search( $(this).val() )
+              .draw();
+          } );
+
+        // Get the search data for the first column and add to the select list
+        /*this
+          .cache('search')
+          .unique();
+          .each( function ( d ) {
+            select.append( $('<option value="' + d + '">' + d + '</option>') );
+          } );*/
+      });
     });
 
 
@@ -351,7 +342,12 @@ export class CatalogoKpiComponent implements OnInit {
       event.preventDefault();
       event.stopPropagation();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        $this.table2csv(datatable_Ref, 'full', '.kpiTable');
+        if($this.viewModel.filters.idKpi || $this.viewModel.filters.titoloBreve || $this.viewModel.filters.referenti || $this.viewModel.filters.tuttiContratti || $this.viewModel.filters.tutteLeFrequenze){
+          $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+        } else {
+          $this.table2csv(datatable_Ref, 'full', '.kpiTable');
+        }
+        //$this.table2csv(datatable_Ref, 'full', '.kpiTable');
       });
     });
   }
