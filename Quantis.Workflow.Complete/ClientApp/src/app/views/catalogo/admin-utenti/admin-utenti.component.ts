@@ -117,7 +117,7 @@ export class AdminUtentiComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
 
-    this.setUpDataTableDependencies();
+    //this.setUpDataTableDependencies();
 
     //this.getUsers1(); can't get the meaning of this 
     this.getUsers();
@@ -139,7 +139,7 @@ export class AdminUtentiComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
+      //this.setUpDataTableDependencies();
     });
   }
 
@@ -147,7 +147,7 @@ export class AdminUtentiComponent implements OnInit {
   //   return datatableElement.dtInstance;
   // }
 
-  setUpDataTableDependencies(){
+ /* setUpDataTableDependencies(){
       // #column3_search is a <input type="text"> element
       $(this.searchCol1.nativeElement).on( 'keyup', function () {
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
@@ -173,9 +173,9 @@ export class AdminUtentiComponent implements OnInit {
           $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
         });
       });
-    }
+    }*/
 
-    table2csv(oTable, exportmode, tableElm) {
+  /*  table2csv(oTable, exportmode, tableElm) {
       var csv = '';
       var headers = [];
       var rows = [];
@@ -215,7 +215,7 @@ export class AdminUtentiComponent implements OnInit {
        console.log(csv);
       var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "CatalogUtenti.csv");
-    }
+    }*/
   
     strip_tags(html) {
       var tmp = document.createElement("div");
