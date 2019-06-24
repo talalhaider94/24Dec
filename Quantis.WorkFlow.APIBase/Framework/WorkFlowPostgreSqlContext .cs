@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Models.Information;
+using Quantis.WorkFlow.Models.SDM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,8 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_RolePermission> RolePermissions { get; set; }
         public DbSet<T_Permission> Permissions { get; set; }
         public DbSet<T_User> TUsers { get; set; } 
-
+        public DbSet<SDM_TicketStatus> SDMTicketStatus { get; set; }
+        public DbSet<SDM_TicketGroup> SDMTicketGroup { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -61,6 +63,8 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_Permission_Configuration());
             builder.ApplyConfiguration(new T_Rule_Configuration());
             builder.ApplyConfiguration(new T_User_Configuration());
+            builder.ApplyConfiguration(new SDM_TicketStatus_Configuration());
+            builder.ApplyConfiguration(new SDM_TicketGroup_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -89,6 +93,8 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_Permission>();
             updateUpdatedProperty<T_Rule>();
             updateUpdatedProperty<T_User>();
+            updateUpdatedProperty<SDM_TicketStatus>();
+            updateUpdatedProperty<SDM_TicketGroup>();
             return base.SaveChanges();
         }
 
