@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Models.Information;
+using Quantis.WorkFlow.Models.SDM;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
@@ -17,10 +18,16 @@ namespace Quantis.WorkFlow.APIBase.API
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IMappingService<ConfigurationDTO, T_Configuration> _configurationMapper;
-        public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper)
+        private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
+        private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
+        public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
+             IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
+             IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper)
         {
             _dbcontext = dbcontext;
             _configurationMapper = configurationMapper;
+            _sdmGroupMapper = sdmGroupMapper;
+            _sdmStatusMapper = sdmStatusMapper;
         }
         public void AddUpdateConfiguration(ConfigurationDTO dto)
         {
@@ -242,5 +249,106 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<SDMStatusDTO> GetAllSDMStatusConfigurations()
+        {
+            try
+            {
+                var ent=_dbcontext.SDMTicketStatus.ToList();
+                var dtos=_sdmStatusMapper.GetDTOs(ent);
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<SDMGroupDTO> GetAllSDMGroupConfigurations()
+        {
+            try
+            {
+                var ent = _dbcontext.SDMTicketGroup.ToList();
+                var dtos = _sdmGroupMapper.GetDTOs(ent);
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void DeleteSDMGroupConfiguration(int id)
+        {
+            try
+            {
+                var ent = _dbcontext.SDMTicketGroup.Single(o => o.id == id);
+                _dbcontext.SDMTicketGroup.Remove(ent);
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void DeleteSDMStatusConfiguration(int id)
+        {
+            try
+            {
+                var ent = _dbcontext.SDMTicketStatus.Single(o => o.id == id);
+                _dbcontext.SDMTicketStatus.Remove(ent);
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto)
+        {
+            try
+            {
+                if (dto.id == 0)
+                {
+                    var ent = new SDM_TicketStatus();
+                    ent=_sdmStatusMapper.GetEntity(dto,ent);
+                    _dbcontext.SDMTicketStatus.Add(ent);
+                    _dbcontext.SaveChanges();
+                }
+                else
+                {
+                    var ent = _dbcontext.SDMTicketStatus.Single(o => o.id == dto.id);
+                    ent = _sdmStatusMapper.GetEntity(dto, ent);
+                    _dbcontext.SaveChanges();
+                }
+                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto)
+        {
+            try
+            {
+                if (dto.id == 0)
+                {
+                    var ent = new SDM_TicketGroup();
+                    ent = _sdmGroupMapper.GetEntity(dto, ent);
+                    _dbcontext.SDMTicketGroup.Add(ent);
+                    _dbcontext.SaveChanges();
+                }
+                else
+                {
+                    var ent = _dbcontext.SDMTicketGroup.Single(o => o.id == dto.id);
+                    ent = _sdmGroupMapper.GetEntity(dto, ent);
+                    _dbcontext.SaveChanges();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }
