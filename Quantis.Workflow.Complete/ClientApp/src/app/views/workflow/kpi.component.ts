@@ -13,11 +13,12 @@ import { Observable, forkJoin } from 'rxjs';
   templateUrl: './kpi.component.html',
 })
 export class KPIComponent implements OnInit {
+
   @ViewChild('successModal') public successModal: ModalDirective;
   @ViewChild('infoModal') public infoModal: ModalDirective;
-
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
+
   submitted = false;
   allTickets: any = [];
   getTicketHistories: any = [];
@@ -33,6 +34,7 @@ export class KPIComponent implements OnInit {
   approveForm: FormGroup;
   rejectForm: FormGroup;
   selectedTickets: any = [];
+  verificaCheckBoxForm: FormGroup;
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -45,7 +47,9 @@ export class KPIComponent implements OnInit {
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
-
+    this.verificaCheckBoxForm = this.formBuilder.group({
+      selectTicket: [''],
+    });
     this.approveForm = this.formBuilder.group({
       description: ['']
     });
@@ -58,17 +62,15 @@ export class KPIComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       dom: 'Bfrtip',
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
-        const self = this;
-        // Unbind first in order to avoid any duplicate handler
-        // (see https://github.com/l-lin/angular-datatables/issues/87)
-        $('td', row).unbind('click');
-        $('td', row).bind('click', () => {
-          self.selectedTickets.push(data);
-          console.log('DATA', data);
-        });
-        return row;
-      },
+      // rowCallback: (row: Node, data: any[] | Object, index: number) => {
+      //   const self = this;
+      //   $('td', row).unbind('click');
+      //   $('td', row).bind('click', () => {
+      //     self.selectedTickets.push(data);
+      //     console.log('DATA', data);
+      //   });
+      //   return row;
+      // },
       buttons: [
         {
           extend: 'colvis',
@@ -185,11 +187,19 @@ export class KPIComponent implements OnInit {
   }
 
   rejectTicket() {
-    this.rejectModal.show();
+    if (this.selectedTickets.length > 0) {
+      this.rejectModal.show();
+    } else {
+      this.toastr.info('Please select a Ticket.');
+    }
   }
 
   approveTicket() {
-    this.approveModal.show();
+    if (this.selectedTickets.length > 0) {
+      this.approveModal.show();
+    } else {
+      this.toastr.info('Please select a Ticket.');
+    }
   }
 
   approveFormSubmit() {
@@ -199,7 +209,7 @@ export class KPIComponent implements OnInit {
 
     let observables = new Array();
     for (let ticket of this.selectedTickets) {
-      observables.push(this.workFlowService.transferTicketByID(ticket[1], ticket[5], description));
+      observables.push(this.workFlowService.escalateTicketbyID(ticket[1], ticket[5], description.value));
     }
     forkJoin(observables).subscribe(data => {
       // this._getAllTickets();
@@ -230,7 +240,7 @@ export class KPIComponent implements OnInit {
 
       let observables = new Array();
       for (let ticket of this.selectedTickets) {
-        observables.push(this.workFlowService.escalateTicketbyID(ticket[1], ticket[5], description));
+        observables.push(this.workFlowService.transferTicketByID(ticket[1], ticket[5], description.value));
       }
       forkJoin(observables).subscribe(data => {
         this.toastr.success('Ticket rejected', 'Success');
@@ -255,5 +265,19 @@ export class KPIComponent implements OnInit {
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
-  
+
+  onCheckboxChange(option, event) {
+    if (event.target.checked) {
+      this.selectedTickets.push(option);
+    } else {
+      if(this.selectedTickets.length > 0) {
+        for (var i = 0; i < this.selectedTickets.length; i++) {
+          if (this.selectedTickets[i].id == option.id) {
+            this.selectedTickets.splice(i, 1);
+          }
+        }
+      }
+    }
+  }
+
 }

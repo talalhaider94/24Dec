@@ -12,64 +12,67 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-              class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+            <form [formGroup]="verificaCheckBoxForm">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                class="table table-responsive-sm table-hover table-outline mb-0 text-center">
 
-              <thead class="thead-light">
-                <tr>
-                  <th>#</th>
-                  <th class="d-none">ID</th>
-                  <th>Rif. Num</th>
-                  <th>Sommario</th>
-                  <th>Gruppo</th>
-                  <th>Stato</th>
-                  <th>Descrizione</th>
-                  <th>KPI ID</th>
-                  <th>Riferimento S1 </th>
-                  <th>Riferimento S2</th>
-                  <th>Riferimento S3</th>
-                  <th>Periodo</th>
-                  <th>Azioni</th>
-                  <th>Allegati</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngIf="allTickets.length === 0 && !loading">
-                  <td colspan="13"><strong>No tickets found.</strong></td>
-                </tr>
-                <tr *ngIf="loading" class="text-center">
-                  <td colspan="13">
-                    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
-                  </td>
-                </tr>
-                <tr *ngFor="let ticket of allTickets; let i = index">
-                  <td><input type="checkbox"> </td>
-                  <td class="d-none">{{ ticket.id }} </td>
-                  <td>{{ ticket.ref_num || 'N/A' }}</td>
-                  <td>{{ ticket.summary || 'N/A' }}</td>
-                  <td>{{ ticket.group || 'N/A' }}</td>
-                  <td>{{ ticket.status || 'N/A' }}</td>
-                  <td>{{ ticket.description || 'N/A' }}</td>
-                  <td>{{ ticket.id_kpi || 'N/A' }}</td>
-                  <td>{{ ticket.reference1 || 'N/A' }}</td>
-                  <td>{{ ticket.reference2 || 'N/A' }}</td>
-                  <td>{{ ticket.reference3 || 'N/A' }}</td>
-                  <td>{{ ticket.period || 'N/A' }}</td>
-                  <td>
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                      (click)="ticketActions(ticket)">
-                      <span class="fa fa-calendar"></span>
-                    </button>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                      (click)="ticketAttachments(ticket)">
-                      <span class="fa fa-archive"></span>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <thead class="thead-light">
+                  <tr>
+                    <th>#</th>
+                    <th class="d-none">ID</th>
+                    <th>Rif. Num</th>
+                    <th>Sommario</th>
+                    <th>Gruppo</th>
+                    <th>Stato</th>
+                    <th>Descrizione</th>
+                    <th>KPI ID</th>
+                    <th>Riferimento S1 </th>
+                    <th>Riferimento S2</th>
+                    <th>Riferimento S3</th>
+                    <th>Periodo</th>
+                    <th>Azioni</th>
+                    <th>Allegati</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="allTickets.length === 0 && !loading">
+                    <td colspan="13"><strong>No tickets found.</strong></td>
+                  </tr>
+                  <tr *ngIf="loading" class="text-center">
+                    <td colspan="13">
+                      <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let ticket of allTickets; let i = index">
+                    <td><input formControlName="selectTicket" value="{{ticket.id}}"
+                        (change)="onCheckboxChange(ticket,$event)" type="checkbox"> </td>
+                    <td class="d-none">{{ ticket.id }} </td>
+                    <td>{{ ticket.ref_num || 'N/A' }}</td>
+                    <td>{{ ticket.summary || 'N/A' }}</td>
+                    <td>{{ ticket.group || 'N/A' }}</td>
+                    <td>{{ ticket.status || 'N/A' }}</td>
+                    <td>{{ ticket.description || 'N/A' }}</td>
+                    <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                    <td>{{ ticket.reference1 || 'N/A' }}</td>
+                    <td>{{ ticket.reference2 || 'N/A' }}</td>
+                    <td>{{ ticket.reference3 || 'N/A' }}</td>
+                    <td>{{ ticket.period || 'N/A' }}</td>
+                    <td>
+                      <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                        (click)="ticketActions(ticket)">
+                        <span class="fa fa-calendar"></span>
+                      </button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                        (click)="ticketAttachments(ticket)">
+                        <span class="fa fa-archive"></span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
           </div>
         </div>
       </div>
@@ -191,7 +194,8 @@
         <!-- APPROVE model body -->
         <form [formGroup]="approveForm" (ngSubmit)="approveFormSubmit()">
           <div class="input-group mb-3">
-            <textarea formControlName="description" class="form-control" placeholder="Description" autocomplete="description" rows="3"></textarea>
+            <textarea formControlName="description" class="form-control" placeholder="Description"
+              autocomplete="description" rows="3"></textarea>
           </div>
           <div class="row">
             <div class="col-6">
