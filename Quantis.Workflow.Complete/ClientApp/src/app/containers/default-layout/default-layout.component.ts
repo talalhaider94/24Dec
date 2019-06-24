@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './default-layout.component.html'
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
-  public navItems = navItems;
+  public navItems = [];
   public sidebarMinimized = true;
   private changes: MutationObserver;
   public element: HTMLElement;
@@ -18,7 +18,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     private authService: AuthService,
     private router: Router,
     @Inject(DOCUMENT) _document?: any,
-    ) {
+  ) {
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -32,6 +32,17 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
+    // const hiddenItemsUrl = ['/tconfiguration'];
+    const hiddenItemsUrl = [''];
+    if (!this.currentUser.issuperadmin) {
+      this.navItems = navItems.filter((item) => {
+        if (hiddenItemsUrl.indexOf(item.url) < 0) {
+          return item;
+        }
+      });
+    } else {
+      this.navItems = navItems;
+    }
   }
 
   ngOnDestroy(): void {
@@ -40,7 +51,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   logout() {
     this.authService.logout();
-    
+
   }
 
 }
