@@ -8,17 +8,33 @@ import { ToastrService } from 'ngx-toastr';
 declare var $;
 var $this;
 
+
 @Component({
   selector: 'app-catalogo-utenti',
   templateUrl: './catalogo-utenti.component.html',
   styleUrls: ['./catalogo-utenti.component.scss']
 })
 export class CatalogoUtentiComponent implements OnInit {
-  @ViewChild('UserTable') block: ElementRef;
+
+  constructor(
+    private apiService: ApiService,
+    private toastr: ToastrService,
+  ) {
+    $this = this;
+  }
+
+  @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
   @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
+  viewModel = {
+    filters: {
+      nome: '',
+      cognome: ''
+    }
+  };
 
   dtOptions: DataTables.Settings = {
     // 'dom': 'rtip',
@@ -75,13 +91,6 @@ export class CatalogoUtentiComponent implements OnInit {
       user_sadmin: 'USER_SADMIN'
     }
   ]
-
-  constructor(
-    private apiService: ApiService,
-    private toastr: ToastrService,
-  ) {
-    $this = this;
-  }
   
   ngOnInit() {
   }
@@ -166,54 +175,54 @@ export class CatalogoUtentiComponent implements OnInit {
 
       // export only what is visible right now (filters & paginationapplied)
       $(this.btnExportCSV.nativeElement).click(function (event) {
-          event.preventDefault();
-          $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+        event.preventDefault();
+        event.stopPropagation();
+        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+          if($this.viewModel.filters.nome || $this.viewModel.filters.cognome){
+            $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+          }else {
+            $this.table2csv(datatable_Ref, 'full', '.kpiTable');
+          }
         });
       });
     }
 
-    table2csv(oTable, exportmode, tableElm) {
-      var csv = '';
-      var headers = [];
-      var rows = [];
-  
-      // Get header names
-      $(tableElm+' thead').find('th').each(function() {
-          var $th = $(this);
-          var text = $th.text();
-          var header = '"' + text + '"';
-          // headers.push(header); // original code
-          if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
-      });
-      csv += headers.join(',') + "\n";
-  
-      // get table data
-      if (exportmode == "full") { // total data
-          var totalRows = oTable.data().length;
-          for(let i = 0; i < totalRows; i++) {
-              var row = oTable.row(i).data();
-              console.log(row)
-              row = $this.strip_tags(row);
-              rows.push(row);
-          }
-      } else { // visible rows only
-          $(tableElm+' tbody tr:visible').each(function(index) {
-              var row = [];
-              $(this).find('td').each(function(){
-                  var $td = $(this);
-                  var text = $td.text();
-                  var cell = '"' +text+ '"';
-                  row.push(cell);
-              });
-              rows.push(row);
-          })
+  table2csv(oTable, exportmode, tableElm) {
+    var csv = '';
+    var headers = [];
+    var rows = [];
+
+    // Get header names
+    $(tableElm+' thead').find('th:not(.notExportCsv)').each(function() {
+      var $th = $(this);
+      var text = $th.text();
+      var header = '"' + text + '"';
+      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+    });
+    csv += headers.join(',') + "\n";
+
+    // get table data
+    if (exportmode == "full") { // total data
+      var totalRows = oTable.data().length;
+      for(let i = 0; i < totalRows; i++) {
+        rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
       }
-      csv += rows.join("\n");
-       console.log(csv);
-      var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-      saveAs(blob, "CatalogUtenti.csv");
+    } else { // visible rows only
+      $(tableElm+' tbody tr:visible').each(function(index) {
+        var row = [];
+        $(this).find('td:not(.notExportCsv)').each(function(){
+          var $td = $(this);
+          var text = $td.text();
+          var cell = '"' +text+ '"';
+          row.push(cell);
+        });
+        rows.push(row);
+      })
     }
+    csv += rows.join("\n");
+    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "ExportUtentiTable.csv");
+  }
   
     strip_tags(html) {
       var tmp = document.createElement("div");

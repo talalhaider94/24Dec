@@ -3,12 +3,12 @@
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br><h2 style="color:#565656">LISTA UTENTI</h2><br>
       <div class="row">
-          <input type="text" class="form-control ml-3 mr-1" style="width:20%;" placeholder="Nome" #searchCol1/>
-          <input type="text" class="form-control ml-1 mr-3" style="width:20%;" placeholder="Cognome" #searchCol2/>
+          <input type="text" class="form-control ml-3 mr-1" style="width:20%;" placeholder="Nome" #searchCol1 [(ngModel)]="viewModel.filters.nome" />
+          <input type="text" class="form-control ml-1 mr-3" style="width:20%;" placeholder="Cognome" #searchCol2 [(ngModel)]="viewModel.filters.cognome" />
 <!--          <button #btnFilter class="mr-2" style="padding-left: 25px; padding-right: 25px">FILTRA</button>-->
           <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
       </div><br/>
-      <table class="table table-bordered" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #E6E6E6">
         <tr>
             <th style="text-align:center">BSI ACCOUNT</th>
@@ -18,9 +18,9 @@
             <th style="text-align:center">MAIL</th>
             <th style="text-align:center">USER ID</th>
             <th style="text-align:center">RESPONSABILE</th>
-            <th style="text-align:center">USER ADMIN</th>
-            <th style="text-align:center">USER SADMIN</th>
-            <th style="text-align:center">AZIONE</th>
+            <th class="notExportCsv" style="text-align:center">USER ADMIN</th>
+            <th class="notExportCsv" style="text-align:center">USER SADMIN</th>
+            <th class="notExportCsv" style="text-align:center">AZIONE</th>
           </tr>
         </thead>
         <tbody>
@@ -32,12 +32,12 @@
             <td>{{row.mail}}</td>
             <td>{{row.userid}}</td>
             <td>{{row.manager}}</td>
-            <td align="center" *ngIf="row.user_admin; then trueBlock else falseBlock"></td>
-            <td align="center" *ngIf="row.user_sadmin; then trueBlock else falseBlock"></td>
+            <td class="notExportCsv" align="center" *ngIf="row.user_admin; then trueBlock else falseBlock"></td>
+            <td class="notExportCsv" align="center" *ngIf="row.user_sadmin; then trueBlock else falseBlock"></td>
 <!--            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>-->
-            <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
-            <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
-            <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+            <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
+            <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
+            <td class="notExportCsv" align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                  data-target="#utentiModal">Modifica</button></td>
           </tr>
           </tbody>
