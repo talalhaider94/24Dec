@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using Quantis.WorkFlow.Services.Framework;
+using Quantis.WorkFlow.Models.SDM;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -27,8 +28,8 @@ namespace Quantis.WorkFlow.APIBase.API
         private int _sid {get;set; }
         private readonly string _username;
         private readonly string _password;
-        private readonly List<SDMGroupDTO> _groupMapping;
-        private readonly List<KeyValuePair<string,string>> _statusMapping;
+        private readonly List<SDM_TicketGroup> _groupMapping;
+        private readonly List<SDM_TicketStatus> _statusMapping;
         private readonly IDataService _dataService;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IInformationService _infomationAPI;
@@ -75,23 +76,9 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             _dbcontext = context;
             _infomationAPI = infomationAPI;
-            _groupMapping = new List<SDMGroupDTO>()
-            {
-                new SDMGroupDTO("cnt:D3D5EE53E8F26A46B1B8DF358EC30065","IMEL_Referenti_OP","IM"),
-                new SDMGroupDTO("cnt:36EBDF755A37104E9DCB0CFE6398EA91","IMEL_Referenti_SER_CERT","IM"),
-                new SDMGroupDTO("cnt:460E863B3E003042BB1C4E887CDACBB2","IMEL_Resp_Contratto","IM"),
-                new SDMGroupDTO("cnt:532AE6B2B61CA34496EE7BD6FBC7C620","BP_Resp_Contratto","BP"),
-                new SDMGroupDTO("cnt:D5D36A81F203AB4F8C078FA8ACA31C99","BP_Resp_Contratto","BP"),
-                new SDMGroupDTO("cnt:7FF46C26EA8DB6429C9C9E075975ECB5","BP_Resp_Contratto","BP"),
+            _groupMapping = _dbcontext.SDMTicketGroup.ToList();
+            _statusMapping = _dbcontext.SDMTicketStatus.OrderBy(o=>o.step).ToList();
 
-            };
-            _statusMapping = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("crs:134676940","BSIVROP"),
-                new KeyValuePair<string, string>("crs:134676941","BSIVRSER"),
-                new KeyValuePair<string, string>("crs:134676942","BSIVRECONT"),
-                new KeyValuePair<string, string>("CLCERT","CLCERT"),
-
-            };
             if (_sdmClient == null)
             {
                 _sdmClient = new SDM.USD_WebServiceSoapClient();
@@ -206,9 +193,9 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 if (string.IsNullOrEmpty(dto.Status))
                 {
-                    dto.Status = _statusMapping[1].Key;
+                    dto.Status = _statusMapping.FirstOrDefault().handle;
                 }
-                dto.Group = _groupMapping.Where(o=>o.GroupCatagory==dto.Group).First().GroupHandler;
+                dto.Group = _groupMapping.Where(o=>o.category==dto.Group).OrderBy(o=>o.step).First().handle;
                 string newRequestHandle = "";
                 string newRequestNumber = "";
                 var ticket=_sdmClient.createRequestAsync(new SDM.createRequestRequest(_sid, "",
@@ -271,9 +258,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 var dto = _dataService.GetKPICredentialToCreateTicket(Id);
                 if (string.IsNullOrEmpty(dto.Status))
                 {
-                    dto.Status = _statusMapping[1].Key;
+                    dto.Status = _statusMapping.FirstOrDefault().handle;
                 }
-                dto.Group = _groupMapping.Where(o => o.GroupCatagory == dto.Group).First().GroupHandler;
+                dto.Group = _groupMapping.Where(o => o.category == dto.Group).OrderBy(o => o.step).First().handle;
                 string newRequestHandle = "";
                 string newRequestNumber = "";
                 var ticket = _sdmClient.createRequestAsync(new SDM.createRequestRequest(_sid, "",
@@ -386,17 +373,17 @@ namespace Quantis.WorkFlow.APIBase.API
                     var select_resultl = select_al.Result.doSelectReturn;
 
 
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping[0].Value+ "' and zz_cned_string1='"+ userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).name+ "' and zz_cned_string1='"+ userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping[1].Value + "' and zz_cned_string2='" + userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).name + "' and zz_cned_string2='" + userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping[2].Value + "' and zz_cned_string3='" + userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).name + "' and zz_cned_string3='" + userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
@@ -424,19 +411,19 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.First().Value || ticket.Status == _statusMapping.Last().Value || !_statusMapping.Any(o => o.Value == ticket.Status))
+                if (ticket.Status == _statusMapping.First().name || ticket.Status == _statusMapping.Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
                 {
                     return null;
                 }
-                int index = _statusMapping.Select(o => o.Value).ToList().IndexOf(ticket.Status);
+                int index = _statusMapping.Select(o => o.name).ToList().IndexOf(ticket.Status);
                 index--;
-                var newstatus = _statusMapping[index].Key;
+                var newstatus = _statusMapping.ElementAt(index).handle;
                 string newgroup = "";
-                foreach (var g in _groupMapping.GroupBy(o => o.GroupCatagory))
+                foreach (var g in _groupMapping.GroupBy(o => o.category))
                 {
-                    if (g.Any(o => o.GroupName == ticket.Group))
+                    if (g.Any(o => o.name == ticket.Group))
                     {
-                        newgroup = g.ElementAt(index).GroupHandler;
+                        newgroup = g.ElementAt(index).handle;
                     }
                 }
                 var kpi = _dataService.GetKpiById(id);
@@ -483,19 +470,19 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.Last().Value || !_statusMapping.Any(o=>o.Value== ticket.Status))
+                if (ticket.Status == _statusMapping.Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
                 {
                     return null;
                 }
-                int index = _statusMapping.Select(o => o.Value).ToList().IndexOf(ticket.Status);
+                int index = _statusMapping.Select(o => o.name).ToList().IndexOf(ticket.Status);
                 index++;
-                var newstatus= _statusMapping[index].Key;
+                var newstatus= _statusMapping.ElementAt(index).handle;
                 string newgroup = "";
-                foreach(var g in _groupMapping.GroupBy(o=>o.GroupCatagory))
+                foreach(var g in _groupMapping.GroupBy(o=>o.category))
                 {
-                    if (g.Any(o => o.GroupName == ticket.Group))
+                    if (g.Any(o => o.name == ticket.Group))
                     {
-                        newgroup = g.ElementAt(index).GroupHandler;
+                        newgroup = g.ElementAt(index).handle;
                     }
                 }
                 var kpi = _dataService.GetKpiById(id);
@@ -615,9 +602,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
                 dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
 
-                if (_groupMapping.Any(o => o.GroupHandler == dto.Group))
+                if (_groupMapping.Any(o => o.handle == dto.Group))
                 {
-                    dto.Group = _groupMapping.FirstOrDefault(o => o.GroupHandler == dto.Group).GroupName;
+                    dto.Group = _groupMapping.FirstOrDefault(o => o.handle == dto.Group).name;
                 }
                 dtos.Add(dto);
             }
