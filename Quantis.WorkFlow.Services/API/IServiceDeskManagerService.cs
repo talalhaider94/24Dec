@@ -8,7 +8,7 @@ namespace Quantis.WorkFlow.Services.API
     public interface IServiceDeskManagerService
     {
         List<SDMTicketLVDTO> GetAllTickets();
-        List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context);
+        List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context, bool filerOnPeriod);
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);

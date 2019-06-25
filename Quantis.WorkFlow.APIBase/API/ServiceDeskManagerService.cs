@@ -352,7 +352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context)
+        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context,bool filerOnPeriod)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -387,7 +387,16 @@ namespace Quantis.WorkFlow.APIBase.API
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
-                    ret= tickets;
+                    if (filerOnPeriod)
+                    {
+                        string period=DateTime.Now.ToString("MM/dd");
+                        ret = tickets.Where(o=>o.Period==period).ToList();
+                    }
+                    else
+                    {
+                        ret = tickets;
+                    }
+                    
                 }
             }
             catch(Exception e)
