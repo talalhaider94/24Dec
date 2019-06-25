@@ -53,7 +53,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
             _infomationAPI.DeleteRole(roleId);
         }
         [HttpGet("GetAllPermissions")]
-        public List<BaseNameCodeDTO> GetAllPermissions()
+        public List<PermissionDTO> GetAllPermissions()
         {
             return _infomationAPI.GetAllPermissions();
         }
@@ -65,13 +65,13 @@ namespace Quantis.WorkFlow.Complete.Controllers
         }
 
         [HttpGet("GetPermissionsByUserId")]
-        public List<BaseNameCodeDTO> GetPermissionsByUserId(int userid)
+        public List<PermissionDTO> GetPermissionsByUserId(int userid)
         {
             return _infomationAPI.GetPermissionsByUserId(userid);
         }
 
         [HttpGet("GetPermissionsByRoleID")]
-        public List<BaseNameCodeDTO> GetPermissionsByRoleID(int roleId)
+        public List<PermissionDTO> GetPermissionsByRoleID(int roleId)
         {
             return _infomationAPI.GetPermissionsByRoleID(roleId);
         }
@@ -86,6 +86,36 @@ namespace Quantis.WorkFlow.Complete.Controllers
         public void AssignPermissionsToRoles([FromBody]MultipleRecordsDTO dto)
         {
             _infomationAPI.AssignPermissionsToRoles(dto);
+        }
+        [HttpGet("GetAllSDMStatusConfigurations")]
+        public List<SDMStatusDTO> GetAllSDMStatusConfigurations()
+        {
+            return _infomationAPI.GetAllSDMStatusConfigurations();
+        }
+        [HttpGet("GetAllSDMGroupConfigurations")]
+        public List<SDMGroupDTO> GetAllSDMGroupConfigurations()
+        {
+            return _infomationAPI.GetAllSDMGroupConfigurations();
+        }
+        [HttpGet("DeleteSDMGroupConfiguration/{id}")]
+        public void DeleteSDMGroupConfiguration(int id)
+        {
+            _infomationAPI.DeleteSDMGroupConfiguration(id);
+        }
+        [HttpGet("DeleteSDMStatusConfiguration/{id}")]
+        public void DeleteSDMStatusConfiguration(int id)
+        {
+            _infomationAPI.DeleteSDMStatusConfiguration(id);
+        }
+        [HttpPost("AddUpdateSDMStatusConfiguration")]
+        public void AddUpdateSDMStatusConfiguration([FromBody]SDMStatusDTO dto)
+        {
+            _infomationAPI.AddUpdateSDMStatusConfiguration(dto);
+        }
+        [HttpPost("AddUpdateSDMGroupConfiguration")]
+        public void AddUpdateSDMGroupConfiguration([FromBody]SDMGroupDTO dto)
+        {
+            _infomationAPI.AddUpdateSDMGroupConfiguration(dto);
         }
 
     }

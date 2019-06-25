@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit{
   ) { 
 
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/coming-soon']);
     }
   }
   
