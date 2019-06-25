@@ -48,10 +48,23 @@
                         (change)="onCheckboxChange(ticket,$event)" type="checkbox"> </td>
                     <td class="d-none">{{ ticket.id }} </td>
                     <td>{{ ticket.ref_num || 'N/A' }}</td>
-                    <td>{{ ticket.summary || 'N/A' }}</td>
-                    <td>{{ ticket.group || 'N/A' }}</td>
+                    <td>
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="dblclick">
+                        {{ ticket.summary | slice:0:15 || 'N/A' }}
+                      </button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="dblclick">
+                        {{ ticket.group | slice:0:15 || 'N/A' }}
+                      </button>
+                    </td>
                     <td>{{ ticket.status || 'N/A' }}</td>
-                    <td>{{ ticket.description || 'N/A' }}</td>
+                    <td>
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description"
+                        triggers="dblclick">
+                        {{ ticket.description | slice:0:15 || 'N/A' }}
+                      </button>
+                    </td>
                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
                     <td>{{ ticket.reference1 || 'N/A' }}</td>
                     <td>{{ ticket.reference2 || 'N/A' }}</td>
@@ -128,7 +141,7 @@
 
 <div bsModal #infoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-info" role="document">
+  <div class="modal-dialog modal-info modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Attachments</h4>
@@ -137,6 +150,43 @@
         </button>
       </div>
       <div class="modal-body">
+        <!-- file upload start -->
+        <div class="bg-white pt-2 pb-2 mb-5" >
+          <div class="col-sm-12 mb-3 file-container">
+            <h5>File Allegati</h5>
+            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
+          </div>
+
+          <div class="col-sm-12">
+            <h5>Elenco dei File</h5>
+            <table class="table table-responsive-sm table-hover table-outline mb-3">
+              <thead>
+                <tr>
+                  <th>Nome File</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="uploader.queue.length === 0">
+                  <td colspan="2">nessun file da caricare</td>
+                </tr>
+                <tr *ngFor="let item of uploader.queue">
+                  <td>{{ item?.file?.name }}</td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
+              <!-- <span class="fa fa-upload" *ngIf="!fileUploading"></span> -->
+              <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
+            </button>
+          </div>
+        </div>
+        <!-- file upload end -->
         <!-- success model body table -->
         <div class="table-responsive">
           <table class="table table-responsive-sm table-hover table-outline mb-0 text-center">

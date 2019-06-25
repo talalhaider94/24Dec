@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { WorkFlowService } from '../../_services';
+import { WorkFlowService, AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -9,6 +9,9 @@ import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, forkJoin } from 'rxjs';
+import { FileUploader } from 'ng2-file-upload';
+
+const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 @Component({
   templateUrl: './kpi.component.html',
 })
@@ -35,12 +38,16 @@ export class KPIComponent implements OnInit {
   rejectForm: FormGroup;
   selectedTickets: any = [];
   verificaCheckBoxForm: FormGroup;
+  fileUploading  = true;
+  public uploader: FileUploader = new FileUploader({ url: URL });
+
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
     private _FileSaverService: FileSaverService,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
+    private authService: AuthService
   ) { }
 
   get approveValues() { return this.approveForm.controls; }
@@ -279,5 +286,33 @@ export class KPIComponent implements OnInit {
       }
     }
   }
+
+  fileUploadUI() {
+    if (this.uploader.queue.length > 0) {
+      console.log('this.uploader', this.uploader);
+      this.uploader.queue.forEach((element, index) => {
+        let file = element._file;
+        this._getUploadedFile(file);
+      });
+    } else {
+      this.toastr.info('Please upload a file');
+    }
+  }
+
+  _getUploadedFile(file) {
+    this.fileUploading  = true;
+    const reader:FileReader = new FileReader();
+    reader.onloadend = (function(theFile, self){
+      let fileName = theFile.name;
+      return function(readerEvent){
+        let binaryString = readerEvent.target.result;
+        let base64Data = btoa(binaryString); 
+        self.fileUploading = false;  
+      };
+  })(file, this);
+    // reader.readAsDataURL(file); // returns file with base64 type prefix
+    reader.readAsBinaryString(file); // return only base64 string
+  }
+
 
 }

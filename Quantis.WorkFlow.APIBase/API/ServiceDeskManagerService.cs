@@ -328,7 +328,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public string UploadAttachmentToTicket(int ticketId,string docName,byte[] docContent)
+        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto)
         {
             string ret = null;
             LogIn();
@@ -337,10 +337,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 param.Add("sid", _sid + "");
                 param.Add("repositoryHandle", "doc_rep:1002");
-                param.Add("objectHandle", "cr:" + ticketId);
-                param.Add("description", docName);
-                param.Add("fileName", docName);
-                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, docContent);
+                param.Add("objectHandle", "cr:" + dto.TicketId);
+                param.Add("description", dto.AttachmentName);
+                param.Add("fileName", dto.AttachmentName);
+                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
             }
             catch (Exception e)
             {
@@ -352,7 +352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context)
+        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context,bool filerOnPeriod)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -387,7 +387,16 @@ namespace Quantis.WorkFlow.APIBase.API
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
-                    ret= tickets;
+                    if (filerOnPeriod)
+                    {
+                        string period=DateTime.Now.ToString("MM/dd");
+                        ret = tickets.Where(o=>o.Period==period).ToList();
+                    }
+                    else
+                    {
+                        ret = tickets;
+                    }
+                    
                 }
             }
             catch(Exception e)
