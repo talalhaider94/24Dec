@@ -25,13 +25,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of UtentiTableBodyData; index as i" style="font-size:13px">
-            <td>{{row.ca_bsi_account}}</td>
-            <td>{{row.name}}</td>
-            <td>{{row.surname}}</td>
-            <td>{{row.organization}}</td>
-            <td>{{row.mail}}</td>
-            <td>{{row.userid}}</td>
-            <td>{{row.manager}}</td>
+            <td style="text-align:center">{{row.ca_bsi_account}}</td>
+            <td style="text-align:center">{{row.name}}</td>
+            <td style="text-align:center">{{row.surname}}</td>
+            <td style="text-align:center">{{row.organization}}</td>
+            <td style="text-align:center">{{row.mail}}</td>
+            <td style="text-align:center">{{row.userid}}</td>
+            <td style="text-align:center">{{row.manager}}</td>
             <td class="notExportCsv" align="center" *ngIf="row.user_admin; then trueBlock else falseBlock"></td>
             <td class="notExportCsv" align="center" *ngIf="row.user_sadmin; then trueBlock else falseBlock"></td>
 <!--            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>-->
