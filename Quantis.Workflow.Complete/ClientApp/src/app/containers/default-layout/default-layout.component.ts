@@ -32,11 +32,19 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
-    // const hiddenItemsUrl = ['/tconfiguration'];
-    const hiddenAdminItemsUrl = ['/archivedkpi', '/configurazione', '/workload', '/workflow', '/report'];
+    // const hiddenAdminItemsUrl = ['/archivedkpi', '/configurazione', '/workload', '/workflow', '/report', '/loading-form/utente', '/catalogo/kpi'];
+    const hiddenAdminItemsUrl = [];
     if (!this.currentUser.issuperadmin && this.currentUser.isadmin) {
       this.navItems = navItems.filter((item) => {
         if (hiddenAdminItemsUrl.indexOf(item.url) < 0) {
+          if (item.children && item.children.length > 0) {
+            const mod_children = item.children.filter((child) => {
+              if (hiddenAdminItemsUrl.indexOf(child.url) < 0) {
+                return child;
+              }
+            });
+            item.children = mod_children;
+          }
           return item;
         }
       });
