@@ -62,7 +62,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Workflow',
-    url: '/coming-soon',
+    url: '/workflow',
     icon: 'fa fa-code-fork',
     children: [
       {
@@ -101,7 +101,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Report',
-    url: '/coming-soon',
+    url: '/report',
     icon: 'fa fa-files-o',
     children: [
       {
@@ -134,8 +134,20 @@ export const navItems: NavData[] = [
     ]
   },
   {
-    name: 'Configurations',
-    url: '/tconfiguration',
+    name: 'Configurazione',
+    url: '/configurazione',
+    icon: 'fa fa-gear',
+    children: [
+      {
+        name: 'Generali',
+        url: '/tconfiguration',
+        icon: 'fa fa-check-circle-o'
+      }
+    ]
+  },
+  {
+    name: 'Workload',
+    url: '/workload',
     icon: 'fa fa-gear'
   },
   {
