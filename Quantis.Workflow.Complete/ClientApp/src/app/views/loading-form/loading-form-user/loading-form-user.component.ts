@@ -4,6 +4,7 @@ import { LoadingFormService, AuthService } from '../../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-loading-form-user',
@@ -67,5 +68,19 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
+  }
+
+  cutOffRow(row) {
+    if(row.cutoff) {
+      let currentDate = moment().format();
+      let isDateBefore = moment(row.modify_date).isBefore(currentDate);
+        if(isDateBefore) {
+          return true;
+        } else {
+          return false;
+        }
+    } else {
+      return false
+    }
   }
 }

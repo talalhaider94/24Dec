@@ -23,7 +23,7 @@
                           <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                       </td>
                   </tr>
-                  <tr *ngFor="let loadingForm of loadingForms; let i = index">
+                  <tr *ngFor="let loadingForm of loadingForms; let i = index" [ngClass]="{'active': cutOffRow(loadingForm)}">
                     <td>
                       <div class="text-center">{{ i+1 }}</div>
                     </td>
