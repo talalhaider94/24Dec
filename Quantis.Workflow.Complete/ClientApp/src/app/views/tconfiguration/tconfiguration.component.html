@@ -9,15 +9,15 @@
         Crea Nuovo
       </button>
     </div><br />
-    <table class="table hover" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead style="background: #E6E6E6">
-        <tr>
-          <th style="text-align:center">Chiave</th>
-          <th style="text-align:center">Owner</th>
-          <th style="text-align:center">Valore</th>
-          <th style="text-align:center">Abilitato</th>
-          <th style="text-align:center">Descrizione</th>
-          <th style="text-align:center">Azione</th>
+    <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <thead style="background: #20a8d8">
+        <tr style="font-size:12px;color:white">
+          <th style="text-align:center">CHIAVE</th>
+          <th style="text-align:center">OWNER</th>
+          <th style="text-align:center">VALORE</th>
+          <th style="text-align:center">ABILITATO</th>
+          <th style="text-align:center">DESCRIZIONE</th>
+          <th style="text-align:center">AZIONE</th>
         </tr>
       </thead>
       <tbody>
@@ -31,8 +31,8 @@
           <td>{{row.description}}</td>
           <td style="text-align: center">
             <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                    data-target="#configModal">
-              Modifica
+                    data-target="#configModal" style="font-size:10px">
+              <i class="fa fa-pencil"></i>
             </button>
           </td>
         </tr>

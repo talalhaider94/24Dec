@@ -29,7 +29,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
   dtOptions: any = {};
   dtTrigger = new Subject();
   bsValue = new Date();
-
+  public selected: any;
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
