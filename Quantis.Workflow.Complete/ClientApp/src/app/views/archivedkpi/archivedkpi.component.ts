@@ -7,9 +7,14 @@ import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/rende
 import * as moment from 'moment';
 import { first } from 'rxjs/operators';
 import { Key } from 'protractor';
+import { MatSort } from '@angular/material';
+//import { OrderPipe } from 'ngx-order-pipe'
+
 
 declare var $;
 var $this;
+
+var nome='';
 
 @Component({
   templateUrl: './archivedkpi.component.html'
@@ -19,6 +24,9 @@ export class ArchivedKpiComponent implements OnInit {
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
  
+  
+  public filter: string;
+  public p: any;
   dtOptions: DataTables.Settings = {
     language: {
       processing: "Elaborazione...",
@@ -44,6 +52,7 @@ export class ArchivedKpiComponent implements OnInit {
     }
   };
 
+ 
   modalData = {
     id_kpi: '',
     name_kpi: '',
@@ -54,14 +63,11 @@ export class ArchivedKpiComponent implements OnInit {
     archived: ''
   };
 
+  
   kpisData = [];
-  datiGrezzi=[];
-  countCampiData=[];
-  p = null;
-  monthVar: any;
-  yearVar: any;
-  id: any;
-  currentKPI = 'test';
+datiGrezzi=[];
+countCampiData=[];
+
 
   fitroDataById: any = [
     {
@@ -78,8 +84,12 @@ export class ArchivedKpiComponent implements OnInit {
       partner_raw_data_id : 'partner_raw_data_id ',
     }
   ]
-  
+
+
+
   dtTrigger: Subject<any> = new Subject();
+
+
 
   ArchivedKpiBodyData: any = [
     {
@@ -92,41 +102,87 @@ export class ArchivedKpiComponent implements OnInit {
       archived: 'archived'
     }
   ]
+
+
+
   
+  monthVar: any;
+  yearVar: any;
+  id:any;
+  sortedCollection: any[];
   constructor(private apiService: ApiService) {
     $this = this;
+     
+    //this.sortedCollection = orderPipe.transform(this.fitroDataById,'info.name');
+
   }
 
   ngOnInit() {
+  // this.getdati('2221','03','2019');
+   //  this.getdati('2221','03','2019');
+   this.getAnno();
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
+   //this.spit();
+
+  
+
   }
 
+  //moment('01/'+dataIngresso).format('MM');
+ //moment('01/'+dataIngresso).format('YYYY');
+
   populateModalData(data) {
-    this.currentKPI = data.kpi_name;
+    // this.modalData.id_kpi = data.id_kpi;
+    // this.modalData.name_kpi = data.name_kpi;
+    // this.modalData.interval_kpi = data.interval_kpi;
+    // this.modalData.value_kpi = data.value_kpi;
+    // this.modalData.ticket_id = data.ticket_id;
+    // this.modalData.close_timestamp_ticket = data.close_timestamp_ticket;
+    // this.modalData.archived = data.archived;
     this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
     this.kpisData = kpis;
-    //console.log('pop',this.kpisData);
+    console.log('pop',this.kpisData);
+    
+
+      
     });
+
   }
+
+
 
   populateDateFilter() {
     this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
       this.ArchivedKpiBodyData = data;
       this.rerender();
+      
     });
+
   }
 
+
+  // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
+
     this.dtTrigger.next();
+
     this.setUpDataTableDependencies();
     //this.getKpis1();
+
     this.apiService.getDataKpis(this.monthVar, this.yearVar).subscribe((data:any)=>{
       this.ArchivedKpiBodyData = data;
       this.rerender();
+      
+
     });
   }
 
+
+  // ngOnDestroy(): void {
+  //   // Do not forget to unsubscribe the event
+  //   this.dtTrigger.unsubscribe();
+  // }
 
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -134,11 +190,17 @@ export class ArchivedKpiComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
+     // this.setUpDataTableDependencies();
     });
   }
+ 
+
+  // getKpiTableRef(datatableElement: DataTableDirective): any {
+  //   return datatableElement.dtInstance;
+  // }
 
   setUpDataTableDependencies(){
+
     // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
@@ -158,7 +220,11 @@ export class ArchivedKpiComponent implements OnInit {
   }
 
   getKpis() {
-    this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data) => {
+    this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data) =>{
+      //this.date=new Date();
+      //let latest_date =this.datepipe.transform(this.date, 'yyyy-MM-dd');
+      
+    
       this.ArchivedKpiBodyData = data;
       Object.keys(this.fitroDataById).forEach( key => {
         this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
@@ -171,17 +237,33 @@ export class ArchivedKpiComponent implements OnInit {
     this.apiService.getArchivedKpis().subscribe((data: any) => {
     });
   }*/
+
+  /*get key(){
+    return Object.keys(this.contratti);
+  }*/
   
-  getdati(id_kpi, month = this.monthVar, year = this.yearVar){
-    this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
-      this.fitroDataById = dati;
-      Object.keys(this.fitroDataById).forEach( key => {
-        this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data); 
-    })
-    //console.log('dati',dati);
-    this.getCountCampiData();
-    });
-  }
+getdati(id_kpi, month = this.monthVar, year = this.yearVar){
+  
+  
+  this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+  
+  this.fitroDataById = dati;
+  Object.keys(this.fitroDataById).forEach( key => {
+    this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+    
+  })
+  /*this.fitroDataById.forEach( d => {
+    let new_d = JSON.parse(d.data);
+    console.log(this.fitroDataById[0])
+    //this.fitroDataById.[d].data = new_d;
+  })*/
+  console.log('dati',dati);
+  this.getCountCampiData();
+  });
+
+
+
+}
 
 
 /*spit(){
@@ -190,26 +272,76 @@ export class ArchivedKpiComponent implements OnInit {
   console.log(second);
 }*/
 
-  getDatiSecondPop(id_kpi, interval){
-    var mese=moment(interval).format('MM');
-    var anno=moment(interval).format('YYYY');
-    this.getdati(id_kpi,mese,anno);
+getDatiSecondPop(id_kpi, interval){
+
+      var mese=moment(interval).format('MM');
+      var anno=moment(interval).format('YYYY');
+  this.getdati(id_kpi,mese,anno);
+
+
+
+        
+      /*let resources = data["ArchivedKpiBodyData"];
+      let resource = resources["interval_kpi"];
+      console.log('stampa',resource);*/
+
+  
+
+  
+
+
+
+}
+
+
+getCountCampiData(){
+  let maxLength = 0;
+  this.fitroDataById.forEach( f => {
+    //let data = JSON.parse(f.data);
+    if(Object.keys(f.data).length > maxLength){
+      maxLength = Object.keys(f.data).length;
+    }  
+  });
+  this.countCampiData = [];
+  for(let i=1;i<= maxLength; i++){
+    this.countCampiData.push(i);
+  }
+}
+
+
+/*getdati(id_kpi,monthVar,yearVar){
+  this.apiService.getDateKpisById(id_kpi,monthVar,yearVar).subscribe(data => {
+    let res = data[0]["fitroDataById"]; 
+    let datiGrezzi = res['data'];
+    this.datiGrezzi=.datiGrezzi 
+    // this.dataChange.next(data) 
+     console.log(this.datiGrezzi);
+    });
+}*/
+
+anni=[];
+//+(moment().add('months', 6).format('YYYY'))
+getAnno(){
+for (var i = 2016; i <=+(moment().add('months', 7).format('YYYY')); i++) {
+ this.anni.push(i);
+ 
+}
+return this.anni;
+console.log("aaaa",this.anni);
+}
+order: string = 'info.name';
+reverse: boolean = false;
+setOrder(value: string) {
+  if (this.order === value) {
+    this.reverse = !this.reverse;
   }
 
-  getCountCampiData(){
-    let maxLength = 0;
-    this.fitroDataById.forEach( f => {
-      //let data = JSON.parse(f.data);
-      if(Object.keys(f.data).length > maxLength){
-        maxLength = Object.keys(f.data).length;
-      }  
-    });
-    this.countCampiData = [];
-    for(let i=1;i<= maxLength; i++){
-      this.countCampiData.push(i);
-    }
-  }
+  this.order = value;
+}
+
+
 
 
   
+
 }

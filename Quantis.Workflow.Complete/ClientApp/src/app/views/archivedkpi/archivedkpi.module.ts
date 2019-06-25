@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ArchivedKpiComponent } from './archivedkpi.component';
 import { ArchivedKpiRoutingModule } from './archivedkpi-routing.module';
 import {DataTablesModule} from 'angular-datatables';
@@ -11,17 +11,29 @@ import { DatePipe } from '@angular/common';
 import { KeysPipe } from './keys.pipe'
 import {NgxPaginationModule} from 'ngx-pagination';
 
+import { Ng2SearchPipeModule } from 'ng2-search-filter'
+
+//import { ArchivedKpiPipe } from '../archived-kpi.pipe';
+
+//import { OrderModule } from 'ngx-order-pipe';
+
+
+
 
 @NgModule({
   declarations: [ArchivedKpiComponent, KeysPipe],
   imports: [
-    NgxPaginationModule,
+   NgxPaginationModule,
     CommonModule,
     ArchivedKpiRoutingModule,
     DataTablesModule,
     FormsModule,
     MomentModule.forRoot(),
    
+    Ng2SearchPipeModule,
+   
+   // OrderModule,
+ 
   ],
  
 })

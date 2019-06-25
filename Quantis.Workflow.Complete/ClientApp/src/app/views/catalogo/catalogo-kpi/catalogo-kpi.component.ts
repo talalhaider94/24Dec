@@ -22,7 +22,7 @@ export class CatalogoKpiComponent implements OnInit {
   ) {
     $this = this;
   }
-
+  loading: boolean = true;
   public des = '';
   public ref: any[] ;
   public reft: string;
@@ -169,6 +169,39 @@ export class CatalogoKpiComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.dtOptions = {
+      //'dom': 'rtip',
+      "columnDefs": [{
+        "targets": [13],
+        "visible": false,
+        "searchable": true
+      }],
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
+
+
   }
 
 
@@ -250,10 +283,13 @@ export class CatalogoKpiComponent implements OnInit {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first
       dtInstance.destroy();
+      
       // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
+      this.dtTrigger.next(); 
       this.setUpDataTableDependencies();
+      
     });
+    
   }
 
   setUpDataTableDependencies() {
@@ -350,6 +386,7 @@ export class CatalogoKpiComponent implements OnInit {
         //$this.table2csv(datatable_Ref, 'full', '.kpiTable');
       });
     });
+    
   }
 
   isNumber(val){
@@ -412,6 +449,7 @@ export class CatalogoKpiComponent implements OnInit {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
       this.rerender();
+      this.loading = false;
     });
   }
 
