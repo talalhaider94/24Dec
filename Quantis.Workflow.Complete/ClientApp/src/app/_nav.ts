@@ -83,7 +83,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-folder-open-o',
     children: [
       {
-        name: 'Admin Utenti',
+        name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o'
       },
