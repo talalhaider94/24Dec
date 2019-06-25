@@ -58,8 +58,13 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 wf_last_sent = e.wf_last_sent,
                 rm_last_sent = e.rm_last_sent,
                 supply = e.supply,
+                day_cutoff = e.day_cutoff,
                 primary_contract_party=e.primary_contract_party,
-                secondary_contract_party=e.secondary_contract_party
+                secondary_contract_party=e.secondary_contract_party,
+                kpi_name_bsi = e.kpi_name_bsi,
+                global_rule_id_bsi = e.global_rule_id_bsi,
+                sla_id_bsi = e.sla_id_bsi
+                
             };
         }
 
