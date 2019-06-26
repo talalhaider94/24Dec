@@ -1,72 +1,76 @@
 <div style="margin-top: -25px; padding: 10px">
   <h2 style="color:#565656">Catalogo</h2><br>
-  <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br><h2 style="color:#565656">KPI</h2><br>
-    <div class="row">
-      <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1 [(ngModel)]="viewModel.filters.idKpi" name="idKpi"/>
-      <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2 [(ngModel)]="viewModel.filters.titoloBreve" name="titoloBreve"/>
-      <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3 [(ngModel)]="viewModel.filters.referenti" name="referenti"/>
-      <span>&nbsp;&nbsp;</span>
-      <select class="form-control" style="width:15%;" #searchCol4 [(ngModel)]="viewModel.filters.tuttiContratti" name="tuttiContratti"><option value="">Tutti i Contratti</option></select>
-      <span>&nbsp;&nbsp;</span>
-      <select class="form-control" style="width:15%;" #searchCol5 [(ngModel)]="viewModel.filters.tutteLeFrequenze" name="tutteLeFrequenze">
-        <option value="">Tutte le Frequenze</option>
-        <option value="MENSILE">MENSILE</option>
-        <option value="TRIMESTRALE">TRIMESTRALE</option>
-        <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
-        <option value="SEMESTRALE">SEMESTRALE</option>
-        <option value="ANNUALE">ANNUALE</option>
-      </select>
-      <span>&nbsp;&nbsp;</span>
-      <button class="ml-5" #btnExporta>Esporta CSV</button>
-    </div><br/>
-    <table class="table table-bordered kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead>
-      <tr>
-        <th style="text-align:center">CONTRATTO</th>
-        <th style="text-align:center">ID KPI</th>
-        <th style="text-align:center">TITOLO BREVE</th>
-        <th style="text-align:center">CARICAMENTO</th>
-        <th style="text-align:center">FREQUENZA</th>
-        <th style="text-align:center">DATA WF</th>
-        <th style="text-align:center">DATA WM</th>
-        <th class="notExportCsv" style="text-align:center">ABILITATO</th>
-        <th class="notExportCsv" style="text-align:center">REMINDER</th>
-        <th class="notExportCsv" style="text-align:center">WORKFLOW</th>
-        <th class="notExportCsv" style="text-align:center">REFERENTI</th>
-        <th class="notExportCsv" style="text-align:center">CALCOLO</th>
-        <th class="notExportCsv" style="text-align:center">AZIONI</th>
-        <th class="notExportCsv">hide</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let row of kpiTableBodyData; index as i">
-        <!--        <td align="center"><input type="checkbox"/></td>-->
-        <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract}}</td>
-        <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
-        <td [ngClass]="isNumber(row.short_name) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
-        <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
-        <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
-        <td [ngClass]="isNumber(row.wf_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.wf_last_sent}}</td>
-        <td [ngClass]="isNumber(row.rm_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.rm_last_sent}}</td>
-        <td class="notExportCsv" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
-        <td class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
-        <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
-        <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
-        <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
-        <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-        <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
-        <td class="notExportCsv" align="center">
-          <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                  data-target="#kpiModal">
-            Modifica
-          </button>
-        </td>
-        <td class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+                                         <div class="table-responsive" style="background: #ffffff; padding: 10px">
+                                           <br><h2 style="color:#565656">KPI</h2><br>
+                                           <div class="row">
+                                             <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1 [(ngModel)]="viewModel.filters.idKpi" name="idKpi" />
+                                             <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2 [(ngModel)]="viewModel.filters.titoloBreve" name="titoloBreve" />
+                                             <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3 [(ngModel)]="viewModel.filters.referenti" name="referenti" />
+                                             <span>&nbsp;&nbsp;</span>
+                                             <select class="form-control" style="width:15%;" #searchCol4 [(ngModel)]="viewModel.filters.tuttiContratti" name="tuttiContratti"><option value="">Tutti i Contratti</option></select>
+                                             <span>&nbsp;&nbsp;</span>
+                                             <select class="form-control" style="width:15%;" #searchCol5 [(ngModel)]="viewModel.filters.tutteLeFrequenze" name="tutteLeFrequenze">
+                                               <option value="">Tutte le Frequenze</option>
+                                               <option value="MENSILE">MENSILE</option>
+                                               <option value="TRIMESTRALE">TRIMESTRALE</option>
+                                               <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+                                               <option value="SEMESTRALE">SEMESTRALE</option>
+                                               <option value="ANNUALE">ANNUALE</option>
+                                             </select>
+                                             <span>&nbsp;&nbsp;</span>
+                                             <button class="ml-5" #btnExporta>Esporta CSV</button>
+                                           </div><br />
+                                           <h5 *ngIf="loading" class="text-center text-primary">   
+                                               <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+                                           </h5>
+                                           <table class="table stripe kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                             <thead style="background:#20a8d8">
+                                               <tr style="color:white;font-size:12px;">
+                                                 <th style="text-align:center">CONTRATTO</th>
+                                                 <th style="text-align:center">ID KPI</th>
+                                                 <th style="text-align:center">TITOLO BREVE</th>
+                                                 <th style="text-align:center">CARICAMENTO</th>
+                                                 <th style="text-align:center">FREQUENZA</th>
+                                                 <th style="text-align:center">DATA WF</th>
+                                                 <th style="text-align:center">DATA WM</th>
+                                                 <th class="notExportCsv" style="text-align:center">ABILITATO</th>
+                                                 <th class="notExportCsv" style="text-align:center">REMINDER</th>
+                                                 <th class="notExportCsv" style="text-align:center">WORKFLOW</th>
+                                                 <th class="notExportCsv" style="text-align:center">REFERENTI</th>
+                                                 <th class="notExportCsv" style="text-align:center">CALCOLO</th>
+                                                 <th class="notExportCsv" style="text-align:center">AZIONI</th>
+                                                 <th class="notExportCsv">hide</th>
+                                               </tr>
+                                             </thead>
+                                             <tbody>
+
+                                               <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
+                                                 <!--        <td align="center"><input type="checkbox"/></td>-->
+                                                 <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract}}</td>
+                                                 <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
+                                                 <td [ngClass]="isNumber(row.short_name) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
+                                                 <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
+                                                 <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
+                                                 <td [ngClass]="isNumber(row.wf_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.wf_last_sent}}</td>
+                                                 <td [ngClass]="isNumber(row.rm_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.rm_last_sent}}</td>
+                                                 <td class="notExportCsv" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
+                                                 <td class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
+                                                 <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
+                                                 <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
+                                                 <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
+                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
+                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
+                                                 <td class="notExportCsv" align="center">
+                                                   <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                                                           data-target="#kpiModal">
+                                                     <i class="fa fa-pencil"></i>
+                                                   </button>
+                                                 </td>
+                                                 <td class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
+                                               </tr>
+                                             </tbody>
+                                           </table>
+                                         </div>
 </div>
 
 <div id="referentiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
@@ -141,24 +145,33 @@
       </div>
       <div class="modal-body">
         <div class="table-responsive" style="background: #ffffff; padding: 10px">
-          <table id="classTable" class="table table-bordered">
+          <table id="classTable" class="table stripe">
+            <thead style="background: #20a8d8">
+            </thead>
+            <tbody>
+              <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
+              <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
+              <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
+              <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
+              <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
+              <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
+              <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
+              <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.tracking_period"></td></tr>
+              <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.wf_last_sent"></td></tr>
+              <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.rm_last_sent"></td></tr>
+              
+            </tbody>
+          </table>
+          <table id="classTable" class="table stripe">
             <thead style="background: #E6E6E6">
             </thead>
             <tbody>
+              <tr style="text-align:center"><th >ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
+              <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_wf" /></td></tr>
 
-            <tr><th>CONTRATTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.contract"></td></tr>
-            <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.id_kpi"></td></tr>
-            <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.short_name"></td></tr>
-            <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.source_type"></td></tr>
-            <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.tracking_period"></td></tr>
-            <tr><th>DATA WF</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.wf_last_sent"></td></tr>
-            <tr><th>DATA WM</th><td colspan="2"><input type="text" class="form-control"[(ngModel)]="modalData.rm_last_sent"></td></tr>
-            <tr><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
-            <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable"/></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox"  [(ngModel)]="modalData.enable_wf"/></td></tr>
-            <!-- by Giacomo: I prefer to have the checkboxes on the same row -->
             </tbody>
-          </table>
-        </div>
+            </table>
+</div>
       </div>
       <div class="modal-footer">
         <button (click)="updateKpi()" class="btn btn-success">Aggiorna</button>

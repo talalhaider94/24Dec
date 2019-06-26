@@ -12,7 +12,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { FileUploadModule } from 'ng2-file-upload';
 @NgModule({
   imports: [
     FormsModule,
@@ -27,6 +28,8 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     BsDatepickerModule.forRoot(),
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
+    NgxDaterangepickerMd.forRoot(),
+    FileUploadModule,
   ],
   declarations: [ KPIComponent, RicercaComponent ]
 })

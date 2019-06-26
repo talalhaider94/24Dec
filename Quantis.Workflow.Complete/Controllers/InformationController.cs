@@ -117,6 +117,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AddUpdateSDMGroupConfiguration(dto);
         }
+        [HttpGet("GetAllKPIHierarchy")]
+        public List<HierarchicalNameCodeDTO> GetAllKPIHierarchy()
+        {
+            return _infomationAPI.GetAllKPIHierarchy();
+        }
 
     }
 }

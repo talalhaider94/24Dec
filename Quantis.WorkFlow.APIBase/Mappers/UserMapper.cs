@@ -31,7 +31,10 @@ namespace Quantis.WorkFlow.APIBase.Mappers
         public override T_CatalogUser GetEntity(UserDTO o, T_CatalogUser e)
         {
             e.ca_bsi_account = o.ca_bsi_account;
-            e.ca_bsi_user_id = o.ca_bsi_user_id;
+            if (e.id == 0)
+            {
+                e.ca_bsi_user_id = o.ca_bsi_user_id;
+            }            
             e.name = o.name;
             e.surname = o.surname;
             e.organization = o.organization;

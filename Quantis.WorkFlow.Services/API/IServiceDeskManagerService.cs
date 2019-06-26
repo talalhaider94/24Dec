@@ -8,13 +8,13 @@ namespace Quantis.WorkFlow.Services.API
     public interface IServiceDeskManagerService
     {
         List<SDMTicketLVDTO> GetAllTickets();
-        List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context);
+        List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context, bool filerOnPeriod);
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);
         SDMTicketLVDTO TransferTicketByID(int id,string status, string description);
         SDMTicketLVDTO EscalateTicketbyID(int id, string status,string description);
-        string UploadAttachmentToTicket(int ticketId, string docName, byte[] docContent);
+        string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto);
 
         byte[] DownloadAttachment(string attachmentHandle);
         List<SDMAttachmentDTO> GetAttachmentsByTicket(int ticketId);

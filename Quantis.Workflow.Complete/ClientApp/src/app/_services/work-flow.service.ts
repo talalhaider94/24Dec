@@ -15,13 +15,13 @@ export class WorkFlowService {
   
   getAllTickets(): Observable<any>{
     const allTicketsEndPoint = `${environment.API_URL}/sdm/GetAllTickets`;
-    // return this.http.get('assets/tempData/getalltickets.json');
-    return this.http.get(allTicketsEndPoint, Headers.setHeaders('GET'));
+    return this.http.get('assets/tempData/getalltickets.json');
+    //return this.http.get(allTicketsEndPoint, Headers.setHeaders('GET'));
   }
 
   getTicketByUser(username): Observable<any> {
     //Danial TODO: need to send Login Token in HEADERS
-    const userTicketsEndPoint = `${environment.API_URL}/sdm/userTicketsEndPoint`;
+    const userTicketsEndPoint = `${environment.API_URL}/sdm/GetTicketsByUser`;
     const  params = new  HttpParams().set('username', username);
     return this.http.get(userTicketsEndPoint, { headers: Headers.setHeaders('GET').headers, params });
   }
@@ -29,8 +29,8 @@ export class WorkFlowService {
   getAttachmentsByTicket(ticketId): Observable<any>{
     const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetAttachmentsByTicket`;
     const  params = new  HttpParams().set('ticketId', ticketId.toString());
-    // return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
-    return this.http.get(ticketAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
+    return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
+    //return this.http.get(ticketAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
   }
 
   getTicketHistory(ticketId): Observable<any>{

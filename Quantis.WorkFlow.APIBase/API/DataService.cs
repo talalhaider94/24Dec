@@ -685,7 +685,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 UserID = res.user_id,
                                 LocaleID = res.user_locale_id,
                                 UserEmail= usr.mail,
-                                UserName=usr.ca_bsi_account
+                                UserName=usr.ca_bsi_account,
+                                Permissions= permissions
                             };
                             
                         }

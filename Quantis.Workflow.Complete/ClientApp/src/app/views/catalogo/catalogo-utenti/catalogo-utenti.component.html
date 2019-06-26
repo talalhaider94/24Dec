@@ -9,8 +9,8 @@
           <button #btnExportCSV style="padding-left: 25px; padding-right: 25px">Esporta CSV</button>
       </div><br/>
       <table class="table kpiTable stripe" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-        <thead style="background: #E6E6E6">
-        <tr style="font-size:12px">
+        <thead style="background: #20a8d8">
+        <tr style="font-size:12px; color:white">
             <th style="text-align:center">BSI ACCOUNT</th>
             <th style="text-align:center">NOME</th>
             <th style="text-align:center">COGNOME</th>
@@ -25,13 +25,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of UtentiTableBodyData; index as i" style="font-size:13px">
-            <td>{{row.ca_bsi_account}}</td>
-            <td>{{row.name}}</td>
-            <td>{{row.surname}}</td>
-            <td>{{row.organization}}</td>
-            <td>{{row.mail}}</td>
-            <td>{{row.userid}}</td>
-            <td>{{row.manager}}</td>
+            <td style="text-align:center">{{row.ca_bsi_account}}</td>
+            <td style="text-align:center">{{row.name}}</td>
+            <td style="text-align:center">{{row.surname}}</td>
+            <td style="text-align:center">{{row.organization}}</td>
+            <td style="text-align:center">{{row.mail}}</td>
+            <td style="text-align:center">{{row.userid}}</td>
+            <td style="text-align:center">{{row.manager}}</td>
             <td class="notExportCsv" align="center" *ngIf="row.user_admin; then trueBlock else falseBlock"></td>
             <td class="notExportCsv" align="center" *ngIf="row.user_sadmin; then trueBlock else falseBlock"></td>
 <!--            <td align="center"><input type="checkbox" [ngModel]="row.user_sadmin" /></td>-->
