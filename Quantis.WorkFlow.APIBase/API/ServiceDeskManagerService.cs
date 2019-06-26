@@ -328,7 +328,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public string UploadAttachmentToTicket(int ticketId,string docName,byte[] docContent)
+        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto)
         {
             string ret = null;
             LogIn();
@@ -337,10 +337,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 Dictionary<string, string> param = new Dictionary<string, string>();
                 param.Add("sid", _sid + "");
                 param.Add("repositoryHandle", "doc_rep:1002");
-                param.Add("objectHandle", "cr:" + ticketId);
-                param.Add("description", docName);
-                param.Add("fileName", docName);
-                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, docContent);
+                param.Add("objectHandle", "cr:" + dto.TicketId);
+                param.Add("description", dto.AttachmentName);
+                param.Add("fileName", dto.AttachmentName);
+                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
             }
             catch (Exception e)
             {

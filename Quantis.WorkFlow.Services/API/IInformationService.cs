@@ -27,6 +27,7 @@ namespace Quantis.WorkFlow.Services.API
         void DeleteSDMStatusConfiguration(int id);
         void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
         void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
+        List<HierarchicalNameCodeDTO> GetAllKPIHierarchy();
 
     }
 }

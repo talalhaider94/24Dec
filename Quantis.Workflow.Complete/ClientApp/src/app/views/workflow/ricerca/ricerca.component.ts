@@ -31,6 +31,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
   bsValue = new Date();
   isCollapsed = true;
 
+  public selected: any; // why
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,

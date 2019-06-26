@@ -9,6 +9,7 @@ using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -188,7 +189,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var roles = _dbcontext.UserRoles.Where(q => q.user_id == userid).Select(s => s.role_id).ToList();
-                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).ToList();
+                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).Distinct().ToList();
                 return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
@@ -203,6 +204,45 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var permissions = _dbcontext.RolePermissions.Include(o => o.Permission).Where(p => p.role_id == roleId).Select(o=>o.Permission);
                 return permissions.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<HierarchicalNameCodeDTO> GetAllKPIHierarchy()
+        {
+            try
+            {
+                var res = new List<UserKPIDTO>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'";
+                using (var command = _dbcontext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = query;
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(new UserKPIDTO()
+                            {
+                                Rule_Name = (string)result[0],
+                                Global_Rule_Id = Decimal.ToInt32((Decimal)result[1]),
+                                Sla_Id = Decimal.ToInt32((Decimal)result[2]),
+                                Sla_Name = (string)result[3],
+                                Customer_name = (string)result[4],
+                                Customer_Id = (int)result[5],
+                            });
+                        }
+                    }
+                }
+                return res.GroupBy(o => o.Customer_Id).Select(o => new HierarchicalNameCodeDTO(o.Key, o.First().Customer_name, o.First().Customer_name)
+                {
+                    Children = o.GroupBy(p => p.Sla_Id).Select(p => new HierarchicalNameCodeDTO(p.Key, p.First().Sla_Name, p.First().Sla_Name)
+                    {
+                        Children = p.Select(r => new HierarchicalNameCodeDTO(r.Global_Rule_Id, r.Rule_Name, r.Rule_Name)).ToList()
+                    }).ToList()
+                }).ToList();
             }
             catch (Exception e)
             {

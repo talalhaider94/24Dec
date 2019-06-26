@@ -16,6 +16,7 @@ interface NavLabel {
 
 export interface NavData {
   name?: string;
+  key?: any;
   url?: string;
   icon?: string;
   badge?: NavBadge;
@@ -32,6 +33,7 @@ export interface NavData {
 export const navItems: NavData[] = [
   {
     name: 'Dashboard',
+    key: '',
     url: '/dashboard',
     icon: 'icon-speedometer',
     badge: {
@@ -42,38 +44,45 @@ export const navItems: NavData[] = [
   {
     title: true,
     name: 'Menu',
+    key: 'alwaysShow'
   },
   {
     name: 'Home',
     url: '/coming-soon',
     icon: 'icon-home',
+    key: ['', ''],
     children: [
       {
         name: 'Contraenti',
         url: '/coming-soon',
-        icon: 'fa fa-th-list'
+        icon: 'fa fa-th-list',
+        key: '',
       },
       {
         name: 'Contratti',
         url: '/coming-soon',
-        icon: 'fa fa-file-text'
+        icon: 'fa fa-file-text',
+        key: '',
       },
     ]
   },
   {
     name: 'Workflow',
-    url: '/workflow',
+    url: '/coming-soon',
     icon: 'fa fa-code-fork',
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA'],
     children: [
       {
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
-        icon: 'fa fa-file-text-o'
+        icon: 'fa fa-file-text-o',
+        key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
         name: 'Ricerca',
         url: '/workflow/ricerca',
-        icon: 'fa fa-search'
+        icon: 'fa fa-search',
+        key: ['VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA']
       },
     ]
   },
@@ -81,82 +90,96 @@ export const navItems: NavData[] = [
     name: 'Catalogo',
     url: '/catalogo',
     icon: 'fa fa-folder-open-o',
+    key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI'],
     children: [
       {
-        name: 'Admin Utenti',
+        name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
-        icon: 'fa fa-address-book-o'
+        icon: 'fa fa-address-book-o',
       },
       {
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
-        icon: 'fa fa-file-archive-o'
+        icon: 'fa fa-file-archive-o',
+        key: 'VIEW_CATALOG_KPI'
       },
       {
         name: 'Catalogo Utenti',
         url: '/catalogo/utenti',
-        icon: 'fa fa-address-book-o'
+        icon: 'fa fa-address-book-o',
+        key: 'VIEW_CATALOG_UTENTI',
       },
     ]
   },
   {
     name: 'Report',
-    url: '/report',
+    url: '/coming-soon',
     icon: 'fa fa-files-o',
+    key: [''],
     children: [
       {
         name: 'WorkFlow Reminder',
         url: '/coming-soon',
-        icon: 'fa fa-check-circle-o'
+        icon: 'fa fa-check-circle-o',
+        key: '',
       }
     ]
   },
   {
     name: 'KPI Certificati',
     url: '/archivedkpi',
-    icon: 'fa fa-archive'
+    icon: 'fa fa-archive',
+    key: 'VIEW_KPI_CERTICATI',
   },
   {
     name: 'Loading Form',
     url: '/coming-soon',
     icon: 'fa fa-pencil-square-o',
+    key: ['VIEW_ADMIN_LOADING_FORM', 'VIEW_LOADING_FORM_UTENTI'],
     children: [
       {
         name: 'Admin',
         url: '/loading-form/admin',
-        icon: 'fa fa-user-circle'
+        icon: 'fa fa-user-circle',
+        key: 'VIEW_ADMIN_LOADING_FORM'
       },
       {
         name: 'Utente',
         url: '/loading-form/utente',
-        icon: 'fa fa-user-circle-o'
+        icon: 'fa fa-user-circle-o',
+        key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]
   },
   {
     name: 'Configurazione',
-    url: '/configurazione',
+    url: '/coming-soon',
     icon: 'fa fa-gear',
+    key: ['VIEW_CONFIGURATIONS','VIEW_WORKLOAD_CONFIGURATIONS'],
     children: [
       {
         name: 'Generali',
         url: '/tconfiguration',
-        icon: 'fa fa-check-circle-o'
+        icon: 'fa fa-check-circle-o',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'Workload',
+        url: '/workload',
+        icon: 'fa fa-gear',
+        key: 'VIEW_WORKLOAD_CONFIGURATIONS'
       }
     ]
   },
   {
-    name: 'Workload',
-    url: '/workload',
-    icon: 'fa fa-gear'
+    divider: true,
+    key: 'alwaysShow'
   },
   {
-    divider: true
-  },
-  {
-    title: true,
-    name: 'Version 1.0.1',
+    title: true, 
+    name: 'Version 1.0.3',
     class: 'class-version-nav',
+    key: 'alwaysShow'
   },
   // {
   //   name: 'Pages',

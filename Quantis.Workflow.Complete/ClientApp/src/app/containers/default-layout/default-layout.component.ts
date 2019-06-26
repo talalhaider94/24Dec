@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './default-layout.component.html'
 })
 export class DefaultLayoutComponent implements OnDestroy, OnInit {
+  permittedMenuItems = [];
   public navItems = [];
   public sidebarMinimized = true;
   private changes: MutationObserver;
@@ -18,7 +19,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     private authService: AuthService,
     private router: Router,
     @Inject(DOCUMENT) _document?: any,
-  ) {
+    ) {
+      this.currentUser = this.authService.getUser(); 
+    
+      this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
+      this.navItems = this.permittedMenuItems; 
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -32,25 +37,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
-    // const hiddenAdminItemsUrl = ['/archivedkpi', '/configurazione', '/workload', '/workflow', '/report', '/loading-form/utente', '/catalogo/kpi'];
-    const hiddenAdminItemsUrl = [];
-    if (!this.currentUser.issuperadmin && this.currentUser.isadmin) {
-      this.navItems = navItems.filter((item) => {
-        if (hiddenAdminItemsUrl.indexOf(item.url) < 0) {
-          if (item.children && item.children.length > 0) {
-            const mod_children = item.children.filter((child) => {
-              if (hiddenAdminItemsUrl.indexOf(child.url) < 0) {
-                return child;
-              }
-            });
-            item.children = mod_children;
-          }
-          return item;
-        }
-      });
-    } else {
-      this.navItems = navItems;
-    }
   }
 
   ngOnDestroy(): void {
@@ -59,7 +45,35 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   logout() {
     this.authService.logout();
+    
+  }
 
+  filterMenuByPermission(navItems, permissions, permittedMenu) {
+    if (navItems) {
+      navItems.forEach((item:any)=>{
+        let isExist:boolean =  item.title || item.divider || item.key == 'alwaysShow' || this.checkArrays(item.key === undefined ? ['$#%^&'] : typeof(item.key) === 'string' ? [item.key] : item.key, permissions);
+        let cloneItem = {...{}, ...item};
+        if(isExist){ // || item.title || item.divider || item.key == 'alwaysShow'
+          cloneItem.children = [];
+          permittedMenu.push(cloneItem);
+        }
+        if (item.children) {
+          this.filterMenuByPermission(item.children, permissions, cloneItem.children);
+        } else {
+          delete cloneItem.children;
+        }
+      });
+    }
+  }
+
+  checkArrays(arr1, arr2) {
+    let isExist = false;
+    arr1.forEach((item:any)=>{
+      if(arr2.indexOf(item) > -1 ){
+        isExist = true;
+      }
+    });
+    return isExist;
   }
 
 }
