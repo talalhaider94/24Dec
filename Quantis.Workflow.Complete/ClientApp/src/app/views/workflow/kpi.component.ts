@@ -33,12 +33,12 @@ export class KPIComponent implements OnInit {
   dtOptions: any = {};
   dtTrigger = new Subject();
   bsValue = new Date();
-
+  setActiveTicketId: Number;
   approveForm: FormGroup;
   rejectForm: FormGroup;
   selectedTickets: any = [];
   verificaCheckBoxForm: FormGroup;
-  fileUploading  = true;
+  fileUploading = true;
   public uploader: FileUploader = new FileUploader({ url: URL });
 
   constructor(
@@ -56,6 +56,7 @@ export class KPIComponent implements OnInit {
   ngOnInit() {
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
+      selectAllTickets: ['']
     });
     this.approveForm = this.formBuilder.group({
       description: ['']
@@ -120,7 +121,7 @@ export class KPIComponent implements OnInit {
   }
 
   _getAllTickets() {
-    this.workFlowService.getAllTickets().pipe(first()).subscribe(data => {
+    this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
       console.log('getAllTickets', data);
       this.allTickets = data;
       this.dtTrigger.next();
@@ -133,6 +134,7 @@ export class KPIComponent implements OnInit {
 
   ticketActions(ticket) {
     this.loading = true;
+    this.setActiveTicketId = +ticket.id;
     this.workFlowService.getTicketHistory(ticket.id).pipe(first()).subscribe(data => {
       // this.getTicketHistories = data.filter(ticketHistory => ticketHistory.id === ticket.id);
       if (!!data) {
@@ -150,6 +152,7 @@ export class KPIComponent implements OnInit {
 
   ticketAttachments(ticket) {
     this.loading = true;
+    this.setActiveTicketId = +ticket.id;
     this.workFlowService.getAttachmentsByTicket(ticket.id).pipe(first()).subscribe(data => {
       // this.getTicketAttachments = data.filter(ticketAttachment => ticketAttachment.id === ticket.id);
       if (!!data) {
@@ -272,12 +275,15 @@ export class KPIComponent implements OnInit {
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
-
+  
+  onselectAllCheckboxChange(event) {
+    this.verificaCheckBoxForm.setValue({ selectTicket: true, selectAllTickets: true })
+  }
   onCheckboxChange(option, event) {
     if (event.target.checked) {
       this.selectedTickets.push(option);
     } else {
-      if(this.selectedTickets.length > 0) {
+      if (this.selectedTickets.length > 0) {
         for (var i = 0; i < this.selectedTickets.length; i++) {
           if (this.selectedTickets[i].id == option.id) {
             this.selectedTickets.splice(i, 1);
@@ -300,17 +306,17 @@ export class KPIComponent implements OnInit {
   }
 
   _getUploadedFile(file) {
-    this.fileUploading  = true;
-    const reader:FileReader = new FileReader();
-    reader.onloadend = (function(theFile, self){
+    this.fileUploading = true;
+    const reader: FileReader = new FileReader();
+    reader.onloadend = (function (theFile, self) {
       let fileName = theFile.name;
-      return function(readerEvent){
+      return function (readerEvent) {
         let binaryString = readerEvent.target.result;
-        let base64Data = btoa(binaryString); 
-        self.fileUploading = false;  
+        let base64Data = btoa(binaryString);
+        self.fileUploading = false;
+        self.workFlowService.uploadAttachmentToTicket(self.setActiveTicketId, fileName, base64Data).pipe()
       };
-  })(file, this);
-    // reader.readAsDataURL(file); // returns file with base64 type prefix
+    })(file, this);
     reader.readAsBinaryString(file); // return only base64 string
   }
 

@@ -64,5 +64,23 @@ export class WorkFlowService {
     const  params = new  HttpParams().set('id', id).set('status', status).set('description', description);
     return this.http.get(escalateTicketEndPoint, { headers: Headers.setHeaders('GET').headers, params });
   }
+  
+  getTicketsVerificationByUserVerifica (): Observable<any>{
+    const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
+    return this.http.get('assets/tempData/getalltickets.json');
+    // return this.http.get(ticketVerificationEndPoint, Headers.setHeaders('GET'));
+  }
+  
+  getTicketsSearchByUserRecerca (): Observable<any>{
+    const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser `;
+    return this.http.get('assets/tempData/getalltickets.json');
+    // return this.http.get(ticketSearchEndPoint, Headers.setHeaders('GET'));
+  }
+
+  uploadAttachmentToTicket(ticketId, docName, docContent): Observable<any> {
+    const submitAttachmentEndPoint = `${environment.API_URL}/sdm/UploadAttachmentToTicket`;
+    const  params = new  HttpParams().set('ticketId', ticketId).set('docName', docName).set('docContent', docContent);
+    return this.http.get(submitAttachmentEndPoint, { headers: Headers.setHeaders('PUT').headers, params });
+  }
 
 }

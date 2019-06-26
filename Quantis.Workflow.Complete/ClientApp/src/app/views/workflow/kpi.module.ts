@@ -14,6 +14,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { FileUploadModule } from 'ng2-file-upload';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+
 @NgModule({
   imports: [
     FormsModule,
@@ -30,6 +32,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     PopoverModule.forRoot(),
     NgxDaterangepickerMd.forRoot(),
     FileUploadModule,
+    CollapseModule.forRoot(),
   ],
   declarations: [ KPIComponent, RicercaComponent ]
 })
