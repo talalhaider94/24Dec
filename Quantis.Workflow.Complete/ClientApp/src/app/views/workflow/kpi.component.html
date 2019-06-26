@@ -18,7 +18,10 @@
 
                 <thead class="thead-light">
                   <tr>
-                    <th>#</th>
+                    <th>
+                        <input formControlName="selectAllTickets" value="selectAllTickets"
+                        (change)="onselectAllCheckboxChange($event)" type="checkbox">
+                    </th>
                     <th class="d-none">ID</th>
                     <th>Rif. Num</th>
                     <th>Sommario</th>
@@ -44,24 +47,24 @@
                     </td>
                   </tr>
                   <tr *ngFor="let ticket of allTickets; let i = index">
-                    <td><input formControlName="selectTicket" value="{{ticket.id}}"
+                    <td><input  [(ngModel)]="value" formControlName="selectTicket" value="{{ticket.id}}"
                         (change)="onCheckboxChange(ticket,$event)" type="checkbox"> </td>
                     <td class="d-none">{{ ticket.id }} </td>
                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                     <td>
-                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="dblclick">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
                         {{ ticket.summary | slice:0:15 || 'N/A' }}
                       </button>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="dblclick">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="focus">
                         {{ ticket.group | slice:0:15 || 'N/A' }}
                       </button>
                     </td>
                     <td>{{ ticket.status || 'N/A' }}</td>
                     <td>
                       <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description"
-                        triggers="dblclick">
+                        triggers="focus">
                         {{ ticket.description | slice:0:15 || 'N/A' }}
                       </button>
                     </td>
@@ -181,7 +184,7 @@
               </tbody>
             </table>
             <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
-              <!-- <span class="fa fa-upload" *ngIf="!fileUploading"></span> -->
+              <span class="fa fa-upload" *ngIf="!fileUploading"></span>
               <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
             </button>
           </div>

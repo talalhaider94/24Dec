@@ -779,7 +779,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse(month), Int32.Parse("01")));
                     }
-                    if ((filterByKpiId != null))
+                    if ((id_kpi > 0))
                     {
                         command.Parameters.AddWithValue(":id_kpi", id_kpi);
                     }
