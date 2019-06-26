@@ -103,11 +103,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<FormAttachmentDTO> GetAttachmentsByFormID(int formId)
+        public List<Tuple<int,int>> GetFormAttachmentCount(List<int> formids)
         {
             try
             {
-                return null;
+                return _dbcontext.Forms.Include(p => p.Attachments).Where(o => formids.Contains(o.form_id)).Select(o => new Tuple<int, int>(o.form_id, o.Attachments.Count)).ToList();
             }
             catch (Exception e)
             {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.OracleAPI;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -18,10 +19,12 @@ namespace Quantis.WorkFlow.Controllers
     public class OracleController : ControllerBase
     {
         private IOracleDataService _oracleAPI { get; set; }
+        private IDataService _dataAPI { get; set; }
 
-        public OracleController(IOracleDataService oracleAPI)
+        public OracleController(IOracleDataService oracleAPI, IDataService dataAPI)
         {
             _oracleAPI = oracleAPI;
+            _dataAPI = dataAPI;
         }
         [HttpGet("GetCustomerById/{id}")]
         public List<OracleCustomerDTO> GetCustomerById(int id)
@@ -43,10 +46,35 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _oracleAPI.GetForm(id, 0);
         }
-        [HttpGet("GetFormsByUserId/{userid}")]
-        public List<OracleFormDTO> GetFormByUserId(int userid)
+        [HttpGet("GetFormsByUser")]
+        public List<OrcaleFormWithAttachmentCountDTO> GetFormsByUser()
         {
-            return _oracleAPI.GetForm(0, userid);
+            var usr=HttpContext.User as AuthUser;
+            if (usr != null)
+            {
+                var dtos=_oracleAPI.GetForm(0, usr.UserId);
+                var attachmentCount = _dataAPI.GetFormAttachmentCount(dtos.Select(o => o.form_id).ToList());
+
+                return (from d in dtos
+                    join a in attachmentCount on d.form_id equals a.Item1
+                        select new OrcaleFormWithAttachmentCountDTO {
+                        form_id = d.form_id,
+                        AttachmentsCount= a.Item2,
+                        create_date=d.create_date,
+                        cutoff=d.cutoff,
+                        form_description=d.form_description,
+                        form_name=d.form_name,
+                        form_owner_id=d.form_owner_id,
+                        modify_date=d.modify_date,
+                        reader_configuration=d.reader_configuration,
+                        reader_id=d.reader_id,
+                        user_group_id=d.user_group_id,
+                        user_group_name=d.user_group_name
+                    }).ToList();
+
+
+            }
+            return null;
         }
         [HttpGet("GetForms")]
         public List<OracleFormDTO> GetForms(int id)
