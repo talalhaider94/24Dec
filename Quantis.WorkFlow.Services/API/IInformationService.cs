@@ -28,6 +28,9 @@ namespace Quantis.WorkFlow.Services.API
         void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
         void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
         List<HierarchicalNameCodeDTO> GetAllKPIHierarchy();
+        List<int> GetGlobalRulesByUserId(int userId);
+        void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
+        List<string> GetContractPartyByUser(int userId);
 
     }
 }

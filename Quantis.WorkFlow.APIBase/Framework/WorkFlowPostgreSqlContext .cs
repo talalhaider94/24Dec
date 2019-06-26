@@ -39,6 +39,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_User> TUsers { get; set; } 
         public DbSet<SDM_TicketStatus> SDMTicketStatus { get; set; }
         public DbSet<SDM_TicketGroup> SDMTicketGroup { get; set; }
+        public DbSet<T_User_KPI> UserKPIs { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -65,6 +66,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_User_Configuration());
             builder.ApplyConfiguration(new SDM_TicketStatus_Configuration());
             builder.ApplyConfiguration(new SDM_TicketGroup_Configuration());
+            builder.ApplyConfiguration(new T_User_KPI_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -95,6 +97,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_User>();
             updateUpdatedProperty<SDM_TicketStatus>();
             updateUpdatedProperty<SDM_TicketGroup>();
+            updateUpdatedProperty<T_User_KPI>();
             return base.SaveChanges();
         }
 
