@@ -41,6 +41,8 @@ export class KPIComponent implements OnInit {
   fileUploading = true;
   public uploader: FileUploader = new FileUploader({ url: URL });
 
+  selectedAll: any;
+
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -78,6 +80,10 @@ export class KPIComponent implements OnInit {
       //     console.log('DATA', data);
       //   });
       //   return row;
+      // },
+      // "fnDrawCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+      // },
+      // "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
       // },
       buttons: [
         {
@@ -123,7 +129,8 @@ export class KPIComponent implements OnInit {
   _getAllTickets() {
     this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
       console.log('getAllTickets', data);
-      this.allTickets = data;
+      const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }))
+      this.allTickets = appendSelectFale;
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
@@ -136,7 +143,6 @@ export class KPIComponent implements OnInit {
     this.loading = true;
     this.setActiveTicketId = +ticket.id;
     this.workFlowService.getTicketHistory(ticket.id).pipe(first()).subscribe(data => {
-      // this.getTicketHistories = data.filter(ticketHistory => ticketHistory.id === ticket.id);
       if (!!data) {
         this.getTicketHistories = data;
         console.log('ticketActions', data);
@@ -154,7 +160,6 @@ export class KPIComponent implements OnInit {
     this.loading = true;
     this.setActiveTicketId = +ticket.id;
     this.workFlowService.getAttachmentsByTicket(ticket.id).pipe(first()).subscribe(data => {
-      // this.getTicketAttachments = data.filter(ticketAttachment => ticketAttachment.id === ticket.id);
       if (!!data) {
         this.getTicketAttachments = data;
         console.log('ticketAttachments', data);
@@ -197,6 +202,8 @@ export class KPIComponent implements OnInit {
   }
 
   rejectTicket() {
+    const selectedTickets = this.allTickets.filter(ticket => ticket.selected);
+    this.selectedTickets = selectedTickets;
     if (this.selectedTickets.length > 0) {
       this.rejectModal.show();
     } else {
@@ -205,6 +212,8 @@ export class KPIComponent implements OnInit {
   }
 
   approveTicket() {
+    const selectedTickets = this.allTickets.filter(ticket => ticket.selected);
+    this.selectedTickets = selectedTickets;
     if (this.selectedTickets.length > 0) {
       this.approveModal.show();
     } else {
@@ -222,22 +231,12 @@ export class KPIComponent implements OnInit {
       observables.push(this.workFlowService.escalateTicketbyID(ticket[1], ticket[5], description.value));
     }
     forkJoin(observables).subscribe(data => {
-      // this._getAllTickets();
       this.toastr.success('Ticket approved', 'Success');
       this.loading = false;
     }, error => {
       this.toastr.error('Error while approving form', 'Error');
       this.loading = false;
     });
-    // this.workFlowService.transferTicketByID('', '', description).pipe(first()).subscribe(data => {
-    //   this.toastr.success('Ticket approved', 'Success');
-    //   this.loading = false;
-    // }, error => {
-    //   console.log('approveFormSubmit: error', error);
-    //   this.toastr.error('Error while approving form', 'Error');
-    //   this.loading = false;
-    // })
-
   }
 
   rejectFormSubmit() {
@@ -254,44 +253,34 @@ export class KPIComponent implements OnInit {
       }
       forkJoin(observables).subscribe(data => {
         this.toastr.success('Ticket rejected', 'Success');
-        // this._getAllTickets();
         this.loading = false;
       }, error => {
         this.toastr.error('Error while rejecting form', 'Error');
         this.loading = false;
       });
-
-      // this.workFlowService.escalateTicketbyID('', '', description).pipe(first()).subscribe(data => {
-      //   this.toastr.success('Ticket rejectd', 'Success');
-      //   this.loading = false;
-      // }, error => {
-      //   console.log('rejectFormSubmit: error', error);
-      //   this.toastr.error('Error while reject form', 'Error');
-      //   this.loading = false;
-      // })
     }
   }
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
-  
-  onselectAllCheckboxChange(event) {
-    this.verificaCheckBoxForm.setValue({ selectTicket: true, selectAllTickets: true })
-  }
-  onCheckboxChange(option, event) {
-    if (event.target.checked) {
-      this.selectedTickets.push(option);
-    } else {
-      if (this.selectedTickets.length > 0) {
-        for (var i = 0; i < this.selectedTickets.length; i++) {
-          if (this.selectedTickets[i].id == option.id) {
-            this.selectedTickets.splice(i, 1);
-          }
-        }
-      }
-    }
-  }
+
+  // onselectAllCheckboxChange(event) {
+  //   this.verificaCheckBoxForm.setValue({ selectTicket: true, selectAllTickets: true })
+  // }
+  // onCheckboxChange(option, event) {
+  //   if (event.target.checked) {
+  //     this.selectedTickets.push(option);
+  //   } else {
+  //     if (this.selectedTickets.length > 0) {
+  //       for (var i = 0; i < this.selectedTickets.length; i++) {
+  //         if (this.selectedTickets[i].id == option.id) {
+  //           this.selectedTickets.splice(i, 1);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   fileUploadUI() {
     if (this.uploader.queue.length > 0) {
@@ -320,5 +309,16 @@ export class KPIComponent implements OnInit {
     reader.readAsBinaryString(file); // return only base64 string
   }
 
+  selectAll() {
+    for (var i = 0; i < this.allTickets.length; i++) {
+      this.allTickets[i].selected = this.selectedAll;
+    }
+  }
+
+  checkIfAllSelected() {
+    this.selectedAll = this.allTickets.every(function (ticket: any) {
+      return ticket.selected == true;
+    })
+  }
 
 }

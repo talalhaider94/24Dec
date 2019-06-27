@@ -86,9 +86,12 @@ export class ProveVarieComponent implements OnInit {
     private router: Router,
     private _FileSaverService: FileSaverService
   ) { }
-
+  monthOption;
+  yearOption;
   ngOnInit() {
     const currentUser = this.authService.getUser();
+    this.monthOption = 1;
+    this.yearOption = 2018;
     this.isAdmin = currentUser.isadmin;
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
@@ -473,4 +476,15 @@ export class ProveVarieComponent implements OnInit {
       year: Number(moment(currentDate).format('YYYY')) 
     }
   }
+  
+  onMonthChange(event) {
+    this.formAttachmentsArray = this.formAttachmentsArray.filter(attachment => attachment.period == event.target.value);
+  }
+
+  onYearChange(event) {
+    debugger
+    this.formAttachmentsArray = this.formAttachmentsArray.filter(attachment => attachment.year == event.target.value);
+  }
+
+  
 }

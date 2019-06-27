@@ -15,8 +15,8 @@ export class WorkFlowService {
   
   getAllTickets(): Observable<any>{
     const allTicketsEndPoint = `${environment.API_URL}/sdm/GetAllTickets`;
-    return this.http.get('assets/tempData/getalltickets.json');
-    //return this.http.get(allTicketsEndPoint, Headers.setHeaders('GET'));
+    //return this.http.get('assets/tempData/getalltickets.json');
+    return this.http.get(allTicketsEndPoint, Headers.setHeaders('GET'));
   }
 
   getTicketByUser(username): Observable<any> {
@@ -29,8 +29,8 @@ export class WorkFlowService {
   getAttachmentsByTicket(ticketId): Observable<any>{
     const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetAttachmentsByTicket`;
     const  params = new  HttpParams().set('ticketId', ticketId.toString());
-    return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
-    //return this.http.get(ticketAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
+    // return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
+    return this.http.get(ticketAttachmentEndPoint, { headers: Headers.setHeaders('GET').headers, params });
   }
 
   getTicketHistory(ticketId): Observable<any>{
@@ -67,14 +67,14 @@ export class WorkFlowService {
   
   getTicketsVerificationByUserVerifica (): Observable<any>{
     const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
-    return this.http.get('assets/tempData/getalltickets.json');
-    // return this.http.get(ticketVerificationEndPoint, Headers.setHeaders('GET'));
+    // return this.http.get('assets/tempData/getalltickets.json');
+    return this.http.get(ticketVerificationEndPoint, Headers.setHeaders('GET'));
   }
   
   getTicketsSearchByUserRecerca (): Observable<any>{
-    const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser `;
-    return this.http.get('assets/tempData/getalltickets.json');
-    // return this.http.get(ticketSearchEndPoint, Headers.setHeaders('GET'));
+    const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser`;
+    // return this.http.get('assets/tempData/getalltickets.json');
+    return this.http.get(ticketSearchEndPoint, Headers.setHeaders('GET'));
   }
 
   uploadAttachmentToTicket(ticketId, docName, docContent): Observable<any> {

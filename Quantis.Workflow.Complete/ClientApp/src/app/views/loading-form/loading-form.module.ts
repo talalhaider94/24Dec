@@ -6,6 +6,7 @@ import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-d
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { DataTablesModule } from 'angular-datatables';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 import {
   MatSidenavModule,
@@ -93,7 +94,8 @@ import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-adm
     MatSnackBarModule,
     MatStepperModule,
     MatTooltipModule,
-    DataTablesModule
+    DataTablesModule,
+    FilterPipeModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},

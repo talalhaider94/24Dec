@@ -12,83 +12,113 @@
             </div>
           </div>
           <div class="table-responsive">
-            <form [formGroup]="verificaCheckBoxForm">
-              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+            <!-- <form [formGroup]="verificaCheckBoxForm"> -->
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+              class="table table-responsive-sm table-hover table-outline mb-0 text-center">
 
-                <thead class="thead-light">
-                  <tr>
-                    <th>
-                        <input formControlName="selectAllTickets" value="selectAllTickets"
-                        (change)="onselectAllCheckboxChange($event)" type="checkbox">
-                    </th>
-                    <th class="d-none">ID</th>
-                    <th>Rif. Num</th>
-                    <th>Sommario</th>
-                    <th>Gruppo</th>
-                    <th>Stato</th>
-                    <th>Descrizione</th>
-                    <th>KPI ID</th>
-                    <th>Riferimento S1 </th>
-                    <th>Riferimento S2</th>
-                    <th>Riferimento S3</th>
-                    <th>Periodo</th>
-                    <th>Azioni</th>
-                    <th>Allegati</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngIf="allTickets.length === 0 && !loading">
-                    <td colspan="13"><strong>No tickets found.</strong></td>
-                  </tr>
-                  <tr *ngIf="loading" class="text-center">
-                    <td colspan="13">
-                      <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
-                    </td>
-                  </tr>
-                  <tr *ngFor="let ticket of allTickets; let i = index">
-                    <td><input  [(ngModel)]="value" formControlName="selectTicket" value="{{ticket.id}}"
-                        (change)="onCheckboxChange(ticket,$event)" type="checkbox"> </td>
-                    <td class="d-none">{{ ticket.id }} </td>
-                    <td>{{ ticket.ref_num || 'N/A' }}</td>
-                    <td>
-                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
-                        {{ ticket.summary | slice:0:15 || 'N/A' }}
+              <thead class="thead-light">
+                <tr>
+                  <th>
+                    <!-- <input formControlName="selectAllTickets" value="selectAllTickets"
+                        (change)="onselectAllCheckboxChange($event)" type="checkbox"> -->
+                    <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+                  </th>
+                  <th class="d-none">ID</th>
+                  <th>Rif. Num</th>
+                  <th>Sommario</th>
+                  <th>Gruppo</th>
+                  <th>Stato</th>
+                  <th>Descrizione</th>
+                  <th>KPI ID</th>
+                  <th>Riferimento S1 </th>
+                  <th>Riferimento S2</th>
+                  <th>Riferimento S3</th>
+                  <th>Periodo</th>
+                  <th>Azioni</th>
+                  <th>Allegati</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="allTickets.length === 0 && !loading">
+                  <td colspan="13"><strong>No tickets found.</strong></td>
+                </tr>
+                <tr *ngIf="loading" class="text-center">
+                  <td colspan="13">
+                    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                  </td>
+                </tr>
+                <tr *ngFor="let ticket of allTickets; let i = index">
+                  <td>
+                    <input type="checkbox" [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
+                    <!-- <input [(ngModel)]="value" formControlName="selectTicket" value="{{ticket.id}}"
+                        (change)="onCheckboxChange(ticket,$event)" type="checkbox"> -->
+                  </td>
+                  <td class="d-none">{{ ticket.id }} </td>
+                  <td>{{ ticket.ref_num || 'N/A' }}</td>
+                  <td>
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
+                      {{ ticket.summary | slice:0:15 || 'N/A' }}
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="focus">
+                      {{ ticket.group | slice:0:15 || 'N/A' }}
+                    </button>
+                  </td>
+                  <td>{{ ticket.status || 'N/A' }}</td>
+                  <td>
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description" triggers="focus">
+                      {{ ticket.description | slice:0:15 || 'N/A' }}
+                    </button>
+                  </td>
+                  <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                  <td>
+                    <div *ngIf="ticket.reference1; else reference1">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference1" triggers="focus">
+                        {{ ticket.reference1 | slice:0:15 }}
                       </button>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="focus">
-                        {{ ticket.group | slice:0:15 || 'N/A' }}
+                    </div>
+                    <ng-template #reference1>
+                      N/A
+                    </ng-template>
+                  </td>
+                  <td>
+                    <div *ngIf="ticket.reference2; else reference2">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference2" triggers="focus">
+                        {{ ticket.reference2 | slice:0:15 }}
                       </button>
-                    </td>
-                    <td>{{ ticket.status || 'N/A' }}</td>
-                    <td>
-                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description"
-                        triggers="focus">
-                        {{ ticket.description | slice:0:15 || 'N/A' }}
-                      </button>
-                    </td>
-                    <td>{{ ticket.id_kpi || 'N/A' }}</td>
-                    <td>{{ ticket.reference1 || 'N/A' }}</td>
-                    <td>{{ ticket.reference2 || 'N/A' }}</td>
-                    <td>{{ ticket.reference3 || 'N/A' }}</td>
-                    <td>{{ ticket.period || 'N/A' }}</td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                        (click)="ticketActions(ticket)">
-                        <span class="fa fa-calendar"></span>
-                      </button>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                        (click)="ticketAttachments(ticket)">
-                        <span class="fa fa-archive"></span>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </form>
+                    </div>
+                    <ng-template #reference2>
+                      N/A
+                    </ng-template>
+                  </td>
+                  <td>
+                    <div *ngIf="ticket.reference3; else reference3">
+                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference3" triggers="focus">
+                          {{ ticket.reference3 | slice:0:15 }}
+                        </button>
+                      </div>
+                      <ng-template #reference3>
+                        N/A
+                      </ng-template>
+                  </td>
+                  <td>{{ ticket.period || 'N/A' }}</td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                      (click)="ticketActions(ticket)">
+                      <span class="fa fa-calendar"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                      (click)="ticketAttachments(ticket)">
+                      <span class="fa fa-archive"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- </form> -->
           </div>
         </div>
       </div>
@@ -154,7 +184,7 @@
       </div>
       <div class="modal-body">
         <!-- file upload start -->
-        <div class="bg-white pt-2 pb-2 mb-5" >
+        <div class="bg-white pt-2 pb-2 mb-5">
           <div class="col-sm-12 mb-3 file-container">
             <h5>File Allegati</h5>
             <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />

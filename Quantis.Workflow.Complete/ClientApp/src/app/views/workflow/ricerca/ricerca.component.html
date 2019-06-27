@@ -1,46 +1,51 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      
       <button type="button" class="btn btn-primary pull-right mb-4 ml-4" (click)="isCollapsed = !isCollapsed"
         [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic"><i class="fa fa-search"></i>
       </button>
       <div id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
-        <div class="card">
-          <div class="card-body">
-            <div class="form-group row">
-              <div class="col-sm-3">
-                <label>
-                  From To date
-                </label>
-                <input type="text" class="form-control  " placeholder="From-To date" ngxDaterangepickerMd
-                  [(ngModel)]="selected" #searchCol1 />
-              </div>
-              <div class="col-sm-3">
-                <label>
-                  Refrence Number
-                </label>
-                <input type="text" class="form-control  " placeholder="Rif Number" #searchCol2 />
-              </div>
-              <div class="col-sm-3">
-                <label>
-                  Summery
-                </label>
-                <input type="text" class="form-control  " placeholder="Summery" #searchCol3 />
-              </div>
-              <div class="col-sm-3">
-                <label>
-                  Status
-                </label>
-                <select class="form-control" #searchCol4>
-                  <option value="">Status</option>
-                </select>
-              </div>
-              <div class="col-sm-3">
-                <label>
-                  Description
-                </label>
-                <input type="text" class="form-control  " placeholder="Description" #searchCol5 />
+        <div class="row justify-content-end">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row justify-content-right">
+                  <div class="col ">
+                    <label>
+                      “DA – A”
+                    </label>
+                    <input type="text" class="form-control  " placeholder="From-To date" ngxDaterangepickerMd
+                      [(ngModel)]="selected" #searchCol1 />
+                  </div>
+                  <div class="col ">
+                    <label>
+                      Numero Rif
+                    </label>
+                    <input type="text" class="form-control  " placeholder="Rif Number" #searchCol2 />
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col ">
+                    <label>
+                      Sommario
+                    </label>
+                    <input type="text" class="form-control  " placeholder="Summery" #searchCol3 />
+                  </div>
+                  <div class="col ">
+                    <label>
+                      Stato
+                    </label>
+                    <select class="form-control" #searchCol4>
+                      <option value="">Status</option>
+                    </select>
+                  </div>
+                  <div class="w-100"></div>
+                  <div class="col ">
+                    <label>
+                      Descrizione
+                    </label>
+                    <input type="text" class="form-control  " placeholder="Description" #searchCol5 />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -104,9 +109,36 @@
                     </button>
                   </td>
                   <td>{{ ticket.id_kpi || 'N/A' }}</td>
-                  <td>{{ ticket.reference1 || 'N/A' }}</td>
-                  <td>{{ ticket.reference2 || 'N/A' }}</td>
-                  <td>{{ ticket.reference3 || 'N/A' }}</td>
+                  <td>
+                    <div *ngIf="ticket.reference1; else reference1">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference1" triggers="focus">
+                        {{ ticket.reference1 | slice:0:15 }}
+                      </button>
+                    </div>
+                    <ng-template #reference1>
+                      N/A
+                    </ng-template>
+                  </td>
+                  <td>
+                    <div *ngIf="ticket.reference2; else reference2">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference2" triggers="focus">
+                        {{ ticket.reference2 | slice:0:15 }}
+                      </button>
+                    </div>
+                    <ng-template #reference2>
+                      N/A
+                    </ng-template>
+                  </td>
+                  <td>
+                    <div *ngIf="ticket.reference3; else reference3">
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference3" triggers="focus">
+                        {{ ticket.reference3 | slice:0:15 }}
+                      </button>
+                    </div>
+                    <ng-template #reference3>
+                      N/A
+                    </ng-template>
+                  </td>
                   <td>{{ ticket.period || 'N/A' }}</td>
                   <td>
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
