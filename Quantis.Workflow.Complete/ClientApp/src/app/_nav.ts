@@ -180,6 +180,12 @@ export const navItems: NavData[] = [
         url: '/sdmstatus',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'User Profiling',
+        url: '/userprofiling',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
       }
     ]
   },
