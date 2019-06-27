@@ -24,10 +24,6 @@
       <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" #searchCol3>
         <option value="">Anno</option>
         <option *ngFor="let year of anni" >{{year}}</option>
-         
-       <!-- <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>-->
       </select>
       <button type="button" class="btn btn-primary ml-3" (click)="populateDateFilter()">Filter</button>
       <button type="button" class="btn btn-primary ml-3" (click)="rerender()">Refresh</button>

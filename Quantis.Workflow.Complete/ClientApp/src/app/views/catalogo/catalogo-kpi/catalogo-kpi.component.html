@@ -31,8 +31,6 @@
                                                  <th style="text-align:center">TITOLO BREVE</th>
                                                  <th style="text-align:center">CARICAMENTO</th>
                                                  <th style="text-align:center">FREQUENZA</th>
-                                                 <th style="text-align:center">DATA WF</th>
-                                                 <th style="text-align:center">DATA WM</th>
                                                  <th class="notExportCsv" style="text-align:center">ABILITATO</th>
                                                  <th class="notExportCsv" style="text-align:center">REMINDER</th>
                                                  <th class="notExportCsv" style="text-align:center">WORKFLOW</th>
@@ -51,15 +49,13 @@
                                                  <td [ngClass]="isNumber(row.short_name) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
                                                  <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
                                                  <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
-                                                 <td [ngClass]="isNumber(row.wf_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.wf_last_sent}}</td>
-                                                 <td [ngClass]="isNumber(row.rm_last_sent) ? 'rightAlign' : 'leftAlign'">{{row.rm_last_sent}}</td>
                                                  <td class="notExportCsv" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
                                                  <td class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
                                                  <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
                                                  <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
                                                  <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
                                                  <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
+                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
                                                  <td class="notExportCsv" align="center">
                                                    <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                                                            data-target="#kpiModal">
