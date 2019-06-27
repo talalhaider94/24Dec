@@ -24,12 +24,12 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("GetTicketsVerificationByUser")]
         public List<SDMTicketLVDTO> GetTicketsVerificationByUser()
         {
-            return _sdmAPI.GetTicketsByUser(HttpContext,true);
+            return _sdmAPI.GetTicketsVerificationByUser(HttpContext);
         }
         [HttpGet("GetTicketsSearchByUser")]
         public List<SDMTicketLVDTO> GetTicketsSearchByUser()
         {
-            return _sdmAPI.GetTicketsByUser(HttpContext,false);
+            return _sdmAPI.GetTicketsRicercaByUser(HttpContext);
         }
         [HttpGet("GetAllTickets")]
         public List<SDMTicketLVDTO> GetAllTickets()

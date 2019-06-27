@@ -390,5 +390,74 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public List<int> GetGlobalRulesByUserId(int userId)
+        {
+            try
+            {
+                var ent = _dbcontext.UserKPIs.Where(o=>o.user_id==userId);
+                return ent.Select(o => o.global_rule_id).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AssignGlobalRulesToUserId(MultipleRecordsDTO dto)
+        {
+            try
+            {
+                var ent = _dbcontext.UserKPIs.Where(o => o.user_id == dto.Id);
+                _dbcontext.UserKPIs.RemoveRange(ent.ToArray());
+                _dbcontext.SaveChanges();
+                var newent = dto.Ids.Select(o => new T_User_KPI()
+                {
+                    user_id=dto.Id,
+                    global_rule_id=o
+                });
+                _dbcontext.UserKPIs.AddRange(newent.ToArray());
+                _dbcontext.SaveChanges();
+                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<string> GetContractPartyByUser(int userId)
+        {
+            try
+            {
+                var res = new List<UserKPIDTO>();
+                string query = "select uk.user_id,r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id join t_user_kpis uk on r.global_rule_id=uk.global_rule_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and uk.user_id="+ userId;
+                using (var command = _dbcontext.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = query;
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(new UserKPIDTO()
+                            {
+                                User_Id=(int)result[0],
+                                Rule_Name = (string)result[1],
+                                Global_Rule_Id = Decimal.ToInt32((Decimal)result[2]),
+                                Sla_Id = Decimal.ToInt32((Decimal)result[3]),
+                                Sla_Name = (string)result[4],
+                                Customer_name = (string)result[5],
+                                Customer_Id = (int)result[6],
+                            });
+                        }
+                    }
+                    return res.Select(o => o.Customer_name).ToList();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

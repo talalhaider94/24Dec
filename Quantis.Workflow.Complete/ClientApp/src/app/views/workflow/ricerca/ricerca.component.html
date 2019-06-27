@@ -1,41 +1,47 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="form-group row">
-            <div class="col-sm-3">
-              <label>
-                From To date
-              </label>
-              <input type="text" class="form-control  " placeholder="From-To date" ngxDaterangepickerMd
-                [(ngModel)]="selected" #searchCol1 />
-            </div>
-            <div class="col-sm-3">
-              <label>
-                Refrence Number
-              </label>
-              <input type="text" class="form-control  " placeholder="Rif Number" #searchCol2 />
-            </div>
-            <div class="col-sm-3">
-              <label>
-                Summery
-              </label>
-              <input type="text" class="form-control  " placeholder="Summery" #searchCol3 />
-            </div>
-            <div class="col-sm-3">
-              <label>
-                Status
-              </label>
-              <select class="form-control" #searchCol4>
-                <option value="">Status</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <label>
-                Description
-              </label>
-              <input type="text" class="form-control  " placeholder="Description" #searchCol5 />
+      
+      <button type="button" class="btn btn-primary pull-right mb-4 ml-4" (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic"><i class="fa fa-search"></i>
+      </button>
+      <div id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group row">
+              <div class="col-sm-3">
+                <label>
+                  From To date
+                </label>
+                <input type="text" class="form-control  " placeholder="From-To date" ngxDaterangepickerMd
+                  [(ngModel)]="selected" #searchCol1 />
+              </div>
+              <div class="col-sm-3">
+                <label>
+                  Refrence Number
+                </label>
+                <input type="text" class="form-control  " placeholder="Rif Number" #searchCol2 />
+              </div>
+              <div class="col-sm-3">
+                <label>
+                  Summery
+                </label>
+                <input type="text" class="form-control  " placeholder="Summery" #searchCol3 />
+              </div>
+              <div class="col-sm-3">
+                <label>
+                  Status
+                </label>
+                <select class="form-control" #searchCol4>
+                  <option value="">Status</option>
+                </select>
+              </div>
+              <div class="col-sm-3">
+                <label>
+                  Description
+                </label>
+                <input type="text" class="form-control  " placeholder="Description" #searchCol5 />
+              </div>
             </div>
           </div>
         </div>
@@ -82,18 +88,18 @@
                   <!-- <td class="d-none">{{ ticket.id }} </td> -->
                   <td>{{ ticket.ref_num || 'N/A' }}</td>
                   <td>
-                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="dblclick">
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
                       {{ ticket.summary | slice:0:15 || 'N/A' }}
                     </button>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="dblclick">
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="focus">
                       {{ ticket.group | slice:0:15 || 'N/A' }}
                     </button>
                   </td>
                   <td>{{ ticket.status || 'N/A' }}</td>
                   <td>
-                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description" triggers="dblclick">
+                    <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description" triggers="focus">
                       {{ ticket.description | slice:0:15 || 'N/A' }}
                     </button>
                   </td>

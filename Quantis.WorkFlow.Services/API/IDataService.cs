@@ -20,6 +20,7 @@ namespace Quantis.WorkFlow.Services.API
         bool AddUpdateUser(UserDTO dto);
         PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);
         List<NotifierLogDTO> GetEmailHistory();
+        List<Tuple<int, int>> GetFormAttachmentCount(List<int> formids);
         List<PageDTO> GetAllPages();
         PageDTO GetPageById(int Id);
         bool AddUpdatePage(PageDTO dto);

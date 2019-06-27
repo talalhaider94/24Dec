@@ -29,7 +29,9 @@ export class RicercaComponent implements OnInit, OnDestroy {
   dtOptions: any = {};
   dtTrigger = new Subject();
   bsValue = new Date();
-  public selected: any;
+  isCollapsed = true;
+
+  public selected: any; // why
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -90,7 +92,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
         }
       }
     };
-    this.workFlowService.getAllTickets().pipe(first()).subscribe(data => {
+    this.workFlowService.getTicketsSearchByUserRecerca().pipe(first()).subscribe(data => {
       console.log('getAllTickets', data);
       this.allTickets = data;
       this.dtTrigger.next();

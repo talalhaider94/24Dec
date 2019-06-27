@@ -56,9 +56,7 @@ export class AdminUtentiComponent implements OnInit {
     organization: '',
     mail: '',
     userid: '',
-    manager: '',
-    user_admin: false,
-    user_sadmin: false
+    manager: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -71,9 +69,7 @@ export class AdminUtentiComponent implements OnInit {
       organization: 'STRUTTURA',
       mail: 'MAIL',
       userid: 'USERID',
-      manager: 'RESPONSABILE',
-      user_admin: 'USER_ADMIN',
-      user_sadmin: 'USER_SADMIN'
+      manager: 'RESPONSABILE'
     }
   ]
 
@@ -97,8 +93,6 @@ export class AdminUtentiComponent implements OnInit {
     this.modalData.mail = data.user_email;
     this.modalData.userid = '';
     this.modalData.manager = '';
-    this.modalData.user_admin = false;
-    this.modalData.user_sadmin = false;
   }
 
   updateUtenti() {

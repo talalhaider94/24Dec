@@ -72,9 +72,7 @@ export class CatalogoUtentiComponent implements OnInit {
     organization: '',
     mail: '',
     userid: '',
-    manager: '',
-    user_admin: '',
-    user_sadmin: ''
+    manager: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -87,9 +85,7 @@ export class CatalogoUtentiComponent implements OnInit {
       organization: 'STRUTTURA',
       mail: 'MAIL',
       userid: 'USERID',
-      manager: 'RESPONSABILE',
-      user_admin: '',
-      user_sadmin: ''
+      manager: 'RESPONSABILE'
     }
   ]
   
@@ -105,8 +101,6 @@ export class CatalogoUtentiComponent implements OnInit {
     this.modalData.mail = data.mail;
     this.modalData.userid = data.userid;
     this.modalData.manager = data.manager;
-    this.modalData.user_admin = data.user_admin;
-    this.modalData.user_sadmin = data.user_sadmin;
   }
 
   updateUtenti() {

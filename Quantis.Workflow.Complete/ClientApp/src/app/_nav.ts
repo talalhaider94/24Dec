@@ -189,7 +189,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.0.1',
+    name: 'Version 1.0.3',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },

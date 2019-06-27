@@ -352,7 +352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsByUser(HttpContext context,bool filerOnPeriod)
+        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -368,10 +368,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
                     userid = userid.Split('\\')[1];
-                    var select_al = _sdmClient.doSelectAsync(_sid, "cr","", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
-                    select_al.Wait();
-                    var select_resultl = select_al.Result.doSelectReturn;
-
 
                     var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).name+ "' and zz_cned_string1='"+ userid + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
@@ -387,19 +383,58 @@ namespace Quantis.WorkFlow.APIBase.API
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
-                    if (filerOnPeriod)
-                    {
-                        string period=DateTime.Now.ToString("MM/dd");
-                        ret = tickets.Where(o=>o.Period==period).ToList();
-                    }
-                    else
-                    {
-                        ret = tickets;
-                    }
-                    
+                    string period = DateTime.Now.ToString("MM/dd");
+                    ret = tickets.Where(o => o.Period == period).ToList();
+
                 }
             }
             catch(Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                LogOut();
+            }
+            return ret;
+
+        }
+
+        public List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context)
+        {
+            List<SDMTicketLVDTO> ret = null;
+            
+            try
+            {
+                var user = context.User as AuthUser;
+                if (user == null)
+                {
+                    throw new Exception("No user Login to Get Tickets by user");
+                }
+                var userid = _dataService.GetUserIdByUserName(user.UserName);
+                if (userid != null)
+                {
+                    List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
+                    userid = userid.Split('\\')[1];
+                    var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
+                    string filterstring = "";
+                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4));
+                    if (!groups.Any())
+                    {
+                        return tickets;
+                    }
+                    var filters = groups.Select(o => string.Format(" group='{0}' ", o));
+                    filterstring=string.Join("OR", filters);
+                    LogIn();
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a.Wait();
+                    var select_result = select_a.Result.doSelectReturn;
+                    return parseTickets(select_result);
+
+
+                }
+            }
+            catch (Exception e)
             {
                 throw e;
             }
@@ -613,7 +648,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 if (_groupMapping.Any(o => o.handle == dto.Group))
                 {
-                    dto.Group = _groupMapping.FirstOrDefault(o => o.handle == dto.Group).name;
+                    dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
                 }
                 dtos.Add(dto);
             }

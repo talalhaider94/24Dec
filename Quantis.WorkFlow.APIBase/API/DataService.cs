@@ -103,11 +103,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<FormAttachmentDTO> GetAttachmentsByFormID(int formId)
+        public List<Tuple<int,int>> GetFormAttachmentCount(List<int> formids)
         {
             try
             {
-                return null;
+                return _dbcontext.Forms.Include(p => p.Attachments).Where(o => formids.Contains(o.form_id)).Select(o => new Tuple<int, int>(o.form_id, o.Attachments.Count)).ToList();
             }
             catch (Exception e)
             {
@@ -779,7 +779,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse(month), Int32.Parse("01")));
                     }
-                    if ((filterByKpiId != null))
+                    if ((id_kpi > 0))
                     {
                         command.Parameters.AddWithValue(":id_kpi", id_kpi);
                     }
