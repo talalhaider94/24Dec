@@ -188,7 +188,6 @@ export const navItems: NavData[] = [
         url: '/workload',
         icon: 'fa fa-gear',
         key: 'VIEW_WORKLOAD_CONFIGURATIONS'
-<<<<<<< HEAD
       },
       {
         name: 'Group',
@@ -207,8 +206,6 @@ export const navItems: NavData[] = [
         url: '/userprofiling',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
-=======
->>>>>>> ef90e627c6bcd65ac9cf59789ac8fe15e3d985ac
       }
     ]
   },
