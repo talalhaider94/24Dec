@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public ReaderConfiguration reader_configuration { get; set; }
         public int user_group_id { get; set; }
         public string user_group_name { get; set; }
+        public int day_cutoff { get; set; }
         public bool cutoff { get; set; }
     }
     public class ReaderConfiguration
