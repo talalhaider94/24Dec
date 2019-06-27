@@ -168,6 +168,18 @@ export const navItems: NavData[] = [
         url: '/workload',
         icon: 'fa fa-gear',
         key: 'VIEW_WORKLOAD_CONFIGURATIONS'
+      },
+      {
+        name: 'Group',
+        url: '/sdmgroup',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'Status',
+        url: '/sdmstatus',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
       }
     ]
   },
