@@ -41,6 +41,7 @@ namespace Quantis.WorkFlow.Services.API
         bool RemoveAttachment(int Id);
 
         LoginResultDTO Login(string username, string password);
+        void Logout(string token);
         bool SumbitForm(SubmitFormDTO dto);
         bool SubmitAttachment(List<FormAttachmentDTO> dto);
 

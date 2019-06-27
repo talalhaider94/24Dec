@@ -700,6 +700,20 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public void Logout(string token)
+        {
+            try
+            {
+                var sesison=_dbcontext.Sessions.Single(o => o.session_token == token);
+                sesison.login_time = DateTime.Now;
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public bool ResetPassword(string username, string email)
         {
             try
