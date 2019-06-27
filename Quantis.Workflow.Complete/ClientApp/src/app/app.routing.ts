@@ -98,6 +98,10 @@ export const routes: Routes = [
       {
         path: 'sdmstatus',
         loadChildren: './views/sdmstatus/sdmstatus.module#SdmStatusModule'
+      },
+      {
+        path: 'userprofiling',
+        loadChildren: './views/userprofiling/userprofiling.module#UserProfilingModule'
       }
     ]
   },
