@@ -34,7 +34,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
                 Encoding encoding = Encoding.GetEncoding("iso-8859-1");
                 string mytoken = encoding.GetString(Convert.FromBase64String(token));
                 //string mytoken = token;
-                var token_entity=_context.Sessions.FirstOrDefault(o => o.session_token == token && (o.logout_time==null || o.logout_time > DateTime.Now) && o.expire_time > DateTime.Now);
+                var token_entity=_context.Sessions.FirstOrDefault(o => o.session_token == token && o.logout_time==null && o.expire_time > DateTime.Now);
                 if (token_entity != null)
                 {
                     var user_entity = _context.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account == token_entity.user_name);
@@ -42,6 +42,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     {
                         UserId = token_entity.user_id,
                         UserName = user_entity.ca_bsi_account,
+                        SessionToken=token_entity.session_token,
                         Permissions = (List<string>)memoryCache.Get("Permission_"+token_entity.user_id)
                     };
                     token_entity.expire_time = DateTime.Now.AddMinutes(getSessionTimeOut(_context));
