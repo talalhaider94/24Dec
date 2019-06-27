@@ -39,9 +39,11 @@ export class ProveVarieComponent implements OnInit {
   loading: boolean = false;
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
+  formAttachmentsArrayFiltered: any = [];
   userLoadingFormErrors: string[] = [];
   fileUploading: boolean = false;
   cutOff: boolean = false;
+  day_cutoff: number;
   modifyDate: Date;
   readOnlyUserForm: boolean = true;
   public uploader: FileUploader = new FileUploader({ url: URL });
@@ -90,8 +92,8 @@ export class ProveVarieComponent implements OnInit {
   yearOption;
   ngOnInit() {
     const currentUser = this.authService.getUser();
-    this.monthOption = 1;
-    this.yearOption = 2018;
+    this.monthOption = moment().format('MM');
+    this.yearOption = moment().format('YYYY');
     this.isAdmin = currentUser.isadmin;
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
@@ -289,10 +291,11 @@ export class ProveVarieComponent implements OnInit {
       this.jsonForm = data[0];
       console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
       this.cutOff = data[0].cutoff;
+      this.day_cutoff = data[0].day_cutoff;
       this.modifyDate = data[0].modify_date;
       if(data[0].cutoff) {
         let currentDate = moment().format();
-        let isDateBefore = moment(data[0].modify_date).isBefore(currentDate);
+        let isDateBefore = moment(data[0].day_cutoff).isBefore(currentDate);
           if(isDateBefore) {
             this.readOnlyUserForm = false;
           }
@@ -332,6 +335,7 @@ export class ProveVarieComponent implements OnInit {
       console.log('_getAttachmentsByFormIdEndPoint ==>', data);
       if (data) {
         this.formAttachmentsArray = data;
+        this.onDataChange();
       }
     }, error => {
       console.error('_getAttachmentsByFormIdEndPoint ==>', error);
@@ -477,13 +481,18 @@ export class ProveVarieComponent implements OnInit {
     }
   }
   
-  onMonthChange(event) {
-    this.formAttachmentsArray = this.formAttachmentsArray.filter(attachment => attachment.period == event.target.value);
+  /*onMonthChange(event) {
+    console.log(event.target.value);
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.period == event.target.value);
   }
 
   onYearChange(event) {
-    debugger
-    this.formAttachmentsArray = this.formAttachmentsArray.filter(attachment => attachment.year == event.target.value);
+    console.log(event.target.value);
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.year == event.target.value);
+  }*/
+  onDataChange() {
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.year == this.yearOption);
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArrayFiltered.filter(attachment => attachment.period == this.monthOption);
   }
 
   
