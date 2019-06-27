@@ -66,6 +66,10 @@ export class SdmGroupComponent implements OnInit {
   ) {
     $this = this;
   }
+  public handle: any;
+  public name: any;
+  public step: any;
+  public category: any;
 
   ngOnInit() {
   }
