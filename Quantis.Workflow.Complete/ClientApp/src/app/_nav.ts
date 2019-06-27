@@ -84,6 +84,18 @@ export const navItems: NavData[] = [
         icon: 'fa fa-search',
         key: ['VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA']
       },
+      {
+        name: 'Gruppi',
+        url: '/sdmgroup',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'Stati',
+        url: '/sdmstatus',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      }
     ]
   },
   {
@@ -96,12 +108,7 @@ export const navItems: NavData[] = [
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o',
-      },
-      {
-        name: 'Catalogo KPI',
-        url: '/catalogo/kpi',
-        icon: 'fa fa-file-archive-o',
-        key: 'VIEW_CATALOG_KPI'
+        key: 'VIEW_UTENTI_DA_CONSOLIDARE'
       },
       {
         name: 'Catalogo Utenti',
@@ -109,6 +116,19 @@ export const navItems: NavData[] = [
         icon: 'fa fa-address-book-o',
         key: 'VIEW_CATALOG_UTENTI',
       },
+      {
+        name: 'KPI da Consolidare',
+        url: '/catalogo/admin-kpi',
+        icon: 'fa fa-file-archive-o',
+        key: 'VIEW_KPI_DA_CONSOLIDARE'
+      },
+      {
+        name: 'Catalogo KPI',
+        url: '/catalogo/kpi',
+        icon: 'fa fa-file-archive-o',
+        key: 'VIEW_CATALOG_KPI'
+      },
+      
     ]
   },
   {
@@ -168,18 +188,6 @@ export const navItems: NavData[] = [
         url: '/workload',
         icon: 'fa fa-gear',
         key: 'VIEW_WORKLOAD_CONFIGURATIONS'
-      },
-      {
-        name: 'Group',
-        url: '/sdmgroup',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
-      },
-      {
-        name: 'Status',
-        url: '/sdmstatus',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
       }
     ]
   },
