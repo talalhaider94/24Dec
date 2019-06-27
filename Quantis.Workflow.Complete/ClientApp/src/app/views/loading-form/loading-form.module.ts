@@ -7,7 +7,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { DataTablesModule } from 'angular-datatables';
 import { FilterPipeModule } from 'ngx-filter-pipe';
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {
   MatSidenavModule,
   MatButtonModule,
@@ -95,7 +95,8 @@ import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-adm
     MatStepperModule,
     MatTooltipModule,
     DataTablesModule,
-    FilterPipeModule
+    FilterPipeModule,
+    Ng2SearchPipeModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
