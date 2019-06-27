@@ -12,7 +12,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
@@ -30,7 +29,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     BsDatepickerModule.forRoot(),
     TooltipModule.forRoot(),
     PopoverModule.forRoot(),
-    NgxDaterangepickerMd.forRoot(),
     FileUploadModule,
     CollapseModule.forRoot(),
   ],
