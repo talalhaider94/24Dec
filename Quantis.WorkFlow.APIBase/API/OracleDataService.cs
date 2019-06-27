@@ -234,6 +234,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 reader_configuration = GetFormAdapterConfiguration((string)o[7]),
                                 user_group_id = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
                                 user_group_name = (o[9] == DBNull.Value) ? string.Empty : (string)o[9],
+                                day_cutoff = day_cutoff,
                                 cutoff = (bool)cutoff_result
                             });
                             return result.ToList();
@@ -252,6 +253,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 reader_configuration = null,
                                 user_group_id = (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
                                 user_group_name = (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
+                                day_cutoff = day_cutoff,
                                 cutoff = (bool)cutoff_result
                             });
                             return result.ToList();
