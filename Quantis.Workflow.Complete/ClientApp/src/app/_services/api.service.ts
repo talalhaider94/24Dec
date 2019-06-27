@@ -37,6 +37,16 @@ export class ApiService {
     return this.http.get(getConfigurationsEndPoint, Headers.setHeaders('GET'));
   }
 
+  getSDMGroupConfigurations(): Observable<any> {
+    const getSDMGroupConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllSDMGroupConfigurations`;
+    return this.http.get(getSDMGroupConfigurationsEndPoint, Headers.setHeaders('GET'));
+  }
+  
+  getSDMStatusConfigurations(): Observable<any> {
+    const getSDMStatusConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllSDMStatusConfigurations`;
+    return this.http.get(getSDMStatusConfigurationsEndPoint, Headers.setHeaders('GET'));
+  }
+
   getArchivedKpis(month, year): Observable<any> {
     const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
@@ -46,6 +56,16 @@ export class ApiService {
     const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?id_kpi=${id}`;
     return this.http.get(getArchivedKpisEndPoint, Headers.setHeaders('GET'));
   }
+  
+  deleteSDMGroupConfiguration(id): Observable<any> {
+    const deleteSDMGroupConfiguration = `${environment.API_URL}/information/DeleteSDMGroupConfiguration/${id}`;
+    return this.http.get(deleteSDMGroupConfiguration, Headers.setHeaders('POST'));
+  }
+    
+  deleteSDMStatusConfiguration(id): Observable<any> {
+    const deleteSDMStatusConfiguration = `${environment.API_URL}/information/DeleteSDMStatusConfiguration/${id}`;
+    return this.http.get(deleteSDMStatusConfiguration, Headers.setHeaders('POST'));
+  }
 
   getDataKpis(month, year): Observable<any> {
     const getDataKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
@@ -54,6 +74,26 @@ export class ApiService {
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateConfiguration`, config, Headers.setHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
+  updateSDMGroupConfig(config) {
+    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`, config, Headers.setHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+  
+  updateSDMStatusConfig(config) {
+    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`, config, Headers.setHeaders('POST'))
       .pipe(
         tap(
           data => data,

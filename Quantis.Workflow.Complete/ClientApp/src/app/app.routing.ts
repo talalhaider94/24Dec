@@ -90,6 +90,14 @@ export const routes: Routes = [
       {
         path: 'tconfiguration',
         loadChildren: './views/tconfiguration/tconfiguration.module#TConfigurationModule'
+      },
+      {
+        path: 'sdmgroup',
+        loadChildren: './views/sdmgroup/sdmgroup.module#SdmGroupModule'
+      },
+      {
+        path: 'sdmstatus',
+        loadChildren: './views/sdmstatus/sdmstatus.module#SdmStatusModule'
       }
     ]
   },
