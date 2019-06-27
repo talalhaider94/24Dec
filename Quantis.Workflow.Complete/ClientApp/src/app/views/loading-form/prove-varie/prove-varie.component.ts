@@ -91,6 +91,7 @@ export class ProveVarieComponent implements OnInit {
   monthOption;
   yearOption;
   ngOnInit() {
+    this.getAnno();
     const currentUser = this.authService.getUser();
     this.monthOption = moment().format('MM');
     this.yearOption = moment().format('YYYY');
@@ -495,5 +496,14 @@ export class ProveVarieComponent implements OnInit {
     this.formAttachmentsArrayFiltered = this.formAttachmentsArrayFiltered.filter(attachment => attachment.period == this.monthOption);
   }
 
-  
+  anni = [];
+  getAnno() {
+    for (var i = 2016; i <= +(moment().add('months', 7).format('YYYY')); i++) {
+      this.anni.push(i);
+
+    }
+    return this.anni;
+  }
+
+
 }
