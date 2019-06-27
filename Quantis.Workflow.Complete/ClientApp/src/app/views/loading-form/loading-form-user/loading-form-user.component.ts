@@ -49,12 +49,13 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
           last: "Ultimo"
         },
         aria: {
-          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortAscending: ":attiva per ordinare la colonna in ordine crescente",
           sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
         }
       }
     };
     const currentUser = this.authService.getUser();
+    // getLoadingForms()
     this.loadingFormService.getFormsByUserId(currentUser.userid).pipe(first()).subscribe(data => {
       console.log('getFormsByUserId', data);
       this.loadingForms = data;

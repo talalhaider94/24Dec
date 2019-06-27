@@ -38,8 +38,8 @@ export class LoadingFormService {
   }
 
   getFormsByUserId(user_id:number): Observable<any> {
-    const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUserId/${user_id}`
-    return this.http.get(formsByUserIdEndPoint,Headers.setHeaders('GET'));
+    const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUser`;
+    return this.http.get(formsByUserIdEndPoint,Headers.setTokenHeaders('GET'));
   }
   // form submitted by Admin from Loading form
   createForm(form): Observable<any> {
