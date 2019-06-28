@@ -143,7 +143,7 @@
             </thead>
             <tbody>
               <tr *ngIf="getTicketHistories.length === 0 && !loading">
-                <td colspan="2"><strong>No tickets found.</strong></td>
+                <td colspan="2"><strong>Nessun ticket trovato.</strong></td>
               </tr>
               <tr *ngIf="loading" class="text-center">
                 <td colspan="2">
@@ -195,7 +195,7 @@
               </thead>
               <tbody>
                 <tr *ngIf="uploader.queue.length === 0">
-                  <td colspan="2">nessun file da caricare</td>
+                  <td colspan="2">Nessun file da caricare</td>
                 </tr>
                 <tr *ngFor="let item of uploader.queue">
                   <td>{{ item?.file?.name }}</td>
@@ -271,7 +271,7 @@
         <!-- APPROVE model body -->
         <form [formGroup]="approveForm" (ngSubmit)="approveFormSubmit()">
           <div class="input-group mb-3">
-            <textarea formControlName="description" class="form-control" placeholder="Description"
+            <textarea formControlName="description" class="form-control" placeholder="Descrizione"
               autocomplete="description" rows="3"></textarea>
           </div>
           <div class="row">
@@ -306,14 +306,13 @@
         <form [formGroup]="rejectForm" (ngSubmit)="rejectFormSubmit()">
           <div class="input-group mb-3">
             <textarea formControlName="description" class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && rejectValues.description.errors }" placeholder="Description"
+              [ngClass]="{ 'is-invalid': submitted && rejectValues.description.errors }" placeholder="Descrizione"
               autocomplete="description" rows="3"></textarea>
 
           </div>
           <!-- display description error -->
           <span class="text-danger mb-3"
-            *ngIf="submitted && rejectValues.description.errors && rejectValues.description.errors.required">Description
-            is required</span>
+            *ngIf="submitted && rejectValues.description.errors && rejectValues.description.errors.required">Giustificativo obbligatorio</span>
           <div class="row">
             <div class="col-6">
               <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
