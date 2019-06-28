@@ -236,7 +236,7 @@ namespace Quantis.WorkFlow.APIBase.API
                       dto.Period,
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
-                ret= parseTickets(ticket).FirstOrDefault();
+                ret= parseNewTicket(ticket);
             }
             catch (Exception e)
             {
@@ -264,7 +264,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 string newRequestHandle = "";
                 string newRequestNumber = "";
                 var ticket = _sdmClient.createRequestAsync(new SDM.createRequestRequest(_sid, "",
-                    new string[38]
+                    new string[34]
                     {"type",
                       "crt:180",
                       "customer",
@@ -299,13 +299,13 @@ namespace Quantis.WorkFlow.APIBase.API
                       dto.Reference3,
                       "zz_cned_string4",
                       dto.Period,
-                      "zz_primary_contract_party",
-                      dto.primary_contract_party+"",
-                      "zz_secondary_contract_party",
-                      dto.secondary_contract_party+""
+                      //"zz_primary_contract_party",
+                     // dto.primary_contract_party+"",
+                      //"zz_secondary_contract_party",
+                     // dto.secondary_contract_party+""
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
-                ret= parseTickets(ticket).FirstOrDefault();
+                ret = parseNewTicket(ticket);
                 var attachments = _dataService.GetAttachmentsByKPIID(Id);
                 foreach(var att in attachments)
                 {
@@ -623,6 +623,33 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        private SDMTicketLVDTO parseNewTicket(string ticket)
+        {
+            var dtos = new List<SDMTicketLVDTO>();
+            XDocument xdoc = XDocument.Parse(ticket);
+            var attributes = xdoc.Element("UDSObject").Element("Attributes").Elements("Attribute");
+            SDMTicketLVDTO dto = new SDMTicketLVDTO();
+            dto.Id = xdoc.Element("UDSObject").Element("Handle").Value.Substring(3);
+            dto.ref_num = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "ref_num").Element("AttrValue").Value;
+            dto.Description = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "description").Element("AttrValue").Value;
+            dto.Group = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "group").Element("AttrValue").Value;
+            dto.Summary = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "summary").Element("AttrValue").Value;
+            dto.Status = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "status").Element("AttrValue").Value;
+            dto.ID_KPI = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_mgnote").Element("AttrValue").Value;
+            dto.Reference1 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string1").Element("AttrValue").Value;
+            dto.Reference2 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string2").Element("AttrValue").Value;
+            dto.Reference3 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string3").Element("AttrValue").Value;
+            dto.Period = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string4").Element("AttrValue").Value;
+            //dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
+            //dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
+
+            if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
+            {
+                dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
+            }
+            return dto;
+
+        }
         private List<SDMTicketLVDTO> parseTickets(string tickets)
         {
             var dtos = new List<SDMTicketLVDTO>();
@@ -643,8 +670,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.Reference2 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string2").Element("AttrValue").Value;
                 dto.Reference3 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string3").Element("AttrValue").Value;
                 dto.Period = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string4").Element("AttrValue").Value;
-                dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
-                dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
+                //dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
+                //dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
 
                 if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
                 {
