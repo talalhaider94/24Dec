@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit{
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService
   ) {
-    localStorage.removeItem('currentUser');
+    //localStorage.removeItem('currentUser');
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
       this.router.navigate(['/coming-soon']);
     }
