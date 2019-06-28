@@ -45,6 +45,7 @@ export class AuthService {
   logout() {
     const logoutEndPoint = `${environment.API_URL}/data/logout`;
     this.currentUserSubject.next(null);
+    localStorage.removeItem('currentUser');
     return this.http.get(logoutEndPoint, Headers.setTokenHeaders('GET'));
   }
 

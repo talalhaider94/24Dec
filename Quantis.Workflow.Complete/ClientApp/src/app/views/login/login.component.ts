@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit{
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService
-  ) { 
-
+  ) {
+    localStorage.removeItem('currentUser');
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
       this.router.navigate(['/coming-soon']);
     }
@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit{
   get f() { return this.loginForm.controls; }
 
   ngOnInit() {
-    this.authService.logout();
     this.loginForm = this.formBuilder.group({
         userName: ['', Validators.required],
         password: ['', [Validators.required, Validators.minLength(4)]]
