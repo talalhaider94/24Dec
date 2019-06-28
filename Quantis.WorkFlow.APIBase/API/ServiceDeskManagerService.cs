@@ -418,7 +418,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     userid = userid.Split('\\')[1];
                     var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
                     string filterstring = "";
-                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4)).ToList();
+                    //var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4)).ToList();
+                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.name).ToList();
                     if (!groups.Any())
                     {
                         return tickets;
@@ -646,7 +647,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
                 dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
 
-                if (_groupMapping.Any(o => o.handle == dto.Group))
+                if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
                 {
                     dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
                 }
