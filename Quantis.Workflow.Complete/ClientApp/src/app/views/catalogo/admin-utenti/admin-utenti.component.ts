@@ -56,7 +56,8 @@ export class AdminUtentiComponent implements OnInit {
     organization: '',
     mail: '',
     userid: '',
-    manager: ''
+    manager: '',
+    password: '9e9f3e692e0a7da4ed9bae3c77f084022dd4dd3f376d9cfd711603f6992e665e',
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -89,6 +90,7 @@ export class AdminUtentiComponent implements OnInit {
     this.modalData.ca_bsi_user_id = data.user_id;
     this.modalData.name = '';
     this.modalData.surname = '';
+    this.modalData.password = '9e9f3e692e0a7da4ed9bae3c77f084022dd4dd3f376d9cfd711603f6992e665e';
     this.modalData.organization = data.user_organization_name;
     this.modalData.mail = data.user_email;
     this.modalData.userid = '';

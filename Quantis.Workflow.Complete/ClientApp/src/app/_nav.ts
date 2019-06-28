@@ -70,7 +70,7 @@ export const navItems: NavData[] = [
     name: 'Workflow',
     url: '/coming-soon',
     icon: 'fa fa-code-fork',
-    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA'],
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA'],
     children: [
       {
         name: 'KPI in Verifica',
@@ -82,7 +82,7 @@ export const navItems: NavData[] = [
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        key: ['VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA']
+        key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
   },
@@ -90,12 +90,13 @@ export const navItems: NavData[] = [
     name: 'Catalogo',
     url: '/catalogo',
     icon: 'fa fa-folder-open-o',
-    key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI'],
+    key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI', 'VIEW_UTENTI_DA_CONSOLIDARE'],
     children: [
       {
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o',
+        key: 'VIEW_UTENTI_DA_CONSOLIDARE'
       },
       {
         name: 'Catalogo KPI',
@@ -111,7 +112,7 @@ export const navItems: NavData[] = [
       },
     ]
   },
-  {
+  /*{
     name: 'Report',
     url: '/coming-soon',
     icon: 'fa fa-files-o',
@@ -124,7 +125,7 @@ export const navItems: NavData[] = [
         key: '',
       }
     ]
-  },
+  },*/
   {
     name: 'KPI Certificati',
     url: '/archivedkpi',
@@ -163,7 +164,7 @@ export const navItems: NavData[] = [
         icon: 'fa fa-check-circle-o',
         key: 'VIEW_CONFIGURATIONS'
       },
-      /*{
+      /*{ // maybe not needed
         name: 'Workflow',
         url: '/workflow-conf',
         icon: 'fa fa-gear',
@@ -178,13 +179,13 @@ export const navItems: NavData[] = [
         name: 'SDM Gruppi',
         url: '/sdmgroup',
         icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
       {
         name: 'SDM Ticket Status',
         url: '/sdmstatus',
         icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
       {
         title: true,
