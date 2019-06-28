@@ -418,7 +418,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     userid = userid.Split('\\')[1];
                     var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
                     string filterstring = "";
-                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4));
+                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4)).ToList();
                     if (!groups.Any())
                     {
                         return tickets;
@@ -591,7 +591,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 using (var client = new HttpClient())
                 {
-                    List<string> data = new List<string>() { dto.primary_contract_party+"", dto.secondary_contract_party+"", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status };
+                    UploadKPIDTO data = new UploadKPIDTO() { arguments = new List<string>() { dto.primary_contract_party + "", dto.secondary_contract_party + "", dto.contract_name, dto.kpi_name, dto.id_ticket, dto.period, dto.ticket_status } };
                     var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "/api/UploadKPI/UploadKPI");
                     client.BaseAddress = new Uri(output.Item1);
                     var dataAsString = JsonConvert.SerializeObject(data);

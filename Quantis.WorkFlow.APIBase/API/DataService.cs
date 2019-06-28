@@ -651,7 +651,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account==username);
+                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account.ToLower()==username.ToLower());
                 if (usr != null)
                 {
                     var secret_key = _infomationAPI.GetConfiguration("be_restserver","secret_key");
