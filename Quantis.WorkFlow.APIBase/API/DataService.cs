@@ -929,7 +929,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             
                             while (reader.Read())
                             {
-
                                 //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
 
                                 ATDtDeDTO atdtde = new ATDtDeDTO();
@@ -950,7 +949,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
                                 atdtde.id_kpi = reader.GetInt32(reader.GetOrdinal("id_kpi"));
-
 
                                 list.Add(atdtde);
                             }                     
@@ -987,7 +985,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false && o.user_status == "ACTIVE" && o.user_organization_name != "INTERNAL").OrderByDescending(o => o.user_create_date);
+                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false && (o.user_status == "ACTIVE" || o.user_status == "INACTIVE") && o.user_organization_name != "INTERNAL").OrderByDescending(o => o.user_create_date);
                 var dtos = usr.Select(o => new TUserDTO()
                 {
                     user_email = o.user_email,
