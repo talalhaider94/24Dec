@@ -21,7 +21,7 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_ADMIN_LOADING_FORM = "VIEW_ADMIN_LOADING_FORM";
         public const string VIEW_LOADING_FORM_UTENTI = "VIEW_LOADING_FORM_UTENTI";
         public const string VIEW_CONFIGURATIONS = "VIEW_CONFIGURATIONS";
-        public const string VIEW_WORKLOAD_CONFIGURATIONS = "VIEW_WORKLOAD_CONFIGURATIONS";
+        public const string VIEW_WORKFLOW_CONFIGURATIONS = "VIEW_WORKFLOW_CONFIGURATIONS";
     }
 
 }
