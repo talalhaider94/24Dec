@@ -163,26 +163,34 @@ export const navItems: NavData[] = [
         icon: 'fa fa-check-circle-o',
         key: 'VIEW_CONFIGURATIONS'
       },
-      {
+      /*{
         name: 'Workflow',
         url: '/workflow-conf',
         icon: 'fa fa-gear',
-        key: 'VIEW_WORKFLOW_CONFIGURATIONS',
-        children: [
-          {
-            name: 'SDM Gruppi',
-            url: '/sdmgroup',
-            icon: 'fa fa-gear',
-            key: 'VIEW_CONFIGURATIONS'
-          },
-          {
-            name: 'SDM Ticket Status',
-            url: '/sdmstatus',
-            icon: 'fa fa-gear',
-            key: 'VIEW_CONFIGURATIONS'
-          },
-        ],
-      }, 
+        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
+      },*/
+      {
+        title: true,
+        name: 'Workflow',
+        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
+      },
+      {
+        name: 'SDM Gruppi',
+        url: '/sdmgroup',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'SDM Ticket Status',
+        url: '/sdmstatus',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        title: true,
+        name: 'Profilazione',
+        key: 'VIEW_CONFIGURATIONS'
+      },
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
