@@ -84,18 +84,6 @@ export const navItems: NavData[] = [
         icon: 'fa fa-search',
         key: ['VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_RECERCA']
       },
-      {
-        name: 'Gruppi',
-        url: '/sdmgroup',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
-      },
-      {
-        name: 'Stati',
-        url: '/sdmstatus',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
-      }
     ]
   },
   {
@@ -108,19 +96,6 @@ export const navItems: NavData[] = [
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o',
-        key: 'VIEW_UTENTI_DA_CONSOLIDARE'
-      },
-      {
-        name: 'Catalogo Utenti',
-        url: '/catalogo/utenti',
-        icon: 'fa fa-address-book-o',
-        key: 'VIEW_CATALOG_UTENTI',
-      },
-      {
-        name: 'KPI da Consolidare',
-        url: '/catalogo/admin-kpi',
-        icon: 'fa fa-file-archive-o',
-        key: 'VIEW_KPI_DA_CONSOLIDARE'
       },
       {
         name: 'Catalogo KPI',
@@ -128,7 +103,12 @@ export const navItems: NavData[] = [
         icon: 'fa fa-file-archive-o',
         key: 'VIEW_CATALOG_KPI'
       },
-      
+      {
+        name: 'Catalogo Utenti',
+        url: '/catalogo/utenti',
+        icon: 'fa fa-address-book-o',
+        key: 'VIEW_CATALOG_UTENTI',
+      },
     ]
   },
   {
@@ -204,6 +184,12 @@ export const navItems: NavData[] = [
       {
         name: 'User Profiling',
         url: '/userprofiling',
+        icon: 'fa fa-gear',
+        key: 'VIEW_CONFIGURATIONS'
+      },
+      {
+        name: 'User Roles',
+        url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
       }

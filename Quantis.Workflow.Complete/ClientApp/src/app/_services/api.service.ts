@@ -72,6 +72,16 @@ export class ApiService {
     return this.http.get(getDataKpisEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getAllRoles(): Observable<any> {
+    const getAllRolesEndPoint = `${environment.API_URL}/information/GetAllRoles`;
+    return this.http.get(getAllRolesEndPoint, Headers.setTokenHeaders('GET'));
+  }
+  getRolesByUserId(userid): Observable<any> {
+    const getRolesByUserIdEndPoint = `${environment.API_URL}/information/GetRolesByUserId/?userid=${userid}`;
+    return this.http.get(getRolesByUserIdEndPoint, Headers.setTokenHeaders('GET'));
+  }
+
+
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateConfiguration`, config, Headers.setTokenHeaders('POST'))
       .pipe(
@@ -121,4 +131,15 @@ export class ApiService {
         )
       );
   }
+
+  assignRolesToUser(postData) {
+    return this.http.post(`${environment.API_URL}/information/AssignRolesToUser`, postData, Headers.setTokenHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { UserProfilingComponent } from './userprofiling.component';
+import { UserRolePermissionsComponent } from './UserRolePermissions/userRolePermissions.component';
 
 const routes: Routes = [
   {
@@ -8,6 +9,13 @@ const routes: Routes = [
     component: UserProfilingComponent,
     data: {
       title: 'T Configurations'
+    }
+  },
+  {
+    path: 'rolepermissions',
+    component: UserRolePermissionsComponent,
+    data: {
+      title: 'User Roles & Permissions'
     }
   }
 ];
