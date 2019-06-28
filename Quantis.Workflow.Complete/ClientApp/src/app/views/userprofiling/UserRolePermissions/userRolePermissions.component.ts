@@ -76,7 +76,7 @@ export class UserRolePermissionsComponent implements OnInit {
     $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
     $($event.target).addClass('highlited-user');
     this.selectedData.userid = user.ca_bsi_user_id;//user.ca_bsi_user_id;
-    this.selectedData.name = user.name + ' ' + user.surname;//user.ca_bsi_user_id;
+    this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';//user.ca_bsi_user_id;
     if(this.selectedData.userid){
       this.apiService.getRolesByUserId(this.selectedData.userid).subscribe((res) => {
         this.selectedRoles = res;
@@ -92,9 +92,9 @@ export class UserRolePermissionsComponent implements OnInit {
         dataToPost.Ids.push(value.id)
       });
       this.apiService.assignRolesToUser(dataToPost).subscribe(data => {
-        this.toastr.success('saved', 'Success');
+        this.toastr.success('Ruolo salvato', 'Success');
       }, error => {
-        this.toastr.error('not saved', 'Error');
+        this.toastr.error('Errore durante il salvataggio', 'Error');
       });
     }
   }
