@@ -155,7 +155,7 @@ export const navItems: NavData[] = [
     name: 'Configurazione',
     url: '/coming-soon',
     icon: 'fa fa-gear',
-    key: ['VIEW_CONFIGURATIONS','VIEW_WORKLOAD_CONFIGURATIONS'],
+    key: ['VIEW_CONFIGURATIONS','VIEW_WORKFLOW_CONFIGURATIONS'],
     children: [
       {
         name: 'Generali',
@@ -164,35 +164,37 @@ export const navItems: NavData[] = [
         key: 'VIEW_CONFIGURATIONS'
       },
       {
-        name: 'Workload',
-        url: '/workload',
+        name: 'Workflow',
+        url: '/workflow-conf',
         icon: 'fa fa-gear',
-        key: 'VIEW_WORKLOAD_CONFIGURATIONS'
-      },
+        key: 'VIEW_WORKFLOW_CONFIGURATIONS',
+        children: [
+          {
+            name: 'SDM Gruppi',
+            url: '/sdmgroup',
+            icon: 'fa fa-gear',
+            key: 'VIEW_CONFIGURATIONS'
+          },
+          {
+            name: 'SDM Ticket Status',
+            url: '/sdmstatus',
+            icon: 'fa fa-gear',
+            key: 'VIEW_CONFIGURATIONS'
+          },
+        ],
+      }, 
       {
-        name: 'Group',
-        url: '/sdmgroup',
+        name: 'Ruoli Utente',
+        url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
       },
       {
-        name: 'Status',
-        url: '/sdmstatus',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
-      },
-      {
-        name: 'User Profiling',
+        name: 'Profilazione Utente',
         url: '/coming-soon',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
       },
-      {
-        name: 'User Roles',
-        url: '/userprofiling/rolepermissions',
-        icon: 'fa fa-gear',
-        key: 'VIEW_CONFIGURATIONS'
-      }
     ]
   },
   {
@@ -201,7 +203,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.1.0',
+    name: 'Version 1.2.1',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
