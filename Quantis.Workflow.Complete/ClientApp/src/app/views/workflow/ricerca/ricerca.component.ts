@@ -92,12 +92,12 @@ export class RicercaComponent implements OnInit, OnDestroy {
       }
     };
     this.workFlowService.getTicketsSearchByUserRecerca().pipe(first()).subscribe(data => {
-      console.log('getAllTickets', data);
+      console.log('getTicketsSearchByUserRecerca', data);
       this.allTickets = data;
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
-      console.error('getAllTickets', error);
+      console.error('getTicketsSearchByUserRecerca', error);
       this.loading = false;
     })
   }
