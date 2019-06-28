@@ -352,7 +352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context, string period)
+        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -383,7 +383,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
-                    ret = tickets.Where(o => o.Period == period).ToList();
+                    ret = tickets.ToList();
 
                 }
             }
