@@ -835,7 +835,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Description = kpi.kpi_description,
                     ID_KPI = kpi.id_kpi,
                     Group = kpi.group_type,
-                    Period = DateTime.Now.AddMonths(-1).Month + "/" + DateTime.Now.AddMonths(-1).Year,
+                    Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
