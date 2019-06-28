@@ -661,7 +661,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
                         //var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
-                        var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id);
+                        var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id && u.user_status == "ACTIVE" );
                         if (res != null)
                         {
                             _dbcontext.Sessions.Add(new T_Session()
