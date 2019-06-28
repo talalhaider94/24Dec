@@ -171,7 +171,7 @@
   <div class="modal-dialog modal-info modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Attachments</h4>
+        <h4 class="modal-title">Allegati</h4>
         <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -226,7 +226,7 @@
             </thead>
             <tbody>
               <tr *ngIf="getTicketAttachments.length === 0 && !loading">
-                <td colspan="3"><strong>No attachments found.</strong></td>
+                <td colspan="3"><strong>Nessun allegato.</strong></td>
               </tr>
               <tr *ngIf="loading" class="text-center">
                 <td colspan="3">
@@ -262,7 +262,7 @@
   <div class="modal-dialog modal-success modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Approve</h4>
+        <h4 class="modal-title">Approva</h4>
         <button type="button" class="close" (click)="approveModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -296,7 +296,7 @@
   <div class="modal-dialog modal-danger modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Reject</h4>
+        <h4 class="modal-title">Rifiuta</h4>
         <button type="button" class="close" (click)="rejectModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

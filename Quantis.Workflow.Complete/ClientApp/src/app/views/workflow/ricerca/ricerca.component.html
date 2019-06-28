@@ -35,7 +35,7 @@
                       Stato
                     </label>
                     <select class="form-control" #searchCol4>
-                      <option value="">Status</option>
+                      <option value="">Stato</option>
                     </select>
                   </div>
                   <div class="w-100"></div>
@@ -43,7 +43,7 @@
                     <label>
                       Descrizione
                     </label>
-                    <input type="text" class="form-control  " placeholder="Description" #searchCol5 />
+                    <input type="text" class="form-control  " placeholder="Descrizione" #searchCol5 />
                   </div>
                 </div>
               </div>
@@ -185,7 +185,7 @@
             </thead>
             <tbody>
               <tr *ngIf="getTicketHistories.length === 0 && !loading">
-                <td colspan="2"><strong>No tickets found.</strong></td>
+                <td colspan="2"><strong>Nessun ticket trovato.</strong></td>
               </tr>
               <tr *ngIf="loading" class="text-center">
                 <td colspan="2">
@@ -213,7 +213,7 @@
   <div class="modal-dialog modal-info" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Attachments</h4>
+        <h4 class="modal-title">Allegati</h4>
         <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -231,7 +231,7 @@
             </thead>
             <tbody>
               <tr *ngIf="getTicketAttachments.length === 0 && !loading">
-                <td colspan="3"><strong>No attachments found.</strong></td>
+                <td colspan="3"><strong>Nessun allegato.</strong></td>
               </tr>
               <tr *ngIf="loading" class="text-center">
                 <td colspan="3">
