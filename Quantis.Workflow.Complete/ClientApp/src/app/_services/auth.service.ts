@@ -43,13 +43,18 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    const logoutEndPoint = `${environment.API_URL}/data/logout`;
     this.currentUserSubject.next(null);
+    return this.http.get(logoutEndPoint, Headers.setTokenHeaders('GET'));
   }
 
   getUser() {
     const currentUser = localStorage.getItem('currentUser');
     return currentUser ? JSON.parse(currentUser) : false;
+  }
+
+  removeUser() {
+    return localStorage.removeItem('currentUser');
   }
 
   isLoggedIn(): boolean {
