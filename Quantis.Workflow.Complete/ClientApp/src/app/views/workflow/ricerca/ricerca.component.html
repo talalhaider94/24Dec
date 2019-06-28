@@ -14,8 +14,8 @@
                     <label>
                       “DA – A”
                     </label>
-                    <input type="text" class="form-control  " placeholder="From-To date" ngxDaterangepickerMd
-                      [(ngModel)]="selected" #searchCol1 />
+                    <input type="text" class="form-control " placeholder="DA – A" bsDaterangepicker
+                    [(ngModel)]="daterangepickerModel" #searchCol1 [bsConfig]="{ adaptivePosition: true }" />
                   </div>
                   <div class="col ">
                     <label>
@@ -81,7 +81,7 @@
               </thead>
               <tbody>
                 <tr *ngIf="allTickets.length === 0 && !loading">
-                  <td colspan="13"><strong>No tickets found.</strong></td>
+                  <td colspan="13"><strong>Nessun Ticket Trovato</strong></td>
                 </tr>
                 <tr *ngIf="loading" class="text-center">
                   <td colspan="13">

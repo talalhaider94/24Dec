@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { navItems } from '../../_nav';
 import { AuthService } from '../../_services';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +17,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public element: HTMLElement;
   currentUser: any;
   constructor(
+    private toastr: ToastrService,
     private authService: AuthService,
     private router: Router,
     @Inject(DOCUMENT) _document?: any,
@@ -23,7 +25,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.currentUser = this.authService.getUser(); 
     
       this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
-      this.navItems = this.permittedMenuItems; 
+      this.navItems = navItems; 
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -44,8 +46,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   }
 
   logout() {
-    this.authService.logout();
-    
+    this.authService.logout().subscribe(data => {
+      this.authService.removeUser();
+      this.toastr.success('Success', 'Logout eseguito con successo.');
+      this.router.navigate(['/login']);
+    });
   }
 
   filterMenuByPermission(navItems, permissions, permittedMenu) {

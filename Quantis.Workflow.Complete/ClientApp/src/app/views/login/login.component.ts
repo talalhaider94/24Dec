@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit{
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService
-  ) { 
-
+  ) {
+    //localStorage.removeItem('currentUser');
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
       this.router.navigate(['/coming-soon']);
     }
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit{
         userName: ['', Validators.required],
         password: ['', [Validators.required, Validators.minLength(4)]]
     });
-    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/coming-soon';
   }
 
   onLoginFormSubmit() {

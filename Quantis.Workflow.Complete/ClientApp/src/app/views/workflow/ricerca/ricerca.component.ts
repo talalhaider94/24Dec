@@ -30,8 +30,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
   dtTrigger = new Subject();
   bsValue = new Date();
   isCollapsed = true;
-
-  public selected: any; // why
+  daterangepickerModel: Date[];
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -93,12 +92,12 @@ export class RicercaComponent implements OnInit, OnDestroy {
       }
     };
     this.workFlowService.getTicketsSearchByUserRecerca().pipe(first()).subscribe(data => {
-      console.log('getAllTickets', data);
+      console.log('getTicketsSearchByUserRecerca', data);
       this.allTickets = data;
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
-      console.error('getAllTickets', error);
+      console.error('getTicketsSearchByUserRecerca', error);
       this.loading = false;
     })
   }
@@ -123,7 +122,6 @@ export class RicercaComponent implements OnInit, OnDestroy {
   ticketAttachments(ticket) {
     this.loading = true;
     this.workFlowService.getAttachmentsByTicket(ticket.id).pipe(first()).subscribe(data => {
-      // this.getTicketAttachments = data.filter(ticketAttachment => ticketAttachment.id === ticket.id);
       if (!!data) {
         this.getTicketAttachments = data;
         console.log('ticketAttachments', data);
@@ -187,7 +185,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
   
     setUpDataTableDependencies() {
   
-      $(this.searchCol1.nativeElement).on('keyup', function () {
+      $(this.searchCol1.nativeElement).on('blur', function () {
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
           datatable_Ref
             .columns(10)

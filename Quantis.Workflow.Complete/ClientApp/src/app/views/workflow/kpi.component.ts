@@ -128,13 +128,13 @@ export class KPIComponent implements OnInit {
 
   _getAllTickets() {
     this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
-      console.log('getAllTickets', data);
+      console.log('getTicketsVerificationByUserVerifica', data);
       const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }))
       this.allTickets = appendSelectFale;
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
-      console.error('getAllTickets', error);
+      console.error('getTicketsVerificationByUserVerifica', error);
       this.loading = false;
     });
   }

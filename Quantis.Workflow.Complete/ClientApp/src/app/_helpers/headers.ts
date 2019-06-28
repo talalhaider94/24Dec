@@ -13,11 +13,13 @@ export default class Headers {
     }
     
     static setTokenHeaders(type) { 
-        let token = JSON.parse(localStorage.getItem('currentUser')).token;
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         let headerObject = new HttpHeaders();
         headerObject = headerObject.append('Content-Type', 'application/json');
         headerObject = headerObject.append("Authorization", "Basic " + btoa("Quantis:WorkflowAPI"));
-        headerObject = headerObject.append("AuthToken", token);
+        if(!!currentUser && !!currentUser.token) {
+            headerObject = headerObject.append("AuthToken", currentUser.token);
+        }
         headerObject = headerObject.append('Access-Control-Allow-Methods', type);
         return { headers: headerObject };
     }
