@@ -183,7 +183,7 @@ export const navItems: NavData[] = [
       },
       {
         name: 'User Profiling',
-        url: '/userprofiling',
+        url: '/coming-soon',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
       },
