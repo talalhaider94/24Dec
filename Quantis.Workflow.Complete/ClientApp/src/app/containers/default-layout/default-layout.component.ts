@@ -25,7 +25,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.currentUser = this.authService.getUser(); 
     
       this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
-      this.navItems = navItems; 
+      this.navItems = this.permittedMenuItems; 
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
