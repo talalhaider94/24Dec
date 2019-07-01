@@ -532,7 +532,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var forms = _dbcontext.Forms.ToList();
+                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).ToList();
                 var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
                 return forms.Select(o => new FormLVDTO()
                 {
@@ -543,6 +543,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     form_owner_id=o.form_owner_id,
                     modify_date=o.modify_date,
                     reader_id=o.reader_id,
+                    latest_input_date=o.FormLogs.Any()?o.FormLogs.Max(p=>p.time_stamp):new DateTime(0),
                     day_cuttoff= (daycutoff==null)?null:daycutoff.Value
                 }).ToList();
             }

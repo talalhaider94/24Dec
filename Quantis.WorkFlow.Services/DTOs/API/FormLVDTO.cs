@@ -14,5 +14,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string day_cuttoff { get; set; }
         public DateTime create_date { get; set; }
         public DateTime modify_date { get; set; }
+        public DateTime latest_input_date { get; set; }
     }
 }
