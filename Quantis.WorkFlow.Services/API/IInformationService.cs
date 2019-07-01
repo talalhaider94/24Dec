@@ -32,7 +32,7 @@ namespace Quantis.WorkFlow.Services.API
         List<HierarchicalNameCodeDTO> GetAllKPIHierarchy();
         List<int> GetGlobalRulesByUserId(int userId);
         void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
-        List<string> GetContractPartyByUser(int userId);
+        List<int> GetContractPartyByUser(int userId);
 
     }
 }

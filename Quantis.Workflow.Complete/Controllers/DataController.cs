@@ -228,6 +228,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetFormConfiguration();
         }
+        [HttpGet("GetAllCustomersKP")]
+        public List<KeyValuePair<int, string>> GetAllCustomersKP()
+        {
+            return _dataAPI.GetAllCustomersKP();
+        }
 
     }
 }

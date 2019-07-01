@@ -17,7 +17,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
                 handle = e.handle,
                 id = e.id,
                 step = e.step,
-                category=e.category
+                category_id=e.category_id,
+                category_name=e.category.customer_name
             };
         }
 
@@ -26,7 +27,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
             e.name = o.name;
             e.handle = o.handle;
             e.step = o.step;
-            e.category = o.category;
+            e.category_id = o.category_id;
             return e;
 
         }

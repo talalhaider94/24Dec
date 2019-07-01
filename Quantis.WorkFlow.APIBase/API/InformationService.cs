@@ -364,7 +364,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var ent = _dbcontext.SDMTicketGroup.ToList();
+                var ent = _dbcontext.SDMTicketGroup.Include(o=>o.category).ToList();
                 var dtos = _sdmGroupMapper.GetDTOs(ent);
                 return dtos;
             }
@@ -481,13 +481,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<string> GetContractPartyByUser(int userId)
+        public List<int> GetContractPartyByUser(int userId)
         {
             try
             {
                 var res = new List<UserKPIDTO>();
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
-                var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.group_type);
+                var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.primary_contract_party);
                 return groups.Where(o => o != null).Distinct().ToList();
 
             }
