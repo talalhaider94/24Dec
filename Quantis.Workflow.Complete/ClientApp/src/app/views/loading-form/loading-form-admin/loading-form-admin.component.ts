@@ -348,15 +348,17 @@ export class LoadingFormAdminComponent implements OnInit {
         let formbody = JSON.parse(data.form_body);
         let formRules = formbody.formRules;
         let comparisonRules = formbody.comparisonRules;
-        formRules.forEach( (rule, index) => {
-          if(rule.type == 'time') {
-            this.maxDate[index] = rule.rule.max;
-            this.minDate[index] = rule.rule.min;
-          } else {
-            this.numeroMax[index] = rule.rule.max;
-            this.numeroMin[index] = rule.rule.min;
-          }
-        });
+        if(formRules) {
+          formRules.forEach( (rule, index) => {
+            if(rule.type == 'time') {
+              this.maxDate[index] = rule.rule.max;
+              this.minDate[index] = rule.rule.min;
+            } else {
+              this.numeroMax[index] = rule.rule.max;
+              this.numeroMin[index] = rule.rule.min;
+            }
+          });
+        }
 
         // JSON.parse(data.form_body).forEach((element, index) => {
         //   console.log(element);
