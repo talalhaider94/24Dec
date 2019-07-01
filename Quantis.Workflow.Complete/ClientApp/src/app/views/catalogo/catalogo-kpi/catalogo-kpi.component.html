@@ -1,7 +1,6 @@
-<div style="margin-top: -25px; padding: 10px">
-  <h2 style="color:#565656">Catalogo</h2><br>
-                                         <div class="table-responsive" style="background: #ffffff; padding: 10px">
-                                           <br><h2 style="color:#565656">KPI</h2><br>
+<div style="margin-top: -25px; padding: 10px"><br />
+                                         <div class="table-responsive" style="background: #ffffff; padding: 5px">
+                                           <br><h2 style="color:#565656">Catalogo KPI</h2><br>
                                            <div class="row">
                                              <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1 [(ngModel)]="viewModel.filters.idKpi" name="idKpi" />
                                              <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2 [(ngModel)]="viewModel.filters.titoloBreve" name="titoloBreve" />
@@ -54,7 +53,7 @@
                                                  <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
                                                  <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
                                                  <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
-                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)=" refren(row.id)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
+                                                 <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)="populateModalData(row)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
                                                  <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
                                                  <td class="notExportCsv" align="center">
                                                    <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
@@ -79,32 +78,24 @@
         </button>
       </div>
       <div class="modal-body">
-        <table id="classTable" class="table table-bordered">
-          <thead style="background: #E6E6E6">
-          <tr>
-            <th>REFERENTI_INPUT</th>
-            <th>REFERENTI_1</th>
-            <th>REFERENTI_2</th>
-            <th>REFERENTI_3</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr >
-            <td>{{this.reft}}</td>
-            <td>{{this.ref1}}</td>
-            <td>{{this.ref2}}</td>
-            <td>{{this.ref3}}</td>
-
-          </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive" style="background: #ffffff; padding: 10px">
+          <table id="classTable" class="table stripe">
+            <thead style="background: #20a8d8">
+            </thead>
+            <tbody>
+              <tr><th width="20%">REFERENTI_INPUT</th><td width="80%"><input type="text" class="form-control" [(ngModel)]="modalData.referent"></td></tr>
+              <tr><th width="20%">REFERENTI_1</th><td width="80%"><input type="text" class="form-control" [(ngModel)]="modalData.referent_1"></td></tr>
+              <tr><th width="20%">REFERENTI_2</th><td width="80%"><input type="text" class="form-control" [(ngModel)]="modalData.referent_2"></td></tr>
+              <tr><th width="20%">REFERENTI_3</th><td width="80%"><input type="text" class="form-control" [(ngModel)]="modalData.referent_3"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="updateKpi('referents')" class="btn btn-success">Aggiorna</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" >
-          Chiudi
-        </button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -112,13 +103,13 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Descrizione Estesa</h5>
+        <h5 class="modal-title" id="approveModalLabel">Descrizione Calcolo</h5>
         <button type="button"   class="close" data-dismiss="modal" aria-label="Close" >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body" >
-        <textarea class="form-control">{{this.des}}</textarea>
+        <textarea class="form-control" disabled style="background:white">{{this.des}}</textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">
@@ -170,7 +161,7 @@
 </div>
       </div>
       <div class="modal-footer">
-        <button (click)="updateKpi()" class="btn btn-success">Aggiorna</button>
+        <button (click)="updateKpi('kpi')" class="btn btn-success">Aggiorna</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
