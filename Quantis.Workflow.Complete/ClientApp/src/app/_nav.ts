@@ -164,6 +164,12 @@ export const navItems: NavData[] = [
         icon: 'fa fa-check-circle-o',
         key: 'VIEW_CONFIGURATIONS'
       },
+      {
+        name: 'Avanzate',
+        url: '/tconfiguration/advanced',
+        icon: 'fa fa-check-circle-o',
+        key: 'VIEW_CONFIGURATIONS'
+      },
       /*{ // maybe not needed
         name: 'Workflow',
         url: '/workflow-conf',
