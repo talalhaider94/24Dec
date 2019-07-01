@@ -16,7 +16,5 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string userid { get; set; }
         public string manager { get; set; }
         public string password { get; set; }
-        public bool user_admin { get; set; }
-        public bool user_sadmin { get; set; }
     }
 }

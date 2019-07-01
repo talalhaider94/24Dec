@@ -36,6 +36,7 @@ export class ProveVarieComponent implements OnInit {
   formId: string = null;
   formName: string = null;
   formRulesBody: [] = [];
+  comparisonRulesBody: [] = [];
   loading: boolean = false;
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
@@ -135,7 +136,8 @@ export class ProveVarieComponent implements OnInit {
 
   removeComparisonForm(i: number) {
     const control = <FormArray>this.myInputForm.get('campiConfronto')['controls'];
-    control.removeAt(i);
+    debugger
+    control.removeAt(i -1);
   }
 
   saveUser(model: any) {
@@ -156,6 +158,12 @@ export class ProveVarieComponent implements OnInit {
       this.toastr.error('Form fields data is not valid');
       return false;
     } else {
+      // const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
+      // if (errorArray.length > 0) {
+      //   this.userLoadingFormErrors = errorArray;
+      //   this.toastr.error('Comparison rule fails for form');
+      //   return false;
+      // }
       this.userLoadingFormErrors = [];
     }
 
@@ -251,26 +259,40 @@ export class ProveVarieComponent implements OnInit {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
       if (data) {
-        this.formRulesBody = JSON.parse(data.form_body);
-        JSON.parse(data.form_body).forEach((element, index) => {
-          console.log('data.form_body element', element);
-          if (element.campo1 != null) {
-            contatore++;
-            array.campo1 = element.campo1;
-            array.segno = element.segno;
-            array.campo2 = element.campo2;
-            this.defaultFont[index] = array;
-            this.addComparisonForm(array);
-          } else if (element.max != null && element.max.length != 24) {
-            console.log(element.max);
-            console.log(typeof element.max === "string");
-            this.numeroMax[index - contatore] = element.max;
-            this.numeroMin[index - contatore] = element.min;
-          } else if (element.max != null && element.max.length == 24) {
-            this.maxDate[index - contatore] = element.max;
-            this.minDate[index - contatore] = element.min;
-          }
-        });
+        debugger
+        let formBody = JSON.parse(data.form_body);
+        let formRules = formBody.formRules;
+        let comparisonRulesBody = formBody.comparisonRules;
+        this.comparisonRulesBody = comparisonRulesBody;
+        this.formRulesBody = formRules;
+        if(formRules) {
+          formRules.forEach((rule, index) => {
+            if(rule.type == 'time') {
+              this.maxDate[index] = rule.rule.max;
+              this.minDate[index] = rule.rule.min;
+            } else {
+              this.numeroMax[index] = rule.rule.max;
+              this.numeroMin[index] = rule.rule.min;
+            }
+            
+            // if (element.campo1 != null) {
+            //   contatore++;
+            //   array.campo1 = element.campo1;
+            //   array.segno = element.segno;
+            //   array.campo2 = element.campo2;
+            //   this.defaultFont[index] = array;
+            //   this.addComparisonForm(array);
+            // } else if (element.max != null && element.max.length != 24) {
+            //   console.log(element.max);
+            //   console.log(typeof element.max === "string");
+            //   this.numeroMax[index - contatore] = element.max;
+            //   this.numeroMin[index - contatore] = element.min;
+            // } else if (element.max != null && element.max.length == 24) {
+            //   this.maxDate[index - contatore] = element.max;
+            //   this.minDate[index - contatore] = element.min;
+            // }
+          });
+        }
       }
 
     }, error => {
@@ -344,14 +366,9 @@ export class ProveVarieComponent implements OnInit {
     })
   }
 
-  _customFormRulesValidation(formElements, formValues, formRules) {
-    // return if formRules are empty/not set
-    if(!formRules.length) {
-      return formRules;
-    }
-    let rulesNotNull = formRules.filter(obj => ( (obj.min !== null && obj.max !== null) ));
-    if(!rulesNotNull.length) {
-      return [];
+  _comparisonRulesValidation(formElements, formValues, comparisonRules) {
+    if(!comparisonRules.length) {
+      return comparisonRules;
     }
     const mapFormValues = formValues.map((value, index) => {
       return {
@@ -360,37 +377,64 @@ export class ProveVarieComponent implements OnInit {
         value: value.valoreUtente || ''
       }
     });
-    const inValidRulesArray = mapFormValues.filter((value, index) => {
+    debugger
+    const invalidRules = comparisonRules.map((compare, index) => {
+      let field1 = compare.campo1;
+      let field2 = compare.campo2;
+      let sign = compare.segno;
+      let value1 = mapFormValues.find(value => value.name == field1).value;
+      let value2 = mapFormValues.find(value => value.name == field2).value;
+
+      debugger
+    });
+    return invalidRules;
+    
+  }
+
+  _customFormRulesValidation(formElements, formValues, formRules) {
+    // return if formRules are empty/not set
+    if(!formRules.length) {
+      return formRules;
+    }
+    let rulesNotNull = formRules.filter(obj => ( (obj.rule.min !== null && obj.rule.max !== null) ));
+    if(!rulesNotNull.length) {
+      return [];
+    }
+    const inValidRulesArray = formRules.filter((value, index) => {
       if (value.type === 'string') {
-        let rule = formRules[index];
+        let rule = value.rule;
         let ruleMin = rule.min || 0;
         let ruleMax = rule.max || 100;
-        const formStringValue = value.value;
-        console.log('formStringValue', formStringValue);
-        if (formStringValue.length >= ruleMin && formStringValue.length <= ruleMax) {
+        const formStringValue = formValues[index];
+        if (formStringValue.valoreUtente.length >= ruleMin && formStringValue.valoreUtente.length <= ruleMax) {
           return false;
         } else {
           return true;
         }
       } else if (value.type === 'time') {
-        if (!formRules[index].min || formRules[index].min === null) {
-          formRules[index].min = moment('1970/01/01');
+        let rule = value.rule;
+        let ruleMin;
+        let ruleMax;
+        if (!rule.min || rule.min === null) {
+          ruleMin = moment(new Date('1970-01-01'), 'YYYY-MM-DD');
+        } else {
+          ruleMin = moment(new Date(rule.min), 'YYYY-MM-DD');
         }
-        if (!formRules[index].max || formRules[index].max === null) {
-          formRules[index].max = moment('2970/01/01');
+        if (!rule.max || rule.max === null) {
+          ruleMax = moment(new Date('2970-01-01'), 'YYYY-MM-DD');
+        } else {
+          ruleMax = moment(new Date(rule.max), 'YYYY-MM-DD');
         }
-        const formDateValue = value.value;
-        const minDate = moment(formRules[index].min);
-        const maxDate = moment(formRules[index].max);
-        let isBetween = moment(formDateValue).isBetween(minDate, maxDate);
-
+        const formDateValue = formValues[index];
+        let isBetween = moment(formDateValue.valoreUtente, 'YYYY-MM-DD').isBetween(ruleMin, ruleMax);
         return isBetween ? false : true;
-      } else if (value.type === 'real') {
-        let rule = formRules[index];
+      } else if (value.type === 'real' || value.type === 'integer') {
+        //type real or integer
+        let rule = value.rule;
         let ruleMin = rule.min || 0;
         let ruleMax = rule.max || 100;
-        const formRealValue = value.value;
-        if (formRealValue >= ruleMin && formRealValue <= ruleMax) {
+        const formRealValue = formValues[index];
+        if (formRealValue.valoreUtente >= ruleMin && formRealValue.valoreUtente <= ruleMax) {
           return false;
         } else {
           return true;
