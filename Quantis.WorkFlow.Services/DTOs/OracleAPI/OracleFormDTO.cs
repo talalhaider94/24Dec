@@ -18,6 +18,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public string user_group_name { get; set; }
         public int day_cutoff { get; set; }
         public bool cutoff { get; set; }
+        public DateTime latest_input_date { get; set; }
     }
     public class ReaderConfiguration
     {

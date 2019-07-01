@@ -235,7 +235,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 user_group_id = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
                                 user_group_name = (o[9] == DBNull.Value) ? string.Empty : (string)o[9],
                                 day_cutoff = day_cutoff,
-                                cutoff = (bool)cutoff_result
+                                cutoff = (bool)cutoff_result,
+                                latest_input_date= _dbcontext.FormLogs.Any(p=>p.id_form==id)? _dbcontext.FormLogs.Where(q=>q.id_form==id).Max(r=>r.time_stamp):new DateTime(0)
                             });
                             return result.ToList();
                         }
@@ -254,7 +255,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 user_group_id = (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
                                 user_group_name = (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
                                 day_cutoff = day_cutoff,
-                                cutoff = (bool)cutoff_result
+                                cutoff = (bool)cutoff_result,
+                                latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
                             });
                             return result.ToList();
                         }
