@@ -31,7 +31,7 @@ export interface NavData {
 }
 
 export const navItems: NavData[] = [
-  {
+  /*{ // TEMP HIDDEN
     name: 'Dashboard',
     key: '',
     url: '/dashboard',
@@ -40,32 +40,32 @@ export const navItems: NavData[] = [
       variant: 'info',
       text: ''
     }
-  },
+  },*/
   {
     title: true,
     name: 'Menu',
     key: 'alwaysShow'
   },
-  {
+  /*{ // TEMP HIDDEN
     name: 'Home',
     url: '/coming-soon',
     icon: 'icon-home',
     key: ['', ''],
     children: [
-      {
+      { // TEMP HIDDEN
         name: 'Contraenti',
         url: '/coming-soon',
         icon: 'fa fa-th-list',
         key: '',
       },
-      {
+      { // TEMP HIDDEN
         name: 'Contratti',
         url: '/coming-soon',
         icon: 'fa fa-file-text',
         key: '',
       },
     ]
-  },
+  },*/
   {
     name: 'Workflow',
     url: '/coming-soon',
@@ -112,13 +112,13 @@ export const navItems: NavData[] = [
       },
     ]
   },
-  /*{
+  /*{ // TEMP HIDDEN
     name: 'Report',
     url: '/coming-soon',
     icon: 'fa fa-files-o',
     key: [''],
     children: [
-      {
+      { // TEMP HIDDEN
         name: 'WorkFlow Reminder',
         url: '/coming-soon',
         icon: 'fa fa-check-circle-o',
@@ -164,17 +164,17 @@ export const navItems: NavData[] = [
         icon: 'fa fa-check-circle-o',
         key: 'VIEW_CONFIGURATIONS'
       },
-      /*{ // maybe not needed
+      /*{ // maybe not needed // TEMP HIDDEN
         name: 'Workflow',
         url: '/workflow-conf',
         icon: 'fa fa-gear',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },*/
-      {
+      /*{ // TEMP HIDDEN
         title: true,
         name: 'Workflow',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
-      },
+      },*/
       {
         name: 'SDM Gruppi',
         url: '/sdmgroup',
@@ -187,11 +187,11 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
-      {
+      /*{ // TEMP HIDDEN
         title: true,
         name: 'Profilazione',
         key: 'VIEW_CONFIGURATIONS'
-      },
+      },*/
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
@@ -212,7 +212,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.2.1',
+    name: 'Version 1.2.2',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
