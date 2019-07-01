@@ -18,8 +18,6 @@ namespace Quantis.WorkFlow.Models
         public string userid { get; set; }
         public string manager { get; set; }
         public string password { get; set; }
-        public bool user_admin { get; set; }
-        public bool user_sadmin { get; set; }
     }
     public class T_CatalogUser_Configuration : IEntityTypeConfiguration<T_CatalogUser>
     {

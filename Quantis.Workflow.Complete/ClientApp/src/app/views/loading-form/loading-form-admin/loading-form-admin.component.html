@@ -81,7 +81,7 @@
               <div class="row align-items-center justify-content-center" [formGroupName]="i">
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select placeholder="campo 1" formControlName="campo1"
+                    <mat-select placeholder="Select" formControlName="campo1" [(ngModel)]="comparisonField1[i]"
                       (selectionChange)="filtraElementi($event.value,i)" disableRipple>
                       <!-- <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}
                       </mat-option> -->
@@ -93,7 +93,7 @@
 
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select placeholder="confronto" formControlName="segno" disableRipple
+                    <mat-select placeholder="Select" formControlName="segno" [(ngModel)]="comparisonField2[i]" disableRipple
                     [disabled]="((confronti[i]!=null && confronti[i].length==0)||(confronti[i]==null))">
                       <mat-option *ngFor="let element of confronti[i] " [value]="element">{{element}}</mat-option>
                     </mat-select>
@@ -102,9 +102,9 @@
 
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select formControlName="campo2" disableRipple
+                    <mat-select formControlName="campo2" disableRipple [(ngModel)]="comparisonField3[i]"
                       [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))"
-                      placeholder="campo 2">
+                      placeholder="Select">
                       <!-- <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}
                       </mat-option> -->
                       <mat-option *ngFor="let element of arraySecondo[i]" [value]="element">{{element.name}}
@@ -129,7 +129,7 @@
           </div>
           <div class="row mb-3 align-items-center pt-3">
             <div class="col-sm-5 offset-sm-7 text-right">
-              <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid">
+              <button type="submit" class="btn btn-primary">
                 <span *ngIf="loading" class="fa fa-spinner fa-spin"></span>Salva
               </button>
               <a [routerLink]="['/loading-form/admin']" class="btn btn-info text-white">Annulla</a>
