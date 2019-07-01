@@ -81,9 +81,28 @@ export class ApiService {
     return this.http.get(getRolesByUserIdEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  addRole(data): Observable<any> {
+    const addrole = `${environment.API_URL}/information/AddUpdateRole`;
+    return this.http.post(addrole,data, Headers.setTokenHeaders('POST'));
+  }
+  
+  deleteRole(roleId): Observable<any> {
+    const deleteroles = `${environment.API_URL}/information/DeleteRole/${roleId}`;
+    return this.http.get(deleteroles, Headers.setTokenHeaders('POST'));
+  }
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateConfiguration`, config, Headers.setTokenHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
+  updateRole(data) {
+    return this.http.post(`${environment.API_URL}/information/AddUpdateRole`, data, Headers.setTokenHeaders('POST'))
       .pipe(
         tap(
           data => data,

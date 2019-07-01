@@ -21,20 +21,35 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI = infomationAPI;
         }
-        [HttpGet("GetAllConfigurations")]
-        public List<ConfigurationDTO> GetAllConfigurations()
+        [HttpGet("GetAllBasicConfigurations")]
+        public List<ConfigurationDTO> GetAllBasicConfigurations()
         {
-            return _infomationAPI.GetAllConfigurations();
+            return _infomationAPI.GetAllBasicConfigurations();
         }
-        [HttpGet("DeleteConfiguration")]
-        public void DeleteConfiguration(string owner, string key)
+        [HttpGet("GetAllAdvancedConfigurations")]
+        public List<ConfigurationDTO> GetAllAdvancedConfigurations()
+        {
+            return _infomationAPI.GetAllAdvancedConfigurations();
+        }
+        [HttpGet("DeleteBasicConfiguration")]
+        public void DeleteBasicConfiguration(string owner, string key)
         {
             _infomationAPI.DeleteConfiguration(owner,key);
         }
-        [HttpPost("AddUpdateConfiguration")]
-        public void AddUpdateConfiguration([FromBody]ConfigurationDTO dto)
+        [HttpGet("DeleteAdvancedConfiguration")]
+        public void DeleteAdvancedConfiguration(string owner, string key)
         {
-            _infomationAPI.AddUpdateConfiguration(dto);
+            _infomationAPI.DeleteConfiguration(owner, key);
+        }
+        [HttpPost("AddUpdateBasicConfiguration")]
+        public void AddUpdateBasicConfiguration([FromBody]ConfigurationDTO dto)
+        {
+            _infomationAPI.AddUpdateBasicConfiguration(dto);
+        }
+        [HttpPost("AddUpdateAdvancedConfiguration")]
+        public void AddUpdateAdvancedConfiguration([FromBody]ConfigurationDTO dto)
+        {
+            _infomationAPI.AddUpdateAdvancedConfiguration(dto);
         }
 
         [HttpGet("GetAllRoles")]

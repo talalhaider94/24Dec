@@ -2,13 +2,21 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { TConfigurationComponent } from './tconfiguration.component';
+import { TConfigurationAdvancedComponent } from './advanced/advanced.component';
 
 const routes: Routes = [
   {
     path: '',
     component: TConfigurationComponent,
     data: {
-      title: 'T Configurations'
+      title: 'General  T Configurations'
+    }
+  },
+  {
+    path: 'advanced',
+    component: TConfigurationAdvancedComponent,
+    data: {
+      title: 'Advanced T Configurations'
     }
   }
 ];

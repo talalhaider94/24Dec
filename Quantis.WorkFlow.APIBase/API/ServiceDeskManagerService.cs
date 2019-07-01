@@ -195,7 +195,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.Status = _statusMapping.FirstOrDefault().handle;
                 }
-                dto.Group = _groupMapping.Where(o=>o.category==dto.Group).OrderBy(o=>o.step).First().handle;
+                dto.Group = _groupMapping.Where(o=>o.category_id==dto.GroupCategoryId).OrderBy(o=>o.step).First().handle;
                 string newRequestHandle = "";
                 string newRequestNumber = "";
                 var ticket=_sdmClient.createRequestAsync(new SDM.createRequestRequest(_sid, "",
@@ -260,7 +260,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.Status = _statusMapping.FirstOrDefault().handle;
                 }
-                dto.Group = _groupMapping.Where(o => o.category == dto.Group).OrderBy(o => o.step).First().handle;
+                dto.Group = _groupMapping.Where(o => o.category_id == dto.GroupCategoryId).OrderBy(o => o.step).First().handle;
                 string newRequestHandle = "";
                 string newRequestNumber = "";
                 var ticket = _sdmClient.createRequestAsync(new SDM.createRequestRequest(_sid, "",
@@ -418,7 +418,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
                     string filterstring = "";
                     //var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4)).ToList();
-                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.name).ToList();
+                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.name).ToList();
                     if (!groups.Any())
                     {
                         return tickets;
