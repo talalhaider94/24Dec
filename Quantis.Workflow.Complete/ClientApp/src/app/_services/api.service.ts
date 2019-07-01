@@ -101,6 +101,16 @@ export class ApiService {
       );
   }
 
+  updateRole(data) {
+    return this.http.post(`${environment.API_URL}/information/AddUpdateRole`, data, Headers.setTokenHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
   updateSDMGroupConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`, config, Headers.setTokenHeaders('POST'))
       .pipe(

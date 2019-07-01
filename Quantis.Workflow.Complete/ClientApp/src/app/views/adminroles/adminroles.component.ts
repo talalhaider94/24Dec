@@ -45,11 +45,9 @@ export class AdminRolesComponent implements OnInit {
   };
 
   modalData = {
-    key: '',
-    value: '',
-    owner: '',
-    isenable: true,
-    description: '',
+    id: '',
+    name: '',
+    code: ''
   };
 
   addData = {
@@ -79,11 +77,9 @@ export class AdminRolesComponent implements OnInit {
   }
 
   populateModalData(data) {
-    this.modalData.key = data.key;
-    this.modalData.owner = data.owner;
-    this.modalData.value = data.value;
-    this.modalData.isenable = data.isenable;
-    this.modalData.description = data.description;
+    this.modalData.id = data.id;
+    this.modalData.name = data.name;
+    this.modalData.code = data.code;
   }
 
   addRole() {
@@ -113,7 +109,7 @@ export class AdminRolesComponent implements OnInit {
 
   updateConfig() {
     this.toastr.info('Valore in aggiornamento..', 'Info');
-    this.apiService.updateConfig(this.modalData).subscribe(data => {
+    this.apiService.updateRole(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
       $('#configModal').modal('toggle').hide();
