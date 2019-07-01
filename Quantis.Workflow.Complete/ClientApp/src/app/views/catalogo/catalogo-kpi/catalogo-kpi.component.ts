@@ -252,15 +252,25 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.sla_id_bsi = data.sla_id_bsi;
   }
 
-  updateKpi() {
+  updateKpi(modal) {
+    console.log(modal);
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getKpis(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
-      $('#kpiModal').modal('toggle').hide();
+      if (modal == 'kpi') {
+        $('#kpiModal').modal('toggle').hide();
+      } else {
+        $('#referentiModal').modal('toggle').hide();
+      }
+      
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
-      $('#kpiModal').modal('toggle').hide();
+      if (modal == 'kpi') {
+        $('#kpiModal').modal('toggle').hide();
+      } else {
+        $('#referentiModal').modal('toggle').hide();
+      }
     });
   }
 
@@ -444,7 +454,8 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
-  getKpis(){
+  getKpis() {
+    this.loading = true;
     this.apiService.getCatalogoKpis().subscribe((data: any) => {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
