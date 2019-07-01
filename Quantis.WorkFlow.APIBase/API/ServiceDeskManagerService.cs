@@ -463,7 +463,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 step--;
                 var newstatus = _statusMapping.FirstOrDefault(o => o.step == step).handle;
                 string newgroup = "";
-                foreach (var g in _groupMapping.GroupBy(o => o.category))
+                foreach (var g in _groupMapping.GroupBy(o => o.category_id))
                 {
                     if (g.Any(o => o.name == ticket.Group))
                     {
@@ -598,13 +598,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.PostAsync(output.Item2, content).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        if (response.Content.ReadAsStringAsync().Result=="True")
+                        string res = response.Content.ReadAsStringAsync().Result;
+                        if (res=="True")
                         {
                             return true;
                         }
                         else
                         {
-                            throw new Exception("Form Adapter returned with :" + response.ToString());
+                            throw new Exception("Upload KPI returned with :" + res);
 
                         }
                     }
