@@ -265,35 +265,34 @@ export class ProveVarieComponent implements OnInit {
         let comparisonRulesBody = formBody.comparisonRules;
         this.comparisonRulesBody = comparisonRulesBody;
         this.formRulesBody = formRules;
-        formRules.forEach((rule, index) => {
-
-          if(rule.type == 'time') {
-            this.maxDate[index] = rule.rule.max;
-            this.minDate[index] = rule.rule.min;
-          } else {
-            this.numeroMax[index] = rule.rule.max;
-            this.numeroMin[index] = rule.rule.min;
-          }
-          
-          // if (element.campo1 != null) {
-          //   contatore++;
-          //   array.campo1 = element.campo1;
-          //   array.segno = element.segno;
-          //   array.campo2 = element.campo2;
-          //   this.defaultFont[index] = array;
-          //   this.addComparisonForm(array);
-          // } else if (element.max != null && element.max.length != 24) {
-          //   console.log(element.max);
-          //   console.log(typeof element.max === "string");
-          //   this.numeroMax[index - contatore] = element.max;
-          //   this.numeroMin[index - contatore] = element.min;
-          // } else if (element.max != null && element.max.length == 24) {
-          //   this.maxDate[index - contatore] = element.max;
-          //   this.minDate[index - contatore] = element.min;
-          // }
-
-
-        });
+        if(formRules) {
+          formRules.forEach((rule, index) => {
+            if(rule.type == 'time') {
+              this.maxDate[index] = rule.rule.max;
+              this.minDate[index] = rule.rule.min;
+            } else {
+              this.numeroMax[index] = rule.rule.max;
+              this.numeroMin[index] = rule.rule.min;
+            }
+            
+            // if (element.campo1 != null) {
+            //   contatore++;
+            //   array.campo1 = element.campo1;
+            //   array.segno = element.segno;
+            //   array.campo2 = element.campo2;
+            //   this.defaultFont[index] = array;
+            //   this.addComparisonForm(array);
+            // } else if (element.max != null && element.max.length != 24) {
+            //   console.log(element.max);
+            //   console.log(typeof element.max === "string");
+            //   this.numeroMax[index - contatore] = element.max;
+            //   this.numeroMin[index - contatore] = element.min;
+            // } else if (element.max != null && element.max.length == 24) {
+            //   this.maxDate[index - contatore] = element.max;
+            //   this.minDate[index - contatore] = element.min;
+            // }
+          });
+        }
       }
 
     }, error => {

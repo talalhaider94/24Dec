@@ -77,6 +77,11 @@ export class ApiService {
     return this.http.get(getDataKpisEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getCustomersKP(): Observable<any> {
+    const getCustomersKP = `${environment.API_URL}/data/GetAllCustomersKP`;
+    return this.http.get(getCustomersKP, Headers.setTokenHeaders('GET'));
+  }
+
   getAllRoles(): Observable<any> {
     const getAllRolesEndPoint = `${environment.API_URL}/information/GetAllRoles`;
     return this.http.get(getAllRolesEndPoint, Headers.setTokenHeaders('GET'));
