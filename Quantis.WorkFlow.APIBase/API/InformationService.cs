@@ -30,7 +30,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
         }
-        public void AddUpdateConfiguration(ConfigurationDTO dto)
+        public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
         {
             try
             {                
@@ -49,6 +49,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {                    
                     conf = new T_Configuration();
                     conf = _configurationMapper.GetEntity(dto, conf);
+                    conf.category = "B";
                     _dbcontext.Configurations.Add(conf);
                 }
                 else
@@ -59,6 +60,40 @@ namespace Quantis.WorkFlow.APIBase.API
                 
             }
             catch(Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AddUpdateAdvancedConfiguration(ConfigurationDTO dto)
+        {
+            try
+            {
+                var conf = _dbcontext.Configurations.Single(o => o.owner == dto.Owner && o.key == dto.Key);
+                //TODO: Need to fix cutt of date.
+                if (dto.Owner == "be_restserver" && dto.Key == "day_cutoff")
+                {
+                    var ents = _dbcontext.CatalogKpi.ToList();
+                    foreach (var en in ents)
+                    {
+                        en.day_cutoff = int.Parse(dto.Value);
+                    }
+                    _dbcontext.SaveChanges();
+                }
+                if (conf == null)
+                {
+                    conf = new T_Configuration();
+                    conf = _configurationMapper.GetEntity(dto, conf);
+                    conf.category = "A";
+                    _dbcontext.Configurations.Add(conf);
+                }
+                else
+                {
+                    conf = _configurationMapper.GetEntity(dto, conf);
+                }
+                _dbcontext.SaveChanges();
+
+            }
+            catch (Exception e)
             {
                 throw e;
             }

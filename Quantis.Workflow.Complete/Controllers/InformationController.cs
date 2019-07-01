@@ -44,12 +44,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
         [HttpPost("AddUpdateBasicConfiguration")]
         public void AddUpdateBasicConfiguration([FromBody]ConfigurationDTO dto)
         {
-            _infomationAPI.AddUpdateConfiguration(dto);
+            _infomationAPI.AddUpdateBasicConfiguration(dto);
         }
         [HttpPost("AddUpdateAdvancedConfiguration")]
         public void AddUpdateAdvancedConfiguration([FromBody]ConfigurationDTO dto)
         {
-            _infomationAPI.AddUpdateConfiguration(dto);
+            _infomationAPI.AddUpdateAdvancedConfiguration(dto);
         }
 
         [HttpGet("GetAllRoles")]

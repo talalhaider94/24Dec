@@ -11,7 +11,8 @@ namespace Quantis.WorkFlow.Services.API
         List<ConfigurationDTO> GetAllAdvancedConfigurations();
         List<ConfigurationDTO> GetAllBasicConfigurations();
         void DeleteConfiguration(string owner, string key);
-        void AddUpdateConfiguration(ConfigurationDTO dto);
+        void AddUpdateBasicConfiguration(ConfigurationDTO dto);
+        void AddUpdateAdvancedConfiguration(ConfigurationDTO dto);
         ConfigurationDTO GetConfiguration(string owner, string key);
         void AddUpdateRole(BaseNameCodeDTO dto);
         void DeleteRole(int roleId);
