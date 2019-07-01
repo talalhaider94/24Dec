@@ -99,11 +99,24 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<ConfigurationDTO> GetAllConfigurations()
+        public List<ConfigurationDTO> GetAllBasicConfigurations()
         {
             try
             {
-                var confs = _dbcontext.Configurations.Where(o=>o.isvisible).OrderBy(o => o.key);
+                var confs = _dbcontext.Configurations.Where(o=>o.isvisible && o.category=="B").OrderBy(o => o.key);
+                var dtos = _configurationMapper.GetDTOs(confs.ToList());
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<ConfigurationDTO> GetAllAdvancedConfigurations()
+        {
+            try
+            {
+                var confs = _dbcontext.Configurations.Where(o => o.isvisible && o.category == "A").OrderBy(o => o.key);
                 var dtos = _configurationMapper.GetDTOs(confs.ToList());
                 return dtos;
             }
