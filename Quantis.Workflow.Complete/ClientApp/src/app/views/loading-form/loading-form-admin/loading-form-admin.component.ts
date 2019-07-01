@@ -60,18 +60,15 @@ export class LoadingFormAdminComponent implements OnInit {
   stringTypeRules: string[] = ['=', '!='];
   integerTypeRules: string[] = ['<', '>', '=', '!=', '>=', '<='];
   dateTypeRules: string[] = ['<', '>', '>=', '<='];
-
-  // dataSource = new MatTableDataSource();
-  // pageSizeOptions: number[] = [5, 10, 25, 100];
-  // mostraTabella: boolean = false;
-  // vai: boolean = false;
   arrayFormElements: any = [];
-
   jsonForm: any = [];
-
   numeroForm: number;
   title: string = '';
   checked: boolean;
+
+  comparisonField1: any = [];
+  comparisonField2: any = [];
+  comparisonField3: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -107,45 +104,42 @@ export class LoadingFormAdminComponent implements OnInit {
   }
 
   initComparisonForm(array) {
-    let a = this.fb.group({
-      campo1: [array.campo1], // means field
-      segno: [array.segno], // means sign
-      campo2: [array.campo2]
+    return this.fb.group({
+      campo1: [{value: array.campo1, disabled: false}], // means field
+      segno: [{value: array.segno, disabled: false}], // means sign
+      campo2: [{value: array.campo2, disabled: false}]
     });
-    return a;
   }
 
   addComparisonForm(array) {
     if (array == '') {
       array = new ControlloConfronto;
     }
-    const control = <FormArray>this.myInputForm.get('campiConfronto')['controls']; // means comparison fields
+    const control = <FormArray>this.myInputForm.get('campiConfronto'); // means comparison fields
     control.push(this.initComparisonForm(array));
   }
 
   removeComparisonForm(i: number) {
-    const control = this.myInputForm.get('campiConfronto')['controls'];
-    control.splice(i,1); 
+    const control = <FormArray>this.myInputForm.get('campiConfronto');
+    // check remove later :/
+    control.removeAt(i);
   }
 
   filtraElementi(formField, index: number) {
-    this.arraySecondo[index] = this.arrayFormElements.filter(form => (form.name !== formField.name && form.type !== formField.type));
-    if(formField.type === 'string') {
+    this.arraySecondo[index] = this.arrayFormElements.filter(form => (form.name !== formField.name && form.type === formField.type));
+    if (formField.type === 'string') {
       this.confronti[index] = this.stringTypeRules;
-    } else if(formField.type === 'integer' || formField.type === 'real') {
+    } else if (formField.type === 'integer' || formField.type === 'real') {
       this.confronti[index] = this.integerTypeRules;
-    } else if(formField.type === 'time') {
+    } else if (formField.type === 'time') {
       this.confronti[index] = this.dateTypeRules;
     } else {
       console.log('Danial: Unknown/New CONDITION MISSING IN filtraElementi method')
     }
-    
+
   }
 
   save(model: any) {
-    // if (!!model.value.termsCheck) {
-    //   this.toastr.info('Inserire nota per dati non pervenuti.')
-    // }
     this.loading = true;
     console.log('ADMIN FORM SAVE MODEL', model.value);
     //elementi da mettere nel json
@@ -153,49 +147,65 @@ export class LoadingFormAdminComponent implements OnInit {
     // let jsonDaPassare:json;
     let jsonDaPassare: any; // means json to pass
     let arrayControlli = []; // controls array
+    let comparisonFieldsArray = [];
     // confrontoAppoggio = means comparison support || ControlloConfronto = means comparison check
     let confrontoAppoggio = new ControlloConfronto;
     let controlloCampo = new ControlloCampo; //means fields control
 
     this.erroriArray = [];
     let indiceAppoggio; // mean index support 
+    let secondIndexSupport;
     let tipo1; // means guy or tip :/
     let valore1; // means value
     let valore2;
     // datiModelConfronto means  DataModel Comparison
     // campiConfronto means comparison fields
     let datiModelConfronto = model.value.campiConfronto;
+    // loop over 3 select comparison fields
+    // check comparison not empty
+    let comparisonValidate = false;
+    // comparisonValidate = datiModelConfronto.filter(comparison => (!!comparison.campo1 && !!comparison.campo2 && !!comparison.segno) );
+    // if length zero mean no comparison rules
+    // if(comparisonValidate) {
 
+    // }
     datiModelConfronto.forEach((element, index) => {
-      console.log('why here....')
-      if (element.campo1 != null && element.segno != null && element.campo2 != null) {
+      if (element.campo1.name != null && element.segno != null && element.campo2.name != null) {
         confrontoAppoggio = new ControlloConfronto;
-        confrontoAppoggio.campo1 = element.campo1;
+        confrontoAppoggio.campo1 = element.campo1.name;
         confrontoAppoggio.segno = element.segno;
-        confrontoAppoggio.campo2 = element.campo2;
-        arrayControlli.push(confrontoAppoggio);
-        tipo1 = element.campo1.Type;
-        indiceAppoggio = this.arrayFormElements.findIndex(x => x.name == element.campo1.Name);
-        console.log(this.arrayFormElements);
-        switch (tipo1) {
-          case 'string':
-            valore1 = this.stringa[indiceAppoggio];
-            valore2 = this.stringa[this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.Name)];
-            break;
+        confrontoAppoggio.campo2 = element.campo2.name;
+        comparisonFieldsArray.push(confrontoAppoggio);
 
-          case 'time':
-            valore1 = this.dt[indiceAppoggio];
-            valore2 = this.dt[this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.Name)];
-            break;
+        // tipo1 = element.campo1.type;
+        // indiceAppoggio = this.arrayFormElements.findIndex(x => x.name == element.campo1.name);
+        // secondIndexSupport = this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.name);
+        
+        // switch (tipo1) {
+        //   case 'string':
+        //     let a = this.numero;
+        //     valore1 = this.numero[indiceAppoggio];
+        //     valore2 = this.numero[secondIndexSupport];
+        //     // valore1 = this.stringa[indiceAppoggio];
+        //     // valore2 = this.stringa[this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.name)];
+        //     debugger
+        //     break;
 
-          default:
-            valore1 = this.numero[indiceAppoggio];
-            valore2 = this.numero[this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.Name)];
-            break;
-        }
-        this.checkConfronto(valore1, valore2, datiModelConfronto[index].segno, element.campo1, element.campo2);
+        //   case 'time':
+        //     valore1 = this.dt[indiceAppoggio];
+        //     valore2 = this.dt[secondIndexSupport];
+        //     debugger
+        //     break;
 
-        return;
+        //   default:
+        //     valore1 = this.numero[indiceAppoggio];
+        //     valore2 = this.numero[secondIndexSupport];
+        //     debugger
+        //     break;
+        // }
+        // this.checkConfronto(valore1, valore2, datiModelConfronto[index].segno, element.campo1, element.campo2);
+
+        // return;
       }
 
     });
@@ -205,27 +215,25 @@ export class LoadingFormAdminComponent implements OnInit {
     } else {
       console.log('NO ERRORS IN FORMS');
       this.arrayFormElements.forEach((element, index) => {
-        console.log('arrayFormElements :', element);
+        console.log('Elements :', element);
         controlloCampo = new ControlloCampo;
         if (element.type == 'time') {
-          controlloCampo.max = this.maxDate[index];
-          controlloCampo.min = this.minDate[index];
-
+          controlloCampo.max = this.maxDate[index] || '';
+          controlloCampo.min = this.minDate[index] || '';
         } else {
-          controlloCampo.max = this.numeroMax[index];
-          controlloCampo.min = this.numeroMin[index];
+          controlloCampo.max = this.numeroMax[index] || '';
+          controlloCampo.min = this.numeroMin[index] || '';
         }
-        arrayControlli.push(controlloCampo);
-        console.log('controlloCampo', controlloCampo);
+        arrayControlli.push({...element, rule: controlloCampo});
       });
     }
     console.log('arrayControlli :', arrayControlli);
-    var formToSend = new Form;
+    let formToSend = new Form;
     formToSend.form_id = this.numeroForm;
-    formToSend.form_body = JSON.stringify(arrayControlli);
+    let fullFormData = { formRules: arrayControlli, comparisonRules: comparisonFieldsArray };
+    formToSend.form_body = JSON.stringify(fullFormData);
     console.log('FINAL SENDING FORM', formToSend);
     this.loadingFormService.createForm(formToSend).subscribe(data => {
-
       this.toastr.success('Form has been submitted', 'Success');
       console.log('FINAL CREATE FORM SUCCESS', data);
       this.loading = false;
@@ -244,47 +252,48 @@ export class LoadingFormAdminComponent implements OnInit {
     console.log('checkConfronto segno', segno);
     console.log('checkConfronto elemento1', elemento1);
     console.log('checkConfronto elemento2', elemento2);
+    debugger;
     switch (segno) {
       case '=':
         if (val1 == val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere uguale a " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere uguale a " + elemento2.name);
         }
         break;
       case '!=':
         if (val1 != val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere diverso di " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere diverso di " + elemento2.name);
         }
         break;
       case '<':
         if (val1 < val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere minore di " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere minore di " + elemento2.name);
         }
         break;
       case '>':
         if (val1 > val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere maggiore di " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere maggiore di " + elemento2.name);
         }
         break;
       case '>=':
         if (val1 >= val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere maggiore o uguale a " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere maggiore o uguale a " + elemento2.name);
         }
         break;
       case '<=':
         if (val1 <= val2) {
 
         } else {
-          this.erroriArray.push(elemento1.Name + " deve essere minore o uguale a " + elemento2.Name);
+          this.erroriArray.push(elemento1.name + " deve essere minore o uguale a " + elemento2.name);
         }
         break;
     }
@@ -336,25 +345,37 @@ export class LoadingFormAdminComponent implements OnInit {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
       if (data) {
-        // debugger
-        JSON.parse(data.form_body).forEach((element, index) => {
-          console.log(element);
-          if (element.campo1 != null) { // means Forms regoles are defined 
-            contatore++;
-            array.campo1 = element.campo1;
-            array.segno = element.segno;
-            array.campo2 = element.campo2;
-            this.defaultFont[index] = array;
-            // this.addComparisonForm(array);
-          } else if (element.max != null && element.max.length != 24) {
-            // type string / real / integer
-            this.numeroMax[index - contatore] = element.max;
-            this.numeroMin[index - contatore] = element.min;
-          } else if (element.max != null && element.max.length == 24) {
-            this.maxDate[index - contatore] = element.max;
-            this.minDate[index - contatore] = element.min;
+        let formbody = JSON.parse(data.form_body);
+        let formRules = formbody.formRules;
+        let comparisonRules = formbody.comparisonRules;
+        formRules.forEach( (rule, index) => {
+          if(rule.type == 'time') {
+            this.maxDate[index] = rule.rule.max;
+            this.minDate[index] = rule.rule.min;
+          } else {
+            this.numeroMax[index] = rule.rule.max;
+            this.numeroMin[index] = rule.rule.min;
           }
         });
+
+        // JSON.parse(data.form_body).forEach((element, index) => {
+        //   console.log(element);
+        //   if (element.campo1 != null) { // means Forms regoles are defined 
+        //     contatore++;
+        //     array.campo1 = element.campo1;
+        //     array.segno = element.segno;
+        //     array.campo2 = element.campo2;
+        //     this.defaultFont[index] = array;
+        //     // this.addComparisonForm(array);
+        //   } else if (element.max != null && element.max.length != 24) {
+        //     // type string / real / integer
+        //     this.numeroMax[index - contatore] = element.max;
+        //     this.numeroMin[index - contatore] = element.min;
+        //   } else if (element.max != null && element.max.length == 24) {
+        //     this.maxDate[index - contatore] = element.max;
+        //     this.minDate[index - contatore] = element.min;
+        //   }
+        // });
       }
 
     }, error => {
