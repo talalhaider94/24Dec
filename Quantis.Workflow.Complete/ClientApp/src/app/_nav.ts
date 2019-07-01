@@ -197,7 +197,7 @@ export const navItems: NavData[] = [
         url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
-      },
+      }, 
       {
         name: 'Profilazione Utente',
         url: '/coming-soon',

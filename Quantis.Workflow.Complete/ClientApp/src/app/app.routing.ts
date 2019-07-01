@@ -102,6 +102,10 @@ export const routes: Routes = [
       {
         path: 'userprofiling',
         loadChildren: './views/userprofiling/userprofiling.module#UserProfilingModule'
+      },
+      {
+        path: 'adminroles',
+        loadChildren: './views/adminroles/adminroles.module#AdminRolesModule'
       }
     ]
   },
