@@ -78,6 +78,17 @@ namespace Quantis.WorkFlow.APIBase.API
             return true;
 
         }
+        public List<KeyValuePair<int,string>> GetAllCustomersKP()
+        {
+            try
+            {
+                return _dbcontext.Customers.Select(o => new KeyValuePair<int, string>(o.customer_id, o.customer_name)).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public bool AddUpdateFormRule(FormRuleDTO dto)
         {
             try
@@ -834,7 +845,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     Description = kpi.kpi_description,
                     ID_KPI = kpi.id_kpi,
-                    Group = kpi.group_type,
+                    GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,

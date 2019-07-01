@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Models.Information
         public bool enable { get; set; }
         public bool isvisible { get; set; }
         public string description { get; set; }
+        public string category { get; set; }
     }
     public class T_Configuration_Configuration : IEntityTypeConfiguration<T_Configuration>
     {

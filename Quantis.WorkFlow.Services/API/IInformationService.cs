@@ -8,9 +8,11 @@ namespace Quantis.WorkFlow.Services.API
 {
     public interface IInformationService
     {
-        List<ConfigurationDTO> GetAllConfigurations();
+        List<ConfigurationDTO> GetAllAdvancedConfigurations();
+        List<ConfigurationDTO> GetAllBasicConfigurations();
         void DeleteConfiguration(string owner, string key);
-        void AddUpdateConfiguration(ConfigurationDTO dto);
+        void AddUpdateBasicConfiguration(ConfigurationDTO dto);
+        void AddUpdateAdvancedConfiguration(ConfigurationDTO dto);
         ConfigurationDTO GetConfiguration(string owner, string key);
         void AddUpdateRole(BaseNameCodeDTO dto);
         void DeleteRole(int roleId);
@@ -30,7 +32,7 @@ namespace Quantis.WorkFlow.Services.API
         List<HierarchicalNameCodeDTO> GetAllKPIHierarchy();
         List<int> GetGlobalRulesByUserId(int userId);
         void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
-        List<string> GetContractPartyByUser(int userId);
+        List<int> GetContractPartyByUser(int userId);
 
     }
 }

@@ -30,7 +30,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
         }
-        public void AddUpdateConfiguration(ConfigurationDTO dto)
+        public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
         {
             try
             {                
@@ -49,6 +49,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {                    
                     conf = new T_Configuration();
                     conf = _configurationMapper.GetEntity(dto, conf);
+                    conf.category = "B";
                     _dbcontext.Configurations.Add(conf);
                 }
                 else
@@ -59,6 +60,40 @@ namespace Quantis.WorkFlow.APIBase.API
                 
             }
             catch(Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AddUpdateAdvancedConfiguration(ConfigurationDTO dto)
+        {
+            try
+            {
+                var conf = _dbcontext.Configurations.Single(o => o.owner == dto.Owner && o.key == dto.Key);
+                //TODO: Need to fix cutt of date.
+                if (dto.Owner == "be_restserver" && dto.Key == "day_cutoff")
+                {
+                    var ents = _dbcontext.CatalogKpi.ToList();
+                    foreach (var en in ents)
+                    {
+                        en.day_cutoff = int.Parse(dto.Value);
+                    }
+                    _dbcontext.SaveChanges();
+                }
+                if (conf == null)
+                {
+                    conf = new T_Configuration();
+                    conf = _configurationMapper.GetEntity(dto, conf);
+                    conf.category = "A";
+                    _dbcontext.Configurations.Add(conf);
+                }
+                else
+                {
+                    conf = _configurationMapper.GetEntity(dto, conf);
+                }
+                _dbcontext.SaveChanges();
+
+            }
+            catch (Exception e)
             {
                 throw e;
             }
@@ -99,11 +134,24 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<ConfigurationDTO> GetAllConfigurations()
+        public List<ConfigurationDTO> GetAllBasicConfigurations()
         {
             try
             {
-                var confs = _dbcontext.Configurations.Where(o=>o.isvisible).OrderBy(o => o.key);
+                var confs = _dbcontext.Configurations.Where(o=>o.isvisible && o.category=="B").OrderBy(o => o.key);
+                var dtos = _configurationMapper.GetDTOs(confs.ToList());
+                return dtos;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<ConfigurationDTO> GetAllAdvancedConfigurations()
+        {
+            try
+            {
+                var confs = _dbcontext.Configurations.Where(o => o.isvisible && o.category == "A").OrderBy(o => o.key);
                 var dtos = _configurationMapper.GetDTOs(confs.ToList());
                 return dtos;
             }
@@ -316,7 +364,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var ent = _dbcontext.SDMTicketGroup.ToList();
+                var ent = _dbcontext.SDMTicketGroup.Include(o=>o.category).ToList();
                 var dtos = _sdmGroupMapper.GetDTOs(ent);
                 return dtos;
             }
@@ -433,13 +481,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<string> GetContractPartyByUser(int userId)
+        public List<int> GetContractPartyByUser(int userId)
         {
             try
             {
                 var res = new List<UserKPIDTO>();
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
-                var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.group_type);
+                var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.primary_contract_party);
                 return groups.Where(o => o != null).Distinct().ToList();
 
             }
