@@ -455,30 +455,29 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.First().name || ticket.Status == _statusMapping.Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().name || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
                 {
                     return null;
                 }
-                int index = _statusMapping.Select(o => o.name).ToList().IndexOf(ticket.Status);
-                index--;
-                var newstatus = _statusMapping.ElementAt(index).handle;
+                int step = _statusMapping.FirstOrDefault(o => o.name == ticket.Status).step;
+                step--;
+                var newstatus = _statusMapping.FirstOrDefault(o => o.step == step).handle;
                 string newgroup = "";
                 foreach (var g in _groupMapping.GroupBy(o => o.category))
                 {
                     if (g.Any(o => o.name == ticket.Group))
                     {
-                        newgroup = g.ElementAt(index).handle;
+                        newgroup = g.FirstOrDefault(o => o.step == step).handle;
                     }
                 }
-                var kpi = _dataService.GetKpiById(id);
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
-                    kpi_name = kpi.id_kpi,
-                    contract_name = kpi.contract,
+                    kpi_name = ticket.ID_KPI,
+                    contract_name = ticket.Summary.Split('|')[0],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
-                    primary_contract_party = kpi.primary_contract_party,
-                    secondary_contract_party = kpi.secondary_contract_party,
+                    primary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.primary_contract_party) ? "0" : ticket.primary_contract_party),
+                    secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
                     ticket_status = status
                 };
                 if (!CallUploadKPI(bsiticketdto))
@@ -486,7 +485,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     LogOut();
                     return null;
                 }
-                string tickethandle = "cr:" + ticket.ref_num;
+                string tickethandle = "cr:" + id;
                 var esca = _sdmClient.transferAsync(_sid, "", tickethandle, description, false, "", true, newgroup, false, "");
                 esca.Wait();
 
@@ -514,30 +513,29 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
                 {
                     return null;
                 }
-                int index = _statusMapping.Select(o => o.name).ToList().IndexOf(ticket.Status);
-                index++;
-                var newstatus= _statusMapping.ElementAt(index).handle;
+                int step = _statusMapping.FirstOrDefault(o => o.name == ticket.Status).step;
+                step++;
+                var newstatus= _statusMapping.FirstOrDefault(o=>o.step== step).handle;
                 string newgroup = "";
-                foreach(var g in _groupMapping.GroupBy(o=>o.category))
+                foreach(var g in _groupMapping.GroupBy(o=>o.category_id))
                 {
                     if (g.Any(o => o.name == ticket.Group))
                     {
-                        newgroup = g.ElementAt(index).handle;
+                        newgroup = g.FirstOrDefault(o=>o.step==step).handle;
                     }
-                }
-                var kpi = _dataService.GetKpiById(id);
+                };
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
-                    kpi_name = kpi.id_kpi,
-                    contract_name = kpi.contract,
+                    kpi_name = ticket.ID_KPI,
+                    contract_name = ticket.Summary.Split('|')[0],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
-                    primary_contract_party = kpi.primary_contract_party,
-                    secondary_contract_party = kpi.secondary_contract_party,
+                    primary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.primary_contract_party)?"0": ticket.primary_contract_party),
+                    secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
                     ticket_status = status
                 };
                 if (!CallUploadKPI(bsiticketdto))
@@ -545,7 +543,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     LogOut();
                     return null;
                 }
-                string tickethandle = "cr:" + ticket.ref_num;
+                string tickethandle = "cr:" + id;
                 var esca=_sdmClient.escalateAsync(_sid, "", tickethandle, description, false, "", true, newgroup, false, "", false, "");
                 esca.Wait();
 
