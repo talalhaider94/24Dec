@@ -93,14 +93,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" /><br>
-        <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" /><br>
-        <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" /><br>
-        <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" /><br>
-        <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" />
+        <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" [(ngModel)]="key" /><br>
+        <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" [(ngModel)]="owner" /><br>
+        <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="value" /><br>
+        <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" [(ngModel)]="isenable" /><br>
+        <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" [(ngModel)]="description" />
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success">Aggiungi</button>
+        <button class="btn btn-success" (click)="addConfig()">Aggiungi</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
