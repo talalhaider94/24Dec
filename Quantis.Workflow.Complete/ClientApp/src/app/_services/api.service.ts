@@ -33,8 +33,13 @@ export class ApiService {
   }
 
   getConfigurations(): Observable<any> {
-    const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllConfigurations`;
+    const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllBasicConfigurations`;
     return this.http.get(getConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
+  }
+
+  getAdvancedConfigurations(): Observable<any> {
+    const getAdvancedConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllAdvancedConfigurations`;
+    return this.http.get(getAdvancedConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
   }
 
   getSDMGroupConfigurations(): Observable<any> {
@@ -72,6 +77,11 @@ export class ApiService {
     return this.http.get(getDataKpisEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getCustomersKP(): Observable<any> {
+    const getCustomersKP = `${environment.API_URL}/data/GetAllCustomersKP`;
+    return this.http.get(getCustomersKP, Headers.setTokenHeaders('GET'));
+  }
+
   getAllRoles(): Observable<any> {
     const getAllRolesEndPoint = `${environment.API_URL}/information/GetAllRoles`;
     return this.http.get(getAllRolesEndPoint, Headers.setTokenHeaders('GET'));
@@ -86,13 +96,33 @@ export class ApiService {
     return this.http.post(addrole,data, Headers.setTokenHeaders('POST'));
   }
   
+  addConfig(data): Observable<any> {
+    const addConfig = `${environment.API_URL}/information/AddUpdateBasicConfiguration`;
+    return this.http.post(addConfig,data, Headers.setTokenHeaders('POST'));
+  }
+   
+  addAdvancedConfig(data): Observable<any> {
+    const addConfig = `${environment.API_URL}/information/AddUpdateAdvancedConfiguration`;
+    return this.http.post(addConfig,data, Headers.setTokenHeaders('POST'));
+  }
+  
   deleteRole(roleId): Observable<any> {
     const deleteroles = `${environment.API_URL}/information/DeleteRole/${roleId}`;
     return this.http.get(deleteroles, Headers.setTokenHeaders('POST'));
   }
 
   updateConfig(config) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateConfiguration`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config, Headers.setTokenHeaders('POST'))
+      .pipe(
+        tap(
+          data => data,
+          error => error
+        )
+      );
+  }
+
+  updateAdvancedConfig(config) {
+    return this.http.post(`${environment.API_URL}/information/AddUpdateAdvancedConfiguration`, config, Headers.setTokenHeaders('POST'))
       .pipe(
         tap(
           data => data,

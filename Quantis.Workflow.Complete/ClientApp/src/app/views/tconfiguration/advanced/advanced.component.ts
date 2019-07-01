@@ -16,6 +16,11 @@ export class TConfigurationAdvancedComponent implements OnInit {
   @ViewChild('ConfigurationTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+  key: any = '';
+  value: any =  '';
+  owner: any = '';
+  isenable: boolean =  false;
+  description: any =  '';
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -50,6 +55,14 @@ export class TConfigurationAdvancedComponent implements OnInit {
     description: '',
   };
 
+  addData = {
+    key: '',
+    value: '',
+    owner: '',
+    isenable: false,
+    description: ''
+  };
+
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
@@ -79,9 +92,27 @@ export class TConfigurationAdvancedComponent implements OnInit {
     this.modalData.description = data.description;
   }
 
+  addConfig() {
+    this.addData.key = this.key;
+    this.addData.owner = this.owner;
+    this.addData.value = this.value;
+    this.addData.isenable = this.isenable;
+    this.addData.description = this.description;
+
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.addAdvancedConfig(this.addData).subscribe(data => {
+        this.getCOnfigurations(); // this should refresh the main table on page
+        this.toastr.success('Valore Aggiornato', 'Success');
+        $('#addConfigModal').modal('toggle').hide();
+    }, error => {
+        this.toastr.error('Errore durante add.', 'Error');
+        $('#addConfigModal').modal('toggle').hide();
+    });
+  }
+
   updateConfig() {
     this.toastr.info('Valore in aggiornamento..', 'Info');
-    this.apiService.updateConfig(this.modalData).subscribe(data => {
+    this.apiService.updateAdvancedConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
       $('#configModal').modal('toggle').hide();
@@ -150,7 +181,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   getCOnfigurations() {
-    this.apiService.getConfigurations().subscribe((data) =>{
+    this.apiService.getAdvancedConfigurations().subscribe((data) =>{
       this.ConfigTableBodyData = data;
       console.log('Configs ', data);
       this.rerender();

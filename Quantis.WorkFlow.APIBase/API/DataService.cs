@@ -690,8 +690,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             _cache.GetOrCreate("Permission_"+res.user_id, entry => permissions);
                             return new LoginResultDTO()
                             {
-                                IsAdmin = usr.user_admin,
-                                IsSuperAdmin = usr.user_sadmin,
                                 Token = token,
                                 UserID = res.user_id,
                                 LocaleID = res.user_locale_id,

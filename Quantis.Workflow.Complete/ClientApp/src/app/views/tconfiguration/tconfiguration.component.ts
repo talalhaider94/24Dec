@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 declare var $;
 var $this;
 
-
 @Component({
   templateUrl: './tconfiguration.component.html'
 })
@@ -16,6 +15,11 @@ export class TConfigurationComponent implements OnInit {
   @ViewChild('ConfigurationTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+  key: any = '';
+  value: any =  '';
+  owner: any = '';
+  isenable: boolean =  false;
+  description: any =  '';
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -49,6 +53,14 @@ export class TConfigurationComponent implements OnInit {
     isenable: true,
     description: '',
   };
+  
+  addData = {
+    key: '',
+    value: '',
+    owner: '',
+    isenable: false,
+    description: ''
+  };
 
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
@@ -77,6 +89,24 @@ export class TConfigurationComponent implements OnInit {
     this.modalData.value = data.value;
     this.modalData.isenable = data.isenable;
     this.modalData.description = data.description;
+  }
+
+  addConfig() {
+    this.addData.key = this.key;
+    this.addData.owner = this.owner;
+    this.addData.value = this.value;
+    this.addData.isenable = this.isenable;
+    this.addData.description = this.description;
+
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.addConfig(this.addData).subscribe(data => {
+        this.getCOnfigurations(); // this should refresh the main table on page
+        this.toastr.success('Valore Aggiornato', 'Success');
+        $('#addConfigModal').modal('toggle').hide();
+    }, error => {
+        this.toastr.error('Errore durante add.', 'Error');
+        $('#addConfigModal').modal('toggle').hide();
+    });
   }
 
   updateConfig() {

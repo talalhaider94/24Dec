@@ -14,8 +14,9 @@ var $this;
 
 export class SdmGroupComponent implements OnInit {
   @ViewChild('ConfigurationTable') block: ElementRef;
-  @ViewChild('searchCol1') searchCol1: ElementRef;
+  // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+  category_id : number = 0;
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -47,7 +48,7 @@ export class SdmGroupComponent implements OnInit {
     handle: '',
     name: '',
     step: '',
-    category: ''
+    category_id: 0
   };
 
   dtTrigger: Subject<any> = new Subject();
@@ -57,6 +58,13 @@ export class SdmGroupComponent implements OnInit {
       name: 'name',
       step: 1,
       category: 'category'
+    }
+  ]
+
+  customersKP: any = [
+    {
+      key: '',
+      value: ''
     }
   ]
 
@@ -79,10 +87,10 @@ export class SdmGroupComponent implements OnInit {
     this.modalData.handle = data.handle;
     this.modalData.name = data.name;
     this.modalData.step = data.step;
-    this.modalData.category = data.category;
   }
 
   updateConfig() {
+    this.modalData.category_id = this.category_id;
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
@@ -112,6 +120,7 @@ export class SdmGroupComponent implements OnInit {
 
     this.setUpDataTableDependencies();
     this.getCOnfigurations();
+    this.getCustomersKP();
 
     /*this.apiService.getConfigurations().subscribe((data:any)=>{
       this.ConfigTableBodyData = data;
@@ -142,19 +151,14 @@ export class SdmGroupComponent implements OnInit {
   // }
 
   setUpDataTableDependencies(){
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
+    // $(this.searchCol1.nativeElement).on( 'keyup', function () {
+    //   $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    //   datatable_Ref
+    //     .columns( 0 )
+    //     .search( this.value )
+    //     .draw();
     // });
-
-    // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
-    });
+    // });
 
   }
 
@@ -168,6 +172,14 @@ export class SdmGroupComponent implements OnInit {
     this.apiService.getSDMGroupConfigurations().subscribe((data) =>{
       this.ConfigTableBodyData = data;
       console.log('Configs ', data);
+      this.rerender();
+    });
+  }
+
+  getCustomersKP() {
+    this.apiService.getCustomersKP().subscribe((data) =>{
+      this.customersKP = data;
+      console.log('CustomersKP ', data);
       this.rerender();
     });
   }
