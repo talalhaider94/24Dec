@@ -12,7 +12,7 @@
       <div class="row">
         <div class="col-md-12">
           <dual-list [source]="gatheredData.permissionsList" key="id" display="name" [(destination)]="gatheredData.assignedPermissions"
-              filter="true" (destinationChange)="onPermissionSelectDeselect($event)" height="500px">
+              filter="true" (destinationChange)="onPermissionSelectDeselect($event)" [format]="format" height="400px">
           </dual-list>
           <div><br>
             <button (click)="saveAssignedPermissions()" class="btn btn-success pull-right" [disabled]="!gatheredData.roleId">Salva</button>
