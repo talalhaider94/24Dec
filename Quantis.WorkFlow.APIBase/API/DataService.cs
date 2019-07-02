@@ -82,7 +82,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                return _dbcontext.Customers.Select(o => new KeyValuePair<int, string>(o.customer_id, o.customer_name)).ToList();
+                return _dbcontext.Customers.Where(o=>o.customer_id>=1000).OrderBy(p=>p.customer_name).Select(o => new KeyValuePair<int, string>(o.customer_id, o.customer_name)).ToList();
             }
             catch (Exception e)
             {
