@@ -12,3 +12,6 @@
 /Quantis.WorkFlow.UnitTest/bin
 /Quantis.WorkFlow.UnitTest/obj
 .vs
+/FormAdapterService/FormAdapterService/bin
+/FormAdapterService/FormAdapterService/obj
+/FormAdapterService/packages
