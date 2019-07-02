@@ -855,16 +855,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
                 return new CreateTicketDTO()
                 {
-                    Description = kpi.kpi_description,
+                    Description = GenerateDiscriptionFromKPI(kpi,"NA"),
                     ID_KPI = kpi.id_kpi,
                     GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.contract+"|"+kpi.id_kpi,
-                    primary_contract_party=kpi.primary_contract_party,
-                    secondary_contract_party=kpi.secondary_contract_party
+                    Summary=kpi.contract+"|"+kpi.id_kpi+"|"+ kpi.primary_contract_party+"|"+kpi.secondary_contract_party??""
                 };
 
             }
@@ -874,8 +872,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
         }
-
-
+        private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi,string calc)
+        {
+            string skeleton = "INDICATORE: {0}<br/>" +
+                "DESCRIZIONE: {1}<br/>" +
+                "ESCALATION: {2}<br/>" +
+                "TARGET: {3}<br/>" +
+                "TIPILOGIA: {4}<br/>" +
+                "VALORE CALC: {5}<br/>" +
+                "AUTORE: {6}" +
+                "TRACKING PERIOD: {7}";
+            return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
+        }
         public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
         {
             try

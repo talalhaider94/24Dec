@@ -298,11 +298,7 @@ namespace Quantis.WorkFlow.APIBase.API
                       "zz_cned_string3",
                       dto.Reference3,
                       "zz_cned_string4",
-                      dto.Period,
-                      //"zz_primary_contract_party",
-                     // dto.primary_contract_party+"",
-                      //"zz_secondary_contract_party",
-                     // dto.secondary_contract_party+""
+                      dto.Period
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
                 ret = parseNewTicket(ticket);
@@ -417,19 +413,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     userid = userid.Split('\\')[1];
                     var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
                     string filterstring = "";
-                    //var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category)).Select(p=>p.handle.Substring(4)).ToList();
-                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.name).ToList();
+                    var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.handle.Substring(4)).ToList();
+                    //var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.name).ToList();
                     if (!groups.Any())
                     {
                         return tickets;
                     }
-                    var filters = groups.Select(o => string.Format(" group='{0}' ", o));
+                    var filters = groups.Select(o => string.Format(" group.id=U'{0}' ", o));
                     filterstring=string.Join("OR", filters);
                     LogIn();
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
-                    return parseTickets(select_result).Where(o=>groups.Contains(o.Group)).ToList();
+                    return parseTickets(select_result);//.Where(o=>groups.Contains(o.Group)).ToList();
 
 
                 }
@@ -669,9 +665,26 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.Reference2 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string2").Element("AttrValue").Value;
                 dto.Reference3 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string3").Element("AttrValue").Value;
                 dto.Period = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string4").Element("AttrValue").Value;
-                //dto.primary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_primary_contract_party").Element("AttrValue").Value;
-                //dto.secondary_contract_party = (attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party")==null)?"":attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_secondary_contract_party").Element("AttrValue").Value;
-
+                var summary = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "summary");
+                if (summary == null)
+                {
+                    dto.primary_contract_party = "";
+                    dto.secondary_contract_party = "";
+                }
+                else
+                {
+                    var val = summary.Element("AttrValue").Value.Split("|");
+                    if (val.Length >= 4)
+                    {
+                        dto.primary_contract_party = val[2];
+                        dto.secondary_contract_party = val[3];
+                    }
+                    else
+                    {
+                        dto.primary_contract_party = "";
+                        dto.secondary_contract_party = "";
+                    }
+                }
                 if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
                 {
                     dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
