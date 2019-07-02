@@ -147,7 +147,6 @@ export class SdmStatusComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
     });
   }
 
