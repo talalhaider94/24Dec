@@ -1,98 +1,22 @@
-<div style="margin-top: -20px;">
+<div style="margin-top: -25px; padding: 10px">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">ADMIN ROLES</h2><br>
+      <h2 style="color:#565656">Role Permissions</h2><br>
       <div class="row">
-        <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 />
-        <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
-          Crea Nuovo
-        </button>
-      </div><br />
-      <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-        <thead style="background: #20a8d8">
-          <tr style="font-size:12px;color:white">
-            <th style="text-align:center">ROLE</th>
-            <th style="text-align:center">AZIONE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of ConfigTableBodyData; index as i">
-            <td>{{row.name}}</td>
-            <td style="text-align: center">
-              <button class="btn btn-primary" [routerLink]="['/tconfiguration']"
-                    style="font-size:10px">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button class="btn btn-danger" (click)="deleteAdminRole(row)"
-                     style="font-size:10px">
-                <i class="fa fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table id="classTable" class="table table-bordered">
-            <thead style="background: #E6E6E6">
-              <tr>
-                <th>Key</th>
-                <th>Owner</th>
-                <th>Value</th>
-                <th>Abilitato</th>
-                <th>Descrizione</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{modalData.key}}</td>
-                <td>{{modalData.owner}}</td>
-                <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
-                <td><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
-                <td>{{modalData.description}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <div class="col-md-12">
+          <div class="form-group">
+            <button  routerLink="/adminroles" class="btn btn-danger" style="color:#fff;"><i class="fa fa-arrow-left"></i> Back to Roles</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  
-  
-  <div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-       aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-         <h5 class="modal-title" id="approveModalLabel">Add Role</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <label><b>Name</b></label><input type="text" class="form-control" placeholder="Name" [(ngModel)]="name"/><br>
-          <label><b>Code</b></label><input type="text" class="form-control" placeholder="Code" [(ngModel)]="code" /><br>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="addRole()">Aggiungi</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+      <div class="row">
+        <div class="col-md-12">
+          <dual-list [source]="gatheredData.permissionsList" key="id" display="name" [(destination)]="gatheredData.assignedPermissions"
+              filter="true" (destinationChange)="onPermissionSelectDeselect($event)" height="500px">
+          </dual-list>
+          <div><br>
+            <button (click)="saveAssignedPermissions()" class="btn btn-success pull-right" [disabled]="!gatheredData.roleId">Salva</button>
+          </div>
         </div>
       </div>
     </div>

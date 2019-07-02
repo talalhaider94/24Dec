@@ -170,7 +170,7 @@ export class LoadingFormAdminComponent implements OnInit {
 
     // }
     datiModelConfronto.forEach((element, index) => {
-      if (element.campo1.name != null && element.segno != null && element.campo2.name != null) {
+      if (!!element.campo1 && !!element.campo1.name && !!element.segno && !!element.campo2 && !!element.campo2.name) {
         confrontoAppoggio = new ControlloConfronto;
         confrontoAppoggio.campo1 = element.campo1.name;
         confrontoAppoggio.segno = element.segno;
@@ -252,7 +252,6 @@ export class LoadingFormAdminComponent implements OnInit {
     console.log('checkConfronto segno', segno);
     console.log('checkConfronto elemento1', elemento1);
     console.log('checkConfronto elemento2', elemento2);
-    debugger;
     switch (segno) {
       case '=':
         if (val1 == val2) {

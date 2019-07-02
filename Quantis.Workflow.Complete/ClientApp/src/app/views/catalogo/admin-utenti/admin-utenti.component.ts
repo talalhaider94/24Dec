@@ -100,6 +100,7 @@ export class AdminUtentiComponent implements OnInit {
   updateUtenti() {
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateCatalogUtenti(this.modalData).subscribe(data => {
+      this.saveAssignedRoles(this.modalData.ca_bsi_user_id);
       this.getUsers(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
       $('#utentiModal').modal('toggle').hide();
@@ -232,5 +233,15 @@ export class AdminUtentiComponent implements OnInit {
       this.rerender();
     });
   }
-
+  saveAssignedRoles(userid) {
+    if (userid) {
+      let dataToPost = { Id: userid, Ids: [] };
+      dataToPost.Ids.push(1); // id role user
+      this.apiService.assignRolesToUser(dataToPost).subscribe(data => {
+        this.toastr.success('Assegnato ruolo USER', 'Success');
+      }, error => {
+        this.toastr.error('Errore durante assegnazione ruolo', 'Error');
+      });
+    }
+  } 
   }

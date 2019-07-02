@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkFlowService, AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
@@ -10,8 +10,13 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, forkJoin } from 'rxjs';
 import { FileUploader } from 'ng2-file-upload';
+import * as moment from 'moment';
 
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
+
+declare var $;
+let $this;
+
 @Component({
   templateUrl: './kpi.component.html',
 })
@@ -21,6 +26,9 @@ export class KPIComponent implements OnInit {
   @ViewChild('infoModal') public infoModal: ModalDirective;
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
+
+  @ViewChild('monthSelect') monthSelect: ElementRef;
+  @ViewChild('yearSelect') yearSelect: ElementRef;
 
   submitted = false;
   allTickets: any = [];
@@ -40,8 +48,9 @@ export class KPIComponent implements OnInit {
   verificaCheckBoxForm: FormGroup;
   fileUploading = true;
   public uploader: FileUploader = new FileUploader({ url: URL });
-
   selectedAll: any;
+  monthOption;
+  yearOption;
 
   constructor(
     private router: Router,
@@ -50,12 +59,16 @@ export class KPIComponent implements OnInit {
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private authService: AuthService
-  ) { }
+  ) {
+    $this = this;
+  }
 
   get approveValues() { return this.approveForm.controls; }
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
+    this.monthOption = moment().format('MM');
+    this.yearOption = moment().format('YY');
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
       selectAllTickets: ['']
@@ -71,7 +84,11 @@ export class KPIComponent implements OnInit {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      destroy: true,
       dom: 'Bfrtip',
+      search: {
+        caseInsensitive: true
+      },
       // rowCallback: (row: Node, data: any[] | Object, index: number) => {
       //   const self = this;
       //   $('td', row).unbind('click');
@@ -129,7 +146,14 @@ export class KPIComponent implements OnInit {
   _getAllTickets() {
     this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
-      const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }))
+      const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
+      // Danial TODO: sort on date
+      // let sort: any = [];
+      //  sort = appendSelectFale.sort(function (a, b) {
+      //   a = a.period.split("/");
+      //   b = b.period.split("/");
+      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
+      // });
       this.allTickets = appendSelectFale;
       this.dtTrigger.next();
       this.loading = false;
@@ -265,23 +289,6 @@ export class KPIComponent implements OnInit {
     this.dtTrigger.unsubscribe();
   }
 
-  // onselectAllCheckboxChange(event) {
-  //   this.verificaCheckBoxForm.setValue({ selectTicket: true, selectAllTickets: true })
-  // }
-  // onCheckboxChange(option, event) {
-  //   if (event.target.checked) {
-  //     this.selectedTickets.push(option);
-  //   } else {
-  //     if (this.selectedTickets.length > 0) {
-  //       for (var i = 0; i < this.selectedTickets.length; i++) {
-  //         if (this.selectedTickets[i].id == option.id) {
-  //           this.selectedTickets.splice(i, 1);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   fileUploadUI() {
     if (this.uploader.queue.length > 0) {
       console.log('this.uploader', this.uploader);
@@ -320,5 +327,40 @@ export class KPIComponent implements OnInit {
       return ticket.selected == true;
     })
   }
+
+  // search start
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.setUpDataTableDependencies();
+    this.rerender();
+  }
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  setUpDataTableDependencies() {
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(12).every(function () {
+        const that = this;
+        $($this.monthSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+      });
+    });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(12).every(function () {
+        const that = this;
+        $($this.yearSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+      });
+    });
+
+  }
+  //search end
 
 }

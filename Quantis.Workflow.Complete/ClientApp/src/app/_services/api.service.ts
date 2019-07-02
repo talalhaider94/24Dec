@@ -111,6 +111,16 @@ export class ApiService {
     return this.http.get(deleteroles, Headers.setTokenHeaders('POST'));
   }
 
+  getAllPermisisons(): Observable<any> {
+    const getAllPermisisonsEndPoint = `${environment.API_URL}/information/GetAllPermissions`;
+    return this.http.get(getAllPermisisonsEndPoint, Headers.setTokenHeaders('GET'));
+  }
+  getPermissionsByRoldId(roleId): Observable<any> {
+    const getPermissionsByRoldIdEndPoint = `${environment.API_URL}/information/GetPermissionsByRoleID/?roleId=${roleId}`;
+    return this.http.get(getPermissionsByRoldIdEndPoint, Headers.setTokenHeaders('GET'));
+  }
+
+
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config, Headers.setTokenHeaders('POST'))
       .pipe(
@@ -190,5 +200,16 @@ export class ApiService {
         )
       );
   }
+
+  assignPermissionsToRoles(postData) {
+    return this.http.post(`${environment.API_URL}/information/AssignPermissionsToRoles`, postData, Headers.setTokenHeaders('POST'))
+    .pipe(
+      tap(
+        data => data,
+        error => error
+      )
+    );
+  }
+
 
 }

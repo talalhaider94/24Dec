@@ -193,11 +193,12 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
-      /*{ // TEMP HIDDEN
-        title: true,
-        name: 'Profilazione',
+      {
+        name: 'Ruoli Admin',
+        url: '/adminroles',
+        icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
-      },*/
+      },  
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
@@ -218,7 +219,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.2.3',
+    name: 'Version 1.2.4',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
