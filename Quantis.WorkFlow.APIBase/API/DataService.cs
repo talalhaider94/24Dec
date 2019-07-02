@@ -383,6 +383,19 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        public List<UserDTO> GetUsersByRoleId(int roleId)
+        {
+            try
+            {
+                var usersids = _dbcontext.UserRoles.Where(o=>o.role_id==roleId).Select(p=>p.user_id).ToList();
+                var users = _dbcontext.CatalogUsers.Where(o => usersids.Contains(o.ca_bsi_user_id ?? 0));
+                return _userMapper.GetDTOs(users.ToList());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public List<WidgetDTO> GetAllWidgets()
         {
