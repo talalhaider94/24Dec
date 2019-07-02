@@ -1,51 +1,40 @@
 <div style="margin-top: -20px;">
-    <div class="table-responsive" style="background: #ffffff; padding: 10px">
-      <br>
-<<<<<<< HEAD
-      <h2 style="color:#565656">Status</h2><br>
-      <div class="row">
-        <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 />
-        <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
-          Nuovo
-        </button>
-      </div><br />
-=======
-      <h2 style="color:#565656">SDM Ticket Status</h2><br>
->>>>>>> 6e6eba5db375a0de1f3e2ba73dc2dc9241355249
-      <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-        <thead style="background: #20a8d8">
-          <tr style="font-size:12px;color:white">
-            <th style="text-align:center">HANDLE</th>
-            <th style="text-align:center">NAME</th>
-            <th style="text-align:center">STEP</th>
-            <th style="text-align:center">AZIONE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of ConfigTableBodyData; index as i">
-<<<<<<< HEAD
-            <td>{{row.handle}}</td>
-            <td>{{row.name}}</td>
-            <td>{{row.step}}</td>
-=======
-            <td style="text-align:center">{{row.handle}}</td>
-            <td style="text-align:center">{{row.name}}</td>
->>>>>>> 6e6eba5db375a0de1f3e2ba73dc2dc9241355249
-            <td style="text-align: center">
-              <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                      data-target="#configModal" style="font-size:10px">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button class="btn btn-danger" (click)="deleteSDMRow(row)"
-                     style="font-size:10px">
-                <i class="fa fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <br>
+    <h2 style="color:#565656">SDM Ticket Status</h2><br>
+    <button class="btn btn-success" data-toggle="modal"
+            data-target="#addConfigModal">
+      Nuovo Stato
+    </button><br /><br />
+    <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <thead style="background: #20a8d8">
+        <tr style="font-size:12px;color:white">
+          <th style="text-align:center">HANDLE</th>
+          <th style="text-align:center">NOME</th>
+          <th style="text-align:center">STEP</th>
+          <th style="text-align:center">AZIONE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of ConfigTableBodyData; index as i">
+
+          <td style="text-align:center">{{row.handle}}</td>
+          <td style="text-align:center">{{row.name}}</td>
+          <td style="text-align:center">{{row.step}}</td>
+          <td style="text-align: center">
+            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                    data-target="#configModal" style="font-size:10px">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button class="btn btn-danger" (click)="deleteSDMRow(row)"
+                    style="font-size:10px">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
   
   <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
@@ -64,7 +53,7 @@
             </thead>
             <tbody>
                 <tr><th>HANDLE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.handle"></td></tr>
-                <tr><th>NAME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
+                <tr><th>NOME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
                 <tr><th>STEP</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.step"></td></tr> 
               </tbody>
           </table>
@@ -83,14 +72,14 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-         <h5 class="modal-title" id="approveModalLabel">Add Role</h5>
+         <h5 class="modal-title" id="approveModalLabel">Nuovo Stato</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <label><b>Handle</b></label><input type="text" class="form-control" placeholder="Name" [(ngModel)]="handle"/><br>
-          <label><b>Name</b></label><input type="text" class="form-control" placeholder="Code" [(ngModel)]="name" /><br>
+          <label><b>Handle</b></label><input type="text" class="form-control" placeholder="Handle" [(ngModel)]="handle"/><br>
+          <label><b>Name</b></label><input type="text" class="form-control" placeholder="Name" [(ngModel)]="name" /><br>
           <label><b>Step</b></label><input type="number" class="form-control" placeholder="Step" [(ngModel)]="step"/><br>
         </div>
         <div class="modal-footer">
