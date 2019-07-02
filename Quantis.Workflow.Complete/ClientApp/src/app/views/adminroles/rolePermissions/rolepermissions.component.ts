@@ -13,10 +13,11 @@ export class RolePermissionsComponent implements OnInit {
   urlId = 0;
   gatheredData = {
     roleId: 0,
+    roleName: '',
     permissionsList: [],
     assignedPermissions: []
   };
-
+  public roleName = '';
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -28,17 +29,23 @@ export class RolePermissionsComponent implements OnInit {
     //this.gatheredData.roleId = +this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe((params) => {
       this.gatheredData.roleId = parseInt(params['id']) || 0;
+      this.gatheredData.roleName = params['name'] || '';
+      //console.log(this.gatheredData.roleId);
+      //console.log(this.gatheredData.roleName)
       if(this.gatheredData.roleId){
         this.getAllPermissions();
       } else {
-        this.toastr.warning('Invlid Role ID', 'Warning');
+        this.toastr.warning('Id del ruolo non valido', 'Warning');
       }
     });
+    this.roleName = this.gatheredData.roleName;
+    
   }
 
   getAllPermissions(){
     this.apiService.getAllPermisisons().subscribe( data => {
       this.gatheredData.permissionsList = data;
+      console.log(data);
       this.getPermissionsByRoldId();
     });
   }
@@ -60,9 +67,9 @@ export class RolePermissionsComponent implements OnInit {
       });
       console.log(dataToPost);
       this.apiService.assignPermissionsToRoles(dataToPost).subscribe(data => {
-        this.toastr.success('Permissions assigned', 'Success');
+        this.toastr.success('Permessi Assegnati', 'Success');
       }, error => {
-        this.toastr.error('Error assigning permissions', 'Error');
+        this.toastr.error('Errore durante l\'assegnazione dei permessi', 'Error');
       });
     }
 

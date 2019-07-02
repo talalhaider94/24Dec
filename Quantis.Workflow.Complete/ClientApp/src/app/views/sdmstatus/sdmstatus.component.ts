@@ -101,8 +101,7 @@ export class SdmStatusComponent implements OnInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
-
-    this.setUpDataTableDependencies();
+    
     this.getCOnfigurations();
 
     /*this.apiService.getConfigurations().subscribe((data:any)=>{
@@ -132,23 +131,6 @@ export class SdmStatusComponent implements OnInit {
   //   //     console.log(dtInstance);
   //   // });
   // }
-
-  setUpDataTableDependencies(){
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
-    // });
-
-    // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
-    });
-
-  }
 
   strip_tags(html) {
     var tmp = document.createElement("div");

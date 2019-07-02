@@ -1,14 +1,7 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">Group</h2><br>
-      <div class="row">
-        <!-- <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 /> -->
-        <!-- <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
-          Crea Nuovo
-        </button> -->
-      </div><br />
+      <h2 style="color:#565656">Gruppi SDM</h2><br>
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #20a8d8">
           <tr style="font-size:12px;color:white">
@@ -21,10 +14,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of ConfigTableBodyData; index as i">
-            <td>{{row.handle}}</td>
-            <td>{{row.name}}</td>
-            <td>{{row.step}}</td>
-            <td>{{row.category_name}}</td> 
+            <td style="text-align:center">{{row.handle}}</td>
+            <td style="text-align:center">{{row.name}}</td>
+            <td style="text-align:center">{{row.step}}</td>
+            <td style="text-align:center">{{row.category_name}}</td> 
             <td style="text-align: center">
               <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                       data-target="#configModal" style="font-size:10px">
@@ -99,4 +92,3 @@
       </div>
     </div>
   </div>
-  
