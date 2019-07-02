@@ -20,6 +20,7 @@ namespace Quantis.WorkFlow.Models.Information
         {
             builder.ToTable("t_role_permissions");
             builder.HasKey(o => o.Id);
+            builder.Property(o => o.Id).HasColumnName("id");
             builder.HasOne(o => o.Role).WithMany(p => p.RolePermissions).HasForeignKey(q => q.role_id);
             builder.HasOne(o => o.Permission).WithMany(p => p.RolePermissions).HasForeignKey(q => q.permission_id);
         }
