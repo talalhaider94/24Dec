@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'rolepermissions',
     component: UserRolePermissionsComponent,
     data: {
-      title: 'User Roles & Permissions'
+      title: 'Profilazione Utenti'
     }
   }
 ];
