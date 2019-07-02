@@ -219,7 +219,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var permission = _dbcontext.Permissions.ToList();
+                var permission = _dbcontext.Permissions.OrderBy(o => o.name).ToList();
                 return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
@@ -247,7 +247,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var roles = _dbcontext.UserRoles.Where(q => q.user_id == userid).Select(s => s.role_id).ToList();
-                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).Distinct().ToList();
+                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).Distinct().OrderBy(o => o.name).ToList();
                 return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
@@ -261,7 +261,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var permissions = _dbcontext.RolePermissions.Include(o => o.Permission).Where(p => p.role_id == roleId).Select(o=>o.Permission);
-                return permissions.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
+                return permissions.OrderBy(o => o.name).Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
             {
