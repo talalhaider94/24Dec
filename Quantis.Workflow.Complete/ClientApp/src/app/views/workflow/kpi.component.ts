@@ -147,14 +147,11 @@ export class KPIComponent implements OnInit {
     this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
       const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
-      // Danial TODO: sort on date
-      // let sort: any = [];
-      //  sort = appendSelectFale.sort(function (a, b) {
-      //   a = a.period.split("/");
-      //   b = b.period.split("/");
-      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
-      // });
-      this.allTickets = appendSelectFale;
+      this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
+        a = a.period ? a.period.split("/") : '01/00'.split("/");
+        b = b.period ? b.period.split("/") : '01/00'.split("/");
+        return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
+      });
       this.dtTrigger.next();
       this.loading = false;
     }, error => {

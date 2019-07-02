@@ -1,13 +1,32 @@
 <div style="margin-top: -20px;">
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br><h2 style="color:#565656">KPI CERTIFICATI</h2><br>
-    <h4 style="color:#565656; margin-left:12%">Periodo:</h4>
+    <br><h2 style="color:#565656">KPI CERTIFICATI: {{monthVar}}/{{yearVar}}</h2><br>
+    <p>
+      
+    <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary info-btn" aria-hidden="true" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><b>INFO</b></button>
+    </p>
+    <div class="row">
+      <div class="col">
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+          <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+            <mat-card-header style="margin-left: 30px">
+            <mat-card-title style="color:#20a8d8">KPI</mat-card-title>
+            <mat-card-subtitle style="margin-left:18px">{{getNumeroKPI()}}</mat-card-subtitle>
+            </mat-card-header>
+           
+            
+          </mat-card>
+          <br />
+        </div>
+      </div>
+    </div>
+
+    <h4 style="color:#565656; ">Periodo:</h4>
    
     <div class="row">
-      
-      <input type="text" class="form-control ml-3" style="width:10%;" placeholder="KPI Name" #searchCol1 />
-      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" #searchCol2>
-        <option value="">Mese</option>
+  
+      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()"  #searchCol2>
+        <option value="">Tutti i mesi</option>
         <option value="01">Gennaio</option>
         <option value="02">Febbraio</option>
         <option value="03">Marzo</option>
@@ -21,15 +40,17 @@
         <option value="11">Novembre</option>
         <option value="12">Dicembre</option>
       </select>
-      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" #searchCol3>
+      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;"  #searchCol3>
         <option value="">Anno</option>
-        <option *ngFor="let year of anni" >{{year}}</option>
+        <option *ngFor="let year of anni" >{{year}}</option>     
       </select>
-      <button type="button" class="btn btn-primary ml-3" (click)="populateDateFilter()">Filter</button>
-      <button type="button" class="btn btn-primary ml-3" (click)="rerender()">Refresh</button>
-    </div><br/>
-    <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead style="background: #E6E6E6">
+
+    </div>
+    <button  aria-hidden="true" type="button" class="btn fa fa-refresh" style="color:white; padding: 2px 7px; margin-left: 96%; background-color: #20a8d8;display: inline-block;text-align: center; margin-bottom: 5px" (click)="rerender()"></button>
+    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+       
+
+      <thead style="background: #20a8d8; color:white">
       <tr>
         <th style="text-align:center">ID KPI</th>
         <th style="text-align:center">Nome KPI</th>
@@ -43,13 +64,13 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
-        <td>{{row.id_kpi}}</td>
-        <td>{{row.name_kpi}}</td>
-        <td>{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
-        <td>{{row.value_kpi}}</td>
-        <td>{{row.ticket_id}}</td>
-        <td>{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
-        <td>{{row.archived}}</td>
+        <td  style="text-align:center">{{row.id_kpi}}</td>
+        <td  style="text-align:center">{{row.name_kpi}}</td>
+        <td  style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
+        <td  style="text-align:center">{{row.value_kpi}}</td>
+        <td  style="text-align:center">{{row.ticket_id}}</td>
+        <td  style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
+        <td  style="text-align:center">{{row.archived}}</td>
         <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                                    data-target="#archivedKpiModal">Vedi</button>
       <button class="btn btn-primary" data-toggle="modal" (click)="getdati(row.id_kpi)"
@@ -68,6 +89,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Valori per KPI:</h5>
+        
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -75,7 +97,7 @@
       <div class="modal-body">
         <div class="table-responsive" style="background: #ffffff; padding: 10px">
           <table id="classTable" class="table table-bordered">
-            <thead style="background: #E6E6E6">
+            <thead style="background: #20a8d8; color:white">
             <tr>
               <th style="text-align:center">ID KPI</th>
               <th style="text-align:center">Nome KPI</th>
@@ -89,13 +111,13 @@
             </thead>
             <tbody>
             <tr *ngFor="let rec of kpisData">
-              <td>{{rec.id_kpi}}</td>
-              <td>{{rec.name_kpi}}</td>
-              <td>{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
-              <td>{{rec.value_kpi}}</td>
-              <td>{{rec.ticket_id}}</td>
-              <td>{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
-              <td>{{rec.archived}}</td>
+              <td  style="text-align:center">{{rec.id_kpi}}</td>
+              <td  style="text-align:center">{{rec.name_kpi}}</td>
+              <td  style="text-align:center">{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
+              <td  style="text-align:center">{{rec.value_kpi}}</td>
+              <td  style="text-align:center">{{rec.ticket_id}}</td>
+              <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
+              <td  style="text-align:center">{{rec.archived}}</td>
               <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi)"
                 data-target="#datiModal">Dati</button></td>
             </tr>
@@ -115,37 +137,90 @@
 
 
 
-<div id="datiModal" class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true"  >
+<div id="datiModal" class="modal fade modal-right" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true"  >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Valori per KPI</h5>
+        <h5 class="modal-title" id="approveModalLabel">Valori per KPI</h5><br><br>
+       
+          
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <br>
+      <div class="row" style="margin-left: 20px">
+        <p>
+         
+      
+          <button class="btn btn-primary info-btn" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><b>INFO</b></button>
+          </p>
+        </div>
+          <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="multiCollapseExample1">
+                <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+                  <mat-card-header>
+                <mat-card-title style="color:#20a8d8">Event Type ID</mat-card-title>
+                <mat-card-subtitle *ngFor="let et of eventTypeArray | keyvalue"><b> {{et.key}}:{{et.value}}</b></mat-card-subtitle>
+                </mat-card-header>
+                 
+                  
+                </mat-card>
+              </div>
+            </div>
+            
+          </div>
       <div class="modal-body">
-        Cerca:
-        <input class="form-control" style="width: 18%" type="text" name="search" [(ngModel)]="filter" placeholder="cerca">
+        <input class="form-control" style="width: 18%" type="text" name="search" [(ngModel)]="filter" placeholder="Cerca">
           <div class="table-responsive" style="background: #ffffff; padding: 10px">
              
-              <table id="classTable" class="table stripe">
-            <thead style="background: #E6E6E6">
-                
+              <table id="classTable" class="table table-bordered">
+            <thead style="background: #20a8d8; color:white">  
             <tr>
-              <th style="text-align:center">EVENT TYPE ID</th>
-              <th style="text-align:center">resource id</th>
-              <th style="text-align:center">time stamp</th>
-              <th style="text-align:center">raw data id</th>
-              <th style="text-align:center">create date</th>
+              <th style="text-align:center"[class.active]="order === 'event_type_id'"
+              (click)="setOrder('event_type_id')">EVENT TYPE ID<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+              <th style="text-align:center"[class.active]="order === 'resource_id'"
+              (click)="setOrder('resource_id')">resource id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+              <th style="text-align:center"[class.active]="order === 'time_stamp'"
+              (click)="setOrder('time_stamp')">time stamp<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
 
-              <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th>
-              <th style="text-align:center">modify date</th>
-              <th style="text-align:center">reader id</th>
-              <th style="text-align:center">event source type id </th>
-              <th style="text-align:center">event state id</th>
-              <th style="text-align:center">partner raw data id</th>
-             
+                <th style="text-align:center"[class.active]="order === 'raw_data_id'"
+                (click)="setOrder('raw_data_id')">raw data id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+
+              <th style="text-align:center"[class.active]="order === 'create_date'"
+              (click)="setOrder('create_date')">create date<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+
+              <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
+              (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+
+              <th style="text-align:center"[class.active]="order === 'modify_date'"
+              (click)="setOrder('modify_date')">modify date<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+
+
+              <th style="text-align:center"[class.active]="order === 'reader_id'"
+              (click)="setOrder('reader_id')">reader id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+
+              <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
+              (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span> </th>
+
+              <th style="text-align:center"[class.active]="order === 'event_state_id'"
+              (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+         
+              <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
+              (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse">▼</span
+                ><span [hidden]="!reverse">▲</span></th>
+              
             </tr>
             </thead>
             <tbody>
@@ -154,18 +229,23 @@
                         Nessun dato per il periodo selezionato
                     </td>
                   </tr>
-            <tr *ngFor="let rec of fitroDataById | filter:filter  | paginate: { itemsPerPage: 10, currentPage: p }">
-              <td>{{rec.event_type_id}}</td>
-              <td>{{rec.resource_id}}</td>
-              <td>{{rec.time_stamp}}</td>
-              <td>{{rec.raw_data_id}}</td>
-              <td>{{rec.create_date}}</td>
-              <td *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
-              <td>{{rec.modify_date}}</td>
-              <td>{{rec.reader_id}}</td>
-              <td>{{rec.event_source_type_id}}</td>
-              <td>{{rec.event_state_id}}</td>
-              <td>{{rec.partner_raw_data_id}}</td>
+                  <tr *ngIf="loading" class="text-center">
+                    <td colspan="6">
+                        <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                    </td>
+                </tr>
+            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td style="text-align:center">{{rec.event_type_id}}</td>
+              <td style="text-align:center">{{rec.resource_id}}</td>
+              <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td style="text-align:center">{{rec.raw_data_id}}</td>
+              <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td  style="text-align:center" *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
+              <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td style="text-align:center">{{rec.reader_id}}</td>
+              <td style="text-align:center">{{rec.event_source_type_id}}</td>
+              <td style="text-align:center">{{rec.event_state_id}}</td>
+              <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
              
             </tr>
             
@@ -228,25 +308,23 @@
                       </td>
                     </tr>
               <tr *ngFor="let rec of fitroDataById | filter:filter  | paginate: { itemsPerPage: 10, currentPage: p }">
-                <td>{{rec.raw_data_id}}</td>
-                <td>{{rec.time_stamp}}</td>
-                <td *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
-                <td>{{rec.reader_id}}</td>
-                <td>{{rec.event_type_id}}</td>
-                <td>{{rec.resource_id}}</td>
-                <td>{{rec.create_date}}</td>
-                <td>{{rec.modify_date}}</td>
-                <td>{{rec.event_source_type_id}}</td>
-                <td>{{rec.event_state_id}}</td>
-                <td>{{rec.partner_raw_data_id}}</td>
+                <td  style="text-align:center">{{rec.raw_data_id}}</td>
+                <td  style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+                <td style="text-align:center" *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
+                <td style="text-align:center">{{rec.reader_id}}</td>
+                <td style="text-align:center">{{rec.event_type_id}}</td>
+                <td style="text-align:center">{{rec.resource_id}}</td>
+                <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+                <td style="text-align:center">{{rec.modify_date  | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
+                <td style="text-align:center">{{rec.event_source_type_id}}</td>
+                <td style="text-align:center">{{rec.event_state_id}}</td>
+                <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
                
               </tr>
               
               </tbody>
               
             </table>
-           <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls>-->
-         <!-- </div>-->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
