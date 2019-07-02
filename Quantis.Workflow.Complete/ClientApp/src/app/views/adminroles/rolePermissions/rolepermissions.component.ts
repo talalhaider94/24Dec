@@ -24,7 +24,10 @@ export class RolePermissionsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
   }
-
+  format = {
+    add: 'Aggiungi', remove: 'Rimuovi', all: 'Tutti', none: 'Nessuno',
+    draggable: true, locale: 'it'
+  };
   ngOnInit() {
     //this.gatheredData.roleId = +this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe((params) => {
