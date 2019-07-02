@@ -488,7 +488,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var res = new List<UserKPIDTO>();
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
                 var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.primary_contract_party);
-                return groups.Where(o => o != null).Distinct().ToList();
+                return groups.Distinct().ToList();
 
             }
             catch (Exception e)
