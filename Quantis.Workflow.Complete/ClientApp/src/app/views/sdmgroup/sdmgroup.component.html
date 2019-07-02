@@ -1,48 +1,7 @@
 <div style="margin-top: -20px;">
-<<<<<<< HEAD
+
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
-        <br><h2 style="color:#565656">Gruppi SDM</h2><br>
-      <div class="row">
-        <!-- <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 /> -->
-        <button style="margin-left:15px" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
-          Nuovo
-        </button>
-      </div><br />
-      
-      <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-        <thead style="background: #20a8d8">
-          <tr style="font-size:12px;color:white">
-            <th style="text-align:center">HANDLE</th>
-            <th style="text-align:center">NAME</th>
-            <th style="text-align:center">STEP</th>
-            <th style="text-align:center">CATEGORY</th>
-            <th style="text-align:center">AZIONE</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of ConfigTableBodyData; index as i">
-            <td style="text-align:center">{{row.handle}}</td>
-            <td style="text-align:center">{{row.name}}</td>
-            <td style="text-align:center">{{row.step}}</td>
-            <td style="text-align:center">{{row.category_name}}</td> 
-            <td style="text-align: center">
-              <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                      data-target="#configModal" style="font-size:10px">
-                <i class="fa fa-pencil"></i>
-              </button>
-              <button class="btn btn-danger" (click)="deleteSDMRow(row)"
-                     style="font-size:10px">
-                <i class="fa fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-=======
-  <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br />
+ <br />
     <h2 style="color:#565656">Gruppi SDM</h2><br>
     <button class="btn btn-success" data-toggle="modal"
             data-target="#addConfigModal">
@@ -78,7 +37,6 @@
       </tbody>
     </table>
   </div>
->>>>>>> 298f16ad3bd78756de58c202a2e22100f7b48d13
   </div>
   
   <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
