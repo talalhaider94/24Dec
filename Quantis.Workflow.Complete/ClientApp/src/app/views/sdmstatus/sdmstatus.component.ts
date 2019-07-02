@@ -49,11 +49,18 @@ export class SdmStatusComponent implements OnInit {
     name: ''
   };
 
+  addData = {
+    handle: '',
+    step: '',
+    name: ''
+  };
+
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
       handle: 'handle',
-      name: 'name'
+      name: 'name',
+      step: 1
     }
   ]
 
@@ -63,6 +70,9 @@ export class SdmStatusComponent implements OnInit {
   ) {
     $this = this;
   }
+  public handle: any;
+  public step: any;
+  public name: any;
 
   ngOnInit() {
   }
@@ -72,6 +82,22 @@ export class SdmStatusComponent implements OnInit {
     this.modalData.handle = data.handle;
     this.modalData.step = data.step;
     this.modalData.name = data.name;
+  }
+
+  add() {
+    this.addData.handle = this.handle;
+    this.addData.step = this.step;
+    this.addData.name = this.name;
+
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.addSDMStatus(this.addData).subscribe(data => {
+        this.getCOnfigurations(); // this should refresh the main table on page
+        this.toastr.success('Valore Aggiornato', 'Success');
+        $('#addConfigModal').modal('toggle').hide();
+    }, error => {
+        this.toastr.error('Errore durante update.', 'Error');
+        $('#addConfigModal').modal('toggle').hide();
+    });
   }
 
   updateConfig() {
@@ -101,8 +127,7 @@ export class SdmStatusComponent implements OnInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
-
-    this.setUpDataTableDependencies();
+    
     this.getCOnfigurations();
 
     /*this.apiService.getConfigurations().subscribe((data:any)=>{
@@ -122,7 +147,6 @@ export class SdmStatusComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
     });
   }
 
@@ -132,23 +156,6 @@ export class SdmStatusComponent implements OnInit {
   //   //     console.log(dtInstance);
   //   // });
   // }
-
-  setUpDataTableDependencies(){
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
-    // });
-
-    // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
-    });
-
-  }
 
   strip_tags(html) {
     var tmp = document.createElement("div");

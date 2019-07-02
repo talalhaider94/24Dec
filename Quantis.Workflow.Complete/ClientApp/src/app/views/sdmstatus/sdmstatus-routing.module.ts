@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: SdmStatusComponent,
     data: {
-      title: 'Group'
+      title: 'SDM Ticket Status'
     }
   }
 ];

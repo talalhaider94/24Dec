@@ -194,7 +194,7 @@ export const navItems: NavData[] = [
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
       {
-        name: 'Ruoli Admin',
+        name: 'Gestione Ruoli',
         url: '/adminroles',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'

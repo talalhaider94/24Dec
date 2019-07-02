@@ -27,6 +27,7 @@ export class ArchivedKpiComponent implements OnInit {
   
   public filter: string;
   public p: any;
+  public loading: any;
   dtOptions: DataTables.Settings = {
     language: {
       processing: "Elaborazione...",
