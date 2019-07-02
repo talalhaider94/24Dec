@@ -874,14 +874,14 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi,string calc)
         {
-            string skeleton = "INDICATORE: {0}<br/>" +
-                "DESCRIZIONE: {1}<br/>" +
-                "ESCALATION: {2}<br/>" +
-                "TARGET: {3}<br/>" +
-                "TIPILOGIA: {4}<br/>" +
-                "VALORE CALC: {5}<br/>" +
-                "AUTORE: {6}" +
-                "TRACKING PERIOD: {7}";
+            string skeleton = "INDICATORE: {0}\n" +
+                "DESCRIZIONE: {1}\n" +
+                "ESCALATION: {2}\n" +
+                "TARGET: {3}\n" +
+                "TIPILOGIA: {4}\n" +
+                "VALORE CALC: {5}\n" +
+                "AUTORE: {6}\n" +
+                "TRACKING PERIOD: {7}\";
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
         public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
