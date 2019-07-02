@@ -17,6 +17,9 @@ export class SdmGroupComponent implements OnInit {
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
   category_id : number = 0;
+  // handle: any = '';
+  // name: any =  '';
+  // step: any = '';
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -45,6 +48,13 @@ export class SdmGroupComponent implements OnInit {
 
   modalData = {
     id: '',
+    handle: '',
+    name: '',
+    step: '',
+    category_id: 0
+  };
+
+  addData = {
     handle: '',
     name: '',
     step: '',
@@ -87,6 +97,23 @@ export class SdmGroupComponent implements OnInit {
     this.modalData.handle = data.handle;
     this.modalData.name = data.name;
     this.modalData.step = data.step;
+  }
+
+  add() {
+    this.addData.handle = this.handle;
+    this.addData.name = this.name;
+    this.addData.step = this.step;
+    this.addData.category_id = this.category_id;
+
+    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.apiService.addSDMGroup(this.addData).subscribe(data => {
+        this.getCOnfigurations(); // this should refresh the main table on page
+        this.toastr.success('Valore Aggiornato', 'Success');
+        $('#addConfigModal').modal('toggle').hide();
+    }, error => {
+        this.toastr.error('Errore durante update.', 'Error');
+        $('#addConfigModal').modal('toggle').hide();
+    });
   }
 
   updateConfig() {

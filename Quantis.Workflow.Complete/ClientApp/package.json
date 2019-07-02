@@ -68,6 +68,7 @@
     "ngx-datatable": "^1.0.3",
     "ngx-filesaver": "^2.2.1",
     "ngx-moment": "^3.4.0",
+    "ngx-order-pipe": "^2.0.3",
     "ngx-pagination": "^4.0.0",
     "ngx-perfect-scrollbar": "^7.2.1",
     "ngx-toastr": "^10.0.4",

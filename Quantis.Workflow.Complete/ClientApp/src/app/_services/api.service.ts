@@ -95,6 +95,16 @@ export class ApiService {
     const addrole = `${environment.API_URL}/information/AddUpdateRole`;
     return this.http.post(addrole,data, Headers.setTokenHeaders('POST'));
   }
+
+  addSDMGroup(data): Observable<any> {
+    const addSDMGroup = `${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`;
+    return this.http.post(addSDMGroup,data, Headers.setTokenHeaders('POST'));
+  }
+  
+  addSDMStatus(data): Observable<any> {
+    const addSDMStatus = `${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`;
+    return this.http.post(addSDMStatus,data, Headers.setTokenHeaders('POST'));
+  }
   
   addConfig(data): Observable<any> {
     const addConfig = `${environment.API_URL}/information/AddUpdateBasicConfiguration`;
