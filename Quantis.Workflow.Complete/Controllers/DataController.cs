@@ -65,6 +65,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllUsers();
         }
+        [HttpGet("GetUsersByRoleId")]
+        public List<UserDTO> GetUsersByRoleId(int roleId)
+        {
+            return _dataAPI.GetUsersByRoleId(roleId);
+        }
         [HttpGet("GetUserById")]
         public UserDTO GetUserById(string UserId)
         {

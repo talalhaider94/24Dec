@@ -50,7 +50,8 @@ export class UserRolePermissionsComponent implements OnInit {
     this.loading.users = true;
     this.loading.roles = true;
     this.apiService.getCatalogoUsers().subscribe((res)=>{
-        this.gatheredData.usersList = res;
+      this.gatheredData.usersList = res;
+      //console.log(res);
         this.loading.users = false;
         });
     this.apiService.getAllRoles().subscribe((res)=>{
@@ -71,7 +72,7 @@ export class UserRolePermissionsComponent implements OnInit {
     console.log($event, this.selectedRoles);
   }
 
-  selectUserItem(user, $event){
+  selectUserItem(user, $event) {
     //console.log(user, $event);
     $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
     $($event.target).addClass('highlited-user');
