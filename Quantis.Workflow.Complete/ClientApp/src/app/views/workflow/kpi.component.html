@@ -4,11 +4,42 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col-sm-12 mb-3">
+            <div class="col-sm-6 mb-3">
               <button type="button" [disabled]="allTickets.length === 0" class="btn btn-danger mr-2" data-toggle="modal"
                 (click)="rejectTicket()">Rifiuta</button>
               <button type="button" [disabled]="allTickets.length === 0" class="btn btn-success" data-toggle="modal"
                 (click)="approveTicket()">Approva</button>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="monthOption"><strong>Mese</strong></label>
+                  <select #monthSelect class="form-control" name="monthOption" [(ngModel)]="monthOption">
+                    <option value="01">1</option>
+                    <option value="02">2</option>
+                    <option value="03">3</option>
+                    <option value="04">4</option>
+                    <option value="05">5</option>
+                    <option value="06">6</option>
+                    <option value="07">7</option>
+                    <option value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="yearOption"><strong>Anno</strong></label>
+                  <select #yearSelect class="form-control" name="yearOption" [(ngModel)]="yearOption">
+                    <option value="16">2016</option>
+                    <option value="18">2017</option>
+                    <option value="18">2018</option>
+                    <option value="19">2019</option>
+                    <option value="20">2020</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
           <div class="table-responsive">
@@ -20,13 +51,15 @@
                   <th>
                     <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
                   </th>
-                  <th class="d-none">ID</th>
+                  <!-- <th class="d-none">ID</th> -->
                   <th>Rif. Num</th>
                   <th>Sommario</th>
                   <th>Gruppo</th>
                   <th>Stato</th>
                   <th>Descrizione</th>
                   <th>KPI ID</th>
+                  <th>Target</th>
+                  <th>Value</th>
                   <th>Riferimento S1 </th>
                   <th>Riferimento S2</th>
                   <th>Riferimento S3</th>
@@ -37,10 +70,10 @@
               </thead>
               <tbody>
                 <tr *ngIf="allTickets.length === 0 && !loading">
-                  <td colspan="13"><strong>Nessun Ticket Trovato.</strong></td>
+                  <td colspan="15"><strong>Nessun Ticket Trovato.</strong></td>
                 </tr>
                 <tr *ngIf="loading" class="text-center">
-                  <td colspan="13">
+                  <td colspan="15">
                     <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                   </td>
                 </tr>
@@ -48,7 +81,7 @@
                   <td>
                     <input type="checkbox" [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                   </td>
-                  <td class="d-none">{{ ticket.id }} </td>
+                  <!-- <td class="d-none">{{ ticket.id }} </td> -->
                   <td>{{ ticket.ref_num || 'N/A' }}</td>
                   <td>
                     <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
@@ -67,6 +100,8 @@
                     </button>
                   </td>
                   <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                  <td>{{ ticket.target || 'N/A' }}</td>
+                  <td>{{ ticket.value || 'N/A' }}</td>
                   <td>
                     <div *ngIf="ticket.reference1; else reference1">
                       <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference1" triggers="focus">
@@ -89,13 +124,13 @@
                   </td>
                   <td>
                     <div *ngIf="ticket.reference3; else reference3">
-                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference3" triggers="focus">
-                          {{ ticket.reference3 | slice:0:15 }}
-                        </button>
-                      </div>
-                      <ng-template #reference3>
-                        N/A
-                      </ng-template>
+                      <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference3" triggers="focus">
+                        {{ ticket.reference3 | slice:0:15 }}
+                      </button>
+                    </div>
+                    <ng-template #reference3>
+                      N/A
+                    </ng-template>
                   </td>
                   <td>{{ ticket.period || 'N/A' }}</td>
                   <td>
@@ -312,7 +347,8 @@
           </div>
           <!-- display description error -->
           <span class="text-danger mb-3"
-            *ngIf="submitted && rejectValues.description.errors && rejectValues.description.errors.required">Giustificativo obbligatorio</span>
+            *ngIf="submitted && rejectValues.description.errors && rejectValues.description.errors.required">Giustificativo
+            obbligatorio</span>
           <div class="row">
             <div class="col-6">
               <button [disabled]="loading" type="submit" class="btn btn-primary px-4">

@@ -36,10 +36,10 @@ export class RicercaComponent implements OnInit, OnDestroy {
     private workFlowService: WorkFlowService,
     private _FileSaverService: FileSaverService,
     private toastr: ToastrService
-  ) { 
+  ) {
     $this = this;
   }
-	
+ 
   @ViewChild('ricercatable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
@@ -51,8 +51,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      destroy: true,    
+      destroy: true,
       dom: 'Bfrtip',
+      search: {
+        caseInsensitive: true
+      },
       buttons: [
         {
           extend: 'colvis',
@@ -167,82 +170,82 @@ export class RicercaComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-    // search start
-    ngAfterViewInit() {
+  // search start
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.setUpDataTableDependencies();
+    this.rerender();
+  }
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
       this.dtTrigger.next();
       this.setUpDataTableDependencies();
-      this.rerender();
-    }
-    rerender(): void {
-      this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        // Destroy the table first
-        dtInstance.destroy();
-        // Call the dtTrigger to rerender again
-        this.dtTrigger.next();
-        this.setUpDataTableDependencies();
-      });
-    }
-  
-    setUpDataTableDependencies() {
-  
-      $(this.searchCol1.nativeElement).on('blur', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          datatable_Ref
-            .columns(10)
-            .search(this.value)
-            .draw();
-        });
-      });
-  
-      $(this.searchCol2.nativeElement).on('keyup', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          datatable_Ref
-            .columns(1)
-            .search(this.value)
-            .draw();
-        });
-      });
-  
-  
-  
-      $(this.searchCol3.nativeElement).on('keyup', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          datatable_Ref
-            .columns(2)
-            .search(this.value)
-            .draw();
-        });
-      });
-  
+    });
+  }
+
+  setUpDataTableDependencies() {
+
+    $(this.searchCol1.nativeElement).on('blur', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref.columns(4).every( function () {
-          const that = this;
-          // Create the select list and search operation
-          const select = $($this.searchCol4.nativeElement)
-            .on( 'change', function () {
-              that
-                .search( $(this).val() )
-                .draw();
-            });
-          // Get the search data for the first column and add to the select list
-          this
-            .cache( 'search' )
-            .sort()
-            .unique()
-            .each( function ( d ) {
-              select.append( $('<option value="' + d + '">' + d + '</option>') );
-            });
-        });
-        });
-      $(this.searchCol5.nativeElement).on('keyup', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          datatable_Ref
-            .columns(5)
-            .search(this.value)
-            .draw();
-        });
+        datatable_Ref
+          .columns(10)
+          .search(this.value)
+          .draw();
       });
-  
-    }
-    //search end
+    });
+
+    $(this.searchCol2.nativeElement).on('keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        datatable_Ref
+          .columns(1)
+          .search(this.value)
+          .draw();
+      });
+    });
+
+
+
+    $(this.searchCol3.nativeElement).on('keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        datatable_Ref
+          .columns(2)
+          .search(this.value)
+          .draw();
+      });
+    });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(4).every(function () {
+        const that = this;
+        // Create the select list and search operation
+        const select = $($this.searchCol4.nativeElement)
+          .on('change', function () {
+            that
+              .search($(this).val())
+              .draw();
+          });
+        // Get the search data for the first column and add to the select list
+        this
+          .cache('search')
+          .sort()
+          .unique()
+          .each(function (d) {
+            select.append($('<option value="' + d + '">' + d + '</option>'));
+          });
+      });
+    });
+    $(this.searchCol5.nativeElement).on('keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        datatable_Ref
+          .columns(5)
+          .search(this.value)
+          .draw();
+      });
+    });
+
+  }
+  //search end
 }
