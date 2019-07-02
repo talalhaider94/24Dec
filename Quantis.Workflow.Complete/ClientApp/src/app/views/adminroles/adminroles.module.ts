@@ -5,6 +5,7 @@ import { AdminRolesComponent } from './adminroles.component';
 import { RolePermissionsComponent } from './rolePermissions/rolepermissions.component';
 import { AdminRolesRoutingModule } from './adminroles-routing.module';
 import {DataTablesModule} from 'angular-datatables';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { FormsModule } from '@angular/forms';
 
 
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     AdminRolesRoutingModule,
+    AngularDualListBoxModule,
     DataTablesModule,
     FormsModule,
   ]

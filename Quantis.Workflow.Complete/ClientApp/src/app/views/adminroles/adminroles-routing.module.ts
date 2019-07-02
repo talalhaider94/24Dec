@@ -13,7 +13,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'adminRolePermissions',
+    path: 'adminRolePermissions/:id',
     component: RolePermissionsComponent,
     data: {
       title: 'Admin Roles & Permissions'

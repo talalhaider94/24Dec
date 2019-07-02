@@ -13,7 +13,7 @@ var $this;
 
 export class TConfigurationComponent implements OnInit {
   @ViewChild('ConfigurationTable') block: ElementRef;
-  @ViewChild('searchCol1') searchCol1: ElementRef;
+  // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
   key: any = '';
   value: any =  '';
@@ -157,19 +157,14 @@ export class TConfigurationComponent implements OnInit {
   // }
 
   setUpDataTableDependencies(){
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
+    // $(this.searchCol1.nativeElement).on( 'keyup', function () {
+    //   $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    //   datatable_Ref
+    //     .columns( 0 )
+    //     .search( this.value )
+    //     .draw();
     // });
-
-    // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
-    });
+    // });
 
   }
 
