@@ -17,9 +17,9 @@ export class ControlloCampo {
 }
 // means comparison check
 export class ControlloConfronto {
-  campo1: any = '';
+  campo1: any;
   segno: string = '';
-  campo2: any = '';
+  campo2: any;
 }
 
 @Component({
@@ -105,8 +105,8 @@ export class LoadingFormAdminComponent implements OnInit {
 
   initComparisonForm(array) {
     return this.fb.group({
-      campo1: [{value: array.campo1, disabled: false}], // means field
-      segno: [{value: array.segno, disabled: false}], // means sign
+      campo1: [{value: array.campo1, disabled: false}],
+      segno: [{value: array.segno, disabled: false}],
       campo2: [{value: array.campo2, disabled: false}]
     });
   }
@@ -172,9 +172,9 @@ export class LoadingFormAdminComponent implements OnInit {
     datiModelConfronto.forEach((element, index) => {
       if (!!element.campo1 && !!element.campo1.name && !!element.segno && !!element.campo2 && !!element.campo2.name) {
         confrontoAppoggio = new ControlloConfronto;
-        confrontoAppoggio.campo1 = element.campo1.name;
+        confrontoAppoggio.campo1 = element.campo1;
         confrontoAppoggio.segno = element.segno;
-        confrontoAppoggio.campo2 = element.campo2.name;
+        confrontoAppoggio.campo2 = element.campo2;
         comparisonFieldsArray.push(confrontoAppoggio);
 
         // tipo1 = element.campo1.type;
@@ -302,15 +302,9 @@ export class LoadingFormAdminComponent implements OnInit {
   // and generates form fields dynamically
   _init(numero: number, nome: string) {
     this.loading = true;
-    const currentUser = this.authService.getUser();
-    // since I put the filters first by comparison,
-    // when the max and min filters go I go to
-    // subtract the number of past comparisons from the index
-    let contatore = 0; // counter
-    // camp means field and segno means sign
-    let array = { 'campo1': '', 'segno': '', 'campo2': '' };
     this.title = nome;
 
+    let array = { 'campo1': '', 'segno': '', 'campo2': '' };
     this.myInputForm = this.fb.group({
       // means values
       valories: this.fb.array([
@@ -318,7 +312,7 @@ export class LoadingFormAdminComponent implements OnInit {
       ]),
       // means comparison fields
       campiConfronto: this.fb.array([
-        this.initComparisonForm(array)
+        // this.initComparisonForm(array)
       ]),
       termsCheck: '',
     });
@@ -358,6 +352,26 @@ export class LoadingFormAdminComponent implements OnInit {
             }
           });
         }
+        if(comparisonRules) {
+          for (let i = 0; i < comparisonRules.length; i++) {
+            this.comparisonField1[i] = comparisonRules[i].campo1;
+            this.comparisonField2[i] = comparisonRules[i].segno;
+            this.comparisonField3[i] = comparisonRules[i].campo2;
+            console.log('comparisonRules[i]', comparisonRules[i])
+            this.addComparisonForm(comparisonRules[i]);
+          }
+          // comparisonRules.forEach( (compare, index) => {
+          //   this.addComparisonForm(compare);
+          // });
+        } else {
+          this.addComparisonForm(array);
+          // this.myInputForm = this.fb.group({
+          //   // means comparison fields
+          //   campiConfronto: this.fb.array([
+          //     this.initComparisonForm(array)
+          //   ]),
+          // });
+        }
 
         // JSON.parse(data.form_body).forEach((element, index) => {
         //   console.log(element);
@@ -386,23 +400,21 @@ export class LoadingFormAdminComponent implements OnInit {
     });
     // if there are no filters for this form I create an empty field
     //array=={'campo1':'','segno':'','campo2':''}?this.initComparisonForm(array):'';
-    if (array.campo1 == "" && array.segno == "" && array.campo2 == "") {
-      this.initComparisonForm(array);
-      console.log('IF FIELDS ARE EMPTY:', array);
-    } else {
-      console.log(array);
-    }
+    // if (array.campo1 == "" && array.segno == "" && array.campo2 == "") {
+    //   this.initComparisonForm(array);
+    //   console.log('IF FIELDS ARE EMPTY:', array);
+    // } else {
+    //   console.log(array);
+    // }
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
       this.jsonForm = data;
-      console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
       this.arrayFormElements = this.jsonForm[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
         this.addInputForm();
       }
-      console.log('AFTER VALORIES LOOP', <FormArray>this.myInputForm.get('valories')['controls']);
       this.numeroForm = numero;
     }, error => {
       this.loading = false;

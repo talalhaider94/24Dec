@@ -126,20 +126,6 @@ export class ProveVarieComponent implements OnInit {
     })
   }
 
-  addComparisonForm(array) {
-    if (array == '') {
-      array = new ControlloConfronto;
-    }
-    const control = <FormArray>this.myInputForm.get('campiConfronto')['controls']; // means comparison fields
-    control.push(this.initComparisonForm(array));
-  }
-
-  removeComparisonForm(i: number) {
-    const control = <FormArray>this.myInputForm.get('campiConfronto')['controls'];
-    debugger
-    control.removeAt(i -1);
-  }
-
   saveUser(model: any) {
     if (!!model.value.termsCheck) {
       this.toastr.info('Inserire nota per dati non pervenuti.')
@@ -158,12 +144,13 @@ export class ProveVarieComponent implements OnInit {
       this.toastr.error('Form fields data is not valid');
       return false;
     } else {
-      // const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
-      // if (errorArray.length > 0) {
-      //   this.userLoadingFormErrors = errorArray;
-      //   this.toastr.error('Comparison rule fails for form');
-      //   return false;
-      // }
+      const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
+      let newArray = errorArray.filter(value => value !== 'remove');
+      if (newArray.length > 0) {
+        this.userLoadingFormErrors = errorArray;
+        this.toastr.info('Comparison rule fails for form');
+        // return false;
+      }
       this.userLoadingFormErrors = [];
     }
 
@@ -181,7 +168,7 @@ export class ProveVarieComponent implements OnInit {
           break;
         default:
           // for real and integer
-          formFields.FieldValue = String(this.numero[index] || '' );
+          formFields.FieldValue = String(this.numero[index] || '');
           break;
       }
       userSubmit.inputs.push(formFields);
@@ -259,22 +246,21 @@ export class ProveVarieComponent implements OnInit {
       this.loading = false;
       console.log('getFormRuleByFormId', data);
       if (data) {
-        debugger
         let formBody = JSON.parse(data.form_body);
         let formRules = formBody.formRules;
         let comparisonRulesBody = formBody.comparisonRules;
         this.comparisonRulesBody = comparisonRulesBody;
         this.formRulesBody = formRules;
-        if(formRules) {
+        if (formRules) {
           formRules.forEach((rule, index) => {
-            if(rule.type == 'time') {
+            if (rule.type == 'time') {
               this.maxDate[index] = rule.rule.max;
               this.minDate[index] = rule.rule.min;
             } else {
               this.numeroMax[index] = rule.rule.max;
               this.numeroMin[index] = rule.rule.min;
             }
-            
+
             // if (element.campo1 != null) {
             //   contatore++;
             //   array.campo1 = element.campo1;
@@ -316,12 +302,12 @@ export class ProveVarieComponent implements OnInit {
       this.cutOff = data[0].cutoff;
       this.day_cutoff = data[0].day_cutoff;
       this.modifyDate = data[0].modify_date;
-      if(data[0].cutoff) {
+      if (data[0].cutoff) {
         let currentDate = moment().format();
         let isDateBefore = moment(data[0].day_cutoff).isBefore(currentDate);
-          if(isDateBefore) {
-            this.readOnlyUserForm = false;
-          }
+        if (isDateBefore) {
+          this.readOnlyUserForm = false;
+        }
       }
       this.arrayFormElements = data[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
@@ -367,7 +353,7 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _comparisonRulesValidation(formElements, formValues, comparisonRules) {
-    if(!comparisonRules.length) {
+    if (!comparisonRules.length) {
       return comparisonRules;
     }
     const mapFormValues = formValues.map((value, index) => {
@@ -377,34 +363,119 @@ export class ProveVarieComponent implements OnInit {
         value: value.valoreUtente || ''
       }
     });
-    debugger
     const invalidRules = comparisonRules.map((compare, index) => {
+      let type = compare.campo1.type;
       let field1 = compare.campo1;
       let field2 = compare.campo2;
       let sign = compare.segno;
-      let value1 = mapFormValues.find(value => value.name == field1).value;
-      let value2 = mapFormValues.find(value => value.name == field2).value;
-
-      debugger
+      console.log('field1', field1);
+      console.log('field2', field2);
+      let currentFormValue1 = mapFormValues.find(value => value.name == field1.name).value;
+      let currentFormValue2 = mapFormValues.find(value => value.name == field2.name).value;
+      console.log('currentFormValue1', currentFormValue1);
+      console.log('currentFormValue2', currentFormValue2);
+      let errorString = 'remove';
+      if (type == 'string') {
+        // string comparison start
+        if (sign === '=') {
+          if (currentFormValue1.length !== currentFormValue2.length) {
+            errorString = `${field1.name} should be equal to ${field2.name}`;
+          }
+        } else if (sign === '!=') {
+          if (currentFormValue1.length === currentFormValue2.length) {
+            errorString = `${field1.name} should not be equal to ${field2.name}`;
+          }
+        } else {
+          errorString = 'Unknown string comparison';
+          console.log('Danial: Unknown sign type in string comparison.')
+        }
+        // string comparison end
+      } else if (type == 'time') {
+        // time comparison start
+        if (sign === '>') {
+          let result = moment(new Date(currentFormValue1)).isAfter(new Date(currentFormValue2));
+          if (!result) {
+            errorString = `${field1.name} should be greater than ${field2.name}`;
+          }
+        }
+        else if (sign === '<') {
+          let result = moment(new Date(currentFormValue1)).isBefore(new Date(currentFormValue2));
+          if (!result) {
+            errorString = `${field1.name} should be less than ${field2.name}`;
+          }
+        }
+        else if (sign === '>=') {
+          let result = moment(new Date(currentFormValue1)).isSameOrAfter(new Date(currentFormValue2));
+          if (!result) {
+            errorString = `${field1.name} should be greater than or equal to ${field2.name}`;
+          }
+        }
+        else if (sign === '<=') {
+          let result = moment(new Date(currentFormValue1)).isSameOrBefore(new Date(currentFormValue2));
+          if (!result) {
+            errorString = `${field1.name} should be less than or equal to ${field2.name}`;
+          }
+        } else {
+          errorString = 'Unknown time comparison';
+        }
+        // time comparison end
+      } else if (type == 'real' || type == 'integer') {
+        // real & integer comparison start
+        if (sign === '=') {
+          if (currentFormValue1 !== currentFormValue2) {
+            errorString = `${field1.name} should be equal to ${field2.name}`;
+          }
+        } else if (sign === '!=') {
+          if (currentFormValue1 === currentFormValue2) {
+            errorString = `${field1.name} should not be equal to ${field2.name}`;
+          }
+        }
+        else if (sign === '>') {
+          if (currentFormValue1 < currentFormValue2) {
+            errorString = `${field1.name} should be greater than ${field2.name}`;
+          }
+        }
+        else if (sign === '<') {
+          if (currentFormValue1 > currentFormValue2) {
+            errorString = `${field1.name} should be less than ${field2.name}`;
+          }
+        }
+        else if (sign === '>=') {
+          if (currentFormValue1 <= currentFormValue2) {
+            errorString = `${field1.name} should be greater than or equal to ${field2.name}`;
+          }
+        }
+        else if (sign === '<=') {
+          if (currentFormValue1 >= currentFormValue2) {
+            errorString = `${field1.name} should be less than or equal to ${field2.name}`;
+          }
+        } else {
+          errorString = 'Unknown real/integer operator';
+        }
+        // real & integer comparison send
+      } else {
+        errorString = 'Unknown comparison';
+      }
+      return errorString || 'remove';
     });
     return invalidRules;
-    
+
   }
 
   _customFormRulesValidation(formElements, formValues, formRules) {
     // return if formRules are empty/not set
-    if(!formRules.length) {
+    if (!formRules.length) {
       return formRules;
     }
-    let rulesNotNull = formRules.filter(obj => ( (obj.rule.min !== null && obj.rule.max !== null) ));
-    if(!rulesNotNull.length) {
+    let rulesNotNull = formRules.filter(obj => ((obj.rule.min !== null && obj.rule.max !== null)));
+    if (!rulesNotNull.length) {
       return [];
     }
     const inValidRulesArray = formRules.filter((value, index) => {
       if (value.type === 'string') {
         let rule = value.rule;
-        let ruleMin = rule.min || 0;
-        let ruleMax = rule.max || 100;
+        let ruleMin = rule.min || -999999999;
+        let ruleMax = rule.max || 999999999;
         const formStringValue = formValues[index];
         if (formStringValue.valoreUtente.length >= ruleMin && formStringValue.valoreUtente.length <= ruleMax) {
           return false;
@@ -431,8 +502,8 @@ export class ProveVarieComponent implements OnInit {
       } else if (value.type === 'real' || value.type === 'integer') {
         //type real or integer
         let rule = value.rule;
-        let ruleMin = rule.min || 0;
-        let ruleMax = rule.max || 100;
+        let ruleMin = rule.min || -999999999;
+        let ruleMax = rule.max || 999999999;
         const formRealValue = formValues[index];
         if (formRealValue.valoreUtente >= ruleMin && formRealValue.valoreUtente <= ruleMax) {
           return false;
@@ -451,22 +522,22 @@ export class ProveVarieComponent implements OnInit {
   downloadFile(base64Data, fileName) {
     let extension = fileName.split('.').pop();
     let prefix = '';
-    if(extension === 'pdf') {
+    if (extension === 'pdf') {
       prefix = `data:application/pdf;base64,${base64Data}`;
-    } else if(extension === 'png') {
+    } else if (extension === 'png') {
       prefix = `data:image/png;base64,${base64Data}`;
-    } else if(extension === 'jpg') {
+    } else if (extension === 'jpg') {
       prefix = `data:image/jpg;base64,${base64Data}`;
-    } else if(extension === 'csv') {
+    } else if (extension === 'csv') {
       prefix = `data:application/octet-stream;base64,${base64Data}`;
-    } else if(extension === 'xlsx') {
+    } else if (extension === 'xlsx') {
       prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
-    } else if(extension === 'txt') {
+    } else if (extension === 'txt') {
       prefix = `data:text/plain;base64,${base64Data}`;
     }
-    
+
     fetch(prefix).then(res => res.blob()).then(blob => {
-      this._FileSaverService.save(blob, fileName);  
+      this._FileSaverService.save(blob, fileName);
     });
   }
 
@@ -483,14 +554,14 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _getUploadedFile(file) {
-    this.fileUploading  = true;
-    const reader:FileReader = new FileReader();
-    reader.onloadend = (function(theFile, self){
+    this.fileUploading = true;
+    const reader: FileReader = new FileReader();
+    reader.onloadend = (function (theFile, self) {
       let fileName = theFile.name;
-      return function(readerEvent){
-        let formAttachments:FormAttachments = new FormAttachments();
+      return function (readerEvent) {
+        let formAttachments: FormAttachments = new FormAttachments();
         let binaryString = readerEvent.target.result;
-        let base64Data = btoa(binaryString);  
+        let base64Data = btoa(binaryString);
         let dateObj = self._getPeriodYear();
         formAttachments.content = base64Data;
         formAttachments.form_attachment_id = 0;
@@ -504,16 +575,16 @@ export class ProveVarieComponent implements OnInit {
           self.fileUploading = false;
           self.uploader.queue.pop();
           self.toastr.success(`${fileName} uploaded successfully.`);
-          if(data) {
+          if (data) {
             self._getAttachmentsByFormIdEndPoint(+self.formId, false);
           }
         }, error => {
           console.error('submitAttachment ==>', error);
           self.fileUploading = false;
           self.toastr.error('Some error occurred while uploading file');
-        });   
+        });
       };
-  })(file, this);
+    })(file, this);
     // reader.readAsDataURL(file); // returns file with base64 type prefix
     reader.readAsBinaryString(file); // return only base64 string
   }
@@ -522,19 +593,10 @@ export class ProveVarieComponent implements OnInit {
     let currentDate = new Date();
     return {
       period: moment(currentDate).format('MM'),
-      year: Number(moment(currentDate).format('YYYY')) 
+      year: Number(moment(currentDate).format('YYYY'))
     }
   }
-  
-  /*onMonthChange(event) {
-    console.log(event.target.value);
-    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.period == event.target.value);
-  }
 
-  onYearChange(event) {
-    console.log(event.target.value);
-    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.year == event.target.value);
-  }*/
   onDataChange() {
     this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.year == this.yearOption);
     this.formAttachmentsArrayFiltered = this.formAttachmentsArrayFiltered.filter(attachment => attachment.period == this.monthOption);

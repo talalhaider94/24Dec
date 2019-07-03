@@ -74,14 +74,14 @@
             <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
           </div>
 
-
+          
           <div formArrayName="campiConfronto" class="panel panel-default admin-form-rules">
             <div *ngFor="let language of myInputForm.get('campiConfronto')['controls']; let i=index"
               class="panel-body bg-white">
               <div class="row align-items-center justify-content-center" [formGroupName]="i">
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select placeholder="Select" formControlName="campo1" [(ngModel)]="comparisonField1[i]"
+                    <mat-select [placeholder]="comparisonField1[i].name" formControlName="campo1" [(value)]="comparisonField1[i]" [(ngModel)]="comparisonField1[i]"
                       (selectionChange)="filtraElementi($event.value,i)" disableRipple>
                       <!-- <mat-option [value]="defaultFont[0].campo1" selected="selected">{{defaultFont[0].campo1.Name}}
                       </mat-option> -->
@@ -93,7 +93,7 @@
 
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline">
-                    <mat-select placeholder="Select" formControlName="segno" [(ngModel)]="comparisonField2[i]" disableRipple
+                    <mat-select [placeholder]="comparisonField2[i]" formControlName="segno" [(ngModel)]="comparisonField2[i]" disableRipple
                     [disabled]="((confronti[i]!=null && confronti[i].length==0)||(confronti[i]==null))">
                       <mat-option *ngFor="let element of confronti[i] " [value]="element">{{element}}</mat-option>
                     </mat-select>
@@ -104,7 +104,7 @@
                   <mat-form-field appearance="outline">
                     <mat-select formControlName="campo2" disableRipple [(ngModel)]="comparisonField3[i]"
                       [disabled]="((arraySecondo[i]!=null && arraySecondo[i].length==0)||(arraySecondo[i]==null))"
-                      placeholder="Select">
+                      [placeholder]="comparisonField3[i].name">
                       <!-- <mat-option [value]="defaultFont[0].campo2" selected="selected">{{defaultFont[0].campo2.Name}}
                       </mat-option> -->
                       <mat-option *ngFor="let element of arraySecondo[i]" [value]="element">{{element.name}}
