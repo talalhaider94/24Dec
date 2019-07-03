@@ -165,6 +165,7 @@
             <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
               <thead>
                 <tr>
+                  <th>Data Di Caricamento</th>
                   <th>Timestamp</th>
                   <th>Nome File</th>
                   <th>Download</th>
@@ -172,9 +173,10 @@
               </thead>
               <tbody>
                 <tr *ngIf="formAttachmentsArray.length === 0">
-                  <td colspan="3">Nessun Documento presente</td>
+                  <td colspan="4">Nessun Documento presente</td>
                 </tr>
                 <tr *ngFor="let attachment of formAttachmentsArrayFiltered">
+                  <td>{{ attachment.create_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
                   <td>{{ attachment.period }}/{{ attachment.year }}</td>
                   <td>{{ attachment.doc_name }}</td>
                   <td>
