@@ -135,6 +135,14 @@ export class ApiService {
     return this.http.get(getPermissionsByRoldIdEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getAllKpiHierarchy(): Observable<any> {
+    const getAllKpiHierarchyEndPoint = `${environment.API_URL}/information/GetAllKpiHierarchy`;
+    return this.http.get(getAllKpiHierarchyEndPoint, Headers.setTokenHeaders('GET'));
+  }
+  getGlobalRulesByUserId(userId): Observable<any> {
+    const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
+    return this.http.get(getGlobalRulesByRoleIdEndPoint, Headers.setTokenHeaders('GET'));
+  }
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config, Headers.setTokenHeaders('POST'))
@@ -218,6 +226,16 @@ export class ApiService {
 
   assignPermissionsToRoles(postData) {
     return this.http.post(`${environment.API_URL}/information/AssignPermissionsToRoles`, postData, Headers.setTokenHeaders('POST'))
+    .pipe(
+      tap(
+        data => data,
+        error => error
+      )
+    );
+  }
+
+  assignGlobalRulesToUserId(postData) {
+    return this.http.post(`${environment.API_URL}/information/AssignGlobalRulesToUserId`, postData, Headers.setTokenHeaders('POST'))
     .pipe(
       tap(
         data => data,

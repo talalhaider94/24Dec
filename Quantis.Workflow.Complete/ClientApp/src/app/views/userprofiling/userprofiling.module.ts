@@ -10,18 +10,21 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { FormsModule } from '@angular/forms';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
+import { TreeviewModule } from 'ngx-treeview';
 
 
 
 @NgModule({
-  declarations: [UserProfilingComponent,UserRolePermissionsComponent, FilterUsersPipe],
+  declarations: [UserProfilingComponent,UserRolePermissionsComponent, FilterUsersPipe, TreeViewComponent],
   imports: [
     CommonModule,
     UserProfilingRoutingModule,
     DataTablesModule,
     AngularDualListBoxModule,
     PerfectScrollbarModule,
-    FormsModule
+    FormsModule,
+    TreeviewModule.forRoot()
   ]
 })
 export class UserProfilingModule { }
