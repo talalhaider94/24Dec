@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Models
         public int year { get; set; }
         public string doc_name { get; set; }
         public string checksum { get; set; }
+        public DateTime create_date { get; set; }
         public virtual T_Form Form { get; set; }
     }
     public class T_FormAttachment_Configuration : IEntityTypeConfiguration<T_FormAttachment>

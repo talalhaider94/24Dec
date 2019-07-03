@@ -19,7 +19,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 form_id = e.form_id,
                 period = e.period,
                 year = e.year,
-                form_attachment_id = e.t_form_attachments_id
+                form_attachment_id = e.t_form_attachments_id,
+                create_date=e.create_date
             };
         }
 
@@ -31,6 +32,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.form_id = o.form_id;
             e.period = o.period;
             e.year = o.year;
+            e.create_date = DateTime.Now;
             return e;
         }
     }

@@ -13,5 +13,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int year { get; set; }
         public string doc_name { get; set; }
         public string checksum { get; set; }
+        public DateTime create_date { get; set; }
     }
 }
