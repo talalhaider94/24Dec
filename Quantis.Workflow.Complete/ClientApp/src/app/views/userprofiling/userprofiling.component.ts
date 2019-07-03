@@ -3,63 +3,114 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
+
 
 declare var $;
 var $this;
 
 
 @Component({
-  templateUrl: './userprofiling.component.html'
+  templateUrl: './userprofiling.component.html',
+  styleUrls: ['./userprofiling.component.scss']
 })
 
 export class UserProfilingComponent implements OnInit {
-  @ViewChild('ConfigurationTable') block: ElementRef;
-  @ViewChild('searchCol1') searchCol1: ElementRef;
-  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
-  dtOptions: DataTables.Settings = {
-    language: {
-      processing: "Elaborazione...",
-      search: "Cerca:",
-      lengthMenu: "Visualizza _MENU_ elementi",
-      info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-      infoEmpty: "Vista da 0 a 0 di 0 elementi",
-      infoFiltered: "(filtrati da _MAX_ elementi totali)",
-      infoPostFix: "",
-      loadingRecords: "Caricamento...",
-      zeroRecords: "La ricerca non ha portato alcun risultato.",
-      emptyTable: "Nessun dato presente nella tabella.",
-      paginate: {
-        first: "Primo",
-        previous: "Precedente",
-        next: "Seguente",
-        last: "Ultimo"
-      },
-      aria: {
-        sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-        sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-      }
-    }
-  };
-
-  modalData = {
-    key: '',
-    value: '',
-    owner: '',
-    isenable: true,
-    description: '',
-  };
-
-  dtTrigger: Subject<any> = new Subject();
-  ConfigTableBodyData: any = [
+  public treeDataa: Object[] = [
     {
-      key: 'key',
-      value: 'value',
-      owner: 'owner',
-      isenable: true,
-      description: 'description',
+        nodeId: '1', nodeText: 'Documents',
+        nodeChild: [
+            { nodeId: '11', nodeText: 'Team management.docx' },
+            { nodeId: '12', nodeText: 'Entity Framework Core.pdf' },
+        ]
+    },
+    {
+        nodeId: '2', nodeText: 'Downloads',
+        nodeChild: [
+            { nodeId: '21', nodeText: 'Sales report.ppt' },
+            { nodeId: '22', nodeText: 'Introduction to Angular.pdf' },
+            { nodeId: '23', nodeText: 'Paint.exe' },
+            { nodeId: '24', nodeText: 'TypeScript sample.zip' },
+        ]
+    },
+    {
+        nodeId: '3', nodeText: 'Music',
+        nodeChild: [
+            { nodeId: '31', nodeText: 'Crazy tone.mp3' }
+        ]
+    },
+    {
+        nodeId: '4', nodeText: 'Videos',
+        nodeChild: [
+            { nodeId: '41', nodeText: 'Angular tutorials.mp4' },
+            { nodeId: '42', nodeText: 'Basics of Programming.mp4' },
+        ]
     }
-  ]
+];
+ 
+  public treeData: Object[] = [
+    {
+        id: '1', name: 'Documents',
+        children: [
+            { id: '11', name: 'Team management.docx' },
+            { id: '12', name: 'Entity Framework Core.pdf' },
+        ]
+    },
+    {
+        id: '2', name: 'Downloads',
+        children: [
+            { id: '21', name: 'Sales report.ppt' },
+            { id: '22', name: 'Introduction to Angular.pdf' },
+            { id: '23', name: 'Paint.exe' },
+            { id: '24', name: 'TypeScript sample.zip' },
+        ]
+    },
+    {
+        id: '3', name: 'Music',
+        children: [
+            { id: '31', name: 'Crazy tone.mp3' }
+        ]
+    },
+    {
+        id: '4', name: 'Videos',
+        children: [
+            { id: '41', name: 'Angular tutorials.mp4' },
+            { id: '42', name: 'Basics of Programming.mp4' },
+        ]
+    }
+  ];
+
+  public treeFields: any = {
+      dataSource: [{
+        id: '4', name: 'Videos',
+        children: [
+            { id: '41', name: 'Angular tutorials.mp4' },
+            { id: '42', name: 'Basics of Programming.mp4' },
+        ]
+    }],
+      id: 'id',//'nodeId',
+      text: 'name',//'nodeText',
+      child: 'children',//'nodeChild'
+  };
+
+
+  gatheredData = {
+    usersList: [],
+    assignedKpis: []
+  }
+  selectedData = {
+    userid: null,
+    name: ''
+  }
+  filters = {
+    searchUsersText: ''
+  }
+  loading = {
+    users: false
+  }
+
+
 
   constructor(
     private apiService: ApiService,
@@ -69,97 +120,40 @@ export class UserProfilingComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.loading.users = true;
+    this.apiService.getCatalogoUsers().subscribe((res)=>{
+      this.gatheredData.usersList = res;
+      //console.log(res);
+      this.loading.users = false;
+    });
+
+
+    this.apiService.getAllKpiHierarchy().subscribe(data=>{
+      console.log('aaaaaaaaaaaaaaa ', data);
+      this.treeFields.dataSource = data;
+      console.log(this.treeFields.dataSource, this.treeDataa);
+    });
+  
   }
 
-  populateModalData(data) {
-    this.modalData.key = data.key;
-    this.modalData.owner = data.owner;
-    this.modalData.value = data.value;
-    this.modalData.isenable = data.isenable;
-    this.modalData.description = data.description;
-  }
-
-  updateConfig() {
-    this.toastr.info('Valore in aggiornamento..', 'Info');
-    this.apiService.updateConfig(this.modalData).subscribe(data => {
-      this.getCOnfigurations(); // this should refresh the main table on page
-      this.toastr.success('Valore Aggiornato', 'Success');
-      $('#configModal').modal('toggle').hide();
-    }, error => {
-      this.toastr.error('Errore durante update.', 'Error');
-      $('#configModal').modal('toggle').hide();
+  selectUserItem(user, $event) {
+    //console.log(user, $event);
+    $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
+    $($event.target).addClass('highlited-user');
+    this.selectedData.userid = user.ca_bsi_user_id;//user.ca_bsi_user_id;
+    this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';//user.ca_bsi_user_id;
+    if(this.selectedData.userid){
+      this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
+        console.log('bbbbbbbbbbbbbbb ', data);
       });
+    }
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
+
   ngAfterViewInit() {
-    this.dtTrigger.next();
-
-    this.setUpDataTableDependencies();
-    this.getCOnfigurations();
-
-    /*this.apiService.getConfigurations().subscribe((data:any)=>{
-      this.ConfigTableBodyData = data;
-      this.rerender();
-    });*/
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
   }
-
-  rerender(): void {
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-      this.setUpDataTableDependencies();
-    });
-  }
-
-  // getConfigTableRef(datatableElement: DataTableDirective): any {
-  //   return datatableElement.dtInstance;
-  //   // .then((dtInstance: DataTables.Api) => {
-  //   //     console.log(dtInstance);
-  //   // });
-  // }
-
-  setUpDataTableDependencies(){
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
-    // });
-
-    // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref
-        .columns( 0 )
-        .search( this.value )
-        .draw();
-    });
-    });
-
-  }
-
-  strip_tags(html) {
-    var tmp = document.createElement("div");
-    tmp.innerHTML = html;
-    return tmp.textContent||tmp.innerText;
-  }
-
-  getCOnfigurations() {
-    this.apiService.getConfigurations().subscribe((data) =>{
-      this.ConfigTableBodyData = data;
-      console.log('Configs ', data);
-      this.rerender();
-    });
-  }
-
- /* getCOnfigurations1() {
-    this.apiService.getConfigurations().subscribe((data: any) => {
-    });
-
-  }*/
 }
