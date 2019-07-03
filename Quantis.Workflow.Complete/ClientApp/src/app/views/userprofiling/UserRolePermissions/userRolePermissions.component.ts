@@ -13,7 +13,10 @@ var $this;
 })
 
 export class UserRolePermissionsComponent implements OnInit {
-
+    format = {
+      add: 'Aggiungi', remove: 'Rimuovi', all: 'Tutti', none: 'Nessuno',
+      draggable: true, locale: 'it'
+    };
     gatheredData = {
         usersList: [],
         rolesList: [],
@@ -32,13 +35,7 @@ export class UserRolePermissionsComponent implements OnInit {
       roles: false
     }
     selectedRoles = [];
-    format = {
-      add: 'Add Item',
-      remove: 'Remove Item',
-      all: 'Add All',
-      none: 'Remove All',
-      draggable: true
-    };
+    
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
