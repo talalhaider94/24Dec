@@ -25,6 +25,7 @@ namespace Quantis.WorkFlow.Models
             builder.ToTable("t_form_attachments");
             builder.HasKey(o => o.t_form_attachments_id);
             builder.HasOne(o => o.Form).WithMany(o => o.Attachments).IsRequired();
+            builder.Property(o => o.create_date).HasColumnName("create_timestamp");
 
         }
     }
