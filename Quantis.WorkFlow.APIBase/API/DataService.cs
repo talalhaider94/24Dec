@@ -383,6 +383,19 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        public List<UserDTO> GetUsersByRoleId(int roleId)
+        {
+            try
+            {
+                var usersids = _dbcontext.UserRoles.Where(o=>o.role_id==roleId).Select(p=>p.user_id).ToList();
+                var users = _dbcontext.CatalogUsers.Where(o => usersids.Contains(o.ca_bsi_user_id ?? 0));
+                return _userMapper.GetDTOs(users.ToList());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public List<WidgetDTO> GetAllWidgets()
         {
@@ -842,16 +855,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
                 return new CreateTicketDTO()
                 {
-                    Description = kpi.kpi_description,
+                    Description = GenerateDiscriptionFromKPI(kpi,"NA"),
                     ID_KPI = kpi.id_kpi,
                     GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.contract+"|"+kpi.id_kpi,
-                    primary_contract_party=kpi.primary_contract_party,
-                    secondary_contract_party=kpi.secondary_contract_party
+                    Summary=kpi.contract+"|"+kpi.id_kpi+"|"+ kpi.primary_contract_party+"|"+kpi.secondary_contract_party??""
                 };
 
             }
@@ -861,8 +872,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
         }
-
-
+        private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi,string calc)
+        {
+            string skeleton = "INDICATORE: {0}\n" +
+                "DESCRIZIONE: {1}\n" +
+                "ESCALATION: {2}\n" +
+                "TARGET: {3}\n" +
+                "TIPILOGIA: {4}\n" +
+                "VALORE CALC: {5}\n" +
+                "AUTORE: {6}\n" +
+                "TRACKING PERIOD: {7}";
+            return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
+        }
         public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
         {
             try

@@ -77,6 +77,11 @@ export class ApiService {
     return this.http.get(getDataKpisEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getUsersByRole(roleId): Observable<any> {
+    const getUsersByRole = `${environment.API_URL}/data/GetUsersByRoleId?roleId=${roleId}`;
+    return this.http.get(getUsersByRole, Headers.setTokenHeaders('GET'));
+  }
+
   getCustomersKP(): Observable<any> {
     const getCustomersKP = `${environment.API_URL}/data/GetAllCustomersKP`;
     return this.http.get(getCustomersKP, Headers.setTokenHeaders('GET'));
@@ -94,6 +99,16 @@ export class ApiService {
   addRole(data): Observable<any> {
     const addrole = `${environment.API_URL}/information/AddUpdateRole`;
     return this.http.post(addrole,data, Headers.setTokenHeaders('POST'));
+  }
+
+  addSDMGroup(data): Observable<any> {
+    const addSDMGroup = `${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`;
+    return this.http.post(addSDMGroup,data, Headers.setTokenHeaders('POST'));
+  }
+  
+  addSDMStatus(data): Observable<any> {
+    const addSDMStatus = `${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`;
+    return this.http.post(addSDMStatus,data, Headers.setTokenHeaders('POST'));
   }
   
   addConfig(data): Observable<any> {
@@ -120,6 +135,14 @@ export class ApiService {
     return this.http.get(getPermissionsByRoldIdEndPoint, Headers.setTokenHeaders('GET'));
   }
 
+  getAllKpiHierarchy(): Observable<any> {
+    const getAllKpiHierarchyEndPoint = `${environment.API_URL}/information/GetAllKpiHierarchy`;
+    return this.http.get(getAllKpiHierarchyEndPoint, Headers.setTokenHeaders('GET'));
+  }
+  getGlobalRulesByUserId(userId): Observable<any> {
+    const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
+    return this.http.get(getGlobalRulesByRoleIdEndPoint, Headers.setTokenHeaders('GET'));
+  }
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config, Headers.setTokenHeaders('POST'))
@@ -203,6 +226,16 @@ export class ApiService {
 
   assignPermissionsToRoles(postData) {
     return this.http.post(`${environment.API_URL}/information/AssignPermissionsToRoles`, postData, Headers.setTokenHeaders('POST'))
+    .pipe(
+      tap(
+        data => data,
+        error => error
+      )
+    );
+  }
+
+  assignGlobalRulesToUserId(postData) {
+    return this.http.post(`${environment.API_URL}/information/AssignGlobalRulesToUserId`, postData, Headers.setTokenHeaders('POST'))
     .pipe(
       tap(
         data => data,

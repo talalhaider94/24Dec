@@ -137,6 +137,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetAllKPIHierarchy();
         }
+        [HttpGet("GetGlobalRulesByUserId")]
+        public List<int> GetGlobalRulesByUserId(int userId)
+        {
+            return _infomationAPI.GetGlobalRulesByUserId(userId);
+        }
         public void AssignGlobalRulesToUserId(MultipleRecordsDTO dto)
         {
             _infomationAPI.AssignGlobalRulesToUserId(dto);

@@ -49,3 +49,79 @@
     }
   }
 }
+
+.example-card {
+  max-width: 200px;
+  max-height: 100px;
+  border: solid #20a8d8
+}
+
+.mat-card-subtitle {
+  font-size: 25px;
+}
+
+.mat-card-title {
+  text-decoration-color: #20a8d8;
+}
+
+
+.modal.fade.modal-right .modal-dialog {
+  transform: translate(125%, 0px);
+}
+
+.modal.show.modal-right .modal-dialog {
+  transform: none;
+}
+
+.modal.fade.modal-right {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+
+.info-btn {
+  padding:2px;
+  font-size: 10px;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.tagsTip {
+  //display: inline;
+  position: relative;
+}
+
+.tagsTip:hover:after {
+  background: #333;
+  background: rgba(0, 0, 0, .8);
+  border-radius: 5px;
+  bottom: -34px;
+  color: #fff;
+  content: attr(data-ext);
+  left: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 350px;
+}
+
+.tagsTip:hover:before {
+  border: solid;
+  border-color: #333 transparent;
+  border-width: 0;// 6px 6px 6px;
+  bottom: -4px;
+  content: "";
+  left: 50%;
+  position: absolute;
+  z-index: 99;
+}

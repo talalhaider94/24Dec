@@ -66,6 +66,12 @@ export class AdminRolesComponent implements OnInit {
     }
   ]
 
+  UsersTableBodyData: any = [
+    {
+      name: ''
+    }
+  ]
+
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -80,6 +86,11 @@ export class AdminRolesComponent implements OnInit {
     this.modalData.id = data.id;
     this.modalData.name = data.name;
     this.modalData.code = data.code;
+  }
+  
+  populateUsersData(data) {
+    this.modalData.id = data.id;
+    this.getUsersList(this.modalData.id);
   }
 
   addRole() {
@@ -166,6 +177,14 @@ export class AdminRolesComponent implements OnInit {
       this.ConfigTableBodyData = data;
       console.log('Configs ', data);
       this.rerender();
+    });
+  }
+  
+  getUsersList(roleId) {
+    this.apiService.getUsersByRole(roleId).subscribe((data) =>{
+      this.UsersTableBodyData = data;
+      console.log('Users ', data);
+      //this.rerender();
     });
   }
 }

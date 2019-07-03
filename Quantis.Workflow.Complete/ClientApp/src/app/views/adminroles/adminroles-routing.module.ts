@@ -9,11 +9,11 @@ const routes: Routes = [
     path: '',
     component: AdminRolesComponent,
     data: {
-      title: 'Admin Roles'
+      title: 'Gestione Ruoli'
     }
   },
   {
-    path: 'adminRolePermissions/:id',
+    path: 'adminRolePermissions/:id/:name',
     component: RolePermissionsComponent,
     data: {
       title: 'Admin Roles & Permissions'

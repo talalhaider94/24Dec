@@ -219,7 +219,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var permission = _dbcontext.Permissions.ToList();
+                var permission = _dbcontext.Permissions.OrderBy(o => o.name).ToList();
                 return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
@@ -247,7 +247,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var roles = _dbcontext.UserRoles.Where(q => q.user_id == userid).Select(s => s.role_id).ToList();
-                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).Distinct().ToList();
+                var permission=_dbcontext.RolePermissions.Include(o => o.Permission).Where(o => roles.Contains(o.role_id)).Select(p => p.Permission).Distinct().OrderBy(o => o.name).ToList();
                 return permission.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
@@ -261,7 +261,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var permissions = _dbcontext.RolePermissions.Include(o => o.Permission).Where(p => p.role_id == roleId).Select(o=>o.Permission);
-                return permissions.Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
+                return permissions.OrderBy(o => o.name).Select(o => new PermissionDTO(o.id, o.name, o.code,o.category,o.permission_type)).ToList();
             }
             catch (Exception e)
             {
@@ -488,7 +488,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var res = new List<UserKPIDTO>();
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
                 var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.primary_contract_party);
-                return groups.Where(o => o != null).Distinct().ToList();
+                return groups.Distinct().ToList();
 
             }
             catch (Exception e)
