@@ -1,9 +1,9 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">CONFIGURAZIONI</h2><br>
+      <h2 style="color:#565656">PROFILAZIONE UTENTE</h2><br>
           <div class="row role-permissions-lists col-md-12">
-              <div class="col-md-4">
+              <div class="col-md-6">
                   <div><label class="lbl-filter-user">Utenti: <strong
                               class="selected-user-title">{{selectedData.name|uppercase}}</strong></label></div>
                   <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="search"
@@ -20,13 +20,18 @@
             
                   </perfect-scrollbar>
               </div>
-              <div class="col-md-8">
-                  <ejs-treeview id="myTree" [fields]="treeFields" [showCheckBox]="true"></ejs-treeview >
+              <div class="col-md-1"></div>
+              <div class="col-md-5">
+                  <br><label>Permissions:</label>
+                <!-- <button class="btn btn-danger btn-sm" [swal]="{title: 'Confirmation', text: 'Do you want to delete?', showCancelButton: true}"
+                  (confirm)="onConfirm($event)"
+                  (cancel)="onCancel($event)">Delete Confirmation Sample</button> -->
+                <br><br>
+                  <ejs-treeview id="myTree" [fields]="treeFields" [showCheckBox]="true" ></ejs-treeview >
               </div>
             </div>
       </div>
   </div>
         
-  
   
   

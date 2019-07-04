@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 //import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [UserProfilingComponent,UserRolePermissionsComponent, FilterUsersPipe, /*TreeViewComponent*/],
@@ -22,6 +23,7 @@ import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
     AngularDualListBoxModule,
     PerfectScrollbarModule,
     FormsModule,
+    SweetAlert2Module,
     TreeViewModule
   ]
 })

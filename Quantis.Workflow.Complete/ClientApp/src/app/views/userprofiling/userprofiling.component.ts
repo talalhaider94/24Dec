@@ -1,13 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
-import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
 
-
-declare var $;
-var $this;
 
 
 @Component({
@@ -16,39 +10,9 @@ var $this;
 })
 
 export class UserProfilingComponent implements OnInit {
+  @ViewChild('myTree') myTree: ElementRef;
 
-  public treeDataa: Object[] = [
-    {
-        nodeId: '1', nodeText: 'Documents',
-        nodeChild: [
-            { nodeId: '11', nodeText: 'Team management.docx' },
-            { nodeId: '12', nodeText: 'Entity Framework Core.pdf' },
-        ]
-    },
-    {
-        nodeId: '2', nodeText: 'Downloads',
-        nodeChild: [
-            { nodeId: '21', nodeText: 'Sales report.ppt' },
-            { nodeId: '22', nodeText: 'Introduction to Angular.pdf' },
-            { nodeId: '23', nodeText: 'Paint.exe' },
-            { nodeId: '24', nodeText: 'TypeScript sample.zip' },
-        ]
-    },
-    {
-        nodeId: '3', nodeText: 'Music',
-        nodeChild: [
-            { nodeId: '31', nodeText: 'Crazy tone.mp3' }
-        ]
-    },
-    {
-        nodeId: '4', nodeText: 'Videos',
-        nodeChild: [
-            { nodeId: '41', nodeText: 'Angular tutorials.mp4' },
-            { nodeId: '42', nodeText: 'Basics of Programming.mp4' },
-        ]
-    }
-];
- 
+  // defined the array of data
   public treeData: Object[] = [
     {
         id: '1', name: 'Documents',
@@ -73,22 +37,16 @@ export class UserProfilingComponent implements OnInit {
         ]
     },
     {
-        id: '4', name: 'Videos',
-        children: [
-            { id: '41', name: 'Angular tutorials.mp4' },
-            { id: '42', name: 'Basics of Programming.mp4' },
-        ]
+      id: '4', name: 'Videos',
+      children: [
+          { id: '41', name: 'Angular tutorials.mp4' },
+          { id: '42', name: 'Basics of Programming.mp4' },
+      ]
     }
   ];
 
   public treeFields: any = {
-      dataSource: [{
-        id: '4', name: 'Videos',
-        children: [
-            { id: '41', name: 'Angular tutorials.mp4' },
-            { id: '42', name: 'Basics of Programming.mp4' },
-        ]
-    }],
+      dataSource: this.treeData,
       id: 'id',//'nodeId',
       text: 'name',//'nodeText',
       child: 'children',//'nodeChild'
@@ -101,7 +59,9 @@ export class UserProfilingComponent implements OnInit {
   }
   selectedData = {
     userid: null,
-    name: ''
+    name: '',
+    checked: null,
+    selected: null
   }
   filters = {
     searchUsersText: ''
@@ -116,7 +76,6 @@ export class UserProfilingComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
   ) {
-    $this = this;
   }
 
   ngOnInit() {
@@ -131,8 +90,7 @@ export class UserProfilingComponent implements OnInit {
 
     this.apiService.getAllKpiHierarchy().subscribe(data=>{
       console.log('aaaaaaaaaaaaaaa ', data);
-      this.treeFields.dataSource = data;
-      console.log(this.treeFields.dataSource, this.treeDataa);
+      //this.treeFields.dataSource = data;
     });
   
   }
@@ -156,4 +114,5 @@ export class UserProfilingComponent implements OnInit {
 
   ngOnDestroy(): void {
   }
+
 }

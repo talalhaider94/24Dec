@@ -5,6 +5,7 @@ import { SdmGroupComponent } from './sdmgroup.component';
 import { SdmGroupRoutingModule } from './sdmgroup-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     SdmGroupRoutingModule,
     DataTablesModule,
+    SweetAlert2Module,
     FormsModule
   ]
 })

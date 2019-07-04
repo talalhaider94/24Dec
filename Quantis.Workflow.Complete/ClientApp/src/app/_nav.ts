@@ -207,7 +207,7 @@ export const navItems: NavData[] = [
       }, 
       {
         name: 'Profilazione Utente',
-        url: '/coming-soon',
+        url: '/userprofiling',
         icon: 'fa fa-gear',
         key: 'VIEW_CONFIGURATIONS'
       },
