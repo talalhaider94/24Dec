@@ -698,6 +698,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
                 }
+                if (_statusMapping.Any(o => o.code == dto.Status))
+                {
+                    dto.Status = _statusMapping.FirstOrDefault(o => o.code == dto.Status).name;
+                }
                 dtos.Add(dto);
             }
             return dtos;
