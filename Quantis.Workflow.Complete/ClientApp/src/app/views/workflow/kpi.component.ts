@@ -270,7 +270,7 @@ export class KPIComponent implements OnInit {
 
       let observables = new Array();
       for (let ticket of this.selectedTickets) {
-        observables.push(this.workFlowService.transferTicketByID(ticket[1], ticket[5], description.value));
+        observables.push(this.workFlowService.transferTicketByID(ticket.id, ticket.status, description.value));
       }
       forkJoin(observables).subscribe(data => {
         this.toastr.success('Ticket rejected', 'Success');
