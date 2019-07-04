@@ -441,19 +441,22 @@ namespace Quantis.WorkFlow.APIBase.API
             return ret;
 
         }
-        public SDMTicketLVDTO TransferTicketByID(int id, string status,string description)
+        public ChangeStatusDTO TransferTicketByID(int id, string status,string description)
         {
+            var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
             {
-                return ticket;
+                _dbcontext.LogInformation("Status is equation to previous Status");
+                return dto;
             }
             LogIn();
             try
             {
                 if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().name || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
                 {
-                    return null;
+                    _dbcontext.LogInformation("Ticket Status not in configuration");
+                    return dto;
                 }
                 int step = _statusMapping.FirstOrDefault(o => o.name == ticket.Status).step;
                 step--;
@@ -475,12 +478,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     primary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.primary_contract_party) ? "0" : ticket.primary_contract_party),
                     secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
                     ticket_status = status
-                };
-                if (!CallUploadKPI(bsiticketdto))
-                {
-                    LogOut();
-                    return null;
-                }
+                };               
                 string tickethandle = "cr:" + id;
                 var esca = _sdmClient.transferAsync(_sid, "", tickethandle, description, false, "", true, newgroup, false, "");
                 esca.Wait();
@@ -488,7 +486,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 var statusa = _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
-                return GetTicketByID(id);
+                dto.IsSDMStatusChanged = true;
+                if (CallUploadKPI(bsiticketdto))
+                {
+                    dto.IsBSIStatusChanged = true;
+                }
+                return dto;
             }
             catch (Exception e)
             {
@@ -499,19 +502,22 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
-        public SDMTicketLVDTO EscalateTicketbyID(int id, string status,string description)
+        public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description)
         {
+            var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
             {
-                return ticket;
+                _dbcontext.LogInformation("Status is equation to previous Status");
+                return dto;
             }
             LogIn();
             try
             {
                 if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
                 {
-                    return null;
+                    _dbcontext.LogInformation("Ticket Status not in configuration");
+                    return dto;
                 }
                 int step = _statusMapping.FirstOrDefault(o => o.name == ticket.Status).step;
                 step++;
@@ -534,11 +540,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
                     ticket_status = status
                 };
-                if (!CallUploadKPI(bsiticketdto))
-                {
-                    LogOut();
-                    return null;
-                }
+                
                 string tickethandle = "cr:" + id;
                 var esca=_sdmClient.escalateAsync(_sid, "", tickethandle, description, false, "", true, newgroup, false, "", false, "");
                 esca.Wait();
@@ -546,7 +548,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 var statusa= _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
-                return GetTicketByID(id);
+                dto.IsSDMStatusChanged = true;
+                if (CallUploadKPI(bsiticketdto))
+                {
+                    dto.IsBSIStatusChanged = true;
+                }
+                return dto;
+
             }
             catch (Exception e)
             {
@@ -601,13 +609,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         else
                         {
-                            throw new Exception("Upload KPI returned with :" + res);
-
+                            _dbcontext.LogInformation("Message from Upload KPI: " + res);
+                            return false;
                         }
                     }
                     else
                     {
-                        throw new Exception(string.Format("Call to Upload KPI has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
+                        _dbcontext.LogInformation(string.Format("Call to Upload KPI has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
+                        return false;
                     }
 
                 }
