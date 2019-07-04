@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FileSaverModule } from 'ngx-filesaver';
 import { TreeviewModule } from 'ngx-treeview';
+import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -68,6 +69,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
     FileSaverModule,
+    FilterUsersPipe,
     SweetAlert2Module.forRoot(),
     TreeviewModule.forRoot() 
   ],
