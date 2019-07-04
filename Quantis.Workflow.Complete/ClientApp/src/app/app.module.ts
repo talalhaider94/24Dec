@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+//import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FileSaverModule } from 'ngx-filesaver';
 import { TreeviewModule } from 'ngx-treeview';
-import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
+//import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -53,7 +53,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   imports: [
-    BrowserModule,
+    //BrowserModule,
     AppRoutingModule,
     AppAsideModule,
     AppBreadcrumbModule.forRoot(),
@@ -81,11 +81,11 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     RegisterComponent,
     ForgetComponent,
     SafePipe,
-    FilterUsersPipe
+   // FilterUsersPipe
     // LoadingFormComponent,
     // CommingsoonComponent
   ],
-  exports: [FilterUsersPipe],
+  exports: [/*FilterUsersPipe*/],
   providers: [{
     provide: LocationStrategy, 
     useClass: HashLocationStrategy // commenting this and location strategry hides the # from url. need to see sideeffect.

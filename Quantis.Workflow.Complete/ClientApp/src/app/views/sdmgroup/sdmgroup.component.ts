@@ -212,7 +212,7 @@ export class SdmGroupComponent implements OnInit {
   }
 
   onCancel(dismissMethod: string): void {
-    console.log('Caneclllllllllllllllllll ', dismissMethod);
+    console.log('Cancel ', dismissMethod);
   }
   
 }

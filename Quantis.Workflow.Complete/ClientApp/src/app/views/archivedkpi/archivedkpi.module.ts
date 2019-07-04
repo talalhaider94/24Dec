@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+//import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ArchivedKpiComponent } from './archivedkpi.component';
 import { ArchivedKpiRoutingModule } from './archivedkpi-routing.module';
 import {DataTablesModule} from 'angular-datatables';

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../../../_services/api.service';
 import { ToastrService } from 'ngx-toastr';
-import { FilterUsersPipe } from './../../../_pipes/filterUsers.pipe';
+//import { FilterUsersPipe } from './../../../_pipes/filterUsers.pipe';
 
 declare var $;
 var $this;
