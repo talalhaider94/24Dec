@@ -126,10 +126,31 @@ export class ProveVarieComponent implements OnInit {
     })
   }
 
+  _mapFormValuesWithFields(formFields, formValues) {
+    return formValues.map((value, index) => {
+      return {
+        name: formFields[index].name,
+        type: formFields[index].type,
+        value: value.valoreUtente || ''
+      }
+    });
+  }
+
   saveUser(model: any) {
+    let utenteFormData;
     if (!!model.value.termsCheck) {
-      this.toastr.info('Inserire nota per dati non pervenuti.')
+      utenteFormData = this._mapFormValuesWithFields(this.arrayFormElements, model.value.valories)
+      .find(field => field.name == 'Note' && !!field.value );
+      
+      if(!utenteFormData) {
+        this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
+        return false;
+      } else {
+        // passing NOTE input field value.
+        this._noteTextFileUpload(utenteFormData.value);
+      }
     }
+
     var formFields: FormField;
     var userSubmit: UserSubmitLoadingForm = new UserSubmitLoadingForm();
     var dataAttuale = new Date();
@@ -316,7 +337,7 @@ export class ProveVarieComponent implements OnInit {
       }
       this.numeroForm = numero;
       // CHECK BOX DISPLAY CONDITION START
-      const checkboxFieldExists = this.arrayFormElements.find(field => field.name === 'Dato_Mancante' && field.type === 'integer');
+      const checkboxFieldExists = this.arrayFormElements.find(field => (field.name === 'Dato_Mancante' || field.name === 'Is_Dato_Mancante') && field.type === 'integer');
       if (checkboxFieldExists) {
         this.displayUserFormCheckBox = true;
       }
@@ -327,16 +348,6 @@ export class ProveVarieComponent implements OnInit {
       console.log('getFormById', error)
     });
 
-  }
-
-  // means filter elements
-  filtraElementi(campo, indice: number) {
-    console.log('FILTER ELEMENTS', campo);
-    let arrayappoggio = new Array(this.arrayFormElements);
-    console.log(this.arraySecondo);
-    this.arraySecondo[indice] = arrayappoggio.filter(
-      elemento => (elemento.Type === campo.Type) && (elemento.Name != campo.Name));
-    console.log(this.arraySecondo);
   }
 
   _getAttachmentsByFormIdEndPoint(formId: number, shouldTrigger: boolean) {
@@ -356,13 +367,14 @@ export class ProveVarieComponent implements OnInit {
     if (!comparisonRules.length) {
       return comparisonRules;
     }
-    const mapFormValues = formValues.map((value, index) => {
-      return {
-        name: formElements[index].name,
-        type: formElements[index].type,
-        value: value.valoreUtente || ''
-      }
-    });
+    const mapFormValues =  this._mapFormValuesWithFields(formElements, formValues);
+    // const mapFormValues = formValues.map((value, index) => {
+    //   return {
+    //     name: formElements[index].name,
+    //     type: formElements[index].type,
+    //     value: value.valoreUtente || ''
+    //   }
+    // });
     const invalidRules = comparisonRules.map((compare, index) => {
       let type = compare.campo1.type;
       let field1 = compare.campo1;
@@ -611,5 +623,40 @@ export class ProveVarieComponent implements OnInit {
     return this.anni;
   }
 
+  _noteTextFileUpload(textString) {
+    const blob = new Blob([textString], {type: "text/plain;charset=utf-8"});
+    const reader = new FileReader();
+    reader.readAsDataURL(blob); 
+    reader.onloadend = (function (self) {
+      let fileName = `Nota-Dato-Mancante-${moment().format('DD-MM-YYYY,h:mm:ss')}.txt`;
+      return function (readerEvent) {
+        let formAttachments: FormAttachments = new FormAttachments();
+        let binaryString = readerEvent.target.result;
+        let base64Data = binaryString.substring(37);
+        let dateObj = self._getPeriodYear();
+        formAttachments.content = base64Data;
+        formAttachments.form_attachment_id = 0;
+        formAttachments.form_id = +self.formId;
+        formAttachments.period = dateObj.period;
+        formAttachments.year = dateObj.year;
+        formAttachments.doc_name = fileName;
+        formAttachments.checksum = 'checksum';
+        self.loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
+          console.log('submitAttachment ==>', data);
+          self.fileUploading = false;
+          self.uploader.queue.pop();
+          self.toastr.success(`${fileName} uploaded successfully.`);
+          if (data) {
+            self._getAttachmentsByFormIdEndPoint(+self.formId, false);
+          }
+        }, error => {
+          console.error('submitAttachment ==>', error);
+          self.fileUploading = false;
+          self.toastr.error('Some error occurred while uploading file');
+        });
+      };
+    })(this);
+    
+  }
 
 }

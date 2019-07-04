@@ -70,12 +70,8 @@
             </div>
           </div>
 
-          <div *ngIf="erroriArray.length>0">
-            <p style="color:red; font-size:16px">{{erroriArray[0]}} </p>
-          </div>
-
-          
           <div formArrayName="campiConfronto" class="panel panel-default admin-form-rules">
+            <p><b>Per ogni modifica selezionare prima il campo 1</b></p>
             <div *ngFor="let language of myInputForm.get('campiConfronto')['controls']; let i=index"
               class="panel-body bg-white">
               <div class="row align-items-center justify-content-center" [formGroupName]="i">
@@ -124,7 +120,7 @@
           </div>
           <div class="margin-20">
             <a (click)="addComparisonForm('')" style="cursor: pointer">
-              Add another Comparison +
+              Aggiungi regola +
             </a>
           </div>
           <div class="row mb-3 align-items-center pt-3">

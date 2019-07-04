@@ -125,3 +125,9 @@
   position: absolute;
   z-index: 99;
 }
+
+.mat-form-field-disabled {
+  &:hover {
+    cursor: not-allowed;
+  }
+}
