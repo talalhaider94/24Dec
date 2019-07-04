@@ -181,5 +181,9 @@ export class SdmStatusComponent implements OnInit {
       this.rerender();
     });
   }
+
+  onCancel(dismissMethod: string): void {
+    console.log('Caneclllllllllllllllllll ', dismissMethod);
+  }
   
 }

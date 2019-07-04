@@ -55,6 +55,10 @@ export class AdminRolesComponent implements OnInit {
     code: ''
   };
 
+  filters = {
+    searchUsersText: ''
+  }
+
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
@@ -90,6 +94,7 @@ export class AdminRolesComponent implements OnInit {
   
   populateUsersData(data) {
     this.modalData.id = data.id;
+    this.modalData.name = data.name;
     this.getUsersList(this.modalData.id);
   }
 

@@ -27,8 +27,9 @@
                     data-target="#configModal" style="font-size:10px">
               <i class="fa fa-pencil"></i>
             </button>
-            <button class="btn btn-danger" (click)="deleteSDMRow(row)"
-                    style="font-size:10px">
+            <button class="btn btn-danger" [swal]="{title: 'Confirmation', text: 'Do you want to delete?', showCancelButton: true}"
+                (confirm)="deleteSDMRow(row)" (cancel)="onCancel($event)"
+                style="font-size:10px">
               <i class="fa fa-trash"></i>
             </button>
           </td>

@@ -210,5 +210,9 @@ export class SdmGroupComponent implements OnInit {
       this.rerender();
     });
   }
+
+  onCancel(dismissMethod: string): void {
+    console.log('Caneclllllllllllllllllll ', dismissMethod);
+  }
   
 }

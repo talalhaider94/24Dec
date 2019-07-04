@@ -8,7 +8,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { FileSaverModule } from 'ngx-filesaver';
-
+import { TreeviewModule } from 'ngx-treeview';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -45,6 +45,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SafePipe } from './_pipes/safe.pipe';
+// import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // import { LoadingFormComponent } from './views/loading-form/loading-form.component';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
@@ -65,7 +67,9 @@ import { SafePipe } from './_pipes/safe.pipe';
     HttpClientModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    FileSaverModule 
+    FileSaverModule,
+    SweetAlert2Module.forRoot(),
+    TreeviewModule.forRoot() 
   ],
   declarations: [
     AppComponent,
@@ -75,7 +79,7 @@ import { SafePipe } from './_pipes/safe.pipe';
     LoginComponent,
     RegisterComponent,
     ForgetComponent,
-    SafePipe,
+    SafePipe
     // LoadingFormComponent,
     // CommingsoonComponent
   ],
