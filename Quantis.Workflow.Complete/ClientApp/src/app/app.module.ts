@@ -69,7 +69,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
     FileSaverModule,
-    FilterUsersPipe,
     SweetAlert2Module.forRoot(),
     TreeviewModule.forRoot() 
   ],
@@ -81,7 +80,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     LoginComponent,
     RegisterComponent,
     ForgetComponent,
-    SafePipe
+    SafePipe,
+    FilterUsersPipe
     // LoadingFormComponent,
     // CommingsoonComponent
   ],
