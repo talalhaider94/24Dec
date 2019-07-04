@@ -20,7 +20,7 @@ let $this;
 @Component({
   templateUrl: './kpi.component.html',
 })
-export class KPIComponent implements OnInit {
+export class KPIComponent implements OnInit, OnDestroy {
 
   @ViewChild('successModal') public successModal: ModalDirective;
   @ViewChild('infoModal') public infoModal: ModalDirective;
@@ -46,7 +46,7 @@ export class KPIComponent implements OnInit {
   rejectForm: FormGroup;
   selectedTickets: any = [];
   verificaCheckBoxForm: FormGroup;
-  fileUploading = true;
+  fileUploading = false;
   public uploader: FileUploader = new FileUploader({ url: URL });
   selectedAll: any;
   monthOption;
@@ -307,7 +307,19 @@ export class KPIComponent implements OnInit {
         let binaryString = readerEvent.target.result;
         let base64Data = btoa(binaryString);
         self.fileUploading = false;
-        self.workFlowService.uploadAttachmentToTicket(self.setActiveTicketId, fileName, base64Data).pipe()
+        self.workFlowService.uploadAttachmentToTicket(self.setActiveTicketId, fileName, base64Data).pipe().subscribe(data => {
+          console.log('uploadAttachmentToTicket ==>', data);
+          self.fileUploading = false;
+          self.uploader.queue.pop();
+          self.toastr.success(`${fileName} uploaded successfully.`);
+          if (data) {
+            self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId);
+          }
+        }, error => {
+          console.error('uploadAttachmentToTicket ==>', error);
+          self.fileUploading = false;
+          self.toastr.error('Some error occurred while uploading file');
+        });
       };
     })(file, this);
     reader.readAsBinaryString(file); // return only base64 string
