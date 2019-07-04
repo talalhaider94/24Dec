@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Linq.Dynamic.Core;
+using Quantis.WorkFlow.Models;
+
 namespace Quantis.WorkFlow.APIBase.Framework
 {
     public static class QuantisExtensions
@@ -32,6 +34,27 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
         }
 
+        public static void LogInformation(this WorkFlowPostgreSqlContext dbcontext,string logMessage)
+        {
+            try
+            {
+
+                var exception = new T_Exception()
+                {
+                    message = logMessage,
+                    stacktrace = null,
+                    loglevel = "Information",
+                    timestamp = DateTime.Now,
+                    innerexceptions=null
+                };                
+                dbcontext.Exceptions.Add(exception);
+                dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
     }
 }

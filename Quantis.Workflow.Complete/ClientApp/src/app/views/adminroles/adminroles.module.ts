@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+//import { AppModule } from './../../app.module';
 import { AdminRolesComponent } from './adminroles.component';
 import { RolePermissionsComponent } from './rolePermissions/rolepermissions.component';
 import { AdminRolesRoutingModule } from './adminroles-routing.module';
@@ -13,6 +13,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 @NgModule({
   declarations: [AdminRolesComponent,RolePermissionsComponent,FilterUsersPipe],
   imports: [
+    //AppModule,
     CommonModule,
     AdminRolesRoutingModule,
     AngularDualListBoxModule,

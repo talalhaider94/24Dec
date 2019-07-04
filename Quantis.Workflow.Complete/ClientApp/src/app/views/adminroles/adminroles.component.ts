@@ -3,7 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-
+//import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
 declare var $;
 var $this;
 
