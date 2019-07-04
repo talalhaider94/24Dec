@@ -11,6 +11,7 @@ namespace Quantis.WorkFlow.Models.SDM
         public int id { get; set; }
         public string handle { get; set; }
         public string name { get; set; }
+        public string code { get; set; }
         public int step { get; set; }
     }
     public class SDM_TicketStatus_Configuration : IEntityTypeConfiguration<SDM_TicketStatus>
