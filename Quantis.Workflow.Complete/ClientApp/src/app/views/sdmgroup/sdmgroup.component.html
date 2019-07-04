@@ -12,7 +12,7 @@
           <th style="text-align:center">HANDLE</th>
           <th style="text-align:center">NOME</th>
           <th style="text-align:center">STEP</th>
-          <th style="text-align:center">CATEGORIA</th>
+          <th style="text-align:center">CONTRAENTE</th>
           <th style="text-align:center">AZIONE</th>
         </tr>
       </thead>
@@ -27,7 +27,7 @@
                     data-target="#configModal" style="font-size:10px">
               <i class="fa fa-pencil"></i>
             </button>
-            <button class="btn btn-danger" [swal]="{title: 'Confirmation', text: 'Do you want to delete?', showCancelButton: true}"
+            <button class="btn btn-danger" [swal]="{title: 'Conferma', text: 'Eliminare il Gruppo?', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina', confirmButtonColor: '#f86c6b' }"
                 (confirm)="deleteSDMRow(row)" (cancel)="onCancel($event)"
                 style="font-size:10px">
               <i class="fa fa-trash"></i>
@@ -57,7 +57,7 @@
               <tr><th>HANDLE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.handle"></td></tr>
               <tr><th>NOME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
               <tr><th>STEP</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.step"></td></tr>
-              <tr><th>CATEGORIA</th><td colspan="2">
+              <tr><th>CONTRAENTE</th><td colspan="2">
                 <select [(ngModel)]="category_id" class="form-control">
                   <option *ngFor="let obj of customersKP; index as i" [value]="obj.key">{{obj.value}}</option>
                 </select>
@@ -88,7 +88,7 @@
           <label><b>Handle</b></label><input type="text" class="form-control" placeholder="Handle" [(ngModel)]="handle"/><br>
           <label><b>Nome</b></label><input type="text" class="form-control" placeholder="Nome" [(ngModel)]="name" /><br>
           <label><b>Step</b></label><input type="text" class="form-control" placeholder="Step" [(ngModel)]="step"/><br>
-          <label><b>Categoria</b></label>
+          <label><b>Contraente</b></label>
             <select [(ngModel)]="category_id" class="form-control">
               <option *ngFor="let obj of customersKP; index as i" [value]="obj.key">{{obj.value}}</option>
             </select><br>
