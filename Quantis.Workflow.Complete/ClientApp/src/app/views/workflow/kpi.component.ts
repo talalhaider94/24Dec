@@ -67,7 +67,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
-    this.monthOption = moment().format('MM');
+    this.monthOption = moment().subtract(1, 'months').format('MM');
     this.yearOption = moment().format('YY');
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
@@ -147,11 +147,12 @@ export class KPIComponent implements OnInit, OnDestroy {
     this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
       const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
-      this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
-        a = a.period ? a.period.split("/") : '01/00'.split("/");
-        b = b.period ? b.period.split("/") : '01/00'.split("/");
-        return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
-      });
+      this.allTickets = appendSelectFale;
+      // this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
+      //   a = a.period ? a.period.split("/") : '01/00'.split("/");
+      //   b = b.period ? b.period.split("/") : '01/00'.split("/");
+      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
+      // });
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
@@ -358,14 +359,20 @@ export class KPIComponent implements OnInit, OnDestroy {
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(12).every(function () {
         const that = this;
-        $($this.monthSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.monthSelect.nativeElement).on('change', function () { 
+          that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
+         });
       });
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(12).every(function () {
         const that = this;
-        $($this.yearSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.yearSelect.nativeElement).on('change', function () { 
+          that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
+         });
       });
     });
 
