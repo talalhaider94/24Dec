@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../../_services/api.service';
 import { ToastrService } from 'ngx-toastr';
 
-
-
 @Component({
   templateUrl: './userprofiling.component.html',
   styleUrls: ['./userprofiling.component.scss']

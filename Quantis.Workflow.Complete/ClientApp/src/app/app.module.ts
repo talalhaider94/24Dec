@@ -84,6 +84,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     // LoadingFormComponent,
     // CommingsoonComponent
   ],
+  exports: [FilterUsersPipe],
   providers: [{
     provide: LocationStrategy, 
     useClass: HashLocationStrategy // commenting this and location strategry hides the # from url. need to see sideeffect.
