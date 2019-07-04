@@ -219,7 +219,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.2.4',
+    name: 'Version 1.2.5',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
