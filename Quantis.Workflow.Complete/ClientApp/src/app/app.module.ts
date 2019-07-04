@@ -45,6 +45,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SafePipe } from './_pipes/safe.pipe';
+import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // import { LoadingFormComponent } from './views/loading-form/loading-form.component';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
@@ -79,6 +80,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     RegisterComponent,
     ForgetComponent,
     SafePipe,
+    FilterUsersPipe
     // LoadingFormComponent,
     // CommingsoonComponent
   ],

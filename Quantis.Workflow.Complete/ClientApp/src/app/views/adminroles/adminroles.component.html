@@ -6,7 +6,7 @@
         <!-- <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 /> -->
         <button style="margin-left:15px" class="btn btn-success" data-toggle="modal"
                 data-target="#addConfigModal">
-          Crea Nuovo Ruolo
+                Aggiungi
         </button>
       </div><br />
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
@@ -29,7 +29,7 @@
               </button>
               <button class="btn btn-info" data-toggle="modal" (click)="populateUsersData(row)"
               data-target="#usersModal" style="font-size:10px">
-                Users
+                Utenti
               </button>
             </td>
           </tr>

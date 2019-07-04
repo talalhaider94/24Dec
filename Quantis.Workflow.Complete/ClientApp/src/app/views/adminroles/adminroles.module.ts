@@ -7,18 +7,15 @@ import { AdminRolesRoutingModule } from './adminroles-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { FormsModule } from '@angular/forms';
-import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
+// import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
 
 @NgModule({
-  declarations: [AdminRolesComponent,RolePermissionsComponent,FilterUsersPipe],
+  declarations: [AdminRolesComponent,RolePermissionsComponent,/*FilterUsersPipe*/],
   imports: [
     CommonModule,
     AdminRolesRoutingModule,
     AngularDualListBoxModule,
     DataTablesModule,
-    PerfectScrollbarModule,
     FormsModule,
   ]
 })
