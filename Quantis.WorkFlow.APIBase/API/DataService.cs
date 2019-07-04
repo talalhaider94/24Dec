@@ -589,6 +589,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.SaveChanges(false);
                     }
                     _dbcontext.FormLogs.Add(form_log);
+                    _dbcontext.SaveChanges(false);
                     T_NotifierLog notifier_log = _dbcontext.NotifierLogs.FirstOrDefault(o => o.id_form == form_log.id_form && o.period == form_log.period && o.year == form_log.year);
                     if (notifier_log != null)
                     {
@@ -606,6 +607,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             year = dto.year
                         };
                         _dbcontext.NotifierLogs.Add(notifier_log);
+                        _dbcontext.SaveChanges(false);
                     }
                     if(CallFormAdapter(new FormAdapterDTO() { formID = dto.form_id, localID = dto.locale_id, forms = dto.inputs }))
                     {
