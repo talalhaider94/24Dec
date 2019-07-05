@@ -348,7 +348,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context)
+        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context,string period)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -365,17 +365,17 @@ namespace Quantis.WorkFlow.APIBase.API
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
                     userid = userid.Split('\\')[1];
 
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).code+ "' and zz_cned_string1 LIKE '%"+ userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).code+ "' and zz_cned_string1 LIKE '%"+ userid + "%' and zz_cned_string4='"+ period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).code + "' and zz_cned_string2 LIKE '%" + userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).code + "' and zz_cned_string2 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).code + "' and zz_cned_string3 LIKE '%" + userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).code + "' and zz_cned_string3 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
