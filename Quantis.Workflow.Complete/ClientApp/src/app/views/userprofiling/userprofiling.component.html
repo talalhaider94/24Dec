@@ -14,8 +14,8 @@
                     <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                       <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                     </h5>
-                    <li *ngFor="let role of gatheredData.rolesList; index as i"
-                        (click)="selectRoleItem(role, $event)">{{role.name}}</li>
+                    <li *ngFor="let user of gatheredData.usersList; index as i"
+                        (click)="selectRoleItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
                   </ul>
           
                 </perfect-scrollbar>
@@ -31,7 +31,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12"><button class="btn btn-success pull-right" (click)="saveAssignedPermissions()">Save</button></div>
+            <div class="col-md-12"><button class="btn btn-success pull-right" (click)="saveAssignedPermissions()">Salva</button></div>
           </div>
     </div>
 </div>

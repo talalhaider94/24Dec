@@ -53,9 +53,9 @@ export class UserProfilingComponent implements OnInit {
   ngOnInit() {
 
     this.loading.roles = true;
-    this.apiService.getAllRoles().subscribe((res)=>{
-      console.log('getAllRoles ==> ', res);
-      this.gatheredData.rolesList = res;
+    this.apiService.getCatalogoUsers().subscribe((res)=>{
+      console.log('getCatalogoUsers ==> ', res);
+      this.gatheredData.usersList = res;
       this.loading.roles = false;
     });
 
@@ -68,14 +68,14 @@ export class UserProfilingComponent implements OnInit {
   
   }
 
-  selectRoleItem(role, $event) {
-    console.log(role, this.permissionsTree.checkedNodes, this.selectedData);
+  selectRoleItem(user, $event) {
+    console.log(user, this.permissionsTree.checkedNodes, this.selectedData);
     $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
     $($event.target).addClass('highlited-user');
-    this.selectedData.roleid = role.id;
-    this.selectedData.name = role.name;
-    if(this.selectedData.roleid){
-      this.apiService.getGlobalRulesByUserId(this.selectedData.roleid).subscribe(data=>{
+    this.selectedData.userid = user.id;
+    this.selectedData.name = user.name;
+    if(this.selectedData.userid){
+      this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
         console.log('getGlobalRulesByUserId ==> ', data);
         //selectedData.checked = data;
       });
@@ -83,8 +83,8 @@ export class UserProfilingComponent implements OnInit {
   }
 
   saveAssignedPermissions(){
-    if(this.selectedData.roleid) {
-      let dataToPost = {Id: this.selectedData.roleid, Ids: this.permissionsTree.checkedNodes};
+    if(this.selectedData.userid) {
+      let dataToPost = {Id: this.selectedData.userid, Ids: this.permissionsTree.checkedNodes};
       // this.permissionsTree.checkedNodes.forEach((value, idx) => {
       //   dataToPost.Ids.push(value.id)
       // });
