@@ -72,8 +72,8 @@ export class UserProfilingComponent implements OnInit {
     console.log(user, this.permissionsTree.checkedNodes, this.selectedData);
     $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
     $($event.target).addClass('highlited-user');
-    this.selectedData.userid = user.id;
-    this.selectedData.name = user.name;
+    this.selectedData.userid = user.ca_bsi_user_id;
+    this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';;
     if(this.selectedData.userid){
       this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
         console.log('getGlobalRulesByUserId ==> ', data);
