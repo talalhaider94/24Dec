@@ -144,7 +144,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   _getAllTickets() {
-    this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
+    this.workFlowService.getTicketsVerificationByUserVerifica(`${this.monthOption}/${this.yearOption}`).pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
       const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
       this.allTickets = appendSelectFale;
@@ -357,7 +357,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   // search start
   ngAfterViewInit() {
     this.dtTrigger.next();
-    this.setUpDataTableDependencies();
+    // this.setUpDataTableDependencies();
     this.rerender();
   }
   rerender(): void {
@@ -366,7 +366,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
+      // this.setUpDataTableDependencies();
     });
   }
 
@@ -394,5 +394,7 @@ export class KPIComponent implements OnInit, OnDestroy {
 
   }
   //search end
-
+onDataChange() {
+  this._getAllTickets();
+  }
 }
