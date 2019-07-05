@@ -53,13 +53,13 @@ namespace Quantis.WorkFlow.Controllers
             if (usr != null)
             {
                 var dtos=_oracleAPI.GetForm(0, usr.UserId);
-                var attachmentCount = _dataAPI.GetFormAttachmentCount(dtos.Select(o => o.form_id).ToList());
+                var attachmentCount = _dataAPI.GetFormDetials(dtos.Select(o => o.form_id).ToList());
 
                 return (from d in dtos
-                    join a in attachmentCount on d.form_id equals a.Item1
+                    join a in attachmentCount on d.form_id equals a.form_id
                         select new OrcaleFormWithAttachmentCountDTO {
                         form_id = d.form_id,
-                        AttachmentsCount= a.Item2,
+                        AttachmentsCount= a.attachment_count,
                         create_date=d.create_date,
                         cutoff=d.cutoff,
                         form_description=d.form_description,
@@ -69,7 +69,8 @@ namespace Quantis.WorkFlow.Controllers
                         reader_configuration=d.reader_configuration,
                         reader_id=d.reader_id,
                         user_group_id=d.user_group_id,
-                        user_group_name=d.user_group_name
+                        user_group_name=d.user_group_name,
+                        latest_input_date=a.latest_modified_date
                     }).ToList();
 
 
