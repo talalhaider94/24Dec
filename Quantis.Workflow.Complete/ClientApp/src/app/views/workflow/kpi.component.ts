@@ -257,6 +257,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       if(data) {
         this.ticketsStatus = data;
         this.statusChangeModal.show();
+        this._getAllTickets();
       }
       this.approveModal.hide();
       this.loading = false;
@@ -285,6 +286,7 @@ export class KPIComponent implements OnInit, OnDestroy {
         if(data) {
           this.ticketsStatus = data;
           this.statusChangeModal.show();
+          this._getAllTickets();
         }
         this.rejectModal.hide();
         this.loading = false;
