@@ -26,7 +26,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   @ViewChild('infoModal') public infoModal: ModalDirective;
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
-
+  @ViewChild('statusChangeModal') public statusChangeModal: ModalDirective;
   @ViewChild('monthSelect') monthSelect: ElementRef;
   @ViewChild('yearSelect') yearSelect: ElementRef;
 
@@ -51,7 +51,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   selectedAll: any;
   monthOption;
   yearOption;
-
+  ticketsStatus: any = [];
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -254,8 +254,16 @@ export class KPIComponent implements OnInit, OnDestroy {
     }
     forkJoin(observables).subscribe(data => {
       this.toastr.success('Ticket approved', 'Success');
+      console.log('approveFormSubmit', data);
+      if(data) {
+        this.ticketsStatus = data;
+        this.statusChangeModal.show();
+        this._getAllTickets();
+      }
+      this.approveModal.hide();
       this.loading = false;
     }, error => {
+      console.error('approveFormSubmit', error);
       this.toastr.error('Error while approving form', 'Error');
       this.loading = false;
     });
@@ -274,9 +282,17 @@ export class KPIComponent implements OnInit, OnDestroy {
         observables.push(this.workFlowService.transferTicketByID(ticket.id, ticket.status, description.value));
       }
       forkJoin(observables).subscribe(data => {
+        console.log('rejectFormSubmit', data);
         this.toastr.success('Ticket rejected', 'Success');
+        if(data) {
+          this.ticketsStatus = data;
+          this.statusChangeModal.show();
+          this._getAllTickets();
+        }
+        this.rejectModal.hide();
         this.loading = false;
       }, error => {
+        console.error('rejectFormSubmit', error);
         this.toastr.error('Error while rejecting form', 'Error');
         this.loading = false;
       });

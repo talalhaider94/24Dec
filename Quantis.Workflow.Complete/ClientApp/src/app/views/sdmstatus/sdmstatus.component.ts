@@ -46,21 +46,24 @@ export class SdmStatusComponent implements OnInit {
     id: '',
     handle: '',
     step: '',
-    name: ''
+    name: '',
+    code: ''
   };
 
   addData = {
     handle: '',
     step: '',
-    name: ''
+    name: '',
+    code: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
-      handle: 'handle',
-      name: 'name',
-      step: 1
+      handle: '',
+      name: '',
+      step: 1,
+      code: ''
     }
   ]
 
@@ -73,21 +76,33 @@ export class SdmStatusComponent implements OnInit {
   public handle: any;
   public step: any;
   public name: any;
+  public code: any;
 
   ngOnInit() {
   }
+
+  // Swal.fire({
+  //   title: 'Are you sure?',
+  //   text: 'You will not be able to recover this imaginary file!',
+  //   type: 'warning',
+  //   showCancelButton: true,
+  //   confirmButtonText: 'Yes, delete it!',
+  //   cancelButtonText: 'No, keep it'
+  // });
 
   populateModalData(data) {
     this.modalData.id = data.id;
     this.modalData.handle = data.handle;
     this.modalData.step = data.step;
     this.modalData.name = data.name;
+    this.modalData.code = data.code;
   }
 
   add() {
     this.addData.handle = this.handle;
     this.addData.step = this.step;
     this.addData.name = this.name;
+    this.addData.code = this.code;
 
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.addSDMStatus(this.addData).subscribe(data => {
