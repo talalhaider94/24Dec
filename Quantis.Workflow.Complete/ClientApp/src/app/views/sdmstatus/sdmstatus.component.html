@@ -28,7 +28,7 @@
                     data-target="#configModal" style="font-size:10px">
               <i class="fa fa-pencil"></i>
             </button>
-            <button class="btn btn-danger" [swal]="{text: 'Sei sicuro di volre cancellare?', showCancelButton: true, cancelButtonText: 'Annulla'}"
+            <button class="btn btn-danger" [swal]="{title: 'Conferma', text: 'Eliminare il Stato?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'}"
             (confirm)="deleteSDMRow(row)" (cancel)="onCancel($event)"
                     style="font-size:10px">
               <i class="fa fa-trash"></i>
