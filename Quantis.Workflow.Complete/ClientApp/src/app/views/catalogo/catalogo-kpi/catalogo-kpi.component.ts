@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
+import { LoadingFormService } from '../../../_services/loading-form.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
@@ -19,6 +20,7 @@ export class CatalogoKpiComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
+    private LoadingFormService: LoadingFormService,
   ) {
     $this = this;
   }
@@ -146,6 +148,7 @@ export class CatalogoKpiComponent implements OnInit {
     }];
 
   kpiTableBodyData: any = [];
+  allForms: any = [];
 
   coloBtn( id: string): void {
     this.des = id;
@@ -200,7 +203,7 @@ export class CatalogoKpiComponent implements OnInit {
         }
       }
     };
-
+    this.getForms();
 
   }
 
@@ -464,4 +467,10 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
+  getForms() {
+    this.LoadingFormService.getLoadingForms().subscribe((data: any) => {
+      this.allForms = data;
+      console.log('forms ', data);
+    });
+  }
 }
