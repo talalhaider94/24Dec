@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../../_services/api.service';
 import { ToastrService } from 'ngx-toastr';
+import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
+
+
 
 @Component({
   templateUrl: './userprofiling.component.html',
@@ -8,43 +11,12 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class UserProfilingComponent implements OnInit {
-  @ViewChild('myTree') myTree: ElementRef;
+  @ViewChild('permissionsTree') permissionsTree: TreeViewComponent;
 
-  // defined the array of data
-  public treeData: Object[] = [
-    {
-        id: '1', name: 'Documents',
-        children: [
-            { id: '11', name: 'Team management.docx' },
-            { id: '12', name: 'Entity Framework Core.pdf' },
-        ]
-    },
-    {
-        id: '2', name: 'Downloads',
-        children: [
-            { id: '21', name: 'Sales report.ppt' },
-            { id: '22', name: 'Introduction to Angular.pdf' },
-            { id: '23', name: 'Paint.exe' },
-            { id: '24', name: 'TypeScript sample.zip' },
-        ]
-    },
-    {
-        id: '3', name: 'Music',
-        children: [
-            { id: '31', name: 'Crazy tone.mp3' }
-        ]
-    },
-    {
-      id: '4', name: 'Videos',
-      children: [
-          { id: '41', name: 'Angular tutorials.mp4' },
-          { id: '42', name: 'Basics of Programming.mp4' },
-      ]
-    }
-  ];
+  isTreeLoaded = false;
 
   public treeFields: any = {
-      dataSource: this.treeData,
+      dataSource: [],
       id: 'id',//'nodeId',
       text: 'name',//'nodeText',
       child: 'children',//'nodeChild'
@@ -53,10 +25,12 @@ export class UserProfilingComponent implements OnInit {
 
   gatheredData = {
     usersList: [],
-    assignedKpis: []
+    rolesList: [],
+    assignedPermissions: []
   }
   selectedData = {
     userid: null,
+    roleid: null,
     name: '',
     checked: null,
     selected: null
@@ -65,9 +39,9 @@ export class UserProfilingComponent implements OnInit {
     searchUsersText: ''
   }
   loading = {
-    users: false
+    users: false,
+    roles: false
   }
-
 
 
   constructor(
@@ -78,39 +52,47 @@ export class UserProfilingComponent implements OnInit {
 
   ngOnInit() {
 
-    this.loading.users = true;
-    this.apiService.getCatalogoUsers().subscribe((res)=>{
-      this.gatheredData.usersList = res;
-      //console.log(res);
-      this.loading.users = false;
+    this.loading.roles = true;
+    this.apiService.getAllRoles().subscribe((res)=>{
+      console.log('getAllRoles ==> ', res);
+      this.gatheredData.rolesList = res;
+      this.loading.roles = false;
     });
 
 
     this.apiService.getAllKpiHierarchy().subscribe(data=>{
-      console.log('aaaaaaaaaaaaaaa ', data);
-      //this.treeFields.dataSource = data;
+      console.log('getAllKpiHierarchy ==> ', data);
+      this.treeFields.dataSource = data;//[].concat(data);
+      this.isTreeLoaded = true;
     });
   
   }
 
-  selectUserItem(user, $event) {
-    //console.log(user, $event);
+  selectRoleItem(role, $event) {
+    console.log(role, this.permissionsTree.checkedNodes, this.selectedData);
     $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
     $($event.target).addClass('highlited-user');
-    this.selectedData.userid = user.ca_bsi_user_id;//user.ca_bsi_user_id;
-    this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';//user.ca_bsi_user_id;
-    if(this.selectedData.userid){
-      this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
-        console.log('bbbbbbbbbbbbbbb ', data);
+    this.selectedData.roleid = role.id;
+    this.selectedData.name = role.name;
+    if(this.selectedData.roleid){
+      this.apiService.getGlobalRulesByUserId(this.selectedData.roleid).subscribe(data=>{
+        console.log('getGlobalRulesByUserId ==> ', data);
+        //selectedData.checked = data;
       });
     }
   }
 
-
-  ngAfterViewInit() {
+  saveAssignedPermissions(){
+    if(this.selectedData.roleid) {
+      let dataToPost = {Id: this.selectedData.roleid, Ids: this.permissionsTree.checkedNodes};
+      // this.permissionsTree.checkedNodes.forEach((value, idx) => {
+      //   dataToPost.Ids.push(value.id)
+      // });
+      this.apiService.assignGlobalRulesToUserId(dataToPost).subscribe(data => {
+        this.toastr.success('Saved', 'Success');
+      }, error => {
+        this.toastr.error('Not Saved', 'Error');
+      });
+    }
   }
-
-  ngOnDestroy(): void {
-  }
-
 }
