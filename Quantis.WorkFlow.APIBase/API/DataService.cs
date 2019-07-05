@@ -545,7 +545,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).ToList();
+                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).OrderBy(o => o.form_name).ToList();
                 var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
                 return forms.Select(o => new FormLVDTO()
                 {

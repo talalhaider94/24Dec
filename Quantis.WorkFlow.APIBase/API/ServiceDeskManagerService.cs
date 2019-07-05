@@ -348,7 +348,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context)
+        public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context,string period)
         {
             List<SDMTicketLVDTO> ret = null;
             LogIn();
@@ -365,17 +365,17 @@ namespace Quantis.WorkFlow.APIBase.API
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
                     userid = userid.Split('\\')[1];
 
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).name+ "' and zz_cned_string1 LIKE '%"+ userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).code+ "' and zz_cned_string1 LIKE '%"+ userid + "%' and zz_cned_string4='"+ period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).name + "' and zz_cned_string2 LIKE '%" + userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).code + "' and zz_cned_string2 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).name + "' and zz_cned_string3 LIKE '%" + userid + "%'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).code + "' and zz_cned_string3 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
@@ -414,7 +414,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
                     string filterstring = "";
                     var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.handle.Substring(4)).ToList();
-                    //var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.name).ToList();
                     if (!groups.Any())
                     {
                         return tickets;
@@ -453,7 +452,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().name || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().code || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().code || !_statusMapping.Any(o => o.code == ticket.Status))
                 {
                     _dbcontext.LogInformation("Ticket Status not in configuration");
                     return dto;
@@ -506,6 +505,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
+            status= _statusMapping.FirstOrDefault(o => o.name == status).code;
             if (ticket.Status != status)
             {
                 _dbcontext.LogInformation("Status is equation to previous Status");
@@ -514,7 +514,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().code || !_statusMapping.Any(o=>o.code== ticket.Status))
                 {
                     _dbcontext.LogInformation("Ticket Status not in configuration");
                     return dto;
