@@ -20,9 +20,10 @@ export class UserProfilingComponent implements OnInit {
       id: 'id',//'nodeId',
       text: 'name',//'nodeText',
       child: 'children',//'nodeChild'
+      title: 'name'
   };
 
-
+  innerMostChildrenNodeIds = [];
   gatheredData = {
     usersList: [],
     rolesList: [],
@@ -77,14 +78,18 @@ export class UserProfilingComponent implements OnInit {
     if(this.selectedData.userid){
       this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
         console.log('getGlobalRulesByUserId ==> ', data);
-        //selectedData.checked = data;
+        this.selectedData.checked = data;
       });
     }
   }
 
   saveAssignedPermissions(){
+    console.log(this.selectedData);
     if(this.selectedData.userid) {
-      let dataToPost = {Id: this.selectedData.userid, Ids: this.permissionsTree.checkedNodes};
+      this.traverseNodes(this.treeFields.dataSource);
+      //console.log('this.innerMostChildrenNodeIds => ', this.innerMostChildrenNodeIds);
+      let dataToPost = {Id: this.selectedData.userid, Ids: this.innerMostChildrenNodeIds};
+      console.log(dataToPost);
       // this.permissionsTree.checkedNodes.forEach((value, idx) => {
       //   dataToPost.Ids.push(value.id)
       // });
@@ -92,6 +97,25 @@ export class UserProfilingComponent implements OnInit {
         this.toastr.success('Saved', 'Success');
       }, error => {
         this.toastr.error('Not Saved', 'Error');
+      });
+    }
+  }
+
+  syncSelectedNodesArray(event){
+    this.selectedData.checked = this.permissionsTree.checkedNodes;
+    //console.log(event);
+  }
+
+  traverseNodes(complexJson) {
+    if (complexJson) {
+      complexJson.forEach((item:any)=>{
+        if (item.children) {
+          this.traverseNodes(item.children);
+        } else {
+          if(this.permissionsTree.checkedNodes.includes(item.id.toString())){
+            this.innerMostChildrenNodeIds.push(item.id);
+          }
+        }
       });
     }
   }

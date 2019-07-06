@@ -27,7 +27,10 @@
               <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-              <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree [fields]="treeFields" [checkedNodes]="selectedData.checked" [showCheckBox]="true" ></ejs-treeview >
+              <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree 
+                [fields]="treeFields" 
+                [checkedNodes]="selectedData.checked" 
+                [showCheckBox]="true" (nodeChecked)=syncSelectedNodesArray($event)></ejs-treeview>
             </div>
           </div>
           <div class="row">
