@@ -66,10 +66,10 @@ export class WorkFlowService {
   }
   
   getTicketsVerificationByUserVerifica (period: string): Observable<any>{
-    const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
-    //return this.http.get('assets/tempData/getalltickets.json');
-    const  params = new  HttpParams().set('period', period);
-    return this.http.get(ticketVerificationEndPoint,{ headers: Headers.setTokenHeaders('GET').headers, params });
+    // const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
+    return this.http.get('https://api.myjson.com/bins/ktkyz');
+    // const  params = new  HttpParams().set('period', period);
+    // return this.http.get(ticketVerificationEndPoint,{ headers: Headers.setTokenHeaders('GET').headers, params });
   }
   
   getTicketsSearchByUserRecerca (): Observable<any>{

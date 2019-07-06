@@ -84,24 +84,11 @@ export class KPIComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      destroy: true,
+      destroy: false, // check here.
       dom: 'Bfrtip',
       search: {
         caseInsensitive: true
       },
-      // rowCallback: (row: Node, data: any[] | Object, index: number) => {
-      //   const self = this;
-      //   $('td', row).unbind('click');
-      //   $('td', row).bind('click', () => {
-      //     self.selectedTickets.push(data);
-      //     console.log('DATA', data);
-      //   });
-      //   return row;
-      // },
-      // "fnDrawCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-      // },
-      // "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-      // },
       buttons: [
         {
           extend: 'colvis',
@@ -140,7 +127,7 @@ export class KPIComponent implements OnInit, OnDestroy {
         }
       }
     };
-    this._getAllTickets();
+    
   }
 
   _getAllTickets() {
@@ -161,6 +148,26 @@ export class KPIComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDataChange() {
+    this.rerender();
+    this._getAllTickets();
+  }
+
+  ngAfterViewInit() {
+    this._getAllTickets();
+    //this.dtTrigger.next();
+    //this.setUpDataTableDependencies();
+    //this.rerender();
+  }
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      // this.setUpDataTableDependencies();
+    });
+  }
   ticketActions(ticket) {
     this.loading = true;
     this.setActiveTicketId = +ticket.id;
@@ -355,20 +362,6 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   // search start
-  ngAfterViewInit() {
-    this.dtTrigger.next();
-    // this.setUpDataTableDependencies();
-    this.rerender();
-  }
-  rerender(): void {
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-      // this.setUpDataTableDependencies();
-    });
-  }
 
   setUpDataTableDependencies() {
 
@@ -394,7 +387,5 @@ export class KPIComponent implements OnInit, OnDestroy {
 
   }
   //search end
-onDataChange() {
-  this._getAllTickets();
-  }
+
 }
