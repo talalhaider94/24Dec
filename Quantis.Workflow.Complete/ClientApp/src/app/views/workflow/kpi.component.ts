@@ -26,7 +26,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   @ViewChild('infoModal') public infoModal: ModalDirective;
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
-
+  @ViewChild('statusChangeModal') public statusChangeModal: ModalDirective;
   @ViewChild('monthSelect') monthSelect: ElementRef;
   @ViewChild('yearSelect') yearSelect: ElementRef;
 
@@ -51,7 +51,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   selectedAll: any;
   monthOption;
   yearOption;
-
+  ticketsStatus: any = [];
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -67,7 +67,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
-    this.monthOption = moment().format('MM');
+    this.monthOption = moment().subtract(1, 'months').format('MM');
     this.yearOption = moment().format('YY');
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
@@ -144,14 +144,15 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   _getAllTickets() {
-    this.workFlowService.getTicketsVerificationByUserVerifica().pipe(first()).subscribe(data => {
+    this.workFlowService.getTicketsVerificationByUserVerifica(`${this.monthOption}/${this.yearOption}`).pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
       const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
-      this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
-        a = a.period ? a.period.split("/") : '01/00'.split("/");
-        b = b.period ? b.period.split("/") : '01/00'.split("/");
-        return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
-      });
+      this.allTickets = appendSelectFale;
+      // this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
+      //   a = a.period ? a.period.split("/") : '01/00'.split("/");
+      //   b = b.period ? b.period.split("/") : '01/00'.split("/");
+      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
+      // });
       this.dtTrigger.next();
       this.loading = false;
     }, error => {
@@ -253,8 +254,16 @@ export class KPIComponent implements OnInit, OnDestroy {
     }
     forkJoin(observables).subscribe(data => {
       this.toastr.success('Ticket approved', 'Success');
+      console.log('approveFormSubmit', data);
+      if(data) {
+        this.ticketsStatus = data;
+        this.statusChangeModal.show();
+        this._getAllTickets();
+      }
+      this.approveModal.hide();
       this.loading = false;
     }, error => {
+      console.error('approveFormSubmit', error);
       this.toastr.error('Error while approving form', 'Error');
       this.loading = false;
     });
@@ -273,9 +282,17 @@ export class KPIComponent implements OnInit, OnDestroy {
         observables.push(this.workFlowService.transferTicketByID(ticket.id, ticket.status, description.value));
       }
       forkJoin(observables).subscribe(data => {
+        console.log('rejectFormSubmit', data);
         this.toastr.success('Ticket rejected', 'Success');
+        if(data) {
+          this.ticketsStatus = data;
+          this.statusChangeModal.show();
+          this._getAllTickets();
+        }
+        this.rejectModal.hide();
         this.loading = false;
       }, error => {
+        console.error('rejectFormSubmit', error);
         this.toastr.error('Error while rejecting form', 'Error');
         this.loading = false;
       });
@@ -340,7 +357,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   // search start
   ngAfterViewInit() {
     this.dtTrigger.next();
-    this.setUpDataTableDependencies();
+    // this.setUpDataTableDependencies();
     this.rerender();
   }
   rerender(): void {
@@ -349,7 +366,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
+      // this.setUpDataTableDependencies();
     });
   }
 
@@ -358,18 +375,26 @@ export class KPIComponent implements OnInit, OnDestroy {
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(12).every(function () {
         const that = this;
-        $($this.monthSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.monthSelect.nativeElement).on('change', function () { 
+          that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
+         });
       });
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(12).every(function () {
         const that = this;
-        $($this.yearSelect.nativeElement).on('change', function () { that.search($(this).val()).draw(); });
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.yearSelect.nativeElement).on('change', function () { 
+          that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
+         });
       });
     });
 
   }
   //search end
-
+onDataChange() {
+  this._getAllTickets();
+  }
 }

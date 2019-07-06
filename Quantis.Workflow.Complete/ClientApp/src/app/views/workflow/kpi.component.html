@@ -12,30 +12,30 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="monthOption"><strong>Mese</strong></label>
-                                    <select #monthSelect class="form-control" name="monthOption" [(ngModel)]="monthOption">
-                    <option value="01">1</option>
-                    <option value="02">2</option>
-                    <option value="03">3</option>
-                    <option value="04">4</option>
-                    <option value="05">5</option>
-                    <option value="06">6</option>
-                    <option value="07">7</option>
-                    <option value="08">8</option>
-                    <option value="09">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                  </select>
+                                    <select #monthSelect class="form-control" name="monthOption" [(ngModel)]="monthOption" (change)="onDataChange()">
+                                        <option value="01">1</option>
+                                        <option value="02">2</option>
+                                        <option value="03">3</option>
+                                        <option value="04">4</option>
+                                        <option value="05">5</option>
+                                        <option value="06">6</option>
+                                        <option value="07">7</option>
+                                        <option value="08">8</option>
+                                        <option value="09">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label for="yearOption"><strong>Anno</strong></label>
-                                    <select #yearSelect class="form-control" name="yearOption" [(ngModel)]="yearOption">
-                    <option value="16">2016</option>
-                    <option value="18">2017</option>
-                    <option value="18">2018</option>
-                    <option value="19">2019</option>
-                    <option value="20">2020</option>
-                  </select>
+                                    <select #yearSelect class="form-control" name="yearOption" [(ngModel)]="yearOption" (change)="onDataChange()">
+                                        <option value="16">2016</option>
+                                        <option value="18">2017</option>
+                                        <option value="18">2018</option>
+                                        <option value="19">2019</option>
+                                        <option value="20">2020</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,6 @@
                                     <th>
                                         <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
                                     </th>
-                                    <!-- <th class="d-none">ID</th> -->
                                     <th>Rif. Num</th>
                                     <th>Sommario</th>
                                     <th>Gruppo</th>
@@ -76,23 +75,22 @@
                                     <td>
                                         <input type="checkbox" [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                     </td>
-                                    <!-- <td class="d-none">{{ ticket.id }} </td> -->
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary" triggers="focus">
-                      {{ ticket.summary | slice:0:15 || 'N/A' }}
-                    </button>
+                                            {{ ticket.summary | slice:0:15 || 'N/A' }}
+                                        </button>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group" triggers="focus">
-                      {{ ticket.group | slice:0:15 || 'N/A' }}
-                    </button>
+                                            {{ ticket.group | slice:0:15 || 'N/A' }}
+                                        </button>
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description" triggers="focus">
-                      {{ ticket.description | slice:0:15 || 'N/A' }}
-                    </button>
+                                            {{ ticket.description | slice:0:15 || 'N/A' }}
+                                        </button>
                                     </td>
                                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
                                     <td>{{ ticket.target || 'N/A' }}</td>
@@ -100,8 +98,8 @@
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference1" triggers="focus">
-                        {{ ticket.reference1 | slice:0:15 }}
-                      </button>
+                                                {{ ticket.reference1 | slice:0:15 }}
+                                            </button>
                                         </div>
                                         <ng-template #reference1>
                                             N/A
@@ -110,8 +108,8 @@
                                     <td>
                                         <div *ngIf="ticket.reference2; else reference2">
                                             <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference2" triggers="focus">
-                        {{ ticket.reference2 | slice:0:15 }}
-                      </button>
+                                                {{ ticket.reference2 | slice:0:15 }}
+                                            </button>
                                         </div>
                                         <ng-template #reference2>
                                             N/A
@@ -120,8 +118,8 @@
                                     <td>
                                         <div *ngIf="ticket.reference3; else reference3">
                                             <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference3" triggers="focus">
-                        {{ ticket.reference3 | slice:0:15 }}
-                      </button>
+                                                {{ ticket.reference3 | slice:0:15 }}
+                                            </button>
                                         </div>
                                         <ng-template #reference3>
                                             N/A
@@ -130,13 +128,13 @@
                                     <td>{{ ticket.period || 'N/A' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" (click)="ticketActions(ticket)">
-                      <span class="fa fa-calendar"></span>
-                    </button>
+                                            <span class="fa fa-calendar"></span>
+                                        </button>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" (click)="ticketAttachments(ticket)">
-                      <span class="fa fa-archive"></span>
-                    </button>
+                                            <span class="fa fa-archive"></span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -155,8 +153,8 @@
             <div class="modal-header">
                 <h4 class="modal-title">Attivita eseguite sul KPI</h4>
                 <button type="button" class="close" (click)="successModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <!-- success model body table -->
@@ -202,8 +200,8 @@
             <div class="modal-header">
                 <h4 class="modal-title">Allegati</h4>
                 <button type="button" class="close" (click)="infoModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <!-- file upload start -->
@@ -230,17 +228,17 @@
                                     <td>{{ item?.file?.name }}</td>
                                     <td nowrap>
                                         <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
-                      <span class="fa fa-trash"></span>
-                    </button>
+                                            <span class="fa fa-trash"></span>
+                                        </button>
 
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
-              <span class="fa fa-upload" *ngIf="!fileUploading"></span>
-              <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
-            </button>
+                            <span class="fa fa-upload" *ngIf="!fileUploading"></span>
+                            <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
+                        </button>
                     </div>
                 </div>
                 <!-- file upload end -->
@@ -295,8 +293,8 @@
             <div class="modal-header">
                 <h4 class="modal-title">Approva</h4>
                 <button type="button" class="close" (click)="approveModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <!-- APPROVE model body -->
@@ -307,8 +305,8 @@
                     <div class="row">
                         <div class="col-6">
                             <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
-                <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Invia
-              </button>
+                                <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Invia
+                            </button>
                             <button type="button" class="btn btn-secondary" (click)="approveModal.hide()">Close</button>
                         </div>
                     </div>
@@ -330,8 +328,8 @@
             <div class="modal-header">
                 <h4 class="modal-title">Rifiuta</h4>
                 <button type="button" class="close" (click)="rejectModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <!-- REJECT model body -->
@@ -342,12 +340,12 @@
                     </div>
                     <!-- display description error -->
                     <span class="text-danger mb-3" *ngIf="submitted && rejectValues.description.errors && rejectValues.description.errors.required">Giustificativo
-            obbligatorio</span>
+                        obbligatorio</span>
                     <div class="row">
                         <div class="col-6">
                             <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
-                <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Invia
-              </button>
+                                <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Invia
+                            </button>
                             <button type="button" class="btn btn-secondary" (click)="rejectModal.hide()">Close</button>
                         </div>
                     </div>
@@ -361,3 +359,33 @@
 </div>
 <!-- /.modal -->
 <!-- REJECT MODAL HTML END -->
+<!-- statusChangeModal.hide() -->
+<!-- STATUS CHANGED MODAL START -->
+<div bsModal #statusChangeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>BSI status Change</th>
+                                <th>SDM Status Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let status of ticketsStatus; let i = index">
+                                <td>{{ i+1 }}</td>
+                                <td>{{ status.isbsistatuschanged }}</td>
+                                <td>{{ status.issdmstatuschanged }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STATUS CHANGED MODAL END -->

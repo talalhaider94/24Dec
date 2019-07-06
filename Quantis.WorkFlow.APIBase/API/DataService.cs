@@ -114,11 +114,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<Tuple<int,int>> GetFormAttachmentCount(List<int> formids)
+        public List<FormDetialsDTO> GetFormDetials(List<int> formids)
         {
             try
             {
-                return _dbcontext.Forms.Include(p => p.Attachments).Where(o => formids.Contains(o.form_id)).Select(o => new Tuple<int, int>(o.form_id, o.Attachments.Count)).ToList();
+                return _dbcontext.Forms.Include(p => p.Attachments).Where(o => formids.Contains(o.form_id)).Select(o => new FormDetialsDTO() {form_id=o.form_id,attachment_count=o.Attachments.Count,latest_modified_date=o.modify_date }).ToList();
             }
             catch (Exception e)
             {
@@ -545,7 +545,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).ToList();
+                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).OrderBy(o => o.form_name).ToList();
                 var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
                 return forms.Select(o => new FormLVDTO()
                 {

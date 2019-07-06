@@ -142,9 +142,15 @@
               <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
               <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
               <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
+              <tr><th>LOADING FORM</th><td colspan="2">
+                <select class="form-control" [(ngModel)]="modalData.id_form">
+                  <option value="">Loading Form: </option>
+                  <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
+                </select>
+                 </td></tr>
               <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
               <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.tracking_period"></td></tr>
-              
+
             </tbody>
           </table>
           <table id="classTable" class="table stripe">
