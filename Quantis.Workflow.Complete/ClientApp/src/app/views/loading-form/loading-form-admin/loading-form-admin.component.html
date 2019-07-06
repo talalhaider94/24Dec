@@ -8,62 +8,71 @@
       <div class="col-sm-12 text-center">
         <h2>{{title}}</h2>
       </div>
-      <div class="col-sm-7">
+      <div class="col-sm-10">
         <form [formGroup]="myInputForm" novalidate (ngSubmit)="save(myInputForm)">
           <div formArrayName="valories">
             <div *ngFor="let language of myInputForm.get('valories')['controls']; let i=index"
               class="panel panel-default">
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'"
-                class="p-3 bg-white panel-body" [formGroupName]="i">
-                <div class="row" id="divDate">
-                  <div class="col-sm-12">
-                    <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})
-                    </mat-label>
+                class="panel-body" [formGroupName]="i">
+                <div class="row justify-content-center" id="divDate">
+                  <div class="col-sm-7 bg-white p-3">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})
+                            </mat-label>
+                          </div>
+                          <div class="col-sm-6">
+                            <mat-form-field appearance="outline">
+                              <mat-label>min Date</mat-label>
+                              <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]"
+                                formControlName="valoreMin">
+                              <mat-datepicker-toggle matSuffix [for]="pickerb"></mat-datepicker-toggle>
+                              <mat-datepicker #pickerb></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-6">
+                            <mat-form-field appearance="outline">
+                              <mat-label>max Date</mat-label>
+                              <input matInput [(ngModel)]="maxDate[i]" [min]="minDate[i]" [matDatepicker]="pickera"
+                                formControlName="valoreMax">
+                              <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
+                              <mat-datepicker #pickera></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                    </div>
                   </div>
-                  <div class="col-sm-6">
-                    <mat-form-field appearance="outline">
-                      <mat-label>min Date</mat-label>
-                      <input matInput [(ngModel)]="minDate[i]" [matDatepicker]="pickerb" [max]="maxDate[i]"
-                        formControlName="valoreMin">
-                      <mat-datepicker-toggle matSuffix [for]="pickerb"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerb></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-6">
-                    <mat-form-field appearance="outline">
-                      <mat-label>max Date</mat-label>
-                      <input matInput [(ngModel)]="maxDate[i]" [min]="minDate[i]" [matDatepicker]="pickera"
-                        formControlName="valoreMax">
-                      <mat-datepicker-toggle matSuffix [for]="pickera"></mat-datepicker-toggle>
-                      <mat-datepicker #pickera></mat-datepicker>
-                    </mat-form-field>
-                  </div>
+
                 </div>
               </div>
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'"
-                class="p-3 bg-white panel-body" [formGroupName]="i">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})
-                    </mat-label>
-                  </div>
-                  <div class="col-sm-6">
-                    <mat-form-field appearance="outline">
-                      <mat-label>
-                        {{arrayFormElements[i].type === 'string' ? 'lunghezza minina' : 'inserisci numero minimo' }}
-                      </mat-label>
-                      <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="Input"
-                        formControlName="valoreMin">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-6">
-                    <mat-form-field appearance="outline">
-                      <mat-label>
-                        {{arrayFormElements[i].type === 'string' ? 'lunghezza massima' : 'inserisci numero massimo' }}
-                      </mat-label>
-                      <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="Input"
-                        formControlName="valoreMax">
-                    </mat-form-field>
+                class="panel-body" [formGroupName]="i">
+                <div class="row justify-content-center">
+                  <div class="col-sm-7">
+                    <div class="row bg-white p-3">
+                        <div class="col-sm-12">
+                            <mat-label><strong>{{arrayFormElements[i].name}}</strong> ({{arrayFormElements[i].type}})
+                            </mat-label>
+                          </div>
+                          <div class="col-sm-6">
+                            <mat-form-field appearance="outline">
+                              <mat-label>
+                                {{arrayFormElements[i].type === 'string' ? 'lunghezza minina' : 'inserisci numero minimo' }}
+                              </mat-label>
+                              <input matInput [max]="numeroMax[i]" [(ngModel)]="numeroMin[i]" type="number" placeholder="Input"
+                                formControlName="valoreMin">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-6">
+                            <mat-form-field appearance="outline">
+                              <mat-label>
+                                {{arrayFormElements[i].type === 'string' ? 'lunghezza massima' : 'inserisci numero massimo' }}
+                              </mat-label>
+                              <input matInput [min]="numeroMin[i]" [(ngModel)]="numeroMax[i]" type="number" placeholder="Input"
+                                formControlName="valoreMax">
+                            </mat-form-field>
+                          </div>
+                    </div>
                   </div>
                 </div>
               </div>
