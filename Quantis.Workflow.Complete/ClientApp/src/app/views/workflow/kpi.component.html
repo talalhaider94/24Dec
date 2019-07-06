@@ -57,8 +57,6 @@
                                     <th>Stato</th>
                                     <th>Descrizione</th>
                                     <th>KPI ID</th>
-                                    <th>Target</th>
-                                    <th>Value</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
                                     <th>Riferimento S3</th>
@@ -93,8 +91,6 @@
                                         </button>
                                     </td>
                                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
-                                    <td>{{ ticket.target || 'N/A' }}</td>
-                                    <td>{{ ticket.value || 'N/A' }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark" [popover]="ticket.reference1" triggers="focus">
