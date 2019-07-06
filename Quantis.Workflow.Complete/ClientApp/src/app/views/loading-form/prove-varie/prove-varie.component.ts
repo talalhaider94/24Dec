@@ -479,7 +479,7 @@ export class ProveVarieComponent implements OnInit {
       if(!!atLeastOneField) {
         return [];
       } else {
-        return ['Please fill atleast one field'];
+        return ['Nessun campo compilato nel Loading Form'];
       }
     }
     const inValidRulesArray = formRules.filter((value, index) => {
