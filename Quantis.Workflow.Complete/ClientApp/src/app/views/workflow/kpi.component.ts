@@ -19,6 +19,7 @@ let $this;
 
 @Component({
   templateUrl: './kpi.component.html',
+  styleUrls: ['./kpi.component.scss']
 })
 export class KPIComponent implements OnInit, OnDestroy {
 
@@ -89,6 +90,13 @@ export class KPIComponent implements OnInit, OnDestroy {
       search: {
         caseInsensitive: true
       },
+      "columnDefs": [{
+        "targets": 0,
+        "orderable": false,
+        "visible": true,
+        "searchable": false
+      },
+    ],
       buttons: [
         {
           extend: 'colvis',
@@ -259,7 +267,7 @@ export class KPIComponent implements OnInit, OnDestroy {
     forkJoin(observables).subscribe(data => {
       this.toastr.success('Ticket approved', 'Success');
       console.log('approveFormSubmit', data);
-      if(data) {
+      if (data) {
         this.ticketsStatus = data;
         this.statusChangeModal.show();
         this._getAllTickets();
@@ -288,7 +296,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       forkJoin(observables).subscribe(data => {
         console.log('rejectFormSubmit', data);
         this.toastr.success('Ticket rejected', 'Success');
-        if(data) {
+        if (data) {
           this.ticketsStatus = data;
           this.statusChangeModal.show();
           this._getAllTickets();
@@ -366,9 +374,9 @@ export class KPIComponent implements OnInit, OnDestroy {
       datatable_Ref.columns(12).every(function () {
         const that = this;
         that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.monthSelect.nativeElement).on('change', function () { 
+        $($this.monthSelect.nativeElement).on('change', function () {
           that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
-         });
+        });
       });
     });
 
@@ -376,9 +384,9 @@ export class KPIComponent implements OnInit, OnDestroy {
       datatable_Ref.columns(12).every(function () {
         const that = this;
         that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.yearSelect.nativeElement).on('change', function () { 
+        $($this.yearSelect.nativeElement).on('change', function () {
           that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
-         });
+        });
       });
     });
 
