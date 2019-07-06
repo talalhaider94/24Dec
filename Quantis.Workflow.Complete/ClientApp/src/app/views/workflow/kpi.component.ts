@@ -140,7 +140,8 @@ export class KPIComponent implements OnInit, OnDestroy {
       //   b = b.period ? b.period.split("/") : '01/00'.split("/");
       //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
       // });
-      this.dtTrigger.next();
+      //this.dtTrigger.next();
+      this.rerender();
       this.loading = false;
     }, error => {
       console.error('getTicketsVerificationByUserVerifica', error);
@@ -149,15 +150,14 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   onDataChange() {
-    this.rerender();
+    //this.rerender();
     this._getAllTickets();
   }
 
   ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.setUpDataTableDependencies();
     this._getAllTickets();
-    //this.dtTrigger.next();
-    //this.setUpDataTableDependencies();
-    //this.rerender();
   }
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -165,7 +165,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      // this.setUpDataTableDependencies();
+      this.setUpDataTableDependencies();
     });
   }
   ticketActions(ticket) {
