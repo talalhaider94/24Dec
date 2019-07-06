@@ -127,19 +127,14 @@ export class KPIComponent implements OnInit, OnDestroy {
         }
       }
     };
-    
+
   }
 
   _getAllTickets() {
     this.workFlowService.getTicketsVerificationByUserVerifica(`${this.monthOption}/${this.yearOption}`).pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
-      const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
-      this.allTickets = appendSelectFale;
-      // this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
-      //   a = a.period ? a.period.split("/") : '01/00'.split("/");
-      //   b = b.period ? b.period.split("/") : '01/00'.split("/");
-      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
-      // });
+      const appendSelectFalse = data.map(ticket => ({ ...ticket, selected: false }));
+      this.allTickets = appendSelectFalse;
       //this.dtTrigger.next();
       this.rerender();
       this.loading = false;
@@ -151,12 +146,14 @@ export class KPIComponent implements OnInit, OnDestroy {
 
   onDataChange() {
     //this.rerender();
+    this.loading = true;
     this._getAllTickets();
   }
 
   ngAfterViewInit() {
+    // debugger
     this.dtTrigger.next();
-    this.setUpDataTableDependencies();
+    //this.setUpDataTableDependencies();
     this._getAllTickets();
   }
   rerender(): void {
@@ -165,7 +162,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
-      this.setUpDataTableDependencies();
+      //this.setUpDataTableDependencies();
     });
   }
   ticketActions(ticket) {
