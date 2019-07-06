@@ -38,6 +38,7 @@ export class ProveVarieComponent implements OnInit {
   formRulesBody: [] = [];
   comparisonRulesBody: [] = [];
   loading: boolean = false;
+  formElementsLoading: boolean = false;
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
   formAttachmentsArrayFiltered: any = [];
@@ -160,6 +161,7 @@ export class ProveVarieComponent implements OnInit {
     }
     var periodRaw = moment(dataAttuale).format('MM/YY');
     const errorArray = this._customFormRulesValidation(this.arrayFormElements, model.value.valories, this.formRulesBody);
+    // errorArray empty means Either all rules passed 
     if (errorArray.length > 0) {
       this.userLoadingFormErrors = errorArray;
       this.toastr.error('Form fields data is not valid');
@@ -225,6 +227,7 @@ export class ProveVarieComponent implements OnInit {
   // generates form fields dynamically
   _init(numero: number, nome: string) {
     this.loading = true;
+    this.formElementsLoading = true;
     // since I put the filters first by comparison,
     // when the max and min filters go I go to
     // subtract the number of past comparisons from the index
@@ -234,13 +237,8 @@ export class ProveVarieComponent implements OnInit {
     this.title = nome;
 
     this.myInputForm = this.fb.group({
-      // means values
       valories: this.fb.array([
         this.initInputForm()
-      ]),
-      // means comparison fields
-      campiConfronto: this.fb.array([
-        //this.initComparisonForm(array)
       ]),
       termsCheck: '',
     });
@@ -317,6 +315,7 @@ export class ProveVarieComponent implements OnInit {
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
+      this.formElementsLoading = false;
       // mutiple forms values are coming for single form Id so picking first one.
       this.jsonForm = data[0];
       console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
@@ -344,6 +343,7 @@ export class ProveVarieComponent implements OnInit {
       // CHECK BOX DISPLAY CONDITION END
     }, error => {
       this.loading = false;
+      this.formElementsLoading = false;
       this.toastr.error(error.error.message, 'Error')
       console.log('getFormById', error)
     });
@@ -368,13 +368,6 @@ export class ProveVarieComponent implements OnInit {
       return comparisonRules;
     }
     const mapFormValues =  this._mapFormValuesWithFields(formElements, formValues);
-    // const mapFormValues = formValues.map((value, index) => {
-    //   return {
-    //     name: formElements[index].name,
-    //     type: formElements[index].type,
-    //     value: value.valoreUtente || ''
-    //   }
-    // });
     const invalidRules = comparisonRules.map((compare, index) => {
       let type = compare.campo1.type;
       let field1 = compare.campo1;
@@ -479,31 +472,39 @@ export class ProveVarieComponent implements OnInit {
     if (!formRules.length) {
       return formRules;
     }
-    let rulesNotNull = formRules.filter(obj => ((obj.rule.min !== null && obj.rule.max !== null)));
+    let rulesNotNull = formRules.filter(obj => (( !!obj.rule.min && !!obj.rule.max)));
     if (!rulesNotNull.length) {
-      return [];
+      // if form rules are empty then then there should be atleat one form field filled
+      let atLeastOneField = formValues.filter(value => !!value.valoreUtente).length;
+      if(!!atLeastOneField) {
+        return [];
+      } else {
+        return ['Please fill atleast one field'];
+      }
     }
     const inValidRulesArray = formRules.filter((value, index) => {
       if (value.type === 'string') {
         let rule = value.rule;
-        let ruleMin = rule.min || -999999999;
-        let ruleMax = rule.max || 999999999;
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if(!ruleMin && !ruleMax) { return false }; // if string rules are empty dont return error
         const formStringValue = formValues[index];
-        if (formStringValue.valoreUtente.length >= ruleMin && formStringValue.valoreUtente.length <= ruleMax) {
+        if ((formStringValue.valoreUtente && formStringValue.valoreUtente.length >= ruleMin) && (formStringValue.valoreUtente && formStringValue.valoreUtente.length <= ruleMax)) {
           return false;
         } else {
           return true;
         }
       } else if (value.type === 'time') {
         let rule = value.rule;
-        let ruleMin;
-        let ruleMax;
-        if (!rule.min || rule.min === null) {
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if(!ruleMin && !ruleMax) { return false };
+        if (!rule.min) {
           ruleMin = moment(new Date('1970-01-01'), 'YYYY-MM-DD');
         } else {
           ruleMin = moment(new Date(rule.min), 'YYYY-MM-DD');
         }
-        if (!rule.max || rule.max === null) {
+        if (!rule.max) {
           ruleMax = moment(new Date('2970-01-01'), 'YYYY-MM-DD');
         } else {
           ruleMax = moment(new Date(rule.max), 'YYYY-MM-DD');
@@ -517,7 +518,7 @@ export class ProveVarieComponent implements OnInit {
         let ruleMin = rule.min || -999999999;
         let ruleMax = rule.max || 999999999;
         const formRealValue = formValues[index];
-        if (formRealValue.valoreUtente >= ruleMin && formRealValue.valoreUtente <= ruleMax) {
+        if ((formRealValue.valoreUtente >= ruleMin) && formRealValue.valoreUtente <= ruleMax) {
           return false;
         } else {
           return true;

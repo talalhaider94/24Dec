@@ -1,4 +1,4 @@
-<div *ngIf='loading' id="loader" class="text-center">
+<div *ngIf='loading || formElementsLoading' id="loader" class="text-center">
   <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 
@@ -97,7 +97,7 @@
                   </div>
                 </div>
                 <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
-                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading">
+                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
                   <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
