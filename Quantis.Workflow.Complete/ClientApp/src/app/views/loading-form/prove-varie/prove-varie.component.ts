@@ -515,8 +515,9 @@ export class ProveVarieComponent implements OnInit {
       } else if (value.type === 'real' || value.type === 'integer') {
         //type real or integer
         let rule = value.rule;
-        let ruleMin = rule.min || -999999999;
-        let ruleMax = rule.max || 999999999;
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if(!ruleMin && !ruleMax) { return false };
         const formRealValue = formValues[index];
         if ((formRealValue.valoreUtente >= ruleMin) && formRealValue.valoreUtente <= ruleMax) {
           return false;
