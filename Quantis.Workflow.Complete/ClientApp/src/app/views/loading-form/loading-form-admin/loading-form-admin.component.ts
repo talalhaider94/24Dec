@@ -410,7 +410,11 @@ export class LoadingFormAdminComponent implements OnInit {
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
       this.jsonForm = data;
-      this.arrayFormElements = this.jsonForm[0].reader_configuration.inputformatfield;
+      // remove checkbox
+      const filterFormFields = this.jsonForm[0].reader_configuration.inputformatfield.filter(fields => {
+        return fields.name !== 'Checkbox_8';
+      });
+      this.arrayFormElements = filterFormFields;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
         this.addInputForm();

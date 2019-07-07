@@ -19,6 +19,7 @@ let $this;
 
 @Component({
   templateUrl: './kpi.component.html',
+  styleUrls: ['./kpi.component.scss']
 })
 export class KPIComponent implements OnInit, OnDestroy {
 
@@ -84,24 +85,18 @@ export class KPIComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      destroy: true,
+      destroy: false, // check here.
       dom: 'Bfrtip',
       search: {
         caseInsensitive: true
       },
-      // rowCallback: (row: Node, data: any[] | Object, index: number) => {
-      //   const self = this;
-      //   $('td', row).unbind('click');
-      //   $('td', row).bind('click', () => {
-      //     self.selectedTickets.push(data);
-      //     console.log('DATA', data);
-      //   });
-      //   return row;
-      // },
-      // "fnDrawCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-      // },
-      // "fnInfoCallback": function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
-      // },
+      "columnDefs": [{
+        "targets": 0,
+        "orderable": false,
+        "visible": true,
+        "searchable": false
+      },
+    ],
       buttons: [
         {
           extend: 'colvis',
@@ -140,20 +135,16 @@ export class KPIComponent implements OnInit, OnDestroy {
         }
       }
     };
-    this._getAllTickets();
+
   }
 
   _getAllTickets() {
     this.workFlowService.getTicketsVerificationByUserVerifica(`${this.monthOption}/${this.yearOption}`).pipe(first()).subscribe(data => {
       console.log('getTicketsVerificationByUserVerifica', data);
-      const appendSelectFale = data.map(ticket => ({ ...ticket, selected: false }));
-      this.allTickets = appendSelectFale;
-      // this.allTickets = appendSelectFale.sort(function (a: any, b: any) {
-      //   a = a.period ? a.period.split("/") : '01/00'.split("/");
-      //   b = b.period ? b.period.split("/") : '01/00'.split("/");
-      //   return new Date(b[1], b[0], 1).getTime() - new Date(a[1], a[0], 1).getTime();
-      // });
-      this.dtTrigger.next();
+      const appendSelectFalse = data.map(ticket => ({ ...ticket, selected: false }));
+      this.allTickets = appendSelectFalse;
+      //this.dtTrigger.next();
+      this.rerender();
       this.loading = false;
     }, error => {
       console.error('getTicketsVerificationByUserVerifica', error);
@@ -161,6 +152,27 @@ export class KPIComponent implements OnInit, OnDestroy {
     });
   }
 
+  onDataChange() {
+    //this.rerender();
+    this.loading = true;
+    this._getAllTickets();
+  }
+
+  ngAfterViewInit() {
+    // debugger
+    this.dtTrigger.next();
+    //this.setUpDataTableDependencies();
+    this._getAllTickets();
+  }
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      //this.setUpDataTableDependencies();
+    });
+  }
   ticketActions(ticket) {
     this.loading = true;
     this.setActiveTicketId = +ticket.id;
@@ -255,7 +267,7 @@ export class KPIComponent implements OnInit, OnDestroy {
     forkJoin(observables).subscribe(data => {
       this.toastr.success('Ticket approved', 'Success');
       console.log('approveFormSubmit', data);
-      if(data) {
+      if (data) {
         this.ticketsStatus = data;
         this.statusChangeModal.show();
         this._getAllTickets();
@@ -284,7 +296,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       forkJoin(observables).subscribe(data => {
         console.log('rejectFormSubmit', data);
         this.toastr.success('Ticket rejected', 'Success');
-        if(data) {
+        if (data) {
           this.ticketsStatus = data;
           this.statusChangeModal.show();
           this._getAllTickets();
@@ -355,20 +367,6 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   // search start
-  ngAfterViewInit() {
-    this.dtTrigger.next();
-    // this.setUpDataTableDependencies();
-    this.rerender();
-  }
-  rerender(): void {
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-      // this.setUpDataTableDependencies();
-    });
-  }
 
   setUpDataTableDependencies() {
 
@@ -376,9 +374,9 @@ export class KPIComponent implements OnInit, OnDestroy {
       datatable_Ref.columns(12).every(function () {
         const that = this;
         that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.monthSelect.nativeElement).on('change', function () { 
+        $($this.monthSelect.nativeElement).on('change', function () {
           that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
-         });
+        });
       });
     });
 
@@ -386,15 +384,13 @@ export class KPIComponent implements OnInit, OnDestroy {
       datatable_Ref.columns(12).every(function () {
         const that = this;
         that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.yearSelect.nativeElement).on('change', function () { 
+        $($this.yearSelect.nativeElement).on('change', function () {
           that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
-         });
+        });
       });
     });
 
   }
   //search end
-onDataChange() {
-  this._getAllTickets();
-  }
+
 }
