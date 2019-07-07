@@ -113,7 +113,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)
-        public List<PslDTO> GetPsl(int global_rule_id, string period)
+        public List<PslDTO> GetPsl(string period, int global_rule_id)
         {
             try
             {
