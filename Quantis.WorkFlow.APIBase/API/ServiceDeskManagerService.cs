@@ -452,7 +452,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().code || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().code || !_statusMapping.Any(o => o.code == ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o => o.step).First().name || ticket.Status == _statusMapping.OrderBy(o => o.step).Last().name || !_statusMapping.Any(o => o.name == ticket.Status))
                 {
                     _dbcontext.LogInformation("Ticket Status not in configuration");
                     return dto;
@@ -514,7 +514,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().code || !_statusMapping.Any(o=>o.code== ticket.Status))
+                if (ticket.Status == _statusMapping.OrderBy(o=>o.step).Last().name || !_statusMapping.Any(o=>o.name== ticket.Status))
                 {
                     _dbcontext.LogInformation("Ticket Status not in configuration");
                     return dto;
