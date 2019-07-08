@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Dynamic.Core;
 using Quantis.WorkFlow.Models;
+using System.Diagnostics;
 
 namespace Quantis.WorkFlow.APIBase.Framework
 {
@@ -54,6 +55,26 @@ namespace Quantis.WorkFlow.APIBase.Framework
             {
                 throw e;
             }
+        }
+        public static string Bash(this string cmd)
+        {
+            var escapedArgs = cmd.Replace("\"", "\\\"");
+
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"{escapedArgs}\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            };
+            process.Start();
+            string result = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            return result;
         }
 
     }
