@@ -28,6 +28,7 @@ namespace Quantis.WorkFlow.Jobs
                 var dbcontext= scope.ServiceProvider.GetService<WorkFlowPostgreSqlContext>();
                 var val = service.GetConfiguration("be_scheduler", "slave_1");
                 string f = string.Format("java -jar {0}", val.Value);
+                dbcontext.LogInformation("Job To run: The command is: " + f);
                 var res=f.Bash();
                 dbcontext.LogInformation("Job Executed: The command is: " + f + " and result is: " + res);
             }
