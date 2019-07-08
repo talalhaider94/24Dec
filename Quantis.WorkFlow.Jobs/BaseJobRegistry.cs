@@ -13,18 +13,22 @@ namespace Quantis.WorkFlow.Jobs
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration conf)
         {
-            services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            
+            if (conf["SchedularEnable"] == "True")
+            {
+                services.AddSingleton<IJobFactory, SingletonJobFactory>();
+                services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
-            // Add our job
-            string exp=conf["CronJob1Expression"];
-            services.AddSingleton<HelloWorldJob>();
-            services.AddSingleton(new JobSchedule(
-                jobType: typeof(HelloWorldJob),
-                cronExpression: exp)); // run every 5 seconds
+                string exp = conf["CronJob1Expression"];
+                services.AddSingleton<HelloWorldJob>();
+                services.AddSingleton(new JobSchedule(
+                    jobType: typeof(HelloWorldJob),
+                    cronExpression: exp)); // run every 5 seconds
 
 
-            services.AddHostedService<QuartzHostedService>();
+                services.AddHostedService<QuartzHostedService>();
+            }
+                        
         }
     }
 }
