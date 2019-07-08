@@ -1036,6 +1036,24 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<TRuleDTO> GetAllTRules()
+        {
+            try
+            {
+                var usr = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y" && o.status != "D").OrderBy(o => o.rule_name);
+                var dtos = usr.Select(o => new TRuleDTO()
+                {
+                    
+
+                }).ToList();
+                return dtos;
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         #region privateFunctions
 
         private bool CallFormAdapter(FormAdapterDTO dto)

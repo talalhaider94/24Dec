@@ -27,6 +27,7 @@ namespace Quantis.WorkFlow.Models
         public string calculation_policy_id { get; set; }
         public string calc_policy_change_seq { get; set; }
         public string global_rule_name_key { get; set; }
+        public bool in_catalog { get; set; }
 
     }
     public class T_GlobalRule_Configuration : IEntityTypeConfiguration<T_GlobalRule>

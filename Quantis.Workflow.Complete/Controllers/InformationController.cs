@@ -34,7 +34,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
         [HttpGet("DeleteBasicConfiguration")]
         public void DeleteBasicConfiguration(string owner, string key)
         {
-            _infomationAPI.DeleteConfiguration(owner,key);
+            _infomationAPI.DeleteConfiguration(owner, key);
         }
         [HttpGet("DeleteAdvancedConfiguration")]
         public void DeleteAdvancedConfiguration(string owner, string key)
@@ -146,6 +146,10 @@ namespace Quantis.WorkFlow.Complete.Controllers
         public void AssignGlobalRulesToUserId([FromBody]MultipleRecordsDTO dto)
         {
             _infomationAPI.AssignGlobalRulesToUserId(dto);
+        }
+        public string GetApiVersion()
+        {
+            return "Version 1.2.5";
         }
 
     }
