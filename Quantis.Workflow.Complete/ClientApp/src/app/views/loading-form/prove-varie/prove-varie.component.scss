@@ -74,3 +74,14 @@ input:focus {
   background: #1985ac; 
 }
 
+.disable-datepicker {
+  background: #e4e7ea;
+  &:hover {
+    pointer-events: none;
+  }
+  input {
+    &:hover {
+      pointer-events: none;
+    }
+  }
+}

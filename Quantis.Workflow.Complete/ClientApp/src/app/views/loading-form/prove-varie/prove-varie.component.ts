@@ -563,7 +563,7 @@ export class ProveVarieComponent implements OnInit {
         this._getUploadedFile(file);
       });
     } else {
-      this.toastr.info('Please upload a file');
+      this.toastr.info('Nessun documento da caricare');
     }
   }
 
