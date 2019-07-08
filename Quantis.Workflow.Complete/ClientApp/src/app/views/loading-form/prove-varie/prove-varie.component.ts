@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
 
 export class FormClass {
@@ -90,7 +91,8 @@ export class ProveVarieComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private _FileSaverService: FileSaverService
+    private _FileSaverService: FileSaverService,
+    private http: HttpClient
   ) { }
   monthOption;
   yearOption;
@@ -143,9 +145,9 @@ export class ProveVarieComponent implements OnInit {
     let utenteFormData;
     if (!!model.value.termsCheck) {
       utenteFormData = this._mapFormValuesWithFields(this.arrayFormElements, model.value.valories)
-      .find(field => field.name == 'Note' && !!field.value );
-      
-      if(!utenteFormData) {
+        .find(field => field.name == 'Note' && !!field.value);
+
+      if (!utenteFormData) {
         this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
         return false;
       } else {
@@ -272,7 +274,7 @@ export class ProveVarieComponent implements OnInit {
         let comparisonRulesBody = formBody.comparisonRules;
         this.comparisonRulesBody = comparisonRulesBody;
         this.formRulesBody = formRules;
-        if(comparisonRulesBody) {
+        if (comparisonRulesBody) {
           this.displayComparisonRules = comparisonRulesBody.map(compRule => {
             return `La regola ${compRule.campo1.name} ${compRule.segno} ${compRule.campo2.name} non è validata`
           })
@@ -374,7 +376,7 @@ export class ProveVarieComponent implements OnInit {
     if (!comparisonRules.length) {
       return comparisonRules;
     }
-    const mapFormValues =  this._mapFormValuesWithFields(formElements, formValues);
+    const mapFormValues = this._mapFormValuesWithFields(formElements, formValues);
     const invalidRules = comparisonRules.map((compare, index) => {
       let type = compare.campo1.type;
       let field1 = compare.campo1;
@@ -479,11 +481,11 @@ export class ProveVarieComponent implements OnInit {
     if (!formRules.length) {
       return formRules;
     }
-    let rulesNotNull = formRules.filter(obj => (( !!obj.rule.min && !!obj.rule.max)));
+    let rulesNotNull = formRules.filter(obj => ((!!obj.rule.min && !!obj.rule.max)));
     if (!rulesNotNull.length) {
       // if form rules are empty then then there should be atleat one form field filled
       let atLeastOneField = formValues.filter(value => !!value.valoreUtente).length;
-      if(!!atLeastOneField) {
+      if (!!atLeastOneField) {
         return [];
       } else {
         return ['Nessun campo compilato nel Loading Form'];
@@ -494,7 +496,7 @@ export class ProveVarieComponent implements OnInit {
         let rule = value.rule;
         let ruleMin = rule.min;
         let ruleMax = rule.max;
-        if(!ruleMin && !ruleMax) { return false }; // if string rules are empty dont return error
+        if (!ruleMin && !ruleMax) { return false }; // if string rules are empty dont return error
         const formStringValue = formValues[index];
         if ((formStringValue.valoreUtente && formStringValue.valoreUtente.length >= ruleMin) && (formStringValue.valoreUtente && formStringValue.valoreUtente.length <= ruleMax)) {
           return false;
@@ -505,7 +507,7 @@ export class ProveVarieComponent implements OnInit {
         let rule = value.rule;
         let ruleMin = rule.min;
         let ruleMax = rule.max;
-        if(!ruleMin && !ruleMax) { return false };
+        if (!ruleMin && !ruleMax) { return false };
         if (!rule.min) {
           ruleMin = moment(new Date('1970-01-01'), 'YYYY-MM-DD');
         } else {
@@ -524,7 +526,7 @@ export class ProveVarieComponent implements OnInit {
         let rule = value.rule;
         let ruleMin = rule.min;
         let ruleMax = rule.max;
-        if(!ruleMin && !ruleMax) { return false };
+        if (!ruleMin && !ruleMax) { return false };
         const formRealValue = formValues[index];
         if ((formRealValue.valoreUtente >= ruleMin) && formRealValue.valoreUtente <= ruleMax) {
           return false;
@@ -557,9 +559,14 @@ export class ProveVarieComponent implements OnInit {
       prefix = `data:text/plain;base64,${base64Data}`;
     }
 
-    fetch(prefix).then(res => res.blob()).then(blob => {
-      this._FileSaverService.save(blob, fileName);
-    });
+    this.http.get(prefix,
+      {
+        observe: 'response',
+        responseType: 'blob'
+      }).subscribe(data => {
+        this._FileSaverService.save(data.body, fileName);
+
+      })
   }
 
   fileUploadUI() {
@@ -633,9 +640,9 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _noteTextFileUpload(textString) {
-    const blob = new Blob([textString], {type: "text/plain;charset=utf-8"});
+    const blob = new Blob([textString], { type: "text/plain;charset=utf-8" });
     const reader = new FileReader();
-    reader.readAsDataURL(blob); 
+    reader.readAsDataURL(blob);
     reader.onloadend = (function (self) {
       let fileName = `Nota-Dato-Mancante-${moment().format('DD-MM-YYYY,h:mm:ss')}.txt`;
       return function (readerEvent) {
@@ -665,7 +672,7 @@ export class ProveVarieComponent implements OnInit {
         });
       };
     })(this);
-    
+
   }
 
 }
