@@ -1,7 +1,6 @@
 <div *ngIf='loading || formElementsLoading' id="loader" class="text-center">
   <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
-
 <div>
   <div class="container">
     <div class="row">
@@ -12,6 +11,19 @@
               CutOff attivo dal giorno: {{ day_cutoff }} <br />
               E' possibile solamente eseguire il download degli allegati.
             </p>
+            <span *ngIf='displayComparisonRules.length > 0'>
+              <button type="button" class="btn btn-primary btn-sm mb-2" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
+                Regole di confronto +
+              </button>
+              <div id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
+                <div class="well well-lg card card-block card-header">
+                  <ul class="pl-3 mb-1">
+                    <li *ngFor="let camp of displayComparisonRules">{{ camp }}</li>
+                  </ul>
+                </div>
+              </div>
+            </span>
           </div>
         </div>
       </div>
@@ -45,9 +57,11 @@
                           placeholder="inserisci data" class="form-control" formControlName="valoreUtente"> -->
                         <mat-form-field appearance="outline" class="disable-datepicker">
                           <mat-label>Data</mat-label>
-                          <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]"
-                            [max]="maxDate[i]" [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm" [disabled]="!readOnlyUserForm">
-                          <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm"></mat-datepicker-toggle>
+                          <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
+                            [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm"
+                            [disabled]="!readOnlyUserForm">
+                          <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm">
+                          </mat-datepicker-toggle>
                           <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
                         </mat-form-field>
                         <div class="row">
@@ -69,7 +83,7 @@
                         <label>{{arrayFormElements[i].name}}</label>
                       </div>
                       <div class="col-sm-8">
-                        
+
                         <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
@@ -99,7 +113,8 @@
                   </div>
                 </div>
                 <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
-                  <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                  <button type="submit" class="btn btn-primary"
+                    [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
                   <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"

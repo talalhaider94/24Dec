@@ -80,6 +80,8 @@ export class ProveVarieComponent implements OnInit {
   numeroForm: number;
   title: string = '';
   checked: boolean;
+  displayComparisonRules: string[] = [];
+  isCollapsed = true;
 
   constructor(
     private fb: FormBuilder,
@@ -270,6 +272,11 @@ export class ProveVarieComponent implements OnInit {
         let comparisonRulesBody = formBody.comparisonRules;
         this.comparisonRulesBody = comparisonRulesBody;
         this.formRulesBody = formRules;
+        if(comparisonRulesBody) {
+          this.displayComparisonRules = comparisonRulesBody.map(compRule => {
+            return `La regola ${compRule.campo1.name} ${compRule.segno} ${compRule.campo2.name} non è validata`
+          })
+        }
         if (formRules) {
           formRules.forEach((rule, index) => {
             if (rule.type == 'time') {
