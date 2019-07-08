@@ -54,5 +54,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string measurability_status { get; set; }
         public string is_dirty { get; set; }
         public string is_parameters_dirty { get; set; }
+        public bool in_catalog { get; set; }
     }
 }

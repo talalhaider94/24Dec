@@ -147,9 +147,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AssignGlobalRulesToUserId(dto);
         }
-        public string GetApiVersion()
+        [HttpGet("GetVersion")]
+        public IActionResult GetVersion()
         {
-            return "Version 1.2.5";
+            var json = new { API = "v. 1.2.5", UI = "v. 1.2.5b" };
+            return Ok(json);
         }
 
     }
