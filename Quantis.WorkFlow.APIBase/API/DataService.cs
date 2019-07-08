@@ -35,7 +35,8 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
         private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
-        private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;        
+        private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;
+        private readonly IMappingService<TRuleDTO, T_Rule> _truleMapper;
         private readonly IOracleDataService _oracleAPI;
         private readonly IConfiguration _configuration;
         private readonly ISMTPService _smtpService;
@@ -48,6 +49,7 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<PageDTO, T_Page> pageMapper, 
             IMappingService<WidgetDTO, T_Widget> widgetMapper,
             IMappingService<UserDTO, T_CatalogUser> userMapper,
+            IMappingService<TRuleDTO, T_Rule> truleMapper,
             IMappingService<FormRuleDTO, T_FormRule> formRuleMapper,
             IMappingService<CatalogKpiDTO, T_CatalogKPI> catalogKpiMapper,
             IMappingService<ApiDetailsDTO, T_APIDetail> apiMapper,
@@ -1040,13 +1042,29 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y" && o.status != "D").OrderBy(o => o.rule_name);
-                var dtos = usr.Select(o => new TRuleDTO()
-                {
-                    
+                //return _widgetMapper.GetDTOs(widget.ToList());
 
+                var rules = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
+                return _truleMapper.GetDTOs(rules.ToList());
+                /*var dtos = usr.Select(o => new TRuleDTO()
+                {
+                    rule_id = o.rule_id,
+                    status = o.status,
+                    prev_status = o.prev_status,
+                    formula_id = o.formula_id,
+                    rule_name = o.rule_name,
+                    rule_description = o.rule_description,
+                    sla_version_id = o.sla_version_id,
+                    domain_category_id = o.domain_category_id,
+                    service_level_target = o.service_level_target,
+                    rule_period_time_unit = o.rule_period_time_unit,
+                    rule_period_interval_length = o.rule_period_interval_length,
+                    is_effective = o.is_effective,
+                    locale_id = o.locale_id,
+                    global_rule_id = o.global_rule_id,
+                    objective_statement = o.objective_statement
                 }).ToList();
-                return dtos;
+                return dtos;*/
 
             }
             catch (Exception e)
