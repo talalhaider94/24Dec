@@ -3,7 +3,7 @@
     <br>
     <h2 style="color:#565656">PROFILAZIONE UTENTE</h2><br>
         <div class="row role-permissions-lists col-md-12">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div><label class="lbl-filter-user">Utenti: <strong
                             class="selected-user-title">{{selectedData.name|uppercase}}</strong></label></div>
                 <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="search"
@@ -21,13 +21,16 @@
                 </perfect-scrollbar>
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-5">
+            <div class="col-md-7">
                 <br><label>Permissions:</label>
               <br><br>
               <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-              <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree [fields]="treeFields" [checkedNodes]="selectedData.checked" [showCheckBox]="true" ></ejs-treeview >
+              <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree 
+                [fields]="treeFields" 
+                [checkedNodes]="selectedData.checked" 
+                [showCheckBox]="true" (nodeChecked)=syncSelectedNodesArray($event)></ejs-treeview>
             </div>
           </div>
           <div class="row">

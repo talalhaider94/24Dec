@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
 
 export class FormClass {
@@ -38,6 +39,7 @@ export class ProveVarieComponent implements OnInit {
   formRulesBody: [] = [];
   comparisonRulesBody: [] = [];
   loading: boolean = false;
+  formElementsLoading: boolean = false;
   displayUserFormCheckBox: boolean = false;
   formAttachmentsArray: any = [];
   formAttachmentsArrayFiltered: any = [];
@@ -79,6 +81,8 @@ export class ProveVarieComponent implements OnInit {
   numeroForm: number;
   title: string = '';
   checked: boolean;
+  displayComparisonRules: string[] = [];
+  isCollapsed = true;
 
   constructor(
     private fb: FormBuilder,
@@ -87,7 +91,8 @@ export class ProveVarieComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private _FileSaverService: FileSaverService
+    private _FileSaverService: FileSaverService,
+    private http: HttpClient
   ) { }
   monthOption;
   yearOption;
@@ -140,9 +145,9 @@ export class ProveVarieComponent implements OnInit {
     let utenteFormData;
     if (!!model.value.termsCheck) {
       utenteFormData = this._mapFormValuesWithFields(this.arrayFormElements, model.value.valories)
-      .find(field => field.name == 'Note' && !!field.value );
-      
-      if(!utenteFormData) {
+        .find(field => field.name == 'Note' && !!field.value);
+
+      if (!utenteFormData) {
         this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
         return false;
       } else {
@@ -160,6 +165,7 @@ export class ProveVarieComponent implements OnInit {
     }
     var periodRaw = moment(dataAttuale).format('MM/YY');
     const errorArray = this._customFormRulesValidation(this.arrayFormElements, model.value.valories, this.formRulesBody);
+    // errorArray empty means Either all rules passed 
     if (errorArray.length > 0) {
       this.userLoadingFormErrors = errorArray;
       this.toastr.error('Form fields data is not valid');
@@ -225,6 +231,7 @@ export class ProveVarieComponent implements OnInit {
   // generates form fields dynamically
   _init(numero: number, nome: string) {
     this.loading = true;
+    this.formElementsLoading = true;
     // since I put the filters first by comparison,
     // when the max and min filters go I go to
     // subtract the number of past comparisons from the index
@@ -234,13 +241,8 @@ export class ProveVarieComponent implements OnInit {
     this.title = nome;
 
     this.myInputForm = this.fb.group({
-      // means values
       valories: this.fb.array([
         this.initInputForm()
-      ]),
-      // means comparison fields
-      campiConfronto: this.fb.array([
-        //this.initComparisonForm(array)
       ]),
       termsCheck: '',
     });
@@ -272,6 +274,11 @@ export class ProveVarieComponent implements OnInit {
         let comparisonRulesBody = formBody.comparisonRules;
         this.comparisonRulesBody = comparisonRulesBody;
         this.formRulesBody = formRules;
+        if (comparisonRulesBody) {
+          this.displayComparisonRules = comparisonRulesBody.map(compRule => {
+            return `La regola ${compRule.campo1.name} ${compRule.segno} ${compRule.campo2.name} non è validata`
+          })
+        }
         if (formRules) {
           formRules.forEach((rule, index) => {
             if (rule.type == 'time') {
@@ -317,6 +324,7 @@ export class ProveVarieComponent implements OnInit {
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
+      this.formElementsLoading = false;
       // mutiple forms values are coming for single form Id so picking first one.
       this.jsonForm = data[0];
       console.log('DYNAMIC FORM FIELDS : jsonForm', this.jsonForm);
@@ -344,6 +352,7 @@ export class ProveVarieComponent implements OnInit {
       // CHECK BOX DISPLAY CONDITION END
     }, error => {
       this.loading = false;
+      this.formElementsLoading = false;
       this.toastr.error(error.error.message, 'Error')
       console.log('getFormById', error)
     });
@@ -367,14 +376,7 @@ export class ProveVarieComponent implements OnInit {
     if (!comparisonRules.length) {
       return comparisonRules;
     }
-    const mapFormValues =  this._mapFormValuesWithFields(formElements, formValues);
-    // const mapFormValues = formValues.map((value, index) => {
-    //   return {
-    //     name: formElements[index].name,
-    //     type: formElements[index].type,
-    //     value: value.valoreUtente || ''
-    //   }
-    // });
+    const mapFormValues = this._mapFormValuesWithFields(formElements, formValues);
     const invalidRules = comparisonRules.map((compare, index) => {
       let type = compare.campo1.type;
       let field1 = compare.campo1;
@@ -479,31 +481,39 @@ export class ProveVarieComponent implements OnInit {
     if (!formRules.length) {
       return formRules;
     }
-    let rulesNotNull = formRules.filter(obj => ((obj.rule.min !== null && obj.rule.max !== null)));
+    let rulesNotNull = formRules.filter(obj => ((!!obj.rule.min && !!obj.rule.max)));
     if (!rulesNotNull.length) {
-      return [];
+      // if form rules are empty then then there should be atleat one form field filled
+      let atLeastOneField = formValues.filter(value => !!value.valoreUtente).length;
+      if (!!atLeastOneField) {
+        return [];
+      } else {
+        return ['Nessun campo compilato nel Loading Form'];
+      }
     }
     const inValidRulesArray = formRules.filter((value, index) => {
       if (value.type === 'string') {
         let rule = value.rule;
-        let ruleMin = rule.min || -999999999;
-        let ruleMax = rule.max || 999999999;
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if (!ruleMin && !ruleMax) { return false }; // if string rules are empty dont return error
         const formStringValue = formValues[index];
-        if (formStringValue.valoreUtente.length >= ruleMin && formStringValue.valoreUtente.length <= ruleMax) {
+        if ((formStringValue.valoreUtente && formStringValue.valoreUtente.length >= ruleMin) && (formStringValue.valoreUtente && formStringValue.valoreUtente.length <= ruleMax)) {
           return false;
         } else {
           return true;
         }
       } else if (value.type === 'time') {
         let rule = value.rule;
-        let ruleMin;
-        let ruleMax;
-        if (!rule.min || rule.min === null) {
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if (!ruleMin && !ruleMax) { return false };
+        if (!rule.min) {
           ruleMin = moment(new Date('1970-01-01'), 'YYYY-MM-DD');
         } else {
           ruleMin = moment(new Date(rule.min), 'YYYY-MM-DD');
         }
-        if (!rule.max || rule.max === null) {
+        if (!rule.max) {
           ruleMax = moment(new Date('2970-01-01'), 'YYYY-MM-DD');
         } else {
           ruleMax = moment(new Date(rule.max), 'YYYY-MM-DD');
@@ -514,10 +524,11 @@ export class ProveVarieComponent implements OnInit {
       } else if (value.type === 'real' || value.type === 'integer') {
         //type real or integer
         let rule = value.rule;
-        let ruleMin = rule.min || -999999999;
-        let ruleMax = rule.max || 999999999;
+        let ruleMin = rule.min;
+        let ruleMax = rule.max;
+        if (!ruleMin && !ruleMax) { return false };
         const formRealValue = formValues[index];
-        if (formRealValue.valoreUtente >= ruleMin && formRealValue.valoreUtente <= ruleMax) {
+        if ((formRealValue.valoreUtente >= ruleMin) && formRealValue.valoreUtente <= ruleMax) {
           return false;
         } else {
           return true;
@@ -548,9 +559,14 @@ export class ProveVarieComponent implements OnInit {
       prefix = `data:text/plain;base64,${base64Data}`;
     }
 
-    fetch(prefix).then(res => res.blob()).then(blob => {
-      this._FileSaverService.save(blob, fileName);
-    });
+    this.http.get(prefix,
+      {
+        observe: 'response',
+        responseType: 'blob'
+      }).subscribe(data => {
+        this._FileSaverService.save(data.body, fileName);
+
+      })
   }
 
   fileUploadUI() {
@@ -561,7 +577,7 @@ export class ProveVarieComponent implements OnInit {
         this._getUploadedFile(file);
       });
     } else {
-      this.toastr.info('Please upload a file');
+      this.toastr.info('Nessun documento da caricare');
     }
   }
 
@@ -624,9 +640,9 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _noteTextFileUpload(textString) {
-    const blob = new Blob([textString], {type: "text/plain;charset=utf-8"});
+    const blob = new Blob([textString], { type: "text/plain;charset=utf-8" });
     const reader = new FileReader();
-    reader.readAsDataURL(blob); 
+    reader.readAsDataURL(blob);
     reader.onloadend = (function (self) {
       let fileName = `Nota-Dato-Mancante-${moment().format('DD-MM-YYYY,h:mm:ss')}.txt`;
       return function (readerEvent) {
@@ -656,7 +672,7 @@ export class ProveVarieComponent implements OnInit {
         });
       };
     })(this);
-    
+
   }
 
 }

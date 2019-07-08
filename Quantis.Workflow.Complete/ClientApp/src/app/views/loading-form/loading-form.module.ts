@@ -7,6 +7,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { DataTablesModule } from 'angular-datatables';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+
 import {
   MatSidenavModule,
   MatButtonModule,
@@ -94,7 +96,8 @@ import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-adm
     MatStepperModule,
     MatTooltipModule,
     DataTablesModule,
-    Ng2SearchPipeModule
+    Ng2SearchPipeModule,
+    CollapseModule.forRoot(),
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
