@@ -19,5 +19,6 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string Period { get; set; }
         public string primary_contract_party { get; set; }
         public string secondary_contract_party { get; set; }
+        public bool IsClosed { get; set; }
     }
 }

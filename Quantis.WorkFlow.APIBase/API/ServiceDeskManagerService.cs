@@ -701,6 +701,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 if (_statusMapping.Any(o => o.code == dto.Status))
                 {
                     dto.Status = _statusMapping.FirstOrDefault(o => o.code == dto.Status).name;
+                    if(_statusMapping.First(o => o.code == dto.Status).step == 3)
+                    {
+                        dto.IsClosed = true;
+                    }
+                    else
+                    {
+                        dto.IsClosed = false;
+                    }
                 }
                 dtos.Add(dto);
             }
