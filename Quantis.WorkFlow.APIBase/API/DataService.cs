@@ -118,7 +118,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                return _dbcontext.Forms.Include(p => p.Attachments).Where(o => formids.Contains(o.form_id)).Select(o => new FormDetialsDTO() {form_id=o.form_id,attachment_count=o.Attachments.Count,latest_modified_date=o.modify_date }).ToList();
+                return _dbcontext.Forms.Include(p => p.Attachments).Include(q=>q.FormLogs).Where(o => formids.Contains(o.form_id)).Select(o => new FormDetialsDTO() {form_id=o.form_id,attachment_count=o.Attachments.Count,latest_modified_date=o.FormLogs.Any()?o.FormLogs.Max(r=>r.time_stamp):new DateTime(0) }).ToList();
             }
             catch (Exception e)
             {
