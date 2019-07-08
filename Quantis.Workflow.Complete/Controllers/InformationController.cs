@@ -142,7 +142,8 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetGlobalRulesByUserId(userId);
         }
-        public void AssignGlobalRulesToUserId(MultipleRecordsDTO dto)
+        [HttpPost("AssignGlobalRulesToUserId")]
+        public void AssignGlobalRulesToUserId([FromBody]MultipleRecordsDTO dto)
         {
             _infomationAPI.AssignGlobalRulesToUserId(dto);
         }
