@@ -95,6 +95,10 @@ export class UserProfilingComponent implements OnInit {
       // });
       this.apiService.assignGlobalRulesToUserId(dataToPost).subscribe(data => {
         this.toastr.success('Saved', 'Success');
+        this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
+          console.log('getGlobalRulesByUserId ==> ', data);
+          this.selectedData.checked = data;
+        });
       }, error => {
         this.toastr.error('Not Saved', 'Error');
       });
