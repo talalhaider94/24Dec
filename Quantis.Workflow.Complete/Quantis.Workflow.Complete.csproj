@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Quantis.WorkFlow.APIBase\Quantis.WorkFlow.APIBase.csproj" />
+    <ProjectReference Include="..\Quantis.WorkFlow.Jobs\Quantis.WorkFlow.Jobs.csproj" />
     <ProjectReference Include="..\Quantis.WorkFlow.Services\Quantis.WorkFlow.Services.csproj" />
   </ItemGroup>
 

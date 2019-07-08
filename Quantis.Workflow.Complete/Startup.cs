@@ -57,7 +57,8 @@ namespace Quantis.WorkFlow.Complete
                 configuration.RootPath = "ClientApp/dist";
             });
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
-            Quantis.WorkFlow.APIBase.BaseAPIRegistry.RegisterServices(services);
+            RegisterServices(services);
+            
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
                 options.UseLazyLoadingProxies().UseNpgsql(
                     sqlConnectionString,
@@ -126,6 +127,8 @@ namespace Quantis.WorkFlow.Complete
 
         private void RegisterServices(IServiceCollection services)
         {
+            Quantis.WorkFlow.APIBase.BaseAPIRegistry.RegisterServices(services);
+            Quantis.WorkFlow.Jobs.BaseJobRegistry.RegisterServices(services, Configuration);
         }
     }
 }

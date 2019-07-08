@@ -226,8 +226,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
         }
-
-
+ 
         [HttpGet("GetFormConfiguration")]
         public List<FormConfigurationDTO> GetFormConfiguration()
         {
@@ -238,6 +237,10 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllCustomersKP();
         }
-
+        [HttpGet("GetAllTRules")]
+        public List<TRuleDTO> GetAllTRules()
+        {
+            return _dataAPI.GetAllTRules();
+        }
     }
 }

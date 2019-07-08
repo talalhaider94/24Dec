@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.WorkFlow.Complete", "Quantis.Workflow.Complete\Quantis.Workflow.Complete.csproj", "{152AEFBD-20D4-4EFE-9785-A4B3EEA6AEB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.Workflow.Complete", "Quantis.Workflow.Complete\Quantis.Workflow.Complete.csproj", "{152AEFBD-20D4-4EFE-9785-A4B3EEA6AEB9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkflowApplication", "WorkflowApplication", "{92199B3B-ABCC-488C-B43B-9B32B9B87A7E}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.WorkFlow.Models", "Quantis.WorkFlow.Models\Quantis.WorkFlow.Models.csproj", "{CD17E66D-C26B-48BB-BAAA-7DE63A84F19C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantis.WorkFlow.UnitTest", "Quantis.WorkFlow.UnitTest\Quantis.WorkFlow.UnitTest.csproj", "{D3B37287-A3D8-491F-A5FA-7EE9338461BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quantis.WorkFlow.Jobs", "Quantis.WorkFlow.Jobs\Quantis.WorkFlow.Jobs.csproj", "{58DC2C6B-E692-4535-B2D3-151AC391B18C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{D3B37287-A3D8-491F-A5FA-7EE9338461BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3B37287-A3D8-491F-A5FA-7EE9338461BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3B37287-A3D8-491F-A5FA-7EE9338461BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58DC2C6B-E692-4535-B2D3-151AC391B18C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58DC2C6B-E692-4535-B2D3-151AC391B18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58DC2C6B-E692-4535-B2D3-151AC391B18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58DC2C6B-E692-4535-B2D3-151AC391B18C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{D37520CE-4EB1-4E3E-B4D7-70601F8D4DC7} = {92199B3B-ABCC-488C-B43B-9B32B9B87A7E}
 		{CD17E66D-C26B-48BB-BAAA-7DE63A84F19C} = {92199B3B-ABCC-488C-B43B-9B32B9B87A7E}
 		{D3B37287-A3D8-491F-A5FA-7EE9338461BD} = {92199B3B-ABCC-488C-B43B-9B32B9B87A7E}
+		{58DC2C6B-E692-4535-B2D3-151AC391B18C} = {92199B3B-ABCC-488C-B43B-9B32B9B87A7E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70BF7D48-652B-4C1F-BD2C-D9A49866BFAB}

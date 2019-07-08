@@ -1,16 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Quantis.WorkFlow.Models
+namespace Quantis.WorkFlow.Services.DTOs.API
 {
-    public class T_Rule
+    public class TRuleDTO
     {
         public int rule_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
-        public string prev_status{ get; set; }
+        public string prev_status { get; set; }
         public int formula_id { get; set; }
         public string rule_name { get; set; }
         public string rule_description { get; set; }
@@ -57,14 +55,5 @@ namespace Quantis.WorkFlow.Models
         public string is_dirty { get; set; }
         public string is_parameters_dirty { get; set; }
         public bool in_catalog { get; set; }
-
-    }
-    public class T_Rule_Configuration : IEntityTypeConfiguration<T_Rule>
-    {
-        public void Configure(EntityTypeBuilder<T_Rule> builder)
-        {
-            builder.ToTable("t_rules");
-            builder.HasKey(o => o.rule_id);
-        }
     }
 }
