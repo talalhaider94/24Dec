@@ -2,8 +2,11 @@ import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { navItems } from '../../_nav';
 import { AuthService } from '../../_services';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { filter } from 'rxjs/operators';
+import { ObservableLike } from 'rxjs';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +18,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public sidebarMinimized = true;
   private changes: MutationObserver;
   public element: HTMLElement;
+  private currentUrl = 'abc';
+  public currentVerion = 'abc';
+  public returnedNode:any;
   currentUser: any;
   constructor(
     private toastr: ToastrService,
@@ -34,6 +40,13 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.changes.observe(<Element>this.element, {
       attributes: true,
       attributeFilter: ['class']
+    });
+    this.router.events.pipe(
+      filter((event:any) => event instanceof NavigationEnd)
+    ).subscribe(x => {
+      this.currentUrl = x.url;
+      this.findUrlDataByName(this.navItems, this.currentUrl);
+      this.currentVerion = this.returnedNode.version || '0.0.1';
     });
   }
 
@@ -80,5 +93,20 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     });
     return isExist;
   }
+
+  findUrlDataByName(itemsArray, url) {
+    if(itemsArray){
+      itemsArray.forEach((item:any)=>{
+        if(item.url === url){
+          this.returnedNode = item;
+        }
+        if (item.children) {
+          this.findUrlDataByName(item.children, url);
+        } else {
+        }
+      });
+    }
+  }
+
 
 }
