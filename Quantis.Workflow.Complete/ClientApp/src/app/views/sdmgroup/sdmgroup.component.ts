@@ -97,6 +97,7 @@ export class SdmGroupComponent implements OnInit {
     this.modalData.handle = data.handle;
     this.modalData.name = data.name;
     this.modalData.step = data.step;
+    this.modalData.category_id = data.category_id;
   }
 
   add() {

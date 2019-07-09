@@ -58,7 +58,7 @@
               <tr><th>NOME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
               <tr><th>STEP</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.step"></td></tr>
               <tr><th>CONTRAENTE</th><td colspan="2">
-                <select [(ngModel)]="category_id" class="form-control">
+                <select [(ngModel)]="modalData.category_id" class="form-control">
                   <option *ngFor="let obj of customersKP; index as i" [value]="obj.key">{{obj.value}}</option>
                 </select>
               </td></tr>
