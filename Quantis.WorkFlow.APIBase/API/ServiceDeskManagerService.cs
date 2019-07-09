@@ -478,7 +478,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     period = ticket.Period,
                     primary_contract_party = primarycp,
                     secondary_contract_party = secondarycp,
-                    ticket_status = status
+                    ticket_status = _statusMapping.FirstOrDefault(o => o.step == step).name
                 };               
                 string tickethandle = "cr:" + id;
                 var esca = _sdmClient.transferAsync(_sid, "", tickethandle, description, false, "", true, newgroup, false, "");
@@ -541,7 +541,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     period = ticket.Period,
                     primary_contract_party = primarycp,
                     secondary_contract_party = secondarycp,
-                    ticket_status = status
+                    ticket_status = _statusMapping.FirstOrDefault(o => o.step == step).name
                 };
                 
                 string tickethandle = "cr:" + id;
