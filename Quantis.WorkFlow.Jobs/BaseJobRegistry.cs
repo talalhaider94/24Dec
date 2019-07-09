@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quantis.WorkFlow.Jobs.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -13,22 +14,23 @@ namespace Quantis.WorkFlow.Jobs
     {
         public static void RegisterServices(IServiceCollection services, IConfiguration conf)
         {
-            
-            if (conf["SchedularEnable"] == "True")
-            {
-                services.AddSingleton<IJobFactory, SingletonJobFactory>();
-                services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-
-                string exp = conf["CronJob1Expression"];
-                services.AddSingleton<HelloWorldJob>();
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            if (!string.IsNullOrEmpty(conf["CronJobJavaCallingExpression"]))
+            {               
+                services.AddSingleton<CallingJavaJob>();
                 services.AddSingleton(new JobSchedule(
-                    jobType: typeof(HelloWorldJob),
-                    cronExpression: exp)); // run every 5 seconds
-
-
-                services.AddHostedService<QuartzHostedService>();
+                    jobType: typeof(CallingJavaJob),
+                    cronExpression: conf["CronJobJavaCallingExpression"])); // run every 5 seconds               
             }
-                        
+            if (!string.IsNullOrEmpty(conf["CronJobCreatingTicketsExpression"]))
+            {
+                services.AddSingleton<CreateTicketsJob>();
+                services.AddSingleton(new JobSchedule(
+                    jobType: typeof(CreateTicketsJob),
+                    cronExpression: conf["CronJobCreatingTicketsExpression"])); // run every 5 seconds               
+            }
+            services.AddHostedService<QuartzHostedService>();
         }
     }
 }
