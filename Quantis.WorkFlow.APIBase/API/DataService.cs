@@ -857,9 +857,10 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 return new CreateTicketDTO()
                 {
-                    Description = GenerateDiscriptionFromKPI(kpi,"NA"),
+                    Description = GenerateDiscriptionFromKPI(kpi,psl.FirstOrDefault().provided_ce+""),
                     ID_KPI = kpi.id_kpi,
                     GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
