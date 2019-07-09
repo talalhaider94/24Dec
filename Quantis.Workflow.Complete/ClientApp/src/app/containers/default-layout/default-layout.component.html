@@ -40,6 +40,7 @@
   <app-sidebar [fixed]="true" [display]="'lg'">
     <!-- Danial: navItems are coming from _nav.ts  -->
     <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <!-- <span style="padding-left: 15px; color:#bbb"> v{{currentVerion}} </span> -->
     <app-sidebar-minimizer></app-sidebar-minimizer>
   </app-sidebar>
   <!-- Main content -->
@@ -53,6 +54,7 @@
           <a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>
         </div>
       </li> -->
+      <span style="width:98%; position:absolute; color:#bbb; text-align:right"> v {{currentVerion}} </span>
     </cui-breadcrumb>
     <div class="container-fluid">
       <!-- Danial: center area to display content -->

@@ -505,7 +505,6 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
-            status= _statusMapping.FirstOrDefault(o => o.name == status).code;
             if (ticket.Status != status)
             {
                 _dbcontext.LogInformation("Status is equation to previous Status");
@@ -700,8 +699,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (_statusMapping.Any(o => o.code == dto.Status))
                 {
+                    var st = dto.Status;
                     dto.Status = _statusMapping.FirstOrDefault(o => o.code == dto.Status).name;
-                    if(_statusMapping.First(o => o.code == dto.Status).step == 3)
+                    if(_statusMapping.First(o => o.code == st).step == 3)
                     {
                         dto.IsClosed = true;
                     }

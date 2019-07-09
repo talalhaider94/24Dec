@@ -21,6 +21,7 @@ export interface NavData {
   icon?: string;
   badge?: NavBadge;
   title?: boolean;
+  version?: string;
   children?: NavData[];
   variant?: string;
   attributes?: NavAttributes;
@@ -76,12 +77,14 @@ export const navItems: NavData[] = [
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
         icon: 'fa fa-file-text-o',
+        version: '0.0.1',
         key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
+        version: '0.0.1',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
@@ -96,18 +99,21 @@ export const navItems: NavData[] = [
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o',
+        version: '0.0.1',
         key: 'VIEW_UTENTI_DA_CONSOLIDARE'
       },
       {
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
         icon: 'fa fa-file-archive-o',
+        version: '0.0.1',
         key: 'VIEW_CATALOG_KPI'
       },
       {
         name: 'Catalogo Utenti',
         url: '/catalogo/utenti',
         icon: 'fa fa-address-book-o',
+        version: '0.0.1',
         key: 'VIEW_CATALOG_UTENTI',
       },
     ]
@@ -130,6 +136,7 @@ export const navItems: NavData[] = [
     name: 'KPI Certificati',
     url: '/archivedkpi',
     icon: 'fa fa-archive',
+    version: '0.0.1',
     key: 'VIEW_KPI_CERTICATI',
   },
   {
@@ -142,12 +149,14 @@ export const navItems: NavData[] = [
         name: 'Admin',
         url: '/loading-form/admin',
         icon: 'fa fa-user-circle',
+        version: '0.0.1',
         key: 'VIEW_ADMIN_LOADING_FORM'
       },
       {
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',
+        version: '0.0.1',
         key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]
@@ -162,12 +171,14 @@ export const navItems: NavData[] = [
         name: 'Generali',
         url: '/tconfiguration',
         icon: 'fa fa-check-circle-o',
+        version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
       },
       {
         name: 'Avanzate',
         url: '/tconfiguration/advanced',
         icon: 'fa fa-check-circle-o',
+        version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
       },
       /*{ // maybe not needed
@@ -185,30 +196,35 @@ export const navItems: NavData[] = [
         name: 'SDM Gruppi',
         url: '/sdmgroup',
         icon: 'fa fa-gear',
+        version: '0.0.1',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
       {
         name: 'SDM Ticket Status',
         url: '/sdmstatus',
         icon: 'fa fa-gear',
+        version: '0.0.1',
         key: 'VIEW_WORKFLOW_CONFIGURATIONS'
       },
       {
         name: 'Gestione Ruoli',
         url: '/adminroles',
         icon: 'fa fa-gear',
+        version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
       },  
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
+        version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
       }, 
       {
         name: 'Profilazione Utente',
         url: '/userprofiling',
         icon: 'fa fa-gear',
+        version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
       },
     ]
@@ -219,7 +235,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.2.6b',
+    name: 'Version 1.3.0',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },

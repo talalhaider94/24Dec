@@ -242,5 +242,10 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllTRules();
         }
+        [HttpGet("GetEmailNotifiers")]
+        public List<EmailNotifierDTO> GetEmailNotifiers()
+        {
+            return _dataAPI.GetEmailNotifiers();
+        }
     }
 }

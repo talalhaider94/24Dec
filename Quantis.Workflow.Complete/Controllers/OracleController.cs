@@ -124,10 +124,10 @@ namespace Quantis.WorkFlow.Controllers
         }
         [HttpGet("GetPsl")]
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)
-        public List<PslDTO> GetPsl(string period, int global_rule_id)
+        public List<PslDTO> GetPsl(string period, int global_rule_id, string tracking_period)
         {
             //return _oracleAPI.GetPsl(period, sla_name, rule_name, tracking_period);
-            return _oracleAPI.GetPsl(period, global_rule_id);
+            return _oracleAPI.GetPsl(period, global_rule_id, tracking_period);
         }
     }
 }

@@ -368,8 +368,17 @@ export class KPIComponent implements OnInit, OnDestroy {
           self.fileUploading = false;
           self.uploader.queue.pop();
           self.toastr.success(`${fileName} uploaded successfully.`);
-          if (data) {
-            self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId);
+          if (data.status === 200 || data.status === 204) {
+                self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId).pipe(first()).subscribe(data => {
+                  if (!!data) {
+                    self.getTicketAttachments = data;
+                    console.log('ticketAttachments', data);
+                  }
+                  self.loading = false;
+                }, error => {
+                  self.loading = false;
+                });
+
           }
         }, error => {
           console.error('uploadAttachmentToTicket ==>', error);

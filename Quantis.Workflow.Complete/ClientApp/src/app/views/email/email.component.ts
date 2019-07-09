@@ -7,19 +7,19 @@ import { ToastrService } from 'ngx-toastr';
 declare var $;
 var $this;
 
-
 @Component({
-  templateUrl: './sdmgroup.component.html'
+  templateUrl: './email.component.html'
 })
 
-export class SdmGroupComponent implements OnInit {
+export class EmailComponent implements OnInit {
   @ViewChild('ConfigurationTable') block: ElementRef;
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-  category_id : number = 0;
-  // handle: any = '';
-  // name: any =  '';
-  // step: any = '';
+  key: any = '';
+  value: any =  '';
+  owner: any = '';
+  isenable: boolean =  false;
+  description: any =  '';
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -47,34 +47,29 @@ export class SdmGroupComponent implements OnInit {
   };
 
   modalData = {
-    id: '',
-    handle: '',
-    name: '',
-    step: '',
-    category_id: 0
+    key: '',
+    value: '',
+    owner: '',
+    isenable: true,
+    description: '',
   };
-
+  
   addData = {
-    handle: '',
-    name: '',
-    step: '',
-    category_id: 0
+    key: '',
+    value: '',
+    owner: '',
+    isenable: false,
+    description: ''
   };
 
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
-      handle: 'handle',
-      name: 'name',
-      step: 1,
-      category: 'category'
-    }
-  ]
-
-  customersKP: any = [
-    {
-      key: '',
-      value: ''
+      key: 'key',
+      value: 'value',
+      owner: 'owner',
+      isenable: true,
+      description: 'description',
     }
   ]
 
@@ -84,61 +79,45 @@ export class SdmGroupComponent implements OnInit {
   ) {
     $this = this;
   }
-  public handle: any;
-  public name: any;
-  public step: any;
-  public category: any;
 
   ngOnInit() {
   }
 
   populateModalData(data) {
-    this.modalData.id = data.id;
-    this.modalData.handle = data.handle;
-    this.modalData.name = data.name;
-    this.modalData.step = data.step;
-    this.modalData.category_id = data.category_id;
+    this.modalData.key = data.key;
+    this.modalData.owner = data.owner;
+    this.modalData.value = data.value;
+    this.modalData.isenable = data.isenable;
+    this.modalData.description = data.description;
   }
 
-  add() {
-    this.addData.handle = this.handle;
-    this.addData.name = this.name;
-    this.addData.step = this.step;
-    this.addData.category_id = this.category_id;
+  addConfig() {
+    this.addData.key = this.key;
+    this.addData.owner = this.owner;
+    this.addData.value = this.value;
+    this.addData.isenable = this.isenable;
+    this.addData.description = this.description;
 
     this.toastr.info('Valore in aggiornamento..', 'Info');
-    this.apiService.addSDMGroup(this.addData).subscribe(data => {
+    this.apiService.addConfig(this.addData).subscribe(data => {
         this.getCOnfigurations(); // this should refresh the main table on page
         this.toastr.success('Valore Aggiornato', 'Success');
         $('#addConfigModal').modal('toggle').hide();
     }, error => {
-        this.toastr.error('Errore durante update.', 'Error');
+        this.toastr.error('Errore durante add.', 'Error');
         $('#addConfigModal').modal('toggle').hide();
     });
   }
 
   updateConfig() {
-    this.modalData.category_id = this.category_id;
     this.toastr.info('Valore in aggiornamento..', 'Info');
-    this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
+    this.apiService.updateConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
       $('#configModal').modal('toggle').hide();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       $('#configModal').modal('toggle').hide();
-      });
-  }
-
-  deleteSDMRow(data) {
-    this.toastr.info('Valore in aggiornamento..', 'Confirm');
-    this.apiService.deleteSDMGroupConfiguration(data.id).subscribe(data => {
-      this.getCOnfigurations(); // this should refresh the main table on page
-      this.toastr.success('Valore Aggiornato', 'Success');
-      // $('#configModal').modal('toggle').hide();
-    }, error => {
-      this.toastr.error('Errore durante update.', 'Error');
-      // $('#configModal').modal('toggle').hide();
       });
   }
 
@@ -148,7 +127,6 @@ export class SdmGroupComponent implements OnInit {
 
     this.setUpDataTableDependencies();
     this.getCOnfigurations();
-    this.getCustomersKP();
 
     /*this.apiService.getConfigurations().subscribe((data:any)=>{
       this.ConfigTableBodyData = data;
@@ -197,23 +175,16 @@ export class SdmGroupComponent implements OnInit {
   }
 
   getCOnfigurations() {
-    this.apiService.getSDMGroupConfigurations().subscribe((data) =>{
+    this.apiService.getConfigurations().subscribe((data) =>{
       this.ConfigTableBodyData = data;
       console.log('Configs ', data);
       this.rerender();
     });
   }
 
-  getCustomersKP() {
-    this.apiService.getCustomersKP().subscribe((data) =>{
-      this.customersKP = data;
-      console.log('CustomersKP ', data);
-      this.rerender();
+ /* getCOnfigurations1() {
+    this.apiService.getConfigurations().subscribe((data: any) => {
     });
-  }
 
-  onCancel(dismissMethod: string): void {
-    console.log('Cancel ', dismissMethod);
-  }
-  
+  }*/
 }

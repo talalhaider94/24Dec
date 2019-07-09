@@ -1,17 +1,16 @@
 <div *ngIf='loading || formElementsLoading' id="loader" class="text-center">
-  <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+    <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 <div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
+    <div class="container">
         <div class="row">
-          <div class="col-6">
-            <p class="alert alert-info" *ngIf="!readOnlyUserForm">
-              CutOff attivo dal giorno: {{ day_cutoff }} <br />
-              E' possibile solamente eseguire il download degli allegati.
-            </p>
-            <span *ngIf='displayComparisonRules.length > 0'>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="alert alert-info" *ngIf="!readOnlyUserForm">
+                            CutOff attivo dal giorno: {{ day_cutoff }} <br /> E' possibile solamente eseguire il download degli allegati.
+                        </p>
+                        <span *ngIf='displayComparisonRules.length > 0'>
               <button type="button" class="btn btn-primary btn-sm mb-2" (click)="isCollapsed = !isCollapsed"
                 [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
                 Regole di confronto +
@@ -24,139 +23,126 @@
                 </div>
               </div>
             </span>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-header">
-            <strong>{{jsonForm.description || title}}</strong>
-          </div>
-          <div class="card-body">
-            <ul class="bg-danger pt-2 pb-2" *ngIf="userLoadingFormErrors.length > 0">
-              <li *ngFor="let error of userLoadingFormErrors"> {{ error }}</li>
-            </ul>
-            <form [formGroup]="myInputForm" novalidate (ngSubmit)="saveUser(myInputForm)">
-              <div class="form-group row">
-                <label class="col-md-4 col-form-label"><strong>Nome Campo</strong> </label>
-                <div class="col-md-8">
-                  <p class="form-control-static"><strong class="mt-2 d-block">Valore</strong> </p>
+                    </div>
                 </div>
-              </div>
-              <div formArrayName="valories">
-                <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index"
-                  class="panel panel-default">
-                  <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'"
-                    class="panel-body bg-white" [formGroupName]="i">
-                    <div class="row align-items-center mb-2">
-                      <div class="col-md-4 col-form-label">
-                        <label>{{arrayFormElements[i].name}}</label>
-                      </div>
-                      <div class="col-sm-8">
-                        <!-- <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>{{jsonForm.description || title}}</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul class="bg-danger pt-2 pb-2" *ngIf="userLoadingFormErrors.length > 0">
+                            <li *ngFor="let error of userLoadingFormErrors"> {{ error }}</li>
+                        </ul>
+                        <form [formGroup]="myInputForm" novalidate (ngSubmit)="saveUser(myInputForm)">
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label"><strong>Nome Campo</strong> </label>
+                                <div class="col-md-8">
+                                    <p class="form-control-static"><strong class="mt-2 d-block">Valore</strong> </p>
+                                </div>
+                            </div>
+                            <div formArrayName="valories">
+                                <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index" class="panel panel-default">
+                                    <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-md-4 col-form-label">
+                                                <label>{{arrayFormElements[i].name}}</label>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <!-- <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
                           placeholder="inserisci data" class="form-control" formControlName="valoreUtente"> -->
-                        <mat-form-field appearance="outline" class="disable-datepicker">
-                          <mat-label>Data</mat-label>
-                          <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
-                            [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm"
-                            [disabled]="!readOnlyUserForm">
-                          <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm">
-                          </mat-datepicker-toggle>
-                          <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
-                        </mat-form-field>
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <small>Data minima: {{minDate[i]|date}}</small>
-                          </div>
-                          <div class="col-sm-6">
-                            <small>Data massima: {{maxDate[i]|date}}</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'"
-                    class="panel-body bg-white" [formGroupName]="i">
-                    <div class="row align-items-center mb-2">
-                      <div class="col-md-4 col-form-label"
-                        *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
-                        <label>{{arrayFormElements[i].name}}</label>
-                      </div>
-                      <div class="col-sm-8">
+                                                <mat-form-field appearance="outline" [ngClass]="{'disable-datepicker': !readOnlyUserForm}">
+                                                    <mat-label>Data</mat-label>
+                                                    <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]" [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm" [disabled]="!readOnlyUserForm">
+                                                    <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
+                                                </mat-form-field>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <small>Data minima: {{minDate[i]|date}}</small>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <small>Data massima: {{maxDate[i]|date}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i">
+                                        <div class="row align-items-center mb-2">
+                                            <div class="col-md-4 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
+                                                <label>{{arrayFormElements[i].name}}</label>
+                                            </div>
+                                            <div class="col-sm-8">
 
-                        <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'"
-                          [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]"
-                          placeholder="Input" class="form-control" formControlName="valoreUtente">
+                                                <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                        <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'"
-                          [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]"
-                          placeholder="Input" class="form-control" formControlName="valoreUtente">
-                        <div class="row"
-                          *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
-                          <div class="col-sm-6">
-                            <small>Valore minimo: {{numeroMin[i]}}</small>
-                          </div>
-                          <div class="col-sm-6">
-                            <small>Valore massimo: {{numeroMax[i]}}</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-3 align-items-center">
-                <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
-                    <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
-                  </div>
-                </div>
-                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
-                  <button type="submit" class="btn btn-primary"
-                    [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                                                <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
+                                                <div class="row" *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
+                                                    <div class="col-sm-6">
+                                                        <small>Valore minimo: {{numeroMin[i]}}</small>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <small>Valore massimo: {{numeroMax[i]}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
+                                        <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
-                  <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
-                    class="btn btn-info text-white">Annulla</a>
+                                    <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']" class="btn btn-info text-white">Annulla</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
-            </form>
-          </div>
-        </div>
 
-        <div class="table-responsive">
-          <table class="table table-hover table-outline bg-white">
-            <thead>
-              <tr>
-                <th>Contratto</th>
-                <th>Nome KPI</th>
-                <th>Target</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf='listaKpiPerForm.length === 0'>
-                <td colspan="3">Nessun KPI Assegnato al Loading Form</td>
-              </tr>
-              <tr *ngFor='let kpi of listaKpiPerForm'>
-                <td>{{kpi.contract}}</td>
-                <td>{{kpi.id_kpi}} - {{kpi.kpi_name_bsi}}</td>
-                <td>{{kpi.target}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-header">
-            <strong>Documenti Presenti</strong>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-sm-6">
-                <label for="ccmonth">Mese</label>
-                <select class="form-control" name="monthOption" [(ngModel)]="monthOption" (change)="onDataChange()">
+                <div class="table-responsive">
+                    <table class="table table-hover table-outline bg-white">
+                        <thead>
+                            <tr>
+                                <th>Contratto</th>
+                                <th>Nome KPI</th>
+                                <th>Target</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf='listaKpiPerForm.length === 0'>
+                                <td colspan="3">Nessun KPI Assegnato al Loading Form</td>
+                            </tr>
+                            <tr *ngFor='let kpi of listaKpiPerForm'>
+                                <td>{{kpi.contract}}</td>
+                                <td>{{kpi.id_kpi}} - {{kpi.kpi_name_bsi}}</td>
+                                <td>{{kpi.target}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Documenti Presenti</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="ccmonth">Mese</label>
+                                <select class="form-control" name="monthOption" [(ngModel)]="monthOption" (change)="onDataChange()">
                   <option value="01">1</option>
                   <option value="02">2</option>
                   <option value="03">3</option>
@@ -170,78 +156,78 @@
                   <option value="11">11</option>
                   <option value="12">12</option>
                 </select>
-              </div>
-              <div class="form-group col-sm-6">
-                <label for="ccyear">Anno</label>
-                <select class="form-control" name="yearOption" [(ngModel)]="yearOption" (change)="onDataChange()">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="ccyear">Anno</label>
+                                <select class="form-control" name="yearOption" [(ngModel)]="yearOption" (change)="onDataChange()">
                   <option *ngFor="let year of anni">{{year}}</option>
                 </select>
-              </div>
-            </div>
-            <!--/.row-->
-            <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
-              <thead>
-                <tr>
-                  <th>Data Di Caricamento</th>
-                  <th>Periodo</th>
-                  <th>Nome File</th>
-                  <th>Download</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngIf="formAttachmentsArray.length === 0">
-                  <td colspan="4">Nessun Documento presente</td>
-                </tr>
-                <tr *ngFor="let attachment of formAttachmentsArrayFiltered">
-                  <td>{{ attachment.create_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
-                  <td>{{ attachment.period }}/{{ attachment.year }}</td>
-                  <td>{{ attachment.doc_name }}</td>
-                  <td>
-                    <a (click)="downloadFile(attachment.content, attachment.doc_name)"><i
+                            </div>
+                        </div>
+                        <!--/.row-->
+                        <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
+                            <thead>
+                                <tr>
+                                    <th>Data Di Caricamento</th>
+                                    <th>Periodo</th>
+                                    <th>Nome File</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="formAttachmentsArray.length === 0">
+                                    <td colspan="4">Nessun Documento presente</td>
+                                </tr>
+                                <tr *ngFor="let attachment of formAttachmentsArrayFiltered">
+                                    <td>{{ attachment.create_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
+                                    <td>{{ attachment.period }}/{{ attachment.year }}</td>
+                                    <td>{{ attachment.doc_name }}</td>
+                                    <td>
+                                        <a (click)="downloadFile(attachment.content, attachment.doc_name)"><i
                         class="fa fa-download text-primary"></i></a>
-                    <!-- <a href="data:application/pdf;base64,{{attachment.content}} | safe: 'resourceUrl'" target="_blank" download><i
+                                        <!-- <a href="data:application/pdf;base64,{{attachment.content}} | safe: 'resourceUrl'" target="_blank" download><i
                         class="fa fa-download"></i></a> -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
-          <div class="col-sm-12 mb-3 file-container">
-            <h5>File Allegati</h5>
-            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
-          </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
+                    <div class="col-sm-12 mb-3 file-container">
+                        <h5>File Allegati</h5>
+                        <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
+                    </div>
 
-          <div class="col-sm-12">
-            <h5>Elenco dei File</h5>
-            <table class="table table-responsive-sm table-hover table-outline mb-3">
-              <thead>
-                <tr>
-                  <th>Nome File</th>
-                  <th>Azioni</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngIf="uploader.queue.length === 0">
-                  <td colspan="2">nessun file da caricare</td>
-                </tr>
-                <tr *ngFor="let item of uploader.queue">
-                  <td>{{ item?.file?.name }}</td>
-                  <td nowrap>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
+                    <div class="col-sm-12">
+                        <h5>Elenco dei File</h5>
+                        <table class="table table-responsive-sm table-hover table-outline mb-3">
+                            <thead>
+                                <tr>
+                                    <th>Nome File</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="uploader.queue.length === 0">
+                                    <td colspan="2">nessun file da caricare</td>
+                                </tr>
+                                <tr *ngFor="let item of uploader.queue">
+                                    <td>{{ item?.file?.name }}</td>
+                                    <td nowrap>
+                                        <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
                       <span class="fa fa-trash"></span>
                     </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" [disabled]="fileUploading" class="btn btn-primary" (click)="fileUploadUI()">
               <span class="fa fa-upload" *ngIf="!fileUploading"></span>
               <span class="fa fa-spinner fa-spin" *ngIf="fileUploading"></span> Carica
             </button>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>

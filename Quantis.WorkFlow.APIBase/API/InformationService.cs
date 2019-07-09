@@ -34,7 +34,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {                
-                var conf=_dbcontext.Configurations.Single(o => o.owner == dto.Owner && o.key == dto.Key);
+                var conf=_dbcontext.Configurations.FirstOrDefault(o => o.owner == dto.Owner && o.key == dto.Key);
                 //TODO: Need to fix cutt of date.
                 if (dto.Owner == "be_restserver" && dto.Key == "day_cutoff")
                 {
@@ -68,7 +68,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var conf = _dbcontext.Configurations.Single(o => o.owner == dto.Owner && o.key == dto.Key);
+                var conf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == dto.Owner && o.key == dto.Key);
                 //TODO: Need to fix cutt of date.
                 if (dto.Owner == "be_restserver" && dto.Key == "day_cutoff")
                 {
@@ -120,7 +120,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var conf = _dbcontext.Configurations.Single(o => o.owner == owner && o.key == key);
+                var conf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == owner && o.key == key);
                 if(conf == null)
                 {
                     return null;

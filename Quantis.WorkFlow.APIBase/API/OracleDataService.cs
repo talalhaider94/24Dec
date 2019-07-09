@@ -113,12 +113,12 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)
-        public List<PslDTO> GetPsl(string period, int global_rule_id)
+        public List<PslDTO> GetPsl(string period, int global_rule_id, string tracking_period)
         {
             try
             {
                 var period_table = "t_psl_0_month";
-                /*switch (tracking_period)
+                switch (tracking_period)
                 {
                     case "MENSILE":
                         period_table = "t_psl_0_month";
@@ -135,11 +135,11 @@ namespace Quantis.WorkFlow.APIBase.API
                     case "ANNUALE":
                         period_table = "t_psl_0_year";
                         break;
-                }*/
+                }
                 
-                string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_slas s on v.sla_id = s.SLA_ID left join ";
+                string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc, d.domain_category_relation, r.service_level_target from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_global_rules gr on gr.global_rule_id = :global_rule_id left join t_slas s on v.sla_id = s.SLA_ID left join t_domain_categories d on r.domain_category_id = d.domain_category_id left join ";
                 query += period_table;
-                query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where s.sla_name = :sla_name and r.rule_name = :rule_name and p.time_stamp_utc is not null";
+                query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where r.rule_name = gr.global_rule_name and p.time_stamp_utc is not null";
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -160,14 +160,20 @@ namespace Quantis.WorkFlow.APIBase.API
                         List<DataRow> list = dt.AsEnumerable().ToList();
                         var values = list.Select(o => new PslDTO()
                         {
-                            sla_id = (Decimal)o[0],
-                            rule_id = (Decimal)o[1],
-                            provided = (Decimal)o[2],
-                            provided_c = (Decimal)o[3],
-                            provided_e = (Decimal)o[4],
-                            provided_ce = (Decimal)o[5],
-                            time_stamp_utc = (DateTime)o[6],
 
+                            sla_id = Decimal.ToInt32((Decimal)o[0]),
+                            rule_id = Decimal.ToInt32((Decimal)o[1]),
+                            provided = (o[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[2]),
+                            provided_c = (o[3] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[3]),
+                            provided_e = (o[4] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[4]),
+                            provided_ce = (o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5]),
+                            time_stamp_utc = (DateTime)o[6],
+                            result = (o[7].ToString() == "NLT") ? 
+                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Non Compliant]" : "[Compliant]")
+                                :
+                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Compliant]" : "[Non Compliant]"),
+                            target = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
+                            relation = o[7].ToString()
                         });
                         return values.ToList();
                     }
@@ -651,8 +657,8 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 Dictionary<string, string> config = null;
-                var bsiconf = _dbcontext.Configurations.Single(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
-                var oracleconf = _dbcontext.Configurations.Single(o => o.owner == "be_oracle" && o.key == "con_str");
+                var bsiconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
+                var oracleconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_oracle" && o.key == "con_str");
                 if (bsiconf == null || oracleconf == null)
                 {
                     var e = new Exception("Configuration of BSI or Oracle does not exist");
