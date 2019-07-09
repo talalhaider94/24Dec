@@ -11,6 +11,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, forkJoin } from 'rxjs';
 import { FileUploader } from 'ng2-file-upload';
 import * as moment from 'moment';
+import { tick } from '@angular/core/src/render3';
 
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
@@ -27,7 +28,6 @@ export class KPIComponent implements OnInit, OnDestroy {
   @ViewChild('infoModal') public infoModal: ModalDirective;
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
-  @ViewChild('statusChangeModal') public statusChangeModal: ModalDirective;
   @ViewChild('monthSelect') monthSelect: ElementRef;
   @ViewChild('yearSelect') yearSelect: ElementRef;
 
@@ -239,7 +239,11 @@ export class KPIComponent implements OnInit, OnDestroy {
     const selectedTickets = this.allTickets.filter(ticket => ticket.selected);
     this.selectedTickets = selectedTickets;
     if (this.selectedTickets.length > 0) {
-      this.rejectModal.show();
+      if(this.selectedTickets.length === 1) {
+        this.rejectModal.show();
+      } else {
+        this.toastr.info('Please select only one ticket.');  
+      }
     } else {
       this.toastr.info('Please select a Ticket.');
     }
@@ -269,7 +273,18 @@ export class KPIComponent implements OnInit, OnDestroy {
       console.log('approveFormSubmit', data);
       if (data) {
         this.ticketsStatus = data;
-        this.statusChangeModal.show();
+        this.ticketsStatus.forEach(status => {
+          if(status.isbsistatuschanged) {
+            this.toastr.success('Success', 'BSI status true.');
+          } else {
+            this.toastr.error('Error', 'BSI status false.');
+          }
+          if(status.issdmstatuschanged){
+            this.toastr.success('Success', 'SDM status true');
+          } else {
+            this.toastr.success('Error', 'SDM status false');
+          }
+        });
         this._getAllTickets();
       }
       this.approveModal.hide();
@@ -298,7 +313,19 @@ export class KPIComponent implements OnInit, OnDestroy {
         this.toastr.success('Ticket rejected', 'Success');
         if (data) {
           this.ticketsStatus = data;
-          this.statusChangeModal.show();
+          this.ticketsStatus.forEach(status => {
+            if(status.isbsistatuschanged) {
+              this.toastr.success('Success', 'BSI status true.');
+            } else {
+              this.toastr.error('Error', 'BSI status false.');
+            }
+            if(status.issdmstatuschanged){
+              this.toastr.success('Success', 'SDM status true');
+            } else {
+              this.toastr.success('Error', 'SDM status false');
+            }
+          });
+          // show toastr on reject
           this._getAllTickets();
         }
         this.rejectModal.hide();
@@ -365,12 +392,16 @@ export class KPIComponent implements OnInit, OnDestroy {
 
   selectAll() {
     for (var i = 0; i < this.allTickets.length; i++) {
-      this.allTickets[i].selected = this.selectedAll;
+      if(!this.allTickets[i].isclosed) {
+        this.allTickets[i].selected = this.selectedAll;
+      }
     }
   }
 
   checkIfAllSelected() {
-    this.selectedAll = this.allTickets.every(function (ticket: any) {
+    const notClosedTickets = this.allTickets.filter(ticket => !ticket.isclosed);
+
+    this.selectedAll = notClosedTickets.every(function (ticket: any) {
       return ticket.selected == true;
     })
   }

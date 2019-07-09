@@ -3,12 +3,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row justify-content-around">
                         <div class="col-sm-6 mb-3">
                             <button type="button" [disabled]="allTickets.length === 0" class="btn btn-danger mr-2" data-toggle="modal" (click)="rejectTicket()">Rifiuta</button>
                             <button type="button" [disabled]="allTickets.length === 0" class="btn btn-success" data-toggle="modal" (click)="approveTicket()">Approva</button>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3 ml-auto">
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label for="monthOption"><strong>Mese</strong></label>
@@ -49,7 +49,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>
-                                        <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+                                        <input type="checkbox"  [(ngModel)]="selectedAll" (change)="selectAll();" />
                                     </th>
                                     <th>Rif. Num</th>
                                     <th>Sommario</th>
@@ -71,7 +71,7 @@
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index">
                                     <td>
-                                        <input type="checkbox" [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
+                                        <input type="checkbox" [disabled]="ticket.isclosed" [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                     </td>
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                                     <td>
@@ -355,33 +355,3 @@
 </div>
 <!-- /.modal -->
 <!-- REJECT MODAL HTML END -->
-<!-- statusChangeModal.hide() -->
-<!-- STATUS CHANGED MODAL START -->
-<div bsModal #statusChangeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>BSI status Change</th>
-                                <th>SDM Status Change</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let status of ticketsStatus; let i = index">
-                                <td>{{ i+1 }}</td>
-                                <td>{{ status.isbsistatuschanged }}</td>
-                                <td>{{ status.issdmstatuschanged }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- STATUS CHANGED MODAL END -->
