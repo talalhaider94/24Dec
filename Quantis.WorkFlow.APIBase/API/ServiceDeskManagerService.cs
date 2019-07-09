@@ -468,14 +468,16 @@ namespace Quantis.WorkFlow.APIBase.API
                         newgroup = g.FirstOrDefault(o => o.step == step).handle;
                     }
                 }
+                string primarycp = string.IsNullOrEmpty(ticket.primary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.primary_contract_party)).customer_name;
+                string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
                     kpi_name = ticket.ID_KPI,
-                    contract_name = ticket.Summary.Split('|')[0],
+                    contract_name = ticket.Summary.Split('|')[1],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
-                    primary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.primary_contract_party) ? "0" : ticket.primary_contract_party),
-                    secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
+                    primary_contract_party = primarycp,
+                    secondary_contract_party = secondarycp,
                     ticket_status = status
                 };               
                 string tickethandle = "cr:" + id;
@@ -529,14 +531,16 @@ namespace Quantis.WorkFlow.APIBase.API
                         newgroup = g.FirstOrDefault(o=>o.step==step).handle;
                     }
                 };
+                string primarycp = string.IsNullOrEmpty(ticket.primary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.primary_contract_party)).customer_name;
+                string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
                     kpi_name = ticket.ID_KPI,
                     contract_name = ticket.Summary.Split('|')[0],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
-                    primary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.primary_contract_party)?"0": ticket.primary_contract_party),
-                    secondary_contract_party = int.Parse(string.IsNullOrEmpty(ticket.secondary_contract_party) ? "0" : ticket.secondary_contract_party),
+                    primary_contract_party = primarycp,
+                    secondary_contract_party = secondarycp,
                     ticket_status = status
                 };
                 
@@ -596,6 +600,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var output = QuantisUtilities.FixHttpURLForCall(_dataService.GetBSIServerURL(), "/api/UploadKPI/UploadKPI");
                     client.BaseAddress = new Uri(output.Item1);
                     var dataAsString = JsonConvert.SerializeObject(data);
+                    _dbcontext.LogInformation("Parameters for Upload KPI: " + dataAsString);
                     var content = new StringContent(dataAsString);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     var response = client.PostAsync(output.Item2, content).Result;
@@ -684,8 +689,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     var val = summary.Element("AttrValue").Value.Split("|");
                     if (val.Length >= 4)
                     {
-                        dto.primary_contract_party = val[2];
-                        dto.secondary_contract_party = val[3];
+                        dto.primary_contract_party = val[3];
+                        dto.secondary_contract_party = val[4];
                     }
                     else
                     {
@@ -701,7 +706,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     var st = dto.Status;
                     dto.Status = _statusMapping.FirstOrDefault(o => o.code == dto.Status).name;
-                    if(_statusMapping.First(o => o.code == st).step == 3)
+                    if(_statusMapping.First(o => o.code == st).step == _statusMapping.Max(p=>p.step))
                     {
                         dto.IsClosed = true;
                     }
