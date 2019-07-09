@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Quantis.WorkFlow.Jobs
+namespace Quantis.WorkFlow.Jobs.Jobs
 {
     [DisallowConcurrentExecution]
-    public class HelloWorldJob : IJob
+    public class CallingJavaJob : IJob
     {
         private readonly IServiceProvider _provider;
-        public HelloWorldJob(IServiceProvider provider)
+        public CallingJavaJob(IServiceProvider provider)
         {
             _provider = provider;
         }

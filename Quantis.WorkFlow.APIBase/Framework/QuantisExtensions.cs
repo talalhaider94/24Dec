@@ -42,7 +42,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
                 var exception = new T_Exception()
                 {
-                    message = logMessage,
+                    message = logMessage.Substring(0, Math.Min(999, logMessage.Length)),
                     stacktrace = null,
                     loglevel = "Information",
                     timestamp = DateTime.Now,
