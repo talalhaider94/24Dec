@@ -34,7 +34,7 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                     if (DateTime.Now.Day == Idayworkflow)
                     {
                         string month = DateTime.Now.Month.ToString();
-                        var kpis=dbcontext.CatalogKpi.Where(o => !string.IsNullOrEmpty(o.month)).ToList();
+                        var kpis=dbcontext.CatalogKpi.Where(o => !string.IsNullOrEmpty(o.month) && o.enable_wf).ToList();
                         kpis = kpis.Where(o => o.month.Split(',').ToList().Contains(month)).ToList();
                         dbcontext.LogInformation("Create Ticket Job Running: KPIS ids are "+string.Join(',',kpis.Select(o=>o.id)));
                         foreach(var k in kpis)
