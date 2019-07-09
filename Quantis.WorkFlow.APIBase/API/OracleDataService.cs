@@ -137,7 +137,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         break;
                 }
                 
-                string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_global_rules gr on gr.global_rule_id = :global_rule_id left join t_slas s on v.sla_id = s.SLA_ID left join ";
+                string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc, d.domain_category_relation, r.service_level_target from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_global_rules gr on gr.global_rule_id = :global_rule_id left join t_slas s on v.sla_id = s.SLA_ID left join t_domain_categories d on r.domain_category_id = d.domain_category_id left join ";
                 query += period_table;
                 query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where r.rule_name = gr.global_rule_name and p.time_stamp_utc is not null";
                 using (OracleConnection con = new OracleConnection(_connectionstring))
@@ -160,6 +160,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         List<DataRow> list = dt.AsEnumerable().ToList();
                         var values = list.Select(o => new PslDTO()
                         {
+
                             sla_id = Decimal.ToInt32((Decimal)o[0]),
                             rule_id = Decimal.ToInt32((Decimal)o[1]),
                             provided = (o[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[2]),
@@ -167,7 +168,12 @@ namespace Quantis.WorkFlow.APIBase.API
                             provided_e = (o[4] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[4]),
                             provided_ce = (o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5]),
                             time_stamp_utc = (DateTime)o[6],
-
+                            result = (o[7].ToString() == "NLT") ? 
+                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Non Compliant]" : "[Compliant]")
+                                :
+                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Compliant]" : "[Non Compliant]"),
+                            target = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
+                            relation = o[7].ToString()
                         });
                         return values.ToList();
                     }
