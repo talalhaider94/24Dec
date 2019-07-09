@@ -24,6 +24,7 @@ namespace Quantis.WorkFlow.Models
         public virtual IList<T_FormLog> FormLogs { get; set; }
         public virtual IList<T_FormRule> Rules { get; set; }
         public virtual IList<T_NotifierLog> NotifierLogs { get; set; }
+        public virtual IList<T_EmailNotifiers> EmailNotifiers { get; set; }
 
     }
 
@@ -38,6 +39,7 @@ namespace Quantis.WorkFlow.Models
             builder.HasMany(o => o.FormLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
             builder.HasMany(o => o.Rules).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.NotifierLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q=>q.id_form);
+            builder.HasMany(o => o.EmailNotifiers).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
         }
     }
 }
