@@ -505,7 +505,6 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
-            status= _statusMapping.FirstOrDefault(o => o.name == status).code;
             if (ticket.Status != status)
             {
                 _dbcontext.LogInformation("Status is equation to previous Status");
