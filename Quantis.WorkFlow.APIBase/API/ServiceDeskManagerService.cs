@@ -472,8 +472,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
-                    kpi_name = ticket.ID_KPI,
-                    contract_name = ticket.Summary.Split('|')[1],
+                    kpi_name = ticket.Summary.Split('|')[1],
+                    contract_name = ticket.Summary.Split('|')[2],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
                     primary_contract_party = primarycp,
@@ -535,8 +535,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
                 var bsiticketdto = new BSIKPIUploadDTO()
                 {
-                    kpi_name = ticket.ID_KPI,
-                    contract_name = ticket.Summary.Split('|')[0],
+                    kpi_name = ticket.Summary.Split('|')[1],
+                    contract_name = ticket.Summary.Split('|')[2],
                     id_ticket = ticket.ref_num,
                     period = ticket.Period,
                     primary_contract_party = primarycp,
@@ -607,7 +607,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     if (response.IsSuccessStatusCode)
                     {
                         string res = response.Content.ReadAsStringAsync().Result;
-                        if (res=="True")
+                        if (res == "\"TRUE\"")
                         {
                             return true;
                         }
@@ -687,7 +687,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 else
                 {
                     var val = summary.Element("AttrValue").Value.Split("|");
-                    if (val.Length >= 4)
+                    if (val.Length >= 5)
                     {
                         dto.primary_contract_party = val[3];
                         dto.secondary_contract_party = val[4];
