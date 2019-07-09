@@ -106,6 +106,10 @@ export const routes: Routes = [
       {
         path: 'adminroles',
         loadChildren: './views/adminroles/adminroles.module#AdminRolesModule'
+      },
+      {
+        path: 'email',
+        loadChildren: './views/email/email.module#EmailModule'
       }
     ]
   },
