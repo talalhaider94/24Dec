@@ -651,8 +651,8 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 Dictionary<string, string> config = null;
-                var bsiconf = _dbcontext.Configurations.Single(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
-                var oracleconf = _dbcontext.Configurations.Single(o => o.owner == "be_oracle" && o.key == "con_str");
+                var bsiconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
+                var oracleconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_oracle" && o.key == "con_str");
                 if (bsiconf == null || oracleconf == null)
                 {
                     var e = new Exception("Configuration of BSI or Oracle does not exist");

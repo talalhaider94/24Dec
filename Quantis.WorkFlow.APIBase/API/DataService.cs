@@ -584,7 +584,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_id = dto.user_id,
                         year = dto.year
                     };
-                    var form=_dbcontext.Forms.Single(o => o.form_id == dto.form_id);
+                    var form=_dbcontext.Forms.FirstOrDefault(o => o.form_id == dto.form_id);
                     if (form != null)
                     {
                         form.modify_date = DateTime.Now;
