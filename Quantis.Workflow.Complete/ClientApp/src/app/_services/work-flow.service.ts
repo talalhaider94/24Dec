@@ -81,7 +81,7 @@ export class WorkFlowService {
   uploadAttachmentToTicket(ticketId, docName, docContent): Observable<any> {
     const submitAttachmentEndPoint = `${environment.API_URL}/sdm/UploadAttachmentToTicket`;
     const  params = { TicketId: ticketId, AttachmentName: docName, AttachmentContent: docContent };
-    return this.http.post(submitAttachmentEndPoint, params, Headers.setTokenHeaders('POST'));
+    return this.http.post(submitAttachmentEndPoint, params, {observe: 'response', headers: Headers.setHeaders('POST').headers});
   }
 
 }
