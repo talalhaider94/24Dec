@@ -584,7 +584,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_id = dto.user_id,
                         year = dto.year
                     };
-                    var form=_dbcontext.Forms.Single(o => o.form_id == dto.form_id);
+                    var form=_dbcontext.Forms.FirstOrDefault(o => o.form_id == dto.form_id);
                     if (form != null)
                     {
                         form.modify_date = DateTime.Now;
@@ -1009,6 +1009,29 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 var attachments = _dbcontext.Forms.Include(o => o.Attachments).Single(p => p.form_id == form).Attachments;
                 return _fromAttachmentMapper.GetDTOs(attachments.ToList());
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<EmailNotifierDTO> GetEmailNotifiers()
+        {
+            try
+            {
+                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).ToList();
+                return notifiers.Select(o => new EmailNotifierDTO()
+                {
+                    email_body = o.email_body,
+                    id = o.id,
+                    form_name = o.Form.form_name,
+                    notify_date = o.notify_date,
+                    period = o.period,
+                    recipient = o.recipient,
+                    type = o.type,
+                    user_domain = o.user_domain
+                }).ToList();
 
             }
             catch (Exception e)

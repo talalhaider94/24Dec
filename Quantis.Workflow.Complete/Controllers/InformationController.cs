@@ -153,6 +153,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
             var json = new { API = "v. 1.2.5", UI = "v. 1.2.5b" };
             return Ok(json);
         }
+        [HttpGet("GetBSILink")]
+        public string GetBSILink()
+        {
+            var conf=_infomationAPI.GetConfiguration("bsi_server", "bsi_webserver");
+            return (conf==null)?null:conf.Value;
+        }
 
     }
 }
