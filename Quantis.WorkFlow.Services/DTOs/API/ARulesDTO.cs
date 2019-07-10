@@ -6,7 +6,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
 {
     public class ARulesDTO
     {
-        public int id_kpi { get; set; }
+        public string id_kpi { get; set; }
         public string name_kpi { get; set; }
         public DateTime interval_kpi { get; set; }
         public double value_kpi { get; set; }

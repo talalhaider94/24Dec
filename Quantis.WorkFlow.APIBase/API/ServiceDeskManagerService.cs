@@ -334,7 +334,7 @@ namespace Quantis.WorkFlow.APIBase.API
             param.Add("objectHandle", "cr:" + dto.TicketId);
             param.Add("description", dto.AttachmentName);
             param.Add("fileName", dto.AttachmentName);
-            _dbcontext.LogInformation("link:"+_sdmClient.InnerChannel.RemoteAddress.ToString()+" Name: "+dto.AttachmentName+" TicketNo: "+dto.TicketId+" Content: "+dto.AttachmentContent);
+            _dbcontext.LogInformation("link:"+_sdmClient.InnerChannel.RemoteAddress.ToString()+" Name: "+dto.AttachmentName+" TicketNo: "+dto.TicketId+" Content: "+ Encoding.UTF8.GetString(dto.AttachmentContent, 0, dto.AttachmentContent.Length));
             SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
             LogOut();
             return ret;
@@ -546,6 +546,31 @@ namespace Quantis.WorkFlow.APIBase.API
                 if (CallUploadKPI(bsiticketdto))
                 {
                     dto.IsBSIStatusChanged = true;
+                }
+                if (step == _statusMapping.Max(o => o.step))
+                {
+                    if (ticket.Summary.Split('|').Length == 6)
+                    {
+                        var kpiid = int.Parse(ticket.Summary.Split('|').LastOrDefault());
+                        var kpi=_dbcontext.CatalogKpi.FirstOrDefault(o => o.id == kpiid);
+                        ARulesDTO ardto = new ARulesDTO()
+                        {
+                            contract_name=kpi.contract,
+                            customer_name=_dbcontext.Customers.Single(o=>o.customer_id==kpi.primary_contract_party).customer_name,
+                            global_rule_id=kpi.global_rule_id_bsi,
+                            archived=true,
+                            id_kpi=kpi.id_kpi,
+                            interval_kpi=new DateTime(2000+int.Parse(ticket.Period.Split('/').Last()), int.Parse(ticket.Period.Split('/').First()),1),
+                            tracking_period=kpi.tracking_period,
+                            name_kpi=kpi.short_name,
+                            kpi_name_bsi=kpi.kpi_name_bsi,
+                            rule_id_bsi=kpi.global_rule_id_bsi,
+                            close_timestamp_ticket=DateTime.Now,
+                            ticket_id=int.Parse(ticket.Id),
+                            value_kpi=int.Parse(ticket.Description.Split('\n').ElementAt(5).Split(':').Last().Split('[').First().Trim())
+                        };
+                        _dataService.AddArchiveKPI(ardto);
+                    }
                 }
                 return dto;
 
@@ -778,15 +803,19 @@ namespace Quantis.WorkFlow.APIBase.API
                 byte[] topBoundryBytes = Encoding.UTF8.GetBytes(topBoundry);
                 stream.Write(topBoundryBytes, 0, topBoundryBytes.Length);
                 soapEnvelopeXml.Save(stream);
+                //_dbcontext.LogInformation(soapEnvelopeXml.OuterXml);
 
                 var filename = parameters["fileName"];
                 string fileHeaderTemplate = Environment.NewLine + "--" + boundary + Environment.NewLine + "Content-Type: text/plain; charset=us-ascii; name={0}" + Environment.NewLine + "Content-Transfer-Encoding: 7bit" + Environment.NewLine + "Content-ID: <{0}>" + Environment.NewLine + "Content-Disposition: attachment; name=\"{0}\"; filename=\"{0}\"" + Environment.NewLine;
                 fileHeaderTemplate = string.Format(fileHeaderTemplate, filename);
                 byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeaderTemplate + Environment.NewLine);
                 stream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
+                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes, 0, fileHeaderBytes.Length));
                 stream.Write(fileData, 0, fileData.Length);
+                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileData, 0, fileData.Length));
                 byte[] fileHeaderBytes2 = Encoding.UTF8.GetBytes(Environment.NewLine + "--" + boundary + "--" + Environment.NewLine);
                 stream.Write(fileHeaderBytes2, 0, fileHeaderBytes2.Length);
+                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes2, 0, fileHeaderBytes2.Length));
 
             }
 

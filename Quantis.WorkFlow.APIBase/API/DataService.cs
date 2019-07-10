@@ -794,6 +794,37 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
         
+        public void AddArchiveKPI(ARulesDTO dto)
+        {
+            try
+            {
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                {
+                    con.Open();
+                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period) values(:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period)";
+                    var command = new NpgsqlCommand(sp, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":id_kpi", dto.id_kpi);
+                    command.Parameters.AddWithValue(":name_kpi", dto.name_kpi);
+                    command.Parameters.AddWithValue(":interval_kpi", dto.interval_kpi);
+                    command.Parameters.AddWithValue(":value_kpi", dto.value_kpi);
+                    command.Parameters.AddWithValue(":ticket_id", dto.ticket_id);
+                    command.Parameters.AddWithValue(":close_timestamp_ticket", dto.close_timestamp_ticket);
+                    command.Parameters.AddWithValue(":archived", dto.archived);
+                    command.Parameters.AddWithValue(":customer_name", dto.customer_name);
+                    command.Parameters.AddWithValue(":contract_name", dto.contract_name);
+                    command.Parameters.AddWithValue(":kpi_name_bsi", dto.kpi_name_bsi);
+                    command.Parameters.AddWithValue(":rule_id_bsi", dto.rule_id_bsi);
+                    command.Parameters.AddWithValue(":global_rule_id", dto.global_rule_id);
+                    command.Parameters.AddWithValue(":tracking_period", dto.tracking_period);
+                    command.ExecuteScalar();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi,List<int> globalruleIds)
         {
             try
@@ -832,7 +863,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             //id_kpi | name_kpi |    interval_kpi     | value_kpi | ticket_id | close_timestamp_ticket | archived
                             ARulesDTO arules = new ARulesDTO();
-                            arules.id_kpi = reader.GetInt32(reader.GetOrdinal("id_kpi"));
+                            arules.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
                             arules.interval_kpi = reader.GetDateTime(reader.GetOrdinal("interval_kpi"));
                             arules.value_kpi = reader.GetDouble(reader.GetOrdinal("value_kpi"));
@@ -874,7 +905,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ kpi.primary_contract_party+"|"+kpi.secondary_contract_party??""
+                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ kpi.primary_contract_party+"|"+(kpi.secondary_contract_party==null?"": kpi.secondary_contract_party.ToString()) +"|"+kpi.id
                 };
 
             }

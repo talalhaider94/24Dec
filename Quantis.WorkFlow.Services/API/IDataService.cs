@@ -42,7 +42,7 @@ namespace Quantis.WorkFlow.Services.API
         FormRuleDTO GetFormRuleByFormId(int Id);
         bool AddUpdateFormRule(FormRuleDTO dto);
         bool RemoveAttachment(int Id);
-
+        void AddArchiveKPI(ARulesDTO dto);
         LoginResultDTO Login(string username, string password);
         void Logout(string token);
         bool SumbitForm(SubmitFormDTO dto);
