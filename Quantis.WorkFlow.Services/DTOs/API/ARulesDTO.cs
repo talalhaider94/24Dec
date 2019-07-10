@@ -13,5 +13,10 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int ticket_id { get; set; }
         public DateTime close_timestamp_ticket { get; set; }
         public bool archived { get; set; }
+        public string customer_name { get; set; }
+        public string contract_name { get; set; }
+        public string kpi_name_bsi { get; set; }
+        public int rule_id_bsi { get; set; }
+        public int global_rule_id { get; set; }
     }
 }
