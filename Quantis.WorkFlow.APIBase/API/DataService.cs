@@ -508,7 +508,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).FirstOrDefault(o => o.form_id == Id);
+                var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).Single(o => o.form_id == Id);
                 if (kpi.CatalogKPI == null)
                 {
                     return null;
