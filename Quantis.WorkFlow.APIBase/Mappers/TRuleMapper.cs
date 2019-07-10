@@ -62,7 +62,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 is_dirty = e.is_dirty,
                 is_parameters_dirty = e.is_parameters_dirty,
                 in_catalog = e.in_catalog,
-                global_rule_in_catalog=e.GlobalRule.in_catalog
+                //global_rule_in_catalog=e.GlobalRule.in_catalog
             };
         }
 
