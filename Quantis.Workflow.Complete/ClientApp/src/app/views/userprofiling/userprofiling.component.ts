@@ -58,6 +58,7 @@ export class UserProfilingComponent implements OnInit {
       console.log('getCatalogoUsers ==> ', res);
       this.gatheredData.usersList = res;
       this.loading.roles = false;
+      this.selectedData.userid = res.ca_bsi_user_id;
     });
 
 
@@ -66,6 +67,15 @@ export class UserProfilingComponent implements OnInit {
       this.treeFields.dataSource = data;//[].concat(data);
       this.isTreeLoaded = true;
     });
+
+    // if(this.selectedData.userid){
+    //   this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
+    //     console.log('getGlobalRulesByUserId ==> ', data);
+    //     this.treeFields.dataSource = data;//[].concat(data);
+    //     this.isTreeLoaded = true;
+    //     this.selectedData.checked = data;
+    //   });
+    // }
   
   }
 
