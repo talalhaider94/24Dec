@@ -266,7 +266,7 @@ export class KPIComponent implements OnInit, OnDestroy {
 
     let observables = new Array();
     for (let ticket of this.selectedTickets) {
-      observables.push(this.workFlowService.escalateTicketbyID(ticket.id, ticket.status, description.value));
+      observables.push(this.workFlowService.escalateTicketbyID(ticket.id, ticket.status, description.value || null));
     }
     forkJoin(observables).subscribe(data => {
       this.toastr.success('Ticket approved', 'Success');
