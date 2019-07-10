@@ -42,7 +42,7 @@ namespace Quantis.WorkFlow.Services.API
         FormRuleDTO GetFormRuleByFormId(int Id);
         bool AddUpdateFormRule(FormRuleDTO dto);
         bool RemoveAttachment(int Id);
-
+        void AddArchiveKPI(ARulesDTO dto);
         LoginResultDTO Login(string username, string password);
         void Logout(string token);
         bool SumbitForm(SubmitFormDTO dto);
@@ -51,7 +51,7 @@ namespace Quantis.WorkFlow.Services.API
         int ArchiveKPIs(ArchiveKPIDTO dto);
         bool ResetPassword(string username, string email);
         List<UserDTO> GetUsersByRoleId(int roleId);
-        List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi);
+        List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi, List<int> globalruleIds);
         List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
         
         List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year);

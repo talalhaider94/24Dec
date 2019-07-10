@@ -794,7 +794,38 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
         
-        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi)
+        public void AddArchiveKPI(ARulesDTO dto)
+        {
+            try
+            {
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                {
+                    con.Open();
+                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period) values(:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period)";
+                    var command = new NpgsqlCommand(sp, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":id_kpi", dto.id_kpi);
+                    command.Parameters.AddWithValue(":name_kpi", dto.name_kpi);
+                    command.Parameters.AddWithValue(":interval_kpi", dto.interval_kpi);
+                    command.Parameters.AddWithValue(":value_kpi", dto.value_kpi);
+                    command.Parameters.AddWithValue(":ticket_id", dto.ticket_id);
+                    command.Parameters.AddWithValue(":close_timestamp_ticket", dto.close_timestamp_ticket);
+                    command.Parameters.AddWithValue(":archived", dto.archived);
+                    command.Parameters.AddWithValue(":customer_name", dto.customer_name);
+                    command.Parameters.AddWithValue(":contract_name", dto.contract_name);
+                    command.Parameters.AddWithValue(":kpi_name_bsi", dto.kpi_name_bsi);
+                    command.Parameters.AddWithValue(":rule_id_bsi", dto.rule_id_bsi);
+                    command.Parameters.AddWithValue(":global_rule_id", dto.global_rule_id);
+                    command.Parameters.AddWithValue(":tracking_period", dto.tracking_period);
+                    command.ExecuteScalar();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi,List<int> globalruleIds)
         {
             try
             {
@@ -813,6 +844,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         sp += filterByKpiId;
                     }
+                    sp += " and global_rule_id in (" +string.Join(',',globalruleIds) + ")";
                     sp += " order by interval_kpi asc";
                     var command = new NpgsqlCommand(sp, con);
 
@@ -831,7 +863,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             //id_kpi | name_kpi |    interval_kpi     | value_kpi | ticket_id | close_timestamp_ticket | archived
                             ARulesDTO arules = new ARulesDTO();
-                            arules.id_kpi = reader.GetInt32(reader.GetOrdinal("id_kpi"));
+                            arules.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
                             arules.interval_kpi = reader.GetDateTime(reader.GetOrdinal("interval_kpi"));
                             arules.value_kpi = reader.GetDouble(reader.GetOrdinal("value_kpi"));
@@ -839,6 +871,12 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
 
+                            arules.customer_name = reader.GetString(reader.GetOrdinal("customer_name"));
+                            arules.contract_name = reader.GetString(reader.GetOrdinal("contract_name"));
+                            arules.kpi_name_bsi = reader.GetString(reader.GetOrdinal("kpi_name_bsi"));
+                            arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
+                            arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
+                            arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
                             list.Add(arules);
                         }
 
@@ -867,7 +905,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ kpi.primary_contract_party+"|"+kpi.secondary_contract_party??""
+                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ kpi.primary_contract_party+"|"+(kpi.secondary_contract_party==null?"": kpi.secondary_contract_party.ToString()) +"|"+kpi.id
                 };
 
             }
@@ -1068,7 +1106,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 //return _widgetMapper.GetDTOs(widget.ToList());
 
-                var rules = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
+                var rules = _dbcontext.Rules.Include(p => p.GlobalRule).Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
                 return _truleMapper.GetDTOs(rules.ToList());
                 /*var dtos = usr.Select(o => new TRuleDTO()
                 {
@@ -1256,11 +1294,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         //if (response.Content.ReadAsStringAsync().Result == "True")
                         //string x = response.Content.ReadAsStringAsync().Result;
                         string xml = response.Content.ReadAsStringAsync().Result;
-                        string xml2 = HttpUtility.HtmlEncode(xml);
-                        string xml3 = HttpUtility.HtmlDecode(xml);
-                        string xml4 = HttpUtility.UrlEncode(xml);
-                        string xml5 = HttpUtility.UrlDecode(xml);
-                        XDocument xdoc = XDocument.Parse(xml3);
+                        string xmlDecoded = HttpUtility.HtmlDecode(xml);
+                        XDocument xdoc = XDocument.Parse(xmlDecoded);
                         var lists = from uoslist in xdoc.Element("DataLoadingForms").Element("ControlsXml").Element("Xml").Element("Controls").Elements("Control") select uoslist;
                         //var labelList = new List<FormConfigurationDTO>();
                         var labelList = lists.Where(o=>o.Attribute("type").Value == "DLFLabel").Select(l => new{
@@ -1305,102 +1340,107 @@ namespace Quantis.WorkFlow.APIBase.API
                             a_checkedValue = (l.Attribute("checkedValue") != null) ? l.Element("checkedValue").Value : null,
                             a_unCheckedValue = (l.Attribute("unCheckedValue") != null) ? l.Element("unCheckedValue").Value : null,
                         });
-                        //foreach (var l in lists)
-                        //{
-                        //    if (l.Attribute("type").Value == "DLFLabel")
-                        //    {
-                        //        labelList.Add(new FormConfigurationDTO()
-                        //        {
-                        //            a_id = l.Attribute("id").Value,
-                        //            a_top = l.Attribute("top").Value,
-                        //            a_left = l.Attribute("left").Value,
-                        //            a_width = l.Attribute("width").Value,
-                        //            a_height = l.Attribute("height").Value,
-                        //            text = l.Element("text").Value,
-                        //            a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
-                        //            a_type = l.Attribute("type").Value
-                        //        }
-                        //        );
-                        //    }
-                        //    else
-                        //    {
-                        //        formfields.Add(new FormConfigurationDTO()
-                        //        {
-                        //            a_id = l.Attribute("id").Value,
-                        //            //useless a_name = l.Attribute("name").Value,
-                        //            a_top = l.Attribute("top").Value,
-                        //            a_left = l.Attribute("left").Value,
-                        //            a_width = l.Attribute("width").Value,
-                        //            a_height = l.Attribute("height").Value,
-                        //            a_type = l.Attribute("type").Value,
-                        //            //useless a_fontColor = l.Attribute("fontColor").Value,
-                        //            //useless a_fontFamily = l.Attribute("fontFamily").Value,
-                        //            //useless a_fontWeight = l.Attribute("fontWeight").Value,
-                        //            //useless a_fontItalic = l.Attribute("fontItalic").Value,
-                        //            //useless a_textDecoration = l.Attribute("textDecoration").Value,
-                        //            //useless a_fontSize = l.Attribute("fontSize").Value,
-                        //            //useless a_backgrounColor = l.Attribute("backgroundColor").Value,
-                        //            //useless a_isDefaultFontColor = l.Attribute("isDefaultFontColor").Value,
-                        //            //useless a_isDefaultBGColor = l.Attribute("isDefaultBGColor").Value,
-                        //            //useless a_text = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("text").Value : null,
+                    //foreach (var l in lists)
+                    //{
+                    //    if (l.Attribute("type").Value == "DLFLabel")
+                    //    {
+                    //        labelList.Add(new FormConfigurationDTO()
+                    //        {
+                    //            a_id = l.Attribute("id").Value,
+                    //            a_top = l.Attribute("top").Value,
+                    //            a_left = l.Attribute("left").Value,
+                    //            a_width = l.Attribute("width").Value,
+                    //            a_height = l.Attribute("height").Value,
+                    //            text = l.Element("text").Value,
+                    //            a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                    //            a_type = l.Attribute("type").Value
+                    //        }
+                    //        );
+                    //    }
+                    //    else
+                    //    {
+                    //        formfields.Add(new FormConfigurationDTO()
+                    //        {
+                    //            a_id = l.Attribute("id").Value,
+                    //            //useless a_name = l.Attribute("name").Value,
+                    //            a_top = l.Attribute("top").Value,
+                    //            a_left = l.Attribute("left").Value,
+                    //            a_width = l.Attribute("width").Value,
+                    //            a_height = l.Attribute("height").Value,
+                    //            a_type = l.Attribute("type").Value,
+                    //            //useless a_fontColor = l.Attribute("fontColor").Value,
+                    //            //useless a_fontFamily = l.Attribute("fontFamily").Value,
+                    //            //useless a_fontWeight = l.Attribute("fontWeight").Value,
+                    //            //useless a_fontItalic = l.Attribute("fontItalic").Value,
+                    //            //useless a_textDecoration = l.Attribute("textDecoration").Value,
+                    //            //useless a_fontSize = l.Attribute("fontSize").Value,
+                    //            //useless a_backgrounColor = l.Attribute("backgroundColor").Value,
+                    //            //useless a_isDefaultFontColor = l.Attribute("isDefaultFontColor").Value,
+                    //            //useless a_isDefaultBGColor = l.Attribute("isDefaultBGColor").Value,
+                    //            //useless a_text = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("text").Value : null,
 
-                        //            a_dataType = l.Attribute("dataType").Value,
-                        //            name = l.Element("name").Value,
-                        //            text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
-                        //                  : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
+                    //            a_dataType = l.Attribute("dataType").Value,
+                    //            name = l.Element("name").Value,
+                    //            text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
+                    //                  : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
 
-                        //            a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
+                    //            a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
 
-                        //            a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
-                        //                                 : (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("controllerDataType").Value : null,
+                    //            a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
+                    //                                 : (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("controllerDataType").Value : null,
 
-                        //            a_defaultValue = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("defaultValue").Value
-                        //                           : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("defaultValue").Value : null,
+                    //            a_defaultValue = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("defaultValue").Value
+                    //                           : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("defaultValue").Value : null,
 
-                        //            a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
-                        //            a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
-                        //                          : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("isMandatory").Value : null,
+                    //            a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
+                    //            a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
+                    //                          : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("isMandatory").Value : null,
 
-                        //            a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
-                        //                      : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("labelId").Value : null,
+                    //            a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
+                    //                      : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("labelId").Value : null,
 
-                        //            a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
-                        //            a_checkedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedValue").Value : null,
-                        //            a_unCheckedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("unCheckedValue").Value : null,
-
-
-
-                        //            /*if (a_type == "DLFLabel"){
-                        //                  a_text = l.Attribute("text").Value,
-                        //                  a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
-                        //              }
-                        //              if (a_type == "DLFTextBox") {
-                        //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
-                        //                  a_defaultValue = l.Attribute("defaultValue").Value,
-                        //                  a_maxLength = l.Attribute("maxLength").Value,
-                        //                  a_isMandatory = l.Attribute("isMandatory").Value,
-                        //                  a_labelId = l.Attribute("labelId").Value,
-                        //               }
-                        //               if (a_type == "DLFDatePicker"){
-                        //                  a_defaultValue = l.Attribute("defaultValue").Value,
-                        //                  a_showLegend = l.Attribute("showLegend").Value,
-                        //                  a_isMandatory = l.Attribute("isMandatory").Value,
-                        //                  a_labelId = l.Attribute("labelId").Value,
-                        //                }
-                        //                if (a_type == "DLFCheckBox"){
-                        //                  a_text = l.Attribute("text").Value,
-                        //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
-                        //                  a_checkedStatus = l.Attribute("checkedStatus").Value,
-                        //                  a_checkedValue = l.Attribute("checkedValue").Value,
-                        //                  a_unCheckedValue = l.Attribute("unCheckedValue").Value,
-                        //                } */
+                    //            a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
+                    //            a_checkedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedValue").Value : null,
+                    //            a_unCheckedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("unCheckedValue").Value : null,
 
 
-                        //        });
-                        //    }
+
+                    //            /*if (a_type == "DLFLabel"){
+                    //                  a_text = l.Attribute("text").Value,
+                    //                  a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                    //              }
+                    //              if (a_type == "DLFTextBox") {
+                    //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
+                    //                  a_defaultValue = l.Attribute("defaultValue").Value,
+                    //                  a_maxLength = l.Attribute("maxLength").Value,
+                    //                  a_isMandatory = l.Attribute("isMandatory").Value,
+                    //                  a_labelId = l.Attribute("labelId").Value,
+                    //               }
+                    //               if (a_type == "DLFDatePicker"){
+                    //                  a_defaultValue = l.Attribute("defaultValue").Value,
+                    //                  a_showLegend = l.Attribute("showLegend").Value,
+                    //                  a_isMandatory = l.Attribute("isMandatory").Value,
+                    //                  a_labelId = l.Attribute("labelId").Value,
+                    //                }
+                    //                if (a_type == "DLFCheckBox"){
+                    //                  a_text = l.Attribute("text").Value,
+                    //                  a_controllerDataType = l.Attribute("controllerDataType").Value,
+                    //                  a_checkedStatus = l.Attribute("checkedStatus").Value,
+                    //                  a_checkedValue = l.Attribute("checkedValue").Value,
+                    //                  a_unCheckedValue = l.Attribute("unCheckedValue").Value,
+                    //                } */
 
 
-                        //}
+                    //        });
+                    //    }
+
+
+                    //}
+
+                    //name: "Trans_CICS_Apert_Libr_no_abend"
+                    //source: "event"
+                    //type: "real"
+
                         var outputs = new List<FormConfigurationDTO>();
                         formfields = formfields.OrderBy(o=>Int32.Parse (o.a_top)).ToList();
                         foreach (var f in formfields)

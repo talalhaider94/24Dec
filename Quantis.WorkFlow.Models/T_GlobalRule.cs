@@ -28,6 +28,7 @@ namespace Quantis.WorkFlow.Models
         public string calc_policy_change_seq { get; set; }
         public string global_rule_name_key { get; set; }
         public bool in_catalog { get; set; }
+        public virtual List<T_Rule> Rules { get; set; }
 
     }
     public class T_GlobalRule_Configuration : IEntityTypeConfiguration<T_GlobalRule>
@@ -36,6 +37,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_global_rules");
             builder.HasKey(o => o.global_rule_id);
+            builder.HasMany(o => o.Rules).WithOne(p => p.GlobalRule).HasForeignKey(r => r.global_rule_id);
         }
     }
 }

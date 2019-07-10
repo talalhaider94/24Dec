@@ -20,9 +20,11 @@ namespace Quantis.WorkFlow.Controllers
     public class DataController : ControllerBase
     {
         private IDataService _dataAPI { get; set; }
-        public DataController(IDataService dataAPI)
+        private IInformationService _informationAPI { get; set; }
+        public DataController(IDataService dataAPI,IInformationService informationAPI)
         {
             _dataAPI = dataAPI;
+            _informationAPI = informationAPI;
         }
         [HttpGet("CronJobsScheduler")]
         public bool CronJobsScheduler()
@@ -213,7 +215,9 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("GetAllArchivedKPIs")]
         public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, int id_kpi)
         {
-            return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi);
+            var user = HttpContext.User as AuthUser;
+            var globalrules=_informationAPI.GetGlobalRulesByUserId(user.UserId);
+            return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi, globalrules);
         }
 
         [HttpGet("GetRawDataByKpiID")]
