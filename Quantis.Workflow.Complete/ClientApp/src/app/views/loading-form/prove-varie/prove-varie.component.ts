@@ -174,11 +174,12 @@ export class ProveVarieComponent implements OnInit {
       const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
       let newArray = errorArray.filter(value => value !== 'remove');
       if (newArray.length > 0) {
-        this.userLoadingFormErrors = errorArray;
+        this.userLoadingFormErrors = newArray;
         this.toastr.info('Comparison rule fails for form');
         // return false;
-      }
-      this.userLoadingFormErrors = [];
+      } else {
+        this.userLoadingFormErrors = [];
+      }      
     }
 
     //part where I fill in field values
@@ -219,6 +220,7 @@ export class ProveVarieComponent implements OnInit {
         this.toastr.error('There was an error while submitting form', 'Error');
         return;
       } else {
+        this.userLoadingFormErrors = [];
         this.toastr.success('Form has been submitted successfully.', 'Success');
       }
     }, error => {
