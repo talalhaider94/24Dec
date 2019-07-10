@@ -839,6 +839,11 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
 
+                            arules.customer_name = reader.GetString(reader.GetOrdinal("customer_name"));
+                            arules.contract_name = reader.GetString(reader.GetOrdinal("contract_name"));
+                            arules.kpi_name_bsi = reader.GetString(reader.GetOrdinal("kpi_name_bsi"));
+                            arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
+                            arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             list.Add(arules);
                         }
 
