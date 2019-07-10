@@ -57,6 +57,7 @@ namespace Quantis.WorkFlow.Models
         public string is_dirty { get; set; }
         public string is_parameters_dirty { get; set; }
         public bool in_catalog { get; set; }
+        public virtual T_GlobalRule GlobalRule { get; set; }
 
     }
     public class T_Rule_Configuration : IEntityTypeConfiguration<T_Rule>
@@ -65,6 +66,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_rules");
             builder.HasKey(o => o.rule_id);
+            builder.HasOne(o => o.GlobalRule).WithMany(p => p.Rules).HasForeignKey(r => r.global_rule_id);
         }
     }
 }

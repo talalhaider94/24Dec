@@ -55,5 +55,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string is_dirty { get; set; }
         public string is_parameters_dirty { get; set; }
         public bool in_catalog { get; set; }
+        public bool global_rule_in_catalog { get; set; }
     }
 }

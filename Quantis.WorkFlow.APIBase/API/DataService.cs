@@ -1106,7 +1106,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 //return _widgetMapper.GetDTOs(widget.ToList());
 
-                var rules = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
+                var rules = _dbcontext.Rules.Include(p => p.GlobalRule).Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
                 return _truleMapper.GetDTOs(rules.ToList());
                 /*var dtos = usr.Select(o => new TRuleDTO()
                 {
