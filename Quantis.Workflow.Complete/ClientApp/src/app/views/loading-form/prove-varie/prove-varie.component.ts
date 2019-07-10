@@ -276,7 +276,7 @@ export class ProveVarieComponent implements OnInit {
         this.formRulesBody = formRules;
         if (comparisonRulesBody) {
           this.displayComparisonRules = comparisonRulesBody.map(compRule => {
-            return `La regola ${compRule.campo1.name} ${compRule.segno} ${compRule.campo2.name} non è validata`
+            return `${compRule.campo1.name} ${compRule.segno} ${compRule.campo2.name}`
           })
         }
         if (formRules) {
