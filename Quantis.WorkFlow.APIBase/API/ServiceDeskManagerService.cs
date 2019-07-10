@@ -328,24 +328,15 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             string ret = null;
             LogIn();
-            try
-            {
-                Dictionary<string, string> param = new Dictionary<string, string>();
-                param.Add("sid", _sid + "");
-                param.Add("repositoryHandle", "doc_rep:1002");
-                param.Add("objectHandle", "cr:" + dto.TicketId);
-                param.Add("description", dto.AttachmentName);
-                param.Add("fileName", dto.AttachmentName);
-                SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                LogOut();
-            }
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            param.Add("sid", _sid + "");
+            param.Add("repositoryHandle", "doc_rep:1002");
+            param.Add("objectHandle", "cr:" + dto.TicketId);
+            param.Add("description", dto.AttachmentName);
+            param.Add("fileName", dto.AttachmentName);
+            _dbcontext.LogInformation("link:"+_sdmClient.InnerChannel.RemoteAddress.ToString()+" Name: "+dto.AttachmentName+" TicketNo: "+dto.TicketId+" Content: "+dto.AttachmentContent);
+            SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
+            LogOut();
             return ret;
         }
         public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context,string period)
