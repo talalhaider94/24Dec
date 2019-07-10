@@ -7,6 +7,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
 
 declare var $;
 let $this;
@@ -19,6 +20,15 @@ let $this;
 export class RicercaComponent implements OnInit, OnDestroy {
   @ViewChild('successModal') public successModal: ModalDirective;
   @ViewChild('infoModal') public infoModal: ModalDirective;
+
+  @ViewChild('ricercatable') block: ElementRef;
+  @ViewChild('searchCol2') searchCol2: ElementRef;
+  @ViewChild('searchCol3') searchCol3: ElementRef;
+  @ViewChild('searchCol4') searchCol4: ElementRef;
+  @ViewChild('searchCol5') searchCol5: ElementRef;
+  
+  @ViewChild('monthSelect') monthSelect: ElementRef;
+  @ViewChild('yearSelect') yearSelect: ElementRef;
   allTickets: any = [];
   getTicketHistories: any = [];
   getTicketAttachments: any = [];
@@ -31,6 +41,10 @@ export class RicercaComponent implements OnInit, OnDestroy {
   bsValue = new Date();
   isCollapsed = true;
   daterangepickerModel: Date[];
+  
+  monthOption;
+  yearOption;
+
   constructor(
     private router: Router,
     private workFlowService: WorkFlowService,
@@ -40,18 +54,15 @@ export class RicercaComponent implements OnInit, OnDestroy {
     $this = this;
   }
  
-  @ViewChild('ricercatable') block: ElementRef;
-  @ViewChild('searchCol1') searchCol1: ElementRef;
-  @ViewChild('searchCol2') searchCol2: ElementRef;
-  @ViewChild('searchCol3') searchCol3: ElementRef;
-  @ViewChild('searchCol4') searchCol4: ElementRef;
-  @ViewChild('searchCol5') searchCol5: ElementRef;
-
   ngOnInit() {
+    
+    this.monthOption = moment().subtract(1, 'months').format('MM');
+    this.yearOption = moment().format('YY');
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      destroy: true,
+      destroy: false,
       dom: 'Bfrtip',
       search: {
         caseInsensitive: true
@@ -94,10 +105,15 @@ export class RicercaComponent implements OnInit, OnDestroy {
         }
       }
     };
+
+  }
+
+  getRicercaTickets () {
     this.workFlowService.getTicketsSearchByUserRecerca().pipe(first()).subscribe(data => {
       console.log('getTicketsSearchByUserRecerca', data);
       this.allTickets = data;
-      this.dtTrigger.next();
+      //this.dtTrigger.next();
+      this.rerender();
       this.loading = false;
     }, error => {
       console.error('getTicketsSearchByUserRecerca', error);
@@ -174,13 +190,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.setUpDataTableDependencies();
-    this.rerender();
+    this.getRicercaTickets();
   }
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
       dtInstance.destroy();
-      // Call the dtTrigger to rerender again
       this.dtTrigger.next();
       this.setUpDataTableDependencies();
     });
@@ -188,12 +202,23 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   setUpDataTableDependencies() {
 
-    $(this.searchCol1.nativeElement).on('blur', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref
-          .columns(10)
-          .search(this.value)
-          .draw();
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(10).every(function () {
+        const that = this;
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.monthSelect.nativeElement).on('change', function () {
+          that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
+        });
+      });
+    });
+
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      datatable_Ref.columns(10).every(function () {
+        const that = this;
+        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+        $($this.yearSelect.nativeElement).on('change', function () {
+          that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
+        });
       });
     });
 
