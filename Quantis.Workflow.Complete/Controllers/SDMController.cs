@@ -69,6 +69,7 @@ namespace Quantis.WorkFlow.Controllers
             return _sdmAPI.DownloadAttachment(attachmentHandle);
         }
         [HttpPost("UploadAttachmentToTicket")]
+        [DisableRequestSizeLimit]
         public string UploadAttachmentToTicket([FromBody]SDMUploadAttachmentDTO dto)
         {
             return _sdmAPI.UploadAttachmentToTicket(dto);

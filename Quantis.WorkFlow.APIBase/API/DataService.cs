@@ -794,7 +794,7 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
         
-        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi)
+        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi,List<int> globalruleIds)
         {
             try
             {
@@ -813,6 +813,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         sp += filterByKpiId;
                     }
+                    sp += " and global_rule_id in (" +string.Join(',',globalruleIds) + ")";
                     sp += " order by interval_kpi asc";
                     var command = new NpgsqlCommand(sp, con);
 
