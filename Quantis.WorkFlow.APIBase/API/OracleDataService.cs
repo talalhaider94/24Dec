@@ -264,7 +264,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (id != 0)
                 {
-                    query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
+                    //query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
+                    query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration from t_forms f left join t_readers r on f.reader_id = r.reader_id where 1 = 1 ";
+
                     query += " and f.form_id = :form_id";
                     getConfigurations = true;
                 }
@@ -304,8 +306,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 create_date = (DateTime)o[5],
                                 modify_date = (DateTime)o[6],
                                 reader_configuration = GetFormAdapterConfiguration((string)o[7]),
-                                user_group_id = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
-                                user_group_name = (o[9] == DBNull.Value) ? string.Empty : (string)o[9],
+                                user_group_id = 0,//(o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
+                                user_group_name = string.Empty, //(o[9] == DBNull.Value) ? string.Empty : (string)o[9],
                                 day_cutoff = day_cutoff,
                                 cutoff = (bool)cutoff_result,
                                 latest_input_date= _dbcontext.FormLogs.Any(p=>p.id_form==id)? _dbcontext.FormLogs.Where(q=>q.id_form==id).Max(r=>r.time_stamp):new DateTime(0)
