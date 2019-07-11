@@ -19,7 +19,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   private changes: MutationObserver;
   public element: HTMLElement;
   private currentUrl = 'abc';
-  public currentVerion = 'abc';
+  public currentVerion = '0.0.0';
   public returnedNode:any;
   currentUser: any;
   constructor(
