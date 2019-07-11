@@ -82,7 +82,8 @@
     "ts-helpers": "^1.1.2",
     "tsickle": "^0.34.3",
     "tslib": "^1.9.0",
-    "zone.js": "^0.8.29"
+    "zone.js": "^0.8.29",
+    "xlsx": "^0.14.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.6",

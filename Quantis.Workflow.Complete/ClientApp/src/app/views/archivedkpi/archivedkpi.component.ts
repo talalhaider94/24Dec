@@ -9,13 +9,16 @@ import { first } from 'rxjs/operators';
 import { Key } from 'protractor';
 import { MatSort } from '@angular/material';
 import { OrderPipe } from 'ngx-order-pipe'
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
 
 declare var $;
 var $this;
 
 var nome='';
-
+const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+const EXCEL_EXTENSION = '.xlsx';
 @Component({
   templateUrl: './archivedkpi.component.html'
 })
@@ -23,11 +26,12 @@ export class ArchivedKpiComponent implements OnInit {
   @ViewChild('ArchivedkpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
- 
+  @ViewChild('table') table: ElementRef;
   
   public filter: string;
+  
   public p: any;
-  public loading: any;
+  loading: boolean = false;
   dtOptions: DataTables.Settings = {
     language: {
       processing: "Elaborazione...",
@@ -65,7 +69,7 @@ export class ArchivedKpiComponent implements OnInit {
   };
 
   
-  kpisData = [];
+kpisData = [];
 datiGrezzi=[];
 countCampiData=[];
 
@@ -93,14 +97,17 @@ countCampiData=[];
 
 
   ArchivedKpiBodyData: any = [
-    {
+    { 
+      customer_name: 'customer_name',
+      contract_name:'contract_name ',
       id_kpi: 'id_kpi',
       name_kpi: 'name_kpi',
       interval_kpi: 'interval_kpi',
       value_kpi: 'value_kpi',
       ticket_id: 'ticket_id',
       close_timestamp_ticket: 'close_timestamp_ticket',
-      archived: 'archived'
+      archived: 'archived',
+     
     }
   ]
 
@@ -122,27 +129,40 @@ countCampiData=[];
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
    this.populateDateFilter();
+
   }
 
   populateModalData(data) {
     this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
     this.kpisData = kpis;
+
     console.log('pop',this.kpisData);
     });
   }
 
+  
+
   populateDateFilter() {
-    this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
+      this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
+     
       this.ArchivedKpiBodyData = data;
+      console.log("kpi1",data);
+     // this.getNumeroContratti();
+      
       this.rerender();
+      this.numeroContratti();
+     
     });
+  
   }
   
   ngAfterViewInit() {
     this.dtTrigger.next();
     //this.getKpis1();
+    
     this.apiService.getDataKpis(this.monthVar, this.yearVar).subscribe((data:any)=>{
       this.ArchivedKpiBodyData = data;
+      
       this.rerender();
     });
   }
@@ -178,26 +198,30 @@ countCampiData=[];
   getKpis() {
     this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data) =>{
       this.ArchivedKpiBodyData = data;
+      console.log("kpi",data);
       Object.keys(this.fitroDataById).forEach( key => {
         this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
       })
+      
     });
   }
 
   eventTypeArray=[];
   getdati(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.loading = true;
     this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
-  
+    
     this.fitroDataById = dati;
     Object.keys(this.fitroDataById).forEach( key => {
       this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
-    
+     
     })
 
   console.log('dati',dati);
   this.getCountCampiData();
 
   this.numeroEventi();
+  this.loading = false;
   console.log(this.eventTypeArray);
 
   /*Object.keys(this.eventTypeArray).forEach( e=> {
@@ -206,9 +230,49 @@ countCampiData=[];
 
  });
   }
+arrayContratti=[];
+
+numeroContratti()
+{
+  this.arrayContratti=[];
+  this.ArchivedKpiBodyData.forEach( e => {
+    var count = this.ArchivedKpiBodyData.reduce((acc, cur) => cur.contract_name === e.contract_name ? ++acc : acc, 0);
+  // console.log('type:' + e.contract_name + ' # count:' +count);
+    if(e.contract_name !=null)this.arrayContratti[e.contract_name]=count;
+   // console.log('prova',this.arrayContratti);
+   
+})
+}
+
+
+
+numeroContrattoKpi=[];
+arraykpi=[];
+
+//addChildren(){
+
+  
+ // this.ArchivedKpiBodyData.forEach((x:any) => {
+   // console.log('cliente',x.name);
+   //this.numeroContrattoKpi.push({contratto:x.contract_name})
+ //  this.numeroContrattoKpi.push({contratto:x.contract_name});
+    //x.numeroContrattoKpi.forEach((y:any) => {
+      //var nomeContratto=x.contract_name;
+    // this.numeroContrattoKpi.push({contratto:x.contract_name:kpi});
+     
+     
+    
+      
+  //  });
+
+    
+ // });
+ // console.log('contrattoKPI',this.numeroContrattoKpi)
+//}
+
 
   numeroEventi() {
-    this.eventTypeArray = [];
+  this.eventTypeArray = [];
   this.fitroDataById.forEach( e => {
     var count = this.fitroDataById.reduce((acc, cur) => cur.event_type_id === e.event_type_id ? ++acc : acc, 0);
    // console.log('type:' + e.event_type_id + ' # count:' +count);
@@ -228,7 +292,7 @@ getDatiSecondPop(id_kpi, interval){
 
       var mese=moment(interval).format('MM');
       var anno=moment(interval).format('YYYY');
-  this.getdati(id_kpi,mese,anno);
+       this.getdati(id_kpi,mese,anno);
 
 
 
@@ -300,12 +364,54 @@ getNumeroKPI(){
     return this.ArchivedKpiBodyData.length;
   }
 
+ /* getNumeroContratti(){
+    var Length = 0;
+    this.ArchivedKpiBodyData.forEach( f => {
+      //let data = JSON.parse(f.data);
+      if(Object.keys(f.contract_name).length){
+        Length = Object.keys(f.contract_name).length;
+        return Length;
+      }  
+    });
+  
+  }
+*/  
 
 
-  
+  /*public exportAsExcelFile(json: any[], excelFileName: string): void {
+    
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    console.log('worksheet',worksheet);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    //const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+  } 
   
 
-  
+  exportAsXLSX():void {
+    this.exportAsExcelFile(this.fitroDataById, 'sample');
+  }*/
  
+  fireEvent()
+{
+  const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+  /* save to file */
+  XLSX.writeFile(wb, 'Export.csv');
+  
+}
 
+clear(){
+  this.filter = '';
+  }
 }
