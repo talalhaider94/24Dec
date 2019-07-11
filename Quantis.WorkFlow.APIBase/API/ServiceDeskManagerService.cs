@@ -594,7 +594,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var selecta = _sdmClient.doSelectAsync(_sid, "alg", "call_req_id='cr:"+ ticketId + "'", 99999, new string[0]);
                 selecta.Wait();
                 var sel = selecta.Result.doSelectReturn;
-                ret = parseLogs(sel);
+                ret = parseLogs(sel).OrderByDescending(o=>int.Parse(o.TimeStamp)).ToList();
             }
             catch (Exception e)
             {
