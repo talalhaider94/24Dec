@@ -866,7 +866,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
                             arules.interval_kpi = reader.GetDateTime(reader.GetOrdinal("interval_kpi"));
-                            arules.value_kpi = reader.GetDouble(reader.GetOrdinal("value_kpi"));
+                            arules.value_kpi = reader.GetString(reader.GetOrdinal("value_kpi"));
                             arules.ticket_id = reader.GetInt32(reader.GetOrdinal("ticket_id"));
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
