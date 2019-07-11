@@ -19,7 +19,7 @@ namespace Quantis.WorkFlow.Models
         public string form_error { get; set; }
         public DateTime create_date { get; set; }
         public DateTime modify_date { get; set; }
-        public virtual T_CatalogKPI CatalogKPI { get; set; }
+        public virtual IList<T_CatalogKPI> CatalogKPIs { get; set; }
         public virtual IList<T_FormAttachment> Attachments { get; set; }
         public virtual IList<T_FormLog> FormLogs { get; set; }
         public virtual IList<T_FormRule> Rules { get; set; }
@@ -34,7 +34,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_forms");
             builder.HasKey(o => o.form_id);
-            builder.HasOne(o => o.CatalogKPI).WithOne(p => p.Form).HasForeignKey<T_CatalogKPI>(e=>e.id_form);
+            builder.HasMany(o => o.CatalogKPIs).WithOne(p => p.Form).HasForeignKey(e=>e.id_form);
             builder.HasMany(o => o.Attachments).WithOne(p=>p.Form).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.FormLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
             builder.HasMany(o => o.Rules).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);

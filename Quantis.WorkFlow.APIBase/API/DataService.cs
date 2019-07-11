@@ -504,24 +504,24 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
 
-        public KPIOnlyContractDTO GetKpiByFormId(int Id)
+        public List<KPIOnlyContractDTO> GetKpiByFormId(int Id)
         {
             try
             {
-                var kpi = _dbcontext.Forms.Include(o => o.CatalogKPI).Single(o => o.form_id == Id);
-                if (kpi.CatalogKPI == null)
+                var kpi = _dbcontext.Forms.Include(o => o.CatalogKPIs).FirstOrDefault(o => o.form_id == Id);
+                if (kpi== null && kpi.CatalogKPIs.Any())
                 {
                     return null;
                 }
-                var dto = new KPIOnlyContractDTO()
+                return kpi.CatalogKPIs.Select(o => new KPIOnlyContractDTO()
                 {
-                    contract = kpi.CatalogKPI.contract,
-                    id_kpi = kpi.CatalogKPI.id_kpi,
-                    global_rule_id = kpi.CatalogKPI.global_rule_id_bsi,
-                    kpi_name_bsi = kpi.CatalogKPI.kpi_name_bsi,
-                    target = kpi.CatalogKPI.target
-                };
-                return dto;
+                    contract = o.contract,
+                    id_kpi = o.id_kpi,
+                    global_rule_id = o.global_rule_id_bsi,
+                    kpi_name_bsi = o.kpi_name_bsi,
+                    target = o.target
+                }).ToList();
+                
 
             }
             catch (Exception e)

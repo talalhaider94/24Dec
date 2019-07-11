@@ -128,7 +128,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.AddUpdateKpi(dto);
         }
         [HttpGet("GetKpiByFormId/{id}")]
-        public KPIOnlyContractDTO GetKpiByFormId(int id)
+        public List<KPIOnlyContractDTO> GetKpiByFormId(int id)
         {
             return _dataAPI.GetKpiByFormId(id);
         }
