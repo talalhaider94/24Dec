@@ -65,7 +65,8 @@ export class ArchivedKpiComponent implements OnInit {
     value_kpi: '',
     ticket_id: '',
     close_timestamp_ticket: '',
-    archived: ''
+    archived: '',
+    symbol: ''
   };
 
   
@@ -107,6 +108,7 @@ countCampiData=[];
       ticket_id: 'ticket_id',
       close_timestamp_ticket: 'close_timestamp_ticket',
       archived: 'archived',
+      symbol: ''
      
     }
   ]

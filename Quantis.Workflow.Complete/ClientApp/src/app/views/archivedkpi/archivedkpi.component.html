@@ -100,7 +100,7 @@
         <td  style="text-align:center">{{row.id_kpi}}</td>
         <td  style="text-align:center">{{row.name_kpi}}</td>
         <td  style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
-        <td  style="text-align:center">{{row.value_kpi}}</td>
+        <td  style="text-align:center">{{row.value_kpi}} {{row.symbol}}</td>
         <td  style="text-align:center">{{row.ticket_id}}</td>
         <td  style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
         <td  style="text-align:center">{{row.archived}}</td>
@@ -147,7 +147,7 @@
               <td  style="text-align:center">{{rec.id_kpi}}</td>
               <td  style="text-align:center">{{rec.name_kpi}}</td>
               <td  style="text-align:center">{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
-              <td  style="text-align:center">{{rec.value_kpi}}</td>
+              <td  style="text-align:center">{{rec.value_kpi}} {{rec.symbol}}</td>
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
               <td  style="text-align:center">{{rec.archived}}</td>
