@@ -61,7 +61,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 measurability_status = e.measurability_status,
                 is_dirty = e.is_dirty,
                 is_parameters_dirty = e.is_parameters_dirty,
-                in_catalog = e.in_catalog
+                in_catalog = e.in_catalog,
+                //global_rule_in_catalog=e.GlobalRule.in_catalog
             };
         }
 
