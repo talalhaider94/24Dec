@@ -16,5 +16,6 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public string result { get; set; }
         public Decimal target { get; set; }
         public string relation { get; set; }
+        public string symbol { get; set; }
     }
 }

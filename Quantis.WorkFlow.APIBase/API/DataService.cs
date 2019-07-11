@@ -866,7 +866,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
                             arules.interval_kpi = reader.GetDateTime(reader.GetOrdinal("interval_kpi"));
-                            arules.value_kpi = reader.GetDouble(reader.GetOrdinal("value_kpi"));
+                            arules.value_kpi = reader.GetString(reader.GetOrdinal("value_kpi"));
                             arules.ticket_id = reader.GetInt32(reader.GetOrdinal("ticket_id"));
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
@@ -877,6 +877,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
                             arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
+                            arules.symbol = reader.GetString(reader.GetOrdinal("symbol"));
                             list.Add(arules);
                         }
 
@@ -898,7 +899,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 return new CreateTicketDTO()
                 {
-                    Description = GenerateDiscriptionFromKPI(kpi,psl.Any()?(psl.FirstOrDefault().provided_ce+" "+psl.FirstOrDefault().result):"N/A"),
+                    Description = GenerateDiscriptionFromKPI(kpi,psl.Any()?(psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " "+psl.FirstOrDefault().result):"N/A"),
                     ID_KPI = kpi.id_kpi,
                     GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
