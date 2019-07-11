@@ -168,7 +168,9 @@ export class ProveVarieComponent implements OnInit {
     // errorArray empty means Either all rules passed 
     if (errorArray.length > 0) {
       this.userLoadingFormErrors = errorArray;
-      this.toastr.error('Form fields data is not valid');
+      if(!errorArray.includes('Nessun campo compilato nel Loading Form')) {
+        this.toastr.error('Form fields data is not valid');
+      }
       return false;
     } else {
       const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
