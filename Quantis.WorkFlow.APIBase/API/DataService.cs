@@ -1042,9 +1042,9 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var form=_dbcontext.CatalogKpi.Single(o=>o.id==kpiId).id_form;
-                if (form == 0)
+                if (form==null || form == 0)
                 {
-                    throw new Exception("No form Available for KPI " + kpiId);
+                    return new List<FormAttachmentDTO>();
                 }
                 var attachments = _dbcontext.Forms.Include(o => o.Attachments).Single(p => p.form_id == form).Attachments;
                 return _fromAttachmentMapper.GetDTOs(attachments.ToList());
