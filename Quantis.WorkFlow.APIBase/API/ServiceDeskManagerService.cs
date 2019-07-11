@@ -567,7 +567,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             rule_id_bsi=kpi.global_rule_id_bsi,
                             close_timestamp_ticket=DateTime.Now,
                             ticket_id=int.Parse(ticket.Id),
-                            value_kpi=int.Parse(ticket.Description.Split('\n').ElementAt(5).Split(':').Last().Trim().Split(' ').First().Trim()),
+                            value_kpi=ticket.Description.Split('\n').ElementAt(5).Split(':').Last().Trim().Split(' ').First().Trim(),
                             symbol = ticket.Description.Split('\n').ElementAt(5).Split(':').Last().Trim().Split('[').First().Trim().Split(' ').Last()
                         };
                         _dataService.AddArchiveKPI(ardto);

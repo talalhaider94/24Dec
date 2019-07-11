@@ -41,11 +41,11 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                             try
                             {
                                 var tic = sdmservice.CreateTicketByKPIID(k.id);
-                                dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: "+k+" ticket ref: " + tic.ref_num);
+                                dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: "+k.id+" ticket ref: " + tic.ref_num);
                             }
                             catch(Exception e)
                             {
-                                dbcontext.LogInformation("Create Ticket Job(NO): Ticket creation failed with kpiId: " + k+" with msg: "+e.Message);
+                                dbcontext.LogInformation("Create Ticket Job(NO): Ticket creation failed with kpiId: " + k.id+" with msg: "+e.Message);
                             }
                             
                         }
