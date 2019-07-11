@@ -176,7 +176,7 @@ export class ProveVarieComponent implements OnInit {
       if (newArray.length > 0) {
         this.userLoadingFormErrors = newArray;
         this.toastr.info('Comparison rule fails for form');
-        // return false;
+        return false;
       } else {
         this.userLoadingFormErrors = [];
       }      
