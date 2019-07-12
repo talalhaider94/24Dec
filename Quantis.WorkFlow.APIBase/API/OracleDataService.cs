@@ -905,7 +905,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                             var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
                             (
-                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top) &&
+                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top)-5 &&
                             Int32.Parse(o.a_top) <= (Int32.Parse(f.a_top) + Int32.Parse(f.a_height))
                             ));
                             if (label != null)
