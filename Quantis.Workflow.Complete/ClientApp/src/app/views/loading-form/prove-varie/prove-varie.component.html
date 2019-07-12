@@ -46,9 +46,12 @@
                                 <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index" class="panel panel-default">
                                     <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
                                         <div class="row align-items-center mb-2">
-                                            <div class="col-md-4 col-form-label">
-                                                <label>{{arrayFormElements[i].name}}</label>
-                                            </div>
+                                          <div class="col-md-4 col-form-label">
+                                                  <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
+                                                  <ng-template #trueBlock><label>{{arrayFormElements[i].label}}</label></ng-template>
+                                                  <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                                            
+                                          </div>
                                             <div class="col-sm-8">
                                                 <!-- <input type="date" [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
                           placeholder="inserisci data" class="form-control" formControlName="valoreUtente"> -->
@@ -72,9 +75,11 @@
                                     </div>
                                     <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type!='time'" class="panel-body bg-white" [formGroupName]="i">
                                         <div class="row align-items-center mb-2">
-                                            <div class="col-md-4 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
-                                                <label>{{arrayFormElements[i].name}}</label>
-                                            </div>
+                                          <div class="col-md-4 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
+                                            <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
+                                            <ng-template #trueBlock><label>{{arrayFormElements[i].label}}</label></ng-template>
+                                            <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                                          </div>
                                             <div class="col-sm-8">
 
                                                 <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
