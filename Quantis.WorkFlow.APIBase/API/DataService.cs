@@ -829,7 +829,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                if (!globalruleIds.Any())
+                if (!globalruleIds.Any() || globalruleIds == null )
                 {
                     return new List<ARulesDTO>();
                 }
@@ -881,7 +881,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
                             arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
-                            arules.symbol = reader.GetString(reader.GetOrdinal("symbol"));
+                            arules.symbol = (reader.IsDBNull(reader.GetOrdinal("symbol")) ? null : reader.GetString(reader.GetOrdinal("symbol")));
                             list.Add(arules);
                         }
 
