@@ -69,7 +69,7 @@ export const navItems: NavData[] = [
   },*/
   {
     name: 'Workflow',
-    url: '/coming-soon',
+    url: '/workflow-menu',
     icon: 'fa fa-code-fork',
     key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA'],
     children: [
@@ -141,7 +141,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Loading Form',
-    url: '/coming-soon',
+    url: '/loadingform-menu',
     icon: 'fa fa-pencil-square-o',
     key: ['VIEW_ADMIN_LOADING_FORM', 'VIEW_LOADING_FORM_UTENTI'],
     children: [
@@ -163,7 +163,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Configurazione',
-    url: '/coming-soon',
+    url: '/config-menu',
     icon: 'fa fa-gear',
     key: ['VIEW_CONFIGURATIONS','VIEW_WORKFLOW_CONFIGURATIONS'],
     children: [
