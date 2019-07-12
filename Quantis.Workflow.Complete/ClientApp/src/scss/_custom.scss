@@ -1,4 +1,40 @@
 // Here you can add other styles
+.sidebar {
+  .nav-link {
+    padding: 8px;
+  }
+
+  .nav-link.active {
+    background-color: #20a8d8;
+
+    i.nav-icon {
+      color: white;//#00ff59;
+    }
+  }
+
+  .nav-dropdown-items {
+    background-color: #002a40;
+
+    i.nav-icon {
+      margin-left: 8px;
+    }
+  }
+
+  .nav-dropdown.open {
+    .nav-link {
+      padding: 6px;
+    }
+
+    a.nav-dropdown-toggle {
+      background-color: #004265;
+    }
+
+    i.nav-icon {
+      color: white;
+    }
+  }
+}
+
 .class-version-nav {
   margin-top: auto;
 }
@@ -57,9 +93,10 @@
 }
 
 .mat-card-subtitle {
+  width: auto;
+  height: auto;
   font-size: 25px;
 }
-
 .mat-card-title {
   text-decoration-color: #20a8d8;
 }

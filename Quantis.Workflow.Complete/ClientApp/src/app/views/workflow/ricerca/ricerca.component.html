@@ -40,14 +40,6 @@
                                         </select>
                                     </div>
                                     <div class="w-100"></div>
-                                    <!-- <div class="col ">
-                                        <label>
-                                            “DA – A”
-                                        </label>
-                                        <input type="text" class="form-control " placeholder="DA – A" bsDaterangepicker
-                                            [(ngModel)]="daterangepickerModel" #searchCol1
-                                            [bsConfig]="{ adaptivePosition: true }" />
-                                    </div> -->
                                     <div class="col ">
                                         <label>
                                             Numero Rif
@@ -125,6 +117,9 @@
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary"
                                             triggers="focus">
                                             {{ ticket.summary | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.summary | slice:15 || 'N/A' }}
+                                            </span>
                                         </button>
                                     </td>
                                     <td>
@@ -138,6 +133,9 @@
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description"
                                             triggers="focus">
                                             {{ ticket.description | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
                                         </button>
                                     </td>
                                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
