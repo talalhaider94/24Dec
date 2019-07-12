@@ -829,6 +829,10 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
+                if (!globalruleIds.Any())
+                {
+                    return new List<ARulesDTO>();
+                }
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
                 {
                     con.Open();
