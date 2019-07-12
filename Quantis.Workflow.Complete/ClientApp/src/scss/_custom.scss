@@ -87,16 +87,12 @@
 }
 
 .example-card {
-  max-width: 200px;
-  max-height: 100px;
-  border: solid #20a8d8
+  max-width: auto;
+  max-height: auto;
+  border: solid #20a8d8;
 }
 
-.mat-card-subtitle {
-  width: auto;
-  height: auto;
-  font-size: 25px;
-}
+
 .mat-card-title {
   text-decoration-color: #20a8d8;
 }
@@ -170,4 +166,9 @@
 }
 .hiddenRow {
   padding: 0 !important;
+}
+.mat-card-subtitle {
+  width: auto;
+  height: auto;
+  font-size: 25px;
 }

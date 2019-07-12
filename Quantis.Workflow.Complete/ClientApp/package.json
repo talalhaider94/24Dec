@@ -49,6 +49,7 @@
     "angular-dual-listbox": "^5.0.1",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
+    "classlist.js": "^1.1.20150312",
     "core-js": "^2.6.5",
     "datatables.net": "^1.10.19",
     "datatables.net-buttons": "^1.5.6",
@@ -82,8 +83,8 @@
     "ts-helpers": "^1.1.2",
     "tsickle": "^0.34.3",
     "tslib": "^1.9.0",
-    "zone.js": "^0.8.29",
-    "xlsx": "^0.14.3"
+    "xlsx": "^0.14.3",
+    "zone.js": "^0.8.29"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.6",
