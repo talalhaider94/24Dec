@@ -414,7 +414,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   setUpDataTableDependencies() {
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(1).every(function () {
+      datatable_Ref.columns(5).every(function () {
         const that = this;
         $($this.statoKPISelect.nativeElement).on('change', function () {
           that.search($(this).val()).draw();
