@@ -906,7 +906,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ kpi.primary_contract_party+"|"+(kpi.secondary_contract_party==null?"": kpi.secondary_contract_party.ToString()) +"|"+kpi.id
+                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract,
+                    zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
+                    zz2_calcValue= psl.Any() ? (psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result) : "N/A",
+                    zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
                 };
 
             }

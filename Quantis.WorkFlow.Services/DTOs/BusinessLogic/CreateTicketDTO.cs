@@ -17,5 +17,8 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string Reference2 { get; set; }
         public string Reference3 { get; set; }
         public string Period { get; set; }
+        public string zz1_contractParties { get; set; }
+        public string zz2_calcValue { get; set; }
+        public string zz3_KpiIds { get; set; }
     }
 }
