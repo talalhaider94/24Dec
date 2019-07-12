@@ -61,7 +61,5 @@ namespace Quantis.WorkFlow.Services.API
 
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
 
-        List<FormConfigurationDTO> GetFormConfiguration();
-
     }
 }
