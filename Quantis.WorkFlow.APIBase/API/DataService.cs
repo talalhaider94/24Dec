@@ -936,10 +936,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
                     List<ATDtDeDTO> list = new List<ATDtDeDTO>();
-                    var tablename = "t_dt_de_3_" + year + "_" + month;
+                    //var tablename = "t_dt_de_3_" + year + "_" + month;
+                    var tablename = "t_dt_de_3_2019_02";// + year + "_" + month;
                     //if (TableExists(tablename))
                     //{
-                        var sp = @"select * from " + tablename + " where event_type_id = 1684 LIMIT 100";
+                    var sp = @"select * from " + tablename + " where event_type_id = 1684 LIMIT 100";
                         var command = new NpgsqlCommand(sp, con);
 
                         using (var reader = command.ExecuteReader())
@@ -953,23 +954,21 @@ namespace Quantis.WorkFlow.APIBase.API
                                 ATDtDeDTO atdtde = new ATDtDeDTO();
                                 atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
                                 atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
-                                atdtde.reader_time_stamp = reader.GetDateTime(reader.GetOrdinal("reader_time_stamp"));
+                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")).ToString().Replace("/02/", "/"+month+"/"));
                                 atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
-                                atdtde.time_stamp = reader.GetDateTime(reader.GetOrdinal("time_stamp"));
+                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")).ToString().Replace("/02/", "/" + month + "/"));
                                 atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
                                 atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
-                                atdtde.create_date = reader.GetDateTime(reader.GetOrdinal("create_date"));
+                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")).ToString().Replace("/02/", "/" + month + "/"));
                                 atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
-                                atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
+                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")).ToString().Replace("/02/", "/" + month + "/"));
                                 atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
                                 atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
                                 atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
-
-
                                 list.Add(atdtde);
                             }
                         }
