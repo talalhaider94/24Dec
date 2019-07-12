@@ -14,7 +14,8 @@
                             <div class="row">
                                 <div class="form-group col-sm-4">
                                     <label for="yearOption"><strong>Stato KPI</strong></label>
-                                    <select #statoKPISelect class="form-control" name="statoKPIOption" [(ngModel)]="statoKPIOption">
+                                    <select #statoKPISelect class="form-control" name="statoKPIOption"
+                                        [(ngModel)]="statoKPIOption">
                                         <option value="" selected>Select</option>
                                         <option value="[Compliant]">Compliant</option>
                                         <option value="[Non Compliant]">Non Compliant</option>
@@ -113,7 +114,18 @@
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.description"
+                                        <ng-template #popTemplate>
+                                            <ul class="list-group list-group-flush"
+                                                *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                                <li *ngIf="obj.key" class="list-group-item">
+                                                    <b>{{obj.key}}</b> {{obj.value}}
+                                                </li>
+                                                <li *ngIf="!obj.key" class="list-group-item">
+                                                    {{obj}}
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
                                             triggers="focus">
                                             {{ ticket.description | slice:0:15 || 'N/A' }}
                                             <span class="d-none">

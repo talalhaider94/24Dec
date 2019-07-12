@@ -100,7 +100,7 @@ export class KPIComponent implements OnInit, OnDestroy {
         "visible": true,
         "searchable": false
       },
-    ],
+      ],
       buttons: [
         {
           extend: 'colvis',
@@ -242,10 +242,10 @@ export class KPIComponent implements OnInit, OnDestroy {
     const selectedTickets = this.allTickets.filter(ticket => ticket.selected);
     this.selectedTickets = selectedTickets;
     if (this.selectedTickets.length > 0) {
-      if(this.selectedTickets.length === 1) {
+      if (this.selectedTickets.length === 1) {
         this.rejectModal.show();
       } else {
-        this.toastr.info('L’operazione di Rifiuto è consentita su un solo ticket');  
+        this.toastr.info('L’operazione di Rifiuto è consentita su un solo ticket');
       }
     } else {
       this.toastr.info('Please select a Ticket.');
@@ -277,12 +277,12 @@ export class KPIComponent implements OnInit, OnDestroy {
       if (data) {
         this.ticketsStatus = data;
         this.ticketsStatus.forEach(status => {
-          if(status.isbsistatuschanged) {
+          if (status.isbsistatuschanged) {
             this.toastr.success('Success', 'BSI status true.');
           } else {
             this.toastr.error('Error', 'BSI status false.');
           }
-          if(status.issdmstatuschanged){
+          if (status.issdmstatuschanged) {
             this.toastr.success('Success', 'SDM status true');
           } else {
             this.toastr.success('Error', 'SDM status false');
@@ -317,12 +317,12 @@ export class KPIComponent implements OnInit, OnDestroy {
         if (data) {
           this.ticketsStatus = data;
           this.ticketsStatus.forEach(status => {
-            if(status.isbsistatuschanged) {
+            if (status.isbsistatuschanged) {
               this.toastr.success('Success', 'BSI status true.');
             } else {
               this.toastr.error('Error', 'BSI status false.');
             }
-            if(status.issdmstatuschanged){
+            if (status.issdmstatuschanged) {
               this.toastr.success('Success', 'SDM status true');
             } else {
               this.toastr.success('Error', 'SDM status false');
@@ -372,15 +372,15 @@ export class KPIComponent implements OnInit, OnDestroy {
           self.uploader.queue.pop();
           self.toastr.success(`${fileName} uploaded successfully.`);
           if (data.status === 200 || data.status === 204) {
-                self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId).pipe(first()).subscribe(data => {
-                  if (!!data) {
-                    self.getTicketAttachments = data;
-                    console.log('ticketAttachments', data);
-                  }
-                  self.loading = false;
-                }, error => {
-                  self.loading = false;
-                });
+            self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId).pipe(first()).subscribe(data => {
+              if (!!data) {
+                self.getTicketAttachments = data;
+                console.log('ticketAttachments', data);
+              }
+              self.loading = false;
+            }, error => {
+              self.loading = false;
+            });
 
           }
         }, error => {
@@ -395,7 +395,7 @@ export class KPIComponent implements OnInit, OnDestroy {
 
   selectAll() {
     for (var i = 0; i < this.allTickets.length; i++) {
-      if(!this.allTickets[i].isclosed) {
+      if (!this.allTickets[i].isclosed) {
         this.allTickets[i].selected = this.selectedAll;
       }
     }
@@ -423,5 +423,24 @@ export class KPIComponent implements OnInit, OnDestroy {
     });
   }
   //search end
+
+  formatDescriptionColumn(description) {
+    const regex = /([\w]+:)("(([^"])*)"|'(([^'])*)'|(([^\s])*))/g;
+    if(!!description && description.length > 0) {
+      let stringMatches = description.match(regex);
+      if(stringMatches.length > 0){
+        return stringMatches.map((key, index) => {
+          return {
+            key,
+            value: description.split(stringMatches[index]).pop().split(stringMatches[index + 1])[0]
+          }
+        });
+      } else {
+        return [description];
+      }
+    } else {
+      return ['N/A'];
+    }
+  }
 
 }
