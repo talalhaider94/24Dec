@@ -12,6 +12,7 @@ import { OrderPipe } from 'ngx-order-pipe'
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -65,8 +66,7 @@ export class ArchivedKpiComponent implements OnInit {
     value_kpi: '',
     ticket_id: '',
     close_timestamp_ticket: '',
-    archived: '',
-    symbol: ''
+    archived: ''
   };
 
   
@@ -77,17 +77,17 @@ countCampiData=[];
 
   fitroDataById: any = [
     {
-      event_type_id: ' event_type_id  ',
-      resource_id: 'resource_id',
-      time_stamp : 'time_stamp ',
-      raw_data_id: 'raw_data_id',
-      create_date : 'create_date ',
+      event_type_id: '   ',
+      resource_id: '',
+      time_stamp : ' ',
+      raw_data_id: '',
+      create_date : ' ',
       data:this.datiGrezzi,
-      modify_date:'modify_date',
-      reader_id: 'reader_id',
-      event_source_type_id : 'event_source_type_id ',
-      event_state_id: 'event_state_id ',
-      partner_raw_data_id : 'partner_raw_data_id ',
+      modify_date:'',
+      reader_id: '',
+      event_source_type_id : ' ',
+      event_state_id: ' ',
+      partner_raw_data_id : ' ',
     }
   ]
 
@@ -99,16 +99,15 @@ countCampiData=[];
 
   ArchivedKpiBodyData: any = [
     { 
-      customer_name: 'customer_name',
-      contract_name:'contract_name ',
-      id_kpi: 'id_kpi',
-      name_kpi: 'name_kpi',
-      interval_kpi: 'interval_kpi',
-      value_kpi: 'value_kpi',
-      ticket_id: 'ticket_id',
-      close_timestamp_ticket: 'close_timestamp_ticket',
-      archived: 'archived',
-      symbol: ''
+      customer_name: '',
+      contract_name:' ',
+      id_kpi: '',
+      name_kpi: '',
+      interval_kpi: '',
+      value_kpi: '',
+      ticket_id: '',
+      close_timestamp_ticket: '',
+      archived: '',
      
     }
   ]
@@ -120,7 +119,7 @@ countCampiData=[];
   yearVar: any;
   id:any;
   sortedCollection: any[];
-  constructor(private apiService: ApiService,private orderPipe: OrderPipe) {
+  constructor(private apiService: ApiService,private orderPipe: OrderPipe,private toastr: ToastrService) {
     $this = this;
     this.sortedCollection = orderPipe.transform(this.fitroDataById, 'info.name');
     console.log(this.sortedCollection);
@@ -131,7 +130,7 @@ countCampiData=[];
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
    this.populateDateFilter();
-
+   
   }
 
   populateModalData(data) {
@@ -153,9 +152,14 @@ countCampiData=[];
       
       this.rerender();
       this.numeroContratti();
-     
-    });
-  
+      this.addChildren();
+      },error=>{
+
+        this.toastr.error("errore di connessione al sever");
+
+      });
+    
+    
   }
   
   ngAfterViewInit() {
@@ -229,8 +233,11 @@ countCampiData=[];
   /*Object.keys(this.eventTypeArray).forEach( e=> {
     console.log(e + '#' + this.eventTypeArray[e]);
   })*/
+},error=>{
 
- });
+  this.toastr.error("errore di connessione al server");
+
+});
   }
 arrayContratti=[];
 
@@ -250,34 +257,39 @@ numeroContratti()
 
 numeroContrattoKpi=[];
 arraykpi=[];
+res:any={};
 
-//addChildren(){
-
-  
- // this.ArchivedKpiBodyData.forEach((x:any) => {
-   // console.log('cliente',x.name);
-   //this.numeroContrattoKpi.push({contratto:x.contract_name})
- //  this.numeroContrattoKpi.push({contratto:x.contract_name});
-    //x.numeroContrattoKpi.forEach((y:any) => {
-      //var nomeContratto=x.contract_name;
-    // this.numeroContrattoKpi.push({contratto:x.contract_name:kpi});
+addChildren(){
+  this.res={};
+  this.ArchivedKpiBodyData.forEach((y:any) => {
+    if(this.res[y.contract_name]){
+      this.res[y.contract_name].push(y.name_kpi)
+    }
+    else{
+      this.res[y.contract_name]=[];
+      this.res[y.contract_name].push(y.name_kpi)
+    }
+   
      
-     
-    
       
-  //  });
+      
+     
+     
+       
+    });
+  
 
+   console.log('contrattoKPI',this.res);
+  }
     
- // });
- // console.log('contrattoKPI',this.numeroContrattoKpi)
-//}
+ 
 
 
   numeroEventi() {
   this.eventTypeArray = [];
   this.fitroDataById.forEach( e => {
     var count = this.fitroDataById.reduce((acc, cur) => cur.event_type_id === e.event_type_id ? ++acc : acc, 0);
-   // console.log('type:' + e.event_type_id + ' # count:' +count);
+   //console.log('type:' + e.event_type_id + ' # count:' +count);
     if(e.event_type_id > 0)this.eventTypeArray[e.event_type_id]=count;
    // console.log('prova',this.eventTypeArray);
    
@@ -415,5 +427,12 @@ getNumeroKPI(){
 
 clear(){
   this.filter = '';
+  this.fitroDataById=[];
+  this.p=1;
   }
+  reset() {
+    this.kpisData = [];
+  }
+
+
 }

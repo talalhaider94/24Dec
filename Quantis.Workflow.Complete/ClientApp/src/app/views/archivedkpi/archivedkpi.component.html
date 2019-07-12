@@ -24,22 +24,32 @@
                 </mat-card>
              -->
              <div class="row">
-               <mat-card class="example-card" style="margin-left: 20px;">
+               <!--<mat-card class="example-card" style="margin-left: 20px;">
                   <mat-card-header >
                     <mat-card-title style="color:#20a8d8">CONTRATTI</mat-card-title>
                     <mat-card-subtitle style="margin-left: 40px" *ngFor="let et of arrayContratti | keyvalue"><b> {{et.key}}</b></mat-card-subtitle>
+                     
+                    
+                  </mat-card-header>
+                 
+                </mat-card>&nbsp;-->
+                
+               
+               <mat-card class="example-card" style="margin-left: 20px;">
+                  <mat-card-header >
+                    <mat-card-title style="color:#20a8d8;text-align: center;">CONTRATTI/KPI</mat-card-title>
+                    <mat-card-subtitle style="text-align: center;" *ngFor="let et of res | keyvalue"><b> {{et.key}}/{{et.value.length}}</b></mat-card-subtitle>
                   </mat-card-header>
                  
                 </mat-card>&nbsp;
-                
-               <mat-card class="example-card" style="margin-left: 30px; width: 50%" >
-                  <mat-card-header style="margin-left:30px;">
-                  <mat-card-title style="color:#20a8d8;margin-left:22px;">KPI</mat-card-title>
-                  <mat-card-subtitle style="margin-left: 30px">{{getNumeroKPI()}}</mat-card-subtitle>
+
+
+                <mat-card class="example-card" style="margin-left: 20px;">
+                  <mat-card-header >
+                    <mat-card-title style="color:#20a8d8;text-align: center;">TOTALE KPI</mat-card-title>
+                    <mat-card-subtitle style="text-align: center;">{{getNumeroKPI()}}</mat-card-subtitle>
                   </mat-card-header>
-                 
-                  
-                </mat-card>
+                </mat-card>&nbsp;
                 <br>
                 
                 </div>
@@ -123,7 +133,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Valori per KPI</h5>
         
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -147,7 +157,7 @@
               <td  style="text-align:center">{{rec.id_kpi}}</td>
               <td  style="text-align:center">{{rec.name_kpi}}</td>
               <td  style="text-align:center">{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
-              <td  style="text-align:center">{{rec.value_kpi}} {{rec.symbol}}</td>
+              <td style="text-align:center">{{rec.value_kpi}} {{rec.symbol}}</td>
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
               <td  style="text-align:center">{{rec.archived}}</td>
@@ -159,7 +169,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="reset()">Chiudi</button>
       </div>
     </div>
   </div>
@@ -189,17 +199,17 @@
           </p>
         </div>
           <div class="row">
-            <div class="col">
+            
               <div class="collapse" id="collapseExample">
-                <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+                <mat-card class="example-card" style="margin-left: 20px; " >
                   <mat-card-header>
-                <mat-card-title style="color:#20a8d8; margin-left: 30px">Eventi</mat-card-title>
-                <mat-card-subtitle *ngFor="let et of eventTypeArray | keyvalue"><b> {{et.key}}:{{et.value}}</b></mat-card-subtitle>
+                <mat-card-title style="color:#20a8d8; text-align: center;">Eventi</mat-card-title>
+                <mat-card-subtitle style="text-align: center;" *ngFor="let et of eventTypeArray | keyvalue"><b> {{et.key}}:{{et.value}}</b></mat-card-subtitle>
                 </mat-card-header>
                  
                   
                 </mat-card>
-              </div>
+             
             </div>
             
           </div>
@@ -346,17 +356,17 @@
           </p>
         </div>
           <div class="row">
-            <div class="col">
+           
               <div class="collapse" id="collapseExample">
-                <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+                <mat-card class="example-card" style="margin-left: 20px;" >
                   <mat-card-header>
-                <mat-card-title style="color:#20a8d8;margin-left: 30px">EVENTI</mat-card-title>
-                <mat-card-subtitle *ngFor="let et of eventTypeArray | keyvalue"><b> {{et.key}}:{{et.value}}</b></mat-card-subtitle>
+                <mat-card-title style="color:#20a8d8;text-align: center;">EVENTI</mat-card-title>
+                <mat-card-subtitle style="text-align: center;" *ngFor="let et of eventTypeArray | keyvalue"><b> {{et.key}}:{{et.value}}</b></mat-card-subtitle>
                 </mat-card-header>
                  
                   
                 </mat-card>
-              </div>
+              
             </div>
             
           </div>
