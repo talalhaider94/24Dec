@@ -287,6 +287,13 @@ export class KPIComponent implements OnInit, OnDestroy {
           } else {
             this.toastr.success('Error', 'SDM status false');
           }
+          if(status.showarchivemsg) {
+            if(status.isarchive) {
+              this.toastr.success('Success', 'Ticket is archived.');
+            } else {
+              this.toastr.success('Info', 'Archive is not successfull.');
+            }
+          }
         });
         this._getAllTickets();
       }
@@ -326,6 +333,13 @@ export class KPIComponent implements OnInit, OnDestroy {
               this.toastr.success('Success', 'SDM status true');
             } else {
               this.toastr.success('Error', 'SDM status false');
+            }
+            if(status.showarchivemsg) {
+              if(status.isarchive) {
+                this.toastr.success('Success', 'Ticket is archived.');
+              } else {
+                this.toastr.success('Info', 'Archive is not successfull.');
+              }
             }
           });
           // show toastr on reject
