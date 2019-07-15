@@ -47,6 +47,7 @@
     "@types/file-saver": "^2.0.1",
     "angular-datatables": "^7.0.0",
     "angular-dual-listbox": "^5.0.1",
+    "angular-tree-component": "^8.4.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "classlist.js": "^1.1.20150312",
