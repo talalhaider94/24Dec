@@ -148,12 +148,14 @@ export class ProveVarieComponent implements OnInit {
         .find(field => field.name == 'Note' && !!field.value);
 
       if (!utenteFormData) {
+        // The Notes field is mandatory because Missing Data has been selected
         this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
         return false;
-      } else {
-        // passing NOTE input field value.
-        this._noteTextFileUpload(utenteFormData.value);
       }
+      //  else {
+      //   // passing NOTE input field value.
+      //   this._noteTextFileUpload(utenteFormData.value);
+      // }
     }
 
     var formFields: FormField;
@@ -201,6 +203,7 @@ export class ProveVarieComponent implements OnInit {
       }
       userSubmit.inputs.push(formFields);
     });
+    this._noteTextFileUpload(utenteFormData.value);
     this._userLoadingFormSubmit(periodRaw, dataAttuale, userSubmit);
   }
 
