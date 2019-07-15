@@ -26,6 +26,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_CatalogUser> CatalogUsers { get; set; }
         public DbSet<T_Session> Sessions { get; set; }
         public DbSet<T_CatalogKPI> CatalogKpi { get; set; }
+        public DbSet<T_GlobalRule> TGlobalRules { get; set; }
         public DbSet<T_APIDetail> ApiDetails { get; set; }
         public DbSet<T_FormAttachment> FormAttachments { get; set; }
         public DbSet<T_FormLog> FormLogs { get; set; }
@@ -71,6 +72,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_User_KPI_Configuration());
             builder.ApplyConfiguration(new T_Customer_Configuration());
             builder.ApplyConfiguration(new T_EmailNotifiers_Configuration());
+            builder.ApplyConfiguration(new T_GlobalRule_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -104,6 +106,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_User_KPI>();
             updateUpdatedProperty<T_Customer>();
             updateUpdatedProperty<T_EmailNotifiers>();
+            updateUpdatedProperty<T_GlobalRule>();
             return base.SaveChanges();
         }
 

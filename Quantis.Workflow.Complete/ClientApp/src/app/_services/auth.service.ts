@@ -62,14 +62,14 @@ export class AuthService {
       return !!this.getUser();
   }
 
-  checkSession() {
+  checkSession() { //temporary function while implementing logout on 401 error //remove in app.component.ts
     let user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
       //console.log(user)
       let last_action = user.last_action;
       //console.log(last_action);
       //console.log(Date.now());
-      if ((Date.now() - last_action) <= 900000) {
+      if ((Date.now() - last_action) <= 1800000) {
         let new_action = Date.now();
         user.last_action = new_action;
         localStorage.setItem('currentUSer', JSON.stringify(user));

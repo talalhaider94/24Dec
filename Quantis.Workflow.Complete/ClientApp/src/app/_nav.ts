@@ -96,6 +96,13 @@ export const navItems: NavData[] = [
     key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI', 'VIEW_UTENTI_DA_CONSOLIDARE'],
     children: [
       {
+        name: 'KPI da Consolidare',
+        url: '/catalogo/admin-kpi',
+        icon: 'fa fa-file-archive-o',
+        version: '0.0.1',
+        key: 'VIEW_CATALOG_KPI'
+      },
+      {
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
         icon: 'fa fa-address-book-o',

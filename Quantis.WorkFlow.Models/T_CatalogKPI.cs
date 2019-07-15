@@ -61,7 +61,7 @@ namespace Quantis.WorkFlow.Models
         public void Configure(EntityTypeBuilder<T_CatalogKPI> builder)
         {
             builder.ToTable("t_catalog_kpis");
-            builder.HasKey(o => new { o.id_kpi, o.id });
+            builder.HasKey(o => o.id );
             builder.HasOne(o => o.Form).WithMany(p => p.CatalogKPIs).HasForeignKey(r=>r.id_form);
         }
     }
