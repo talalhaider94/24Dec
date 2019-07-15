@@ -802,14 +802,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
             XmlDocument soapEnvelopeXml = new XmlDocument();
-            var xmlStr = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:ser=""http://www.ca.com/UnicenterServicePlus/ServiceDesk"">
-                    <soapenv:Header/>
-                    <soapenv:Body>
-                    <ser:{0}>
-                    {1}
-                    </ser:{0}>
-                    </soapenv:Body>
-                    </soapenv:Envelope>";
+            var xmlStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://www.ca.com/UnicenterServicePlus/ServiceDesk\">" + Environment.NewLine + "<soapenv:Header/>" + Environment.NewLine + "<soapenv:Body>" + Environment.NewLine + "<ser:{0}>" + Environment.NewLine + "{1}" + Environment.NewLine +"</ser:{0}>" + Environment.NewLine +"</soapenv:Body>" + Environment.NewLine +"</soapenv:Envelope>";
             string parms = string.Join(string.Empty, parameters.Select(kv => String.Format("<{0}>{1}</{0}>", kv.Key, kv.Value)).ToArray());
             var s = String.Format(xmlStr, action, parms);
             soapEnvelopeXml.LoadXml(s);
