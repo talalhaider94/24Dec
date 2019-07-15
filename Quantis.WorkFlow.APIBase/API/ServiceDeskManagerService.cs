@@ -18,6 +18,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using Quantis.WorkFlow.Services.Framework;
 using Quantis.WorkFlow.Models.SDM;
+using System.Globalization;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -807,7 +808,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var s = String.Format(xmlStr, action, parms);
             soapEnvelopeXml.LoadXml(s);
             // Create the web request
-            string boundary = "=" + DateTime.Now.Ticks.ToString("x");
+            string boundary = "=" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture);
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
             webRequest.Headers.Add("Content-Type", string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org> \"; boundary=\"{0}\"", boundary));
             webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
