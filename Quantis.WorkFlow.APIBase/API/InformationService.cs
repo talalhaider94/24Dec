@@ -298,9 +298,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     Children = o.GroupBy(p => p.Sla_Id).Select(p => new HierarchicalNameCodeDTO(p.Key, p.First().Sla_Name, p.First().Sla_Name)
                     {
-                        Children = p.Select(r => new HierarchicalNameCodeDTO(r.Global_Rule_Id, r.Rule_Name, r.Rule_Name)).ToList()
-                    }).ToList()
-                }).ToList();
+                        Children = p.Select(r => new HierarchicalNameCodeDTO(r.Global_Rule_Id, r.Rule_Name, r.Rule_Name)).OrderBy(r=>r.Code).ToList()
+                    }).OrderBy(p=>p.Code).ToList()
+                }).OrderBy(o=>o.Code).ToList();
             }
             catch (Exception e)
             {

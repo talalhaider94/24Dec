@@ -14,47 +14,47 @@ export class LoadingFormService {
 
   getLoadingForms(): Observable<any>{
     const loadingFormEndPoint = `${environment.API_URL}/data/GetAllForms`;
-    return this.http.get(loadingFormEndPoint, Headers.setHeaders('GET'));
+    return this.http.get(loadingFormEndPoint);
   }
   
   getKpiByFormId(form_id:number): Observable<any> {
     const getKpiByFormIdEndPoint = `${environment.API_URL}/Data/GetKpiByFormId/${form_id}`;
-    return this.http.get(getKpiByFormIdEndPoint, Headers.setHeaders('GET'));
+    return this.http.get(getKpiByFormIdEndPoint);
   }
 
   getFormFilterById(form_id:number): Observable<any> {
     const getFormFilterByIdEndPoint = `${environment.API_URL}/Data/GetFormById/${form_id}`
-    return this.http.get(getFormFilterByIdEndPoint, Headers.setHeaders('GET'));
+    return this.http.get(getFormFilterByIdEndPoint);
   }
   // form submitted by User from Loading form
   submitForm(formFields:UserSubmitLoadingForm){
     const submitFormEndPoint = `${environment.API_URL}/Data/SubmitForm`;
-    return this.http.post(submitFormEndPoint,JSON.stringify(formFields),Headers.setHeaders('POST'));
+    return this.http.post(submitFormEndPoint,JSON.stringify(formFields));
   }
   
   getFormById(form_id:number): Observable<any> {
     const getFormByIdEndPoint = `${environment.API_URL}/Oracle/GetFormById/${form_id}`
-    return this.http.get(getFormByIdEndPoint,Headers.setHeaders('GET'));
+    return this.http.get(getFormByIdEndPoint);
   }
 
   getFormsByUserId(user_id:number): Observable<any> {
     const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUser`;
-    return this.http.get(formsByUserIdEndPoint,Headers.setTokenHeaders('GET'));
+    return this.http.get(formsByUserIdEndPoint);
   }
   // form submitted by Admin from Loading form
   createForm(form): Observable<any> {
     const createFormEndPoint = `${environment.API_URL}/Data/AddUpdateFormRule`;
-    return this.http.post(createFormEndPoint,form, Headers.setHeaders('POST'));
+    return this.http.post(createFormEndPoint,form);
   }
 
   getFormRuleByFormId(formId): Observable<any> {
     const getFormRuleByFormIdEndPoint = `${environment.API_URL}/Data/GetFormRuleByFormId/${formId}`;
-    return this.http.get(getFormRuleByFormIdEndPoint, Headers.setHeaders('GET'));
+    return this.http.get(getFormRuleByFormIdEndPoint);
   }
   getAttachmentsByFormId(formId: number): Observable<any> {
     const getAttachmentsByFormIdEndPoint = `${environment.API_URL}/Data/GetAttachmentsByFormId/`;
     const  params = new  HttpParams().set('formId', formId.toString());
-    return this.http.get(getAttachmentsByFormIdEndPoint, { headers: Headers.setHeaders('GET').headers, params } );
+    return this.http.get(getAttachmentsByFormIdEndPoint, { params } );
   }
 
   submitAttachment(attachment): Observable<any> {
@@ -62,7 +62,7 @@ export class LoadingFormService {
     // TODO: improve later
     let a = [];
     a.push(attachment);
-    return this.http.post(submitAttachmentEndPoint, a, Headers.setHeaders('POST'));
+    return this.http.post(submitAttachmentEndPoint, a);
   }
 
 }

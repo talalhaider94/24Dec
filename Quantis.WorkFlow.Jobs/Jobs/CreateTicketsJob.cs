@@ -36,14 +36,20 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                         string month = DateTime.Now.Month.ToString();
                         var kpis=dbcontext.CatalogKpi.Where(o => !string.IsNullOrEmpty(o.month) && o.enable_wf).ToList();
                         kpis = kpis.Where(o => o.month.Split(',').ToList().Contains(month)).ToList();
-                        dbcontext.LogInformation("Create Ticket Job Running: KPIS ids are "+string.Join(',',kpis.Select(o=>o.id)));
-                        List<string> ticketIds = new List<string>();
                         foreach(var k in kpis)
                         {
-                            var tic=sdmservice.CreateTicketByKPIID(k.id);
-                            ticketIds.Add(tic.ref_num);
+                            try
+                            {
+                                var tic = sdmservice.CreateTicketByKPIID(k.id);
+                                dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: "+k.id+" ticket ref: " + tic.ref_num);
+                            }
+                            catch(Exception e)
+                            {
+                                dbcontext.LogInformation("Create Ticket Job(NO): Ticket creation failed with kpiId: " + k.id+" with msg: "+e.Message);
+                            }
+                            
                         }
-                        dbcontext.LogInformation("Create Ticket Job Sucessful: Tickets created with ref: " + string.Join(',', ticketIds));
+                        
 
                     }
                 }
