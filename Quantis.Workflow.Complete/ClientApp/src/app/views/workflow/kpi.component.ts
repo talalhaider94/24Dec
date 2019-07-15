@@ -248,7 +248,7 @@ export class KPIComponent implements OnInit, OnDestroy {
         this.toastr.info('L’operazione di Rifiuto è consentita su un solo ticket');
       }
     } else {
-      this.toastr.info('Please select a Ticket.');
+      this.toastr.info('Selezionare almeno un ticket');
     }
   }
 
@@ -258,7 +258,7 @@ export class KPIComponent implements OnInit, OnDestroy {
     if (this.selectedTickets.length > 0) {
       this.approveModal.show();
     } else {
-      this.toastr.info('Please select a Ticket.');
+      this.toastr.info('Selezionare almeno un ticket');
     }
   }
 
