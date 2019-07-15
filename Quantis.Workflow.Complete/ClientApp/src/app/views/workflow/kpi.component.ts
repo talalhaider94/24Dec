@@ -289,9 +289,9 @@ export class KPIComponent implements OnInit, OnDestroy {
           }
           if(status.showarchivemsg) {
             if(status.isarchive) {
-              this.toastr.success('Success', 'Ticket is archived.');
+              this.toastr.success('Success', 'KPI archiviato con successo.');
             } else {
-              this.toastr.success('Info', 'Archive is not successfull.');
+              this.toastr.success('Info', 'Archiviazione del KPI fallita.');
             }
           }
         });
@@ -336,9 +336,9 @@ export class KPIComponent implements OnInit, OnDestroy {
             }
             if(status.showarchivemsg) {
               if(status.isarchive) {
-                this.toastr.success('Success', 'Ticket is archived.');
+                this.toastr.success('Success', 'KPI archiviato con successo.');
               } else {
-                this.toastr.success('Info', 'Archive is not successfull.');
+                this.toastr.success('Info', 'Archiviazione del KPI fallita.');
               }
             }
           });
