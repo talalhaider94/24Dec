@@ -28,15 +28,30 @@
           <br><label>Permissions:</label>
         <br><br>
         <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
-          <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
-        </h5>
-        <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree 
+            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
+          </h5>
+                <!-- <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree 
           [fields]="treeFields" 
           [checkedNodes]="selectedData.checked" 
-          [showCheckBox]="true" (nodeChecked)=syncSelectedNodesArray($event)></ejs-treeview>
+          [showCheckBox]="true" (nodeChecked)=syncSelectedNodesArray($event)></ejs-treeview> -->
+
+            <!-- <div *ngFor="let treeObj of treesArray" >
+              <ejs-treeview #permissionsTree [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="treeObj.checkedNodes" (nodeChecked)='syncSelectedNodesArray($event)' ></ejs-treeview>
+            </div> -->
+            <div *ngFor="let treeObj of treesArray; let i = index" >
+                <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
+              <ejs-treeview [hidden]="!treeObj.loaded"
+                #permissionsTree 
+                id="{{treeObj.elementId}}" 
+                [fields]='treeObj.settings' 
+                [showCheckBox]='true' 
+                [checkedNodes]="treeObj.checkedNodes" 
+                (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
+              </ejs-treeview>
+            </div>
+
       </div>
     </div>
+
   </div>
 </div>
-      
-
