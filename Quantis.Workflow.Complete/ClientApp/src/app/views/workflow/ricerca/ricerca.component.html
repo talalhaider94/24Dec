@@ -114,7 +114,15 @@
                                     <!-- <td class="d-none">{{ ticket.id }} </td> -->
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary"
+                                        <ng-template #popSummary>
+                                            <ul class="list-group list-group-flush"
+                                                *ngFor="let obj of formatSummaryColumn(ticket.summary)">
+                                                <li class="list-group-item">
+                                                    {{ obj }}
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="popSummary"
                                             triggers="focus">
                                             {{ ticket.summary | slice:0:15 || 'N/A' }}
                                             <span class="d-none">
