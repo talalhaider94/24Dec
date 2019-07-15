@@ -928,9 +928,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 "ESCALATION: {2}\n" +
                 "TARGET: {3}\n" +
                 "TIPILOGIA: {4}\n" +
-                "VALORE CALC: {5}\n" +
+                "VALORE: {5}\n" +
                 "AUTORE: {6}\n" +
-                "TRACKING PERIOD: {7}";
+                "FREQUENZA: {7}";
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
         public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
