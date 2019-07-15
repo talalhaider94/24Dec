@@ -44,7 +44,6 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IMappingService<FormAttachmentDTO, T_FormAttachment>, FormAttachmentMapper>();
             services.AddTransient<IMappingService<CatalogKpiDTO, T_CatalogKPI>, CatalogKpiMapper>();            
             services.AddTransient<IMappingService<ApiDetailsDTO, T_APIDetail>, ApiMapper>();
-            services.AddTransient<IMappingService<TRuleDTO, T_Rule>, truleMapper>();
             services.AddTransient<IMappingService<ConfigurationDTO, T_Configuration>, ConfigurationMapper>();
             services.AddTransient<IMappingService<SDMStatusDTO, SDM_TicketStatus>, SDMStatusMapper>();
             services.AddTransient<IMappingService<SDMGroupDTO, SDM_TicketGroup>, SDMGroupMapper>();

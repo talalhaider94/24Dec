@@ -36,7 +36,6 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
         private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
         private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;
-        private readonly IMappingService<TRuleDTO, T_Rule> _truleMapper;
         private readonly IOracleDataService _oracleAPI;
         private readonly IConfiguration _configuration;
         private readonly ISMTPService _smtpService;
@@ -49,7 +48,6 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<PageDTO, T_Page> pageMapper, 
             IMappingService<WidgetDTO, T_Widget> widgetMapper,
             IMappingService<UserDTO, T_CatalogUser> userMapper,
-            IMappingService<TRuleDTO, T_Rule> truleMapper,
             IMappingService<FormRuleDTO, T_FormRule> formRuleMapper,
             IMappingService<CatalogKpiDTO, T_CatalogKPI> catalogKpiMapper,
             IMappingService<ApiDetailsDTO, T_APIDetail> apiMapper,
@@ -1111,31 +1109,43 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                //return _widgetMapper.GetDTOs(widget.ToList());
-
-                //var rules = _dbcontext.Rules.Include(p => p.GlobalRule).Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
-                var rules = _dbcontext.Rules.Where(o => o.in_catalog == false && o.is_effective == "Y").OrderBy(o => o.rule_name);
-                return _truleMapper.GetDTOs(rules.ToList());
-                /*var dtos = usr.Select(o => new TRuleDTO()
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                 {
-                    rule_id = o.rule_id,
-                    status = o.status,
-                    prev_status = o.prev_status,
-                    formula_id = o.formula_id,
-                    rule_name = o.rule_name,
-                    rule_description = o.rule_description,
-                    sla_version_id = o.sla_version_id,
-                    domain_category_id = o.domain_category_id,
-                    service_level_target = o.service_level_target,
-                    rule_period_time_unit = o.rule_period_time_unit,
-                    rule_period_interval_length = o.rule_period_interval_length,
-                    is_effective = o.is_effective,
-                    locale_id = o.locale_id,
-                    global_rule_id = o.global_rule_id,
-                    objective_statement = o.objective_statement
-                }).ToList();
-                return dtos;*/
+                    con.Open();
+                    List<TRuleDTO> list = new List<TRuleDTO>();
 
+                    var sp = @"select r.rule_id, r.global_rule_id, r.rule_name, r.rule_description, r.sla_version_id, r.service_level_target, sv.sla_id, s.sla_name, sv.version_number, s.customer_id as primary_contract_party_id, c.customer_name as primary_contract_party_name, s.additional_customer_id as secondary_contract_party_id, c2.customer_name as secondary_contract_party_name
+                            from t_rules r
+                            left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                            left join t_global_rules gr on r.global_rule_id = gr.global_rule_id
+                            left join t_slas s on sv.sla_id = s.sla_id
+                            left join t_customers c on s.customer_id = c.customer_id
+                            left join t_customers c2 on s.additional_customer_id = c2.customer_id
+                            where sv.sla_status = 'EFFECTIVE' and r.is_effective = 'Y' and s.sla_status = 'EFFECTIVE' and gr.in_catalog = false";
+                    var command = new NpgsqlCommand(sp, con);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        { 
+                            TRuleDTO tRule = new TRuleDTO();
+                            tRule.rule_id = reader.GetInt32(reader.GetOrdinal("rule_id"));
+                            tRule.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
+                            tRule.rule_name = reader.GetString(reader.GetOrdinal("rule_name"));
+                            tRule.rule_description = (reader.IsDBNull(reader.GetOrdinal("rule_description")) ? null : reader.GetString(reader.GetOrdinal("rule_description")));
+                            tRule.sla_version_id = reader.GetInt32(reader.GetOrdinal("sla_version_id"));
+                            tRule.service_level_target = (reader.IsDBNull(reader.GetOrdinal("service_level_target")) ? 0 : reader.GetDouble(reader.GetOrdinal("service_level_target")));
+                            tRule.sla_id = reader.GetInt32(reader.GetOrdinal("sla_id"));
+                            tRule.sla_name = reader.GetString(reader.GetOrdinal("sla_name"));
+                            tRule.version_number = reader.GetInt32(reader.GetOrdinal("version_number"));
+                            tRule.primary_contract_party_id = reader.GetInt32(reader.GetOrdinal("primary_contract_party_id"));
+                            tRule.primary_contract_party_name = reader.GetString(reader.GetOrdinal("primary_contract_party_name"));
+                            tRule.secondary_contract_party_id = (reader.IsDBNull(reader.GetOrdinal("secondary_contract_party_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("secondary_contract_party_id")));
+                            tRule.secondary_contract_party_name = (reader.IsDBNull(reader.GetOrdinal("secondary_contract_party_name")) ? null : reader.GetString(reader.GetOrdinal("secondary_contract_party_name")));
+                            list.Add(tRule);
+                        }
+                    }
+                    return list;
+                }
             }
             catch (Exception e)
             {
