@@ -172,3 +172,9 @@
   height: auto;
   font-size: 25px;
 }
+
+.pointer-cursor {
+  &:hover {
+    cursor: pointer;
+  }
+}
