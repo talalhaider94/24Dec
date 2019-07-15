@@ -88,7 +88,7 @@
                                 <tr *ngIf="allTickets.length === 0 && !loading">
                                     <td colspan="15"><strong>Nessun Ticket Trovato.</strong></td>
                                 </tr>
-                                <tr *ngFor="let ticket of allTickets; let i = index">
+                                <tr *ngFor="let ticket of allTickets; let i = index" [ngClass]="{'bg-secondary': ticket.isclosed}">
                                     <td class="pl-3">
                                         <label class="checkbox-container border"
                                             [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
