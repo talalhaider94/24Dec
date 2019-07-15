@@ -128,7 +128,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.AddUpdateKpi(dto);
         }
         [HttpGet("GetKpiByFormId/{id}")]
-        public KPIOnlyContractDTO GetKpiByFormId(int id)
+        public List<KPIOnlyContractDTO> GetKpiByFormId(int id)
         {
             return _dataAPI.GetKpiByFormId(id);
         }
@@ -229,12 +229,6 @@ namespace Quantis.WorkFlow.Controllers
         public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
         {
             return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
-        }
- 
-        [HttpGet("GetFormConfiguration")]
-        public List<FormConfigurationDTO> GetFormConfiguration()
-        {
-            return _dataAPI.GetFormConfiguration();
         }
         [HttpGet("GetAllCustomersKP")]
         public List<KeyValuePair<int, string>> GetAllCustomersKP()

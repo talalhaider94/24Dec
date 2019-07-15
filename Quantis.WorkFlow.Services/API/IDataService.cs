@@ -35,7 +35,7 @@ namespace Quantis.WorkFlow.Services.API
         List<CatalogKpiDTO> GetAllKpis(); //List<CatalogKPILVDTO> GetAllKpis(); 
         CatalogKpiDTO GetKpiById(int Id);
         bool AddUpdateKpi(CatalogKpiDTO dto);
-        KPIOnlyContractDTO GetKpiByFormId(int Id);
+        List<KPIOnlyContractDTO> GetKpiByFormId(int Id);
 
         List<ApiDetailsDTO> GetAllAPIs();
 
@@ -60,8 +60,6 @@ namespace Quantis.WorkFlow.Services.API
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
 
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
-
-        List<FormConfigurationDTO> GetFormConfiguration();
 
     }
 }

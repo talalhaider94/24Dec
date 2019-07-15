@@ -148,12 +148,14 @@ export class ProveVarieComponent implements OnInit {
         .find(field => field.name == 'Note' && !!field.value);
 
       if (!utenteFormData) {
+        // The Notes field is mandatory because Missing Data has been selected
         this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
         return false;
-      } else {
-        // passing NOTE input field value.
-        this._noteTextFileUpload(utenteFormData.value);
       }
+      //  else {
+      //   // passing NOTE input field value.
+      //   this._noteTextFileUpload(utenteFormData.value);
+      // }
     }
 
     var formFields: FormField;
@@ -174,11 +176,12 @@ export class ProveVarieComponent implements OnInit {
       const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
       let newArray = errorArray.filter(value => value !== 'remove');
       if (newArray.length > 0) {
-        this.userLoadingFormErrors = errorArray;
+        this.userLoadingFormErrors = newArray;
         this.toastr.info('Comparison rule fails for form');
-        // return false;
-      }
-      this.userLoadingFormErrors = [];
+        return false;
+      } else {
+        this.userLoadingFormErrors = [];
+      }      
     }
 
     //part where I fill in field values
@@ -200,6 +203,7 @@ export class ProveVarieComponent implements OnInit {
       }
       userSubmit.inputs.push(formFields);
     });
+    this._noteTextFileUpload(utenteFormData.value);
     this._userLoadingFormSubmit(periodRaw, dataAttuale, userSubmit);
   }
 
@@ -219,6 +223,7 @@ export class ProveVarieComponent implements OnInit {
         this.toastr.error('There was an error while submitting form', 'Error');
         return;
       } else {
+        this.userLoadingFormErrors = [];
         this.toastr.success('Form has been submitted successfully.', 'Success');
       }
     }, error => {
@@ -382,21 +387,17 @@ export class ProveVarieComponent implements OnInit {
       let field1 = compare.campo1;
       let field2 = compare.campo2;
       let sign = compare.segno;
-      console.log('field1', field1);
-      console.log('field2', field2);
       let currentFormValue1 = mapFormValues.find(value => value.name == field1.name).value;
       let currentFormValue2 = mapFormValues.find(value => value.name == field2.name).value;
-      console.log('currentFormValue1', currentFormValue1);
-      console.log('currentFormValue2', currentFormValue2);
       let errorString = 'remove';
       if (type == 'string') {
         // string comparison start
         if (sign === '=') {
-          if (currentFormValue1.length !== currentFormValue2.length) {
+          if (currentFormValue1 !== currentFormValue2) {
             errorString = `${field1.name} should be equal to ${field2.name}`;
           }
         } else if (sign === '!=') {
-          if (currentFormValue1.length === currentFormValue2.length) {
+          if (currentFormValue1 === currentFormValue2) {
             errorString = `${field1.name} should not be equal to ${field2.name}`;
           }
         } else {
