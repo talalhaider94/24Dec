@@ -801,56 +801,43 @@ namespace Quantis.WorkFlow.APIBase.API
 
         private string SendSOAPRequest(string url, string action, Dictionary<string, string> parameters,byte[] fileData)
         {
-            MultipartFormDataContent multiContent = new MultipartFormDataContent();
-            XmlDocument soapEnvelopeXml = new XmlDocument();
-            var xmlStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://www.ca.com/UnicenterServicePlus/ServiceDesk\">" + Environment.NewLine + "<soapenv:Header/>" + Environment.NewLine + "<soapenv:Body>" + Environment.NewLine + "<ser:{0}>" + Environment.NewLine + "{1}" + Environment.NewLine +"</ser:{0}>" + Environment.NewLine +"</soapenv:Body>" + Environment.NewLine +"</soapenv:Envelope>";
-            string parms = string.Join(string.Empty, parameters.Select(kv => String.Format("<{0}>{1}</{0}>", kv.Key, kv.Value)).ToArray());
-            var s = String.Format(xmlStr, action, parms);
-            soapEnvelopeXml.LoadXml(s);
-            // Create the web request
-            string boundary = "=" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture);
-            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
-            webRequest.Headers.Add("Content-Type", string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org> \"; boundary=\"{0}\"", boundary));
-            webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
-            webRequest.Headers.Add("SOAPAction", "");
-            webRequest.Headers.Add("MIME-Version", "1.0");
-            webRequest.Accept = "application/xml";
-            webRequest.Method = "POST";
-            // Insert SOAP envelope
-            using (Stream stream = webRequest.GetRequestStream())
+            var dto = new UploadTicketDTO();
+            dto.url = url;
+            dto.action = action;
+            dto.sid = parameters["sid"];
+            dto.repositoryHandle = parameters["repositoryHandle"];
+            dto.objectHandle = parameters["objectHandle"];
+            dto.description = parameters["description"];
+            dto.fileName = parameters["fileName"];
+            dto.fileData = fileData;
+            using (var client = new HttpClient())
             {
-                string topBoundry = "--" + boundary + Environment.NewLine + "Content-Type: text/xml; charset=UTF-8" + Environment.NewLine + "Content-Transfer-Encoding: 8bit" + Environment.NewLine + "Content-ID: <rootpart@soapui.org>" + Environment.NewLine + Environment.NewLine;
-                byte[] topBoundryBytes = Encoding.UTF8.GetBytes(topBoundry);
-                stream.Write(topBoundryBytes, 0, topBoundryBytes.Length);
-                soapEnvelopeXml.Save(stream);
-                //_dbcontext.LogInformation(soapEnvelopeXml.OuterXml);
-
-                var filename = parameters["fileName"];
-                string fileHeaderTemplate = Environment.NewLine + "--" + boundary + Environment.NewLine + "Content-Type: text/plain; charset=us-ascii; name={0}" + Environment.NewLine + "Content-Transfer-Encoding: 7bit" + Environment.NewLine + "Content-ID: <{0}>" + Environment.NewLine + "Content-Disposition: attachment; name=\"{0}\"; filename=\"{0}\"" + Environment.NewLine;
-                fileHeaderTemplate = string.Format(fileHeaderTemplate, filename);
-                byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeaderTemplate + Environment.NewLine);
-                stream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
-                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes, 0, fileHeaderBytes.Length));
-                stream.Write(fileData, 0, fileData.Length);
-                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileData, 0, fileData.Length));
-                byte[] fileHeaderBytes2 = Encoding.UTF8.GetBytes(Environment.NewLine + "--" + boundary + "--" + Environment.NewLine);
-                stream.Write(fileHeaderBytes2, 0, fileHeaderBytes2.Length);
-                //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes2, 0, fileHeaderBytes2.Length));
-
-            }
-
-            // Send request and retrieve result
-            string result = null;
-            using (WebResponse response = webRequest.GetResponse())
-            {
-                using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+                var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
+                var output = QuantisUtilities.FixHttpURLForCall(bsiconf.Value, "/home/SendSOAPRequest");
+                client.BaseAddress = new Uri(output.Item1);
+                var dataAsString = JsonConvert.SerializeObject(dto);
+                var content = new StringContent(dataAsString);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response = client.PostAsync(output.Item2, content).Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    result = rd.ReadToEnd();
+                    string xml = response.Content.ReadAsStringAsync().Result;
+                    if (xml == "TRUE")
+                    {
+                        return "TRUE";
+                    }
+                    else
+                    {
+                        _dbcontext.LogInformation(xml);
+                        throw new Exception(xml);
+                    }
+                }
+                else
+                {
+                    _dbcontext.LogInformation("Call to BSI not sucessfull");
+                    throw new Exception("Call to BSI not sucessfull");
                 }
             }
-            XDocument xdoc = XDocument.Parse(result);
-            var ret = xdoc.DescendantNodes().Last().ToString();
-            return ret;
         }
         ~ServiceDeskManagerService()
         {
