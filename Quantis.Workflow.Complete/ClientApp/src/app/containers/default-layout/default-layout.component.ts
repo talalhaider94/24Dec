@@ -44,6 +44,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.router.events.pipe(
       filter((event:any) => event instanceof NavigationEnd)
     ).subscribe(x => {
+      console.log('router');
+      console.log(x);
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = this.returnedNode.version || '0.0.1';
