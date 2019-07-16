@@ -149,7 +149,7 @@ export class ProveVarieComponent implements OnInit {
 
       if (!utenteFormData) {
         // The Notes field is mandatory because Missing Data has been selected
-        this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato Dato Mancante');
+        this.toastr.info('Il campo Note è obbligatorio perchè è stato selezionato "Dato Mancante"');
         return false;
       }
       //  else {
@@ -170,14 +170,14 @@ export class ProveVarieComponent implements OnInit {
     // errorArray empty means Either all rules passed 
     if (errorArray.length > 0) {
       this.userLoadingFormErrors = errorArray;
-      this.toastr.error('Form fields data is not valid');
+      this.toastr.error('Form non valido');
       return false;
     } else {
       const errorArray = this._comparisonRulesValidation(this.arrayFormElements, model.value.valories, this.comparisonRulesBody);
       let newArray = errorArray.filter(value => value !== 'remove');
       if (newArray.length > 0) {
         this.userLoadingFormErrors = newArray;
-        this.toastr.info('Comparison rule fails for form');
+        this.toastr.info('Errore durante la compilazione del form');
         return false;
       } else {
         this.userLoadingFormErrors = [];
@@ -222,11 +222,11 @@ export class ProveVarieComponent implements OnInit {
       this.loading = false;
       console.log('USER FORM SUBMIT SUCCESS', data);
       if (!data) {
-        this.toastr.error('There was an error while submitting form', 'Error');
+        this.toastr.error('Errore durante l\'invio del form', 'Error');
         return;
       } else {
         this.userLoadingFormErrors = [];
-        this.toastr.success('Form has been submitted successfully.', 'Success');
+        this.toastr.success('Form inviato correttamente.', 'Success');
       }
     }, error => {
       this.loading = false;
@@ -374,7 +374,7 @@ export class ProveVarieComponent implements OnInit {
       }
     }, error => {
       console.error('_getAttachmentsByFormIdEndPoint ==>', error);
-      this.toastr.error('Error while fetching form attachments.');
+      this.toastr.error('Errore durante la lettura degli allegati.');
     })
   }
 
@@ -395,15 +395,15 @@ export class ProveVarieComponent implements OnInit {
         // string comparison start
         if (sign === '=') {
           if (currentFormValue1 !== currentFormValue2) {
-            errorString = `${field1.name} should be equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere uguale a ${field2.name}`;
           }
         } else if (sign === '!=') {
           if (currentFormValue1 === currentFormValue2) {
-            errorString = `${field1.name} should not be equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere diverso da ${field2.name}`;
           }
         } else {
           errorString = 'Unknown string comparison';
-          console.log('Danial: Unknown sign type in string comparison.')
+          console.log('Unknown sign type in string comparison.')
         }
         // string comparison end
       } else if (type == 'time') {
@@ -411,25 +411,25 @@ export class ProveVarieComponent implements OnInit {
         if (sign === '>') {
           let result = moment(new Date(currentFormValue1)).isAfter(new Date(currentFormValue2));
           if (!result) {
-            errorString = `${field1.name} should be greater than ${field2.name}`;
+            errorString = `${field1.name} deve essere maggiore di ${field2.name}`;
           }
         }
         else if (sign === '<') {
           let result = moment(new Date(currentFormValue1)).isBefore(new Date(currentFormValue2));
           if (!result) {
-            errorString = `${field1.name} should be less than ${field2.name}`;
+            errorString = `${field1.name} deve essere minore di ${field2.name}`;
           }
         }
         else if (sign === '>=') {
           let result = moment(new Date(currentFormValue1)).isSameOrAfter(new Date(currentFormValue2));
           if (!result) {
-            errorString = `${field1.name} should be greater than or equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere maggiore o uguale a ${field2.name}`;
           }
         }
         else if (sign === '<=') {
           let result = moment(new Date(currentFormValue1)).isSameOrBefore(new Date(currentFormValue2));
           if (!result) {
-            errorString = `${field1.name} should be less than or equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere minore o uguale a ${field2.name}`;
           }
         } else {
           errorString = 'Unknown time comparison';
@@ -439,31 +439,31 @@ export class ProveVarieComponent implements OnInit {
         // real & integer comparison start
         if (sign === '=') {
           if (currentFormValue1 !== currentFormValue2) {
-            errorString = `${field1.name} should be equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere uguale a ${field2.name}`;
           }
         } else if (sign === '!=') {
           if (currentFormValue1 === currentFormValue2) {
-            errorString = `${field1.name} should not be equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere diverso da ${field2.name}`;
           }
         }
         else if (sign === '>') {
           if (currentFormValue1 < currentFormValue2) {
-            errorString = `${field1.name} should be greater than ${field2.name}`;
+            errorString = `${field1.name} deve essere maggiroe di ${field2.name}`;
           }
         }
         else if (sign === '<') {
           if (currentFormValue1 > currentFormValue2) {
-            errorString = `${field1.name} should be less than ${field2.name}`;
+            errorString = `${field1.name} deve essere minore di ${field2.name}`;
           }
         }
         else if (sign === '>=') {
           if (currentFormValue1 <= currentFormValue2) {
-            errorString = `${field1.name} should be greater than or equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere maggiore o uguale a ${field2.name}`;
           }
         }
         else if (sign === '<=') {
           if (currentFormValue1 >= currentFormValue2) {
-            errorString = `${field1.name} should be less than or equal to ${field2.name}`;
+            errorString = `${field1.name} deve essere minore o uguale a ${field2.name}`;
           }
         } else {
           errorString = 'Unknown real/integer operator';
@@ -540,7 +540,7 @@ export class ProveVarieComponent implements OnInit {
       }
     });
     return inValidRulesArray.map(invalidField => {
-      return `${invalidField.name} Input is not valid`;
+      return `${invalidField.name} Input non valido`;
     })
   }
 
@@ -604,14 +604,14 @@ export class ProveVarieComponent implements OnInit {
           console.log('submitAttachment ==>', data);
           self.fileUploading = false;
           self.uploader.queue.pop();
-          self.toastr.success(`${fileName} uploaded successfully.`);
+          self.toastr.success(`${fileName} caricato correttamente.`);
           if (data) {
             self._getAttachmentsByFormIdEndPoint(+self.formId, false);
           }
         }, error => {
           console.error('submitAttachment ==>', error);
           self.fileUploading = false;
-          self.toastr.error('Some error occurred while uploading file');
+          self.toastr.error('Errore durante il caricamento dell\'allegato');
         });
       };
     })(file, this);
@@ -663,14 +663,14 @@ export class ProveVarieComponent implements OnInit {
           console.log('submitAttachment ==>', data);
           self.fileUploading = false;
           self.uploader.queue.pop();
-          self.toastr.success(`${fileName} uploaded successfully.`);
+          self.toastr.success(`${fileName} caricato correttamente.`);
           if (data) {
             self._getAttachmentsByFormIdEndPoint(+self.formId, false);
           }
         }, error => {
           console.error('submitAttachment ==>', error);
           self.fileUploading = false;
-          self.toastr.error('Some error occurred while uploading file');
+          self.toastr.error('Errore durante il caricamento del file');
         });
       };
     })(this);
