@@ -969,7 +969,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 "FREQUENZA: {7}";
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
-        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
             {

@@ -221,7 +221,7 @@ namespace Quantis.WorkFlow.Controllers
         }
 
         [HttpGet("GetRawDataByKpiID")]
-        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             return _dataAPI.GetRawDataByKpiID(id_kpi, month, year);
         }
