@@ -978,7 +978,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     con.Open();
                     List<ATDtDeDTO> list = new List<ATDtDeDTO>();
                     //var tablename = "t_dt_de_3_" + year + "_" + month;
-                    var tablename = "t_dt_de_3_2019_02";// + year + "_" + month;
+                    var tablename = "t_dt_de_3_2018_11";// + year + "_" + month;
                     //if (TableExists(tablename))
                     //{
                     var sp = @"select * from " + tablename + " where event_type_id = 1684 LIMIT 100";
@@ -1063,7 +1063,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
-                                atdtde.id_kpi = reader.GetInt32(reader.GetOrdinal("id_kpi"));
+                                atdtde.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
 
                                 list.Add(atdtde);
                             }                     
