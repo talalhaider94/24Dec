@@ -2,67 +2,67 @@
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br><h2 style="color:#565656">KPI CERTIFICATI: {{monthVar}}/{{yearVar}}</h2><br>
     <p>
-      
-    <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary info-btn" aria-hidden="true" type="button" data-toggle="collapse" data-target=".multi" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><b>INFO</b></button>
+
+      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary info-btn" aria-hidden="true" type="button" data-toggle="collapse" data-target=".multi" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><b>INFO</b></button>
     </p>
     <div class="row" class="collapse multi" id="multiCollapseExample1">
-  
-      
-         <!-- <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
-            <mat-card-header style="margin-left: 30px">
-            <mat-card-title style="color:#20a8d8">KPI</mat-card-title>
-            <mat-card-subtitle style="margin-left:18px">{{getNumeroKPI()}}</mat-card-subtitle>
-            </mat-card-header>
-          </mat-card>
-       
-         
-                <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
-                  <mat-card-header style="margin-left: 30px">
-                  <mat-card-title style="color:#20a8d8">KPI</mat-card-title>
-                  <mat-card-subtitle style="margin-left:18px">{{getNumeroKPI()}}</mat-card-subtitle>
-                  </mat-card-header>
-                </mat-card>
-             -->
-             <div class="row">
-               <!--<mat-card class="example-card" style="margin-left: 20px;">
-                  <mat-card-header >
-                    <mat-card-title style="color:#20a8d8">CONTRATTI</mat-card-title>
-                    <mat-card-subtitle style="margin-left: 40px" *ngFor="let et of arrayContratti | keyvalue"><b> {{et.key}}</b></mat-card-subtitle>
-                     
-                    
-                  </mat-card-header>
-                 
-                </mat-card>&nbsp;-->
-                
-               
-               <mat-card class="example-card" style="margin-left: 20px;">
-                  <mat-card-header >
-                    <mat-card-title style="color:#20a8d8;text-align: center;">CONTRATTI/KPI</mat-card-title>
-                    <mat-card-subtitle style="text-align: center;" *ngFor="let et of res | keyvalue"><b> {{et.key}}/{{et.value.length}}</b></mat-card-subtitle>
-                  </mat-card-header>
-                 
-                </mat-card>&nbsp;
 
 
-                <mat-card class="example-card" style="margin-left: 20px;">
-                  <mat-card-header >
-                    <mat-card-title style="color:#20a8d8;text-align: center;">TOTALE KPI</mat-card-title>
-                    <mat-card-subtitle style="text-align: center;">{{getNumeroKPI()}}</mat-card-subtitle>
-                  </mat-card-header>
-                </mat-card>&nbsp;
-                <br>
-                
-                </div>
-                
-      
- 
-</div>
-<br>
+      <!-- <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+       <mat-card-header style="margin-left: 30px">
+       <mat-card-title style="color:#20a8d8">KPI</mat-card-title>
+       <mat-card-subtitle style="margin-left:18px">{{getNumeroKPI()}}</mat-card-subtitle>
+       </mat-card-header>
+     </mat-card>
+
+
+           <mat-card class="example-card" style="margin-left: 20px; width: 50%" >
+             <mat-card-header style="margin-left: 30px">
+             <mat-card-title style="color:#20a8d8">KPI</mat-card-title>
+             <mat-card-subtitle style="margin-left:18px">{{getNumeroKPI()}}</mat-card-subtitle>
+             </mat-card-header>
+           </mat-card>
+        -->
+      <div class="row">
+        <!--<mat-card class="example-card" style="margin-left: 20px;">
+         <mat-card-header >
+           <mat-card-title style="color:#20a8d8">CONTRATTI</mat-card-title>
+           <mat-card-subtitle style="margin-left: 40px" *ngFor="let et of arrayContratti | keyvalue"><b> {{et.key}}</b></mat-card-subtitle>
+
+
+         </mat-card-header>
+
+       </mat-card>&nbsp;-->
+
+
+        <mat-card class="example-card" style="margin-left: 20px;">
+          <mat-card-header>
+            <mat-card-title style="color:#20a8d8;text-align: center;">CONTRATTI/KPI</mat-card-title>
+            <mat-card-subtitle style="text-align: center;" *ngFor="let et of res | keyvalue"><b> {{et.key}}/{{et.value.length}}</b></mat-card-subtitle>
+          </mat-card-header>
+
+        </mat-card>&nbsp;
+
+
+        <mat-card class="example-card" style="margin-left: 20px;">
+          <mat-card-header>
+            <mat-card-title style="color:#20a8d8;text-align: center;">TOTALE KPI</mat-card-title>
+            <mat-card-subtitle style="text-align: center;">{{getNumeroKPI()}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>&nbsp;
+        <br>
+
+      </div>
+
+
+
+    </div>
+    <br>
     <h4 style="color:#565656;">Periodo:</h4>
-   
+
     <div class="row">
-  
-      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()"  #searchCol2>
+
+      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()" #searchCol2>
         <option value="">Tutti i mesi</option>
         <option value="01">Gennaio</option>
         <option value="02">Febbraio</option>
@@ -77,51 +77,53 @@
         <option value="11">Novembre</option>
         <option value="12">Dicembre</option>
       </select>
-      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="populateDateFilter()"  #searchCol3>
+      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="populateDateFilter()" #searchCol3>
         <option value="">Anno</option>
-        <option *ngFor="let year of anni" >{{year}}</option>     
+        <option *ngFor="let year of anni">{{year}}</option>
       </select>
-
     </div>
-    
-    <button  aria-hidden="true" type="button" class="btn fa fa-refresh" style="color:white; padding: 2px 7px; margin-left: 96%; background-color: #20a8d8;display: inline-block;text-align: center; margin-bottom: 5px" (click)="rerender()"></button>
-     
-    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-       
+
+    <!-->button  aria-hidden="true" type="button" class="btn fa fa-refresh" style="color:white; padding: 2px 7px; margin-left: 96%; background-color: #20a8d8;display: inline-block;text-align: center; margin-bottom: 5px" (click)="rerender()"></!--button-->
+
+    <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
 
       <thead style="background: #20a8d8; color:white">
-      <tr>
-        <th style="text-align:center">Cliente</th>
-        <th style="text-align:center">Contratto</th>
-        <th style="text-align:center">ID KPI</th>
-        <th style="text-align:center">Nome KPI</th>
-        <th style="text-align:center">Periodo</th>
-        <th style="text-align:center">Valore</th>
-        <th style="text-align:center">Ticket ID</th>
-        <th style="text-align:center">Chiusura Ticket</th>
-        <th style="text-align:center">Archiviato</th>
-        <th style="text-align:center">Azione</th>
-      </tr>
+        <tr>
+          <th style="text-align:center">Cliente</th>
+          <th style="text-align:center">Contratto</th>
+          <th style="text-align:center">ID KPI</th>
+          <th style="text-align:center">Titolo</th>
+          <th style="text-align:center">Periodo</th>
+          <th style="text-align:center">Valore</th>
+          <th style="text-align:center">Ticket ID</th>
+          <th style="text-align:center">Chiusura Ticket</th>
+          <th style="text-align:center">Archiviato</th>
+          <th style="text-align:center">Azione</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
-          <td  style="text-align:center">{{row.customer_name}}</td>
-          <td  style="text-align:center">{{row.contract_name}}</td>
-        <td  style="text-align:center">{{row.id_kpi}}</td>
-        <td  style="text-align:center">{{row.name_kpi}}</td>
-        <td  style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
-        <td  style="text-align:center">{{row.value_kpi}} {{row.symbol}}</td>
-        <td  style="text-align:center">{{row.ticket_id}}</td>
-        <td  style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
-        <td  style="text-align:center">{{row.archived}}</td>
-        <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                   data-target="#archivedKpiModal">Vedi</button>
-      <button class="btn btn-primary" data-toggle="modal" (click)="getdati(row.id_kpi)"
-                                   data-target="#datiModal">Dati</button>
-             </td>
+        <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
+          <td style="text-align:center">{{row.customer_name}}</td>
+          <td style="text-align:center">{{row.contract_name}}</td>
+          <td style="text-align:center">{{row.id_kpi}}</td>
+          <td style="text-align:center">{{row.name_kpi}}</td>
+          <td style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
+          <td style="text-align:center">{{row.value_kpi}} {{row.symbol}}</td>
+          <td style="text-align:center">{{row.ticket_id}}</td>
+          <td style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
+          <td style="text-align:center">{{row.archived}}</td>
+          <td align="center">
+            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                    data-target="#archivedKpiModal">
+              Vedi
+            </button>
+            <button class="btn btn-primary" data-toggle="modal" (click)="getdati(row.id_kpi)"
+                    data-target="#datiModal">
+              Dati
+            </button>
+          </td>
 
-     
-      </tr>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -143,12 +145,11 @@
             <thead style="background: #20a8d8; color:white">
             <tr>
               <th style="text-align:center">ID KPI</th>
-              <th style="text-align:center">Nome KPI</th>
+              <th style="text-align:center">Titolo</th>
               <th style="text-align:center">Periodo</th>
               <th style="text-align:center">Valore</th>
               <th style="text-align:center">Ticket ID</th>
               <th style="text-align:center">Chiusura Ticket</th>
-              <th style="text-align:center">Archiviato</th>
               <th style="text-align:center">Azione</th>
             </tr>
             </thead>
@@ -160,7 +161,6 @@
               <td style="text-align:center">{{rec.value_kpi}} {{rec.symbol}}</td>
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
-              <td  style="text-align:center">{{rec.archived}}</td>
               <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi)"
                 data-target="#datiModal">Dati</button></td>
             </tr>

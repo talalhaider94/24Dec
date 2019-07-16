@@ -36,11 +36,6 @@ export class AdminKpiComponent implements OnInit {
 
   dtOptions = {
     //'dom': 'rtip',
-    "columnDefs": [{
-      "targets": [11],
-      "visible": false,
-      "searchable": true
-    }],
     language: {
       processing: "Elaborazione...",
       search: "Cerca:",
@@ -115,9 +110,6 @@ export class AdminKpiComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   kpiTableHeadData = [
     {
-      ABILITATO: 'ABILITATO',
-      REMINDER: 'REMINDER',
-      WORKFLOW: 'WORKFLOW',
       CONTRACT: 'CONTRACT',
       ID_KPI: 'ID_KPI',
       TITOLO_BREVE: 'TITOLO_BREVE',
@@ -152,12 +144,6 @@ export class AdminKpiComponent implements OnInit {
 
   ngOnInit() {
     this.dtOptions = {
-      //'dom': 'rtip',
-      "columnDefs": [{
-        "targets": [11],
-        "visible": false,
-        "searchable": true
-      }],
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -282,7 +268,7 @@ export class AdminKpiComponent implements OnInit {
   }
 
   setUpDataTableDependencies() {
-
+/*
     // let datatable_Ref = $(this.block.nativeElement).DataTable({
     //   'dom': 'rtip'
     // });
@@ -330,10 +316,10 @@ export class AdminKpiComponent implements OnInit {
           .unique();
           .each( function ( d ) {
             select.append( $('<option value="' + d + '">' + d + '</option>') );
-          } );*/
+          } ); //***
       });
     });
-
+*/
     
   }
 
