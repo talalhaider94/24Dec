@@ -340,8 +340,7 @@ namespace Quantis.WorkFlow.APIBase.API
             param.Add("repositoryHandle", "doc_rep:1002");
             param.Add("objectHandle", "cr:" + dto.TicketId);
             param.Add("description", dto.AttachmentName);
-            param.Add("fileName", dto.AttachmentName);
-            _dbcontext.LogInformation("link:"+_sdmClient.InnerChannel.RemoteAddress.ToString()+" Name: "+dto.AttachmentName+" TicketNo: "+dto.TicketId+" Content: "+ Encoding.UTF8.GetString(dto.AttachmentContent, 0, dto.AttachmentContent.Length));
+            param.Add("fileName", dto.AttachmentName);           
             SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
             LogOut();
             return ret;
