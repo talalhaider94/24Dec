@@ -125,6 +125,7 @@
     <Compile Include="Models\APIToWorkflowDTO.cs" />
     <Compile Include="Models\FormAdapterDTO.cs" />
     <Compile Include="Models\UploadKPIDTO.cs" />
+    <Compile Include="Models\UploadTicketDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
