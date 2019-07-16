@@ -40,15 +40,15 @@ namespace Quantis.WorkFlow.Models
         public string is_os_compiled { get; set; }
         public string is_param_compiled { get; set; }
         public string objective_statement_text { get; set; }
-        public int parent_rule_id { get; set; }
+        public int? parent_rule_id { get; set; }
         public int metric_type_id { get; set; }
-        public int main_indicator { get; set; }
+        public int? main_indicator { get; set; }
         public string is_shadow_id { get; set; }
         public int unit_id { get; set; }
         public int section_id { get; set; }
         public int is_target_dynamic { get; set; }
-        public int unit_of_consumption_id { get; set; }
-        public int is_forecaster { get; set; }
+        public int? unit_of_consumption_id { get; set; }
+        public int is_forecasted { get; set; }
         public string is_registrations_compiled { get; set; }
         public int is_cluster_recursive { get; set; }
         public int is_use_all_nodes { get; set; }

@@ -280,7 +280,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public bool AddUpdateKpi(CatalogKpiDTO dto)
+        /*public bool AddUpdateKpi(CatalogKpiDTO dto)
         {
             try
             {
@@ -301,6 +301,42 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
+        }*/
+        public bool AddUpdateKpi(CatalogKpiDTO dto)
+        {
+            using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var entity = new T_CatalogKPI();
+                    if (dto.id > 0)
+                    {
+                        entity = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == dto.id);
+                    }
+                    entity = _catalogKpiMapper.GetEntity(dto, entity);
+
+                    if (dto.id == 0)
+                    {
+                        var kpi = _dbcontext.TGlobalRules.FirstOrDefault(o => dto.global_rule_id_bsi == o.global_rule_id);
+                        if (kpi != null)
+                        {
+                            kpi.in_catalog = true;
+                            _dbcontext.SaveChanges(false);
+                            _dbcontext.CatalogKpi.Add(entity);
+                        }
+                    }
+
+                    _dbcontext.SaveChanges(false);
+                    dbContextTransaction.Commit();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+                    throw e;
+                }
+            }
+
         }
         public List<GroupDTO> GetAllGroups()
         {
@@ -933,7 +969,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 "FREQUENZA: {7}";
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
-        public List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year)
+        public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
             {
@@ -1121,7 +1157,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join t_slas s on sv.sla_id = s.sla_id
                             left join t_customers c on s.customer_id = c.customer_id
                             left join t_customers c2 on s.additional_customer_id = c2.customer_id
-                            where sv.sla_status = 'EFFECTIVE' and r.is_effective = 'Y' and s.sla_status = 'EFFECTIVE' and gr.in_catalog = false";
+                            where sv.sla_status = 'EFFECTIVE' and r.is_effective = 'Y' and s.sla_status = 'EFFECTIVE' and gr.in_catalog = false order by s.sla_name, r.rule_name";
                     var command = new NpgsqlCommand(sp, con);
                     using (var reader = command.ExecuteReader())
                     {

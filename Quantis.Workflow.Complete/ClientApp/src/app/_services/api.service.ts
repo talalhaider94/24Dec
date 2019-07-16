@@ -21,6 +21,10 @@ export class ApiService {
     const getTUsersEndPoint = `${environment.API_URL}/data/GetAllTUsers`;
     return this.http.get(getTUsersEndPoint, Headers.setTokenHeaders('GET'));
   }
+  getTRules(): Observable<any> {
+    const getTRulesEndPoint = `${environment.API_URL}/data/GetAllTRules`;
+    return this.http.get(getTRulesEndPoint);
+  }
 
   getKpiArchivedData(id,month,year): Observable<any>{ 
     const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;

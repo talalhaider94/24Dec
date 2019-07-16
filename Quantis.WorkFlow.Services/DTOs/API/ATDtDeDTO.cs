@@ -22,6 +22,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int event_state_id { get; set; }
         public int partner_raw_data_id { get; set; }
         public string hash_data_key { get; set; }
-        public int id_kpi { get; set; }
+        public string id_kpi { get; set; }
     }
 }

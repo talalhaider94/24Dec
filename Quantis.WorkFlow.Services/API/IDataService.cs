@@ -54,7 +54,7 @@ namespace Quantis.WorkFlow.Services.API
         List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi, List<int> globalruleIds);
         List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
         
-        List<ATDtDeDTO> GetRawDataByKpiID(int id_kpi, string month, string year);
+        List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year);
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);

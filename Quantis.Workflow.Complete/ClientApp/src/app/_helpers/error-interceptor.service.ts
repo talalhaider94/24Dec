@@ -27,8 +27,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
         this.router.navigate(['/login']);
         this.toastr.error('Unauthorize', 'Please try login again');
       }
-      const error = err.error.message || err.statusText;
-      return throwError(error);
+      return throwError(err);
     }))
   }
 }

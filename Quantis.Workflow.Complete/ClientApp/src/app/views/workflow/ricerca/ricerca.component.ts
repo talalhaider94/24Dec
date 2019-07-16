@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { WorkFlowService } from '../../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -8,6 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+import WorkFlowHelper from '../../../_helpers/workflow';
 
 declare var $;
 let $this;
@@ -273,4 +274,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   }
   //search end
+  formatDescriptionColumn(description) {
+    return WorkFlowHelper.formatDescription(description);
+  }
+
+  formatSummaryColumn(summary) {
+    return WorkFlowHelper.formatSummary(summary);
+  }
 }
