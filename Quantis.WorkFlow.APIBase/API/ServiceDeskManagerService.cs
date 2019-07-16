@@ -143,7 +143,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 LogOut();
             }
-            return ret;
+            return ret.OrderByDescending(o=>o.LastModifiedDate).ToList();
         }
         public byte[] DownloadAttachment(string attachmentHandle)
         {
