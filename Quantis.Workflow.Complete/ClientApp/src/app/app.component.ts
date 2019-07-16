@@ -19,9 +19,9 @@ export class AppComponent implements OnInit {
         return;
       }
       //console.log(evt.url);
-      if (evt.url !== '/forget') {
-        this.authService.checkSession();
-      }
+      if (evt.url !== '/forget') {        //remove when logout on 401 is implemented
+        this.authService.checkSession();  //remove when logout on 401 is implemented
+      }                                   //remove when logout on 401 is implemented
       window.scrollTo(0, 0);
     });
   }

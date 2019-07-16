@@ -16,7 +16,7 @@
                                     <label for="yearOption"><strong>Stato KPI</strong></label>
                                     <select #statoKPISelect class="form-control" name="statoKPIOption"
                                         [(ngModel)]="statoKPIOption">
-                                        <option value="" selected>Select</option>
+                                        <option value="" selected>Tutti</option>
                                         <option value="[Compliant]">Compliant</option>
                                         <option value="[Non Compliant]">Non Compliant</option>
                                     </select>
@@ -63,11 +63,11 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>
-                                        <label class="checkbox-container checkbox-container-default border border-primary">
+                                        <label
+                                            class="checkbox-container checkbox-container-default border border-primary">
                                             <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();">
                                             <span class="checkbox-checkmark"></span>
                                         </label>
-                                        <!-- <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" /> -->
                                     </th>
                                     <!-- <th>Stato KPI</th> -->
                                     <th>Rif. Num</th>
@@ -88,26 +88,26 @@
                                 <tr *ngIf="allTickets.length === 0 && !loading">
                                     <td colspan="15"><strong>Nessun Ticket Trovato.</strong></td>
                                 </tr>
-                                <tr *ngFor="let ticket of allTickets; let i = index">
+                                <tr *ngFor="let ticket of allTickets; let i = index" [ngClass]="{'bg-secondary': ticket.isclosed}">
                                     <td class="pl-3">
-                                        <label class="checkbox-container border" [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
+                                        <label class="checkbox-container border"
+                                            [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
-                                            [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
+                                                [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
                                         </label>
-                                        <!-- <input type="checkbox" [disabled]="ticket.isclosed"
-                                            [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();"> -->
                                     </td>
-                                    <!-- <td>
-                                        <i class="fa fa-square"
-                                            [ngClass]="ticket.description.includes('[Compliant]') ? 'text-success' : ticket.description.includes('[Non Compliant]') ? 'text-danger' : 'text-secondary' "></i>
-                                        <span class="d-none">
-                                            {{ ticket.description | slice:15 || 'N/A' }}
-                                        </span>
-                                    </td> -->
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.summary"
+                                        <ng-template #popSummary>
+                                            <ul class="list-group list-group-flush"
+                                                *ngFor="let obj of formatSummaryColumn(ticket.summary)">
+                                                <li class="list-group-item">
+                                                    {{ obj }}
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="popSummary"
                                             triggers="focus">
                                             {{ ticket.summary | slice:0:15 || 'N/A' }}
                                             <span class="d-none">

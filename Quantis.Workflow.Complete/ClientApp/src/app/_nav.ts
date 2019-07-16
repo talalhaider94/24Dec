@@ -77,14 +77,14 @@ export const navItems: NavData[] = [
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
         icon: 'fa fa-file-text-o',
-        version: '0.0.5',
+        version: '0.0.7',
         key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        version: '0.0.3',
+        version: '0.0.4',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
@@ -95,6 +95,13 @@ export const navItems: NavData[] = [
     icon: 'fa fa-folder-open-o',
     key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI', 'VIEW_UTENTI_DA_CONSOLIDARE'],
     children: [
+      {
+        name: 'KPI da Consolidare',
+        url: '/catalogo/admin-kpi',
+        icon: 'fa fa-file-archive-o',
+        version: '0.0.1',
+        key: 'VIEW_CATALOG_KPI'
+      },
       {
         name: 'Utenti da Consolidare',
         url: '/catalogo/admin-utenti',
@@ -156,7 +163,7 @@ export const navItems: NavData[] = [
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',
-        version: '0.0.4',
+        version: '0.0.5',
         key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]

@@ -13,7 +13,6 @@ let $this;
 @Component({
   selector: 'app-admin-kpi',
   templateUrl: './admin-kpi.component.html',
-  styleUrls: ['./admin-kpi.component.scss']
 })
 export class AdminKpiComponent implements OnInit {
 
@@ -33,23 +32,7 @@ export class AdminKpiComponent implements OnInit {
   public ref3: string;
 
   @ViewChild('kpiTable') block: ElementRef;
-  @ViewChild('searchCol1') searchCol1: ElementRef;
-  @ViewChild('searchCol2') searchCol2: ElementRef;
-  @ViewChild('searchCol3') searchCol3: ElementRef;
-  @ViewChild('searchCol4') searchCol4: ElementRef;
-  @ViewChild('searchCol5') searchCol5: ElementRef;
-  @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-
-  viewModel = {
-    filters: {
-      idKpi: '',
-      titoloBreve: '',
-      referenti: '',
-      tuttiContratti: '',
-      tutteLeFrequenze: ''
-    }
-  };
 
   dtOptions = {
     //'dom': 'rtip',
@@ -154,11 +137,8 @@ export class AdminKpiComponent implements OnInit {
     this.des = id;
   }
 
-
   refren( idd: string): void {
     console.log(idd);
-
-
     console.log(this.kpiTableBodyData);
     for (const i of this.kpiTableBodyData) {
       if (i.id == idd) {
@@ -166,13 +146,11 @@ export class AdminKpiComponent implements OnInit {
         this.ref1 = i.referent_1;
         this.ref2 = i.referent_2;
         this.ref3 = i.referent_3;
-
       }
     }
   }
 
   ngOnInit() {
-
     this.dtOptions = {
       //'dom': 'rtip',
       "columnDefs": [{
@@ -204,18 +182,17 @@ export class AdminKpiComponent implements OnInit {
       }
     };
     this.getForms();
-
   }
 
 
   populateModalData(data) {
-    this.modalData.id = data.id;
+    this.modalData.id = 0;
     this.modalData.short_name = data.short_name;
     this.modalData.group_type = data.group_type;
     this.modalData.id_kpi = data.id_kpi;
     this.modalData.id_alm = data.id_alm;
     this.modalData.id_form = data.id_form;
-    this.modalData.kpi_description = data.kpi_description;
+    this.modalData.kpi_description = data.rule_description;
     this.modalData.kpi_computing_description = data.kpi_computing_description;
     this.modalData.source_type = data.source_type;
     this.modalData.computing_variable = data.computing_variable;
@@ -224,7 +201,7 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.measure_unit = data.measure_unit;
     this.modalData.kpi_type = data.kpi_type;
     this.modalData.escalation = data.escalation;
-    this.modalData.target = data.target;
+    this.modalData.target = data.service_level_target;
     this.modalData.penalty_value = data.penalty_value;
     this.modalData.source_name = data.source_name;
     this.modalData.organization_unit = data.organization_unit;
@@ -244,23 +221,23 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.enable = data.enable;
     this.modalData.enable_wf = data.enable_wf;
     this.modalData.enable_rm = data.enable_rm;
-    this.modalData.contract = data.contract;
+    this.modalData.contract = data.sla_name;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
     this.modalData.supply = data.supply;
-    this.modalData.primary_contract_party = data.primary_contract_party;
-    this.modalData.secondary_contract_party = data.secondary_contract_party;
-    this.modalData.kpi_name_bsi = data.kpi_name_bsi;
-    this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
-    this.modalData.sla_id_bsi = data.sla_id_bsi;
+    this.modalData.primary_contract_party = data.primary_contract_party_id;
+    this.modalData.secondary_contract_party = data.secondary_contract_party_id;
+    this.modalData.kpi_name_bsi = data.rule_name;
+    this.modalData.global_rule_id_bsi = data.global_rule_id;
+    this.modalData.sla_id_bsi = data.sla_id;
   }
 
   updateKpi(modal) {
     console.log(modal);
-    this.toastr.info('Valore in aggiornamento..', 'Info');
+    this.toastr.info('KPI in aggiornamento..', 'Info');
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
-      this.getKpis(); // this should refresh the main table on page
-      this.toastr.success('Valore Aggiornato', 'Success');
+      this.getTRules(); // this should refresh the main table on page
+      this.toastr.success('KPI Consolidato', 'Success');
       if (modal == 'kpi') {
         $('#kpiModal').modal('toggle').hide();
       } else {
@@ -268,7 +245,7 @@ export class AdminKpiComponent implements OnInit {
       }
       
     }, error => {
-      this.toastr.error('Errore durante update.', 'Error');
+      this.toastr.error('Errore durante consolidamento.', 'Error');
       if (modal == 'kpi') {
         $('#kpiModal').modal('toggle').hide();
       } else {
@@ -280,10 +257,9 @@ export class AdminKpiComponent implements OnInit {
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
-
     this.setUpDataTableDependencies();
-    this.getKpis1();
-    this.getKpis();
+    this.getTRules();
+    //this.getKpis();
     //this.rerender();
   }
 
@@ -312,33 +288,6 @@ export class AdminKpiComponent implements OnInit {
     // });
 
     // #column3_search is a <input type="text"> element
-    $(this.searchCol1.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref
-          .columns(1)
-          .search(this.value)
-          .draw();
-      });
-    });
-
-
-
-    $(this.searchCol2.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref
-          .columns( 2 )
-          .search( this.value )
-          .draw();
-      });
-    });
-    $(this.searchCol3.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref
-          .columns(11)
-          .search( this.value )
-          .draw();
-      });
-    });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(0).every( function () {
@@ -385,20 +334,6 @@ export class AdminKpiComponent implements OnInit {
       });
     });
 
-
-    // export only what is visible right now (filters & paginationapplied)
-    $(this.btnExporta.nativeElement).click(function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        if($this.viewModel.filters.idKpi || $this.viewModel.filters.titoloBreve || $this.viewModel.filters.referenti || $this.viewModel.filters.tuttiContratti || $this.viewModel.filters.tutteLeFrequenze){
-          $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
-        } else {
-          $this.table2csv(datatable_Ref, 'full', '.kpiTable');
-        }
-        //$this.table2csv(datatable_Ref, 'full', '.kpiTable');
-      });
-    });
     
   }
 
@@ -452,7 +387,7 @@ export class AdminKpiComponent implements OnInit {
     return tmp.textContent || tmp.innerText;
   }
 
-  getKpis1() {
+ /* getKpis1() {
     this.apiService.getCatalogoKpis().subscribe((data: any) => {
     });
   }
@@ -465,8 +400,16 @@ export class AdminKpiComponent implements OnInit {
       this.rerender();
       this.loading = false;
     });
+  }*/
+  getTRules() {
+    this.loading = true;
+    this.apiService.getTRules().subscribe((data: any) => {
+      this.kpiTableBodyData = data;
+      console.log('Rules ', data);
+      this.rerender();
+      this.loading = false;
+    });
   }
-
   getForms() {
     this.LoadingFormService.getLoadingForms().subscribe((data: any) => {
       this.allForms = data;

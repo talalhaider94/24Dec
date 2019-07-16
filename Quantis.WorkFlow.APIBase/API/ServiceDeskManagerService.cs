@@ -18,6 +18,7 @@ using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 using Quantis.WorkFlow.Services.Framework;
 using Quantis.WorkFlow.Models.SDM;
+using System.Globalization;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -802,19 +803,12 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
             XmlDocument soapEnvelopeXml = new XmlDocument();
-            var xmlStr = @"<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:ser=""http://www.ca.com/UnicenterServicePlus/ServiceDesk"">
-                    <soapenv:Header/>
-                    <soapenv:Body>
-                    <ser:{0}>
-                    {1}
-                    </ser:{0}>
-                    </soapenv:Body>
-                    </soapenv:Envelope>";
+            var xmlStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://www.ca.com/UnicenterServicePlus/ServiceDesk\">" + Environment.NewLine + "<soapenv:Header/>" + Environment.NewLine + "<soapenv:Body>" + Environment.NewLine + "<ser:{0}>" + Environment.NewLine + "{1}" + Environment.NewLine +"</ser:{0}>" + Environment.NewLine +"</soapenv:Body>" + Environment.NewLine +"</soapenv:Envelope>";
             string parms = string.Join(string.Empty, parameters.Select(kv => String.Format("<{0}>{1}</{0}>", kv.Key, kv.Value)).ToArray());
             var s = String.Format(xmlStr, action, parms);
             soapEnvelopeXml.LoadXml(s);
             // Create the web request
-            string boundary = "=" + DateTime.Now.Ticks.ToString("x");
+            string boundary = "=" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture);
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
             webRequest.Headers.Add("Content-Type", string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org> \"; boundary=\"{0}\"", boundary));
             webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
