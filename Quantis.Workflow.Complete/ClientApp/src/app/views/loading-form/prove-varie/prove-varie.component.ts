@@ -203,7 +203,9 @@ export class ProveVarieComponent implements OnInit {
       }
       userSubmit.inputs.push(formFields);
     });
-    this._noteTextFileUpload(utenteFormData.value);
+    if(utenteFormData) {
+      this._noteTextFileUpload(utenteFormData.value);
+    }
     this._userLoadingFormSubmit(periodRaw, dataAttuale, userSubmit);
   }
 
@@ -228,8 +230,7 @@ export class ProveVarieComponent implements OnInit {
       }
     }, error => {
       this.loading = false;
-      console.log('USER FORM SUBMIT ERROR', error);
-      this.toastr.error(error.error.error, 'Error');
+      this.toastr.error(error.statusText, 'Error');
     });
   }
 

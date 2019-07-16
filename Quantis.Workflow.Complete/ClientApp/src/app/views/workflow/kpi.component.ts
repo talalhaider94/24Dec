@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { WorkFlowService, AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -8,10 +8,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { FileUploader } from 'ng2-file-upload';
 import * as moment from 'moment';
-import { tick } from '@angular/core/src/render3';
+import WorkFlowHelper from '../../_helpers/workflow';
 
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
@@ -289,9 +289,9 @@ export class KPIComponent implements OnInit, OnDestroy {
           }
           if(status.showarchivemsg) {
             if(status.isarchive) {
-              this.toastr.success('Success', 'Ticket is archived.');
+              this.toastr.success('Success', 'KPI archiviato con successo.');
             } else {
-              this.toastr.success('Info', 'Archive is not successfull.');
+              this.toastr.success('Info', 'Archiviazione del KPI fallita.');
             }
           }
         });
@@ -336,9 +336,9 @@ export class KPIComponent implements OnInit, OnDestroy {
             }
             if(status.showarchivemsg) {
               if(status.isarchive) {
-                this.toastr.success('Success', 'Ticket is archived.');
+                this.toastr.success('Success', 'KPI archiviato con successo.');
               } else {
-                this.toastr.success('Info', 'Archive is not successfull.');
+                this.toastr.success('Info', 'Archiviazione del KPI fallita.');
               }
             }
           });
@@ -439,22 +439,11 @@ export class KPIComponent implements OnInit, OnDestroy {
   //search end
 
   formatDescriptionColumn(description) {
-    const regex = /([\w]+:)("(([^"])*)"|'(([^'])*)'|(([^\s])*))/g;
-    if(!!description && description.length > 0) {
-      let stringMatches = description.match(regex);
-      if(stringMatches.length > 0){
-        return stringMatches.map((key, index) => {
-          return {
-            key,
-            value: description.split(stringMatches[index]).pop().split(stringMatches[index + 1])[0]
-          }
-        });
-      } else {
-        return [description];
-      }
-    } else {
-      return ['N/A'];
-    }
+    return WorkFlowHelper.formatDescription(description);
+  }
+
+  formatSummaryColumn(summary) {
+    return WorkFlowHelper.formatSummary(summary);
   }
 
 }
