@@ -16,7 +16,8 @@ export class TokenInterceptorService implements HttpInterceptor {
         request = request.clone({
             setHeaders: {
                 Authorization: `Basic ${btoa("Quantis:WorkflowAPI")}`,
-                AuthToken: currentUser.token   
+                AuthToken: currentUser.token,
+                'Content-Type': 'application/json',
             }
         });
     }
