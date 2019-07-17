@@ -41,6 +41,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       attributes: true,
       attributeFilter: ['class']
     });
+    
+  }
+
+  ngOnInit() {
+    this.currentUser = this.authService.getUser();
     this.router.events.pipe(
       filter((event:any) => event instanceof NavigationEnd)
     ).subscribe(x => {
@@ -50,10 +55,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = this.returnedNode.version || '0.0.1';
     });
-  }
-
-  ngOnInit() {
-    this.currentUser = this.authService.getUser();
   }
 
   ngOnDestroy(): void {
