@@ -31,8 +31,7 @@ export class UserProfilingComponent implements OnInit {
   gatheredData = {
     usersList: [],
     rolesList: [],
-    assignedPermissions: [],
-    allPermissions: []
+    assignedPermissions: []
   }
   selectedData = {
     userid: null,
@@ -42,7 +41,8 @@ export class UserProfilingComponent implements OnInit {
     selected: null
   }
   filters = {
-    searchUsersText: ''
+    searchUsersText: '',
+    searchPermissionsText: ''
   }
   loading = {
     users: false,
@@ -70,7 +70,6 @@ export class UserProfilingComponent implements OnInit {
     this.apiService.getAllKpiHierarchy().subscribe(data=>{
       console.log('getAllKpiHierarchy ==> ', data);
       //this.treeFields.dataSource = data;
-      this.gatheredData.allPermissions = data;
       this.createTrees(data);
     }, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
   }
@@ -151,15 +150,11 @@ export class UserProfilingComponent implements OnInit {
       this.allTreesNodes.forEach((tre:any) => {
         allChkd = [...allChkd, ...tre.checkedNodes];
       });
-      
       allChkd = allChkd.map(function(item) {
         return parseInt(item, 10);
       });
 
-      console.log('allChkd', allChkd);
-
-      this.traverseNodes(this.gatheredData.allPermissions, allChkd);
-      let dataToPost = {Id: this.selectedData.userid, Ids: this.innerMostChildrenNodeIds};
+      let dataToPost = {Id: this.selectedData.userid, Ids: allChkd};
       console.log('dataToPost ', dataToPost);
       this.apiService.assignGlobalRulesToUserId(dataToPost).subscribe(data => {
         this.toastr.success('Saved', 'Success');
@@ -185,20 +180,6 @@ export class UserProfilingComponent implements OnInit {
     console.log('chekedddddddddddddddd ');//, treeRef);
     treeRef.loaded = true;
     //this.selectedData.checked = this.permissionsTree.checkedNodes;
-  }
-
-  traverseNodes(complexJson, allChkdNodes) {
-    if (complexJson) {
-      complexJson.forEach((item:any)=>{
-        if (item.children) {
-          this.traverseNodes(item.children, allChkdNodes);
-        } else {
-          if(allChkdNodes.includes(item.id)){
-            this.innerMostChildrenNodeIds.push(item.id);
-          }
-        }
-      });
-    }
   }
 
   getAllLeafNodesIds(complexJson) {
