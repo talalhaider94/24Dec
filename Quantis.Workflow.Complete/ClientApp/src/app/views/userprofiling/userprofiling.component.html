@@ -9,7 +9,7 @@
       <div class="col-md-4">
           <div><label class="lbl-filter-user">Utenti: <strong
                       class="selected-user-title">{{selectedData.name|uppercase}}</strong></label></div>
-          <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="search"
+          <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
                   [(ngModel)]="filters.searchUsersText" /></div>
           <perfect-scrollbar style="max-height: 546px;">
             
@@ -17,7 +17,7 @@
               <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-              <li *ngFor="let user of gatheredData.usersList; index as i"
+              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
                   (click)="selectRoleItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
             </ul>
     
@@ -26,6 +26,8 @@
       <div class="col-md-1"></div>
       <div class="col-md-7">
           <br><label>Permissions:</label>
+          <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
+            [(ngModel)]="filters.searchPermissionsText" /></div>
         <br><br>
         <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
@@ -38,7 +40,7 @@
             <!-- <div *ngFor="let treeObj of treesArray" >
               <ejs-treeview #permissionsTree [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="treeObj.checkedNodes" (nodeChecked)='syncSelectedNodesArray($event)' ></ejs-treeview>
             </div> -->
-            <div *ngFor="let treeObj of treesArray; let i = index" >
+            <div *ngFor="let treeObj of treesArray | filter : filters.searchPermissionsText; let i = index" >
                 <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
               <ejs-treeview [hidden]="!treeObj.loaded"
                 #permissionsTree 

@@ -225,13 +225,13 @@ export const navItems: NavData[] = [
         url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_CONFIGURATIONS' 
       }, 
       {
         name: 'Profilazione Utente',
-        url: '/userprofiling',
+        url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
-        version: '0.0.2',
+        version: '0.0.4',
         key: 'VIEW_CONFIGURATIONS'
       },
     ]
@@ -242,7 +242,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.3.1b',
+    name: 'Version 1.3.1',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },

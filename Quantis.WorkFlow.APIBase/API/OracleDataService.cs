@@ -189,73 +189,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        /*       public List<PslDTO> GetPslValue(int global_rule_id, string period)
-               {
-                   try
-                   {
-                       var period_table = "";
-                       switch (tracking_period)
-                       {
-                           case "MENSILE":
-                               period_table = "t_psl_0_month";
-                               break;
-                           case "TRIMESTRALE":
-                               period_table = "t_psl_0_quarter";
-                               break;
-                           case "QUADRIMESTRALE":
-                               period_table = "t_psl_0_month";
-                               break;
-                           case "SEMESTRALE":
-                               period_table = "t_psl_0_month";
-                               break;
-                           case "ANNUALE":
-                               period_table = "t_psl_0_year";
-                               break;
-                       }
-                       //string query = @"select s.sla_name, r.rule_name, ROUND(p.provided_ce,2), time_stamp_utc from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_slas s on v.sla_id = s.SLA_ID left join " + period_table +
-                       // " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'),to_char(time_stamp_utc, 'YY')) = :period where s.sla_name = :sla_name and r.rule_name = :rule_name and p.time_stamp_utc is not null";
-                       string pre = @"select * from t_rules r where r.global_rule_id = :global_rule_id and";
-                       string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_slas s on v.sla_id = s.SLA_ID left join ";
-                       query += period_table;
-                       query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where s.sla_name = :sla_name and r.rule_name = :rule_name and p.time_stamp_utc is not null";
-                       using (OracleConnection con = new OracleConnection(_connectionstring))
-                       {
-                           using (OracleCommand cmd = con.CreateCommand())
-                           {
-                               con.Open();
-                               cmd.BindByName = true;
-                               cmd.CommandText = query;
-                               OracleParameter param1 = new OracleParameter("period", period);
-                               OracleParameter param2 = new OracleParameter("sla_name", sla_name);
-                               OracleParameter param3 = new OracleParameter("rule_name", rule_name);
-                               cmd.Parameters.Add(param1);
-                               cmd.Parameters.Add(param2);
-                               cmd.Parameters.Add(param3);
-                               OracleDataReader reader = cmd.ExecuteReader();
-                               DataTable dt = new DataTable();
-                               dt.Load(reader);
-                               List<DataRow> list = dt.AsEnumerable().ToList();
-                               var values = list.Select(o => new PslDTO()
-                               {
-                                   sla_id = (Decimal)o[0],
-                                   rule_id = (Decimal)o[1],
-                                   provided = (Decimal)o[2],
-                                   provided_c = (Decimal)o[3],
-                                   provided_e = (Decimal)o[4],
-                                   provided_ce = (Decimal)o[5],
-                                   time_stamp_utc = (DateTime)o[6],
 
-                               });
-                               return values.ToList();
-                           }
-                       }
-                   }
-                   catch (Exception e)
-                   {
-                       throw e;
-                   }
-
-               }*/
         public List<OracleFormDTO> GetForm(int id, int userid)
         {
             try
@@ -374,6 +308,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                     {
                                         name = f.name,
                                         label = subset?.text??String.Empty,
+                                        mandatory = subset?.a_isMandatory??String.Empty,
+                                        defaultValue = subset?.defaultValue??String.Empty,
                                         source = f.source,
                                         type = f.type
                                     }).ToList()

@@ -18,8 +18,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public sidebarMinimized = true;
   private changes: MutationObserver;
   public element: HTMLElement;
-  private currentUrl = 'abc';
-  public currentVerion = 'abc';
+  private currentUrl = '0.0.1';
+  public currentVerion = '0.0.1';
   public returnedNode:any;
   currentUser: any;
   constructor(
@@ -41,17 +41,20 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       attributes: true,
       attributeFilter: ['class']
     });
-    this.router.events.pipe(
-      filter((event:any) => event instanceof NavigationEnd)
-    ).subscribe(x => {
-      this.currentUrl = x.url;
-      this.findUrlDataByName(this.navItems, this.currentUrl);
-      this.currentVerion = this.returnedNode.version || '0.0.1';
-    });
+    
   }
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
+    this.router.events.pipe(
+      filter((event:any) => event instanceof NavigationEnd)
+    ).subscribe(x => {
+      console.log('router');
+      console.log(x);
+      this.currentUrl = x.url;
+      this.findUrlDataByName(this.navItems, this.currentUrl);
+      this.currentVerion = this.returnedNode.version || '0.0.1';
+    });
   }
 
   ngOnDestroy(): void {

@@ -2,7 +2,7 @@
     <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
 </div>
 <div>
-    <div class="container" style="max-width:90%">
+    <div class="container" style="max-width:100%">
         <div class="row">
             <div class="col-12">
                 <div class="row">
@@ -36,19 +36,14 @@
                             <li *ngFor="let error of userLoadingFormErrors"> {{ error }}</li>
                         </ul>
                         <form [formGroup]="myInputForm" novalidate (ngSubmit)="saveUser(myInputForm)">
-                            <div class="form-group row">
-                                <label class="col-md-5 col-form-label"><strong>Nome Campo</strong> </label>
-                                <div class="col-md-7">
-                                    <p class="form-control-static"><strong class="mt-2 d-block">Valore</strong> </p>
-                                </div>
-                            </div>
+
                             <div formArrayName="valories">
                                 <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index" class="panel panel-default">
                                     <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='time'" class="panel-body bg-white" [formGroupName]="i">
                                         <div class="row align-items-center mb-2">
                                           <div class="col-md-5 col-form-label">
                                                   <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                                                  <ng-template #trueBlock><label>{{arrayFormElements[i].label}}</label></ng-template>
+                                                  <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
                                                   <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
                                             
                                           </div>
@@ -63,12 +58,12 @@
                                                     <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
                                                 </mat-form-field>
                                                 <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <small>Data minima: {{minDate[i]|date}}</small>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <small>Data massima: {{maxDate[i]|date}}</small>
-                                                    </div>
+                                                  <div class="col-sm-6" *ngIf="minDate[i].length > 0">
+                                                    <small style="color:red">Data minima: {{minDate[i]|date}}</small>
+                                                  </div>
+                                                  <div class="col-sm-6" *ngIf="maxDate[i].length > 0">
+                                                    <small style="color:red">Data massima: {{maxDate[i]|date}}</small>
+                                                  </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -77,20 +72,28 @@
                                         <div class="row align-items-center mb-2">
                                           <div class="col-md-5 col-form-label" *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
                                             <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                                            <ng-template #trueBlock><label>{{arrayFormElements[i].label}}</label></ng-template>
+                                            <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
                                             <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
                                           </div>
                                             <div class="col-sm-7">
 
-                                                <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
+                                            
+                                            <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length === 0" [attr.maxlength]="numeroMax[i]"
+                                                   [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                                                <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'" [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
-                                                <div class="row" *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
-                                                    <div class="col-sm-6">
-                                                        <small>Valore minimo: {{numeroMin[i]}}</small>
+                                            <input [readonly]="!readOnlyUserForm" *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length > 0" [attr.maxlength]="numeroMax[i]"
+                                                   [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i] = arrayFormElements[i].defaultvalue" value='{{arrayFormElements[i].defaultvalue}}' placeholder="Resource" class="form-control" formControlName="valoreUtente" disabled>
+
+                                            <input [readonly]="!readOnlyUserForm" type="number" *ngIf="arrayFormElements[i].type=='real'"
+                                                   [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]" placeholder="Input" class="form-control" formControlName="valoreUtente">
+
+
+                                              <div class="row" *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
+                                                    <div class="col-sm-6" *ngIf="numeroMin[i] > 0">
+                                                        <small style="color:red">Valore minimo: {{numeroMin[i]}}</small>
                                                     </div>
-                                                    <div class="col-sm-6">
-                                                        <small>Valore massimo: {{numeroMax[i]}}</small>
+                                                    <div class="col-sm-6" *ngIf="numeroMax[i] > 0">
+                                                        <small style="color:red">Valore massimo: {{numeroMax[i]}}</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,10 +176,10 @@
                         <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
                             <thead>
                                 <tr>
-                                    <th>Data Di Caricamento</th>
+                                    <th>Data</th>
                                     <th>Periodo</th>
                                     <th>Nome File</th>
-                                    <th>Download</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

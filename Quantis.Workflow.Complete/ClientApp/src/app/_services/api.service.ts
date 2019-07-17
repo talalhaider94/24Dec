@@ -15,11 +15,11 @@ export class ApiService {
 
   getCatalogoUsers(): Observable<any> {
     const getUtentiEndPoint = `${environment.API_URL}/data/GetAllUsers`;
-    return this.http.get(getUtentiEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getUtentiEndPoint);
   }
   getTUsers(): Observable<any> {
     const getTUsersEndPoint = `${environment.API_URL}/data/GetAllTUsers`;
-    return this.http.get(getTUsersEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getTUsersEndPoint);
   }
   getTRules(): Observable<any> {
     const getTRulesEndPoint = `${environment.API_URL}/data/GetAllTRules`;
@@ -28,128 +28,128 @@ export class ApiService {
 
   getKpiArchivedData(id,month,year): Observable<any>{ 
     const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
-    return this.http.get(getDateKpiId,Headers.setTokenHeaders('GET'));
+    return this.http.get(getDateKpiId);
   }
 
   getCatalogoKpis(): Observable<any> {
     const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpis`;
-    return this.http.get(getKpiEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getKpiEndPoint);
   }
 
   getConfigurations(): Observable<any> {
     const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllBasicConfigurations`;
-    return this.http.get(getConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getConfigurationsEndPoint);
   }
 
   getAdvancedConfigurations(): Observable<any> {
     const getAdvancedConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllAdvancedConfigurations`;
-    return this.http.get(getAdvancedConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getAdvancedConfigurationsEndPoint);
   }
 
   getSDMGroupConfigurations(): Observable<any> {
     const getSDMGroupConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllSDMGroupConfigurations`;
-    return this.http.get(getSDMGroupConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getSDMGroupConfigurationsEndPoint);
   }
   
   getSDMStatusConfigurations(): Observable<any> {
     const getSDMStatusConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllSDMStatusConfigurations`;
-    return this.http.get(getSDMStatusConfigurationsEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getSDMStatusConfigurationsEndPoint);
   }
 
   getArchivedKpis(month, year): Observable<any> {
     const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
-    return this.http.get(getArchivedKpisEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getArchivedKpisEndPoint);
   }
 
   getArchivedKpiById(id): Observable<any> {
     const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?id_kpi=${id}`;
-    return this.http.get(getArchivedKpisEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getArchivedKpisEndPoint);
   }
   
   deleteSDMGroupConfiguration(id): Observable<any> {
     const deleteSDMGroupConfiguration = `${environment.API_URL}/information/DeleteSDMGroupConfiguration/${id}`;
-    return this.http.get(deleteSDMGroupConfiguration, Headers.setTokenHeaders('POST'));
+    return this.http.get(deleteSDMGroupConfiguration);
   }
     
   deleteSDMStatusConfiguration(id): Observable<any> {
     const deleteSDMStatusConfiguration = `${environment.API_URL}/information/DeleteSDMStatusConfiguration/${id}`;
-    return this.http.get(deleteSDMStatusConfiguration, Headers.setTokenHeaders('POST'));
+    return this.http.get(deleteSDMStatusConfiguration);
   }
 
   getDataKpis(month, year): Observable<any> {
     const getDataKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?month=${month}&year=${year}`;
-    return this.http.get(getDataKpisEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getDataKpisEndPoint);
   }
 
   getUsersByRole(roleId): Observable<any> {
     const getUsersByRole = `${environment.API_URL}/data/GetUsersByRoleId?roleId=${roleId}`;
-    return this.http.get(getUsersByRole, Headers.setTokenHeaders('GET'));
+    return this.http.get(getUsersByRole);
   }
 
   getCustomersKP(): Observable<any> {
     const getCustomersKP = `${environment.API_URL}/data/GetAllCustomersKP`;
-    return this.http.get(getCustomersKP, Headers.setTokenHeaders('GET'));
+    return this.http.get(getCustomersKP);
   }
 
   getAllRoles(): Observable<any> {
     const getAllRolesEndPoint = `${environment.API_URL}/information/GetAllRoles`;
-    return this.http.get(getAllRolesEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getAllRolesEndPoint);
   }
   getRolesByUserId(userid): Observable<any> {
     const getRolesByUserIdEndPoint = `${environment.API_URL}/information/GetRolesByUserId/?userid=${userid}`;
-    return this.http.get(getRolesByUserIdEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getRolesByUserIdEndPoint);
   }
 
   addRole(data): Observable<any> {
     const addrole = `${environment.API_URL}/information/AddUpdateRole`;
-    return this.http.post(addrole,data, Headers.setTokenHeaders('POST'));
+    return this.http.post(addrole,data);
   }
 
   addSDMGroup(data): Observable<any> {
     const addSDMGroup = `${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`;
-    return this.http.post(addSDMGroup,data, Headers.setTokenHeaders('POST'));
+    return this.http.post(addSDMGroup,data);
   }
   
   addSDMStatus(data): Observable<any> {
     const addSDMStatus = `${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`;
-    return this.http.post(addSDMStatus,data, Headers.setTokenHeaders('POST'));
+    return this.http.post(addSDMStatus,data);
   }
   
   addConfig(data): Observable<any> {
     const addConfig = `${environment.API_URL}/information/AddUpdateBasicConfiguration`;
-    return this.http.post(addConfig,data, Headers.setTokenHeaders('POST'));
+    return this.http.post(addConfig,data);
   }
    
   addAdvancedConfig(data): Observable<any> {
     const addConfig = `${environment.API_URL}/information/AddUpdateAdvancedConfiguration`;
-    return this.http.post(addConfig,data, Headers.setTokenHeaders('POST'));
+    return this.http.post(addConfig,data);
   }
   
   deleteRole(roleId): Observable<any> {
     const deleteroles = `${environment.API_URL}/information/DeleteRole/${roleId}`;
-    return this.http.get(deleteroles, Headers.setTokenHeaders('POST'));
+    return this.http.get(deleteroles);
   }
 
   getAllPermisisons(): Observable<any> {
     const getAllPermisisonsEndPoint = `${environment.API_URL}/information/GetAllPermissions`;
-    return this.http.get(getAllPermisisonsEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getAllPermisisonsEndPoint);
   }
   getPermissionsByRoldId(roleId): Observable<any> {
     const getPermissionsByRoldIdEndPoint = `${environment.API_URL}/information/GetPermissionsByRoleID/?roleId=${roleId}`;
-    return this.http.get(getPermissionsByRoldIdEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getPermissionsByRoldIdEndPoint);
   }
 
   getAllKpiHierarchy(): Observable<any> {
     const getAllKpiHierarchyEndPoint = `${environment.API_URL}/information/GetAllKpiHierarchy`;
-    return this.http.get(getAllKpiHierarchyEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getAllKpiHierarchyEndPoint);
   }
   getGlobalRulesByUserId(userId): Observable<any> {
     const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
-    return this.http.get(getGlobalRulesByRoleIdEndPoint, Headers.setTokenHeaders('GET'));
+    return this.http.get(getGlobalRulesByRoleIdEndPoint);
   }
 
   updateConfig(config) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)
       .pipe(
         tap(
           data => data,
@@ -159,7 +159,7 @@ export class ApiService {
   }
 
   updateAdvancedConfig(config) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateAdvancedConfiguration`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateAdvancedConfiguration`, config)
       .pipe(
         tap(
           data => data,
@@ -169,7 +169,7 @@ export class ApiService {
   }
 
   updateRole(data) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateRole`, data, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateRole`, data)
       .pipe(
         tap(
           data => data,
@@ -179,7 +179,7 @@ export class ApiService {
   }
 
   updateSDMGroupConfig(config) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMGroupConfiguration`, config)
       .pipe(
         tap(
           data => data,
@@ -189,7 +189,7 @@ export class ApiService {
   }
   
   updateSDMStatusConfig(config) {
-    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AddUpdateSDMStatusConfiguration`, config)
       .pipe(
         tap(
           data => data,
@@ -199,7 +199,7 @@ export class ApiService {
   }
 
   updateCatalogUtenti(config) {
-    return this.http.post(`${environment.API_URL}/data/AddUpdateUser`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/data/AddUpdateUser`, config)
       .pipe(
         tap(
           data => data,
@@ -209,7 +209,7 @@ export class ApiService {
   }
 
   updateCatalogKpi(config) {
-    return this.http.post(`${environment.API_URL}/data/AddUpdateKpi`, config, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/data/AddUpdateKpi`, config)
       .pipe(
         tap(
           data => data,
@@ -219,7 +219,7 @@ export class ApiService {
   }
 
   assignRolesToUser(postData) {
-    return this.http.post(`${environment.API_URL}/information/AssignRolesToUser`, postData, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AssignRolesToUser`, postData)
       .pipe(
         tap(
           data => data,
@@ -229,7 +229,7 @@ export class ApiService {
   }
 
   assignPermissionsToRoles(postData) {
-    return this.http.post(`${environment.API_URL}/information/AssignPermissionsToRoles`, postData, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AssignPermissionsToRoles`, postData)
     .pipe(
       tap(
         data => data,
@@ -239,7 +239,8 @@ export class ApiService {
   }
 
   assignGlobalRulesToUserId(postData) {
-    return this.http.post(`${environment.API_URL}/information/AssignGlobalRulesToUserId`, postData, Headers.setTokenHeaders('POST'))
+    return this.http.post(`${environment.API_URL}/information/AssignGlobalRulesToUserId`, postData
+    )
     .pipe(
       tap(
         data => data,

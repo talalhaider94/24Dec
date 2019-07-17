@@ -5,7 +5,7 @@ import { UserRolePermissionsComponent } from './UserRolePermissions/userRolePerm
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'userpermissions',
     component: UserProfilingComponent,
     data: {
       title: 'T Configurations'
