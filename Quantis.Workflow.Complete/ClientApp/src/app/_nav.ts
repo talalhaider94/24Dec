@@ -176,7 +176,7 @@ export const navItems: NavData[] = [
     children: [
       {
         name: 'Generali',
-        url: '/tconfiguration',
+        url: '/tconfiguration/general',
         icon: 'fa fa-check-circle-o',
         version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'
