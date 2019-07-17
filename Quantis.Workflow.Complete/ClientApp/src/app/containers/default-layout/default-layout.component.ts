@@ -18,8 +18,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public sidebarMinimized = true;
   private changes: MutationObserver;
   public element: HTMLElement;
-  private currentUrl = 'abc';
-  public currentVerion = 'abc';
+  private currentUrl = '0.0.1';
+  public currentVerion = '0.0.1';
   public returnedNode:any;
   currentUser: any;
   constructor(
