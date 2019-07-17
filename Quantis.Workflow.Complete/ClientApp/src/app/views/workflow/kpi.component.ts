@@ -157,7 +157,6 @@ export class KPIComponent implements OnInit, OnDestroy {
   }
 
   onDataChange() {
-    //this.rerender();
     this.loading = true;
     this._getAllTickets();
   }
