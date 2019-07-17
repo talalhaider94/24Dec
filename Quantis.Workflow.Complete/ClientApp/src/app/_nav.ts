@@ -163,7 +163,7 @@ export const navItems: NavData[] = [
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',
-        version: '0.0.5',
+        version: '0.0.7',
         key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]
@@ -176,7 +176,7 @@ export const navItems: NavData[] = [
     children: [
       {
         name: 'Generali',
-        url: '/tconfiguration',
+        url: '/tconfiguration/general',
         icon: 'fa fa-check-circle-o',
         version: '0.0.1',
         key: 'VIEW_CONFIGURATIONS'

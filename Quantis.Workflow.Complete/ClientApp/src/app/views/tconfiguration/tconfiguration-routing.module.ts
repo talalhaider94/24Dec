@@ -6,7 +6,7 @@ import { TConfigurationAdvancedComponent } from './advanced/advanced.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'general',
     component: TConfigurationComponent,
     data: {
       title: 'General  T Configurations'
