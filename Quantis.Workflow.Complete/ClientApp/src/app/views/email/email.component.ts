@@ -65,11 +65,10 @@ export class EmailComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
-      key: 'key',
-      value: 'value',
-      owner: 'owner',
-      isenable: true,
-      description: 'description',
+      type: 'type',
+      user_domain: 'user_domain',
+      period: 'period',
+      notify_date: 'notify_date'
     }
   ]
 
@@ -175,9 +174,9 @@ export class EmailComponent implements OnInit {
   }
 
   getCOnfigurations() {
-    this.apiService.getConfigurations().subscribe((data) =>{
+    this.apiService.getEmails().subscribe((data) =>{
       this.ConfigTableBodyData = data;
-      console.log('Configs ', data);
+      console.log('Emails Data ', data);
       this.rerender();
     });
   }

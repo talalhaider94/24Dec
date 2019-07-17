@@ -106,9 +106,9 @@ export const routes: Routes = [
       {
         path: 'adminroles',
         loadChildren: './views/adminroles/adminroles.module#AdminRolesModule'
-      },
-      {
-        path: 'email',
+      }, 
+      { 
+        path: 'specialreporting',
         loadChildren: './views/email/email.module#EmailModule'
       }
     ]

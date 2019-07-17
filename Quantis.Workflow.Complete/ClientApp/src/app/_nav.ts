@@ -234,6 +234,13 @@ export const navItems: NavData[] = [
         version: '0.0.4',
         key: 'VIEW_CONFIGURATIONS'
       },
+      {
+        name: 'Special Reporting',
+        url: '/specialreporting',
+        icon: 'fa fa-gear',
+        version: '0.0.2',
+        key: 'VIEW_CONFIGURATIONS'
+      }
     ]
   },
   {
