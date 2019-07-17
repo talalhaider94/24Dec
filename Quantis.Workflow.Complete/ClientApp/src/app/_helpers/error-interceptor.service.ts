@@ -25,7 +25,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
         // auto logout if 401 response returned from api
         this.authService.logout();
         this.router.navigate(['/login']);
-        this.toastr.error('Unauthorize', 'Please try login again');
+        this.toastr.error('Sessione Scaduta', 'Effettuare nuovamente il login');
       }
       return throwError(err);
     }))

@@ -118,7 +118,7 @@ export class SdmGroupComponent implements OnInit {
   }
 
   updateConfig() {
-    this.modalData.category_id = this.category_id;
+    //this.modalData.category_id = this.category_id;
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
