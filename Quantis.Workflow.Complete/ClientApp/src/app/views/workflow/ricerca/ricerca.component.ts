@@ -110,10 +110,15 @@ export class RicercaComponent implements OnInit, OnDestroy {
   }
 
   getRicercaTickets () {
-    this.workFlowService.getTicketsSearchByUserRecerca().pipe(first()).subscribe(data => {
+    let period;
+    if(this.monthOption === 'all' || this.yearOption === 'all') {
+      period = 'all';
+    } else {
+      period = `${this.monthOption}/${this.yearOption}`;
+    }
+    this.workFlowService.getTicketsSearchByUserRecerca(period).pipe(first()).subscribe(data => {
       console.log('getTicketsSearchByUserRecerca', data);
       this.allTickets = data;
-      //this.dtTrigger.next();
       this.rerender();
       this.loading = false;
     }, error => {
@@ -188,6 +193,11 @@ export class RicercaComponent implements OnInit, OnDestroy {
   }
 
   // search start
+  onDataChange() {
+    this.loading = true;
+    this.getRicercaTickets();
+  }
+
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.setUpDataTableDependencies();
@@ -203,25 +213,25 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   setUpDataTableDependencies() {
 
-    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(10).every(function () {
-        const that = this;
-        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.monthSelect.nativeElement).on('change', function () {
-          that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
-        });
-      });
-    });
+    // $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    //   datatable_Ref.columns(10).every(function () {
+    //     const that = this;
+    //     that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+    //     $($this.monthSelect.nativeElement).on('change', function () {
+    //       that.search(`${$(this).val()}/${$this.yearSelect.nativeElement.value}`).draw();
+    //     });
+    //   });
+    // });
 
-    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(10).every(function () {
-        const that = this;
-        that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
-        $($this.yearSelect.nativeElement).on('change', function () {
-          that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
-        });
-      });
-    });
+    // $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    //   datatable_Ref.columns(10).every(function () {
+    //     const that = this;
+    //     that.search(moment().subtract(1, 'months').format('MM/YY')).draw();
+    //     $($this.yearSelect.nativeElement).on('change', function () {
+    //       that.search(`${$this.monthSelect.nativeElement.value}/${$(this).val()}`).draw();
+    //     });
+    //   });
+    // });
 
     $(this.searchCol2.nativeElement).on('keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {

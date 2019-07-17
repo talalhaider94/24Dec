@@ -995,16 +995,16 @@ namespace Quantis.WorkFlow.APIBase.API
                                 ATDtDeDTO atdtde = new ATDtDeDTO();
                                 atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
                                 atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
-                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")).ToString().Replace("/02/", "/"+month+"/"));
+                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")).ToString().Replace("/12/2018", "/"+month+"/" + year));
                                 atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
-                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")).ToString().Replace("/02/", "/" + month + "/"));
-                                atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
+                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")).ToString().Replace("/11/2018", "/" + month + "/" + year));
+                            atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
                                 atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
-                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")).ToString().Replace("/02/", "/" + month + "/"));
-                                atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")).ToString().Replace("/12/2018", "/" + month + "/" + year));
+                            atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
-                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")).ToString().Replace("/02/", "/" + month + "/"));
-                                atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")).ToString().Replace("/12/2018", "/" + month + "/" + year));
+                            atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
                                 atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
@@ -1096,11 +1096,25 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<EmailNotifierDTO> GetEmailNotifiers()
+        public List<KeyValuePair<int,string>> GetKPITitolo(List<int> ids)
         {
             try
             {
-                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).ToList();
+                var form = _dbcontext.CatalogKpi.Where(o=>ids.Contains(o.id));
+                return form.Select(o => new KeyValuePair<int, string>(o.id, o.short_name)).ToList();
+              
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<EmailNotifierDTO> GetEmailNotifiers(string period)
+        {
+            try
+            {
+                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).Where(p=>p.notify_date.ToString("MM/yy")==period).ToList();
                 return notifiers.Select(o => new EmailNotifierDTO()
                 {
                     email_body = o.email_body,

@@ -69,12 +69,12 @@
                                             <span class="checkbox-checkmark"></span>
                                         </label>
                                     </th>
-                                    <!-- <th>Stato KPI</th> -->
                                     <th>Rif. Num</th>
                                     <th>Sommario</th>
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Descrizione</th>
+                                    <th>Titolo</th>
                                     <th>KPI ID</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
@@ -88,7 +88,8 @@
                                 <tr *ngIf="allTickets.length === 0 && !loading">
                                     <td colspan="15"><strong>Nessun Ticket Trovato.</strong></td>
                                 </tr>
-                                <tr *ngFor="let ticket of allTickets; let i = index" [ngClass]="{'bg-secondary': ticket.isclosed}">
+                                <tr *ngFor="let ticket of allTickets; let i = index"
+                                    [ngClass]="{'bg-secondary': ticket.isclosed}">
                                     <td class="pl-3">
                                         <label class="checkbox-container border"
                                             [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
@@ -139,6 +140,15 @@
                                             {{ ticket.description | slice:0:15 || 'N/A' }}
                                             <span class="d-none">
                                                 {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
+                                            triggers="focus">
+                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.titolo | slice:15 || 'N/A' }}
                                             </span>
                                         </button>
                                     </td>
