@@ -288,6 +288,7 @@ namespace Quantis.WorkFlow.APIBase.API
             XDocument xdoc = XDocument.Parse(xml);
             var lists = from uoslist in xdoc.Element("AdapterConfiguration").Element("InputFormatCollection").Element("InputFormat").Element("InputFormatFields").Elements("InputFormatField") select uoslist;
             var formfields = new List<FormField>();
+            
             foreach (var l in lists)
             {
                 formfields.Add(new FormField()
@@ -298,6 +299,19 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 });
 
+            }
+            foreach (var s in conf)
+            {
+                if (s.a_type == "DLFLabel" && s.text != "Label" && s.text != null && s.text.Length > 0)
+                {
+                    formfields.Add(new FormField()
+                    {
+                        name = "Label",
+                        type = "Label",
+                        source = s.text
+
+                    });
+                }
             }
             return new ReaderConfiguration()
             {
