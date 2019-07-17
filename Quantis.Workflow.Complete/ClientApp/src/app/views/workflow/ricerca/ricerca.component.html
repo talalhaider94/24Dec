@@ -14,6 +14,7 @@
                                         <label for="monthOption"><strong>Mese</strong></label>
                                         <select #monthSelect class="form-control" name="monthOption"
                                             [(ngModel)]="monthOption" (change)="onDataChange()">
+                                            <option value="all">Tutti</option>
                                             <option value="01">1</option>
                                             <option value="02">2</option>
                                             <option value="03">3</option>
@@ -32,6 +33,7 @@
                                         <label for="yearOption"><strong>Anno</strong></label>
                                         <select #yearSelect class="form-control" name="yearOption"
                                             [(ngModel)]="yearOption" (change)="onDataChange()">
+                                            <option value="all">Tutti</option>
                                             <option value="16">2016</option>
                                             <option value="18">2017</option>
                                             <option value="18">2018</option>

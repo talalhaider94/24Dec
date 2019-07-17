@@ -110,7 +110,12 @@ export class RicercaComponent implements OnInit, OnDestroy {
   }
 
   getRicercaTickets () {
-    let period = `${this.monthOption}/${this.yearOption}`;
+    let period;
+    if(this.monthOption === 'all' || this.yearOption === 'all') {
+      period = 'all';
+    } else {
+      period = `${this.monthOption}/${this.yearOption}`;
+    }
     this.workFlowService.getTicketsSearchByUserRecerca(period).pipe(first()).subscribe(data => {
       console.log('getTicketsSearchByUserRecerca', data);
       this.allTickets = data;
