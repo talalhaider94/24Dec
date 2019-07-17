@@ -883,7 +883,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         sp += filterByKpiId;
                     }
                     sp += " and global_rule_id in (" +string.Join(',',globalruleIds) + ")";
-                    sp += " order by interval_kpi asc";
+                    sp += " order by close_timestamp_ticket desc";
                     var command = new NpgsqlCommand(sp, con);
 
                     if ((month != null) && (year != null))
