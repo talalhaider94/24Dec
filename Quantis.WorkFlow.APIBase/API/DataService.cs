@@ -669,7 +669,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var ents=_dbcontext.FormAttachments.Where(o => o.form_id == formId);
                 var dtos = _fromAttachmentMapper.GetDTOs(ents.ToList());
-                return dtos;
+                return dtos.OrderByDescending(o=>o.create_date).ToList();
             }
             catch (Exception e)
             {
@@ -1088,7 +1088,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     return new List<FormAttachmentDTO>();
                 }
                 var attachments = _dbcontext.Forms.Include(o => o.Attachments).Single(p => p.form_id == form).Attachments;
-                return _fromAttachmentMapper.GetDTOs(attachments.ToList());
+                return _fromAttachmentMapper.GetDTOs(attachments.ToList()).OrderByDescending(o=>o.create_date).ToList();
 
             }
             catch (Exception e)
