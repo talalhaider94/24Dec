@@ -27,9 +27,9 @@ namespace Quantis.WorkFlow.Controllers
             return _sdmAPI.GetTicketsVerificationByUser(HttpContext,period);
         }
         [HttpGet("GetTicketsSearchByUser")]
-        public List<SDMTicketLVDTO> GetTicketsSearchByUser()
+        public List<SDMTicketLVDTO> GetTicketsSearchByUser(string period)
         {
-            return _sdmAPI.GetTicketsRicercaByUser(HttpContext);
+            return _sdmAPI.GetTicketsRicercaByUser(HttpContext, period);
         }
         [HttpGet("GetAllTickets")]
         public List<SDMTicketLVDTO> GetAllTickets()
