@@ -158,8 +158,6 @@ countCampiData=[];
         this.toastr.error("errore di connessione al sever");
 
       });
-    
-    
   }
   
   ngAfterViewInit() {
