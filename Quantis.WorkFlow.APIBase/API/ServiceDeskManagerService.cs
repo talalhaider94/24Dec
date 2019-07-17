@@ -392,7 +392,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         }
 
-        public List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context)
+        public List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context,string period)
         {
             List<SDMTicketLVDTO> ret = null;
             
@@ -417,6 +417,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     var filters = groups.Select(o => string.Format(" group.id=U'{0}' ", o));
                     filterstring=string.Join("OR", filters);
+                    if (period != "all")
+                    {
+                        filterstring = string.Format("({0}) AND zz_cned_string4='{1}'", filterstring, period);
+                    }
                     LogIn();
                     var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
                     select_a.Wait();
