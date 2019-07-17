@@ -96,6 +96,7 @@
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Descrizione</th>
+                                    <th>Titolo</th>
                                     <th>KPI ID</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
@@ -154,6 +155,15 @@
                                             {{ ticket.description | slice:0:15 || 'N/A' }}
                                             <span class="d-none">
                                                 {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
+                                            triggers="focus">
+                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.titolo | slice:15 || 'N/A' }}
                                             </span>
                                         </button>
                                     </td>
