@@ -74,6 +74,7 @@ export class WorkFlowService {
   
   getTicketsSearchByUserRecerca (period: string): Observable<any>{
     const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser`;
+    // TODO: period=all
     // return this.http.get('https://api.myjson.com/bins/ktkyz');
     const  params = new  HttpParams().set('period', period);
     return this.http.get(ticketSearchEndPoint, { params });
