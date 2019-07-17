@@ -41,6 +41,11 @@ export class ApiService {
     return this.http.get(getConfigurationsEndPoint);
   }
 
+  getEmails(): Observable<any> {
+    const getEmailsEndPoint = `${environment.API_URL}/data/GetEmailNotifiers`;
+    return this.http.get(getEmailsEndPoint);
+  }
+
   getAdvancedConfigurations(): Observable<any> {
     const getAdvancedConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllAdvancedConfigurations`;
     return this.http.get(getAdvancedConfigurationsEndPoint);
