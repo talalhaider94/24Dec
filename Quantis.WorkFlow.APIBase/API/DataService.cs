@@ -1096,11 +1096,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<EmailNotifierDTO> GetEmailNotifiers()
+        public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {
             try
             {
-                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).ToList();
+                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).Where(p=>p.notify_date.ToString("MM/yy")==period).ToList();
                 return notifiers.Select(o => new EmailNotifierDTO()
                 {
                     email_body = o.email_body,
