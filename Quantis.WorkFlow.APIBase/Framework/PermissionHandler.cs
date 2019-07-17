@@ -35,7 +35,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Task.CompletedTask;
             }
-            else if (requirement.Permission== WorkFlowPermissions.BASIC_LOGIN || user.Permissions.Contains(requirement.Permission))
+            else if (requirement.Permission== WorkFlowPermissions.BASIC_LOGIN || (user.Permissions!=null && user.Permissions.Contains(requirement.Permission)))
             {
                 context.Succeed(requirement);
             }

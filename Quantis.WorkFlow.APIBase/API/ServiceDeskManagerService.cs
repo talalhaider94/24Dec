@@ -417,7 +417,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     var filters = groups.Select(o => string.Format(" group.id=U'{0}' ", o));
                     filterstring=string.Join("OR", filters);
-                    if (period != "all")
+                    if (!string.IsNullOrEmpty(period) && period != "all")
                     {
                         filterstring = string.Format("({0}) AND zz_cned_string4='{1}'", filterstring, period);
                     }
@@ -425,7 +425,32 @@ namespace Quantis.WorkFlow.APIBase.API
                     var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
-                    return parseTickets(select_result);//.Where(o=>groups.Contains(o.Group)).ToList();
+                    var tckts= parseTickets(select_result);
+                    var ids = tckts.Select(o => o.kpiIdPK).ToList();
+                    var titolos=_dataService.GetKPITitolo(ids);
+                    return (from tks in tckts
+                     join tito in titolos on tks.kpiIdPK equals tito.Key
+                     into gj from subset in gj.DefaultIfEmpty()
+                            select new SDMTicketLVDTO()
+                     {
+                         Id = tks.Id,
+                         ref_num = tks.ref_num,
+                         Summary = tks.Summary,
+                         Description = tks.Description,
+                         Status = tks.Status,
+                         Group = tks.Group,
+                         ID_KPI = tks.ID_KPI,
+                         Reference1 = tks.Reference1,
+                         Reference2 = tks.Reference2,
+                         Reference3 = tks.Reference3,
+                         Period = tks.Period,
+                         primary_contract_party = tks.primary_contract_party,
+                         secondary_contract_party = tks.secondary_contract_party,
+                         IsClosed = tks.IsClosed,
+                         calcValue = tks.calcValue,
+                         KpiIds = tks.KpiIds,
+                         Titolo = subset.Value??string.Empty
+                     }).ToList();
 
 
                 }
@@ -743,6 +768,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 if (zz3 != null)
                 {
                     dto.KpiIds = zz3.Element("AttrValue").Value;
+                    int kpiid = 0;
+                    int.TryParse(dto.KpiIds.Split('|').FirstOrDefault(), out kpiid);
+                    dto.kpiIdPK = kpiid;
                 }
                 if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
                 {

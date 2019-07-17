@@ -22,5 +22,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public bool IsClosed { get; set; }
         public string calcValue { get; set; }
         public string KpiIds { get; set; }
+        public string Titolo { get; set; }
+        public int kpiIdPK { get; set; }
     }
 }

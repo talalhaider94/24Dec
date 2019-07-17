@@ -1096,6 +1096,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<KeyValuePair<int,string>> GetKPITitolo(List<int> ids)
+        {
+            try
+            {
+                var form = _dbcontext.CatalogKpi.Where(o=>ids.Contains(o.id));
+                return form.Select(o => new KeyValuePair<int, string>(o.id, o.short_name)).ToList();
+              
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {
             try
