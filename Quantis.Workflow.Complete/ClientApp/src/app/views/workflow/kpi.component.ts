@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { WorkFlowService, AuthService } from '../../_services';
-import { first } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { first, delay, mergeMap, retryWhen } from 'rxjs/operators';
+import { Subject, Observable, of, throwError } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FileSaverService } from 'ngx-filesaver';
@@ -12,7 +12,6 @@ import { forkJoin } from 'rxjs';
 import { FileUploader } from 'ng2-file-upload';
 import * as moment from 'moment';
 import WorkFlowHelper from '../../_helpers/workflow';
-
 const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 
 declare var $;
@@ -286,8 +285,8 @@ export class KPIComponent implements OnInit, OnDestroy {
           } else {
             this.toastr.success('Error', 'SDM status false');
           }
-          if(status.showarchivemsg) {
-            if(status.isarchive) {
+          if (status.showarchivemsg) {
+            if (status.isarchive) {
               this.toastr.success('Success', 'KPI archiviato con successo.');
             } else {
               this.toastr.success('Info', 'Archiviazione del KPI fallita.');
@@ -333,8 +332,8 @@ export class KPIComponent implements OnInit, OnDestroy {
             } else {
               this.toastr.success('Error', 'SDM status false');
             }
-            if(status.showarchivemsg) {
-              if(status.isarchive) {
+            if (status.showarchivemsg) {
+              if (status.isarchive) {
                 this.toastr.success('Success', 'KPI archiviato con successo.');
               } else {
                 this.toastr.success('Info', 'Archiviazione del KPI fallita.');
@@ -366,7 +365,7 @@ export class KPIComponent implements OnInit, OnDestroy {
         this._getUploadedFile(file);
       });
     } else {
-      this.toastr.info('Please upload a file');
+      this.toastr.info('Nessun documento da caricare');
     }
   }
 
@@ -379,10 +378,11 @@ export class KPIComponent implements OnInit, OnDestroy {
         let binaryString = readerEvent.target.result;
         let base64Data = btoa(binaryString);
         self.fileUploading = false;
-        self.workFlowService.uploadAttachmentToTicket(self.setActiveTicketId, fileName, base64Data).pipe().subscribe(data => {
+        self.workFlowService.uploadAttachmentToTicket(self.setActiveTicketId, fileName, base64Data).pipe(self.delayedRetries(10000, 3)).subscribe(data => {
           console.log('uploadAttachmentToTicket ==>', data);
           self.fileUploading = false;
-          self.uploader.queue.pop();
+          self.removeFileFromQueue(fileName);
+          // self.uploader.queue.pop();
           self.toastr.success(`${fileName} uploaded successfully.`);
           if (data.status === 200 || data.status === 204) {
             self.workFlowService.getAttachmentsByTicket(self.setActiveTicketId).pipe(first()).subscribe(data => {
@@ -444,5 +444,21 @@ export class KPIComponent implements OnInit, OnDestroy {
   formatSummaryColumn(summary) {
     return WorkFlowHelper.formatSummary(summary);
   }
+  removeFileFromQueue(fileName: string) {
+    for (let i = 0; i < this.uploader.queue.length; i++) {
+      if (this.uploader.queue[i].file.name === fileName) {
+        this.uploader.queue[i].remove();
+        return;
+      }
+    }
+  }
 
+  delayedRetries(delayMs: number, maxRetry: number) {
+    let retries = maxRetry;
+    return (src: Observable<any>) => src.pipe(retryWhen((errors: Observable<any>) => errors.pipe(
+      delay(delayMs),
+      mergeMap(error => retries-- > 0 ? of(error) : throwError(`Tried to upload ${maxRetry} times. without success.`))
+    )
+    ))
+  }
 }
