@@ -1,23 +1,51 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">SPECIAL REPORTING</h2><br>
-      <div class="row">
-        <!-- <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 /> -->
+      <h2 style="color:#565656">NOTIFICHE E-MAIL</h2><br>
+      <!-- <div class="row">
         <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
                 data-target="#addConfigModal">
           Crea Nuovo
         </button>
-      </div><br />
+      </div><br /> -->
+      <h4 style="color:#565656;">Periodo:</h4>
+
+      <div class="row">
+  
+        <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()" #searchCol2>
+          <option value="">Tutti i mesi</option>
+          <option value="01">Gennaio</option>
+          <option value="02">Febbraio</option>
+          <option value="03">Marzo</option>
+          <option value="04">Aprile</option>
+          <option value="05">Maggio</option>
+          <option value="06">Giugno</option>
+          <option value="07">Luglio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Settembre</option>
+          <option value="10">Ottobre</option>
+          <option value="11">Novembre</option>
+          <option value="12">Dicembre</option>
+        </select>
+        <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="populateDateFilter()" #searchCol3>
+          <option value="">Anno</option>
+          <option value="16">2016</option>
+          <option value="17">2017</option>
+          <option value="18">2018</option>
+          <option value="19">2019</option>
+          <option value="20">2020</option>
+        </select>
+      </div>
+      <br>
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #20a8d8">
           <tr style="font-size:12px;color:white">
-            <th style="text-align:center">TYPE</th>
-            <th style="text-align:center">USER DOMAIN</th>
-            <th style="text-align:center">PERIOD</th>
-            <th style="text-align:center">NOTIFY DATE</th>
-            <!-- <th style="text-align:center">AZIONE</th> -->
-          </tr>
+            <th style="text-align:center">TIPO</th>
+            <th style="text-align:center">DESTINATARIO</th>
+            <th style="text-align:center">PERIODO</th>
+            <th style="text-align:center">DATA DI INVIO</th>
+            <th style="text-align:center">AZIONE</th>
+          </tr> 
         </thead>
         <tbody>
           <tr *ngFor="let row of ConfigTableBodyData; index as i">
@@ -25,12 +53,12 @@
             <td style="text-align: center">{{row.user_domain}}</td>
             <td style="text-align: center">{{row.period}}</td>
             <td style="text-align: center">{{row.notify_date}}</td>
-            <!-- <td style="text-align: center">
+            <td style="text-align: center">
               <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                       data-target="#configModal" style="font-size:10px">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-envelope"></i>
               </button>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>
@@ -42,35 +70,15 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>
+          <h5 class="modal-title" id="approveModalLabel">Testo</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <table id="classTable" class="table table-bordered">
-            <thead style="background: #E6E6E6">
-              <tr>
-                <th>Key</th>
-                <th>Owner</th>
-                <th>Value</th>
-                <th>Abilitato</th>
-                <th>Descrizione</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{modalData.key}}</td>
-                <td>{{modalData.owner}}</td>
-                <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
-                <td><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
-                <td>{{modalData.description}}</td>
-              </tr>
-            </tbody>
-          </table>
+            <div [innerHTML]="modalData.email_body"></div>
         </div>
         <div class="modal-footer">
-          <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
         </div>
       </div>

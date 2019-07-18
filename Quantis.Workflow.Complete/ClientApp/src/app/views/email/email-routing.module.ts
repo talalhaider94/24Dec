@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: EmailComponent,
     data: {
-      title: 'Special Reporting'
+      title: 'Notifiche e-mail'
     }
   }
 ];
