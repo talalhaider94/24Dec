@@ -777,7 +777,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     int.TryParse(dto.KpiIds.Split('|').FirstOrDefault(), out kpiid);
                     dto.kpiIdPK = kpiid;
                 }
-                if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
+                if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group) && !string.IsNullOrEmpty(dto.primary_contract_party))
                 {
                     var groupscene = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group && o.category_id == int.Parse(dto.primary_contract_party));
                     if (groupscene != null)
