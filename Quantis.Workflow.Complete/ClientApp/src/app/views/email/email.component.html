@@ -1,7 +1,7 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">SPECIAL REPORTING</h2><br>
+      <h2 style="color:#565656">NOTIFICHE E-MAIL</h2><br>
       <!-- <div class="row">
         <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
                 data-target="#addConfigModal">
@@ -40,10 +40,10 @@
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #20a8d8">
           <tr style="font-size:12px;color:white">
-            <th style="text-align:center">TYPE</th>
-            <th style="text-align:center">USER DOMAIN</th>
-            <th style="text-align:center">PERIOD</th>
-            <th style="text-align:center">NOTIFY DATE</th>
+            <th style="text-align:center">TIPO</th>
+            <th style="text-align:center">DESTINATARIO</th>
+            <th style="text-align:center">PERIODO</th>
+            <th style="text-align:center">DATA DI INVIO</th>
             <th style="text-align:center">AZIONE</th>
           </tr> 
         </thead>
@@ -70,13 +70,13 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="approveModalLabel">View Email Body</h5>
+          <h5 class="modal-title" id="approveModalLabel">Testo</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <p>{{modalData.email_body}}</p>
+            <div [innerHTML]="modalData.email_body"></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
