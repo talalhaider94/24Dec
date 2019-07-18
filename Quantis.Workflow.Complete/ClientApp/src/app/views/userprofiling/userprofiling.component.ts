@@ -16,7 +16,9 @@ export class UserProfilingComponent implements OnInit {
   @ViewChildren('permissionsTree') allTreesNodes !: QueryList<TreeViewComponent>;
   isTreeLoaded = false;
   treesArray = [];
-	allCurrentChildIds = [];
+  allCurrentChildIds = [];
+  assign = true;
+  unassign = false;
 
 
   public treeFields: any = {
@@ -33,9 +35,14 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
+  permissionsData = {
+    id: 0,
+    name: '',
+    code: ''
+  }
   selectedData = {
     userid: null,
-    roleid: null,
+    permid: null,
     name: '',
     checked: null,
     selected: null
@@ -66,12 +73,36 @@ export class UserProfilingComponent implements OnInit {
       this.selectedData.userid = res.ca_bsi_user_id;
     }, err => {this.loading.roles = true; this.toastr.warning('Connection error', 'Info')});
 
+    // this.apiService.getAllKpiHierarchy().subscribe(data=>{
+    //   console.log('getAllKpiHierarchy ==> ', data);
+    //   //this.treeFields.dataSource = data;
+    //   this.createTrees(data);
+    // }, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
+  }
 
-    this.apiService.getAllKpiHierarchy().subscribe(data=>{
-      console.log('getAllKpiHierarchy ==> ', data);
-      //this.treeFields.dataSource = data;
-      this.createTrees(data);
-    }, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
+  populatePermission(data){
+    this.selectedData.permid = data.id;
+    console.log('Contract Party ID ==> ', this.selectedData.permid);
+  }
+
+  assignedPermissions(data){
+    this.selectedData.permid = data.id;
+    console.log('assignedPermissions ==> ', this.selectedData.userid,this.selectedData.permid,this.assign);
+    this.apiService.assignContractParty(this.selectedData.userid,this.selectedData.permid).subscribe(data => {
+      this.toastr.success('Saved', 'Success');
+    }, error => {
+      this.toastr.error('Not Saved', 'Error');
+    });
+  }
+
+  unAssignedPermissions(data){
+    this.selectedData.permid = data.id;
+    console.log('unAssignedPermissions ==> ', this.selectedData.userid,this.selectedData.permid,this.unassign);
+    this.apiService.unassignContractParty(this.selectedData.userid,this.selectedData.permid).subscribe(data => {
+      this.toastr.success('Saved', 'Success');
+    }, error => {
+      this.toastr.error('Not Saved', 'Error');
+    });
   }
 
   createTrees(treesData){
@@ -117,17 +148,14 @@ export class UserProfilingComponent implements OnInit {
     $($event.target).addClass('highlited-user');
     this.selectedData.userid = user.ca_bsi_user_id;
     this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';
+    
     if(this.selectedData.userid){
-      this.addLoaderToTrees();
-      this.apiService.getGlobalRulesByUserId(this.selectedData.userid).subscribe(data=>{
-        console.log('getGlobalRulesByUserId ==> ', data);
-        this.updateTrees(data);
-      }, err => {
-        this.uncheckAllTrees();
-        this.toastr.warning('Connection error', 'Info');
+      this.apiService.getAllKpiHierarchy(this.selectedData.userid).subscribe(data=>{
+        this.permissionsData = data;
+        console.log('getFirstLevelHierarchy ==> ', data);
       });
     } else {
-      this.uncheckAllTrees();
+      //this.uncheckAllTrees();
     }
   }
   addLoaderToTrees(add = true){
