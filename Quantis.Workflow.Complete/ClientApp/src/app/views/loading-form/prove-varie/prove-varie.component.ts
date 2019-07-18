@@ -9,6 +9,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
 
+import { Observable, of, throwError } from 'rxjs';
+import { delay, mergeMap, retryWhen } from 'rxjs/operators';
+
 export class FormClass {
   form_id: number;
   // form_body: json;
@@ -600,10 +603,12 @@ export class ProveVarieComponent implements OnInit {
         formAttachments.year = dateObj.year;
         formAttachments.doc_name = fileName;
         formAttachments.checksum = 'checksum';
-        self.loadingFormService.submitAttachment(formAttachments).pipe().subscribe(data => {
+        self.fileUploading = true;
+        self.loadingFormService.submitAttachment(formAttachments).pipe(self.delayedRetries(10000, 3)).subscribe(data => {
           console.log('submitAttachment ==>', data);
           self.fileUploading = false;
-          self.uploader.queue.pop();
+          self.removeFileFromQueue(fileName);
+          //self.uploader.queue.pop();
           self.toastr.success(`${fileName} caricato correttamente.`);
           if (data) {
             self._getAttachmentsByFormIdEndPoint(+self.formId, false);
@@ -677,4 +682,21 @@ export class ProveVarieComponent implements OnInit {
 
   }
 
+  removeFileFromQueue(fileName: string){
+    for(let i=0; i<this.uploader.queue.length; i++){
+       if(this.uploader.queue[i].file.name  === fileName){
+          this.uploader.queue[i].remove();
+          return;
+       }
+    }
+ }
+
+ delayedRetries(delayMs: number, maxRetry: number) {
+  let retries = maxRetry;
+  return (src: Observable<any>) => src.pipe(retryWhen((errors: Observable<any>) => errors.pipe(
+      delay(delayMs),
+      mergeMap(error => retries -- > 0 ? of(error) : throwError(`Tried to upload ${maxRetry} times. without success.`))
+      )
+  ))
+ }
 }

@@ -13,7 +13,8 @@
                                     <div class="form-group col-6">
                                         <label for="monthOption"><strong>Mese</strong></label>
                                         <select #monthSelect class="form-control" name="monthOption"
-                                            [(ngModel)]="monthOption">
+                                            [(ngModel)]="monthOption" (change)="onDataChange()">
+                                            <option value="all">Tutti</option>
                                             <option value="01">1</option>
                                             <option value="02">2</option>
                                             <option value="03">3</option>
@@ -31,7 +32,8 @@
                                     <div class="form-group col-6">
                                         <label for="yearOption"><strong>Anno</strong></label>
                                         <select #yearSelect class="form-control" name="yearOption"
-                                            [(ngModel)]="yearOption">
+                                            [(ngModel)]="yearOption" (change)="onDataChange()">
+                                            <option value="all">Tutti</option>
                                             <option value="16">2016</option>
                                             <option value="18">2017</option>
                                             <option value="18">2018</option>
@@ -96,6 +98,7 @@
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Descrizione</th>
+                                    <th>Titolo</th>
                                     <th>KPI ID</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
@@ -154,6 +157,15 @@
                                             {{ ticket.description | slice:0:15 || 'N/A' }}
                                             <span class="d-none">
                                                 {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
+                                            triggers="focus">
+                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.titolo | slice:15 || 'N/A' }}
                                             </span>
                                         </button>
                                     </td>

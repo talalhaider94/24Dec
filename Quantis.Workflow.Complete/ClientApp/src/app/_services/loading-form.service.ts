@@ -59,7 +59,6 @@ export class LoadingFormService {
 
   submitAttachment(attachment): Observable<any> {
     const submitAttachmentEndPoint = `${environment.API_URL}/Data/SubmitAttachment`;
-    // TODO: improve later
     let a = [];
     a.push(attachment);
     return this.http.post(submitAttachmentEndPoint, a);
