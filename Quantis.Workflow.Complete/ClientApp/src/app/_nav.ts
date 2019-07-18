@@ -169,6 +169,21 @@ export const navItems: NavData[] = [
     ]
   },
   {
+    name: 'Report',
+    url: '',
+    icon: 'fa fa-pencil-square-o',
+    key: 'VIEW_CONFIGURATIONS',
+    children: [
+      {
+        name: 'Notifiche Workflow',
+        url: '/specialreporting',
+        icon: 'fa fa-user-circle',
+        version: '0.0.3',
+        key: 'VIEW_CONFIGURATIONS'
+      }
+    ]
+  },
+  {
     name: 'Configurazione',
     url: '/config-menu',
     icon: 'fa fa-gear',
@@ -232,13 +247,6 @@ export const navItems: NavData[] = [
         url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
         version: '0.0.4',
-        key: 'VIEW_CONFIGURATIONS'
-      },
-      {
-        name: 'Special Reporting',
-        url: '/specialreporting',
-        icon: 'fa fa-gear',
-        version: '0.0.3',
         key: 'VIEW_CONFIGURATIONS'
       }
     ]
