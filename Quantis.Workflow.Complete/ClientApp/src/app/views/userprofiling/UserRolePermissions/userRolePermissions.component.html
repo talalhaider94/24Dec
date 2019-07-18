@@ -16,7 +16,7 @@
                     <h5 *ngIf="loading.users" class="text-center text-primary loader">
                       <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                     </h5>
-                    <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
+                    <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i" class="tagsTip" data-html="true" style="white-space: pre-line;" attr.data-ext="Dominio: {{user.userid}} &#013;&#010; Nome: {{user.name}}  {{user.surname}} &#013;&#010; BSI: {{user.ca_bsi_account}}&#013;&#010; Email: {{user.mail}} &#013;&#010; Manager: {{user.manager}} &#013;&#010; Organizzazione: {{user.organization}}"
                         (click)="selectUserItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
                   </ul>
 
