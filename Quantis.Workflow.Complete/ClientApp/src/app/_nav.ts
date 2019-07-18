@@ -246,7 +246,7 @@ export const navItems: NavData[] = [
         name: 'Profilazione Utente',
         url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
-        version: '0.0.4',
+        version: '0.0.5',
         key: 'VIEW_CONFIGURATIONS'
       }
     ]
