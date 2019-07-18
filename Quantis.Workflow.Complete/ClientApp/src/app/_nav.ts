@@ -77,7 +77,7 @@ export const navItems: NavData[] = [
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
         icon: 'fa fa-file-text-o',
-        version: '0.0.7',
+        version: '0.0.8',
         key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
@@ -163,7 +163,7 @@ export const navItems: NavData[] = [
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',
-        version: '0.0.7',
+        version: '0.0.8',
         key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]

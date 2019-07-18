@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, EMPTY } from 'rxjs';
+import { map, catchError, retry,shareReplay } from 'rxjs/operators';
 import * as sha256 from 'sha256';
 import {environment} from '../../environments/environment';
 import Headers from '../_helpers/headers';
@@ -31,7 +31,7 @@ export class AuthService {
     const loginEndPoint = `${environment.API_URL}/Data/Login?username=${username}&password=${hashedPassword}`;
     // Danial TODO: move headers code into custom HTTP Interceptor class
     return this.http.get<any>(loginEndPoint, Headers.setHeaders('GET'))
-        .pipe(map(user => {
+        .pipe(retry(2), map(user => {
           if (!!user && user.token) {
                 user.last_action = Date.now(); // temp
                 console.log(user);
@@ -39,7 +39,12 @@ export class AuthService {
                 this.currentUserSubject.next(user);
             }
             return user;
-        }));
+        }),
+        // catchError(() => {
+        //   return EMPTY
+        // }),
+        shareReplay()
+        );
   }
 
   logout() {

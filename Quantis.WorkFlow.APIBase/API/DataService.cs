@@ -1114,7 +1114,14 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var notifiers = _dbcontext.EmailNotifiers.Include(o=>o.Form).Where(p=>p.notify_date.ToString("MM/yy")==period).ToList();
+                var split = period.Split('/');
+                var month = split[0];
+                var year = split[1];
+                var notifiers = month.Length > 0 ?
+                        _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("MM/yy") == period).ToList()
+                    :   _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("yy") == year).ToList();
+
+                
                 return notifiers.Select(o => new EmailNotifierDTO()
                 {
                     email_body = o.email_body,
