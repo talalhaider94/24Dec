@@ -28,11 +28,16 @@ namespace Quantis.WorkFlow.Services.API
         void DeleteSDMGroupConfiguration(int id);
         void DeleteSDMStatusConfiguration(int id);
         void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
-        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
-        List<HierarchicalNameCodeDTO> GetAllKPIHierarchy();
+        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);        
         List<int> GetGlobalRulesByUserId(int userId);
         void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
         List<int> GetContractPartyByUser(int userId);
+        List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId);
+        List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId);
+        List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId);
+        void AssignKpisToUserByContractParty(int userId, int contractpartyId, bool assign);
+        void AssignKpisToUserByContract(int userId, int contractId, bool assign);
+        void AssignKpisToUserByKpis(int userId, int contractId, List<int> kpiIds);
 
     }
 }

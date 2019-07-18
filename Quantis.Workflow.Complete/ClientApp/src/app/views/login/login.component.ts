@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit{
   submitted: boolean = false;
   returnUrl: string;
   loading: boolean = false;
-  
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -25,7 +24,9 @@ export class LoginComponent implements OnInit{
     private toastr: ToastrService
   ) {
     //localStorage.removeItem('currentUser');
-    if (this.authService.currentUserValue || this.authService.isLoggedIn()) { 
+    if (this.authService.currentUserValue || this.authService.isLoggedIn()) {
+      console.log('checkLogin');
+      this.authService.checkToken();
       this.router.navigate(['/coming-soon']);
     }
   }

@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="API\InformationService.cs~RF513d2e2.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Quantis.WorkFlow.Models\Quantis.WorkFlow.Models.csproj" />
     <ProjectReference Include="..\Quantis.WorkFlow.Services\Quantis.WorkFlow.Services.csproj" />
   </ItemGroup>

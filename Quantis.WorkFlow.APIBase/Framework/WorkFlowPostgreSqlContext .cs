@@ -13,6 +13,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
     {
         public WorkFlowPostgreSqlContext(DbContextOptions<WorkFlowPostgreSqlContext> options) : base(options)
         {
+            Database.SetCommandTimeout(150000);
         }
 
         public DbSet<T_Group> Groups { get; set; }

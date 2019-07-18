@@ -11,6 +11,7 @@ export class CommingsoonComponent implements OnInit {
   constructor(private authService: AuthService) {  }
 
   ngOnInit() {
+    this.authService.checkToken();
     this.currentUser = this.authService.getUser();
     this.permissions = this.currentUser.permissions;
   }
