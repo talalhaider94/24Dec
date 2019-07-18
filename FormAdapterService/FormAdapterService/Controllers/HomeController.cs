@@ -16,8 +16,6 @@ namespace FormAdapterService.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
-        private object __lockObj;
         public string Index()
         {
             return "Api is running";
@@ -38,73 +36,69 @@ namespace FormAdapterService.Controllers
         [HttpPost]
         public string SendSOAPRequest(UploadTicketDTO dto)
         {
-            lock (__lockObj)
+            try
             {
-                try
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("sid", dto.sid);
+                parameters.Add("repositoryHandle", dto.repositoryHandle);
+                parameters.Add("objectHandle", dto.objectHandle);
+                parameters.Add("description", dto.description);
+                parameters.Add("fileName", dto.fileName);
+                XmlDocument soapEnvelopeXml = new XmlDocument();
+                var xmlStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://www.ca.com/UnicenterServicePlus/ServiceDesk\">" + Environment.NewLine + "<soapenv:Header/>" + Environment.NewLine + "<soapenv:Body>" + Environment.NewLine + "<ser:{0}>" + Environment.NewLine + "{1}" + Environment.NewLine + "</ser:{0}>" + Environment.NewLine + "</soapenv:Body>" + Environment.NewLine + "</soapenv:Envelope>";
+                string parms = string.Join(string.Empty, parameters.Select(kv => String.Format("<{0}>{1}</{0}>", kv.Key, kv.Value)).ToArray());
+                var s = String.Format(xmlStr, dto.action, parms);
+                soapEnvelopeXml.LoadXml(s);
+                // Create the web request
+                string boundary = "=" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture);
+                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(dto.url);
+                webRequest.ContentType = string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org> \"; boundary=\"{0}\"", boundary);
+                webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
+                webRequest.Headers.Add("SOAPAction", "");
+                webRequest.Headers.Add("MIME-Version", "1.0");
+                webRequest.Accept = "application/xml";
+                webRequest.Method = "POST";
+                // Insert SOAP envelope
+                using (Stream stream = webRequest.GetRequestStream())
                 {
-                    Dictionary<string, string> parameters = new Dictionary<string, string>();
-                    parameters.Add("sid", dto.sid);
-                    parameters.Add("repositoryHandle", dto.repositoryHandle);
-                    parameters.Add("objectHandle", dto.objectHandle);
-                    parameters.Add("description", dto.description);
-                    parameters.Add("fileName", dto.fileName);
-                    XmlDocument soapEnvelopeXml = new XmlDocument();
-                    var xmlStr = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://www.ca.com/UnicenterServicePlus/ServiceDesk\">" + Environment.NewLine + "<soapenv:Header/>" + Environment.NewLine + "<soapenv:Body>" + Environment.NewLine + "<ser:{0}>" + Environment.NewLine + "{1}" + Environment.NewLine + "</ser:{0}>" + Environment.NewLine + "</soapenv:Body>" + Environment.NewLine + "</soapenv:Envelope>";
-                    string parms = string.Join(string.Empty, parameters.Select(kv => String.Format("<{0}>{1}</{0}>", kv.Key, kv.Value)).ToArray());
-                    var s = String.Format(xmlStr, dto.action, parms);
-                    soapEnvelopeXml.LoadXml(s);
-                    // Create the web request
-                    string boundary = "=" + DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture);
-                    HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(dto.url);
-                    webRequest.ContentType = string.Format("multipart/related; type=\"text/xml\"; start=\"<rootpart@soapui.org> \"; boundary=\"{0}\"", boundary);
-                    webRequest.Headers.Add("Accept-Encoding", "gzip,deflate");
-                    webRequest.Headers.Add("SOAPAction", "");
-                    webRequest.Headers.Add("MIME-Version", "1.0");
-                    webRequest.Accept = "application/xml";
-                    webRequest.Method = "POST";
-                    // Insert SOAP envelope
-                    using (Stream stream = webRequest.GetRequestStream())
-                    {
-                        string topBoundry = "--" + boundary + Environment.NewLine + "Content-Type: text/xml; charset=UTF-8" + Environment.NewLine + "Content-Transfer-Encoding: 8bit" + Environment.NewLine + "Content-ID: <rootpart@soapui.org>" + Environment.NewLine + Environment.NewLine;
-                        byte[] topBoundryBytes = Encoding.UTF8.GetBytes(topBoundry);
-                        stream.Write(topBoundryBytes, 0, topBoundryBytes.Length);
-                        soapEnvelopeXml.Save(stream);
-                        //_dbcontext.LogInformation(soapEnvelopeXml.OuterXml);
+                    string topBoundry = "--" + boundary + Environment.NewLine + "Content-Type: text/xml; charset=UTF-8" + Environment.NewLine + "Content-Transfer-Encoding: 8bit" + Environment.NewLine + "Content-ID: <rootpart@soapui.org>" + Environment.NewLine + Environment.NewLine;
+                    byte[] topBoundryBytes = Encoding.UTF8.GetBytes(topBoundry);
+                    stream.Write(topBoundryBytes, 0, topBoundryBytes.Length);
+                    soapEnvelopeXml.Save(stream);
+                    //_dbcontext.LogInformation(soapEnvelopeXml.OuterXml);
 
-                        var filename = parameters["fileName"];
-                        string fileHeaderTemplate = Environment.NewLine + "--" + boundary + Environment.NewLine + "Content-Type: text/plain; charset=us-ascii; name={0}" + Environment.NewLine + "Content-Transfer-Encoding: 7bit" + Environment.NewLine + "Content-ID: <{0}>" + Environment.NewLine + "Content-Disposition: attachment; name=\"{0}\"; filename=\"{0}\"" + Environment.NewLine;
-                        fileHeaderTemplate = string.Format(fileHeaderTemplate, filename);
-                        byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeaderTemplate + Environment.NewLine);
-                        stream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
-                        //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes, 0, fileHeaderBytes.Length));
-                        stream.Write(dto.fileData, 0, dto.fileData.Length);
-                        //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileData, 0, fileData.Length));
-                        byte[] fileHeaderBytes2 = Encoding.UTF8.GetBytes(Environment.NewLine + "--" + boundary + "--" + Environment.NewLine);
-                        stream.Write(fileHeaderBytes2, 0, fileHeaderBytes2.Length);
-                        //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes2, 0, fileHeaderBytes2.Length));
+                    var filename = parameters["fileName"];
+                    string fileHeaderTemplate = Environment.NewLine + "--" + boundary + Environment.NewLine + "Content-Type: text/plain; charset=us-ascii; name={0}" + Environment.NewLine + "Content-Transfer-Encoding: 7bit" + Environment.NewLine + "Content-ID: <{0}>" + Environment.NewLine + "Content-Disposition: attachment; name=\"{0}\"; filename=\"{0}\"" + Environment.NewLine;
+                    fileHeaderTemplate = string.Format(fileHeaderTemplate, filename);
+                    byte[] fileHeaderBytes = Encoding.UTF8.GetBytes(fileHeaderTemplate + Environment.NewLine);
+                    stream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
+                    //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes, 0, fileHeaderBytes.Length));
+                    stream.Write(dto.fileData, 0, dto.fileData.Length);
+                    //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileData, 0, fileData.Length));
+                    byte[] fileHeaderBytes2 = Encoding.UTF8.GetBytes(Environment.NewLine + "--" + boundary + "--" + Environment.NewLine);
+                    stream.Write(fileHeaderBytes2, 0, fileHeaderBytes2.Length);
+                    //_dbcontext.LogInformation(Encoding.UTF8.GetString(fileHeaderBytes2, 0, fileHeaderBytes2.Length));
 
-                    }
-
-                    // Send request and retrieve result
-                    string result = null;
-                    using (WebResponse response = webRequest.GetResponse())
-                    {
-                        using (StreamReader rd = new StreamReader(response.GetResponseStream()))
-                        {
-                            result = rd.ReadToEnd();
-                        }
-                    }
-                    XDocument xdoc = XDocument.Parse(result);
-                    var ret = xdoc.DescendantNodes().Last().ToString();
-                    return "TRUE";
                 }
-                catch (Exception e)
+
+                // Send request and retrieve result
+                string result = null;
+                using (WebResponse response = webRequest.GetResponse())
                 {
-                    return "Exception: " + e.Message;
+                    using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+                    {
+                        result = rd.ReadToEnd();
+                    }
                 }
+                XDocument xdoc = XDocument.Parse(result);
+                var ret = xdoc.DescendantNodes().Last().ToString();
+                return "TRUE";
+            }
+            catch (Exception e)
+            {
+                return "Exception: " + e.Message;
             }
 
-            
         }
 
         [HttpPost]
