@@ -24,6 +24,7 @@ namespace Quantis.WorkFlow.APIBase.API
 {
     public class ServiceDeskManagerService : IServiceDeskManagerService
     {
+        static readonly object _object = new object();
         private readonly SDM.USD_WebServiceSoapClient _sdmClient = null;
         private readonly SDMExt.USD_R11_ExtSoapClient _sdmExtClient = null;
         private int _sid {get;set; }
@@ -487,12 +488,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 step--;
                 var newstatus = _statusMapping.FirstOrDefault(o => o.step == step).handle;
                 string newgroup = "";
-                foreach (var g in _groupMapping.GroupBy(o => o.category_id))
+                var newgroupEnt=_groupMapping.FirstOrDefault(o => o.step == step && o.category_id == int.Parse(ticket.primary_contract_party));
+                if (newgroupEnt != null)
                 {
-                    if (g.Any(o => o.name == ticket.Group))
-                    {
-                        newgroup = g.FirstOrDefault(o => o.step == step).handle;
-                    }
+                    newgroup = newgroupEnt.handle;
+                }
+                else
+                {
+                    throw new Exception("No group configuration in settings: Name: " + ticket.Group + " and category id: " + ticket.primary_contract_party);
                 }
                 string primarycp = string.IsNullOrEmpty(ticket.primary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.primary_contract_party)).customer_name;
                 string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
@@ -550,13 +553,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 step++;
                 var newstatus= _statusMapping.FirstOrDefault(o=>o.step== step).handle;
                 string newgroup = "";
-                foreach(var g in _groupMapping.GroupBy(o=>o.category_id))
+                var newgroupEnt = _groupMapping.FirstOrDefault(o => o.step == step && o.category_id == int.Parse(ticket.primary_contract_party));
+                if (newgroupEnt != null)
                 {
-                    if (g.Any(o => o.name == ticket.Group))
-                    {
-                        newgroup = g.FirstOrDefault(o=>o.step==step).handle;
-                    }
-                };
+                    newgroup = newgroupEnt.handle;
+                }
+                else
+                {
+                    throw new Exception("No group configuration in settings: Name: " + ticket.Group + " and category id: " + ticket.primary_contract_party);
+                }
                 string primarycp = string.IsNullOrEmpty(ticket.primary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.primary_contract_party)).customer_name;
                 string secondarycp = string.IsNullOrEmpty(ticket.secondary_contract_party) ? "" : _dbcontext.Customers.Single(o => o.customer_id == int.Parse(ticket.secondary_contract_party)).customer_name;
                 var bsiticketdto = new BSIKPIUploadDTO()
@@ -774,7 +779,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group))
                 {
-                    dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
+                    var groupscene = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group && o.category_id == int.Parse(dto.primary_contract_party));
+                    if (groupscene != null)
+                    {
+                        dto.Group = groupscene.name;
+                    }
+                    
                 }
                 if (_statusMapping.Any(o => o.code == dto.Status))
                 {
@@ -832,43 +842,47 @@ namespace Quantis.WorkFlow.APIBase.API
 
         private string SendSOAPRequest(string url, string action, Dictionary<string, string> parameters,byte[] fileData)
         {
-            var dto = new UploadTicketDTO();
-            dto.url = url;
-            dto.action = action;
-            dto.sid = parameters["sid"];
-            dto.repositoryHandle = parameters["repositoryHandle"];
-            dto.objectHandle = parameters["objectHandle"];
-            dto.description = parameters["description"];
-            dto.fileName = parameters["fileName"];
-            dto.fileData = fileData;
-            using (var client = new HttpClient())
+            lock (_object)
             {
-                var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
-                var output = QuantisUtilities.FixHttpURLForCall(bsiconf.Value, "/home/SendSOAPRequest");
-                client.BaseAddress = new Uri(output.Item1);
-                var dataAsString = JsonConvert.SerializeObject(dto);
-                var content = new StringContent(dataAsString);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var response = client.PostAsync(output.Item2, content).Result;
-                if (response.IsSuccessStatusCode)
+                var dto = new UploadTicketDTO();
+                dto.url = url;
+                dto.action = action;
+                dto.sid = parameters["sid"];
+                dto.repositoryHandle = parameters["repositoryHandle"];
+                dto.objectHandle = parameters["objectHandle"];
+                dto.description = parameters["description"];
+                dto.fileName = parameters["fileName"];
+                dto.fileData = fileData;
+                using (var client = new HttpClient())
                 {
-                    string xml = response.Content.ReadAsStringAsync().Result;
-                    if (xml == "TRUE")
+                    var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
+                    var output = QuantisUtilities.FixHttpURLForCall(bsiconf.Value, "/home/SendSOAPRequest");
+                    client.BaseAddress = new Uri(output.Item1);
+                    var dataAsString = JsonConvert.SerializeObject(dto);
+                    var content = new StringContent(dataAsString);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var response = client.PostAsync(output.Item2, content).Result;
+                    if (response.IsSuccessStatusCode)
                     {
-                        return "TRUE";
+                        string xml = response.Content.ReadAsStringAsync().Result;
+                        if (xml == "TRUE")
+                        {
+                            return "TRUE";
+                        }
+                        else
+                        {
+                            _dbcontext.LogInformation(xml);
+                            throw new Exception(xml);
+                        }
                     }
                     else
                     {
-                        _dbcontext.LogInformation(xml);
-                        throw new Exception(xml);
+                        _dbcontext.LogInformation("Call to BSI not sucessfull");
+                        throw new Exception("Call to BSI not sucessfull");
                     }
                 }
-                else
-                {
-                    _dbcontext.LogInformation("Call to BSI not sucessfull");
-                    throw new Exception("Call to BSI not sucessfull");
-                }
             }
+            
         }
         ~ServiceDeskManagerService()
         {
