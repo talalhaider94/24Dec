@@ -1,7 +1,7 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">NOTIFICHE E-MAIL</h2><br>
+      <h2 style="color:#565656">NOTIFICHE WORKFLOW</h2><br>
       <!-- <div class="row">
         <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
                 data-target="#addConfigModal">
@@ -44,7 +44,8 @@
             <th style="text-align:center">DESTINATARIO</th>
             <th style="text-align:center">PERIODO</th>
             <th style="text-align:center">DATA DI INVIO</th>
-            <th style="text-align:center">AZIONE</th>
+            <th style="text-align:center;">TESTO</th>
+            <th style="display:none">TESTO1</th>
           </tr> 
         </thead>
         <tbody>
@@ -52,13 +53,15 @@
             <td style="text-align: center">{{row.type}}</td>
             <td style="text-align: center">{{row.user_domain}}</td>
             <td style="text-align: center">{{row.period}}</td>
-            <td style="text-align: center">{{row.notify_date}}</td>
+            <td style="text-align: center">{{row.notify_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
             <td style="text-align: center">
               <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                       data-target="#configModal" style="font-size:10px">
                 <i class="fa fa-envelope"></i>
               </button>
             </td>
+            <td style="display:none">{{row.email_body}}</td>
+            <!-- <td class="tagsTip" style="text-align: center" data-ext="" attr.data-ext="{{row.email_body}}" [innerHTML]="row.email_body | slice:0:100"></td> -->
           </tr>
         </tbody>
       </table>

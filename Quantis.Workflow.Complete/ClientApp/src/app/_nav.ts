@@ -178,7 +178,7 @@ export const navItems: NavData[] = [
         name: 'Notifiche LoadingForm',
         url: '/specialreporting',
         icon: 'fa fa-envelope',
-        version: '0.0.3',
+        version: '0.0.4',
         key: 'VIEW_CONFIGURATIONS'
       }
     ]
