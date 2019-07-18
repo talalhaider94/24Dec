@@ -198,11 +198,17 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AssignGlobalRulesToUserId(dto);
         }
-        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
         [HttpGet("GetVersion")]
         public IActionResult GetVersion()
         {
-            var json = new { API = "v. 1.2.5", UI = "v. 1.2.5b" };
+            var json = new { API = "v. 1.3.1", UI = "v. 1.3.2b" };
+            return Ok(json);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("CheckLogin")]
+        public IActionResult CheckLogin()
+        {
+            var json = new { ACTIVE = true };
             return Ok(json);
         }
         [Authorize(WorkFlowPermissions.VIEW_BSI_LINK)]
