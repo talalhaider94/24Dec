@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
+using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 
@@ -150,10 +151,40 @@ namespace Quantis.WorkFlow.Complete.Controllers
             _infomationAPI.AddUpdateSDMGroupConfiguration(dto);
         }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
-        [HttpGet("GetAllKPIHierarchy")]
-        public List<HierarchicalNameCodeDTO> GetAllKPIHierarchy()
+        [HttpGet("GetAllContractPariesByUserId")]
+        public List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId)
         {
-            return _infomationAPI.GetAllKPIHierarchy();
+            return _infomationAPI.GetAllContractPariesByUserId(userId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [HttpGet("GetAllContractsByUserId")]
+        public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
+        {
+            return _infomationAPI.GetAllContractsByUserId(userId, contractpartyId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [HttpGet("GetAllKpisByUserId")]
+        public List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId)
+        {
+            return _infomationAPI.GetAllKpisByUserId(userId,contractId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [HttpGet("AssignKpisToUserByContractParty")]
+        public void AssignKpisToUserByContractParty(int userId, int contractpartyId, bool assign)
+        {
+            _infomationAPI.AssignKpisToUserByContractParty(userId,contractpartyId,assign);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [HttpGet("AssignKpisToUserByContract")]
+        public void AssignKpisToUserByContract(int userId, int contractId, bool assign)
+        {
+            _infomationAPI.AssignKpisToUserByContract(userId,contractId,assign);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [HttpPost("AssignKpisToUserByKpis")]
+        public void AssignKpisToUserByKpis(AssignKPIDTO dto)
+        {
+            _infomationAPI.AssignKpisToUserByKpis(dto.userId, dto.contractId, dto.kpiIds);
         }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
         [HttpGet("GetGlobalRulesByUserId")]

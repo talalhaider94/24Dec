@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Models.Information;
@@ -21,14 +23,17 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<ConfigurationDTO, T_Configuration> _configurationMapper;
         private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
         private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
+        private readonly IConfiguration _configuration;
         public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
              IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
-             IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper)
+             IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper,
+             IConfiguration configuration)
         {
             _dbcontext = dbcontext;
             _configurationMapper = configurationMapper;
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
+            _configuration = configuration;
         }
         public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
         {
@@ -268,11 +273,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<HierarchicalNameCodeDTO> GetAllKPIHierarchy()
+
+
+
+        public List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId)
         {
             try
             {
                 var res = new List<UserKPIDTO>();
+                var dtos = new List<BaseNameCodeDTO>();
                 string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'";
                 using (var command = _dbcontext.Database.GetDbConnection().CreateCommand())
                 {
@@ -293,20 +302,253 @@ namespace Quantis.WorkFlow.APIBase.API
                             });
                         }
                     }
-                }
-                return res.GroupBy(o => o.Customer_Id).Select(o => new HierarchicalNameCodeDTO(o.Key, o.First().Customer_name, o.First().Customer_name)
-                {
-                    Children = o.GroupBy(p => p.Sla_Id).Select(p => new HierarchicalNameCodeDTO(p.Key, p.First().Sla_Name, p.First().Sla_Name)
+                    var userKpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).ToList();
+                    var groups = res.GroupBy(o => new { o.Customer_Id, o.Customer_name });
+                    foreach(var g in groups)
                     {
-                        Children = p.Select(r => new HierarchicalNameCodeDTO(r.Global_Rule_Id, r.Rule_Name, r.Rule_Name)).OrderBy(r=>r.Code).ToList()
-                    }).OrderBy(p=>p.Code).ToList()
-                }).OrderBy(o=>o.Code).ToList();
+                        var kpiIds = g.Select(o => o.Global_Rule_Id).ToList(); 
+                        var dto=new BaseNameCodeDTO(g.Key.Customer_Id, g.Key.Customer_name, "");
+                        var kpicount = userKpis.Count(o =>kpiIds.Contains(o.global_rule_id));
+                        if (kpicount == 0)
+                        {
+                            dto.Code = "0";
+                        }
+                        else if (kpicount == kpiIds.Count)
+                        {
+                            dto.Code = "2";
+                        }
+                        else
+                        {
+                            dto.Code = "1";
+                        }
+                        dtos.Add(dto);
+                    }
+                    return dtos;
+
+                }                
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+        public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId,int contractpartyId)
+        {
+            try
+            {
+                var res = new List<UserKPIDTO>();
+                var dtos = new List<BaseNameCodeDTO>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' AND m.customer_id=:customer_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":customer_id", contractpartyId);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(new UserKPIDTO()
+                            {
+                                Rule_Name = (string)result[0],
+                                Global_Rule_Id = Decimal.ToInt32((Decimal)result[1]),
+                                Sla_Id = Decimal.ToInt32((Decimal)result[2]),
+                                Sla_Name = (string)result[3],
+                                Customer_name = (string)result[4],
+                                Customer_Id = (int)result[5],
+                            });
+                        }
+                    }
+                    var userKpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).ToList();
+                    var groups = res.GroupBy(o => new { o.Sla_Id, o.Sla_Name });
+                    foreach (var g in groups)
+                    {
+                        var kpiIds = g.Select(o => o.Global_Rule_Id).ToList();
+                        var dto = new BaseNameCodeDTO(g.Key.Sla_Id, g.Key.Sla_Name, "");
+                        var kpicount = userKpis.Count(o => kpiIds.Contains(o.global_rule_id));
+                        if (kpicount == 0)
+                        {
+                            dto.Code = "0";
+                        }
+                        else if (kpicount == kpiIds.Count)
+                        {
+                            dto.Code = "2";
+                        }
+                        else
+                        {
+                            dto.Code = "1";
+                        }
+                        dtos.Add(dto);
+                    }
+                    return dtos;
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId)
+        {
+            try
+            {
+                var dtos = new List<BaseNameCodeDTO>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' AND m.sla_id=:sla_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":sla_id", contractId);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            dtos.Add(new BaseNameCodeDTO(Decimal.ToInt32((Decimal)result[1]), (string)result[0], ""));
+                        }
+                    }
+                    var userKpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).ToList();
+
+                    return (from d in dtos
+                     join u in userKpis on d.Id equals u.global_rule_id
+                     into gj
+                     from subset in gj.DefaultIfEmpty()
+                     select new BaseNameCodeDTO(d.Id, d.Name, subset == null ? "0" : "1")).ToList();
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AssignKpisToUserByContractParty(int userId, int contractpartyId,bool assign)
+        {
+            try
+            {
+                var res = new List<int>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' AND m.customer_id=:customer_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":customer_id", contractpartyId);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(Decimal.ToInt32((Decimal)result[1]));
+                        }
+                    }
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    _dbcontext.UserKPIs.RemoveRange(values.ToArray());
+                    _dbcontext.SaveChanges();
+                    if (assign)
+                    {
+                        var entities=res.Select(o => new T_User_KPI()
+                        {
+                            global_rule_id = o,
+                            user_id = userId
+                        }).ToList();
+                        _dbcontext.UserKPIs.AddRange(entities.ToArray());
+                        _dbcontext.SaveChanges();
+                    }
+                                       
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AssignKpisToUserByContract(int userId, int contractId, bool assign)
+        {
+            try
+            {
+                var res = new List<int>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' AND m.sla_id=:sla_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":sla_id", contractId);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(Decimal.ToInt32((Decimal)result[1]));
+                        }
+                    }
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    _dbcontext.UserKPIs.RemoveRange(values.ToArray());
+                    _dbcontext.SaveChanges();
+                    if (assign)
+                    {
+                        var entities = res.Select(o => new T_User_KPI()
+                        {
+                            global_rule_id = o,
+                            user_id = userId
+                        }).ToList();
+                        _dbcontext.UserKPIs.AddRange(entities.ToArray());
+                        _dbcontext.SaveChanges();
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void AssignKpisToUserByKpis(int userId,int contractId,List<int> kpiIds)
+        {
+            try
+            {
+                var res = new List<int>();
+                string query = "select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' AND m.sla_id=:sla_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":sla_id", contractId);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res.Add(Decimal.ToInt32((Decimal)result[1]));
+                        }
+                    }
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    _dbcontext.UserKPIs.RemoveRange(values.ToArray());
+                    _dbcontext.SaveChanges();
+
+                    var entities = kpiIds.Select(o => new T_User_KPI()
+                    {
+                        global_rule_id = o,
+                        user_id = userId
+                    }).ToList();
+                    _dbcontext.UserKPIs.AddRange(entities.ToArray());
+                    _dbcontext.SaveChanges();
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
 
         public void AssignRolesToUser(MultipleRecordsDTO dto)
         {
