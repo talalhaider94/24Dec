@@ -35,11 +35,13 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
-  permissionsData = {
-    id: 0,
-    name: '',
-    code: ''
-  }
+  permissionsData = [
+    // {
+    //   id: 0,
+    //   name: '',
+    //   code: ''
+    // }
+  ];
   selectedData = {
     userid: null,
     permid: null,
@@ -55,6 +57,7 @@ export class UserProfilingComponent implements OnInit {
     users: false,
     roles: false
   }
+  selectedUserObj = {};
 
 
   constructor(
@@ -90,6 +93,7 @@ export class UserProfilingComponent implements OnInit {
     console.log('assignedPermissions ==> ', this.selectedData.userid,this.selectedData.permid,this.assign);
     this.apiService.assignContractParty(this.selectedData.userid,this.selectedData.permid).subscribe(data => {
       this.toastr.success('Saved', 'Success');
+      this.selectRoleItem(this.selectedUserObj, null);
     }, error => {
       this.toastr.error('Not Saved', 'Error');
     });
@@ -100,6 +104,7 @@ export class UserProfilingComponent implements OnInit {
     console.log('unAssignedPermissions ==> ', this.selectedData.userid,this.selectedData.permid,this.unassign);
     this.apiService.unassignContractParty(this.selectedData.userid,this.selectedData.permid).subscribe(data => {
       this.toastr.success('Saved', 'Success');
+      this.selectRoleItem(this.selectedUserObj, null);
     }, error => {
       this.toastr.error('Not Saved', 'Error');
     });
@@ -144,8 +149,11 @@ export class UserProfilingComponent implements OnInit {
   }
 
   selectRoleItem(user, $event) {
-    $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
-    $($event.target).addClass('highlited-user');
+    this.selectedUserObj = user;
+    if($event){
+      $('.role-permissions-lists ul.users-list li').removeClass('highlited-user');
+      $($event.target).addClass('highlited-user');
+    }
     this.selectedData.userid = user.ca_bsi_user_id;
     this.selectedData.name = user.userid + ' - ' + user.name + ' ' + user.surname + '[' + user.ca_bsi_account + ']';
     
@@ -155,6 +163,7 @@ export class UserProfilingComponent implements OnInit {
         console.log('getFirstLevelHierarchy ==> ', data);
       });
     } else {
+      this.permissionsData = [];
       //this.uncheckAllTrees();
     }
   }

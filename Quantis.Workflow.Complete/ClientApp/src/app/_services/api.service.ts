@@ -245,12 +245,12 @@ export class ApiService {
      
   assignContractParty(userId,contractpartyId): Observable<any> {
     const assignContractPartyEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContractParty?userId=${userId}&contractpartyId=${contractpartyId}&assign=true`;
-    return this.http.post(assignContractPartyEndPoint,userId,contractpartyId);
+    return this.http.get(assignContractPartyEndPoint);
   }
 
   unassignContractParty(userId,contractpartyId): Observable<any> {
     const assignContractPartyEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContractParty?userId=${userId}&contractpartyId=${contractpartyId}&assign=false`;
-    return this.http.post(assignContractPartyEndPoint,userId,contractpartyId);
+    return this.http.get(assignContractPartyEndPoint);
   }
 
   assignGlobalRulesToUserId(postData) {
