@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { TConfigurationComponent } from './tconfiguration.component';
 import { TConfigurationAdvancedComponent } from './advanced/advanced.component';
 
@@ -9,14 +8,14 @@ const routes: Routes = [
     path: 'general',
     component: TConfigurationComponent,
     data: {
-      title: 'General  T Configurations'
+      title: 'Configurazioni Generali'
     }
   },
   {
     path: 'advanced',
     component: TConfigurationAdvancedComponent,
     data: {
-      title: 'Advanced T Configurations'
+      title: 'Configurazioni Avanzate'
     }
   }
 ];

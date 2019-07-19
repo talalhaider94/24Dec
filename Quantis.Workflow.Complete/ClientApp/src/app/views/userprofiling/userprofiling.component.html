@@ -17,7 +17,7 @@
               <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
+              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i" class="tagsTip" data-html="true" style="white-space: pre-line;" attr.data-ext="Dominio: {{user.userid}} &#013;&#010; Nome: {{user.name}}  {{user.surname}} &#013;&#010; BSI: {{user.ca_bsi_account}}&#013;&#010; Email: {{user.mail}} &#013;&#010; Manager: {{user.manager}} &#013;&#010; Organizzazione: {{user.organization}}"
                   (click)="selectRoleItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
             </ul>
     
@@ -37,8 +37,8 @@
             </h5>
             <li [ngClass]="{'0':'redClr', '1':'blueClr', '2':'greenClr'}[perm.code]" *ngFor="let perm of permissionsData | filter : filters.searchPermissionsText; index as i"
               >{{perm.name}}
-              <button *ngIf="perm.code=='2'" class="btn btn-danger pull-right ml-1 btn-assign" style="margin-top:-7px"  (click)="unAssignedPermissions(perm)">Unassign</button>
-              <button *ngIf="perm.code=='0'" class="btn btn-success pull-right btn-unassign" style="margin-top:-7px"  (click)="assignedPermissions(perm)">Assign</button></li>
+              <button *ngIf="perm.code=='2'" class="btn btn-danger pull-right ml-1 btn-assign" style="margin-top:-7px"  (click)="unAssignedPermissions(perm)">Rimuovi</button>
+              <button *ngIf="perm.code=='0'" class="btn btn-success pull-right btn-unassign" style="margin-top:-7px"  (click)="assignedPermissions(perm)">Assegna</button></li>
           </ul>
   
         </perfect-scrollbar>
