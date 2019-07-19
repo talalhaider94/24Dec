@@ -1009,7 +1009,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
-                                atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key"));
+                                atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
                                 atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
                                 list.Add(atdtde);
                             }
