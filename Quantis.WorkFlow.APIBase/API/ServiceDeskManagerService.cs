@@ -851,7 +851,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.repositoryHandle = parameters["repositoryHandle"];
                 dto.objectHandle = parameters["objectHandle"];
                 dto.description = parameters["description"];
-                dto.fileName = parameters["fileName"];
+                dto.fileName = parameters["fileName"].Replace(":","");
                 dto.fileData = fileData;
                 using (var client = new HttpClient())
                 {
