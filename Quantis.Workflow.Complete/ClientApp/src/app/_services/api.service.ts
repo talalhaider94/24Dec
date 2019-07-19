@@ -152,6 +152,14 @@ export class ApiService {
     const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
     return this.http.get(getGlobalRulesByRoleIdEndPoint);
   }
+  getContracts(userId,contractPartyId): Observable<any> {
+    const getContractsEndPoint = `${environment.API_URL}/information/GetAllContractsByUserId?userId=${userId}&contractpartyId=${contractPartyId}`;
+    return this.http.get(getContractsEndPoint);
+  }
+  getKpis(userId,contractId): Observable<any> {
+    const getKpisEndPoint = `${environment.API_URL}/information/GetAllKpisByUserId?userId=${userId}&contractId=${contractId}`;
+    return this.http.get(getKpisEndPoint);
+  }
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)
@@ -251,6 +259,21 @@ export class ApiService {
   unassignContractParty(userId,contractpartyId): Observable<any> {
     const assignContractPartyEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContractParty?userId=${userId}&contractpartyId=${contractpartyId}&assign=false`;
     return this.http.get(assignContractPartyEndPoint);
+  }
+       
+  assignContracts(userId,contractId): Observable<any> {
+    const assignContractsEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContract?userId=${userId}&contractId=${contractId}&assign=true`;
+    return this.http.get(assignContractsEndPoint);
+  }
+
+  unassignContracts(userId,contractId): Observable<any> {
+    const assignContractsEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContract?userId=${userId}&contractId=${contractId}&assign=false`;
+    return this.http.get(assignContractsEndPoint);
+  }
+
+  assignKpistoUser(postData): Observable<any> {
+    const assignKpisEndPoint = `${environment.API_URL}/information/AssignKpisToUserByKpis`;
+    return this.http.post(assignKpisEndPoint,postData);
   }
 
   assignGlobalRulesToUserId(postData) {

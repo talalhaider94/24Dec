@@ -21,15 +21,20 @@ button.btn.btn-unassign {
     color: unset;
     border-width: 2px;
 }
+button.btn.btn-partial {
+    background-color: transparent;
+    color: unset;
+    border-width: 2px;
+}
 .redClr {
     /* background-color: rgba(249, 197, 197, 0.75); */
     /* background-image: linear-gradient(to right, rgba(249, 197, 197, 0.75), #fff, #fff); */
     border-left: 6px solid #f35151d1;
 }
-.blueClr {
+.orangeClr {
     /* background-color: rgba(193, 211, 249, 0.72); */
     /* background-image: linear-gradient(to right, rgba(193, 211, 249, 0.72), #fff, #fff); */
-    border-left: 6px solid #0089ff;
+    border-left: 6px solid #fdbf14;
 }.greenClr {
     /* background-color: rgba(207, 254, 207, 0.72); */
     /* background-image: linear-gradient(to right, rgba(207, 254, 207, 0.72), #fff, #fff); */
@@ -97,4 +102,24 @@ perfect-scrollbar {
 
 .loader {
     margin-top: 30px;
+}
+
+.modal-lg.contractsModal {
+    max-width: 80%;
+}
+
+.modal-lg.kpisModal {
+    max-width: 100%;
+}
+
+.fa.fa-arrow-right {
+    color:#fdbf14;
+}
+
+.fa.fa-times {
+    color:#ff0000d5;
+}
+
+.fa.fa-check {
+    color:#239123;
 }
