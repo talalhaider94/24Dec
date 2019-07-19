@@ -321,6 +321,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     param.Add("fileName", att.doc_name);
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
+                var log = new SDM_TicketLog();
+                log.global_rule_id = _dbcontext.CatalogKpi.Single(o => o.id == Id).global_rule_id_bsi;
+                log.period = dto.Period;
+                log.ticket_id = int.Parse(ret.ref_num);
+                log.create_timestamp = DateTime.Now;
+                _dbcontext.SDMTicketLogs.Add(log);
+                _dbcontext.SaveChanges();
+
             }
             catch (Exception e)
             {
@@ -496,8 +504,14 @@ namespace Quantis.WorkFlow.APIBase.API
             return ret;
 
         }
-        public ChangeStatusDTO TransferTicketByID(int id, string status,string description)
+        public ChangeStatusDTO TransferTicketByID(int id, string status,string description, HttpContext context)
         {
+            var user = context.User as AuthUser;
+            if (user == null)
+            {
+                throw new Exception("No user Login to Get Tickets by user");
+            }
+            var userid = _dataService.GetUserIdByUserName(user.UserName);
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
@@ -542,6 +556,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 var esca = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "group", newgroup }, new string[0]);
                 esca.Wait();
 
+                description = string.Format("Rifiutato da {0} Nota inserita dall'utente {1}", userid = userid.Split('\\')[1], description);
+
                 var statusa = _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
@@ -561,8 +577,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
-        public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description)
+        public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context)
         {
+            var user = context.User as AuthUser;
+            if (user == null)
+            {
+                throw new Exception("No user Login to Get Tickets by user");
+            }
+            var userid = _dataService.GetUserIdByUserName(user.UserName);
+
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
@@ -607,6 +630,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 string tickethandle = "cr:" + id;
                 var esca = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "group", newgroup }, new string[0]);
                 esca.Wait();
+
+                description = string.Format("Approvato da {0} Nota inserita dall'utente: {1}", userid = userid.Split('\\')[1], description);
 
                 var statusa= _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
