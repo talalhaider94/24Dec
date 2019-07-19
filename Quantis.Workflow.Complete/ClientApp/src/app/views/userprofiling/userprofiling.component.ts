@@ -35,7 +35,6 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
-<<<<<<< HEAD
   permissionsData = [];
   contractsData = [];
   kpisData = [];
@@ -46,10 +45,6 @@ export class UserProfilingComponent implements OnInit {
     contractId:0,
     kpiIds:[]
   }
-=======
-  permissionsData: any;
-
->>>>>>> 015dccbd96b8067b961db8be55d79b8c316a78b5
   selectedData = {
     userid: null,
     permid: null,

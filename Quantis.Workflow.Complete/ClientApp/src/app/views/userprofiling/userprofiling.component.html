@@ -35,16 +35,11 @@
               <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-<<<<<<< HEAD
               <li [ngClass]="{'0':'redClr', '1':'orangeClr', '2':'greenClr'}[perm.code]" *ngFor="let perm of permissionsData | filter : filters.searchPermissionsText; index as i"
                 >{{perm.name}}
                 <button class="btn btn-warning pull-right ml-1 btn-partial" style="margin-top:-7px" (click)="getContracts(perm)" data-toggle="modal" data-target="#contractsModal"><i class="fa fa-arrow-right"></i></button>
                 <button *ngIf="perm.code=='2' || perm.code=='1'" class="btn btn-danger pull-right ml-1 btn-assign" style="margin-top:-7px"  (click)="unAssignedPermissions(perm)"><i class="fa fa-times"></i></button>
                 <button *ngIf="perm.code=='0' || perm.code=='1'" class="btn btn-success pull-right btn-unassign" style="margin-top:-7px"  (click)="assignedPermissions(perm)"><i class="fa fa-check"></i></button></li>
-=======
-              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i" class="tagsTip" data-html="true" style="white-space: pre-line;" attr.data-ext="Dominio: {{user.userid}} &#013;&#010; Nome: {{user.name}}  {{user.surname}} &#013;&#010; BSI: {{user.ca_bsi_account}}&#013;&#010; Email: {{user.mail}} &#013;&#010; Manager: {{user.manager}} &#013;&#010; Organizzazione: {{user.organization}}"
-                  (click)="selectRoleItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
->>>>>>> 015dccbd96b8067b961db8be55d79b8c316a78b5
             </ul>
     
           </perfect-scrollbar>
@@ -56,7 +51,6 @@
           <br><br>
           <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
               <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
-<<<<<<< HEAD
           </h5>
           <div *ngFor="let treeObj of treesArray | filter : filters.searchPermissionsText; let i = index" >
               <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
@@ -69,14 +63,6 @@
               (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
             </ejs-treeview>
           </div>
-=======
-            </h5>
-            <li [ngClass]="{'0':'redClr', '1':'blueClr', '2':'greenClr'}[perm.code]" *ngFor="let perm of permissionsData | filter : filters.searchPermissionsText; index as i"
-              >{{perm.name}}
-              <button *ngIf="perm.code=='2'" class="btn btn-danger pull-right ml-1 btn-assign" style="margin-top:-7px"  (click)="unAssignedPermissions(perm)">Rimuovi</button>
-              <button *ngIf="perm.code=='0'" class="btn btn-success pull-right btn-unassign" style="margin-top:-7px"  (click)="assignedPermissions(perm)">Assegna</button></li>
-          </ul>
->>>>>>> 015dccbd96b8067b961db8be55d79b8c316a78b5
   
         </div> -->
       </div>
@@ -170,8 +156,4 @@
       </div>
     </div>
   </div>
-<<<<<<< HEAD
   </div>
-=======
-</div>
->>>>>>> 015dccbd96b8067b961db8be55d79b8c316a78b5
