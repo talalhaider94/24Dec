@@ -73,7 +73,8 @@ export class ArchivedKpiComponent implements OnInit {
 kpisData = [];
 datiGrezzi=[];
 countCampiData=[];
-
+id_kpi_temp = '';
+intervalloPeriodo='';
 
   fitroDataById: any = [
     {
@@ -114,9 +115,11 @@ countCampiData=[];
 
 
 
-  
+  annoIntervallo:any;
   monthVar: any;
   yearVar: any;
+  meseInput:any;
+  
   id:any;
   sortedCollection: any[];
   constructor(private apiService: ApiService,private orderPipe: OrderPipe,private toastr: ToastrService) {
@@ -127,6 +130,7 @@ countCampiData=[];
 
   ngOnInit() {
    this.getAnno();
+   
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
    this.populateDateFilter();
@@ -134,12 +138,16 @@ countCampiData=[];
   }
 
   populateModalData(data) {
+    this.reset()
+   
     this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
     this.kpisData = kpis;
-
-    console.log('pop',this.kpisData);
+   
+   // console.log('pop',this.kpisData);
     });
   }
+
+  
 
   
 
@@ -153,17 +161,22 @@ countCampiData=[];
       this.rerender();
       this.numeroContratti();
       this.addChildren();
+      
       });
+    //  console.log("prova", this.ArchivedKpiBodyData)
+    
+    
   }
   
   ngAfterViewInit() {
     this.dtTrigger.next();
     //this.getKpis1();
-    
+   
     this.apiService.getDataKpis(this.monthVar, this.yearVar).subscribe((data:any)=>{
       this.ArchivedKpiBodyData = data;
       
       this.rerender();
+     
     });
   }
 
@@ -207,28 +220,69 @@ countCampiData=[];
   }
 
   eventTypeArray=[];
-  getdati(id_kpi, month = this.monthVar, year = this.yearVar){
+  getdati(id_kpi, tracking_period = '',interval_kpi='', month = this.monthVar, year = this.yearVar){
+    
+    this.id_kpi_temp = id_kpi;
+     if(tracking_period.length >0 && interval_kpi.length >0){
+      this.arrayTempo(tracking_period,interval_kpi);
+    }
     this.loading = true;
     this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
     
     this.fitroDataById = dati;
+    
+  
     Object.keys(this.fitroDataById).forEach( key => {
       this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
      
     })
-
+  
+  console.log("array tempo",this.arrayPeriodo);
   console.log('dati',dati);
   this.getCountCampiData();
 
   this.numeroEventi();
   this.loading = false;
   console.log(this.eventTypeArray);
-
+ 
   /*Object.keys(this.eventTypeArray).forEach( e=> {
     console.log(e + '#' + this.eventTypeArray[e]);
   })*/
+
 });
   }
+
+
+  getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.id_kpi_temp = id_kpi;
+    
+   
+    this.loading = true;
+    this.apiService.getKpiArchivedData(id_kpi,month,year).subscribe((dati: any) =>{
+    
+    this.fitroDataById = dati;
+    
+  
+    Object.keys(this.fitroDataById).forEach( key => {
+      this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+     
+    })
+  
+  console.log("array tempo",this.arrayPeriodo);
+  console.log('dati',dati);
+  this.getCountCampiData();
+
+  this.numeroEventi();
+  this.loading = false;
+  console.log(this.eventTypeArray);
+ 
+  /*Object.keys(this.eventTypeArray).forEach( e=> {
+    console.log(e + '#' + this.eventTypeArray[e]);
+  })*/
+
+});
+  }
+
 arrayContratti=[];
 
 numeroContratti()
@@ -292,12 +346,13 @@ addChildren(){
   console.log(second);
 }*/
 
-getDatiSecondPop(id_kpi, interval){
-
+getDatiSecondPop(id_kpi,interval,tracking_period){
+  
+     this.id_kpi_temp = id_kpi;
       var mese=moment(interval).format('MM');
       var anno=moment(interval).format('YYYY');
-       this.getdati(id_kpi,mese,anno);
-
+    // this.getdati(id_kpi,mese,anno,tracking_period);
+    this.getdati(id_kpi,tracking_period,interval,mese,anno);
 
 
         
@@ -420,9 +475,68 @@ clear(){
   this.fitroDataById=[];
   this.p=1;
   }
+
   reset() {
     this.kpisData = [];
   }
+
+arrayPeriodo=[];
+arrayTempo(tracking_period,interval_kpi){
+ //debugger;
+console.log(tracking_period);
+this.arrayPeriodo=[];
+if( tracking_period === 'TRIMESTRALE'){
+  
+ var mese1 = moment(interval_kpi).format('MM');
+ var mese2 = moment(interval_kpi).subtract(1, 'month').format('MM');
+ var mese3 = moment(interval_kpi).subtract(2, 'month').format('MM');
+  this.arrayPeriodo.push(mese1,mese2,mese3);
+  
+  console.log("trimestrale",this.arrayPeriodo);
+}
+else if( tracking_period === 'MENSILE')
+{
+ 
+ 
+var mese4 = moment(interval_kpi).format('MM');
+ this.arrayPeriodo.push(mese4);
+ console.log("mensile",this.arrayPeriodo);
+}
+else if(tracking_period ==='SEMESTRALE'){
+ 
+  let mese1 = moment(interval_kpi).format('MM');
+  let mese2 = moment(interval_kpi).subtract(1, 'month').format('MM');
+  let mese3 = moment(interval_kpi).subtract(2, 'month').format('MM');
+  let mese4 = moment(interval_kpi).subtract(3, 'month').format('MM');
+  let mese5 = moment(interval_kpi).subtract(4, 'month').format('MM');
+  let mese6 = moment(interval_kpi).subtract(5, 'month').format('MM');
+
+ this.arrayPeriodo.push(mese1,mese2,mese3,mese4,mese5,mese6);
+ console.log("semestrale",this.arrayPeriodo);
+}
+else if(tracking_period ==='ANNUALE'){
+ 
+  let mese1 = moment(interval_kpi).format('MM');
+  let mese2 = moment(interval_kpi).subtract(1, 'month').format('MM');
+  let mese3 = moment(interval_kpi).subtract(2, 'month').format('MM');
+  let mese4 = moment(interval_kpi).subtract(3, 'month').format('MM');
+  let mese5 = moment(interval_kpi).subtract(4, 'month').format('MM');
+  let mese6 = moment(interval_kpi).subtract(5, 'month').format('MM');
+  let mese7 = moment(interval_kpi).subtract(6, 'month').format('MM');
+  let mese8 = moment(interval_kpi).subtract(7, 'month').format('MM');
+  let mese9 = moment(interval_kpi).subtract(8, 'month').format('MM');
+  let mese10 = moment(interval_kpi).subtract(9, 'month').format('MM');
+  let mese11 = moment(interval_kpi).subtract(10, 'month').format('MM');
+  let mese12 = moment(interval_kpi).subtract(11, 'month').format('MM');
+
+
+ this.arrayPeriodo.push(mese1,mese2,mese3,mese4,mese5,mese6,mese7,mese8,mese9,mese10,mese11,mese12);
+ console.log("semestrale",this.arrayPeriodo);
+}
+
+
+
+}
 
 
 }
