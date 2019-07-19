@@ -35,13 +35,8 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
-  permissionsData = [
-    // {
-    //   id: 0,
-    //   name: '',
-    //   code: ''
-    // }
-  ];
+  permissionsData: any;
+
   selectedData = {
     userid: null,
     permid: null,
