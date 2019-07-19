@@ -5,7 +5,36 @@
 @import "@syncfusion/ej2-buttons/styles/material.css";
 
 
-
+ul.permissions-list1 > li {
+    margin-bottom: 2px;
+}
+ul.permissions-list1 > li {
+    margin-left: -5px !important;
+}
+button.btn.btn-assign {
+    background-color: transparent;
+    color: unset;
+    border-width: 2px;
+}
+button.btn.btn-unassign {
+    background-color: transparent;
+    color: unset;
+    border-width: 2px;
+}
+.redClr {
+    /* background-color: rgba(249, 197, 197, 0.75); */
+    /* background-image: linear-gradient(to right, rgba(249, 197, 197, 0.75), #fff, #fff); */
+    border-left: 6px solid #f35151d1;
+}
+.blueClr {
+    /* background-color: rgba(193, 211, 249, 0.72); */
+    /* background-image: linear-gradient(to right, rgba(193, 211, 249, 0.72), #fff, #fff); */
+    border-left: 6px solid #0089ff;
+}.greenClr {
+    /* background-color: rgba(207, 254, 207, 0.72); */
+    /* background-image: linear-gradient(to right, rgba(207, 254, 207, 0.72), #fff, #fff); */
+    border-left: 6px solid rgb(0, 249, 0);
+}
 
 
 .role-permissions-lists input[type="text"] {

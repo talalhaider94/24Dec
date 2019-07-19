@@ -144,9 +144,9 @@ export class ApiService {
     return this.http.get(getPermissionsByRoldIdEndPoint);
   }
 
-  getAllKpiHierarchy(): Observable<any> {
-    const getAllKpiHierarchyEndPoint = `${environment.API_URL}/information/GetAllKpiHierarchy`;
-    return this.http.get(getAllKpiHierarchyEndPoint);
+  getAllKpiHierarchy(userId): Observable<any> {
+    const getAllKpiHierarchyEndPoint = `${environment.API_URL}/information/GetAllContractPariesByUserId?userId=${userId}`;
+    return this.http.get(getAllKpiHierarchyEndPoint); 
   }
   getGlobalRulesByUserId(userId): Observable<any> {
     const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
@@ -241,6 +241,16 @@ export class ApiService {
         error => error
       )
     );
+  }
+     
+  assignContractParty(userId,contractpartyId): Observable<any> {
+    const assignContractPartyEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContractParty?userId=${userId}&contractpartyId=${contractpartyId}&assign=true`;
+    return this.http.get(assignContractPartyEndPoint);
+  }
+
+  unassignContractParty(userId,contractpartyId): Observable<any> {
+    const assignContractPartyEndPoint = `${environment.API_URL}/information/AssignKpisToUserByContractParty?userId=${userId}&contractpartyId=${contractpartyId}&assign=false`;
+    return this.http.get(assignContractPartyEndPoint);
   }
 
   assignGlobalRulesToUserId(postData) {

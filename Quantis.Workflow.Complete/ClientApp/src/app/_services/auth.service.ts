@@ -70,15 +70,11 @@ export class AuthService {
   checkSession() { //temporary function while implementing logout on 401 error //remove in app.component.ts
     let user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
-      //console.log(user)
       let last_action = user.last_action;
-      //console.log(last_action);
-      //console.log(Date.now());
       if ((Date.now() - last_action) <= 1800000) {
         let new_action = Date.now();
         user.last_action = new_action;
         localStorage.setItem('currentUSer', JSON.stringify(user));
-        //console.log('sessione rinnovata')
         return true
       }
     }
@@ -87,6 +83,20 @@ export class AuthService {
     this.router.navigate(['/login']);
     return false
   }
+  checkLogin(): Observable<any> {
+    const checkLoginEndPoint = `${environment.API_URL}/Information/CheckLogin`;
+    return this.http.get(checkLoginEndPoint);
+  }
+  checkToken() {
+    this.checkLogin().subscribe((data: any) => {
+      console.log('logged');
+    }, error => {
+      this.logout();
+      this.router.navigate(['/login']);
+      return false
+    })
+  }
+
   resetPassword(username,email): Observable<any> {
     const resetPasswordEndPoint = `${environment.API_URL}/Data/ResetPassword?username=${username}&email=${email}`;
     return this.http.get(resetPasswordEndPoint, Headers.setHeaders('GET'))

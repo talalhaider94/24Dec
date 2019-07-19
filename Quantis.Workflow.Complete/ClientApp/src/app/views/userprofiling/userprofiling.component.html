@@ -2,9 +2,9 @@
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
     <br>
     <h2 style="color:#565656">PROFILAZIONE UTENTE</h2><br>
-    <div class="row">
+    <!-- <div class="row">
       <button class="btn btn-success pull-right" style="margin-left:90%" (click)="saveAssignedPermissions()">Salva</button>
-    </div>
+    </div> -->
     <div class="row role-permissions-lists col-md-12">
       <div class="col-md-4">
           <div><label class="lbl-filter-user">Utenti: <strong
@@ -17,7 +17,7 @@
               <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
               </h5>
-              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i" class="tagsTip" data-html="true" style="white-space: pre-line;" attr.data-ext="Dominio: {{user.userid}} &#013;&#010; Nome: {{user.name}}  {{user.surname}} &#013;&#010; BSI: {{user.ca_bsi_account}}&#013;&#010; Email: {{user.mail}} &#013;&#010; Manager: {{user.manager}} &#013;&#010; Organizzazione: {{user.organization}}"
+              <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
                   (click)="selectRoleItem(user, $event)">{{user.userid}} - {{user.name}} {{user.surname}} [{{user.ca_bsi_account}}]</li>
             </ul>
     
@@ -25,34 +25,45 @@
       </div>
       <div class="col-md-1"></div>
       <div class="col-md-7">
+        <div><label class="lbl-filter-user">Permessi: <strong
+                    class="selected-user-title">{{permissionsData.name|uppercase}}</strong></label></div>
+        <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
+                [(ngModel)]="filters.searchPermissionsText" /></div>
+        <perfect-scrollbar style="max-height: 546px;">
+          
+          <ul class="users-list permissions-list1">
+            <h5 *ngIf="loading.roles" class="text-center text-primary loader">
+              <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
+            </h5>
+            <li [ngClass]="{'0':'redClr', '1':'blueClr', '2':'greenClr'}[perm.code]" *ngFor="let perm of permissionsData | filter : filters.searchPermissionsText; index as i"
+              >{{perm.name}}
+              <button *ngIf="perm.code=='2'" class="btn btn-danger pull-right ml-1 btn-assign" style="margin-top:-7px"  (click)="unAssignedPermissions(perm)">Unassign</button>
+              <button *ngIf="perm.code=='0'" class="btn btn-success pull-right btn-unassign" style="margin-top:-7px"  (click)="assignedPermissions(perm)">Assign</button></li>
+          </ul>
+  
+        </perfect-scrollbar>
+      </div>
+      <!-- <div class="col-md-7">
           <br><label>Permessi:</label>
           <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
             [(ngModel)]="filters.searchPermissionsText" /></div>
         <br><br>
         <h5 *ngIf="!isTreeLoaded" class="text-center text-primary loader">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
-          </h5>
-                <!-- <ejs-treeview *ngIf="isTreeLoaded" #permissionsTree 
-          [fields]="treeFields" 
-          [checkedNodes]="selectedData.checked" 
-          [showCheckBox]="true" (nodeChecked)=syncSelectedNodesArray($event)></ejs-treeview> -->
+        </h5>
+        <div *ngFor="let treeObj of treesArray | filter : filters.searchPermissionsText; let i = index" >
+            <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
+          <ejs-treeview [hidden]="!treeObj.loaded"
+            #permissionsTree 
+            id="{{treeObj.elementId}}" 
+            [fields]='treeObj.settings' 
+            [showCheckBox]='true' 
+            [checkedNodes]="treeObj.checkedNodes" 
+            (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
+          </ejs-treeview>
+        </div>
 
-            <!-- <div *ngFor="let treeObj of treesArray" >
-              <ejs-treeview #permissionsTree [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="treeObj.checkedNodes" (nodeChecked)='syncSelectedNodesArray($event)' ></ejs-treeview>
-            </div> -->
-            <div *ngFor="let treeObj of treesArray | filter : filters.searchPermissionsText; let i = index" >
-                <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
-              <ejs-treeview [hidden]="!treeObj.loaded"
-                #permissionsTree 
-                id="{{treeObj.elementId}}" 
-                [fields]='treeObj.settings' 
-                [showCheckBox]='true' 
-                [checkedNodes]="treeObj.checkedNodes" 
-                (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
-              </ejs-treeview>
-            </div>
-
-      </div>
+      </div> -->
     </div>
 
   </div>
