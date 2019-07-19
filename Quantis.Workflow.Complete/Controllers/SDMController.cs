@@ -44,13 +44,13 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("TransferTicketByID")]
         public ChangeStatusDTO TransferTicketByID(int id, string status, string description)
         {
-            return _sdmAPI.TransferTicketByID(id,status, description);
+            return _sdmAPI.TransferTicketByID(id,status, description, HttpContext);
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_KPI_VERIFICA)]
         [HttpGet("EscalateTicketbyID")]
         public ChangeStatusDTO EscalateTicketbyID(int id, string status, string description)
         {
-            return _sdmAPI.EscalateTicketbyID(id,status, description);
+            return _sdmAPI.EscalateTicketbyID(id,status, description, HttpContext);
         }
 
         [HttpGet("CreateTicketByKPIID")]

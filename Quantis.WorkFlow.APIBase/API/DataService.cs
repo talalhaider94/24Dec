@@ -946,7 +946,12 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference3 = kpi.referent_3,
                     Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
-                    zz2_calcValue= psl.Any() ? (psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result) : "N/A",
+                    zz2_calcValue= 
+                        psl.Any() ? 
+                        ((psl.FirstOrDefault().symbol == "[Non Calcolato]") ? psl.FirstOrDefault().symbol
+                        : (psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result)) 
+                        : 
+                        "N/A",
                     zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
                 };
 
@@ -978,10 +983,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     con.Open();
                     List<ATDtDeDTO> list = new List<ATDtDeDTO>();
                     //var tablename = "t_dt_de_3_" + year + "_" + month;
-                    var tablename = "t_dt_de_3_2018_11";// + year + "_" + month;
+                    var tablename = "t_dt_de_3_" + year + "_" + month;
                     //if (TableExists(tablename))
                     //{
-                    var sp = @"select * from " + tablename + " where event_type_id = 1684 LIMIT 100";
+                    var sp = @"select * from " + tablename + " LIMIT 1000";
                         var command = new NpgsqlCommand(sp, con);
 
                         using (var reader = command.ExecuteReader())
@@ -990,25 +995,26 @@ namespace Quantis.WorkFlow.APIBase.API
                             while (reader.Read())
                             {
 
-                                //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
+                            //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
+                            // (reader.IsDBNull(reader.GetOrdinal("secondary_contract_party_name")) ? null : reader.GetString(reader.GetOrdinal("secondary_contract_party_name")));
 
-                                ATDtDeDTO atdtde = new ATDtDeDTO();
+                            ATDtDeDTO atdtde = new ATDtDeDTO();
                                 atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
                                 atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
-                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")).ToString().Replace("/12/2018", "/"+month+"/" + year));
+                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")));
                                 atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
-                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")).ToString().Replace("/11/2018", "/" + month + "/" + year));
-                            atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
+                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")));
+                                atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
                                 atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
-                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")).ToString().Replace("/12/2018", "/" + month + "/" + year));
-                            atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")));
+                                atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
-                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")).ToString().Replace("/12/2018", "/" + month + "/" + year));
-                            atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
+                                atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
                                 atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
-                                atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
+                                atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
                                 atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
                                 list.Add(atdtde);
                             }
@@ -1045,7 +1051,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             while (reader.Read())
                             {
                                 //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
-
                                 ATDtDeDTO atdtde = new ATDtDeDTO();
                                 atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
                                 atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));

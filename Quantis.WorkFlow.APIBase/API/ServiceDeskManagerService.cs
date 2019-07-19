@@ -110,7 +110,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {                
-                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
+                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                 select_a.Wait();
                 var select_result = select_a.Result.doSelectReturn;
                 ret= parseTickets(select_result);
@@ -173,7 +173,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogIn();
             try
             {
-                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "id=" + Id+"", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4","zz_string1","zz_string2","zz_string3", "zz_string1", "zz_string2", "zz_string3" });
+                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "id=" + Id+"", 1, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4","zz_string1","zz_string2","zz_string3", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                 select_a.Wait();
                 var select_result = select_a.Result.doSelectReturn;
                 return parseTickets(select_result).FirstOrDefault();
@@ -321,6 +321,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     param.Add("fileName", att.doc_name);
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
+                var log = new SDM_TicketLog();
+                log.global_rule_id = _dbcontext.CatalogKpi.Single(o => o.id == Id).global_rule_id_bsi;
+                log.period = dto.Period;
+                log.ticket_id = int.Parse(ret.ref_num);
+                log.create_timestamp = DateTime.Now;
+                _dbcontext.SDMTicketLogs.Add(log);
+                _dbcontext.SaveChanges();
+
             }
             catch (Exception e)
             {
@@ -363,21 +371,48 @@ namespace Quantis.WorkFlow.APIBase.API
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
                     userid = userid.Split('\\')[1];
 
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).code+ "' and zz_cned_string1 LIKE '%"+ userid + "%' and zz_cned_string4='"+ period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='"+ _statusMapping.ElementAt(0).code+ "' and zz_cned_string1 LIKE '%"+ userid + "%' and zz_cned_string4='"+ period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).code + "' and zz_cned_string2 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(1).code + "' and zz_cned_string2 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
 
-                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).code + "' and zz_cned_string3 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
+                    select_a = _sdmClient.doSelectAsync(_sid, "cr", "status='" + _statusMapping.ElementAt(2).code + "' and zz_cned_string3 LIKE '%" + userid + "%' and zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                     select_a.Wait();
                     select_result = select_a.Result.doSelectReturn;
                     tickets.AddRange(parseTickets(select_result));
                     ret = tickets.ToList();
+                    var ids = ret.Select(o => o.kpiIdPK).ToList();
+                    var titolos = _dataService.GetKPITitolo(ids);
+                    return (from tks in ret
+                            join tito in titolos on tks.kpiIdPK equals tito.Key
+                            into gj
+                            from subset in gj.DefaultIfEmpty()
+                            select new SDMTicketLVDTO()
+                            {
+                                Id = tks.Id,
+                                ref_num = tks.ref_num,
+                                Summary = tks.Summary,
+                                Description = tks.Description,
+                                Status = tks.Status,
+                                Group = tks.Group,
+                                ID_KPI = tks.ID_KPI,
+                                Reference1 = tks.Reference1,
+                                Reference2 = tks.Reference2,
+                                Reference3 = tks.Reference3,
+                                Period = tks.Period,
+                                primary_contract_party = tks.primary_contract_party,
+                                secondary_contract_party = tks.secondary_contract_party,
+                                IsClosed = tks.IsClosed,
+                                calcValue = tks.calcValue,
+                                KpiIds = tks.KpiIds,
+                                LastModifiedDate = tks.LastModifiedDate,
+                                Titolo = subset.Value ?? string.Empty
+                            }).ToList();
 
                 }
             }
@@ -423,35 +458,37 @@ namespace Quantis.WorkFlow.APIBase.API
                         filterstring = string.Format("({0}) AND zz_cned_string4='{1}'", filterstring, period);
                     }
                     LogIn();
-                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3" });
+                    var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
                     var tckts= parseTickets(select_result);
                     var ids = tckts.Select(o => o.kpiIdPK).ToList();
                     var titolos=_dataService.GetKPITitolo(ids);
                     return (from tks in tckts
-                     join tito in titolos on tks.kpiIdPK equals tito.Key
-                     into gj from subset in gj.DefaultIfEmpty()
+                            join tito in titolos on tks.kpiIdPK equals tito.Key
+                            into gj
+                            from subset in gj.DefaultIfEmpty()
                             select new SDMTicketLVDTO()
-                     {
-                         Id = tks.Id,
-                         ref_num = tks.ref_num,
-                         Summary = tks.Summary,
-                         Description = tks.Description,
-                         Status = tks.Status,
-                         Group = tks.Group,
-                         ID_KPI = tks.ID_KPI,
-                         Reference1 = tks.Reference1,
-                         Reference2 = tks.Reference2,
-                         Reference3 = tks.Reference3,
-                         Period = tks.Period,
-                         primary_contract_party = tks.primary_contract_party,
-                         secondary_contract_party = tks.secondary_contract_party,
-                         IsClosed = tks.IsClosed,
-                         calcValue = tks.calcValue,
-                         KpiIds = tks.KpiIds,
-                         Titolo = subset.Value??string.Empty
-                     }).ToList();
+                            {
+                                Id = tks.Id,
+                                ref_num = tks.ref_num,
+                                Summary = tks.Summary,
+                                Description = tks.Description,
+                                Status = tks.Status,
+                                Group = tks.Group,
+                                ID_KPI = tks.ID_KPI,
+                                Reference1 = tks.Reference1,
+                                Reference2 = tks.Reference2,
+                                Reference3 = tks.Reference3,
+                                Period = tks.Period,
+                                primary_contract_party = tks.primary_contract_party,
+                                secondary_contract_party = tks.secondary_contract_party,
+                                IsClosed = tks.IsClosed,
+                                calcValue = tks.calcValue,
+                                KpiIds = tks.KpiIds,
+                                LastModifiedDate = tks.LastModifiedDate,
+                                Titolo = subset.Value ?? string.Empty
+                            }).ToList();
 
 
                 }
@@ -467,8 +504,14 @@ namespace Quantis.WorkFlow.APIBase.API
             return ret;
 
         }
-        public ChangeStatusDTO TransferTicketByID(int id, string status,string description)
+        public ChangeStatusDTO TransferTicketByID(int id, string status,string description, HttpContext context)
         {
+            var user = context.User as AuthUser;
+            if (user == null)
+            {
+                throw new Exception("No user Login to Get Tickets by user");
+            }
+            var userid = _dataService.GetUserIdByUserName(user.UserName);
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
@@ -513,6 +556,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 var esca = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "group", newgroup }, new string[0]);
                 esca.Wait();
 
+                description = string.Format("Rifiutato da {0} Nota inserita dall'utente {1}", userid = userid.Split('\\')[1], description);
+
                 var statusa = _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
                 LogOut();
@@ -532,8 +577,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
-        public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description)
+        public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context)
         {
+            var user = context.User as AuthUser;
+            if (user == null)
+            {
+                throw new Exception("No user Login to Get Tickets by user");
+            }
+            var userid = _dataService.GetUserIdByUserName(user.UserName);
+
             var dto = new ChangeStatusDTO();
             var ticket = GetTicketByID(id);
             if (ticket.Status != status)
@@ -578,6 +630,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 string tickethandle = "cr:" + id;
                 var esca = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "group", newgroup }, new string[0]);
                 esca.Wait();
+
+                description = string.Format("Approvato da {0} Nota inserita dall'utente: {1}", userid = userid.Split('\\')[1], description);
 
                 var statusa= _sdmClient.changeStatusAsync(_sid, "", tickethandle, description, newstatus);
                 statusa.Wait();
@@ -745,13 +799,16 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.Reference2 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string2").Element("AttrValue").Value;
                 dto.Reference3 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string3").Element("AttrValue").Value;
                 dto.Period = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_cned_string4").Element("AttrValue").Value;
+                dto.LastModifiedDate = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "last_mod_dt").Element("AttrValue").Value;
                 var zz1 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_string1");
                 var zz2 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_string2");
                 var zz3 = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "zz_string3");
+                bool isIncluded = true;
                 if (zz1 == null)
                 {
                     dto.primary_contract_party = "";
                     dto.secondary_contract_party = "";
+                    isIncluded = false;
                 }
                 else
                 {
@@ -770,12 +827,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.calcValue = zz2.Element("AttrValue").Value;
                 }
+                else
+                {
+                    isIncluded = false;
+                }
                 if (zz3 != null)
                 {
                     dto.KpiIds = zz3.Element("AttrValue").Value;
                     int kpiid = 0;
                     int.TryParse(dto.KpiIds.Split('|').FirstOrDefault(), out kpiid);
                     dto.kpiIdPK = kpiid;
+                }
+                else
+                {
+                    isIncluded = false;
                 }
                 if (_groupMapping.Any(o => o.handle.Substring(4) == dto.Group) && !string.IsNullOrEmpty(dto.primary_contract_party))
                 {
@@ -785,6 +850,10 @@ namespace Quantis.WorkFlow.APIBase.API
                         dto.Group = groupscene.name;
                     }
                     
+                }
+                else
+                {
+                    isIncluded = false;
                 }
                 if (_statusMapping.Any(o => o.code == dto.Status))
                 {
@@ -799,7 +868,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         dto.IsClosed = false;
                     }
                 }
-                dtos.Add(dto);
+                else
+                {
+                    isIncluded = false;
+                }
+                if (isIncluded)
+                {
+                    dtos.Add(dto);
+                }                
             }
             return dtos;
         }
@@ -851,7 +927,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.repositoryHandle = parameters["repositoryHandle"];
                 dto.objectHandle = parameters["objectHandle"];
                 dto.description = parameters["description"];
-                dto.fileName = parameters["fileName"];
+                dto.fileName = parameters["fileName"].Replace(":","");
                 dto.fileData = fileData;
                 using (var client = new HttpClient())
                 {

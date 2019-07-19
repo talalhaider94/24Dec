@@ -13,8 +13,8 @@ namespace Quantis.WorkFlow.Services.API
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);
-        ChangeStatusDTO TransferTicketByID(int id,string status, string description);
-        ChangeStatusDTO EscalateTicketbyID(int id, string status,string description);
+        ChangeStatusDTO TransferTicketByID(int id,string status, string description, HttpContext context);
+        ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context);
         string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto);
 
         byte[] DownloadAttachment(string attachmentHandle);

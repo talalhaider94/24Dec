@@ -143,7 +143,7 @@ export const navItems: NavData[] = [
     name: 'KPI Certificati',
     url: '/archivedkpi',
     icon: 'fa fa-archive',
-    version: '0.0.2',
+    version: '0.0.4',
     key: 'VIEW_KPI_CERTICATI',
   },
   {
@@ -257,7 +257,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.3.1',
+    name: 'Version 1.3.2b',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
