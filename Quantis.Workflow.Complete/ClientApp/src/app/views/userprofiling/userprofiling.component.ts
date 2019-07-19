@@ -36,11 +36,11 @@ export class UserProfilingComponent implements OnInit {
     assignedPermissions: []
   }
   permissionsData = [
-     {
-       id: 0,
-       name: '',
-       code: ''
-     }
+    // {
+    //   id: 0,
+    //   name: '',
+    //   code: ''
+    // }
   ];
   selectedData = {
     userid: null,
