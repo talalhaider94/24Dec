@@ -153,10 +153,6 @@ countCampiData=[];
       this.rerender();
       this.numeroContratti();
       this.addChildren();
-      },error=>{
-
-        this.toastr.error("errore di connessione al sever");
-
       });
   }
   
@@ -231,10 +227,6 @@ countCampiData=[];
   /*Object.keys(this.eventTypeArray).forEach( e=> {
     console.log(e + '#' + this.eventTypeArray[e]);
   })*/
-},error=>{
-
-  this.toastr.error("errore di connessione al server");
-
 });
   }
 arrayContratti=[];
