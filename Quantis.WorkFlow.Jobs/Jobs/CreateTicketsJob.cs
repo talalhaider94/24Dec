@@ -40,13 +40,21 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                         {
                             try
                             {
-                                var currentPeriod = DateTime.Now.AddMonths(-1).ToString("MM/yy");
-                                var lastPeriod=dbcontext.SDMTicketLogs.Where(o => o.global_rule_id == k.global_rule_id_bsi).Max(p => p.period);
-                                if(lastPeriod != currentPeriod)
+                                if(dbcontext.SDMTicketLogs.Any(o => o.global_rule_id == k.global_rule_id_bsi))
+                                {
+                                    var lastPeriod = dbcontext.SDMTicketLogs.Where(o => o.global_rule_id == k.global_rule_id_bsi).Max(p => p.create_timestamp);
+                                    if (lastPeriod.Month+(lastPeriod.Year*12) != DateTime.Now.Month + (DateTime.Now.Year * 12))
+                                    {
+                                        var tic = sdmservice.CreateTicketByKPIID(k.id);
+                                        dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: " + k.id + " ticket ref: " + tic.ref_num);
+                                    }
+                                }
+                                else
                                 {
                                     var tic = sdmservice.CreateTicketByKPIID(k.id);
                                     dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: " + k.id + " ticket ref: " + tic.ref_num);
                                 }
+                                
                                 
                             }
                             catch(Exception e)
