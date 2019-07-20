@@ -447,8 +447,11 @@
             </div>
             <div class="modal-body">
                 <!-- TICKETS STATUS model body -->
+                <div *ngIf="loading" class="text-center mb-2">
+                    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                </div>
                 <div class="table-responsive">
-                    <table class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+                    <table class="table table-responsive-sm table-hover table-outline text-center">
                         <tr>
                             <th>No.</th>
                             <th>Ticket Number</th>
@@ -462,10 +465,10 @@
                             </tr>
                             <tr *ngFor="let status of ticketsStatus; let i = index">
                                 <td>
-                                    <div>{{ i+1 }}</div>
+                                    <div>{{ i+1 }} / {{ selectedTickets.length }}</div>
                                 </td>
                                 <td>
-                                    <div>{{ status.ticket.id }}</div>
+                                    <div>{{ status.ticket.ref_num }}</div>
                                 </td>
                                 <td>
                                     <i class="fa fa-square"

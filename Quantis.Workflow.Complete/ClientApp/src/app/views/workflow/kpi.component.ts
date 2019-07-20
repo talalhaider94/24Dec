@@ -265,10 +265,12 @@ export class KPIComponent implements OnInit, OnDestroy {
     this.submitted = true;
     const { description } = this.approveValues;
     this.loading = true;
-
+    this.ticketsStatus = [];
     const myObserver = {
       next: status => {
         this.ticketsStatus.push(status);
+        this.ticketStatusModal.show();
+        this.approveModal.hide();
       },
       error: err => {
         this.approveModal.hide();
@@ -277,9 +279,6 @@ export class KPIComponent implements OnInit, OnDestroy {
         this.loading = false;        
       },
       complete: () => {
-        this.ticketStatusModal.show();
-        this.approveModal.hide();
-        this.toastr.success('Ticket approved', 'Success');
         this._getAllTickets();
         this.loading = false;
       },
