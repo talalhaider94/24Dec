@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { WorkFlowService, AuthService } from '../../_services';
-import { first, delay, mergeMap, retryWhen } from 'rxjs/operators';
-import { Subject, Observable, of, throwError } from 'rxjs';
+import { first, delay, mergeMap, retryWhen, concatMap, map } from 'rxjs/operators';
+import { Subject, Observable, of, throwError, forkJoin, from } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 import { FileUploader } from 'ng2-file-upload';
 import * as moment from 'moment';
 import WorkFlowHelper from '../../_helpers/workflow';
@@ -27,6 +26,8 @@ export class KPIComponent implements OnInit, OnDestroy {
   @ViewChild('infoModal') public infoModal: ModalDirective;
   @ViewChild('approveModal') public approveModal: ModalDirective;
   @ViewChild('rejectModal') public rejectModal: ModalDirective;
+  @ViewChild('ticketStatusModal') public ticketStatusModal: ModalDirective;
+
   @ViewChild('monthSelect') monthSelect: ElementRef;
   @ViewChild('yearSelect') yearSelect: ElementRef;
   @ViewChild('statoKPISelect') statoKPISelect: ElementRef;
@@ -265,43 +266,38 @@ export class KPIComponent implements OnInit, OnDestroy {
     const { description } = this.approveValues;
     this.loading = true;
 
-    let observables = new Array();
-    for (let ticket of this.selectedTickets) {
-      observables.push(this.workFlowService.escalateTicketbyID(ticket.id, ticket.status, description.value || null));
-    }
-    forkJoin(observables).subscribe(data => {
-      this.toastr.success('Ticket approved', 'Success');
-      console.log('approveFormSubmit', data);
-      if (data) {
-        this.ticketsStatus = data;
-        this.ticketsStatus.forEach(status => {
-          if (status.isbsistatuschanged) {
-            this.toastr.success('Success', 'BSI status true.');
-          } else {
-            this.toastr.error('Error', 'BSI status false.');
-          }
-          if (status.issdmstatuschanged) {
-            this.toastr.success('Success', 'SDM status true');
-          } else {
-            this.toastr.success('Error', 'SDM status false');
-          }
-          if (status.showarchivemsg) {
-            if (status.isarchive) {
-              this.toastr.success('Success', 'KPI archiviato con successo.');
-            } else {
-              this.toastr.success('Info', 'Archiviazione del KPI fallita.');
-            }
-          }
-        });
+    const myObserver = {
+      next: status => {
+        this.ticketsStatus.push(status);
+      },
+      error: err => {
+        this.approveModal.hide();
+        console.error('approveFormSubmit', err);
+        this.toastr.error('Error while approving form', 'Error');
+        this.loading = false;        
+      },
+      complete: () => {
+        this.ticketStatusModal.show();
+        this.approveModal.hide();
+        this.toastr.success('Ticket approved', 'Success');
         this._getAllTickets();
-      }
-      this.approveModal.hide();
-      this.loading = false;
-    }, error => {
-      console.error('approveFormSubmit', error);
-      this.toastr.error('Error while approving form', 'Error');
-      this.loading = false;
-    });
+        this.loading = false;
+      },
+    };
+
+    of(...this.selectedTickets)
+    .pipe(concatMap((ticket) => {
+      return this.workFlowService.escalateTicketbyID(ticket.id, ticket.status, description.value || null).pipe(map(result =>{
+        // Danial: here just for testing
+        // result = { 
+        //   isbsistatuschanged: true,
+        //   issdmstatuschanged: false,
+        //   showarchivemsg: true,
+        //   isarchive: false
+        //  }
+        return {ticket, result};
+      }));
+    })).subscribe(myObserver);
   }
 
   rejectFormSubmit() {

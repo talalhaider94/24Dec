@@ -433,3 +433,60 @@
 </div>
 <!-- /.modal -->
 <!-- REJECT MODAL HTML END -->
+
+<!-- TICKETS STATUS MODAL START -->
+<div bsModal #ticketStatusModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tickets Status</h4>
+                <button type="button" class="close" (click)="ticketStatusModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- TICKETS STATUS model body -->
+                <div class="table-responsive">
+                    <table class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+                        <tr>
+                            <th>No.</th>
+                            <th>Ticket Number</th>
+                            <th>SDM Status</th>
+                            <th>BSI Status</th>
+                            <th>Ticket Status</th>
+                        </tr>
+                        <tbody>
+                            <tr *ngIf="ticketsStatus.length === 0 && !loading">
+                                <td colspan="5"><strong>No Tickets approved.</strong></td>
+                            </tr>
+                            <tr *ngFor="let status of ticketsStatus; let i = index">
+                                <td>
+                                    <div>{{ i+1 }}</div>
+                                </td>
+                                <td>
+                                    <div>{{ status.ticket.id }}</div>
+                                </td>
+                                <td>
+                                    <i class="fa fa-square"
+                                        [ngClass]="status.result.issdmstatuschanged ? 'text-success' : 'text-danger' "></i>
+                                </td>
+                                <td>
+                                    <i class="fa fa-square"
+                                        [ngClass]="status.result.isbsistatuschanged ? 'text-success' : 'text-danger' "></i>
+                                </td>
+                                <td>
+                                    <div>{{ status.ticket.status }}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- TICKETS STATUS model body end -->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- TICKETS STATUS MODAL END -->
