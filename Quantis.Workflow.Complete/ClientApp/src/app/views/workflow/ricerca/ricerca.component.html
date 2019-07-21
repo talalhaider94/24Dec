@@ -83,12 +83,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="">
                         <div *ngIf="loading" class="text-center">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                         </div>
                         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                            class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+                            class="table-responsive table table-responsive-sm table-hover table-outline mb-0 text-center">
                             <thead class="thead-light">
                                 <tr>
                                     <th>No.</th>
@@ -142,25 +142,25 @@
                                         </button>
                                     </td>
                                     <td>
-                                            <ng-template #popTemplate>
-                                                <ul class="list-group list-group-flush"
-                                                    *ngFor="let obj of formatDescriptionColumn(ticket.description)">
-                                                    <li *ngIf="obj.key" class="list-group-item">
-                                                        <b>{{obj.key}}</b> {{obj.value}}
-                                                    </li>
-                                                    <li *ngIf="!obj.key" class="list-group-item">
-                                                        {{obj}}
-                                                    </li>
-                                                </ul>
-                                            </ng-template>
-                                            <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
-                                                triggers="focus">
-                                                {{ ticket.description | slice:0:15 || 'N/A' }}
-                                                <span class="d-none">
-                                                    {{ ticket.description | slice:15 || 'N/A' }}
-                                                </span>
-                                            </button>
-                                        </td>
+                                        <ng-template #popTemplate>
+                                            <ul class="list-group list-group-flush"
+                                                *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                                <li *ngIf="obj.key" class="list-group-item">
+                                                    <b>{{obj.key}}</b> {{obj.value}}
+                                                </li>
+                                                <li *ngIf="!obj.key" class="list-group-item">
+                                                    {{obj}}
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
+                                            triggers="focus" placement="top">
+                                            {{ ticket.description | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group"
                                             triggers="focus">

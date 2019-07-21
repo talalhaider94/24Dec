@@ -53,12 +53,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="">
                         <div *ngIf="loading" class="text-center">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                         </div>
                         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                            class="kpi-table table table-responsive-sm table-hover table-outline mb-0 text-center">
+                            class="table-responsive kpi-table table table-responsive-sm table-hover table-outline mb-0 text-center">
 
                             <thead class="thead-light">
                                 <tr>
@@ -139,7 +139,7 @@
                                                 </ul>
                                             </ng-template>
                                             <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
-                                                triggers="focus">
+                                                triggers="focus" placement="top">
                                                 {{ ticket.description | slice:0:15 || 'N/A' }}
                                                 <span class="d-none">
                                                     {{ ticket.description | slice:15 || 'N/A' }}
