@@ -92,18 +92,17 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>No.</th>
-                                    <!-- <th class="d-none">ID</th> -->
                                     <th>Rif. Num</th>
-                                    <th>Sommario</th>
-                                    <th>Gruppo</th>
-                                    <th>Stato</th>
-                                    <th>Descrizione</th>
                                     <th>Titolo</th>
                                     <th>KPI ID</th>
+                                    <th>Sommario</th>
+                                    <th>Descrizione</th>
+                                    <th>Gruppo</th>
+                                    <th>Stato</th>
+                                    <th>Periodo</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
                                     <th>Riferimento S3</th>
-                                    <th>Periodo</th>
                                     <th>Azioni</th>
                                     <th>Allegati</th>
                                 </tr>
@@ -114,8 +113,17 @@
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index">
                                     <td>{{ i+1 }}</td>
-                                    <!-- <td class="d-none">{{ ticket.id }} </td> -->
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
+                                            triggers="focus">
+                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.titolo | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
+                                    <td>{{ ticket.id_kpi || 'N/A' }}</td>
                                     <td>
                                         <ng-template #popSummary>
                                             <ul class="list-group list-group-flush"
@@ -134,42 +142,33 @@
                                         </button>
                                     </td>
                                     <td>
+                                            <ng-template #popTemplate>
+                                                <ul class="list-group list-group-flush"
+                                                    *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                                    <li *ngIf="obj.key" class="list-group-item">
+                                                        <b>{{obj.key}}</b> {{obj.value}}
+                                                    </li>
+                                                    <li *ngIf="!obj.key" class="list-group-item">
+                                                        {{obj}}
+                                                    </li>
+                                                </ul>
+                                            </ng-template>
+                                            <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
+                                                triggers="focus">
+                                                {{ ticket.description | slice:0:15 || 'N/A' }}
+                                                <span class="d-none">
+                                                    {{ ticket.description | slice:15 || 'N/A' }}
+                                                </span>
+                                            </button>
+                                        </td>
+                                    <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group"
                                             triggers="focus">
                                             {{ ticket.group | slice:0:15 || 'N/A' }}
                                         </button>
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
-                                    <td>
-                                        <ng-template #popTemplate>
-                                            <ul class="list-group list-group-flush"
-                                                *ngFor="let obj of formatDescriptionColumn(ticket.description)">
-                                                <li *ngIf="obj.key" class="list-group-item">
-                                                    <b>{{obj.key}}</b> {{obj.value}}
-                                                </li>
-                                                <li *ngIf="!obj.key" class="list-group-item">
-                                                    {{obj}}
-                                                </li>
-                                            </ul>
-                                        </ng-template>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
-                                            triggers="focus">
-                                            {{ ticket.description | slice:0:15 || 'N/A' }}
-                                            <span class="d-none">
-                                                {{ ticket.description | slice:15 || 'N/A' }}
-                                            </span>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
-                                            triggers="focus">
-                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
-                                            <span class="d-none">
-                                                {{ ticket.titolo | slice:15 || 'N/A' }}
-                                            </span>
-                                        </button>
-                                    </td>
-                                    <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                                    <td>{{ ticket.period || 'N/A' }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark"
@@ -203,7 +202,6 @@
                                             N/A
                                         </ng-template>
                                     </td>
-                                    <td>{{ ticket.period || 'N/A' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                             (click)="ticketActions(ticket)">
