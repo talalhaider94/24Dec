@@ -35,8 +35,8 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
-  permissionsData = [];
-  contractsData = [];
+  permissionsData: any;
+  contractsData: any;
   kpisData = [];
   kpisId = [];
   storedIds = [];
