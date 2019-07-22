@@ -323,7 +323,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         dtos.Add(dto);
                     }
-                    return dtos;
+                    return dtos.OrderBy(o=>o.Name).ToList();
 
                 }                
             }
@@ -382,7 +382,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         dtos.Add(dto);
                     }
-                    return dtos;
+                    return dtos.OrderBy(o => o.Name).ToList();
 
                 }
             }
@@ -417,7 +417,7 @@ namespace Quantis.WorkFlow.APIBase.API
                      join u in userKpis on d.Id equals u.global_rule_id
                      into gj
                      from subset in gj.DefaultIfEmpty()
-                     select new BaseNameCodeDTO(d.Id, d.Name, subset == null ? "0" : "1")).ToList();
+                     select new BaseNameCodeDTO(d.Id, d.Name, subset == null ? "0" : "1")).OrderBy(o => o.Name).ToList();
 
                 }
             }
