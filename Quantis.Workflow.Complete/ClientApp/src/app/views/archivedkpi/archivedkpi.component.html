@@ -503,7 +503,7 @@
                 <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>
                  <td style="text-align:center">{{rec.event_state_id}}</td>-->
                  <td style="text-align:center">{{rec.partner_raw_data_id}}</td>          
-                 <td  style="text-align:center" *ngFor="let key of rec.data | keys "><b>{{key}} :</b> {{rec.data[key] }}</td>
+                 <td  style="text-align:center" *ngFor="let key of rec.data | keys "><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
                
                   <!--  <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.reader_id}} </div> </td>
                  <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.partner_raw_data_id}} </div> </td>
