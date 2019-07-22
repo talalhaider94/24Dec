@@ -54,11 +54,12 @@ export class UserProfilingComponent implements OnInit {
     checked: null,
     selected: null
   }
-  filters: any;
-  /*filters = {
+ 
+  filters: any = {
     searchUsersText: '',
     searchPermissionsText: ''
-  }*/
+  }
+
   loading = {
     users: false,
     roles: false
