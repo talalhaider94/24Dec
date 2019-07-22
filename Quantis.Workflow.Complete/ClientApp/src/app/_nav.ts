@@ -172,14 +172,14 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-pencil-square-o',
-    key: 'VIEW_CONFIGURATIONS',
+    key: 'VIEW_NOTIFIER_EMAILS',
     children: [
       {
         name: 'Notifiche LoadingForm',
         url: '/specialreporting',
         icon: 'fa fa-envelope',
         version: '0.0.4',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_NOTIFIER_EMAILS'
       }
     ]
   },

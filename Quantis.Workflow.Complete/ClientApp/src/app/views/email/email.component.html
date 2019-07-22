@@ -43,6 +43,7 @@
             <th style="text-align:center">TIPO</th>
             <th style="text-align:center">DESTINATARIO</th>
             <th style="text-align:center">PERIODO</th>
+            <th style="text-align:center">FORM</th>
             <th style="text-align:center">DATA DI INVIO</th>
             <th style="text-align:center;">TESTO</th>
             <th style="display:none">TESTO1</th>
@@ -51,8 +52,9 @@
         <tbody>
           <tr *ngFor="let row of ConfigTableBodyData; index as i">
             <td style="text-align: center">{{row.type}}</td>
-            <td style="text-align: center">{{row.user_domain}}</td>
+            <td style="text-align: center">{{row.user_domain}} {{row.recipient}}</td>
             <td style="text-align: center">{{row.period}}</td>
+            <td style="text-align: center">{{row.form_name}}</td>
             <td style="text-align: center">{{row.notify_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
             <td style="text-align: center">
               <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"

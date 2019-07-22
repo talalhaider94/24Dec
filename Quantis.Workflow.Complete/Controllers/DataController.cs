@@ -264,7 +264,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllTRules();
         }
-        //[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [Authorize(WorkFlowPermissions.VIEW_NOTIFIER_EMAILS)]
         [HttpGet("GetEmailNotifiers")]
         public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {

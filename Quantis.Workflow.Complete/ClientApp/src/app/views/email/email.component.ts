@@ -62,10 +62,10 @@ export class EmailComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   ConfigTableBodyData: any = [
     {
-      type: 'type',
-      user_domain: 'user_domain',
-      period: 'period',
-      notify_date: 'notify_date'
+      type: '',
+      user_domain: '',
+      period: '',
+      notify_date: ''
     }
   ]
 
