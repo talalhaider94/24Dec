@@ -226,9 +226,9 @@ intervalloPeriodo='';
      if(tracking_period.length >0 && interval_kpi.length >0){
       this.arrayTempo(tracking_period,interval_kpi);
     }
-    this.loading = true;
+   
     this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
-    
+      this.loading = true;
     this.fitroDataById = dati;
     
   

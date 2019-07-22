@@ -170,8 +170,8 @@ namespace Quantis.WorkFlow.Controllers
             if (data != null) {
                 return Ok(data);
             }
-            var json = new { error = "Login Error", description = "Username o Password errati." };
-            return StatusCode(StatusCodes.Status401Unauthorized, json);
+            var json = new { error = "Errore durente il Login", description = "Username o Password errati." };
+            return StatusCode(StatusCodes.Status403Forbidden, json);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("Logout")]

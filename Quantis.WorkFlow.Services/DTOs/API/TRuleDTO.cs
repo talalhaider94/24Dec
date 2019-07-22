@@ -10,6 +10,8 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int global_rule_id { get; set; }
         public string rule_name { get; set; }
         public string rule_description { get; set; }
+        public DateTime create_date { get; set; }
+        public DateTime modify_date { get; set; }
         public int sla_version_id { get; set; }
         public double? service_level_target { get; set; }
         public int sla_id { get; set; }

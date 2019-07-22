@@ -11,6 +11,9 @@
         <th style="text-align:center">CONTRATTO</th>
         <th width="50%" style="text-align:center">KPI</th>
         <th style="text-align:center">DESCRIZIONE</th>
+        <th style="text-align:center">CONTRAENTE PRIMARIO</th>
+        <th style="text-align:center">CONTRAENTE SECONDARIO</th>
+        <th style="text-align:center">ULTIMA MODIFICA</th>
         <th style="text-align:center">AZIONE</th>
       </tr>
     </thead>
@@ -19,8 +22,11 @@
         <td style="text-align: left;">{{row.sla_name}}</td>
         <td style="text-align: left;">{{row.rule_name}}</td>
         <td class="tagsTip" width="50%" *ngIf="row.rule_description; then trueBlock else falseBlock"></td>
-        <ng-template #trueBlock><td class="tagsTip" style="text-align: left;" width="50%"  data-ext="" attr.data-ext="{{row.rule_description}}">{{row.rule_description | slice:0:130}} [...]</td></ng-template>
+        <ng-template #trueBlock><td class="tagsTip" style="text-align: left;" width="50%" data-ext="" attr.data-ext="{{row.rule_description}}">{{row.rule_description | slice:0:130}} [...]</td></ng-template>
         <ng-template #falseBlock><td align="center"> </td></ng-template>
+        <td style="text-align: left;">{{row.primary_contract_party_name}}</td>
+        <td style="text-align: left;">{{row.secondary_contract_party_name}}</td>
+        <td style="text-align: left;">{{row.modify_date}}</td>
         <td class="notExportCsv" align="center">
           <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)" data-target="#kpiModal">
             <i class="fa fa-pencil"></i>

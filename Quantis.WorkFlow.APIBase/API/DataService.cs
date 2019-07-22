@@ -995,7 +995,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var tablename = "t_dt_de_3_" + year + "_" + month;
                     //if (TableExists(tablename))
                     //{
-                    var sp = @"select * from " + tablename + " LIMIT 1000";
+                    var sp = @"select * from " + tablename + " order by modify_date desc LIMIT 1000";
                         var command = new NpgsqlCommand(sp, con);
 
                         using (var reader = command.ExecuteReader())
@@ -1020,7 +1020,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
                                 atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
                                 atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
+                                atdtde.event_source_type_id = (reader.IsDBNull(reader.GetOrdinal("event_source_type_id")) ? null : reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString());
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
@@ -1073,7 +1073,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
                                 atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
                                 atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
+                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString();
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
@@ -1185,7 +1185,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     con.Open();
                     List<TRuleDTO> list = new List<TRuleDTO>();
 
-                    var sp = @"select r.rule_id, r.global_rule_id, r.rule_name, r.rule_description, r.sla_version_id, r.service_level_target, sv.sla_id, s.sla_name, sv.version_number, s.customer_id as primary_contract_party_id, c.customer_name as primary_contract_party_name, s.additional_customer_id as secondary_contract_party_id, c2.customer_name as secondary_contract_party_name
+                    var sp = @"select r.rule_id, r.global_rule_id, r.rule_name, r.rule_description, r.sla_version_id, r.service_level_target, r.rule_create_date, r.rule_modify_date, sv.sla_id, s.sla_name, sv.version_number, s.customer_id as primary_contract_party_id, c.customer_name as primary_contract_party_name, s.additional_customer_id as secondary_contract_party_id, c2.customer_name as secondary_contract_party_name
                             from t_rules r
                             left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                             left join t_global_rules gr on r.global_rule_id = gr.global_rule_id
@@ -1203,6 +1203,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             tRule.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             tRule.rule_name = reader.GetString(reader.GetOrdinal("rule_name"));
                             tRule.rule_description = (reader.IsDBNull(reader.GetOrdinal("rule_description")) ? null : reader.GetString(reader.GetOrdinal("rule_description")));
+                            tRule.create_date = reader.GetDateTime(reader.GetOrdinal("rule_create_date"));
+                            tRule.modify_date = reader.GetDateTime(reader.GetOrdinal("rule_modify_date"));
                             tRule.sla_version_id = reader.GetInt32(reader.GetOrdinal("sla_version_id"));
                             tRule.service_level_target = (reader.IsDBNull(reader.GetOrdinal("service_level_target")) ? 0 : reader.GetDouble(reader.GetOrdinal("service_level_target")));
                             tRule.sla_id = reader.GetInt32(reader.GetOrdinal("sla_id"));
