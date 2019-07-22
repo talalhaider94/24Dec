@@ -102,7 +102,7 @@ export class ProveVarieComponent implements OnInit {
   ngOnInit() {
     this.getAnno();
     const currentUser = this.authService.getUser();
-    this.monthOption = moment().format('MM');
+    this.monthOption = moment().subtract(1, 'months').format('MM');
     this.yearOption = moment().format('YYYY');
     this.isAdmin = currentUser.isadmin;
     this.activatedRoute.paramMap.subscribe(params => {
