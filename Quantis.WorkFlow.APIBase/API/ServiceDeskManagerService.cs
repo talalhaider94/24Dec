@@ -444,7 +444,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
                     userid = userid.Split('\\')[1];
-                    var contractparties=_infomationAPI.GetContractPartyByUser(user.UserId);
+                    var kpiDetials=_infomationAPI.GetContractPartyByUser(user.UserId);
+                    var kpiIds = kpiDetials.Select(o => o.Item1).ToList();
+                    var contractparties = kpiDetials.Select(o => o.Item2).Distinct();
                     string filterstring = "";
                     var groups=_dbcontext.SDMTicketGroup.Where(o => contractparties.Contains(o.category_id)).Select(p=>p.handle.Substring(4)).ToList();
                     if (!groups.Any())
@@ -473,7 +475,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
                     select_a.Wait();
                     var select_result = select_a.Result.doSelectReturn;
-                    var tckts= parseTickets(select_result);
+                    var tckts= parseTickets(select_result).Where(o=> kpiIds.Contains(o.kpiIdPK)).ToList();
                     var ids = tckts.Select(o => o.kpiIdPK).ToList();
                     var titolos=_dataService.GetKPITitolo(ids);
                     return (from tks in tckts

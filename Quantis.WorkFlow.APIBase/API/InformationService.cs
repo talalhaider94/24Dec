@@ -723,14 +723,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<int> GetContractPartyByUser(int userId)
+        public List<Tuple<int, int>> GetContractPartyByUser(int userId)
         {
             try
             {
                 var res = new List<UserKPIDTO>();
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
-                var groups = _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => p.primary_contract_party);
-                return groups.Distinct().ToList();
+                return _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => new Tuple<int,int>(p.id,p.primary_contract_party)).ToList();
 
             }
             catch (Exception e)
