@@ -995,7 +995,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var tablename = "t_dt_de_3_" + year + "_" + month;
                     //if (TableExists(tablename))
                     //{
-                    var sp = @"select * from " + tablename + " LIMIT 1000";
+                    var sp = @"select * from " + tablename + " order by modify_date desc LIMIT 1000";
                         var command = new NpgsqlCommand(sp, con);
 
                         using (var reader = command.ExecuteReader())

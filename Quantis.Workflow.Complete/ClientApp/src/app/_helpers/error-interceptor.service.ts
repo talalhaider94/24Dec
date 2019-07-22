@@ -27,10 +27,14 @@ export class ErrorInterceptorService implements HttpInterceptor {
         this.router.navigate(['/login']);
         this.toastr.error('Sessione Scaduta', 'Effettuare nuovamente il login');
       }
+      if (err.status === 403) {
+        return throwError(err.error);
+      }
       if (err.status >= 500 && err.status < 600) {
         this.toastr.error('Errore durante la comunicazione con il server');
       }
       return throwError(err);
+      
     }))
   }
 }
