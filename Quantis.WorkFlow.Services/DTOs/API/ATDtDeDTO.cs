@@ -18,7 +18,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string data { get; set; }
         public DateTime modify_date { get; set; }
         public int reader_id { get; set; }
-        public int event_source_type_id { get; set; }
+        public string event_source_type_id { get; set; }
         public int event_state_id { get; set; }
         public int partner_raw_data_id { get; set; }
         public string hash_data_key { get; set; }

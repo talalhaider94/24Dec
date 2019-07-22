@@ -1020,7 +1020,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
                                 atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
                                 atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
+                                atdtde.event_source_type_id = (reader.IsDBNull(reader.GetOrdinal("event_source_type_id")) ? null : reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString());
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
@@ -1073,7 +1073,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 atdtde.data = reader.GetString(reader.GetOrdinal("data"));
                                 atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
                                 atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id"));
+                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString();
                                 atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
                                 atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
                                 atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
