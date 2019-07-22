@@ -76,7 +76,7 @@
   <div class="modal-dialog modal-lg contractsModal">
     <div class="modal-content"> 
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Modifica Contract Party - {{selectedData.contractParty}}</h5>
+        <h5 class="modal-title" id="approveModalLabel">Modifica Contraente - {{selectedData.contractParty}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -85,7 +85,7 @@
         <div class="table-responsive" style="background: #ffffff; padding: 10px">
           <div class="row role-permissions-lists col-md-12">
             <div class="col-md-10">
-              <div><label class="lbl-filter-user">Contracts: <strong
+              <div><label class="lbl-filter-user">Contratti: <strong
                           class="selected-user-title">{{contractsData.name|uppercase}}</strong></label></div>
               <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
                       [(ngModel)]="filters.searchContractsText" /></div>
@@ -120,7 +120,7 @@
   <div class="modal-dialog modal-lg kpisModal">
     <div class="modal-content"> 
       <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Modifica Contract - {{selectedData.contractName}}</h5>
+        <h5 class="modal-title" id="approveModalLabel">Modifica Contratto - {{selectedData.contractName}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -150,7 +150,7 @@
         </div>  
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#contractsModal">Back</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#contractsModal">Indietro</button>
         <button type="button" class="btn btn-success" data-dismiss="modal" (click)="assignKpis()">Salva</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
