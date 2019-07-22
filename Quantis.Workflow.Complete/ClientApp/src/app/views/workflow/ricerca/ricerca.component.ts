@@ -254,7 +254,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(4).every(function () {
+      datatable_Ref.columns(7).every(function () {
         const that = this;
         // Create the select list and search operation
         const select = $($this.searchCol4.nativeElement)

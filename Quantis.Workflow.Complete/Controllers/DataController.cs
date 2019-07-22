@@ -234,7 +234,7 @@ namespace Quantis.WorkFlow.Controllers
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllArchivedKPIs")]
-        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, int id_kpi)
+        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi)
         {
             var user = HttpContext.User as AuthUser;
             var globalrules=_informationAPI.GetGlobalRulesByUserId(user.UserId);

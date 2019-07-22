@@ -35,9 +35,9 @@ export class UserProfilingComponent implements OnInit {
     rolesList: [],
     assignedPermissions: []
   }
-  permissionsData = [];
-  contractsData = [];
-  kpisData = [];
+  permissionsData: any;
+  contractsData: any;
+  kpisData: any;
   kpisId = [];
   storedIds = [];
   saveKpisData =  {
@@ -54,10 +54,12 @@ export class UserProfilingComponent implements OnInit {
     checked: null,
     selected: null
   }
-  filters = {
+ 
+  filters: any = {
     searchUsersText: '',
     searchPermissionsText: ''
   }
+
   loading = {
     users: false,
     roles: false

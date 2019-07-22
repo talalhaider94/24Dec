@@ -859,7 +859,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, int id_kpi,List<int> globalruleIds)
+        public List<ARulesDTO> GetAllArchiveKPIs(string month, string year, string id_kpi,List<int> globalruleIds)
         {
             try
             {
@@ -872,13 +872,18 @@ namespace Quantis.WorkFlow.APIBase.API
                     con.Open();
 
                     var whereclause = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
+                    var whereYear = " and interval_kpi LIKE '%:interval_kpi%'";
                     var filterByKpiId = " and id_kpi = :id_kpi";
                     var sp = @"select * from a_rules where 1=1";
                     if ( (month != null) && (year != null))
                     {
                         sp += whereclause;
                     }
-                    if (id_kpi > 0 )
+                    if( (month == null) && (year != null))
+                    {
+                        sp += whereYear;
+                    }
+                    if (id_kpi != null )
                     {
                         sp += filterByKpiId;
                     }
@@ -890,7 +895,11 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse(month), Int32.Parse("01")));
                     }
-                    if ((id_kpi > 0))
+                    if ((month == null) && (year != null))
+                    {
+                        command.Parameters.AddWithValue(":interval_kpi", year);
+                    }
+                    if ((id_kpi != null))
                     {
                         command.Parameters.AddWithValue(":id_kpi", id_kpi.ToString());
                     }
