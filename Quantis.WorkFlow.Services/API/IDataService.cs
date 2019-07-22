@@ -17,6 +17,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormLVDTO> GetAllForms();
         List<KeyValuePair<int, string>> GetAllCustomersKP();
         List<UserDTO> GetAllUsers();
+        List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period);
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
         PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);

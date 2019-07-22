@@ -125,6 +125,39 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<int> GetRawIdsFromResource(List<EventResourceDTO> dto,string period)
+        {
+            try
+            {
+               
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                {
+                    con.Open();
+                    var output = new List<int>();
+                    var month = period.Split('/').FirstOrDefault();
+                    var year = "20"+period.Split('/').LastOrDefault();
+                    var events = string.Join(',',dto.Select(o => o.EventId).ToList());
+                    var resources = string.Join(',', dto.Select(o => o.ResourceId).ToList());
+                    var sp = string.Format("Select event_type_id,resource_id,raw_data_id from t_dt_de_3_{0}_{1} where event_type_id in(:events) and resource_id in (:resources)",year,month);
+                    var command = new NpgsqlCommand(sp, con);
+                    command.Parameters.AddWithValue(":events", events);
+                    command.Parameters.AddWithValue(":resources", resources);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            output.Add(reader.GetInt32(reader.GetOrdinal("raw_data_id")));                            
+                        }
+
+                        return output;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<NotifierLogDTO> GetEmailHistory()
         {
             try
