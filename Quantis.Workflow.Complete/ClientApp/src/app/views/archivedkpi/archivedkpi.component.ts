@@ -122,12 +122,16 @@ intervalloPeriodo='';
   
   id:any;
   sortedCollection: any[];
-  constructor(private apiService: ApiService,private orderPipe: OrderPipe,private toastr: ToastrService) {
+  constructor(private apiService: ApiService,private orderPipe: OrderPipe) {
     $this = this;
     this.sortedCollection = orderPipe.transform(this.fitroDataById, 'info.name');
     console.log(this.sortedCollection);
   }
 
+  createLoop(length = this.countCampiData) {
+    console.log(length)
+    return new Array(length);
+  }
   ngOnInit() {
    this.getAnno();
    
@@ -149,7 +153,7 @@ intervalloPeriodo='';
 
   
 
-  
+
 
   populateDateFilter() {
       this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
@@ -208,7 +212,7 @@ intervalloPeriodo='';
     return tmp.textContent||tmp.innerText;
   }
 
-  getKpis() {
+ /* getKpis() {
     this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data) =>{
       this.ArchivedKpiBodyData = data;
       console.log("kpi",data);
@@ -217,39 +221,51 @@ intervalloPeriodo='';
       })
       
     });
-  }
+  }*/
 
-  eventTypeArray=[];
+  eventTypeArray = [];
+
   getdati(id_kpi, tracking_period = '',interval_kpi='', month = this.monthVar, year = this.yearVar){
-    
-    this.id_kpi_temp = id_kpi;
-     if(tracking_period.length >0 && interval_kpi.length >0){
-      this.arrayTempo(tracking_period,interval_kpi);
-    }
    
-    this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+      this.id_kpi_temp = id_kpi;
+      if(tracking_period.length >0 && interval_kpi.length >0){
+          this.arrayTempo(tracking_period,interval_kpi);
+      }
       this.loading = true;
-    this.fitroDataById = dati;
-    
-  
-    Object.keys(this.fitroDataById).forEach( key => {
-      this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
-     
-    })
-  
-  console.log("array tempo",this.arrayPeriodo);
-  console.log('dati',dati);
-  this.getCountCampiData();
+      this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+        this.fitroDataById = dati;
+        console.log(dati);
+        Object.keys(this.fitroDataById).forEach(key => {
+          this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+        })
+        this.getCountCampiData();
+        this.numeroEventi();
+        let max = this.countCampiData.length;
 
-  this.numeroEventi();
-  this.loading = false;
-  console.log(this.eventTypeArray);
+
+        Object.keys(this.fitroDataById).forEach(key => {
+          let temp = Object.keys(this.fitroDataById[key].data).length;
+          if (temp < max) {
+            for (let i = 0; i < (max - temp); i++) {
+              this.fitroDataById[key].data['empty#'+i] = '##empty##';
+            }
+          }
+        })
+          
+  
+          //****console.log("array tempo",this.arrayPeriodo);
+          console.log('dati', dati);
+          //****console.log('key', this.fitroDataById);
+         /**** this.getCountCampiData();
+          this.numeroEventi();****/
  
-  /*Object.keys(this.eventTypeArray).forEach( e=> {
-    console.log(e + '#' + this.eventTypeArray[e]);
-  })*/
-
-});
+          //****console.log(this.eventTypeArray);
+  
+          /*Object.keys(this.eventTypeArray).forEach( e=> {
+            console.log(e + '#' + this.eventTypeArray[e]);
+          })*/
+          this.loading = false;
+      });
   }
 
 
@@ -257,22 +273,29 @@ intervalloPeriodo='';
     this.id_kpi_temp = id_kpi;
     
    
-    this.loading = true;
+    
     this.apiService.getKpiArchivedData(id_kpi,month,year).subscribe((dati: any) =>{
-    
+    this.loading = true;
     this.fitroDataById = dati;
-    
-  
+
+    this.getCountCampiData();
+    this.numeroEventi();
+
+
     Object.keys(this.fitroDataById).forEach( key => {
       this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
-     
+      /*if (this.fitroDataById[key].data.length < this.countCampiData) {
+        console.log('minore');
+      } else {*/
+        console.log('data length: ', this.fitroDataById[key].data.length);
+     // }
     })
   
   console.log("array tempo",this.arrayPeriodo);
   console.log('dati',dati);
-  this.getCountCampiData();
+  
 
-  this.numeroEventi();
+  
   this.loading = false;
   console.log(this.eventTypeArray);
  
