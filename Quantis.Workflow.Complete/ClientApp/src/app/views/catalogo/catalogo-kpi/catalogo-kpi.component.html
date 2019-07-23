@@ -44,7 +44,7 @@
 
                                                <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
                                                  <!--        <td align="center"><input type="checkbox"/></td>-->
-                                                 <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract}}</td>
+                                                 <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
                                                  <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
                                                  <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
                                                  <td class="tagsTip" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
@@ -139,7 +139,7 @@
             </thead>
             <tbody>
               <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknow'"><b>Primario: </b>{{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow'"><b>Secondario: </b>{{modalData.secondary_contract_party_name}}</span></td></tr>
-              <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
+              <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
               <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
               <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
               <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>

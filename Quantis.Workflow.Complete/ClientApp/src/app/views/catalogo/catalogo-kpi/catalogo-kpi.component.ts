@@ -119,6 +119,7 @@ export class CatalogoKpiComponent implements OnInit {
     enable_wf: '',
     enable_rm: '',
     contract: '',
+    contract_name: '',
     wf_last_sent: '',
     rm_last_sent: '',
     supply: '',
@@ -247,6 +248,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.enable_wf = data.enable_wf;
     this.modalData.enable_rm = data.enable_rm;
     this.modalData.contract = data.contract;
+    this.modalData.contract_name = data.contract_name;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
     this.modalData.supply = data.supply;

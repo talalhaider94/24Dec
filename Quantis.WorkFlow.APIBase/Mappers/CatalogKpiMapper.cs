@@ -65,7 +65,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 global_rule_id_bsi = e.global_rule_id_bsi,
                 sla_id_bsi = e.sla_id_bsi,
                 primary_contract_party_name=e.PrimaryCustomer?.customer_name,
-                secondary_contract_party_name=e.SecondaryCustomer?.customer_name
+                secondary_contract_party_name=e.SecondaryCustomer?.customer_name,
+                contract_name=e.Sla?.sla_name
                 
             };
         }
