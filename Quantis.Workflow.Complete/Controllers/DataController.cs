@@ -270,5 +270,10 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetEmailNotifiers(period);
         }
+        [HttpGet("GetRawIdsFromRulePeriod")]
+        public List<int> GetRawIdsFromRulePeriod(int ruleId, string period)
+        {
+            return _dataAPI.GetRawIdsFromRulePeriod(ruleId, period);
+        }
     }
 }
