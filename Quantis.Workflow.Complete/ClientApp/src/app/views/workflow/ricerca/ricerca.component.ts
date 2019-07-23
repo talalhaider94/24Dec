@@ -93,7 +93,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
         infoPostFix: "",
         loadingRecords: "Caricamento...",
         zeroRecords: "La ricerca non ha portato alcun risultato.",
-        emptyTable: "Nessun dato presente nella tabella.",
+        emptyTable: "Nessun Ticket Trovato.",
         paginate: {
           first: "Primo",
           previous: "Precedente",
@@ -111,18 +111,23 @@ export class RicercaComponent implements OnInit, OnDestroy {
 
   getRicercaTickets () {
     let period;
-    if(this.monthOption === 'all' || this.yearOption === 'all') {
-      period = 'all';
+    if(this.monthOption === 'all' && this.yearOption === 'all') {
+      period = 'all/all';
     } else {
       period = `${this.monthOption}/${this.yearOption}`;
     }
     this.workFlowService.getTicketsSearchByUserRecerca(period).pipe(first()).subscribe(data => {
       console.log('getTicketsSearchByUserRecerca', data);
-      this.allTickets = data;
+      if(!!data && data.length > 0) {
+        this.allTickets = data;
+      } else {
+        this.allTickets = null;
+      }      
       this.rerender();
       this.loading = false;
     }, error => {
       console.error('getTicketsSearchByUserRecerca', error);
+      this.allTickets = null;
       this.loading = false;
     })
   }
