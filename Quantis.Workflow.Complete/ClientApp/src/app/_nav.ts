@@ -84,7 +84,7 @@ export const navItems: NavData[] = [
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        version: '0.0.10',
+        version: '0.0.12',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
