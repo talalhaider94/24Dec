@@ -118,10 +118,12 @@
         <td  style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
         
         <td  style="text-align:center">{{row.tracking_period}}</td>
-        <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                   data-target="#archivedKpiModal">Vedi</button>
-      <button class="btn btn-primary" data-toggle="modal" (click)="getdati(row.id_kpi, row.tracking_period,row.interval_kpi)"
-                                   data-target="#datiModal">Dati</button>
+        <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" (click)="populateModalData(row)"
+                                   data-target="#archivedKpiModal" title="VEDI"><i class="fa fa-eye"></i>
+                                  </button>
+      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi, row.tracking_period,row.interval_kpi)"
+                                   data-target="#datiModal"><i class="fa fa-table"></i>
+                                  </button>
              </td>
 
      
@@ -150,7 +152,7 @@
             <thead style="background: #20a8d8; color:white">
             <tr>
               <th style="text-align:center">ID KPI</th>
-              <th style="text-align:center">Nome KPI</th>
+              <th style="text-align:center">Titolo</th>
               <th style="text-align:center">Periodo</th>
               <th style="text-align:center">Valore</th>
               <th style="text-align:center">Ticket ID</th>
@@ -220,6 +222,7 @@
             </div>
             
           </div>
+          
           <div *ngIf='loading' id="loader" class="text-center">
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </div>
@@ -259,13 +262,6 @@
                 </span></th>
 
             
-
-              
-
-              <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
-              (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
                 <th style="text-align:center"[class.active]="order === 'create_date'"
               (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                 ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
@@ -273,6 +269,28 @@
               <th style="text-align:center"[class.active]="order === 'modify_date'"
               (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                 ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+
+              
+                <th style="text-align:center"[class.active]="order === 'reader_id'"
+                (click)="setOrder('reader_id')">reader id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                  ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+
+                <!-- <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
+              (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
+
+              <th style="text-align:center"[class.active]="order === 'event_state_id'"
+              (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>-->
+         
+              <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
+              (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+
+              <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
+              (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+
 
 
              
@@ -283,24 +301,11 @@
               <th colspan="3" style="text-align:center" class="hiddenRow" > <div class="collapse multi-collapse" id="Collapse1">event state id </div></th>-->
      
              
-              <th style="text-align:center"[class.active]="order === 'reader_id'"
-              (click)="setOrder('reader_id')">reader id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
                <!-- <th style="text-align:center"class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">partner raw data id</div></th>
               <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event source type id</div></th>
               <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event state id</div></th>-->
 
-              <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
-              (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
-
-              <th style="text-align:center"[class.active]="order === 'event_state_id'"
-              (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-         
-              <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
-              (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+              
               
             </tr>
            
@@ -317,17 +322,19 @@
                     </td>
                 </tr>-->
             <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+              <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
               <td style="text-align:center">{{rec.raw_data_id}}</td>
               <td style="text-align:center">{{rec.event_type_id}}</td>
               <td style="text-align:center">{{rec.resource_id}}</td>
-              <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>             
-              <td  style="text-align:center" *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
-              <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
-              <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
               <td style="text-align:center">{{rec.reader_id}}</td>
-              <td style="text-align:center">{{rec.event_source_type_id}}</td>
-              <td style="text-align:center">{{rec.event_state_id}}</td>
-              <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
+             <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>
+              <td style="text-align:center">{{rec.event_state_id}}</td>-->
+              <td style="text-align:center">{{rec.partner_raw_data_id}}</td>          
+              <td  style="text-align:center" *ngFor="let key of rec.data | keys "><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
+
+              <!--td *ngFor='let item of [].constructor(countCampiData-rec.data.length); let i = index'>{{i}}</td-->
                <!--  <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.reader_id}} </div> </td>
               <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.partner_raw_data_id}} </div> </td>
               <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.event_source_type_id}} </div> </td>
@@ -407,103 +414,115 @@
           <button (click)="fireEvent()"style="margin-left:20%">Esporta CSV</button></div>
         
           <div class="table-responsive" style="background: #ffffff; padding: 10px">
-         
-              <table id="classTable" class="table table-bordered"  #table>
-            <thead style="background: #20a8d8; color:white">  
-            <tr>
-                <th style="text-align:center"[class.active]="order === 'raw_data_id'"
-                (click)="setOrder('raw_data_id')">raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-              <th style="text-align:center"[class.active]="order === 'event_type_id'"
-              (click)="setOrder('event_type_id')">event Type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-              <th style="text-align:center"[class.active]="order === 'resource_id'"
-              (click)="setOrder('resource_id')">resource id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-              <th style="text-align:center"[class.active]="order === 'time_stamp'"
-              (click)="setOrder('time_stamp')">time stamp<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i>
-                </span></th>
-
+              <!-- <button class="btn fa fa-plus" style="color:white; padding: 2px 7px; margin-left: 98%; background-color: #20a8d8;display: inline-block;text-align: center; margin-bottom: 0px" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="Collapse1 Collapse2"></button>-->
+                 <table id="classTable" class="table table-bordered"  #table>
+               <thead style="background: #20a8d8; color:white">  
+               <tr>
+                   <th style="text-align:center"[class.active]="order === 'raw_data_id'"
+                   (click)="setOrder('raw_data_id')">raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+                 <th style="text-align:center"[class.active]="order === 'event_type_id'"
+                 (click)="setOrder('event_type_id')">event Type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+                 <th style="text-align:center"[class.active]="order === 'resource_id'"
+                 (click)="setOrder('resource_id')">resource id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+                 <th style="text-align:center"[class.active]="order === 'time_stamp'"
+                 (click)="setOrder('time_stamp')">time stamp<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i>
+                   </span></th>
+   
+               
+                   <th style="text-align:center"[class.active]="order === 'create_date'"
+                 (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+   
+                 <th style="text-align:center"[class.active]="order === 'modify_date'"
+                 (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+   
+                 
+                   <th style="text-align:center"[class.active]="order === 'reader_id'"
+                   (click)="setOrder('reader_id')">reader id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                     ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+   
+                   <!-- <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
+                 (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
+   
+                 <th style="text-align:center"[class.active]="order === 'event_state_id'"
+                 (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>-->
             
-
+                 <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
+                 (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+   
+                 <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
+                 (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+   
+   
+   
+                
+                 
+                  <!--<th colspan="3" style="text-align:center"class="hiddenRow" > <div class="collapse multi-collapse" id="Collapse1">reader id</div></th>
+                 <th colspan="3" style="text-align:center"class="hiddenRow" > <div class="collapse multi-collapse" id="Collapse1">partner raw data id</div></th>
+                 <th colspan="3"  style="text-align:center" class="hiddenRow" >  <div class="collapse multi-collapse" id="Collapse1">event source type id</div></th>
+                 <th colspan="3" style="text-align:center" class="hiddenRow" > <div class="collapse multi-collapse" id="Collapse1">event state id </div></th>-->
+        
+                
+                  <!-- <th style="text-align:center"class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">partner raw data id</div></th>
+                 <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event source type id</div></th>
+                 <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event state id</div></th>-->
+   
+                 
+                 
+               </tr>
               
-
-              <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
-              (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
-                <th style="text-align:center"[class.active]="order === 'create_date'"
-              (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
-              <th style="text-align:center"[class.active]="order === 'modify_date'"
-              (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
-
-             
-              
-           
-     
-             
-            <th style="text-align:center"[class.active]="order === 'reader_id'"
-              (click)="setOrder('reader_id')">reader id<span [hidden]="reverse">  <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-             <!--<th style="text-align:center"class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">partner raw data id</div></th>
-              <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event source type id</div></th>
-              <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event state id</div></th>-->
-
-                <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
-              (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse">  <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
-
-              <th style="text-align:center"[class.active]="order === 'event_state_id'"
-              (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse">  <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-         
-              <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
-              (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse">  <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-              
-            </tr>
-           
-            </thead>
-            <tbody>
-                <tr *ngIf="fitroDataById.length==0" >
-                    <td class="font-italic text-center" colspan="12">
-                        Nessun dato per il periodo selezionato
-                    </td>
-                  </tr>
-          
-            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
-              <td style="text-align:center">{{rec.raw_data_id}}</td>
-              <td style="text-align:center">{{rec.event_type_id}}</td>
-              <td style="text-align:center">{{rec.resource_id}}</td>
-              <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>             
-              <td  style="text-align:center" *ngFor="let key of rec.data | keys"><b>{{key}}:</b> {{rec.data[key]}}</td>
-              <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
-              <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
-              
+               </thead>
+               <tbody>
+                   <tr *ngIf="fitroDataById.length==0" >
+                       <td class="font-italic text-center" colspan="12">
+                           Nessun dato per il periodo selezionato
+                       </td>
+                     </tr>
+                  <!--   <tr *ngIf="loading" class="text-center">
+                       <td colspan="6"></td>
+                           <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+                       </td>
+                   </tr>-->
+               <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+                 <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+                 <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+                 <td style="text-align:center">{{rec.raw_data_id}}</td>
+                 <td style="text-align:center">{{rec.event_type_id}}</td>
+                 <td style="text-align:center">{{rec.resource_id}}</td>
+                 <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
                  <td style="text-align:center">{{rec.reader_id}}</td>
-                 <td style="text-align:center">{{rec.event_source_type_id}}</td>
-                 <td style="text-align:center">{{rec.event_state_id}}</td>
-                 <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
-            
-            </tr>
-            
-            </tbody>
-            
-          </table>
-          <pagination-controls previousLabel="precedente"  nextLabel="successiva" (pageChange)="p = $event"></pagination-controls>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="clear()" data-dismiss="modal">Chiudi</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+                <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>
+                 <td style="text-align:center">{{rec.event_state_id}}</td>-->
+                 <td style="text-align:center">{{rec.partner_raw_data_id}}</td>          
+                 <td  style="text-align:center" *ngFor="let key of rec.data | keys "><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
+               
+                  <!--  <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.reader_id}} </div> </td>
+                 <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.partner_raw_data_id}} </div> </td>
+                 <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.event_source_type_id}} </div> </td>
+                 <td colspan="3" style="text-align:center" class="hiddenRow"> <div class="collapse multi-collapse" id="Collapse2"> <br>{{rec.event_state_id}} </div> </td>-->
+              
+               </tr>
+               
+               </tbody>
+               
+             </table>
+             <pagination-controls previousLabel="precedente"  nextLabel="successiva" (pageChange)="p = $event"></pagination-controls>
+           </div>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-primary" (click)="clear()" data-dismiss="modal">Chiudi</button>
+         </div>
+       </div>
+     </div>
+   </div>
 
 

@@ -21,6 +21,7 @@ import { OrderModule } from 'ngx-order-pipe';
 
 
 
+
 @NgModule({
   declarations: [ArchivedKpiComponent, KeysPipe],
   imports: [
