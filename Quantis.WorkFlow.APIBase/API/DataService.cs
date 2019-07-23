@@ -125,39 +125,45 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<int> GetRawIdsFromResource(List<EventResourceDTO> dto,string period)
+        public List<int> GetRawIdsFromRulePeriod(int ruleId,string period)
         {
             try
             {
-               
-                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                var config = new List<KPIRegistrationDTO>();
+                using (var client = new HttpClient())
                 {
-                    con.Open();
-                    var output = new List<int>();
-                    var month = period.Split('/').FirstOrDefault();
-                    var year = "20"+period.Split('/').LastOrDefault();
-                    var events = string.Join(',',dto.Select(o => o.EventId).ToList());
-                    var resources = string.Join(',', dto.Select(o => o.ResourceId).ToList());
-                    var sp = string.Format("Select event_type_id,resource_id,raw_data_id from t_dt_de_3_{0}_{1} where event_type_id in(:events) and resource_id in (:resources)",year,month);
-                    var command = new NpgsqlCommand(sp, con);
-                    command.Parameters.AddWithValue(":events", events);
-                    command.Parameters.AddWithValue(":resources", resources);
-                    using (var reader = command.ExecuteReader())
+                    var con = GetBSIServerURL();
+                    var apiPath = "api/KPIRegistration/GetKPIRegistrations?ruleId="+ ruleId;
+                    var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
+                    client.BaseAddress = new Uri(output.Item1);
+                    var response = client.GetAsync(output.Item2).Result;
+                    if (response.IsSuccessStatusCode)
                     {
-                        while (reader.Read())
-                        {
-                            output.Add(reader.GetInt32(reader.GetOrdinal("raw_data_id")));                            
-                        }
 
-                        return output;
+                        config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
+                        var eventResource = config.Select(o => new EventResourceDTO()
+                        {
+                            EventId = o.EventTypeId,
+                            ResourceId = o.ResourceId
+                        }).ToList();
+                        var rawIds = GetRawIdsFromResource(eventResource, period);
+                        return rawIds;
+
                     }
+                    else
+                    {
+                        var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
+                        throw e;
+                    }
+
                 }
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 throw e;
             }
         }
+
         public List<NotifierLogDTO> GetEmailHistory()
         {
             try
@@ -1259,6 +1265,54 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
         #region privateFunctions
+
+        private List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period)
+        {
+            try
+            {
+
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var output = new List<int>();
+                    var month = period.Split('/').FirstOrDefault();
+                    var year = "20" + period.Split('/').LastOrDefault();
+                    string completewhereStatement = "";
+                    var whereStatements = new List<string>();
+                    foreach (var d in dto)
+                    {
+                        if (d.ResourceId == -1)
+                        {
+                            whereStatements.Add(string.Format("(event_type_id={0})", d.EventId));
+                        }
+                        else
+                        {
+                            whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
+                        }
+
+                    }
+                    if (dto.Any())
+                    {
+                        completewhereStatement = string.Format(" AND ({0})", string.Join(" OR ", whereStatements));
+                    }
+                    var sp = string.Format("Select event_type_id,resource_id,raw_data_id from t_dt_de_3_{0}_{1} where 1=1 {2}", year, month, completewhereStatement);
+                    var command = new NpgsqlCommand(sp, con);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            output.Add(reader.GetInt32(reader.GetOrdinal("raw_data_id")));
+                        }
+
+                        return output;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         private bool CallFormAdapter(FormAdapterDTO dto)
         {
