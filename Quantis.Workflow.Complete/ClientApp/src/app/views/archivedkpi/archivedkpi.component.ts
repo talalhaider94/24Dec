@@ -1,25 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Pipe } from '@angular/core';
-import { DataTableDirective } from 'angular-datatables';
-import { ApiService } from '../../_services/api.service';
-import { Subject, from, BehaviorSubject, interval } from 'rxjs';
-import { DatePipe, formatDate,getLocaleDateFormat } from '@angular/common'
-import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/render3/view/util';
-import * as moment from 'moment';
-import { first } from 'rxjs/operators';
-import { Key } from 'protractor';
-import { MatSort } from '@angular/material';
-import { OrderPipe } from 'ngx-order-pipe'
-import * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
-import { ToastrService } from 'ngx-toastr';
-
 declare var $;
 var $this;
 
 var nome='';
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-const EXCEL_EXTENSION = '.xlsx';
+const EXCEL_EXTENSION = '.csv';
 @Component({
   templateUrl: './archivedkpi.component.html'
 })
@@ -32,7 +16,11 @@ export class ArchivedKpiComponent implements OnInit {
   public filter: string;
   
   public p: any;
-  loading: boolean = false;
+  
+  loading: boolean = true;
+  loadingModal1:boolean=false;
+  loadingModalDati:boolean=false;
+
   dtOptions: DataTables.Settings = {
     language: {
       processing: "Elaborazione...",
@@ -66,7 +54,8 @@ export class ArchivedKpiComponent implements OnInit {
     value_kpi: '',
     ticket_id: '',
     close_timestamp_ticket: '',
-    archived: ''
+    archived: '',
+    contract_name:''
   };
 
   
@@ -119,11 +108,11 @@ intervalloPeriodo='';
   monthVar: any;
   yearVar: any;
   meseInput:any;
-   meseSelezionato:any;
+  meseSelezionato:any;
   annoSelezionato:any;
+  
   id:any;
   sortedCollection: any[];
-  
   constructor(private apiService: ApiService,private orderPipe: OrderPipe) {
     $this = this;
     this.sortedCollection = orderPipe.transform(this.fitroDataById, 'info.name');
@@ -139,17 +128,18 @@ intervalloPeriodo='';
    
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
-   this.populateDateFilter();
+   //this.populateDateFilter();
    
   }
 
   populateModalData(data) {
-    this.reset()
-   
+    this.reset();
+   this.loadingModal1=true;
     this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
     this.kpisData = kpis;
+   this.loadingModal1=false;
    
-   // console.log('pop',this.kpisData);
+   console.log('pop',this.kpisData);
     });
   }
 
@@ -158,39 +148,46 @@ intervalloPeriodo='';
 
 
   populateDateFilter() {
+   
+     this.loading=true;
       this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
      
       this.ArchivedKpiBodyData = data;
-      console.log("kpi1",data);
+      //console.log("kpi1",data);
      // this.getNumeroContratti();
-      
+     
       this.rerender();
       this.numeroContratti();
       this.addChildren();
-      
+      this.loading=false;
       });
     //  console.log("prova", this.ArchivedKpiBodyData)
     
     
   }
   
-  ngAfterViewInit() {
+ ngAfterViewInit() {
     this.dtTrigger.next();
     //this.getKpis1();
    
     this.apiService.getDataKpis(this.monthVar, this.yearVar).subscribe((data:any)=>{
-      this.ArchivedKpiBodyData = data;
-      
-      this.rerender();
      
+     this.ArchivedKpiBodyData = data;
+     
+    this.rerender();
+    this.numeroContratti();
+    this.addChildren();
+    this.loading=false;
     });
+    
+    
   }
 
 
-  // ngOnDestroy(): void {
-  //   // Do not forget to unsubscribe the event
-  //   this.dtTrigger.unsubscribe();
-  // }
+  //ngOnDestroy(): void {
+   // Do not forget to unsubscribe the event
+  // this.dtTrigger.unsubscribe();
+ // }
 
   rerender(): void {
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -228,12 +225,13 @@ intervalloPeriodo='';
   eventTypeArray = [];
 
   getdati(id_kpi, tracking_period = '',interval_kpi='', month = this.monthVar, year = this.yearVar){
-   
+    this.clear();
+      this.arrayPeriodo=[];
       this.id_kpi_temp = id_kpi;
       if(tracking_period.length >0 && interval_kpi.length >0){
           this.arrayTempo(tracking_period,interval_kpi);
       }
-      this.loading = true;
+      this.loadingModalDati = true;
       this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
         this.fitroDataById = dati;
         console.log(dati);
@@ -266,14 +264,16 @@ intervalloPeriodo='';
           /*Object.keys(this.eventTypeArray).forEach( e=> {
             console.log(e + '#' + this.eventTypeArray[e]);
           })*/
-          this.loading = false;
+          this.loadingModalDati = false;
       });
   }
 
 
- getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+  getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.clear();
     this.id_kpi_temp = id_kpi;
-    this.loading = true;
+    this.loadingModalDati = true;
+  
     this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
       this.fitroDataById = dati;
       console.log(dati);
@@ -306,9 +306,10 @@ intervalloPeriodo='';
         /*Object.keys(this.eventTypeArray).forEach( e=> {
           console.log(e + '#' + this.eventTypeArray[e]);
         })*/
-        this.loading = false;
+        this.loadingModalDati = false;
     });
   }
+
 
 
 arrayContratti=[];
@@ -391,7 +392,7 @@ getDatiSecondPop(id_kpi,interval,tracking_period){
 }
 
 getDatiSecondPop2(id_kpi,meseA,anniA){
-  
+ 
   this.id_kpi_temp = id_kpi;
   this.meseSelezionato=meseA;
    this.annoSelezionato=anniA;
@@ -405,6 +406,9 @@ getDatiSecondPop2(id_kpi,meseA,anniA){
    console.log('stampa',resource);*/
 
 }
+
+
+
 
 
 
@@ -456,7 +460,6 @@ setOrder(value: string) {
 
 
 getNumeroKPI(){
-
     return this.ArchivedKpiBodyData.length;
   }
 
@@ -496,21 +499,64 @@ getNumeroKPI(){
     this.exportAsExcelFile(this.fitroDataById, 'sample');
   }*/
  
-  fireEvent()
+fireEvent()
 {
-  const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
+/*const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Export.csv');*/
   
-  /* save to file */
-  XLSX.writeFile(wb, 'Export.csv');
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.fitroDataById);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+    /* save to file */
+    XLSX.writeFile(wb, 'SheetJS.csv');
   
+ 
 }
+
+public exportAsExcelFile(json: any[], excelFileName: string): void {
+    
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+  console.log('worksheet',worksheet);
+  const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+  const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  //const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+  this.saveAsExcelFile(excelBuffer, excelFileName);
+}
+
+private saveAsExcelFile(buffer: any, fileName: string): void {
+  const data: Blob = new Blob([buffer], {
+    type: EXCEL_TYPE
+  });
+  FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+}
+
+exportAsXLSX():void {
+  this.exportAsExcelFile(this.fitroDataById, 'sample');
+}
+
+
+
+
+
+
+
+/*exportExcel(data: any[]){
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.fitroDataById);
+  const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+  XLSX.writeFile(workbook, 'my_file.csv', { bookType: 'csv', type: 'buffer' });
+}*/
+
 
 clear(){
   this.filter = '';
   this.fitroDataById=[];
   this.p=1;
+
   }
 
   reset() {
