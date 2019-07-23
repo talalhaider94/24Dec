@@ -195,21 +195,23 @@ export class ProveVarieComponent implements OnInit {
     //part where I fill in field values
     this.arrayFormElements.forEach((element, index) => {
       formFields = new FormField;
-      formFields.FieldName = element.name;
-      formFields.FieldType = element.type;
-      switch (element.type) {
-        case 'time':
-          formFields.FieldValue = this.dt[index] || '';
-          break;
-        case 'string':
-          formFields.FieldValue = this.stringa[index] || '';
-          break;
-        default:
-          // for real and integer
-          formFields.FieldValue = String(this.numero[index] || '');
-          break;
+      if (element.type != 'Label') {
+        formFields.FieldName = element.name;
+        formFields.FieldType = element.type;
+        switch (element.type) {
+          case 'time':
+            formFields.FieldValue = this.dt[index] || '';
+            break;
+          case 'string':
+            formFields.FieldValue = this.stringa[index] || '';
+            break;
+          default:
+            // for real and integer
+            formFields.FieldValue = String(this.numero[index] || '');
+            break;
+        }
+        userSubmit.inputs.push(formFields);
       }
-      userSubmit.inputs.push(formFields);
     });
     if(utenteFormData) {
       this._noteTextFileUpload(utenteFormData.value);
