@@ -84,7 +84,7 @@ export const navItems: NavData[] = [
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        version: '0.0.8',
+        version: '0.0.10',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
@@ -163,7 +163,7 @@ export const navItems: NavData[] = [
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',
-        version: '0.0.8',
+        version: '0.0.12',
         key: 'VIEW_LOADING_FORM_UTENTI'
       },
     ]
