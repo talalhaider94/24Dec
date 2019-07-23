@@ -1,0 +1,184 @@
+// Here you can add other styles
+.sidebar {
+  .nav-link {
+    padding: 8px;
+  }
+
+  .nav-link.active {
+    background-color: #20a8d8;
+
+    i.nav-icon {
+      color: white;//#00ff59;
+    }
+  }
+
+  .nav-dropdown-items {
+    background-color: #002a40;
+
+    i.nav-icon {
+      margin-left: 8px;
+    }
+  }
+
+  .nav-dropdown.open {
+    .nav-link {
+      padding: 6px;
+    }
+
+    a.nav-dropdown-toggle {
+      background-color: #004265;
+    }
+
+    i.nav-icon {
+      color: white;
+    }
+  }
+}
+
+.class-version-nav {
+  margin-top: auto;
+}
+.dt-buttons {
+  display: inline-block !important;
+}
+.btn-primary {
+  color: #fff !important;
+  background: #20a8d8 !important;
+  border-color: #20a8d8 !important;
+}
+.fixed.three-column {
+  padding: 10px !important;
+}
+
+.admin-form-rules {
+  .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
+  .row {
+    padding: 20px 0 !important;
+  }
+}
+.modal-xl{
+  max-width:100% !important;
+}
+.breadcrumb {
+  margin-bottom: 0.2rem;
+}
+.main .container-fluid {
+  padding: 0px;
+}
+.animated.fadeIn {
+  padding: 0rem 0.2rem;
+}
+.card-body {
+  padding: 1rem;
+}
+.card {
+  margin-bottom: 0.2rem;
+}
+
+.nav-dropdown {
+  .nav-dropdown-items {
+    font-size: 13px;
+    .nav-icon {
+      margin-left: 6px;
+    }
+  }
+}
+
+.example-card {
+  max-width: auto;
+  max-height: auto;
+  border: solid #20a8d8;
+}
+
+
+.mat-card-title {
+  text-decoration-color: #20a8d8;
+}
+
+
+.modal.fade.modal-right .modal-dialog {
+  transform: translate(125%, 0px);
+}
+
+.modal.show.modal-right .modal-dialog {
+  transform: none;
+}
+
+.modal.fade.modal-right {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+
+.info-btn {
+  padding:2px;
+  font-size: 10px;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.tagsTip {
+  //display: inline;
+  position: relative;
+}
+
+.tagsTip:hover:after {
+  background: #333;
+  background: rgba(0, 0, 0, .8);
+  border-radius: 5px;
+  bottom: -34px;
+  color: #fff;
+  content: attr(data-ext);
+  left: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 350px;
+}
+
+.tagsTip:hover:before {
+  border: solid;
+  border-color: #333 transparent;
+  border-width: 0;// 6px 6px 6px;
+  bottom: -4px;
+  content: "";
+  left: 50%;
+  position: absolute;
+  z-index: 99;
+}
+
+.mat-form-field-disabled {
+  &:hover {
+    cursor: not-allowed;
+  }
+}
+.hiddenRow {
+  padding: 0 !important;
+}
+.mat-card-subtitle {
+  width: auto;
+  height: auto;
+  font-size: 25px;
+}
+
+.pointer-cursor {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.width-100 {
+  width: 100px;
+}

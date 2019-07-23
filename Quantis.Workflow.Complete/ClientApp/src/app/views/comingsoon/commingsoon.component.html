@@ -1,0 +1,14 @@
+<div class="container">
+  <h2> Benvenuto <b>{{currentUser.username}}</b> </h2>
+
+
+
+  <h3 style="font-size:20px">Permessi dell'utente:</h3>
+
+  <ul>
+    <li *ngFor="let permission of permissions">
+      {{ permission }}
+    </li>
+  </ul>
+</div>
+
