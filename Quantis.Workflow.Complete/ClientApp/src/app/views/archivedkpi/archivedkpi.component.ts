@@ -119,9 +119,11 @@ intervalloPeriodo='';
   monthVar: any;
   yearVar: any;
   meseInput:any;
-  
+   meseSelezionato:any;
+  annoSelezionato:any;
   id:any;
   sortedCollection: any[];
+  
   constructor(private apiService: ApiService,private orderPipe: OrderPipe) {
     $this = this;
     this.sortedCollection = orderPipe.transform(this.fitroDataById, 'info.name');
@@ -373,27 +375,36 @@ addChildren(){
 }*/
 
 getDatiSecondPop(id_kpi,interval,tracking_period){
-  
+
      this.id_kpi_temp = id_kpi;
-      var mese=moment(interval).format('MM');
-      var anno=moment(interval).format('YYYY');
+     this.meseSelezionato=moment(interval).format('MM');
+      this.annoSelezionato=moment(interval).format('YYYY');
     // this.getdati(id_kpi,mese,anno,tracking_period);
-    this.getdati(id_kpi,tracking_period,interval,mese,anno);
+     this.getdati(id_kpi,tracking_period,interval,this.meseSelezionato,this.annoSelezionato);
 
 
         
       /*let resources = data["ArchivedKpiBodyData"];
       let resource = resources["interval_kpi"];
       console.log('stampa',resource);*/
-
   
-
-  
-
-
-
 }
 
+getDatiSecondPop2(id_kpi,meseA,anniA){
+  
+  this.id_kpi_temp = id_kpi;
+  this.meseSelezionato=meseA;
+   this.annoSelezionato=anniA;
+ // this.getdati(id_kpi,mese,anno,tracking_period);
+  this.getdati1(id_kpi,this.meseSelezionato,this.annoSelezionato);
+
+
+     
+   /*let resources = data["ArchivedKpiBodyData"];
+   let resource = resources["interval_kpi"];
+   console.log('stampa',resource);*/
+
+}
 
 
 

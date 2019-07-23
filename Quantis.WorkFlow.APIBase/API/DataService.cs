@@ -408,7 +408,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpis = _dbcontext.CatalogKpi.ToList();
+                var kpis = _dbcontext.CatalogKpi.Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).Include(o => o.GlobalRule).ToList();
                 return _catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
@@ -525,7 +525,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                var kpi = _dbcontext.CatalogKpi.Include(o => o.GlobalRule).Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 return _catalogKpiMapper.GetDTO(kpi);
             }
             catch (Exception e)
