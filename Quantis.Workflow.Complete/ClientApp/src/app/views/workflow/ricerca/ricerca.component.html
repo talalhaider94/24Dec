@@ -108,7 +108,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngIf="allTickets.length === 0 && !loading">
+                                <tr *ngIf="allTickets && allTickets.length === 0 && !loading">
                                     <td colspan="13"><strong>Nessun Ticket Trovato</strong></td>
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index">

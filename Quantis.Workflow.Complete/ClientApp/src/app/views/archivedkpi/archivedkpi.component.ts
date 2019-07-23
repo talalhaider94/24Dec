@@ -269,42 +269,45 @@ intervalloPeriodo='';
   }
 
 
-  getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+ getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
     this.id_kpi_temp = id_kpi;
-    
-   
-    
-    this.apiService.getKpiArchivedData(id_kpi,month,year).subscribe((dati: any) =>{
     this.loading = true;
-    this.fitroDataById = dati;
+    this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+      this.fitroDataById = dati;
+      console.log(dati);
+      Object.keys(this.fitroDataById).forEach(key => {
+        this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+      })
+      this.getCountCampiData();
+      this.numeroEventi();
+      let max = this.countCampiData.length;
 
-    this.getCountCampiData();
-    this.numeroEventi();
 
+      Object.keys(this.fitroDataById).forEach(key => {
+        let temp = Object.keys(this.fitroDataById[key].data).length;
+        if (temp < max) {
+          for (let i = 0; i < (max - temp); i++) {
+            this.fitroDataById[key].data['empty#'+i] = '##empty##';
+          }
+        }
+      })
+        
 
-    Object.keys(this.fitroDataById).forEach( key => {
-      this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
-      /*if (this.fitroDataById[key].data.length < this.countCampiData) {
-        console.log('minore');
-      } else {*/
-        console.log('data length: ', this.fitroDataById[key].data.length);
-     // }
-    })
-  
-  console.log("array tempo",this.arrayPeriodo);
-  console.log('dati',dati);
-  
+        //****console.log("array tempo",this.arrayPeriodo);
+        console.log('dati', dati);
+        //****console.log('key', this.fitroDataById);
+       /**** this.getCountCampiData();
+        this.numeroEventi();****/
 
-  
-  this.loading = false;
-  console.log(this.eventTypeArray);
- 
-  /*Object.keys(this.eventTypeArray).forEach( e=> {
-    console.log(e + '#' + this.eventTypeArray[e]);
-  })*/
+        //****console.log(this.eventTypeArray);
 
-});
+        /*Object.keys(this.eventTypeArray).forEach( e=> {
+          console.log(e + '#' + this.eventTypeArray[e]);
+        })*/
+        this.loading = false;
+    });
   }
+
 
 arrayContratti=[];
 
