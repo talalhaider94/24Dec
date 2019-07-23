@@ -5,6 +5,10 @@
 @import "@syncfusion/ej2-buttons/styles/material.css";
 
 
+.parent-div{
+    margin-top: -20px; 
+    min-height: 100% !important;
+}
 ul.permissions-list1 > li {
     margin-bottom: 2px;
 }
