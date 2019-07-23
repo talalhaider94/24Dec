@@ -92,7 +92,10 @@
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
                                     <td class="pl-3">
                                         <label class="checkbox-container border"
-                                            [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
+                                            [ngClass]="ticket.description.includes('[Compliant]') ?
+                                             'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
+                                              'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
+                                              'checkbox-container-primary border-primary' : 'checkbox-container-default border-secondary' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
                                                 [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
