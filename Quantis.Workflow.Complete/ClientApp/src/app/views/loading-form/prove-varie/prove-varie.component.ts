@@ -86,7 +86,8 @@ export class ProveVarieComponent implements OnInit {
   checked: boolean;
   displayComparisonRules: string[] = [];
   isCollapsed = true;
-
+  fileUploadMonth: string[] = [];
+  fileUploadYear: string[] = [];
   constructor(
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
@@ -102,8 +103,12 @@ export class ProveVarieComponent implements OnInit {
   ngOnInit() {
     this.getAnno();
     const currentUser = this.authService.getUser();
-    this.monthOption = moment().subtract(1, 'months').format('MM');
+    this.monthOption = moment().subtract(1, 'month').format('MM');
     this.yearOption = moment().format('YYYY');
+    if(this.monthOption === '12') {
+      this.yearOption = moment().subtract(1, 'year').format('YYYY');
+    }
+
     this.isAdmin = currentUser.isadmin;
     this.activatedRoute.paramMap.subscribe(params => {
       this.formId = params.get("formId");
@@ -244,7 +249,6 @@ export class ProveVarieComponent implements OnInit {
     // since I put the filters first by comparison,
     // when the max and min filters go I go to
     // subtract the number of past comparisons from the index
-    let contatore = 0; // counter
     // camp means field and segno means sign
     let array = { 'campo1': '', 'segno': '', 'campo2': '' };
     this.title = nome;
@@ -297,23 +301,6 @@ export class ProveVarieComponent implements OnInit {
               this.numeroMax[index] = rule.rule.max;
               this.numeroMin[index] = rule.rule.min;
             }
-
-            // if (element.campo1 != null) {
-            //   contatore++;
-            //   array.campo1 = element.campo1;
-            //   array.segno = element.segno;
-            //   array.campo2 = element.campo2;
-            //   this.defaultFont[index] = array;
-            //   this.addComparisonForm(array);
-            // } else if (element.max != null && element.max.length != 24) {
-            //   console.log(element.max);
-            //   console.log(typeof element.max === "string");
-            //   this.numeroMax[index - contatore] = element.max;
-            //   this.numeroMin[index - contatore] = element.min;
-            // } else if (element.max != null && element.max.length == 24) {
-            //   this.maxDate[index - contatore] = element.max;
-            //   this.minDate[index - contatore] = element.min;
-            // }
           });
         }
       }
@@ -573,20 +560,28 @@ export class ProveVarieComponent implements OnInit {
 
       })
   }
+  
+  onFileSelected(event) {
+    let period = moment().subtract(1, 'month').format('MM');
+    let year = moment().format('YYYY');
+    this.uploader.queue.forEach((file, index) => {
+      this.fileUploadMonth.push(period);
+      this.fileUploadYear.push(year);
+    });
+  }
 
   fileUploadUI() {
     if (this.uploader.queue.length > 0) {
-      console.log('this.uploader', this.uploader);
       this.uploader.queue.forEach((element, index) => {
         let file = element._file;
-        this._getUploadedFile(file);
+        this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
       });
     } else {
       this.toastr.info('Nessun documento da caricare');
     }
   }
 
-  _getUploadedFile(file) {
+  _getUploadedFile(file, month, year) {
     this.fileUploading = true;
     const reader: FileReader = new FileReader();
     reader.onloadend = (function (theFile, self) {
@@ -599,8 +594,8 @@ export class ProveVarieComponent implements OnInit {
         formAttachments.content = base64Data;
         formAttachments.form_attachment_id = 0;
         formAttachments.form_id = +self.formId;
-        formAttachments.period = dateObj.period;
-        formAttachments.year = dateObj.year;
+        formAttachments.period = month;
+        formAttachments.year = year;
         formAttachments.doc_name = fileName;
         formAttachments.checksum = 'checksum';
         self.fileUploading = true;
@@ -626,10 +621,12 @@ export class ProveVarieComponent implements OnInit {
   // move to helper later
   _getPeriodYear() {
     let currentDate = new Date();
-    return {
-      period: moment(currentDate).format('MM'),
-      year: Number(moment(currentDate).format('YYYY'))
+    let period = moment(currentDate).subtract(1, 'month').format('MM');
+    let year = Number(moment(currentDate).format('YYYY'));
+    if(period === '12') {
+      year = Number(moment(currentDate).subtract(1, 'year').format('YYYY'));
     }
+    return { period, year };
   }
 
   onDataChange() {
@@ -639,7 +636,7 @@ export class ProveVarieComponent implements OnInit {
 
   anni = [];
   getAnno() {
-    for (var i = 2016; i <= +(moment().add('months', 7).format('YYYY')); i++) {
+    for (let i = 2016; i <= +(moment().add('months', 7).format('YYYY')); i++) {
       this.anni.push(i);
 
     }

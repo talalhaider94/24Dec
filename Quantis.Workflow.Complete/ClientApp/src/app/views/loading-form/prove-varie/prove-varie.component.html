@@ -241,7 +241,8 @@
         <div class="bg-white pt-2 pb-2 mb-5" *ngIf="readOnlyUserForm">
           <div class="col-sm-12 mb-3 file-container">
             <h5>File Allegati</h5>
-            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple /><br />
+            <input type="file" class="my-custom-file-field" ng2FileSelect [uploader]="uploader" multiple 
+            (change)="onFileSelected($event)"/><br />
           </div>
 
           <div class="col-sm-12">
@@ -249,16 +250,39 @@
             <table class="table table-responsive-sm table-hover table-outline mb-3">
               <thead>
                 <tr>
-                  <th>Nome File</th>
+                  <th class="width-100">Nome File</th>
+                  <th>Mese</th>
+                  <th>Anno</th>
                   <th>Azioni</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngIf="uploader.queue.length === 0">
-                  <td colspan="2">nessun file da caricare</td>
+                  <td colspan="4">nessun file da caricare</td>
                 </tr>
-                <tr *ngFor="let item of uploader.queue">
-                  <td>{{ item?.file?.name }}</td>
+                <tr *ngFor="let item of uploader.queue; let i=index">
+                  <td class="width-100">{{ item?.file?.name }}</td>
+                  <td>
+                    <select class="form-control" name="fileUploadMonth" [(ngModel)]="fileUploadMonth[i]">
+                      <option value="01">1</option>
+                      <option value="02">2</option>
+                      <option value="03">3</option>
+                      <option value="04">4</option>
+                      <option value="05">5</option>
+                      <option value="06">6</option>
+                      <option value="07">7</option>
+                      <option value="08">8</option>
+                      <option value="09">9</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select class="form-control" name="fileUploadYear" [(ngModel)]="fileUploadYear[i]">
+                      <option *ngFor="let year of anni">{{year}}</option>
+                    </select>
+                  </td>
                   <td nowrap>
                     <button type="button" class="btn btn-danger btn-sm" (click)="item.remove()">
                       <span class="fa fa-trash"></span>
