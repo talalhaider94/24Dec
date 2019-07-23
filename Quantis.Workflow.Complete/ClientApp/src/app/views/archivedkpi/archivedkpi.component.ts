@@ -1,3 +1,19 @@
+import { Component, OnInit, ViewChild, ElementRef, Pipe } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
+import { ApiService } from '../../_services/api.service';
+import { Subject, from, BehaviorSubject, interval } from 'rxjs';
+import { DatePipe, formatDate, getLocaleDateFormat } from '@angular/common'
+import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/render3/view/util';
+import * as moment from 'moment';
+import { first } from 'rxjs/operators';
+import { Key } from 'protractor';
+import { MatSort } from '@angular/material';
+import { OrderPipe } from 'ngx-order-pipe'
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { ToastrService } from 'ngx-toastr';
+
 declare var $;
 var $this;
 
