@@ -351,7 +351,7 @@ export class CatalogoKpiComponent implements OnInit {
         const select = $($this.searchCol4.nativeElement)
           .on( 'change', function () {
             that
-              .search( $(this).val() )
+              .search( $(this).val(),false,false,false )
               .draw();
           } );
 
