@@ -402,7 +402,7 @@
           <div class="row">
    
   
-              <select [(ngModel)]="meseSelezionato" class="form-control ml-3" style="width:15%;" (change)="getDatiSecondPop2(id_kpi,meseSelezionato,annoSelezionato)"  >
+              <select [(ngModel)]="meseSelezionato" class="form-control ml-3" style="width:15%;" (change)="getDatiSecondPop2(id_kpi_temp,meseSelezionato,annoSelezionato)"  >
                
                 <option *ngFor="let me of arrayPeriodo" value="{{me}}">{{me}}/{{this.annoSelezionato}}</option> 
               </select>
