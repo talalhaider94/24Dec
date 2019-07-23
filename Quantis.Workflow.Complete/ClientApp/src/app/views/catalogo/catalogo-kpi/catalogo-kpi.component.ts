@@ -176,7 +176,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtOptions = {
       //'dom': 'rtip',
       "columnDefs": [{
-        "targets": [11],
+        "targets": [12],
         "visible": false,
         "searchable": true
       }],
@@ -320,9 +320,6 @@ export class CatalogoKpiComponent implements OnInit {
           .draw();
       });
     });
-
-
-
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
@@ -334,7 +331,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-          .columns(11)
+          .columns(12)
           .search( this.value )
           .draw();
       });
@@ -364,7 +361,7 @@ export class CatalogoKpiComponent implements OnInit {
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(4).every( function () {
+      datatable_Ref.columns(5).every( function () {
         const that = this;
 
         // Create the select list and search operation
