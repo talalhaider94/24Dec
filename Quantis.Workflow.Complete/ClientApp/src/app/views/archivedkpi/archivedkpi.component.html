@@ -87,6 +87,9 @@
     </div>
     
    <br>
+   <h5 *ngIf='loading' id="loader" class="text-center">
+      <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+    </h5>
      
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
        
@@ -121,7 +124,7 @@
         <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" (click)="populateModalData(row)"
                                    data-target="#archivedKpiModal" title="VEDI"><i class="fa fa-eye"></i>
                                   </button>
-      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi, row.tracking_period,row.interval_kpi)"
+      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi,row.tracking_period,row.interval_kpi)"
                                    data-target="#datiModal"><i class="fa fa-table"></i>
                                   </button>
              </td>
@@ -144,13 +147,14 @@
         </button>
       </div>
       <div class="modal-body">
-          <div *ngIf='loading' id="loader" class="text-center">
+          <div *ngIf='loadingModal1' id="loader" class="text-center">
               <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
             </div>
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
           <table id="classTable" class="table table-bordered">
             <thead style="background: #20a8d8; color:white">
             <tr>
+                <th style="text-align:center">Contratto</th>
               <th style="text-align:center">ID KPI</th>
               <th style="text-align:center">Titolo</th>
               <th style="text-align:center">Periodo</th>
@@ -163,6 +167,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let rec of kpisData">
+                <td  style="text-align:center">{{rec.contract_name}}</td>
               <td  style="text-align:center">{{rec.id_kpi}}</td>
               <td  style="text-align:center">{{rec.name_kpi}}</td>
               <td  style="text-align:center">{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
@@ -170,8 +175,8 @@
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
              
-              <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi,rec.tracking_period)"
-                data-target="#datiTempoModal">Dati</button></td>
+              <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" title="DATI" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi,rec.tracking_period)"
+                data-target="#datiTempoModal"><i class="fa fa-table"></i></button></td>
             </tr>
             </tbody>
           </table>
@@ -223,7 +228,7 @@
             
           </div>
           
-          <div *ngIf='loading' id="loader" class="text-center">
+          <div *ngIf='loadingModalDati' id="loader" class="text-center">
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </div>
           
@@ -394,9 +399,9 @@
             </div>
             
           </div>
-          <div *ngIf='loading' id="loader" class="text-center">
+          <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
-          </div>
+          </h5>
           
       <div class="modal-body">
           <div class="row">
