@@ -123,7 +123,9 @@ export class CatalogoKpiComponent implements OnInit {
     rm_last_sent: '',
     supply: '',
     primary_contract_party: '',
+    primary_contract_party_name: '',
     secondary_contract_party: '',
+    secondary_contract_party_name: '',
     kpi_name_bsi: '',
     global_rule_id_bsi: '',
     sla_id_bsi: ''
@@ -250,6 +252,8 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.supply = data.supply;
     this.modalData.primary_contract_party = data.primary_contract_party;
     this.modalData.secondary_contract_party = data.secondary_contract_party;
+    this.modalData.primary_contract_party_name = data.primary_contract_party_name;
+    this.modalData.secondary_contract_party_name = data.secondary_contract_party_name;
     this.modalData.kpi_name_bsi = data.kpi_name_bsi;
     this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
     this.modalData.sla_id_bsi = data.sla_id_bsi;

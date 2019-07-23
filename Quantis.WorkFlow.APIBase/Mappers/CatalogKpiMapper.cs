@@ -61,9 +61,11 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 day_cutoff = e.day_cutoff,
                 primary_contract_party=e.primary_contract_party,
                 secondary_contract_party=e.secondary_contract_party,
-                kpi_name_bsi = e.kpi_name_bsi,
+                kpi_name_bsi =  e.GlobalRule?.global_rule_name,
                 global_rule_id_bsi = e.global_rule_id_bsi,
-                sla_id_bsi = e.sla_id_bsi
+                sla_id_bsi = e.sla_id_bsi,
+                primary_contract_party_name=e.PrimaryCustomer?.customer_name,
+                secondary_contract_party_name=e.SecondaryCustomer?.customer_name
                 
             };
         }
