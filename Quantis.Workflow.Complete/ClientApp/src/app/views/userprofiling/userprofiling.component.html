@@ -1,7 +1,7 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
       <br>
-      <h2 style="color:#565656">PROFILAZIONE UTENTE</h2><br>
+      <h2 style="color:#565656">PROFILAZIONE UTENTE</h2>
       <!-- <div class="row">
         <button class="btn btn-success pull-right" style="margin-left:90%" (click)="saveAssignedPermissions()">Salva</button>
       </div> -->
@@ -11,7 +11,7 @@
                         class="selected-user-title">{{selectedData.name|uppercase}}</strong></label></div>
             <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
                     [(ngModel)]="filters.searchUsersText" /></div>
-            <perfect-scrollbar style="max-height: 546px;">
+            <perfect-scrollbar style="max-height: 360px;">
               
               <ul class="users-list">
                 <h5 *ngIf="loading.roles" class="text-center text-primary loader">
@@ -29,7 +29,7 @@
                       class="selected-user-title">{{permissionsData.name|uppercase}}</strong></label></div>
           <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
                   [(ngModel)]="filters.searchPermissionsText" /></div>
-          <perfect-scrollbar style="max-height: 546px;">
+          <perfect-scrollbar style="max-height: 360px;">
             
             <ul class="users-list permissions-list1">
               <h5 *ngIf="loading.roles" class="text-center text-primary loader">
@@ -65,8 +65,8 @@
           </div>
   
         </div> -->
-      </div>
-  
+      </div><br>
+
     </div>
   </div>
   
@@ -89,7 +89,7 @@
                           class="selected-user-title">{{contractsData.name|uppercase}}</strong></label></div>
               <div class="txt-filter-user-div"><input type="text" class="form-control" placeholder="Cerca"
                       [(ngModel)]="filters.searchContractsText" /></div>
-              <perfect-scrollbar style="max-height: 350px;">
+                <perfect-scrollbar style="max-height: 350px;">
                 
                 <ul class="users-list permissions-list1">
                   <h5 *ngIf="loading.roles" class="text-center text-primary loader">
