@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Models.Information;
 using Quantis.WorkFlow.Models.SDM;
 using System;
@@ -45,6 +46,14 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_User_KPI> UserKPIs { get; set; }
         public DbSet<T_Customer> Customers { get; set; }
         public DbSet<T_EmailNotifiers> EmailNotifiers { get; set; }
+
+        public DbSet<DB_Dashboard> DB_Dashboards { get; set; }
+        public DbSet<DB_DashboardWidget> DB_DashboardWidgets { get; set; }
+        public DbSet<DB_DashboardWidgetSetting> DB_DashboardWidgetSettings { get; set; }
+        public DbSet<DB_GlobalFilter> DB_GlobalFilters { get; set; }
+        public DbSet<DB_GlobalFilterSetting> DB_GlobalFilterSettings { get; set; }
+        public DbSet<DB_Widget> DB_Widgets { get; set; }
+        public DbSet<DB_WidgetCategory> DB_WidgetCategories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -76,6 +85,14 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_EmailNotifiers_Configuration());
             builder.ApplyConfiguration(new T_GlobalRule_Configuration());
             builder.ApplyConfiguration(new SDM_TicketLog_Configuration());
+
+            builder.ApplyConfiguration(new DB_Dashboard_Configuration());
+            builder.ApplyConfiguration(new DB_DashboardWidget_Configuration());
+            builder.ApplyConfiguration(new DB_DashboardWidgetSetting_Configuration());
+            builder.ApplyConfiguration(new DB_GlobalFilter_Configuration());
+            builder.ApplyConfiguration(new DB_GlobalFilterSetting_Configuration());
+            builder.ApplyConfiguration(new DB_Widget_Configuration());
+            builder.ApplyConfiguration(new DB_WidgetCategory_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -111,6 +128,13 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_EmailNotifiers>();
             updateUpdatedProperty<T_GlobalRule>();
             updateUpdatedProperty<SDM_TicketLog>();
+            updateUpdatedProperty<DB_Dashboard>();
+            updateUpdatedProperty<DB_DashboardWidget>();
+            updateUpdatedProperty<DB_DashboardWidgetSetting>();
+            updateUpdatedProperty<DB_GlobalFilter>();
+            updateUpdatedProperty<DB_GlobalFilterSetting>();
+            updateUpdatedProperty<DB_Widget>();
+            updateUpdatedProperty<DB_WidgetCategory>();
             return base.SaveChanges();
         }
 
