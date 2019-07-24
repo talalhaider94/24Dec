@@ -33,7 +33,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
             builder.HasOne(o => o.Widget).WithMany(o => o.DashboardWidgets).HasForeignKey(o => o.WidgetId).IsRequired(true);
             builder.HasOne(o => o.Dashboard).WithMany(o => o.DashboardWidgets).HasForeignKey(o => o.DashboardId).IsRequired(true);
             builder.HasOne(o => o.GlobalFilter);
-            builder.HasMany(o => o.DashboardWidgetSettings).WithOne(o => o.DashboardWidget).HasForeignKey(o => o.DashboardWidgetId);
+            builder.HasMany(o => o.DashboardWidgetSettings).WithOne(o => o.DashboardWidget).HasForeignKey(o => o.DashboardWidgetId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

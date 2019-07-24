@@ -1,4 +1,5 @@
-﻿using Quantis.WorkFlow.APIBase.Framework;
+﻿using Microsoft.EntityFrameworkCore;
+using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
@@ -40,6 +41,85 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public void AddUpdateDasboard(DashboardDetailDTO dto)
+        {
+            try
+            {
+                if (dto.Id == 0)
+                {
+                    List<DB_DashboardWidget> dbwidgets = new List<DB_DashboardWidget>();
+                    foreach(var dbw in dto.DashboardWidgets)
+                    {
+                        var ent = new DB_DashboardWidget();
+                        ent=_dashboardWidgetMapper.GetEntity(dbw, ent);
+                        dbwidgets.Add(ent);
+                    }
+                    DB_Dashboard entdb = new DB_Dashboard();
+                    entdb.Name = dto.Name;
+                    entdb.DashboardWidgets = dbwidgets;
+                    _dbcontext.DB_Dashboards.Add(entdb);
+                    _dbcontext.SaveChanges();
+                }
+                else
+                {
+                    var dashboardWidgetIds = dto.DashboardWidgets.Where(o => o.Id != 0).Select(o => o.Id).ToList();
+                    var deletewidgets = _dbcontext.DB_DashboardWidgets.Where(o => o.DashboardId == dto.Id && !dashboardWidgetIds.Contains(o.Id)).ToArray();
+                    if (deletewidgets.Any())
+                    {
+                        _dbcontext.DB_DashboardWidgets.RemoveRange(deletewidgets);
+                    }
+
+                    var newwidgets = dto.DashboardWidgets.Where(o => o.Id == 0).ToList();
+                    List<DB_DashboardWidget> dbwidgets = new List<DB_DashboardWidget>();
+                    foreach (var dbw in newwidgets)
+                    {
+                        var ent = new DB_DashboardWidget();
+                        ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
+                        dbwidgets.Add(ent);
+                    }
+                    _dbcontext.DB_DashboardWidgets.AddRange(dbwidgets.ToArray());
+                    _dbcontext.SaveChanges();
+
+                    var oldwidgets = dto.DashboardWidgets.Where(o => o.Id != 0).ToList();
+                    foreach (var dbw in oldwidgets)
+                    {
+                        var ent = _dbcontext.DB_DashboardWidgets.Single(o => o.Id == dbw.Id);
+                        ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
+                    }
+                    _dbcontext.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<WidgetDTO> GetAllWidgets()
+        {
+            try
+            {
+                var entities = _dbcontext.DB_Widgets.ToList();
+                return _widgetMapper.GetDTOs(entities);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<DashboardWidgetDTO> GetDashboardWigetsByDashboardId(int id)
+        {
+            try
+            {
+                var entities = _dbcontext.DB_Dashboards.Include(o => o.DashboardWidgets).Single(o => o.Id == id); ;
+                return _dashboardWidgetMapper.GetDTOs(entities.DashboardWidgets.ToList());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
 
 
     }
