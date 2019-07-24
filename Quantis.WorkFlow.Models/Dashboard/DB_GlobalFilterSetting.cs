@@ -18,7 +18,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
     {
         public void Configure(EntityTypeBuilder<DB_GlobalFilterSetting> builder)
         {
-            builder.ToTable("DB_GlobalFilterSettings");
+            builder.ToTable("db_globalfilter_settings");
             builder.HasKey(o => o.Id);
             builder.HasOne(o => o.GlobalFilter).WithMany(o => o.GlobalFilterSettings).HasForeignKey(o => o.GlobalFilterId);
         }

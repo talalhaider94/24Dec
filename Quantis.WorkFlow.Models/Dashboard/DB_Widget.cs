@@ -24,7 +24,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
     {
         public void Configure(EntityTypeBuilder<DB_Widget> builder)
         {
-            builder.ToTable("DB_Widgets");
+            builder.ToTable("db_widgets");
             builder.HasKey(o => o.Id);
             builder.HasOne(o => o.WidgetCategory);
             builder.HasMany(o => o.DashboardWidgets).WithOne(o => o.Widget).HasForeignKey(o => o.WidgetId);
