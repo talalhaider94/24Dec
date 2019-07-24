@@ -58,6 +58,7 @@ export class CatalogoKpiComponent implements OnInit {
       "visible": false,
       "searchable": true
     }],
+    deferRender: true,
     language: {
       processing: "Elaborazione...",
       search: "Cerca:",
@@ -183,6 +184,7 @@ export class CatalogoKpiComponent implements OnInit {
         "visible": false,
         "searchable": true
       }],
+      deferRender: true,
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -272,7 +274,6 @@ export class CatalogoKpiComponent implements OnInit {
       } else {
         $('#referentiModal').modal('toggle').hide();
       }
-      
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       if (modal == 'kpi') {
@@ -288,7 +289,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-    this.getKpis1();
+   // this.getKpis1();
     this.getKpis();
     //this.rerender();
   }
@@ -306,18 +307,13 @@ export class CatalogoKpiComponent implements OnInit {
       // Call the dtTrigger to rerender again
       this.dtTrigger.next(); 
       this.setUpDataTableDependencies();
-      
+      this.loading = false;
     });
     
   }
 
   setUpDataTableDependencies() {
 
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
-    // });
-
-    // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
@@ -369,7 +365,6 @@ export class CatalogoKpiComponent implements OnInit {
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(5).every( function () {
         const that = this;
-
         // Create the select list and search operation
         const select = $($this.searchCol5.nativeElement)
           .on( 'change', function () {
@@ -377,14 +372,6 @@ export class CatalogoKpiComponent implements OnInit {
               .search( $(this).val() )
               .draw();
           } );
-
-        // Get the search data for the first column and add to the select list
-        /*this
-          .cache('search')
-          .unique();
-          .each( function ( d ) {
-            select.append( $('<option value="' + d + '">' + d + '</option>') );
-          } );*/
       });
     });
 
@@ -466,7 +453,7 @@ export class CatalogoKpiComponent implements OnInit {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
       this.rerender();
-      this.loading = false;
+      
     });
   }
 
