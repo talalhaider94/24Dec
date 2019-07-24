@@ -326,7 +326,7 @@
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </td>
                 </tr>-->
-            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
               <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
               <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
               <td style="text-align:center">{{rec.raw_data_id}}</td>
@@ -497,7 +497,7 @@
                            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                        </td>
                    </tr>-->
-               <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+               <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
                  <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
                  <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
                  <td style="text-align:center">{{rec.raw_data_id}}</td>
