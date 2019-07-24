@@ -127,6 +127,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public List<int> GetRawIdsFromResource(List<EventResourceDTO> dto,string period)
         {
+
             try
             {
                
