@@ -153,22 +153,9 @@ export class LoadingFormAdminComponent implements OnInit {
     let controlloCampo = new ControlloCampo; //means fields control
 
     this.erroriArray = [];
-    let indiceAppoggio; // mean index support 
-    let secondIndexSupport;
-    let tipo1; // means guy or tip :/
-    let valore1; // means value
-    let valore2;
     // datiModelConfronto means  DataModel Comparison
     // campiConfronto means comparison fields
     let datiModelConfronto = model.value.campiConfronto;
-    // loop over 3 select comparison fields
-    // check comparison not empty
-    let comparisonValidate = false;
-    // comparisonValidate = datiModelConfronto.filter(comparison => (!!comparison.campo1 && !!comparison.campo2 && !!comparison.segno) );
-    // if length zero mean no comparison rules
-    // if(comparisonValidate) {
-
-    // }
     datiModelConfronto.forEach((element, index) => {
       if (!!element.campo1 && !!element.campo1.name && !!element.segno && !!element.campo2 && !!element.campo2.name) {
         confrontoAppoggio = new ControlloConfronto;
@@ -176,36 +163,6 @@ export class LoadingFormAdminComponent implements OnInit {
         confrontoAppoggio.segno = element.segno;
         confrontoAppoggio.campo2 = element.campo2;
         comparisonFieldsArray.push(confrontoAppoggio);
-
-        // tipo1 = element.campo1.type;
-        // indiceAppoggio = this.arrayFormElements.findIndex(x => x.name == element.campo1.name);
-        // secondIndexSupport = this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.name);
-        
-        // switch (tipo1) {
-        //   case 'string':
-        //     let a = this.numero;
-        //     valore1 = this.numero[indiceAppoggio];
-        //     valore2 = this.numero[secondIndexSupport];
-        //     // valore1 = this.stringa[indiceAppoggio];
-        //     // valore2 = this.stringa[this.arrayFormElements.findIndex(x => x.name == datiModelConfronto[index].campo2.name)];
-        //     debugger
-        //     break;
-
-        //   case 'time':
-        //     valore1 = this.dt[indiceAppoggio];
-        //     valore2 = this.dt[secondIndexSupport];
-        //     debugger
-        //     break;
-
-        //   default:
-        //     valore1 = this.numero[indiceAppoggio];
-        //     valore2 = this.numero[secondIndexSupport];
-        //     debugger
-        //     break;
-        // }
-        // this.checkConfronto(valore1, valore2, datiModelConfronto[index].segno, element.campo1, element.campo2);
-
-        // return;
       }
 
     });
@@ -297,9 +254,7 @@ export class LoadingFormAdminComponent implements OnInit {
         break;
     }
   }
-  // means take data forms
-  // Danial: this method is invoked when a row is clicked.
-  // and generates form fields dynamically
+
   _init(numero: number, nome: string) {
     this.loading = true;
     this.title = nome;
@@ -360,37 +315,10 @@ export class LoadingFormAdminComponent implements OnInit {
             console.log('comparisonRules[i]', comparisonRules[i])
             this.addComparisonForm(comparisonRules[i]);
           }
-          // comparisonRules.forEach( (compare, index) => {
-          //   this.addComparisonForm(compare);
-          // });
         } else {
           this.addComparisonForm(array);
-          // this.myInputForm = this.fb.group({
-          //   // means comparison fields
-          //   campiConfronto: this.fb.array([
-          //     this.initComparisonForm(array)
-          //   ]),
-          // });
         }
 
-        // JSON.parse(data.form_body).forEach((element, index) => {
-        //   console.log(element);
-        //   if (element.campo1 != null) { // means Forms regoles are defined 
-        //     contatore++;
-        //     array.campo1 = element.campo1;
-        //     array.segno = element.segno;
-        //     array.campo2 = element.campo2;
-        //     this.defaultFont[index] = array;
-        //     // this.addComparisonForm(array);
-        //   } else if (element.max != null && element.max.length != 24) {
-        //     // type string / real / integer
-        //     this.numeroMax[index - contatore] = element.max;
-        //     this.numeroMin[index - contatore] = element.min;
-        //   } else if (element.max != null && element.max.length == 24) {
-        //     this.maxDate[index - contatore] = element.max;
-        //     this.minDate[index - contatore] = element.min;
-        //   }
-        // });
       }
 
     }, error => {
@@ -398,22 +326,21 @@ export class LoadingFormAdminComponent implements OnInit {
       setTimeout(() => this.toastr.error(error.error.error.message, 'Form Rule Error'), 0);
       console.log('getFormRuleByFormId', error)
     });
-    // if there are no filters for this form I create an empty field
-    //array=={'campo1':'','segno':'','campo2':''}?this.initComparisonForm(array):'';
-    // if (array.campo1 == "" && array.segno == "" && array.campo2 == "") {
-    //   this.initComparisonForm(array);
-    //   console.log('IF FIELDS ARE EMPTY:', array);
-    // } else {
-    //   console.log(array);
-    // }
 
     this.loadingFormService.getFormById(numero).subscribe(data => {
       this.loading = false;
       this.jsonForm = data;
       // remove checkbox
       const filterFormFields = this.jsonForm[0].reader_configuration.inputformatfield.filter(fields => {
-        return fields.name !== 'Checkbox_8';
+        if(fields.name === 'Checkbox_8') {
+          return false;
+        } else if(fields.name === 'Is_Dato_Mancante') {
+          return false;
+        } else {
+          return true;
+        }
       });
+
       this.arrayFormElements = filterFormFields;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
