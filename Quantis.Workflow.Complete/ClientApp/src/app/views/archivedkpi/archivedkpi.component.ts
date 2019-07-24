@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Pipe } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject, from, BehaviorSubject, interval } from 'rxjs';
-import { DatePipe, formatDate, getLocaleDateFormat } from '@angular/common'
+import { DatePipe, formatDate,getLocaleDateFormat } from '@angular/common'
 import { conditionallyCreateMapObjectLiteral } from '@angular/compiler/src/render3/view/util';
 import * as moment from 'moment';
 import { first } from 'rxjs/operators';
@@ -141,7 +141,7 @@ intervalloPeriodo='';
   }
   ngOnInit() {
    this.getAnno();
-   
+   this.meseSelezionato=moment().subtract(1, 'month').format('MM');
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
    //this.populateDateFilter();
@@ -150,10 +150,11 @@ intervalloPeriodo='';
 
   populateModalData(data) {
     this.reset();
-   this.loadingModal1=true;
+    this.loadingModal1=true;
+   
     this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
     this.kpisData = kpis;
-   this.loadingModal1=false;
+    this.loadingModal1=false;
    
    console.log('pop',this.kpisData);
     });
@@ -164,8 +165,9 @@ intervalloPeriodo='';
 
 
   populateDateFilter() {
-   
+    
      this.loading=true;
+     
       this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
      
       this.ArchivedKpiBodyData = data;
@@ -201,11 +203,12 @@ intervalloPeriodo='';
 
 
   //ngOnDestroy(): void {
-   // Do not forget to unsubscribe the event
+   //Do not forget to unsubscribe the event
   // this.dtTrigger.unsubscribe();
- // }
+  //}
 
   rerender(): void {
+    
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first
       dtInstance.destroy();
@@ -241,10 +244,11 @@ intervalloPeriodo='';
   eventTypeArray = [];
 
   getdati(id_kpi, tracking_period = '',interval_kpi='', month = this.monthVar, year = this.yearVar){
-    this.clear();
-      this.arrayPeriodo=[];
+      this.clear();
+      this.meseSelezionato=month;
       this.id_kpi_temp = id_kpi;
       if(tracking_period.length >0 && interval_kpi.length >0){
+       
           this.arrayTempo(tracking_period,interval_kpi);
       }
       this.loadingModalDati = true;
@@ -285,8 +289,9 @@ intervalloPeriodo='';
   }
 
 
-  getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+  getdati1(id_kpi, month = this.meseSelezionato, year = this.yearVar){
     this.clear();
+    
     this.id_kpi_temp = id_kpi;
     this.loadingModalDati = true;
   

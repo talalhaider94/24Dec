@@ -236,7 +236,7 @@
           <div class="row">
    
   
-              <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;"  (change)="getdati1(id_kpi_temp,monthVar)"  >
+              <select [(ngModel)]="meseSelezionato" class="form-control ml-3" style="width:15%;"  (change)="getdati1(id_kpi_temp,meseSelezionato)"  >
            
                 <option *ngFor="let name of arrayPeriodo" value="{{name}}">{{name}}/{{this.yearVar}}</option>
               </select>
