@@ -280,6 +280,9 @@ intervalloPeriodo='';
               this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
               break;
           }
+          this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
         })
         this.getCountCampiData();
         this.numeroEventi();
@@ -346,6 +349,9 @@ intervalloPeriodo='';
               this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
               break;
           }
+          this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
       })
       this.getCountCampiData();
       this.numeroEventi();
