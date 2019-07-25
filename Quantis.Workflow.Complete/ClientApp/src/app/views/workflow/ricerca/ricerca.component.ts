@@ -269,6 +269,8 @@ export class RicercaComponent implements OnInit, OnDestroy {
               .draw();
           });
         // Get the search data for the first column and add to the select list
+        select.empty();
+        select.append($('<option value="">Stato</option>'));
         this
           .cache('search')
           .sort()
