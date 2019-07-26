@@ -180,6 +180,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-envelope',
         version: '0.0.4',
         key: 'VIEW_NOTIFIER_EMAILS'
+      },
+      {
+        name: 'Dati Grezzi',
+        url: '/datigrezzi',
+        icon: 'fa fa-envelope',
+        version: '0.0.4',
+        key: 'VIEW_NOTIFIER_EMAILS'
       }
     ]
   },
