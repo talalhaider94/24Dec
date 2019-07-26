@@ -70,13 +70,6 @@ export class RicercaComponent implements OnInit, OnDestroy {
       },
       buttons: [
         {
-          extend: 'colvis',
-          text: '<i class="fa fa-file"></i> Toggle Columns',
-          titleAttr: 'Toggle Columns',
-          collectionLayout: 'fixed three-column',
-          className: 'btn btn-primary mb-3'
-        },
-        {
           extend: 'csv',
           text: '<i class="fa fa-file"></i> Esporta CSV',
           titleAttr: 'Esporta CSV',
