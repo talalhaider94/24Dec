@@ -257,6 +257,32 @@ intervalloPeriodo='';
         console.log(dati);
         Object.keys(this.fitroDataById).forEach(key => {
           this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+            switch (this.fitroDataById[key].event_state_id) {
+            case 1:
+              this.fitroDataById[key].event_state_id = "Originale";
+              break;
+            case 2:
+              this.fitroDataById[key].event_state_id = "Sovrascritto";
+              break;
+            case 3:
+              this.fitroDataById[key].event_state_id = "Eliminato";
+              break;
+            case 4:
+              this.fitroDataById[key].event_state_id = "Correzione";
+              break;
+            case 5:
+              this.fitroDataById[key].event_state_id = "Correzione eliminata";
+              break;
+            case 6:
+              this.fitroDataById[key].event_state_id = "Business";
+              break;
+            default:
+              this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+              break;
+          }
+          this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
         })
         this.getCountCampiData();
         this.numeroEventi();
@@ -300,6 +326,32 @@ intervalloPeriodo='';
       console.log(dati);
       Object.keys(this.fitroDataById).forEach(key => {
         this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+          switch (this.fitroDataById[key].event_state_id) {
+            case 1:
+              this.fitroDataById[key].event_state_id = "Originale";
+              break;
+            case 2:
+              this.fitroDataById[key].event_state_id = "Sovrascritto";
+              break;
+            case 3:
+              this.fitroDataById[key].event_state_id = "Eliminato";
+              break;
+            case 4:
+              this.fitroDataById[key].event_state_id = "Correzione";
+              break;
+            case 5:
+              this.fitroDataById[key].event_state_id = "Correzione eliminata";
+              break;
+            case 6:
+              this.fitroDataById[key].event_state_id = "Business";
+              break;
+            default:
+              this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+              break;
+          }
+          this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
       })
       this.getCountCampiData();
       this.numeroEventi();

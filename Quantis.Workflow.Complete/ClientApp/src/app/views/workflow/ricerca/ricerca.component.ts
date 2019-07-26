@@ -70,13 +70,6 @@ export class RicercaComponent implements OnInit, OnDestroy {
       },
       buttons: [
         {
-          extend: 'colvis',
-          text: '<i class="fa fa-file"></i> Toggle Columns',
-          titleAttr: 'Toggle Columns',
-          collectionLayout: 'fixed three-column',
-          className: 'btn btn-primary mb-3'
-        },
-        {
           extend: 'csv',
           text: '<i class="fa fa-file"></i> Esporta CSV',
           titleAttr: 'Esporta CSV',
@@ -269,6 +262,8 @@ export class RicercaComponent implements OnInit, OnDestroy {
               .draw();
           });
         // Get the search data for the first column and add to the select list
+        select.empty();
+        select.append($('<option value="">Stato</option>'));
         this
           .cache('search')
           .sort()
