@@ -591,6 +591,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
+
+        //public void UpdateViloreByTicket()
+        //{
+        //    _sdmClient.createActivityLogAsync()
+        //}
         public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context)
         {
             var user = context.User as AuthUser;
@@ -660,7 +665,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     dto.ShowArchivedMsg = true;
                     try
                     {
-                        if (ticket.Summary.Split('|').Length == 3)
+                        if (ticket.Summary.Split('|').Length < 3)
                         {
                             var kpiid = int.Parse(ticket.KpiIds.Split('|').FirstOrDefault());
                             var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == kpiid);
