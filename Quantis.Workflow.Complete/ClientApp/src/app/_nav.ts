@@ -77,14 +77,14 @@ export const navItems: NavData[] = [
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
         icon: 'fa fa-file-text-o',
-        version: '0.1.1',
+        version: '0.1.5',
         key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        version: '0.1.1',
+        version: '0.1.5',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
     ]
