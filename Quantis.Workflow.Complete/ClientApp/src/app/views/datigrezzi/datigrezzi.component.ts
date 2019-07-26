@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
-import { ApiService } from '../../../_services/api.service';
-import { LoadingFormService } from '../../../_services/loading-form.service';
+import { ApiService } from '../../_services/api.service';
+import { LoadingFormService } from '../../_services/loading-form.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
@@ -12,10 +12,10 @@ let $this;
 
 @Component({
   selector: 'app-catalogo-kpi',
-  templateUrl: './catalogo-kpi.component.html',
-  styleUrls: ['./catalogo-kpi.component.scss']
+  templateUrl: './datigrezzi.component.html',
+  styleUrls: ['./datigrezzi.component.scss']
 })
-export class CatalogoKpiComponent implements OnInit {
+export class DatiGrezziComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,

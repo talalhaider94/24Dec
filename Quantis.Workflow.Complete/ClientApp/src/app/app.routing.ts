@@ -110,6 +110,10 @@ export const routes: Routes = [
       { 
         path: 'specialreporting',
         loadChildren: './views/email/email.module#EmailModule'
+      }, 
+      { 
+        path: 'datigrezzi',
+        loadChildren: './views/datigrezzi/datigrezzi.module#DatiModule'
       }
     ]
   },

@@ -196,12 +196,42 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
+                bool securityMember = false;
+                if (userid != 0)
+                {
+                    using (OracleConnection con1 = new OracleConnection(_connectionstring))
+                    {
+                        using (OracleCommand cmd = con1.CreateCommand())
+                        {
+                            string query1 = "select user_group_id, security_group_id from t_security_group_members where security_group_id in (select security_group_id from t_security_groups sg where sg.security_group_name = 'Insight Super Administrators') and user_group_id = :userid";
+                            con1.Open();
+                            cmd.BindByName = true;
+                            cmd.CommandText = query1;
+                            OracleParameter param1 = new OracleParameter("userid", userid);
+                            cmd.Parameters.Add(param1);
+                            OracleDataReader reader = cmd.ExecuteReader();
+                            DataTable dt = new DataTable();
+                            dt.Load(reader);
+                            List<DataRow> userSecurity = dt.AsEnumerable().ToList();
+                            if(userSecurity.Count() >= 1)
+                            {
+                                securityMember = true;
+                            }
+                        }
+                    }
+                }
                 string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date,	ug.user_group_id,ug.user_group_name from t_forms f left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
-                //string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
                 bool getConfigurations = false;
                 if (userid != 0)
                 {
-                    query += " and ug.user_group_id = :userid";
+                    if (!securityMember)
+                    {
+                        query += " and ug.user_group_id = :userid";
+                    }
+                    else
+                    {
+                        query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date from t_forms f where 1 = 1 ";
+                    }
                 }
                 if (id != 0)
                 {
@@ -267,11 +297,14 @@ namespace Quantis.WorkFlow.APIBase.API
                                 create_date = (DateTime)o[5],
                                 modify_date = (DateTime)o[6],
                                 reader_configuration = null,
-                                user_group_id = (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
-                                user_group_name = (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
+                                user_group_id = securityMember ? 0 :
+                                    (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
+                                user_group_name = securityMember ? string.Empty : 
+                                    (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
                                 day_cutoff = day_cutoff,
                                 cutoff = (bool)cutoff_result,
-                                latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
+                                latest_input_date = securityMember ? new DateTime(0) :
+                                    _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
                             });
                             return result.ToList();
                         }

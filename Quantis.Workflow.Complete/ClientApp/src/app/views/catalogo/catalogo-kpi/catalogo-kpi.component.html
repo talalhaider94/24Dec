@@ -22,8 +22,8 @@
                                            <h5 *ngIf="loading" class="text-center text-primary">   
                                                <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
                                            </h5>
-                                           <table class="table stripe kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                                             <thead style="background:#20a8d8">
+                                           <table class="table stripe kpiTable" #kpiTable id="kpiTable" [ngStyle]="{'display': loading? 'none' : 'unset'}" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" >
+                                             <thead >
                                                <tr style="color:white;font-size:12px;">
                                                  <th style="text-align:center">CONTRATTO</th>
                                                  <th style="text-align:center">ID</th>
@@ -38,13 +38,14 @@
                                                  <th class="notExportCsv" style="text-align:center">CALCOLO</th>
                                                  <th class="notExportCsv" style="text-align:center"></th>
                                                  <th style="display:none;" width="0" class="notExportCsv">hide</th>
+                                                 <th style="display:none;" width="0" class="notExportCsv">hide</th>
                                                </tr>
                                              </thead>
                                              <tbody>
 
                                                <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
                                                  <!--        <td align="center"><input type="checkbox"/></td>-->
-                                                 <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract}}</td>
+                                                 <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
                                                  <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
                                                  <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
                                                  <td class="tagsTip" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
@@ -64,6 +65,7 @@
                                                    </button>
                                                  </td>
                                                  <td style="display:none;" width="0" class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
+                                                 <td style="display:none;" width="0" >{{row.kpi_name_bsi}}</td>
                                                </tr>
                                              </tbody>
                                            </table>
@@ -139,7 +141,7 @@
             </thead>
             <tbody>
               <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknow'"><b>Primario: </b>{{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow'"><b>Secondario: </b>{{modalData.secondary_contract_party_name}}</span></td></tr>
-              <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
+              <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
               <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
               <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
               <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>

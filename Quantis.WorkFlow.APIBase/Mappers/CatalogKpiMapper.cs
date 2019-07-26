@@ -65,7 +65,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 global_rule_id_bsi = e.global_rule_id_bsi,
                 sla_id_bsi = e.sla_id_bsi,
                 primary_contract_party_name=e.PrimaryCustomer?.customer_name,
-                secondary_contract_party_name=e.SecondaryCustomer?.customer_name
+                secondary_contract_party_name=e.SecondaryCustomer?.customer_name,
+                contract_name=e.Sla?.sla_name
                 
             };
         }
@@ -112,6 +113,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.supply = o.supply;
             e.primary_contract_party = o.primary_contract_party;
             e.secondary_contract_party = o.secondary_contract_party;
+            e.sla_id_bsi = o.sla_id_bsi;
             if (e.id == 0)
             {
                 var rule = _dbcontext.Rules.Where(p => p.global_rule_id == o.global_rule_id_bsi).OrderBy(p=>p.sla_version_id).LastOrDefault();

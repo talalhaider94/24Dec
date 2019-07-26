@@ -87,6 +87,9 @@
     </div>
     
    <br>
+   <h5 *ngIf='loading' id="loader" class="text-center">
+      <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+    </h5>
      
     <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
        
@@ -121,7 +124,7 @@
         <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" (click)="populateModalData(row)"
                                    data-target="#archivedKpiModal" title="VEDI"><i class="fa fa-eye"></i>
                                   </button>
-      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi, row.tracking_period,row.interval_kpi)"
+      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi,row.tracking_period,row.interval_kpi)"
                                    data-target="#datiModal"><i class="fa fa-table"></i>
                                   </button>
              </td>
@@ -144,13 +147,14 @@
         </button>
       </div>
       <div class="modal-body">
-          <div *ngIf='loading' id="loader" class="text-center">
+          <div *ngIf='loadingModal1' id="loader" class="text-center">
               <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
             </div>
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
           <table id="classTable" class="table table-bordered">
             <thead style="background: #20a8d8; color:white">
             <tr>
+                <th style="text-align:center">Contratto</th>
               <th style="text-align:center">ID KPI</th>
               <th style="text-align:center">Titolo</th>
               <th style="text-align:center">Periodo</th>
@@ -163,6 +167,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let rec of kpisData">
+                <td  style="text-align:center">{{rec.contract_name}}</td>
               <td  style="text-align:center">{{rec.id_kpi}}</td>
               <td  style="text-align:center">{{rec.name_kpi}}</td>
               <td  style="text-align:center">{{rec.interval_kpi  | amDateFormat: 'MM/YYYY' }}</td>
@@ -170,8 +175,8 @@
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
              
-              <td align="center"><button class="btn btn-primary" data-toggle="modal" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi,rec.tracking_period)"
-                data-target="#datiTempoModal">Dati</button></td>
+              <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" title="DATI" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi,rec.tracking_period)"
+                data-target="#datiTempoModal"><i class="fa fa-table"></i></button></td>
             </tr>
             </tbody>
           </table>
@@ -223,7 +228,7 @@
             
           </div>
           
-          <div *ngIf='loading' id="loader" class="text-center">
+          <div *ngIf='loadingModalDati' id="loader" class="text-center">
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </div>
           
@@ -231,7 +236,7 @@
           <div class="row">
    
   
-              <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;"  (change)="getdati1(id_kpi_temp,monthVar)"  >
+              <select [(ngModel)]="meseSelezionato" class="form-control ml-3" style="width:15%;"  (change)="getdati1(id_kpi_temp,meseSelezionato)"  >
            
                 <option *ngFor="let name of arrayPeriodo" value="{{name}}">{{name}}/{{this.yearVar}}</option>
               </select>
@@ -239,7 +244,7 @@
         
             </div>
             <br><br>
-        <div class="row"><input class="form-control" style="width: 18%;margin-left:22px"  type="text" name="search" [(ngModel)]="filter" placeholder="Cerca">
+          <div class="row"><input class="form-control" style="width: 18%;margin-left:22px"  type="text" name="search" [(ngModel)]="filter" placeholder="Cerca">
           <button (click)="fireEvent()"style="margin-left:20%">Esporta CSV</button></div>
         
           <div class="table-responsive" style="background: #ffffff; padding: 10px">
@@ -247,6 +252,13 @@
               <table id="classTable" class="table table-bordered"  #table>
             <thead style="background: #20a8d8; color:white">  
             <tr>
+                    <th style="text-align:center"[class.active]="order === 'create_date'"
+              (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+
+              <th style="text-align:center"[class.active]="order === 'modify_date'"
+              (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
                 <th style="text-align:center"[class.active]="order === 'raw_data_id'"
                 (click)="setOrder('raw_data_id')">raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                 ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
@@ -262,13 +274,6 @@
                 </span></th>
 
             
-                <th style="text-align:center"[class.active]="order === 'create_date'"
-              (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
-              <th style="text-align:center"[class.active]="order === 'modify_date'"
-              (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
 
               
                 <th style="text-align:center"[class.active]="order === 'reader_id'"
@@ -277,12 +282,15 @@
 
                 <!-- <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
               (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>-->
 
               <th style="text-align:center"[class.active]="order === 'event_state_id'"
               (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>-->
-         
+                ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+            
+                
+
+
               <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
               (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                 ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
@@ -290,7 +298,6 @@
               <th *ngFor="let key of countCampiData" style="text-align:center" [class.active]="order === 'key.info.data[key]'"
               (click)="setOrder('key.info.data[key]')">campo {{key}}<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                 ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-
 
 
              
@@ -321,16 +328,16 @@
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </td>
                 </tr>-->
-            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
-              <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
-              <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+            <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+              <td style="text-align:center">{{rec.create_date }}</td>
+              <td style="text-align:center">{{rec.modify_date }}</td>
               <td style="text-align:center">{{rec.raw_data_id}}</td>
               <td style="text-align:center">{{rec.event_type_id}}</td>
               <td style="text-align:center">{{rec.resource_id}}</td>
-              <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+              <td style="text-align:center">{{rec.time_stamp }}</td>
               <td style="text-align:center">{{rec.reader_id}}</td>
-             <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>
-              <td style="text-align:center">{{rec.event_state_id}}</td>-->
+             <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>-->
+              <td style="text-align:center">{{rec.event_state_id}}</td>
               <td style="text-align:center">{{rec.partner_raw_data_id}}</td>          
               <td  style="text-align:center" *ngFor="let key of rec.data | keys "><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
 
@@ -394,9 +401,9 @@
             </div>
             
           </div>
-          <div *ngIf='loading' id="loader" class="text-center">
+          <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
-          </div>
+          </h5>
           
       <div class="modal-body">
           <div class="row">
@@ -418,6 +425,13 @@
                  <table id="classTable" class="table table-bordered"  #table>
                <thead style="background: #20a8d8; color:white">  
                <tr>
+                   
+                   <th style="text-align:center"[class.active]="order === 'create_date'"
+                 (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
+                    <th style="text-align:center"[class.active]="order === 'modify_date'"
+                 (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
                    <th style="text-align:center"[class.active]="order === 'raw_data_id'"
                    (click)="setOrder('raw_data_id')">raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                    ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
@@ -432,27 +446,17 @@
                    ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i>
                    </span></th>
    
-               
-                   <th style="text-align:center"[class.active]="order === 'create_date'"
-                 (click)="setOrder('create_date')">create date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-   
-                 <th style="text-align:center"[class.active]="order === 'modify_date'"
-                 (click)="setOrder('modify_date')">modify date<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
-   
-                 
                    <th style="text-align:center"[class.active]="order === 'reader_id'"
                    (click)="setOrder('reader_id')">reader id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
                      ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
    
                    <!-- <th style="text-align:center"[class.active]="order === 'event_source_type_id'"
                  (click)="setOrder('event_source_type_id')">event source type id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span> </th>-->
    
                  <th style="text-align:center"[class.active]="order === 'event_state_id'"
                  (click)="setOrder('event_state_id')">event state id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
-                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>-->
+                   ><span [hidden]="!reverse"> <i class="fa fa-arrow-up"></i></span></th>
             
                  <th style="text-align:center" data-visible="false" [class.active]="order === 'partner_raw_data_id'"
                  (click)="setOrder('partner_raw_data_id')">partner raw data id<span [hidden]="reverse"> <i class="fa fa-arrow-down"></i></span
@@ -492,16 +496,16 @@
                            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                        </td>
                    </tr>-->
-               <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 10, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
-                 <td style="text-align:center">{{rec.create_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
-                 <td style="text-align:center">{{rec.modify_date | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+               <tr *ngFor="let rec of fitroDataById | orderBy: order:reverse:'case-insensitive' | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }" data-toggle="collapse" data-target="#accordion" class="clickable">
+                 <td style="text-align:center">{{rec.create_date}}</td>
+                 <td style="text-align:center">{{rec.modify_date }}</td>
                  <td style="text-align:center">{{rec.raw_data_id}}</td>
                  <td style="text-align:center">{{rec.event_type_id}}</td>
                  <td style="text-align:center">{{rec.resource_id}}</td>
-                 <td style="text-align:center">{{rec.time_stamp | amDateFormat: 'DD/MM/YYYY HH:mm:ss'}}</td>
+                 <td style="text-align:center">{{rec.time_stamp}}</td>
                  <td style="text-align:center">{{rec.reader_id}}</td>
-                <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>
-                 <td style="text-align:center">{{rec.event_state_id}}</td>-->
+                <!-- <td style="text-align:center">{{rec.event_source_type_id}}</td>-->
+                 <td style="text-align:center">{{rec.event_state_id}}</td>
                  <td style="text-align:center">{{rec.partner_raw_data_id}}</td>          
                  <td  style="text-align:center" *ngFor="let key of rec.data | keys "><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
                
