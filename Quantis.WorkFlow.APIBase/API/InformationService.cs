@@ -446,7 +446,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             res.Add(Decimal.ToInt32((Decimal)result[1]));
                         }
                     }
-                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id) && o.user_id==userId).ToList();
                     _dbcontext.UserKPIs.RemoveRange(values.ToArray());
                     _dbcontext.SaveChanges();
                     if (assign)
@@ -488,7 +488,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             res.Add(Decimal.ToInt32((Decimal)result[1]));
                         }
                     }
-                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id) && o.user_id==userId).ToList();
                     _dbcontext.UserKPIs.RemoveRange(values.ToArray());
                     _dbcontext.SaveChanges();
                     if (assign)
@@ -529,7 +529,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             res.Add(Decimal.ToInt32((Decimal)result[1]));
                         }
                     }
-                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id)).ToList();
+                    var values = _dbcontext.UserKPIs.Where(o => res.Contains(o.global_rule_id) && o.user_id==userId).ToList();
                     _dbcontext.UserKPIs.RemoveRange(values.ToArray());
                     _dbcontext.SaveChanges();
 
