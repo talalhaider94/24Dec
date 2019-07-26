@@ -20,8 +20,10 @@ export class AmministrazioneComponent implements OnInit {
   dtTrigger = new Subject();
   @ViewChild('successModal') public successModal: ModalDirective;
   approveForm: FormGroup;
+  loading: boolean = true;
+  ticket: any;
+  approveModal: any;
   constructor() { }
-
   ngOnInit() {
     this.monthOption = moment().subtract(1, 'months').format('MM');
     this.yearOption = moment().format('YY');
