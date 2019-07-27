@@ -592,10 +592,37 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        //public void UpdateViloreByTicket()
-        //{
-        //    _sdmClient.createActivityLogAsync()
-        //}
+        public void UpdateTicketValue(TicketValueDTO dto)
+        {
+            LogIn();
+            try
+            {
+                var desc=GetTicketByID(dto.TicketId).Description;
+                if (desc.IndexOf("VALORE:") == -1)
+                {
+                    throw new Exception("Description format saved in ticket is not correct");
+                }
+                var vilorecomp=desc.Split('\n')[5];
+                var indexstart= vilorecomp.IndexOf(' ')+1;
+                var indexend = vilorecomp.IndexOf(' ', indexstart);
+                var vilore = vilorecomp.Substring(indexstart, indexend - indexstart);
+                var newvilory = vilorecomp.Replace(vilore, dto.NewValue + "");
+                var newdesc = desc.Replace(vilorecomp, newvilory);
+
+                var tickethandle = "cr:" + dto.TicketId;
+                var changeojb=_sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "description", newdesc }, new string[0]);
+                changeojb.Wait();
+                _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, dto.Note, "LOG", 0, false).Wait();
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                LogOut();
+            }
+        }
         public ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context)
         {
             var user = context.User as AuthUser;
