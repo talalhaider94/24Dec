@@ -330,14 +330,14 @@ export class DatiGrezziComponent implements OnInit {
           .draw();
       });
     });
-    $(this.searchCol3.nativeElement).on( 'keyup', function () {
-      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        datatable_Ref
-          .columns(12)
-          .search( this.value )
-          .draw();
-      });
-    });
+    // $(this.searchCol3.nativeElement).on( 'keyup', function () {
+    //   $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    //     datatable_Ref
+    //       .columns(12)
+    //       .search( this.value )
+    //       .draw();
+    //   });
+    // });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
       datatable_Ref.columns(0).every( function () {
@@ -381,7 +381,7 @@ export class DatiGrezziComponent implements OnInit {
       event.preventDefault();
       event.stopPropagation();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        if($this.viewModel.filters.idKpi || $this.viewModel.filters.titoloBreve || $this.viewModel.filters.referenti || $this.viewModel.filters.tuttiContratti || $this.viewModel.filters.tutteLeFrequenze){
+        if($this.viewModel.filters.idKpi || $this.viewModel.filters.titoloBreve || $this.viewModel.filters.tuttiContratti || $this.viewModel.filters.tutteLeFrequenze){
           $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
         } else {
           $this.table2csv(datatable_Ref, 'full', '.kpiTable');
