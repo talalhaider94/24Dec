@@ -30,7 +30,7 @@ export class ArchivedKpiComponent implements OnInit {
   @ViewChild('table') table: ElementRef;
   
   public filter: string;
-  
+  public comparator: any;
   public p: any;
   
   loading: boolean = true;
