@@ -146,9 +146,9 @@ namespace Quantis.WorkFlow.APIBase.API
                             EventId = o.EventTypeId,
                             ResourceId = o.ResourceId
                         }).ToList();
+                        
                         var rawIds = GetRawIdsFromResource(eventResource, period);
                         return rawIds;
-
                     }
                     else
                     {
@@ -163,7 +163,45 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<EventResourceDTO> GetEventResourceFromRule(int ruleId)
+        {
+            try
+            {
+                var config = new List<KPIRegistrationDTO>();
+                using (var client = new HttpClient())
+                {
+                    var con = GetBSIServerURL();
+                    var apiPath = "api/KPIRegistration/GetKPIRegistrations?ruleId=" + ruleId;
+                    var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
+                    client.BaseAddress = new Uri(output.Item1);
+                    var response = client.GetAsync(output.Item2).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
 
+                        config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
+                        var eventResource = config.Select(o => new EventResourceDTO()
+                        {
+                            EventId = o.EventTypeId,
+                            ResourceId = o.ResourceId
+                        }).ToList();
+
+                        //var rawIds = GetRawIdsFromResource(eventResource, period);
+                        return eventResource;
+                        //DO THE QUERY TO ARCHIVE
+                    }
+                    else
+                    {
+                        var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
+                        throw e;
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<NotifierLogDTO> GetEmailHistory()
         {
             try
@@ -863,10 +901,96 @@ namespace Quantis.WorkFlow.APIBase.API
             catch (Exception e)
             {
                 throw e;
-            }
-            
+            }     
         }
-        
+
+        public bool AddArchiveRawData(int global_rule_id, string period, string tracking_period)
+        {
+            try
+            {
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var query = @"select r.rule_id from t_rules r left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id left join t_slas s on sv.sla_id = s.sla_id where sv.sla_status = 'EFFECTIVE' and s.sla_status = 'EFFECTIVE' and r.global_rule_id = :global_rule_id";
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":global_rule_id", global_rule_id);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        int rule_id = 0;
+                        while (reader.Read())
+                        {
+                            rule_id = (reader.IsDBNull(reader.GetOrdinal("rule_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("rule_id")));
+                        }
+                        if(rule_id == 0) { return false;  } // EXIT IF NO RULE_ID
+
+                        List<EventResourceDTO> eventResource = GetEventResourceFromRule(rule_id);
+                        string completewhereStatement = "";
+                        var whereStatements = new List<string>();
+                        foreach (var d in eventResource)
+                        {
+                            if (d.ResourceId == -1)
+                            {
+                                whereStatements.Add(string.Format("(event_type_id={0})", d.EventId));
+                            }
+                            else
+                            {
+                                whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
+                            }
+                        }
+                        if (eventResource.Any())
+                        {
+                            completewhereStatement = string.Format(" AND ({0})", string.Join(" OR ", whereStatements));
+                        }else{ return false; } //EXIT IF NO eventResource
+                        List<string> periods = new List<string>();
+                        string month = period.Split('/').First();
+                        string year = "20"+period.Split('/').Last();
+                        switch (tracking_period)
+                        {
+                            case "TRIMESTRALE":
+                                if (month == "03"){ periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); }
+                                if (month == "06"){ periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
+                                if (month == "09"){ periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); }
+                                if (month == "12"){ periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
+                                break;
+                            case "QUADRIMESTRALE":
+                                if (month == "04") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); }
+                                if (month == "08") { periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); }
+                                if (month == "12") { periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
+                                break;
+                            case "SEMESTRALE":
+                                if (month == "06") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
+                                if (month == "12") { periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
+                                break;
+                            case "ANNUALE":
+                                if (month == "12") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
+                                break;
+                            default:
+                                periods.Add(year + "_" + month);
+                                break;
+                        }
+
+                        foreach(var tmp_period in periods)
+                        {
+                            using (var conOrig = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                            {
+                                conOrig.Open();
+                                var sp = @"insert into t_dt_de_archive_swap select created_by, event_type_id, reader_time_stamp, resource_id, time_stamp, data_source_id, raw_data_id, create_date, corrected_by, data, modify_date, reader_id, event_source_type_id, event_state_id, partner_raw_data_id, hash_data_key, " + global_rule_id + " as global_rule_id from t_dt_de_3_" + tmp_period + " WHERE 1=1 " + completewhereStatement;
+                                var commandOrig = new NpgsqlCommand(sp, conOrig);
+                                commandOrig.CommandType = CommandType.Text;
+                                commandOrig.ExecuteScalar();
+                                conOrig.Close();
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public void AddArchiveKPI(ARulesDTO dto)
         {
             try
@@ -996,8 +1120,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 
                         psl.Any() ? 
-                        ((psl.FirstOrDefault().symbol == "[Non Calcolato]") ? psl.FirstOrDefault().symbol
-                        : (psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result)) 
+                        (psl.FirstOrDefault().result == "[Non Calcolato]" ? psl.FirstOrDefault().result
+                        : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result) 
                         : 
                         "N/A",
                     zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
@@ -1022,6 +1146,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 "FREQUENZA: {7}";
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
+
         public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             try

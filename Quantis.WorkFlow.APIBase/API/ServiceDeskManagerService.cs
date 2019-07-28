@@ -682,6 +682,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 symbol = (ticket.calcValue == "N/A") ? "N/A" : ticket.calcValue.Split(' ').ElementAt(1).Trim(),
                             };
                             _dataService.AddArchiveKPI(ardto);
+                            _dataService.AddArchiveRawData(kpi.global_rule_id_bsi, ticket.Period, kpi.tracking_period);
+
                             dto.IsArchived = true;
                         }
                     }

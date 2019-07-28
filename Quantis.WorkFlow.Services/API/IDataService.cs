@@ -51,6 +51,7 @@ namespace Quantis.WorkFlow.Services.API
         bool SubmitAttachment(List<FormAttachmentDTO> dto);
 
         int ArchiveKPIs(ArchiveKPIDTO dto);
+        bool AddArchiveRawData(int global_rule_id, string period, string tracking_period);
         bool ResetPassword(string username, string email);
         List<UserDTO> GetUsersByRoleId(int roleId);
         List<ARulesDTO> GetAllArchiveKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
@@ -60,7 +61,7 @@ namespace Quantis.WorkFlow.Services.API
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
-
+        
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
 
     }
