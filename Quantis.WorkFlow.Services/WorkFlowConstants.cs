@@ -24,6 +24,10 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_WORKFLOW_CONFIGURATIONS = "VIEW_WORKFLOW_CONFIGURATIONS";
         public const string VIEW_BSI_LINK = "VIEW_BSI_LINK";
         public const string VIEW_NOTIFIER_EMAILS = "VIEW_NOTIFIER_EMAILS";
+        public const string VIEW_RAW_DATA = "VIEW_RAW_DATA";
+        public const string VIEW_BOOKLET = "VIEW_BOOKLET";
+        public const string VIEW_WORKFLOW_ADMIN = "VIEW_WORKFLOW_ADMIN";
+        public const string VIEW_DEBUG = "VIEW_DEBUG";
     }
 
 }

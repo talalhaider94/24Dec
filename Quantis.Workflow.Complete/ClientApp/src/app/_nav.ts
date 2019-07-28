@@ -71,7 +71,7 @@ export const navItems: NavData[] = [
     name: 'Workflow',
     url: '/workflow-menu',
     icon: 'fa fa-code-fork',
-    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_AMMINISTRAZIONE'],
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
     children: [
       {
         name: 'KPI in Verifica',
@@ -92,7 +92,7 @@ export const navItems: NavData[] = [
         url: '/workflow/amministrazione',
         icon: 'fa fa-users',
         version: '0.0.1',
-        key: ['VIEW_WORKFLOW_AMMINISTRAZIONE']
+        key: ['VIEW_WORKFLOW_ADMIN']
       }
     ]
   },
@@ -179,7 +179,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-pencil-square-o',
-    key: 'VIEW_NOTIFIER_EMAILS',
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -193,7 +193,14 @@ export const navItems: NavData[] = [
         url: '/datigrezzi',
         icon: 'fa fa-envelope',
         version: '0.0.1',
-        key: 'VIEW_NOTIFIER_EMAILS'
+        key: 'VIEW_RAW_DATA'
+      },
+      {
+        name: 'Booklet',
+        url: '/booklet',
+        icon: 'fa fa-envelope',
+        version: '0.0.1',
+        key: 'VIEW_DEBUG'
       }
     ]
   },
