@@ -1105,8 +1105,9 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                var kpi = _dbcontext.CatalogKpi.Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
+                string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
                 return new CreateTicketDTO()
                 {
                     Description = GenerateDiscriptionFromKPI(kpi,psl.Any()?(psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " "+psl.FirstOrDefault().result):"N/A"),
@@ -1116,7 +1117,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract,
+                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ contractPartyName,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 
                         psl.Any() ? 

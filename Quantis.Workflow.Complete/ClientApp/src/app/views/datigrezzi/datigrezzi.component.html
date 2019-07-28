@@ -4,7 +4,7 @@
       <div class="row">
         <input type="text" class="form-control ml-3 mr-1" style="width:15%;" placeholder="ID KPI" #searchCol1 [(ngModel)]="viewModel.filters.idKpi" name="idKpi" />
         <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Titolo Breve" #searchCol2 [(ngModel)]="viewModel.filters.titoloBreve" name="titoloBreve" />
-        <input type="text" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3 [(ngModel)]="viewModel.filters.referenti" name="referenti" />
+        <input type="hidden" class="form-control ml-1 mr-1" style="width:15%;" placeholder="Referenti" #searchCol3 [(ngModel)]="viewModel.filters.referenti" name="referenti" />
         <span>&nbsp;&nbsp;</span>
         <select class="form-control" style="width:15%;" #searchCol4 [(ngModel)]="viewModel.filters.tuttiContratti" name="tuttiContratti"><option value="">Tutti i Contratti</option></select>
         <span>&nbsp;&nbsp;</span>
@@ -29,13 +29,13 @@
             <th style="text-align:center">ID</th>
             <th style="text-align:center">TITOLO BREVE</th>
             <th width="50%" style="text-align:center">KPI</th>
-            <th style="text-align:center">CARICAMENTO</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">CARICAMENTO</th>
             <th style="text-align:center">FREQUENZA</th>
-            <th class="notExportCsv" style="text-align:center">ABILITATO</th>
-            <th class="notExportCsv" style="text-align:center">REMINDER</th>
-            <th class="notExportCsv" style="text-align:center">WORKFLOW</th>
-            <th class="notExportCsv" style="text-align:center">REFERENTI</th>
-            <th class="notExportCsv" style="text-align:center">CALCOLO</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">ABILITATO</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">REMINDER</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">WORKFLOW</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">REFERENTI</th>
+            <th class="notExportCsv" style="text-align:center;display:none;">CALCOLO</th>
             <th class="notExportCsv" style="text-align:center"></th>
             <th style="display:none;" width="0" class="notExportCsv">hide</th>
             <th style="display:none;" width="0" class="notExportCsv">hide</th>
@@ -44,20 +44,19 @@
         <tbody>
 
           <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
-            <!--        <td align="center"><input type="checkbox"/></td>-->
             <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
             <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
             <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
             <td class="tagsTip" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
-            <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
+            <td class="notExportCsv" style="display:none;" [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
             <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
-            <td class="notExportCsv" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
-            <td class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
-            <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
-            <ng-template #trueBlock><td class="notExportCsv" align="center">&#10004;</td> </ng-template>
-            <ng-template #falseBlock><td class="notExportCsv" align="center">&#10006;</td> </ng-template>
-            <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)="populateModalData(row)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
-            <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
+            <td style="display:none;" class="notExportCsv" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
+            <td style="display:none;" class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
+            <td style="display:none;" class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
+            <ng-template #trueBlock><td style="display:none;" class="notExportCsv" align="center">&#10004;</td> </ng-template>
+            <ng-template #falseBlock><td style="display:none;" class="notExportCsv" align="center">&#10006;</td> </ng-template>
+            <td style="display:none;" class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)="populateModalData(row)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
+            <td style="display:none;" class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
             <td class="notExportCsv" align="center">
               <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                       data-target="#kpiModal">

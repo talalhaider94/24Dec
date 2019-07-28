@@ -83,5 +83,10 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.UploadAttachmentToTicket(dto);
         }
+        [HttpPost("UpdateTicketValue")]
+        public void UpdateTicketValue([FromBody]TicketValueDTO dto)
+        {
+            _sdmAPI.UpdateTicketValue(dto);
+        }
     }
 }
