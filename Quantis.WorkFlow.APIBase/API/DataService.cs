@@ -1035,14 +1035,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     con.Open();
 
                     var whereclause = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
-                    var whereYear = " and interval_kpi LIKE '%:interval_kpi%'";
+                    var whereYear = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 year') )";
                     var filterByKpiId = " and id_kpi = :id_kpi";
                     var sp = @"select * from a_rules where 1=1";
-                    if ( (month != null) && (year != null))
+                    if ( (month != null && month != "00") && (year != null))
                     {
                         sp += whereclause;
                     }
-                    if( (month == null) && (year != null))
+                    if( (month == "00" || month == null) && (year != null))
                     {
                         sp += whereYear;
                     }
@@ -1054,13 +1054,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     sp += " order by close_timestamp_ticket desc";
                     var command = new NpgsqlCommand(sp, con);
 
-                    if ((month != null) && (year != null))
+                    if ((month != null && month != "00") && (year != null))
                     {
                         command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse(month), Int32.Parse("01")));
                     }
-                    if ((month == null) && (year != null))
+                    if ((month == "00" || month == null) && (year != null))
                     {
-                        command.Parameters.AddWithValue(":interval_kpi", year);
+                        command.Parameters.AddWithValue(":interval_kpi", new NpgsqlTypes.NpgsqlDate(Int32.Parse(year), Int32.Parse("01"), Int32.Parse("01")));
                     }
                     if ((id_kpi != null))
                     {
@@ -1071,7 +1071,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         List<ARulesDTO> list = new List<ARulesDTO>();
                         while (reader.Read())
                         {
-                            //id_kpi | name_kpi |    interval_kpi     | value_kpi | ticket_id | close_timestamp_ticket | archived
                             ARulesDTO arules = new ARulesDTO();
                             arules.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
                             arules.name_kpi = reader.GetString(reader.GetOrdinal("name_kpi"));
@@ -1080,7 +1079,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.ticket_id = reader.GetInt32(reader.GetOrdinal("ticket_id"));
                             arules.close_timestamp_ticket = reader.GetDateTime(reader.GetOrdinal("close_timestamp_ticket"));
                             arules.archived = reader.GetBoolean(reader.GetOrdinal("archived"));
-
                             arules.customer_name = reader.GetString(reader.GetOrdinal("customer_name"));
                             arules.contract_name = reader.GetString(reader.GetOrdinal("contract_name"));
                             arules.kpi_name_bsi = reader.GetString(reader.GetOrdinal("kpi_name_bsi"));
@@ -1090,10 +1088,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.symbol = (reader.IsDBNull(reader.GetOrdinal("symbol")) ? null : reader.GetString(reader.GetOrdinal("symbol")));
                             list.Add(arules);
                         }
-
                         return list;
                     }
-                      
                 }
             }
             catch (Exception e)
@@ -1156,29 +1152,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
                     List<ATDtDeDTO> list = new List<ATDtDeDTO>();
-                    //var tablename = "t_dt_de_3_" + year + "_" + month;
                     var tablename = "t_dt_de_3_" + year + "_" + month;
-                    //if (TableExists(tablename))
-                    //{
                     var sp = @"select * from " + tablename + " order by modify_date desc LIMIT 1000";
-                        var command = new NpgsqlCommand(sp, con);
-
+                        var command = new NpgsqlCommand(sp, con);         
                         using (var reader = command.ExecuteReader())
                         {
-
                             while (reader.Read())
                             {
-
-                            //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
-                            // (reader.IsDBNull(reader.GetOrdinal("secondary_contract_party_name")) ? null : reader.GetString(reader.GetOrdinal("secondary_contract_party_name")));
-
                             ATDtDeDTO atdtde = new ATDtDeDTO();
                                 atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
                                 atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
                                 atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")));
                                 atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
                                 atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")));
-                                atdtde.data_source_id = null;//reader.GetString(reader.GetOrdinal("data_source_id"));
+                                atdtde.data_source_id = (reader.IsDBNull(reader.GetOrdinal("data_source_id")) ? null : reader.GetString(reader.GetOrdinal("data_source_id")));
                                 atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
                                 atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")));
                                 atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
@@ -1193,7 +1180,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 list.Add(atdtde);
                             }
                         }
-                    //}
                     return list;
                 }
             }
@@ -1202,8 +1188,55 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
-        public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year)
+        public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
+        {
+            try
+            {
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                {
+                    con.Open();
+                    List<ATDtDeDTO> list = new List<ATDtDeDTO>();
+                    var tablename = "t_dt_de_" + year + "_" + month;
+                    if (TableExists(tablename))
+                    {
+                    var sp = @"select * from " + tablename + " WHERE global_rule_id = :global_rule_id order by modify_date desc";
+                    var command = new NpgsqlCommand(sp, con);
+                    command.Parameters.AddWithValue(":global_rule_id", id_kpi);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ATDtDeDTO atdtde = new ATDtDeDTO();
+                            atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
+                            atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
+                            atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")));
+                            atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
+                            atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")));
+                            atdtde.data_source_id = (reader.IsDBNull(reader.GetOrdinal("data_source_id")) ? null : reader.GetString(reader.GetOrdinal("data_source_id")));
+                            atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
+                            atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")));
+                            atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                            atdtde.data = reader.GetString(reader.GetOrdinal("data"));
+                            atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
+                            atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                            atdtde.event_source_type_id = (reader.IsDBNull(reader.GetOrdinal("event_source_type_id")) ? null : reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString());
+                            atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
+                            atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
+                            atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
+                            atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
+                            list.Add(atdtde);
+                        }
+                    }
+                    }
+                    return list;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year) // NON USATA
         {
             try
             {
