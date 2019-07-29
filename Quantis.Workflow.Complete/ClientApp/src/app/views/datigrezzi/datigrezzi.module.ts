@@ -5,15 +5,18 @@ import { DatiGrezziComponent } from './datigrezzi.component';
 import { DatiRoutingModule } from './datigrezzi-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
-
-
+import { KeysPipePipe } from './keys-pipe.pipe';
+import { Ng2SearchPipeModule } from 'ng2-search-filter'
+import {NgxPaginationModule} from 'ngx-pagination';
 @NgModule({
-  declarations: [DatiGrezziComponent],
+  declarations: [DatiGrezziComponent, KeysPipePipe],
   imports: [
     CommonModule,
     DatiRoutingModule,
     DataTablesModule,
-    FormsModule
+    FormsModule,
+    Ng2SearchPipeModule,
+    NgxPaginationModule,
   ]
 })
 export class DatiModule { }
