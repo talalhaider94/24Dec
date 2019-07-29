@@ -178,7 +178,7 @@ export const navItems: NavData[] = [
   {
     name: 'Report',
     url: '/report',
-    icon: 'fa fa-pencil-square-o',
+    icon: 'fa fa-bar-chart',
     key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG'],
     children: [
       {
@@ -191,14 +191,14 @@ export const navItems: NavData[] = [
       {
         name: 'Dati Grezzi',
         url: '/datigrezzi',
-        icon: 'fa fa-envelope',
+        icon: 'fa fa-copy',
         version: '0.0.1',
         key: 'VIEW_RAW_DATA'
       },
       {
         name: 'Booklet',
         url: '/booklet',
-        icon: 'fa fa-envelope',
+        icon: 'fa fa-book',
         version: '0.0.1',
         key: 'VIEW_DEBUG'
       }
