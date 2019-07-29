@@ -39,7 +39,7 @@
             <td class="tagsTip" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
             <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
             <td  align="center">
-              <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="getdati1(row.id_kpi,monthVar,yearVar)" data-target="#daModal" title="DATI"><i class="fa fa-table"></i>
+              <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="getdati1(row.global_rule_id_bsi,monthVar,yearVar)" data-target="#daModal" title="DATI"><i class="fa fa-table"></i>
               </button>
             </td>
           </tr>
