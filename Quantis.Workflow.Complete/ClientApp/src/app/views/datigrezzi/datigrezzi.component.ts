@@ -38,7 +38,6 @@ export class DatiGrezziComponent implements OnInit {
   @ViewChild('searchCol3') searchCol3: ElementRef;
   @ViewChild('searchCol4') searchCol4: ElementRef;
   @ViewChild('searchCol5') searchCol5: ElementRef;
-  @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
   @ViewChild('table') table: ElementRef;
 
