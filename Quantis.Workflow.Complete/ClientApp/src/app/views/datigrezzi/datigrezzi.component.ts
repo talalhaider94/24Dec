@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef ,ViewContainerRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { LoadingFormService } from '../../_services/loading-form.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-
+import * as moment from 'moment';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 declare var $;
 let $this;
 
@@ -31,6 +33,9 @@ export class DatiGrezziComponent implements OnInit {
   public ref1: string;
   public ref2: string;
   public ref3: string;
+  public filter: string;
+  public comparator: any;
+  public p: any;
 
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
@@ -40,6 +45,7 @@ export class DatiGrezziComponent implements OnInit {
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+  @ViewChild('table') table: ElementRef;
 
   viewModel = {
     filters: {
@@ -50,6 +56,29 @@ export class DatiGrezziComponent implements OnInit {
       tutteLeFrequenze: ''
     }
   };
+
+  datiGrezzi=[];
+  monthVar: any;
+  yearVar: any;
+  countCampiData=[];
+id_kpi_temp = '';
+loadingModalDati:boolean=false;
+
+  fitroDataById: any = [
+    {
+      event_type_id: '   ',
+      resource_id: '',
+      time_stamp : ' ',
+      raw_data_id: '',
+      create_date : ' ',
+      data:this.datiGrezzi,
+      modify_date:'',
+      reader_id: '',
+      event_source_type_id : ' ',
+      event_state_id: ' ',
+      partner_raw_data_id : ' ',
+    }
+  ]
 
   dtOptions = {
     //'dom': 'rtip',
@@ -209,7 +238,10 @@ export class DatiGrezziComponent implements OnInit {
       }
     };
     this.getForms();
-
+    this.monthVar = moment().format('MM');
+    this.yearVar = moment().format('YYYY');
+    this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
+   this.getAnno();
   }
 
 
@@ -463,4 +495,122 @@ export class DatiGrezziComponent implements OnInit {
       console.log('forms ', data);
     });
   }
+
+  anni=[];
+  //+(moment().add('months', 6).format('YYYY'))
+  getAnno(){
+    debugger;
+  for (var i = 2016; i <=+(moment().add('months', 7).format('YYYY')); i++) {
+   this.anni.push(i);
+   
+  }
+  return this.anni;
+  console.log("aaaa",this.anni);
+  }
+
+clear(){
+  this.filter = '';
+  this.fitroDataById=[];
+  this.p=1;
+
+  }
+
+  getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.clear();
+    
+    this.id_kpi_temp = id_kpi;
+    this.loadingModalDati = true;
+  
+    this.apiService.getKpiArchivedData(id_kpi,month,year).subscribe((dati: any) =>{
+      this.fitroDataById = dati;
+      console.log(dati);
+      Object.keys(this.fitroDataById).forEach(key => {
+     
+        this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+          switch (this.fitroDataById[key].event_state_id) {
+            case 1:
+              this.fitroDataById[key].event_state_id = "Originale";
+              break;
+            case 2:
+              this.fitroDataById[key].event_state_id = "Sovrascritto";
+              break;
+            case 3:
+              this.fitroDataById[key].event_state_id = "Eliminato";
+              break;
+            case 4:
+              this.fitroDataById[key].event_state_id = "Correzione";
+              break;
+            case 5:
+              this.fitroDataById[key].event_state_id = "Correzione eliminata";
+              break;
+            case 6:
+              this.fitroDataById[key].event_state_id = "Business";
+              break;
+            default:
+              this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+              break;
+          }
+          this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+          this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+      })
+      this.getCountCampiData();
+      
+      let max = this.countCampiData.length;
+
+
+      Object.keys(this.fitroDataById).forEach(key => {
+        let temp = Object.keys(this.fitroDataById[key].data).length;
+        if (temp < max) {
+          for (let i = 0; i < (max - temp); i++) {
+            this.fitroDataById[key].data['empty#'+i] = '##empty##';
+          }
+        }
+      })
+        
+
+        //****console.log("array tempo",this.arrayPeriodo);
+        console.log('dati', dati);
+        //****console.log('key', this.fitroDataById);
+       /**** this.getCountCampiData();
+        this.numeroEventi();****/
+
+        //****console.log(this.eventTypeArray);
+
+        /*Object.keys(this.eventTypeArray).forEach( e=> {
+          console.log(e + '#' + this.eventTypeArray[e]);
+        })*/
+        this.loadingModalDati = false;
+    });
+  }
+
+  getCountCampiData(){
+    let maxLength = 0;
+    this.fitroDataById.forEach( f => {
+      //let data = JSON.parse(f.data);
+      if(Object.keys(f.data).length > maxLength){
+        maxLength = Object.keys(f.data).length;
+      }  
+    });
+    this.countCampiData = [];
+    for(let i=1;i<= maxLength; i++){
+      this.countCampiData.push(i);
+    }
+    console.log("ada",this.countCampiData);
+  }
+  
+
+  fireEvent()
+{
+const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Export.csv');
+  
+    
+
+}
+
+
+
 }
