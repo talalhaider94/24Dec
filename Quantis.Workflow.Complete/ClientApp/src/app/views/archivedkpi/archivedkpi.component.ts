@@ -247,9 +247,11 @@ intervalloPeriodo='';
       this.clear();
       this.meseSelezionato=month;
       this.id_kpi_temp = id_kpi;
-      if(tracking_period.length >0 && interval_kpi.length >0){
-       
-          this.arrayTempo(tracking_period,interval_kpi);
+      if(tracking_period.length >0 && interval_kpi.length >0){  
+        this.arrayTempo(tracking_period, interval_kpi);
+        month = moment(interval_kpi).format('MM');
+        year = moment(interval_kpi).format('YYYY');
+        this.meseSelezionato = month;
       }
       this.loadingModalDati = true;
       this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
