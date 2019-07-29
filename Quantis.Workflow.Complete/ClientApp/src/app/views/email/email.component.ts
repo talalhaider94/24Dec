@@ -65,6 +65,7 @@ export class EmailComponent implements OnInit {
       type: '',
       user_domain: '',
       period: '',
+      form_name: '',
       notify_date: ''
     }
   ]
@@ -78,6 +79,7 @@ export class EmailComponent implements OnInit {
 
   monthVar: any;
   yearVar: any;
+  loading:boolean = true;
 
   ngOnInit() {
     this.monthVar = moment().format('MM');
@@ -92,17 +94,21 @@ export class EmailComponent implements OnInit {
   }
 
   populateDateFilter() {
+    this.loading = true;
     this.apiService.getEmails(this.monthVar, this.yearVar).subscribe((data: any) => {
-   
-    this.ConfigTableBodyData = data;
-    this.rerender();
+      this.ConfigTableBodyData = data;
+      this.rerender();
+    
     // this.numeroContratti();
     // this.addChildren();
     // },error=>{
 
     //   this.toastr.error("errore di connessione al sever");
 
-    });
+  }, (err) => {
+    this.ConfigTableBodyData = [];
+    this.loading = false;
+  });
 }
 
   addConfig() {
@@ -160,6 +166,7 @@ export class EmailComponent implements OnInit {
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
       this.setUpDataTableDependencies();
+      this.loading = false;
     });
   }
 
@@ -189,10 +196,14 @@ export class EmailComponent implements OnInit {
   }
 
   getCOnfigurations() {
+    this.loading = true;
     this.apiService.getEmails(this.monthVar,this.yearVar).subscribe((data) =>{
       this.ConfigTableBodyData = data;
       console.log('Emails Data ', data);
       this.rerender();
+    }, (err) => {
+      this.ConfigTableBodyData = [];
+      this.loading = false;
     });
   }
 

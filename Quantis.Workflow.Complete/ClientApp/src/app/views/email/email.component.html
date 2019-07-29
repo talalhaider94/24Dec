@@ -1,42 +1,49 @@
 <div style="margin-top: -20px;">
-    <div class="table-responsive" style="background: #ffffff; padding: 10px">
-      <br>
-      <h2 style="color:#565656">NOTIFICHE LOADING FORM</h2><br>
-      <!-- <div class="row">
-        <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
-          Crea Nuovo
-        </button>
-      </div><br /> -->
-      <h4 style="color:#565656;">Data di Invio:</h4>
+  <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <br>
+    <h2 style="color:#565656">NOTIFICHE LOADING FORM</h2><br>
+    <!-- <div class="row">
+      <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
+              data-target="#addConfigModal">
+        Crea Nuovo
+      </button>
+    </div><br /> -->
+    <h4 style="color:#565656;">Data di Invio:</h4>
 
-      <div class="row">
-  
-        <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()" #searchCol2>
-          <option value="">Tutti i mesi</option>
-          <option value="01">Gennaio</option>
-          <option value="02">Febbraio</option>
-          <option value="03">Marzo</option>
-          <option value="04">Aprile</option>
-          <option value="05">Maggio</option>
-          <option value="06">Giugno</option>
-          <option value="07">Luglio</option>
-          <option value="08">Agosto</option>
-          <option value="09">Settembre</option>
-          <option value="10">Ottobre</option>
-          <option value="11">Novembre</option>
-          <option value="12">Dicembre</option>
-        </select>
-        <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="populateDateFilter()" #searchCol3>
-          <option value="">Anno</option>
-          <option value="16">2016</option>
-          <option value="17">2017</option>
-          <option value="18">2018</option>
-          <option value="19">2019</option>
-          <option value="20">2020</option>
-        </select>
-      </div>
-      <br>
+    <div class="row">
+
+      <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="populateDateFilter()" #searchCol2>
+        <option value="">Tutti i mesi</option>
+        <option value="01">Gennaio</option>
+        <option value="02">Febbraio</option>
+        <option value="03">Marzo</option>
+        <option value="04">Aprile</option>
+        <option value="05">Maggio</option>
+        <option value="06">Giugno</option>
+        <option value="07">Luglio</option>
+        <option value="08">Agosto</option>
+        <option value="09">Settembre</option>
+        <option value="10">Ottobre</option>
+        <option value="11">Novembre</option>
+        <option value="12">Dicembre</option>
+      </select>
+      <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="populateDateFilter()" #searchCol3>
+        <option value="">Anno</option>
+        <option value="16">2016</option>
+        <option value="17">2017</option>
+        <option value="18">2018</option>
+        <option value="19">2019</option>
+        <option value="20">2020</option>
+      </select>
+    </div>
+    <br>
+    <div class="row col-lg-12">
+      <h5 *ngIf="loading" class="text-center text-primary col-lg-12">   
+        <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+      </h5>
+    </div>
+    <br>
+    <div [ngStyle]="{'display': loading? 'none' : 'unset'}">
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #20a8d8">
           <tr style="font-size:12px;color:white">
@@ -68,50 +75,51 @@
         </tbody>
       </table>
     </div>
-  </div>
-  
-  <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="approveModalLabel">Testo</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div [innerHTML]="modalData.email_body"></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        </div>
+</div>
+</div>
+
+<div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="approveModalLabel">Testo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div [innerHTML]="modalData.email_body"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>
-  
-  
-  <div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-       aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-  <!--        <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>-->
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" [(ngModel)]="key" /><br>
-          <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" [(ngModel)]="owner" /><br>
-          <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="value" /><br>
-          <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" [(ngModel)]="isenable" /><br>
-          <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" [(ngModel)]="description" />
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" (click)="addConfig()">Aggiungi</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        </div>
+</div>
+
+
+<div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+<!--        <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" [(ngModel)]="key" /><br>
+        <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" [(ngModel)]="owner" /><br>
+        <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="value" /><br>
+        <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" [(ngModel)]="isenable" /><br>
+        <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" [(ngModel)]="description" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="addConfig()">Aggiungi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>
   </div>
+</div>
