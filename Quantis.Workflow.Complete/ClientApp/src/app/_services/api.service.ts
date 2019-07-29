@@ -26,11 +26,14 @@ export class ApiService {
     return this.http.get(getTRulesEndPoint);
   }
 
-  getKpiArchivedData(id,month,year): Observable<any>{ 
+  getKpiArchivedRawData(id,month,year): Observable<any>{ 
+    const getDateKpiId = `${environment.API_URL}/data/GetArchivedRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
+    return this.http.get(getDateKpiId);
+  }
+  getKpiRawData(id, month, year): Observable<any> {
     const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
     return this.http.get(getDateKpiId);
   }
-
   getCatalogoKpis(): Observable<any> {
     const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpis`;
     return this.http.get(getKpiEndPoint);

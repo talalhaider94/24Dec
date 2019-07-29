@@ -254,7 +254,7 @@ intervalloPeriodo='';
         this.meseSelezionato = month;
       }
       this.loadingModalDati = true;
-      this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+    this.apiService.getKpiArchivedRawData(id_kpi,month, year).subscribe((dati: any) =>{
         this.fitroDataById = dati;
         console.log(dati);
         Object.keys(this.fitroDataById).forEach(key => {
@@ -323,7 +323,7 @@ intervalloPeriodo='';
     this.id_kpi_temp = id_kpi;
     this.loadingModalDati = true;
   
-    this.apiService.getKpiArchivedData(id_kpi,month, year).subscribe((dati: any) =>{
+    this.apiService.getKpiArchivedRawData(id_kpi,month, year).subscribe((dati: any) =>{
       this.fitroDataById = dati;
       console.log(dati);
       Object.keys(this.fitroDataById).forEach(key => {

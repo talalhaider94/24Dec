@@ -288,7 +288,7 @@ clear(){
     this.id_kpi_temp = id_kpi;
     this.loadingModalDati = true;
   
-    this.apiService.getKpiArchivedData(id_kpi,month,year).subscribe((dati: any) =>{
+    this.apiService.getKpiRawData(id_kpi,month,year).subscribe((dati: any) =>{
       this.fitroDataById = dati;
       console.log(dati);
       Object.keys(this.fitroDataById).forEach(key => {
