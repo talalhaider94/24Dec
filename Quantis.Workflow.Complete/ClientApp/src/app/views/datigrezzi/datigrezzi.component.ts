@@ -146,7 +146,7 @@ loadingModalDati:boolean=false;
     };
     this.monthVar = moment().format('MM');
     this.yearVar = moment().format('YYYY');
-    this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
+    //this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
     this.getAnno();
     this.setUpDataTableDependencies();
   }

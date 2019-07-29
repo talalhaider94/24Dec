@@ -238,7 +238,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             var user = HttpContext.User as AuthUser;
             var globalrules=_informationAPI.GetGlobalRulesByUserId(user.UserId);
-            return _dataAPI.GetAllArchiveKPIs(month, year, id_kpi, globalrules);
+            return _dataAPI.GetAllArchivedKPIs(month, year, id_kpi, globalrules);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetRawDataByKpiID")]
@@ -247,11 +247,17 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetRawDataByKpiID(id_kpi, month, year);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
-        [HttpGet("GetDetailsArchivedKPI")]
+        [HttpGet("GetArchivedRawDataByKpiID")]
+        public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
+        {
+            return _dataAPI.GetArchivedRawDataByKpiID(id_kpi, month, year);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+/*      [HttpGet("GetDetailsArchivedKPI")]
         public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
         {
             return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
-        }
+        }*/
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllCustomersKP")]
         public List<KeyValuePair<int, string>> GetAllCustomersKP()
@@ -270,11 +276,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetEmailNotifiers(period);
         }
-        [HttpGet("GetRawIdsFromRulePeriod")]
+ /*       [HttpGet("GetRawIdsFromRulePeriod")]
         public List<int> GetRawIdsFromRulePeriod(int ruleId, string period)
         {
             return _dataAPI.GetRawIdsFromRulePeriod(ruleId, period);
-        }
+        }*/
         [HttpGet("AddArchiveRawData")]
         public bool AddArchiveRawData(int global_rule_id, string period, string tracking_period)
         {

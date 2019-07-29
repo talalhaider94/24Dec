@@ -17,7 +17,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormLVDTO> GetAllForms();
         List<KeyValuePair<int, string>> GetAllCustomersKP();
         List<UserDTO> GetAllUsers();
-        List<int> GetRawIdsFromRulePeriod(int ruleId, string period);
+//        List<int> GetRawIdsFromRulePeriod(int ruleId, string period);
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
         PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);
@@ -54,10 +54,11 @@ namespace Quantis.WorkFlow.Services.API
         bool AddArchiveRawData(int global_rule_id, string period, string tracking_period);
         bool ResetPassword(string username, string email);
         List<UserDTO> GetUsersByRoleId(int roleId);
-        List<ARulesDTO> GetAllArchiveKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
-        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
+        List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
+//        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
         
         List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year);
+        List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year);
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
