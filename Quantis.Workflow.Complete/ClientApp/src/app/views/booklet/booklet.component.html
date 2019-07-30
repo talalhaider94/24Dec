@@ -1,0 +1,91 @@
+<div style="margin-top: -20px;">
+
+
+  
+  <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <br><h2 style="color:#565656">BOOKLET</h2>
+    
+     <span style="margin-left: 75%; font-size: 20px"><b>DATA CORRENTE: {{datacorrente}}</b></span><br>
+
+    
+    <div class="row ml-3 mr-1">
+    <label>TEMPLATE:</label>
+    <select class="form-control ml-3 mr-1" (change)="consoleSelect($event)" placeholder="seleziona"  style="width:30%;" [(ngModel)]=" documentiDef.documentid" >
+     <option value="">Documenti: </option>   
+    <option *ngFor="let item of documentiDef " value="{{item.documentid}} - {{item.documentname}}">{{item.documentname}}</option>
+     
+    </select>
+  </div>
+<span>&nbsp;&nbsp;</span>
+    
+   <br> <br>
+    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+   
+
+      <thead style="background: #20a8d8; color:white">
+      <tr>
+          <th style="align-content: center">SELEZIONA</th>
+          <th style="align-content: center">CLIENTE</th>
+          <th style="align-content: center">NOME CONTRATTO</th>
+          <th style="align-content: center">PRECEDENTE <span>&nbsp;</span>{{dataprecedente}}</th>
+          <th style="align-content: center">CORRENTE<span>&nbsp;</span> {{datacorrente}}</th>
+          
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of array">
+          <td align="center"><input [(ngModel)]="row.checked" type="checkbox"  (change)="getCheckedItemList()"/></td>
+        
+         <td style="align-content: center">{{row.cliente}}</td>
+        <td style="align-content: center">{{row.contratto}}</td>
+          <th>
+           
+          
+         </th>
+          <th></th>
+        </tr>
+      </tbody>
+    </table>
+
+ 
+
+
+<!--NON CANCELLARE PROGRESS BAR DINAMICA-->
+
+<!--   <div class="table-responsive" style="background: #ffffff; padding: 10px">
+    <table class="table">
+      <thead style="background: #E6E6E6">
+      <tr>
+        
+          <th>NOME</th>
+          <th>COGNOME</th>
+          <th>PRECEDENTE</th>
+          <th>CORRENTE</th>
+          
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of documenti; index as i">
+         
+        
+          <td>{{row.nome}}</td>
+          <td>{{row.cognome}}</td>
+          <th>
+         
+          <div class="progress" aria-valuemax="(row.success+row.warning+row.danger)" style="width: 70%">
+              <div class="progress-bar bg-success" role="progressbar" aria-valuenow="row.success" aria-valuemin="0" aria-valuemax="(row.success+row.warning+row.danger)"  [ngStyle]="{width: (row.success/(row.success+row.warning+row.danger))*100 + '%'}">{{row.success}}</div>
+              <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="row.warning" aria-valuemin="0" aria-valuemax="(row.success+row.warning+row.danger)"  [ngStyle]="{width: (row.warning/(row.success+row.warning+row.danger))*100 + '%'}">{{row.warning}}</div>
+              <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="row.danger" aria-valuemin="0" aria-valuemax="(row.success+row.warning+row.danger)"  [ngStyle]="{width: (row.danger/(row.success+row.warning+row.danger))*100 + '%'}">{{row.danger}}</div>
+            </div>
+         </th>
+          <th>
+      
+        
+        </th>
+        </tr>
+        </tbody>
+    </table>
+  </div>
+</div>-->
