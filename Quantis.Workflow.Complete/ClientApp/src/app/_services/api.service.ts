@@ -13,6 +13,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getBooklet(): Observable<any> {
+    const getBookletEndPoint = `${environment.API_URL}/Oracle/GetBooklets`;
+    return this.http.get(getBookletEndPoint, Headers.setHeaders('GEt'));
+  }
   getCatalogoUsers(): Observable<any> {
     const getUtentiEndPoint = `${environment.API_URL}/data/GetAllUsers`;
     return this.http.get(getUtentiEndPoint);
