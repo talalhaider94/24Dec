@@ -1335,12 +1335,28 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var form=_dbcontext.CatalogKpi.Single(o=>o.id==kpiId).id_form;
+                var kpi = _dbcontext.CatalogKpi.Single(o => o.id == kpiId);
+                var form= kpi.id_form;
                 if (form==null || form == 0)
                 {
                     return new List<FormAttachmentDTO>();
                 }
                 var attachments = _dbcontext.Forms.Include(o => o.Attachments).Single(p => p.form_id == form).Attachments;
+                if (kpi.month != null)
+                {
+                    if (kpi.month.Split(',').Count() == 12)
+                    {
+                        attachments = attachments.Where(o =>o.create_date.Year==DateTime.Now.AddMonths(-1).Year && o.create_date.Month == DateTime.Now.AddMonths(-1).Month).ToList();
+                    }
+                    else if (kpi.month.Split(',').Count() == 4)
+                    {
+                        attachments = attachments.Where(o => o.create_date.Year == DateTime.Now.AddMonths(-1).Year && o.create_date.Month <= DateTime.Now.AddMonths(-1).Month && o.create_date.Month >= DateTime.Now.AddMonths(-4).Month).ToList();
+                    }
+                    else if(kpi.month.Split(',').Count() == 2)
+                    {
+                        attachments = attachments.Where(o => o.create_date.Year == DateTime.Now.AddMonths(-1).Year && o.create_date.Month <= DateTime.Now.AddMonths(-1).Month && o.create_date.Month >= DateTime.Now.AddMonths(-7).Month).ToList();
+                    }
+                }
                 return _fromAttachmentMapper.GetDTOs(attachments.ToList()).OrderByDescending(o=>o.create_date).ToList();
 
             }
