@@ -1117,8 +1117,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 
                         psl.Any() ? 
-                        (psl.FirstOrDefault().result == "[Non Calcolato]" ? psl.FirstOrDefault().result
-                        : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result) 
+                        psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? psl.FirstOrDefault().result
+                        : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result 
                         : 
                         "N/A",
                     zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
