@@ -998,7 +998,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
                 {
                     con.Open();
-                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period) values(:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period)";
+                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period,symbol) values (:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period,:symbol)";
                     var command = new NpgsqlCommand(sp, con);
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue(":id_kpi", dto.id_kpi);
@@ -1014,6 +1014,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     command.Parameters.AddWithValue(":rule_id_bsi", dto.rule_id_bsi);
                     command.Parameters.AddWithValue(":global_rule_id", dto.global_rule_id);
                     command.Parameters.AddWithValue(":tracking_period", dto.tracking_period);
+                    command.Parameters.AddWithValue(":symbol", dto.symbol);
                     command.ExecuteScalar();
                 }
             }
@@ -1116,11 +1117,11 @@ namespace Quantis.WorkFlow.APIBase.API
                     Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ contractPartyName,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 
-                        psl.Any() ? 
-                        psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? psl.FirstOrDefault().result
+                        (psl != null) ? 
+                        psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]"
                         : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result 
-                        : 
-                        "N/A",
+                        :
+                        "[Non Calcolato]",
                     zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
                 };
 

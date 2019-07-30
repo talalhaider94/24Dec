@@ -692,10 +692,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     dto.ShowArchivedMsg = true;
                     try
                     {
-                        if (ticket.Summary.Split('|').Length < 3)
+                        if (ticket.Summary.Split('|').Length <= 3)
                         {
-                            var kpiid = int.Parse(ticket.KpiIds.Split('|').FirstOrDefault());
-                            var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == kpiid);
+                            var kpiid = int.Parse(ticket.KpiIds.Split('|').Last());
+                            var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == kpiid);
                             ARulesDTO ardto = new ARulesDTO()
                             {
                                 contract_name = kpi.contract,
@@ -710,8 +710,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 rule_id_bsi = kpi.global_rule_id_bsi,
                                 close_timestamp_ticket = DateTime.Now,
                                 ticket_id = int.Parse(ticket.ref_num),
-                                value_kpi = (ticket.calcValue == "N/A") ? "N/A" : ticket.calcValue.Split(' ').FirstOrDefault().Trim(),
-                                symbol = (ticket.calcValue == "N/A") ? "N/A" : ticket.calcValue.Split(' ').ElementAt(1).Trim(),
+                                value_kpi = (ticket.calcValue == "[Non Calcolato]") ? "[Non Calcolato]" : ticket.calcValue.Split(' ').FirstOrDefault().Trim(),
+                                symbol = (ticket.calcValue == "[Non Calcolato]") ? "N/A" : ticket.calcValue.Split(' ').ElementAt(1).Trim(),
                             };
                             _dataService.AddArchiveKPI(ardto);
                             _dataService.AddArchiveRawData(kpi.global_rule_id_bsi, ticket.Period, kpi.tracking_period);
