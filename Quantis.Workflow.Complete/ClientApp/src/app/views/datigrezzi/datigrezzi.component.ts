@@ -35,7 +35,6 @@ export class DatiGrezziComponent implements OnInit {
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
-  @ViewChild('searchCol3') searchCol3: ElementRef;
   @ViewChild('searchCol4') searchCol4: ElementRef;
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -148,7 +147,7 @@ loadingModalDati:boolean=false;
     this.yearVar = moment().format('YYYY');
     //this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
     this.getAnno();
-    this.setUpDataTableDependencies();
+    //this.setUpDataTableDependencies();
   }
 
 
@@ -248,10 +247,6 @@ loadingModalDati:boolean=false;
     return tmp.textContent || tmp.innerText;
   }
 
-  getKpis1() {
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
-    });
-  }
 
   getKpis() {
  
