@@ -13,7 +13,7 @@ export class LoadingFormService {
   constructor(private http: HttpClient) { }
 
   getLoadingForms(): Observable<any>{
-    const loadingFormEndPoint = `${environment.API_URL}/data/GetAllForms`;
+    const loadingFormEndPoint = `${environment.API_URL}/dashboard/GetAllForms`;
     return this.http.get(loadingFormEndPoint);
   }
   

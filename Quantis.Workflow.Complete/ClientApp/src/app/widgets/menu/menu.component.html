@@ -1,0 +1,12 @@
+<span *ngFor="let widget of widgetCollection">
+  <!-- 
+    Draggable widget from store using vanilla javascript event (dragstart)
+    onDrag() is call, it take $event and a widget identifier as parameters
+  -->
+  <a draggable="true" class="btn btn-success" (dragstart)="onDrag($event, widget.identifier)">
+    {{ widget.name }}
+  </a>
+</span>
+<!-- <div *ngFor="let dashboard of dashboardCollection">
+  <button routerLink="dashboard/{{dashboard.id}}">{{ dashboard.username }}</button>
+</div> -->
