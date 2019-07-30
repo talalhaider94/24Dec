@@ -171,7 +171,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var client = new HttpClient())
                 {
                     var con = GetBSIServerURL();
-                    var apiPath = "api/KPIRegistration/GetKPIRegistrations?ruleId=" + ruleId;
+                    var apiPath = "/api/KPIRegistration/GetKPIRegistrations?ruleId=" + ruleId;
                     var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
                     client.BaseAddress = new Uri(output.Item1);
                     var response = client.GetAsync(output.Item2).Result;
