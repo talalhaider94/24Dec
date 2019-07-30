@@ -975,7 +975,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             using (var conOrig = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                             {
                                 conOrig.Open();
-                                var sp = @"insert into t_dt_de_archive_swap select created_by, event_type_id, reader_time_stamp, resource_id, time_stamp, data_source_id, raw_data_id, create_date, corrected_by, data, modify_date, reader_id, event_source_type_id, event_state_id, partner_raw_data_id, hash_data_key, " + global_rule_id + " as global_rule_id from t_dt_de_3_" + tmp_period + " WHERE 1=1 " + completewhereStatement;
+                                var sp = @"insert into t_dt_de_archive_swap (created_by, event_type_id, reader_time_stamp, resource_id, time_stamp, data_source_id, raw_data_id, create_date, corrected_by, data, modify_date, reader_id, event_source_type_id, event_state_id, partner_raw_data_id, hash_data_key, global_rule_id) select created_by, event_type_id, reader_time_stamp, resource_id, time_stamp, data_source_id, raw_data_id, create_date, corrected_by, data, modify_date, reader_id, event_source_type_id, event_state_id, partner_raw_data_id, hash_data_key, " + global_rule_id + " as global_rule_id from t_dt_de_3_" + tmp_period + " WHERE 1=1 " + completewhereStatement;
                                 var commandOrig = new NpgsqlCommand(sp, conOrig);
                                 commandOrig.CommandType = CommandType.Text;
                                 commandOrig.ExecuteScalar();
