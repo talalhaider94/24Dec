@@ -1107,7 +1107,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
                 return new CreateTicketDTO()
                 {
-                    Description = GenerateDiscriptionFromKPI(kpi,psl.Any()?(psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " "+psl.FirstOrDefault().result):"N/A"),
+                    Description = GenerateDiscriptionFromKPI(kpi, (psl != null)?psl.FirstOrDefault().result.Contains("[Non Calcolato]")?"[Non Calcolato]":psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result:"[Non Calcolato]"),
                     ID_KPI = kpi.id_kpi,
                     GroupCategoryId=kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),

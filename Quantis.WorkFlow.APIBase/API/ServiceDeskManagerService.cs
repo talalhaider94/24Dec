@@ -692,7 +692,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     dto.ShowArchivedMsg = true;
                     try
                     {
-                        if (ticket.Summary.Split('|').Length <= 3)
+                        if (ticket.Summary.Split('|').Length <= 4)
                         {
                             var kpiid = int.Parse(ticket.KpiIds.Split('|').Last());
                             var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == kpiid);
