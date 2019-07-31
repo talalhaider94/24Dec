@@ -42,7 +42,10 @@ export class ApiService {
     const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpis`;
     return this.http.get(getKpiEndPoint);
   }
-
+  getCatalogoKpisByUserId(): Observable<any> {
+    const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpisByUserId`;
+    return this.http.get(getKpiEndPoint);
+  }
   getConfigurations(): Observable<any> {
     const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllBasicConfigurations`;
     return this.http.get(getConfigurationsEndPoint);

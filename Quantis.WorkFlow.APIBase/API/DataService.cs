@@ -455,7 +455,23 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
         }
+        public List<CatalogKpiDTO> GetAllKpisByUserId(List<int> globalruleIds)
+        {
+            try
+            {
+                if (!globalruleIds.Any() || globalruleIds == null)
+                {
+                    return new List<CatalogKpiDTO>();
+                }
+                var kpis = _dbcontext.CatalogKpi.Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).Include(o => o.GlobalRule).Include(o => o.Sla).Where(o => globalruleIds.Contains(o.global_rule_id_bsi)).ToList();
+                return _catalogKpiMapper.GetDTOs(kpis.ToList());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
+        }
         public List<PageDTO> GetAllPages()
         {
             try

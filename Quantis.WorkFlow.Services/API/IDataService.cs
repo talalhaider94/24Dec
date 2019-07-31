@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.Services.API
         List<TRuleDTO> GetAllTRules();
         List<EmailNotifierDTO> GetEmailNotifiers(string period);
         List<CatalogKpiDTO> GetAllKpis(); //List<CatalogKPILVDTO> GetAllKpis(); 
+        List<CatalogKpiDTO> GetAllKpisByUserId(List<int> globalruleIds);
         CatalogKpiDTO GetKpiById(int Id);
         bool AddUpdateKpi(CatalogKpiDTO dto);
         List<KPIOnlyContractDTO> GetKpiByFormId(int Id);

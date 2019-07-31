@@ -241,6 +241,14 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetAllArchivedKPIs(month, year, id_kpi, globalrules);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllKpisByUserId")]
+        public List<CatalogKpiDTO> GetAllKpisByUserId()
+        {
+            var user = HttpContext.User as AuthUser;
+            var globalrules = _informationAPI.GetGlobalRulesByUserId(user.UserId);
+            return _dataAPI.GetAllKpisByUserId(globalrules);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetRawDataByKpiID")]
         public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {

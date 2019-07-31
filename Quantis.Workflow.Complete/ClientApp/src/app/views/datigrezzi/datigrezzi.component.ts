@@ -250,7 +250,7 @@ loadingModalDati:boolean=false;
 
   getKpis() {
  
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
+    this.apiService.getCatalogoKpisByUserId().subscribe((data: any) => {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
       this.rerender();
