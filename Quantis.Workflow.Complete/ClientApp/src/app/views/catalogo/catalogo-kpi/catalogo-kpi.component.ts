@@ -266,6 +266,32 @@ export class CatalogoKpiComponent implements OnInit {
   updateKpi(modal) {
     console.log(modal);
     this.toastr.info('Valore in aggiornamento..', 'Info');
+    switch (this.modalData.tracking_period) {
+      case 'MENSILE':
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+      case 'TRIMESTRALE':
+        this.modalData.month = '1,4,7,10';
+        this.modalData.monthtrigger = '1,4,7,10';
+        break;
+      case 'QUADRIMESTRALE':
+        this.modalData.month = '1,5,9';
+        this.modalData.monthtrigger = '1,5,9';
+        break;
+      case 'SEMESTRALE':
+        this.modalData.month = '1,7';
+        this.modalData.monthtrigger = '1,7';
+        break;
+      case 'ANNUALE':
+        this.modalData.month = '1';
+        this.modalData.monthtrigger = '1';
+        break;
+      default:
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+    }
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getKpis(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');

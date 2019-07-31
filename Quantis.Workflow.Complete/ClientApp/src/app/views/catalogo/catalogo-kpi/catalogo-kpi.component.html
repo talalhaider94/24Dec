@@ -157,9 +157,19 @@
                 </td>
               </tr>
               <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
-              <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.tracking_period"></td></tr>
+              <tr>
+                <th>FREQUENZA</th>
+                <td colspan="2">
+                  <select class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
+                    <option value="MENSILE">MENSILE</option>
+                    <option value="TRIMESTRALE">TRIMESTRALE</option>
+                    <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+                    <option value="SEMESTRALE">SEMESTRALE</option>
+                    <option value="ANNUALE">ANNUALE</option>
+                  </select>
+                </td>
 
-            </tbody>
+</tbody>
           </table>
           <table id="classTable" class="table stripe">
             <thead style="background: #E6E6E6">
