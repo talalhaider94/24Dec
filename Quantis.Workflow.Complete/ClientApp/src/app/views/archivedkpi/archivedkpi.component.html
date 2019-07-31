@@ -126,7 +126,7 @@
         <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" (click)="populateModalData(row)"
                                    data-target="#archivedKpiModal" title="VEDI"><i class="fa fa-eye"></i>
                                   </button>
-      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.id_kpi,row.tracking_period,row.interval_kpi)"
+      <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.global_rule_id,row.tracking_period,row.interval_kpi)"
                                    data-target="#datiModal"><i class="fa fa-table"></i>
                                   </button>
              </td>
@@ -177,7 +177,7 @@
               <td  style="text-align:center">{{rec.ticket_id}}</td>
               <td  style="text-align:center">{{rec.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
              
-              <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" title="DATI" (click)="getDatiSecondPop(rec.id_kpi,rec.interval_kpi,rec.tracking_period)"
+              <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" title="DATI" (click)="getDatiSecondPop(rec.global_rule_id,rec.interval_kpi,rec.tracking_period)"
                 data-target="#datiTempoModal"><i class="fa fa-table"></i></button></td>
             </tr>
             </tbody>

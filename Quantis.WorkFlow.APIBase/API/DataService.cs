@@ -1037,7 +1037,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                     var whereclause = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 month') )";
                     var whereYear = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 year') )";
-                    var filterByKpiId = " and id_kpi = :id_kpi";
+                    var filterByKpiId = " and global_rule_id = :global_rule_id";
                     var sp = @"select * from a_rules where 1=1";
                     if ( (month != null && month != "00") && (year != null))
                     {
@@ -1065,7 +1065,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     if ((id_kpi != null))
                     {
-                        command.Parameters.AddWithValue(":id_kpi", id_kpi.ToString());
+                        command.Parameters.AddWithValue(":global_rule_id", Int32.Parse(id_kpi));
                     }
                     using (var reader = command.ExecuteReader())
                     {
@@ -1238,12 +1238,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     con.Open();
                     List<ATDtDeDTO> list = new List<ATDtDeDTO>();
-                    var tablename = "t_dt_de_" + year + "_" + month;
+                    var tablename = "a_dt_de_" + year + "_" + month;
                     if (TableExists(tablename))
                     {
                     var sp = @"select * from " + tablename + " WHERE global_rule_id = :global_rule_id order by modify_date desc";
                     var command = new NpgsqlCommand(sp, con);
-                    command.Parameters.AddWithValue(":global_rule_id", id_kpi);
+                    command.Parameters.AddWithValue(":global_rule_id", Int32.Parse(id_kpi));
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())

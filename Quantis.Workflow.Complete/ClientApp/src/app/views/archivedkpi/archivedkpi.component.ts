@@ -114,6 +114,7 @@ intervalloPeriodo='';
       ticket_id: '',
       close_timestamp_ticket: '',
       archived: '',
+      global_rule_id: '',
      
     }
   ]
@@ -152,7 +153,7 @@ intervalloPeriodo='';
     this.reset();
     this.loadingModal1=true;
    
-    this.apiService.getArchivedKpiById(data.id_kpi).subscribe((kpis: any) => {
+    this.apiService.getArchivedKpiById(data.global_rule_id).subscribe((kpis: any) => {
     this.kpisData = kpis;
     this.loadingModal1=false;
    
