@@ -11,5 +11,6 @@ namespace Quantis.WorkFlow.Services.DTOs.Dashboard
         public int WigetCategoryId { get; set; }
         public string WidgetCategoryName { get; set; }
         public string IconURL { get; set; }
+        public string UIIdentifier { get; set; }
     }
 }

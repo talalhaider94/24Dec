@@ -18,6 +18,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public virtual DB_WidgetCategory WidgetCategory { get; set; }
         public int WidgetCategoryId { get; set; }
         public string IconURL { get; set; }
+        public string UIIdentifier { get; set; }
         public virtual List<DB_DashboardWidget> DashboardWidgets { get; set; }
     }
     public class DB_Widget_Configuration : IEntityTypeConfiguration<DB_Widget>

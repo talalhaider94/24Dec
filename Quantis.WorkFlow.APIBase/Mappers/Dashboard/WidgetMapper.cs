@@ -20,7 +20,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 IconURL = e.IconURL,
                 URL = e.URL,
                 WidgetCategoryName = e.WidgetCategory.Name,
-                WigetCategoryId = e.WidgetCategoryId
+                WigetCategoryId = e.WidgetCategoryId,
+                UIIdentifier=e.UIIdentifier
             };
         }
 
