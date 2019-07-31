@@ -598,10 +598,8 @@ getNumeroKPI(){
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Export.csv');
-
-
-
   }
+
 public exportAsExcelFile(json: any[], excelFileName: string): void {
     
   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
