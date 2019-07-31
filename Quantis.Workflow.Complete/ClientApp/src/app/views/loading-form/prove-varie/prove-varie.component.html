@@ -32,13 +32,13 @@
           <div class="card-header">
             <strong>{{jsonForm.description || title}}</strong>
           </div>
-          <div class="container" style="background:#fdcece">
+          <div class="container" style="background:#eedc00">
             <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index"
               class="panel panel-default">
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='Label'" class="panel-body ">
                 <div class="row align-items-center ">
                   <div class="col-md-12 ">
-                    <small><b><i>{{arrayFormElements[i].source}}</i></b></small>
+                    <small><b><i style="color:#0047bb">{{arrayFormElements[i].source}}</i></b></small>
                   </div>
                 </div>
               </div>
