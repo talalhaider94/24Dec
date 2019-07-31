@@ -575,25 +575,33 @@ getNumeroKPI(){
     this.exportAsExcelFile(this.fitroDataById, 'sample');
   }*/
  
-fireEvent()
+/*fireEvent()
 {
 /*const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
   const wb: XLSX.WorkBook = XLSX.utils.book_new();
  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Export.csv');*/
   
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.fitroDataById);
+ //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.fitroDataById);
 
     /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+ //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+//    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     
     /* save to file */
-    XLSX.writeFile(wb, 'SheetJS.csv');
+//    XLSX.writeFile(wb, 'SheetJS.csv');
   
  
-}
+//}
+  fireEvent() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'Export.csv');
 
+
+
+  }
 public exportAsExcelFile(json: any[], excelFileName: string): void {
     
   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
