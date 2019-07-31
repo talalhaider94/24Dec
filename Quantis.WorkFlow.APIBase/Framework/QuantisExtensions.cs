@@ -35,6 +35,10 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
         }
 
+        public static void Add(this Dictionary<string, string>  dic,KeyValuePair<string,string> kp)
+        {
+            dic.Add(kp.Key, kp.Value);
+        }
         public static void LogInformation(this WorkFlowPostgreSqlContext dbcontext,string logMessage)
         {
             try
