@@ -13,7 +13,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
         {
             return new DashboardDTO()
             {
-                CreatedOn = e.CreateOn,
+                CreatedOn = e.CreatedOn,
                 Id = e.Id,
                 Name = e.Name
             };

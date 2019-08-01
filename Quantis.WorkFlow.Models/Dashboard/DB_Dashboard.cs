@@ -11,7 +11,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public int Id { get; set; }
         public string Name { get; set; }
         public string UserId { get; set; }
-        public DateTime CreateOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public bool IsActive { get; set; }
         public virtual List<DB_DashboardWidget> DashboardWidgets {get;set;}
     }
