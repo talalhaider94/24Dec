@@ -20,6 +20,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "json-server": "json-server --watch ./API/db.json",
     "build": "ng build --prod --aot --buildOptimizer --commonChunk --vendorChunk --optimization --progress",
     "test": "ng test",
     "lint": "ng lint",

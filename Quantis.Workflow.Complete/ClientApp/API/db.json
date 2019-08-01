@@ -5,82 +5,20 @@
       "username": "Nathan",
       "dashboard": [
         {
-          "cols": 4,
-          "rows": 5,
-          "x": 0,
-          "y": 0,
-          "name": "Doughnut Chart",
-          "component": "Doughnut Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 4,
-          "y": 0,
-          "name": "Doughnut Chart",
-          "component": "Doughnut Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 9,
-          "y": 0,
-          "minItemRows": 5,
-          "minItemCols": 5,
-          "name": "Line Chart",
-          "component": "Line Chart"
-        },
-        {
           "cols": 5,
           "rows": 5,
           "x": 0,
-          "y": 5,
-          "name": "Doughnut Chart",
-          "component": "Doughnut Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 5,
-          "y": 5,
+          "y": 0,
           "name": "Radar Chart",
           "component": "Radar Chart"
         },
         {
           "cols": 5,
           "rows": 5,
-          "x": 10,
-          "y": 5,
-          "minItemRows": 5,
-          "minItemCols": 5,
-          "name": "Line Chart",
-          "component": "Line Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 14,
+          "x": 5,
           "y": 0,
-          "name": "Doughnut Chart",
-          "component": "Doughnut Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 15,
-          "y": 5,
-          "name": "Doughnut Chart",
-          "component": "Doughnut Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 19,
-          "y": 0,
-          "minItemRows": 5,
-          "minItemCols": 5,
-          "name": "Line Chart",
-          "component": "Line Chart"
+          "name": "Radar Chart",
+          "component": "Radar Chart"
         }
       ]
     },
@@ -126,15 +64,15 @@
   "widgets": [
     {
       "name": "Radar Chart",
-      "identifier": "radar_chart"
+      "uiidentifier": "radar_chart"
     },
     {
       "name": "Doughnut Chart",
-      "identifier": "doughnut_chart"
+      "uiidentifier": "doughnut_chart"
     },
     {
       "name": "Line Chart",
-      "identifier": "line_chart"
+      "uiidentifier": "line_chart"
     }
   ]
 }

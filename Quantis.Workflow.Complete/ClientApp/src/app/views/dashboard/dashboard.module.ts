@@ -20,7 +20,7 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
     FormsModule,
     DashboardRoutingModule,
     ChartsModule,
-    BsDropdownModule,
+    BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
     CommonModule,
     GridsterModule,

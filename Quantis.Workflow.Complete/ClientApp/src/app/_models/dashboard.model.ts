@@ -1,6 +1,13 @@
 export interface WidgetModel {
     name: string;
-    identifier: string;
+    uiidentifier: string;
+    createdon: Date;
+    help: string;
+    iconurl: string;
+    id: number;
+    url: string;
+    widgetcategoryname: string;
+    wigetcategoryid: number;
 }
 
 export interface DashboardContentModel {
@@ -20,17 +27,17 @@ export interface DashboardModel {
     dashboard: Array<DashboardContentModel>;
 }
 
-export const WidgetsMock: WidgetModel[] = [
-    {
-        name: 'Radar Chart',
-        identifier: 'radar_chart'
-    },
-    {
-        name: 'Doughnut Chart',
-        identifier: 'doughnut_chart'
-    },
-    {
-        name: 'Line Chart',
-        identifier: 'line_chart'
-    }
-]
+// export const WidgetsMock: WidgetModel[] = [
+//     {
+//         name: 'Radar Chart',
+//         identifier: 'radar_chart'
+//     },
+//     {
+//         name: 'Doughnut Chart',
+//         identifier: 'doughnut_chart'
+//     },
+//     {
+//         name: 'Line Chart',
+//         identifier: 'line_chart'
+//     }
+// ]

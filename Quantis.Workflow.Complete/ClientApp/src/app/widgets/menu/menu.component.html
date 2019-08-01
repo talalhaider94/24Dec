@@ -1,9 +1,9 @@
 <span *ngFor="let widget of widgetCollection">
   <!-- 
     Draggable widget from store using vanilla javascript event (dragstart)
-    onDrag() is call, it take $event and a widget identifier as parameters
+    onDrag() is call, it take $event and a widget uiidentifier as parameters
   -->
-  <a draggable="true" class="btn btn-success" (dragstart)="onDrag($event, widget.identifier)">
+  <a draggable="true" class="btn btn-success" (dragstart)="onDrag($event, widget.uiidentifier)">
     {{ widget.name }}
   </a>
 </span>
