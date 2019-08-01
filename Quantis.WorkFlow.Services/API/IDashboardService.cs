@@ -10,6 +10,6 @@ namespace Quantis.WorkFlow.Services.API
         List<DashboardDTO> GetDashboards();
         void AddUpdateDasboard(DashboardDetailDTO dto);
         List<WidgetDTO> GetAllWidgets();
-        List<DashboardWidgetDTO> GetDashboardWigetsByDashboardId(int id);
+        DashboardDetailDTO GetDashboardWigetsByDashboardId(int id);
     }
 }

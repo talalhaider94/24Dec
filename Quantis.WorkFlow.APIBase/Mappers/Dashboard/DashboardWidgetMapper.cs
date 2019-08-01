@@ -16,14 +16,15 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             var dto = new DashboardWidgetDTO()
             {
                 DashboardId = e.DashboardId,
-                GlobalFilterId = e.GlobalFilterId,
                 Id = e.Id,
                 LocationX = e.LocationX,
                 LocationY = e.LocationY,
                 SizeX = e.SizeX,
                 SizeY = e.SizeY,
                 WidgetId = e.WidgetId,
-                WidgetName = e.WidgetName ?? e.Widget.Name
+                WidgetName = e.WidgetName ?? e.Widget.Name,
+                UIIdentifier=e.Widget.UIIdentifier
+                
             };
             dto.Properties = e.DashboardWidgetSettings.Where(o => o.SettingType == 0).Select(o => new DashboardWidgetPropertyDTO()
             {
@@ -41,7 +42,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
 
         public override DB_DashboardWidget GetEntity(DashboardWidgetDTO o, DB_DashboardWidget e)
         {            
-            e.GlobalFilterId = o.GlobalFilterId;
             e.LocationX = o.LocationX;
             e.LocationY = o.LocationY;
             e.SizeX = o.SizeX;

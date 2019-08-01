@@ -56,6 +56,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     DB_Dashboard entdb = new DB_Dashboard();
                     entdb.Name = dto.Name;
+                    entdb.GlobalFilterId = dto.GlobalFilterId;
                     entdb.DashboardWidgets = dbwidgets;
                     _dbcontext.DB_Dashboards.Add(entdb);
                     _dbcontext.SaveChanges();
@@ -86,6 +87,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         var ent = _dbcontext.DB_DashboardWidgets.Single(o => o.Id == dbw.Id);
                         ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
                     }
+                    var dashboard=_dbcontext.DB_Dashboards.Single(o => o.Id == dto.Id);
+                    dashboard.GlobalFilterId = dto.GlobalFilterId;
                     _dbcontext.SaveChanges();
                 }
             }
@@ -107,12 +110,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<DashboardWidgetDTO> GetDashboardWigetsByDashboardId(int id)
+        public DashboardDetailDTO GetDashboardWigetsByDashboardId(int id)
         {
             try
             {
-                var entities = _dbcontext.DB_Dashboards.Include(o => o.DashboardWidgets).Single(o => o.Id == id); ;
-                return _dashboardWidgetMapper.GetDTOs(entities.DashboardWidgets.ToList());
+                var entities = _dbcontext.DB_Dashboards.Include(o => o.DashboardWidgets).Single(o => o.Id == id);
+                var widgets= _dashboardWidgetMapper.GetDTOs(entities.DashboardWidgets.ToList());
+                return new DashboardDetailDTO()
+                {
+                    Id = entities.Id,
+                    Name = entities.Name,
+                    GlobalFilterId = entities.GlobalFilterId,
+                    DashboardWidgets = widgets
+                };
+
             }
             catch (Exception e)
             {

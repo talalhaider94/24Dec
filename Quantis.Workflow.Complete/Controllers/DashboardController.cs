@@ -38,7 +38,7 @@ namespace Quantis.Workflow.Complete.Controllers
             return _dashboardAPI.GetAllWidgets();
         }
         [HttpGet("GetDashboardWigetsByDashboardId")]
-        public List<DashboardWidgetDTO> GetDashboardWigetsByDashboardId(int id)
+        public DashboardDetailDTO GetDashboardWigetsByDashboardId(int id)
         {
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
         }

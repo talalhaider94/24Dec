@@ -14,7 +14,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Dashboard
         public int LocationX { get; set; }
         public int LocationY { get; set; }
         public string WidgetName { get; set; }
-        public int GlobalFilterId { get; set; }
+        public string UIIdentifier { get; set; }
         public List<DashboardWidgetPropertyDTO> Properties { get; set; }
         public List<DashboardWidgetFilterDTO> Filters { get; set; }
     }
