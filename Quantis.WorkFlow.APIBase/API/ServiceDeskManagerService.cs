@@ -593,8 +593,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
         public void UpdateTicketValue(TicketValueDTO dto)
-        {
-            LogIn();
+        {            
             try
             {
                 var desc=GetTicketByID(dto.TicketId).Description;
@@ -607,9 +606,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 var indexend = vilorecomp.IndexOf(' ', indexstart);
                 var vilore = vilorecomp.Substring(indexstart, indexend - indexstart);
                 var newvilory = vilorecomp.Replace(vilore, dto.NewValue + "");
-                var newdesc = desc.Replace(vilorecomp, newvilory);
+                var newdesc = desc.Replace(vilorecomp, newvilory).ToString();
 
                 var tickethandle = "cr:" + dto.TicketId;
+                LogIn();
                 var changeojb=_sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "description", newdesc }, new string[0]);
                 changeojb.Wait();
                 _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, dto.Note, "LOG", 0, false).Wait();
