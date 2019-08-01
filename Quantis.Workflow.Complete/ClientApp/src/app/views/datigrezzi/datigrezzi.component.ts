@@ -343,7 +343,10 @@ clear(){
           console.log(e + '#' + this.eventTypeArray[e]);
         })*/
         this.loadingModalDati = false;
-    });
+    },
+      error=>{       
+         this.loadingModalDati = false;
+      });
   }
 
   getCountCampiData(){

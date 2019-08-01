@@ -314,6 +314,9 @@ intervalloPeriodo='';
             console.log(e + '#' + this.eventTypeArray[e]);
           })*/
           this.loadingModalDati = false;
+      },
+        error=>{       
+         this.loadingModalDati = false;
       });
   }
 
@@ -368,7 +371,11 @@ intervalloPeriodo='';
             this.fitroDataById[key].data['empty#'+i] = '##empty##';
           }
         }
-      })
+      },
+        error=>{       
+         this.loadingModalDati = false;
+      }
+      )
         
 
         //****console.log("array tempo",this.arrayPeriodo);
