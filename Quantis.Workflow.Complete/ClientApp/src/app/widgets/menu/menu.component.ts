@@ -21,9 +21,9 @@ export class MenuComponent implements OnInit {
 		});
 
 		// We make get request to get all dashboards from our REST API
-		this._ds.getDashboards().subscribe(dashboards => {
-			this.dashboardCollection = dashboards;
-		});
+		// this._ds.getDashboards().subscribe(dashboards => {
+		// 	this.dashboardCollection = dashboards;
+		// });
 	}
 
 	onDrag(event, identifier) {
