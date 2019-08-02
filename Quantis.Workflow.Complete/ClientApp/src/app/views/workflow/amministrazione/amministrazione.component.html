@@ -78,8 +78,8 @@
                                   <td>{{ i+1 }}</td>
                                   <td>{{ ticket.ref_num || 'N/A' }}</td>
                                   <td>{{ ticket.period || 'N/A' }}</td>
-                                  <td>{{ ticket.target || 'N/A' }}</td>
-                                  <td>{{ ticket.valore || 'N/A' }}</td>
+                                  <td>{{ parseTargetValue(ticket.description) || 'N/A' }}</td>
+                                  <td>{{ parseValoreValue(ticket.description) || 'N/A' }}</td>
                                   <td>
                                       <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                           (click)="openModal(ticket)">

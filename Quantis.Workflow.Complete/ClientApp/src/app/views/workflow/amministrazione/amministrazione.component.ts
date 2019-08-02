@@ -7,6 +7,7 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import {DateTimeService} from '../../../_helpers';
 import { WorkFlowService } from '../../../_services';
+import WorkFlowHelper from '../../../_helpers/workflow';
 
 @Component({
   selector: 'app-amministrazione',
@@ -155,6 +156,7 @@ export class AmministrazioneComponent implements OnInit {
       this.workFlowService.UpdateTicketValue(editTicketObj).pipe(first()).subscribe(data => {
         this.toastr.success('Ticket edited successfully.');
         this.loading = false;
+        this.editTicketModal.show();
         this.getTicketsForVilore();
       }, error => {
         console.log('onEditTicketFormSubmit: error', error);
@@ -163,4 +165,15 @@ export class AmministrazioneComponent implements OnInit {
       })
     }
   }
+  
+  parseTargetValue(description) {
+    let target = WorkFlowHelper.getDescriptionField(description, 'TARGET:');
+    return (target) ? target.value : target;
+  }
+  
+  parseValoreValue(description) {
+    let target = WorkFlowHelper.getDescriptionField(description, 'VALORE:');
+    return (target) ? target.value : target;
+  }
+
 }
