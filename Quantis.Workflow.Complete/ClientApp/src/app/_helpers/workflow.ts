@@ -16,7 +16,7 @@ export default class WorkFlowHelper {
         const regex = /([\w]+:)("(([^"])*)"|'(([^'])*)'|(([^\s])*))/g;
         if (!!description && description.length > 0) {
             let stringMatches = description.match(regex);
-            if (stringMatches.length > 0) {
+            if (stringMatches && stringMatches.length > 0) {
                 return stringMatches.map((key, index) => {
                     return {
                         key,
@@ -29,5 +29,9 @@ export default class WorkFlowHelper {
         } else {
             return ['N/A'];
         }
+    }
+    
+    static getDescriptionField(description, field) {
+        return this.formatDescription(description).find(column => column.key === field);
     }
 }
