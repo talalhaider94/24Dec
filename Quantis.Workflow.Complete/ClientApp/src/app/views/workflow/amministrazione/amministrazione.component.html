@@ -13,7 +13,7 @@
                                   <div class="form-group col-6">
                                       <label for="monthOption"><strong>Mese</strong></label>
                                       <select #monthSelect class="form-control" name="monthOption"
-                                          [(ngModel)]="monthOption">
+                                          [(ngModel)]="monthOption" (change)="onDataChange()">
                                           <option value="all">Tutti</option>
                                           <option value="01">1</option>
                                           <option value="02">2</option>
@@ -32,7 +32,7 @@
                                   <div class="form-group col-6">
                                       <label for="yearOption"><strong>Anno</strong></label>
                                       <select #yearSelect class="form-control" name="yearOption"
-                                          [(ngModel)]="yearOption">
+                                          [(ngModel)]="yearOption" (change)="onDataChange()">
                                           <option value="all">Tutti</option>
                                           <option value="16">2016</option>
                                           <option value="18">2017</option>
@@ -71,10 +71,10 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <!-- <tr *ngIf="allTickets && allTickets.length === 0 && !loading">
+                              <tr *ngIf="searchedTickets && searchedTickets.length === 0 && !loading">
                                   <td colspan="6"><strong>Nessun Ticket Trovato</strong></td>
                               </tr>
-                              <tr *ngFor="let ticket of allTickets; let i = index">
+                              <tr *ngFor="let ticket of searchedTickets; let i = index">
                                   <td>{{ i+1 }}</td>
                                   <td>{{ ticket.ref_num || 'N/A' }}</td>
                                   <td>{{ ticket.period || 'N/A' }}</td>
@@ -82,24 +82,11 @@
                                   <td>{{ ticket.valore || 'N/A' }}</td>
                                   <td>
                                       <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                          (click)="ticketActions(ticket)">
+                                          (click)="openModal(ticket)">
                                           <span class="fa fa-calendar"></span>
                                       </button>
                                   </td>
-                              </tr> -->
-                              <tr>
-                                <td>1</td>
-                                <td>200333</td>
-                                <td>03/19</td>
-                                <td>Myself</td>
-                                <td>Some value</td>
-                                <td>
-                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                        (click)="openModal(ticket)">
-                                        <span class="fa fa-calendar"></span>
-                                    </button>
-                                </td>
-                            </tr>
+                              </tr>
                           </tbody>
                       </table>
                   </div>
@@ -111,36 +98,65 @@
   <!--/.row-->
 </div>
 
-<div bsModal #successModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div bsModal #editTicketModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-success modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Modal</h4>
-                <button type="button" class="close" (click)="successModal.hide()" aria-label="Close">
+                <h4 class="modal-title">Edit Ticket ID {{editTicketId}}</h4>
+                <button type="button" class="close" (click)="editTicketModal.hide()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- success model body table -->
-                <form [formGroup]="approveForm" >
+                <!-- edit model body table -->
+                <form [formGroup]="editTicketForm" (ngSubmit)="onEditTicketFormSubmit()">
                   <div class="input-group mb-3">
-                    <input type="text" formControlName="valore" class="form-control" placeholder="Valore"/>
+                    <input type="number" min="0" formControlName="Value" class="form-control"
+                     placeholder="Valore"
+                     [ngClass]="{ 'is-invalid': submitted && editTicketValues.Value.errors }"
+                     />
                 </div>
-                  <div class="input-group mb-3">
-                      <textarea formControlName="description" class="form-control" placeholder="Note"
-                          autocomplete="description" rows="3"></textarea>
-                  </div>
+                <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Value.errors && editTicketValues.Value.errors.required">Valore is required</span>
+
+                <div class="input-group mb-3">
+                        <input type="text"  formControlName="Sign" class="form-control"
+                         placeholder="Sign"
+                         [ngClass]="{ 'is-invalid': submitted && editTicketValues.Sign.errors }"
+                         />
+                    </div>
+                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Sign.errors && editTicketValues.Sign.errors.required">Sign is required</span>
+
+                    <div class="input-group mb-3">
+                            <select class="form-control" formControlName="Type" [ngClass]="{ 'is-invalid': submitted && editTicketValues.Type.errors }">
+                            <option value="">Select</option>
+                            <option value="1">Complaint</option>
+                            <option value="2">Non Compliant</option>
+                        </select>
+                        </div>
+                        <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Type.errors && editTicketValues.Type.errors.required">
+                            Type is required
+                        </span>
+
+                    <div class="input-group mb-3">
+                            <textarea formControlName="Note" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && editTicketValues.Note.errors }"
+                                placeholder="Note" rows="3"></textarea>
+    
+                    </div>
+                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Note.errors && editTicketValues.Note.errors.required">
+                        Note is required.
+                    </span>
                   <div class="row">
                       <div class="col-6">
                           <button [disabled]="loading" type="submit" class="btn btn-primary px-4">
                               <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva 
                           </button>
-                          <button type="button" class="btn btn-secondary" (click)="approveModal.hide()">Chiudi </button>
+                          <button type="button" class="btn btn-secondary" (click)="editTicketModal.hide()">Chiudi </button>
                       </div>
                   </div>
               </form>
-                <!-- success model body table end -->
+                <!-- edit model body table end -->
             </div>
         </div>
         <!-- /.modal-content -->
