@@ -143,7 +143,15 @@ export class AmministrazioneComponent implements OnInit {
         return;
     } else {
       this.loading = true;
-      let editTicketObj = { ...this.editTicketValues, TicketId:this.editTicketId }
+      const { Value, Note, Sign, Type } = this.editTicketValues;
+      
+      let editTicketObj = { 
+        TicketId:this.editTicketId,
+        Value: Value.value,
+        Note: Note.value,
+        Sign: Sign.value,
+        Type: Type.value
+       }
       this.workFlowService.UpdateTicketValue(editTicketObj).pipe(first()).subscribe(data => {
         this.toastr.success('Ticket edited successfully.');
         this.loading = false;
