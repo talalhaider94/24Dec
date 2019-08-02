@@ -592,23 +592,31 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public void UpdateTicketValue(TicketValueDTO dto)
-        {            
+        public void UpdateTicketValue(HttpContext context,TicketValueDTO dto)
+        {
+            
             try
             {
+                var user = context.User as AuthUser;
+                if (user == null)
+                {
+                    throw new Exception("No user Login to Get Tickets by user");
+                }
+                var userid = _dataService.GetUserIdByUserName(user.UserName);
                 var desc=GetTicketByID(dto.TicketId).Description;
                 if (desc.IndexOf("VALORE: [Non Calcolato]") == -1)
                 {
                     throw new Exception("Description format saved in ticket is not correct");
                 }
-                var newstring = string.Format("VALORE: {0} {1} {2}", dto.Value, dto.Sign, dto.Type == 1 ? "[Complaint]" : "[Non Complaint]");
+                var newstring = string.Format("VALORE: {0} {1} {2}", dto.Value, dto.Sign, dto.Type == 1 ? "[Compliant]" : "[Non Compliant]");
                 var newdesc = desc.Replace("VALORE: [Non Calcolato]", newstring).ToString();
 
                 var tickethandle = "cr:" + dto.TicketId;
                 LogIn();
                 var changeojb=_sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "description", newdesc }, new string[0]);
                 changeojb.Wait();
-                _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, dto.Note, "LOG", 0, false).Wait();
+                var note = string.Format("Aggiornato il valore del ticket da parte dell’utente: {0}  Questa è la nota inserita: {1}", userid.Split('\\')[1], dto.Note);
+                _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, note, "LOG", 0, false).Wait();
             }
             catch(Exception e)
             {
