@@ -15,7 +15,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             {
                 CreatedOn = e.CreatedOn,
                 Id = e.Id,
-                Name = e.Name
+                Name = e.Name,
+                Owner=e.User.user_name
             };
         }
 
