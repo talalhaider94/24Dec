@@ -597,16 +597,12 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var desc=GetTicketByID(dto.TicketId).Description;
-                if (desc.IndexOf("VALORE:") == -1)
+                if (desc.IndexOf("VALORE: [Non Calcolato]") == -1)
                 {
                     throw new Exception("Description format saved in ticket is not correct");
                 }
-                var vilorecomp=desc.Split('\n')[5];
-                var indexstart= vilorecomp.IndexOf(' ')+1;
-                var indexend = vilorecomp.IndexOf(' ', indexstart);
-                var vilore = vilorecomp.Substring(indexstart, indexend - indexstart);
-                var newvilory = vilorecomp.Replace(vilore, dto.NewValue + "");
-                var newdesc = desc.Replace(vilorecomp, newvilory).ToString();
+                var newstring = string.Format("VALORE: {0} {1} {2}", dto.Value, dto.Sign, dto.Type == 1 ? "[Complaint]" : "[Non Complaint]");
+                var newdesc = desc.Replace("VALORE: [Non Calcolato]", newstring).ToString();
 
                 var tickethandle = "cr:" + dto.TicketId;
                 LogIn();
