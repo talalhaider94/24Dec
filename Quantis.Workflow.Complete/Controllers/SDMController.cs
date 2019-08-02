@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.GetTicketsRicercaByUser(HttpContext, period);
         }
+        [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_ADMIN)]
         [HttpGet("GetTicketsSearchForViloreByUser")]
         public List<SDMTicketLVDTO> GetTicketsSearchForViloreByUser(string period)
         {
@@ -89,6 +90,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _sdmAPI.UploadAttachmentToTicket(dto);
         }
+        [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_ADMIN)]
         [HttpPost("UpdateTicketValue")]
         public void UpdateTicketValue([FromBody]TicketValueDTO dto)
         {
