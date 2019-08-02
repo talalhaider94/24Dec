@@ -93,7 +93,7 @@ export class WorkFlowService {
   }
 
   UpdateTicketValue(args): Observable<any> {
-    const updateTicketEndPoint = `${environment.API_URL}/api/sdm/UpdateTicketValue`;
+    const updateTicketEndPoint = `${environment.API_URL}/sdm/UpdateTicketValue`;
     return this.http.post(updateTicketEndPoint, args, {observe: 'response'});
   }
 
