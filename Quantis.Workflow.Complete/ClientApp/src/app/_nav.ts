@@ -91,7 +91,7 @@ export const navItems: NavData[] = [
         name: 'Amministrazione',
         url: '/workflow/amministrazione',
         icon: 'fa fa-users',
-        version: '0.0.1',
+        version: '0.0.2',
         key: ['VIEW_WORKFLOW_ADMIN']
       }
     ]

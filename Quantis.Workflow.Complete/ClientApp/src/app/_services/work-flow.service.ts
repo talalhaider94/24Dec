@@ -85,4 +85,16 @@ export class WorkFlowService {
     return this.http.post(submitAttachmentEndPoint, params, {observe: 'response'});
   }
 
+  getViloreByUser(period: string): Observable<any> {
+    // return this.http.get('https://api.myjson.com/bins/ktkyz');
+    const viloreEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchForViloreByUser`;
+    const  params = new  HttpParams().set('period', period);
+    return this.http.get(viloreEndPoint, { params });
+  }
+
+  UpdateTicketValue(args): Observable<any> {
+    const updateTicketEndPoint = `${environment.API_URL}/api/sdm/UpdateTicketValue`;
+    return this.http.post(updateTicketEndPoint, args, {observe: 'response'});
+  }
+
 }
