@@ -2,30 +2,16 @@
   "dashboards": [
     {
       "id": 1,
-      "username": "Nathan",
-      "dashboard": [
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 0,
-          "y": 0,
-          "name": "Radar Chart",
-          "component": "Radar Chart"
-        },
-        {
-          "cols": 5,
-          "rows": 5,
-          "x": 5,
-          "y": 0,
-          "name": "Radar Chart",
-          "component": "Radar Chart"
-        }
-      ]
+      "name": "Super Dashboard",
+      "createdon": "0001-01-01T00:00:00",
+      "dashboardwidgets": []
     },
     {
       "id": 2,
-      "username": "John",
-      "dashboard": [
+      "name": "Custom Dashboard",
+      "owner": "amazzei",
+      "createdon": "2019-07-24T18:29:43",
+      "dashboardwidgets": [
         {
           "cols": 5,
           "rows": 5,

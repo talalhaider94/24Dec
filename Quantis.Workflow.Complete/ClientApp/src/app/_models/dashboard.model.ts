@@ -23,8 +23,10 @@ export interface DashboardContentModel {
 
 export interface DashboardModel {
     id: number;
-    username: string;
-    dashboard: Array<DashboardContentModel>;
+    name: string;
+    owner: string,
+    createdon: Date,
+    dashboardwidgets: Array<DashboardContentModel>;
 }
 
 // export const WidgetsMock: WidgetModel[] = [

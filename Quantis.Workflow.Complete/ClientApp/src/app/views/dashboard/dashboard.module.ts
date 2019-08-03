@@ -7,6 +7,7 @@ import { DynamicModule } from 'ng-dynamic-component';
 import { GridsterModule } from 'angular-gridster2';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -22,6 +23,7 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
     ChartsModule,
     BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
+    CollapseModule.forRoot(),
     CommonModule,
     GridsterModule,
     DynamicModule.withComponents([

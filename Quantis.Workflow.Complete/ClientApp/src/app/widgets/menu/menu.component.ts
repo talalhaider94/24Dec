@@ -11,7 +11,6 @@ export class MenuComponent implements OnInit {
 
   constructor(private _ds: DashboardService) {};
   protected widgetCollection: WidgetModel[];
-	protected dashboardCollection: DashboardModel[];
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
@@ -19,11 +18,6 @@ export class MenuComponent implements OnInit {
 		this._ds.getWidgets().subscribe(widgets => {
 			this.widgetCollection = widgets;
 		});
-
-		// We make get request to get all dashboards from our REST API
-		// this._ds.getDashboards().subscribe(dashboards => {
-		// 	this.dashboardCollection = dashboards;
-		// });
 	}
 
 	onDrag(event, identifier) {

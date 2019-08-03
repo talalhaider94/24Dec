@@ -6,7 +6,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 import { ObservableLike } from 'rxjs';
-
+import { DashboardService } from '../../_services';
+import { WidgetModel, DashboardModel } from "../../_models";
 
 @Component({
   selector: 'app-dashboard',
@@ -22,10 +23,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public currentVerion = '0.0.1';
   public returnedNode:any;
   currentUser: any;
+  protected dashboardCollection: DashboardModel[];
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,
     private router: Router,
+    private dashboardService: DashboardService,
     @Inject(DOCUMENT) _document?: any,
     ) {
       this.currentUser = this.authService.getUser(); 
@@ -55,6 +58,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = this.returnedNode.version || '0.0.1';
     });
+    
+    // We make get request to get all dashboards from our REST API
+		this.dashboardService.getDashboards().subscribe(dashboards => {
+			this.dashboardCollection = dashboards;
+    });
+    
   }
 
   ngOnDestroy(): void {
