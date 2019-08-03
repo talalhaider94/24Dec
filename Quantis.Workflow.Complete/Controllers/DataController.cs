@@ -73,7 +73,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllUsers();
         }
-        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATIONS)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_ROLES)]
         [HttpGet("GetUsersByRoleId")]
         public List<UserDTO> GetUsersByRoleId(int roleId)
         {
