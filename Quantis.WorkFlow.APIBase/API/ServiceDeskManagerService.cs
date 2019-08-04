@@ -310,6 +310,26 @@ namespace Quantis.WorkFlow.APIBase.API
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
                 ret = parseNewTicket(ticket);
+                var sdm_fact = new SDM_TicketFact()
+                {
+                    complaint = (dto.Description.IndexOf("[Complaint]") != -1),
+                    created_on = DateTime.Now,
+                    global_rule_id = int.Parse(dto.zz3_KpiIds.Split('|')[1]),
+                    notcalculated = (dto.Description.IndexOf("[Non Calcolato]") != -1),
+                    notcomplaint = (dto.Description.IndexOf("[Non Complaint]") != -1),
+                    period_month = DateTime.Now.AddMonths(-1).Month,
+                    period_year = DateTime.Now.AddMonths(-1).Year,
+                    primary_contract_party_id = dto.GroupCategoryId,
+                    refused = false,
+                    result_value = dto.zz2_calcValue,
+                    secondary_contract_party_id = dto.SecondaryContractParty,
+                    ticket_id = int.Parse(ret.Id),
+                    ticket_refnum = int.Parse(ret.ref_num),
+                    customer_id = _infomationAPI.GetContractIdByGlobalRuleId(int.Parse(dto.zz3_KpiIds.Split('|')[1]))
+
+                };
+                _dbcontext.SDMTicketFact.Add(sdm_fact);
+                _dbcontext.SaveChanges();
                 var attachments = _dataService.GetAttachmentsByKPIID(Id);
                 foreach(var att in attachments)
                 {
@@ -321,12 +341,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     param.Add("fileName", att.doc_name);
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
-                var log = new SDM_TicketLog();
-                log.global_rule_id = _dbcontext.CatalogKpi.Single(o => o.id == Id).global_rule_id_bsi;
-                log.period = dto.Period;
-                log.ticket_id = int.Parse(ret.ref_num);
-                log.create_timestamp = DateTime.Now;
-                _dbcontext.SDMTicketLogs.Add(log);
                 _dbcontext.SaveChanges();
 
             }
@@ -580,6 +594,20 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.IsBSIStatusChanged = true;
                 }
+                if (_dbcontext.SDMTicketFact.Any(o => o.ticket_id == id))
+                {
+                    var fact = _dbcontext.SDMTicketFact.Single(o => o.ticket_id == id);
+                    var log = new SDM_TicketLog()
+                    {
+                        created_on = DateTime.Now,
+                        log_type = "D",
+                        note = description,
+                        TicketFact = fact,
+                        ticket_fact_id = fact.id
+                    };
+                    _dbcontext.SDMTicketLogs.Add(log);
+                    _dbcontext.SaveChanges();
+                }
                 return dto;
             }
             catch (Exception e)
@@ -728,6 +756,20 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.LogInformation("Error: " + e.Message);
                     }
 
+                }
+                if (_dbcontext.SDMTicketFact.Any(o => o.ticket_id == id))
+                {
+                    var fact = _dbcontext.SDMTicketFact.Single(o => o.ticket_id == id);
+                    var log = new SDM_TicketLog()
+                    {
+                        created_on = DateTime.Now,
+                        log_type = "A",
+                        note = description,
+                        TicketFact = fact,
+                        ticket_fact_id = fact.id
+                    };
+                    _dbcontext.SDMTicketLogs.Add(log);
+                    _dbcontext.SaveChanges();
                 }
                 return dto;
 

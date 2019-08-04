@@ -1130,6 +1130,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
+                    SecondaryContractParty=kpi.secondary_contract_party,
                     Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ contractPartyName,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 

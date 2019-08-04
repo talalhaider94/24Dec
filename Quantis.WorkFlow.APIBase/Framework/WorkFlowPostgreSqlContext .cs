@@ -42,6 +42,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<SDM_TicketStatus> SDMTicketStatus { get; set; }
         public DbSet<SDM_TicketGroup> SDMTicketGroup { get; set; }
         public DbSet<SDM_TicketLog> SDMTicketLogs { get; set; }
+        public DbSet<SDM_TicketFact> SDMTicketFact { get; set; }
         public DbSet<T_User_KPI> UserKPIs { get; set; }
         public DbSet<T_Customer> Customers { get; set; }
         public DbSet<T_EmailNotifiers> EmailNotifiers { get; set; }
@@ -78,6 +79,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_GlobalRule_Configuration());
             builder.ApplyConfiguration(new T_Sla_Configuration());
             builder.ApplyConfiguration(new SDM_TicketLog_Configuration());
+            builder.ApplyConfiguration(new SDM_TicketFact_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -114,6 +116,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_GlobalRule>();
             updateUpdatedProperty<T_Sla>();
             updateUpdatedProperty<SDM_TicketLog>();
+            updateUpdatedProperty<SDM_TicketFact>();
             return base.SaveChanges();
         }
 
