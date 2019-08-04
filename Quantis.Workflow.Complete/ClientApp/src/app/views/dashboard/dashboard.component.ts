@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
 		// let parsed: DashboardModel = JSON.parse(tmp);
 		// this.serialize(parsed.dashboardwidgets);
 		// console.log(this.dashboardArray);
-		
+		debugger
 		this._ds.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
 			debugger
 		}, error => {

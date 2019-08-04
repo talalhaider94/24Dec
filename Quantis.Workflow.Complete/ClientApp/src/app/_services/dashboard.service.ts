@@ -76,6 +76,6 @@ export class DashboardService {
 			createdon: params.createdon,
 			dashboardwidgets
 		}
-		return this.http.post<DashboardModel>(`http://localhost:5000/api/dashboard/AddUpdateDasboard/${id}`, newParams);
+		return this.http.post<DashboardModel>(`http://localhost:5000/api/dashboard/AddUpdateDasboard`, newParams);
 	}
 }
