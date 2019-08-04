@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_WORKFLOW_RICERCA = "VIEW_WORKFLOW_RICERCA";
         public const string VIEW_CATALOG_UTENTI = "VIEW_CATALOG_UTENTI";
         public const string VIEW_CATALOG_KPI = "VIEW_CATALOG_KPI";
+        public const string EDIT_CATALOG_KPI = "EDIT_CATALOG_KPI";
         public const string VIEW_UTENTI_DA_CONSOLIDARE= "VIEW_UTENTI_DA_CONSOLIDARE";
         public const string VIEW_KPI_DA_CONSOLIDARE = "VIEW_KPI_DA_CONSOLIDARE";
         public const string VIEW_KPI_CERTICATI = "VIEW_KPI_CERTICATI";
