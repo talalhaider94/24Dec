@@ -1,19 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-doughnut-chart',
-  templateUrl: './doughnut-chart.component.html',
-  styleUrls: ['./doughnut-chart.component.scss']
+	selector: 'app-doughnut-chart',
+	templateUrl: './doughnut-chart.component.html',
+	styleUrls: ['./doughnut-chart.component.scss']
 })
 export class DoughnutChartComponent implements OnInit {
+	isCollapsed = true;
+	constructor() { }
 
-  constructor() { }
+	ngOnInit() {
+		console.log('DOUGHNUT CHART COMPONENT')
+	}
 
-  ngOnInit() {
-	  console.log('DOUGHNUT CHART COMPONENT')
-  }
-  
-  public doughnutChartLabels: string[] = [
+	public doughnutChartLabels: string[] = [
 		"Download Sales",
 		"In-Store Sales",
 		"Mail-Order Sales"

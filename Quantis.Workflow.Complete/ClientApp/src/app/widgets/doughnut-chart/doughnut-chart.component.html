@@ -1,4 +1,45 @@
+<button type="button" class="no-drag btn-sm btn btn-primary" (click)="isCollapsed = !isCollapsed"
+	[attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
+	<i class="fa fa-cog"></i> <span class="caret"></span>
+</button>
+
+<div class="no-drag" id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
+	<div class="well well-lg card card-block card-header">
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+		<select class="form-control" name="yearOption">
+			<option value="16">Line Chart</option>
+			<option value="18">Bar Chart</option>
+		</select>
+	</div>
+</div>
 <div style="display: block">
-	<canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" (chartHover)="chartHovered($event)"
-	 (chartClick)="chartClicked($event)"></canvas>
+	<canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+		(chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
 </div>

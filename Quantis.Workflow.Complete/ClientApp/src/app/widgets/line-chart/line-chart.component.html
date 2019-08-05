@@ -1,11 +1,8 @@
 <div style="display: block;">
-  <canvas baseChart 
-              [datasets]="lineChartData"
-              [labels]="lineChartLabels"
-              [options]="lineChartOptions"
-              [colors]="lineChartColors"
-              [legend]="lineChartLegend"
-              [chartType]="lineChartType"
-              (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)"></canvas>
+  <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+    [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+    (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+
+  <!-- <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions">
+  </highcharts-chart> -->
 </div>

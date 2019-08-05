@@ -12,19 +12,7 @@
           <button class="btn btn-sm btn-primary drag-handler">
             <i class="fa fa-arrows-alt"></i>
           </button>
-          <button type="button" class="no-drag btn-sm btn btn-primary" (click)="isCollapsed = !isCollapsed"
-            [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
-            <i class="fa fa-cog"></i> <span class="caret"></span>
-          </button>
 
-          <div class="no-drag" id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
-            <div class="well well-lg card card-block card-header">
-              <select class="form-control" name="yearOption">
-                <option value="16">Line Chart</option>
-                <option value="18">Bar Chart</option>
-              </select>
-            </div>
-          </div>
         </div>
         <!-- Delete button call removeItem() who takes as parameter item -->
 
@@ -35,7 +23,10 @@
           ndc-dynamic tag is from ng-dynamic-component library 
           it generates a dynamic component on the fly
         -->
-        <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" (moduleInfo)="display($event)">
+        <ndc-dynamic class="no-drag" 
+        [ndcDynamicComponent]="item.component"
+        [ndcDynamicInputs]="inputs" 
+        (moduleInfo)="display($event)">
         </ndc-dynamic>
       </div>
     </div>

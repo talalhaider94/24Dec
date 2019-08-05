@@ -11,6 +11,9 @@
     </li>
   </ul> -->
   <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item" *ngIf="loading">
+      <i class="fa fa-spin fa-spinner text-info fa-2x"></i> 
+    </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link"  href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
         <i class="icon-bell"></i>

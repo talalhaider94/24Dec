@@ -1,74 +1,121 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import * as Highcharts from 'highcharts';
 
 @Component({
-  selector: 'app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss']
+	selector: 'app-line-chart',
+	templateUrl: './line-chart.component.html',
+	styleUrls: ['./line-chart.component.scss']
 })
 export class LineChartComponent implements OnInit {
+	@Input() inputs: any;
+	@Input() hello: string;
+	isCollapsed = true;
+	constructor() { }
 
-  constructor() { }
-
-  ngOnInit() {
-	  console.log('LINE CHART COMPONENT');
-  }
-  	// lineChart
-	public lineChartData:Array<any> = [
-		{data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-		{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-		{data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
-	  ];
-	  public lineChartLabels:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-	  public lineChartOptions:any = {
+	ngOnInit() {
+		console.log('LINE CHART COMPONENT', this.inputs);
+		console.log('LINE CHART COMPONENT', this.hello);
+	}
+	// lineChart
+	public lineChartData: Array<any> = [
+		{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
+		{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
+		{ data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C' }
+	];
+	public lineChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+	public lineChartOptions: any = {
 		responsive: true
-	  };
-	  public lineChartColors:Array<any> = [
+	};
+	public lineChartColors: Array<any> = [
 		{ // grey
-		  backgroundColor: 'rgba(148,159,177,0.2)',
-		  borderColor: 'rgba(148,159,177,1)',
-		  pointBackgroundColor: 'rgba(148,159,177,1)',
-		  pointBorderColor: '#fff',
-		  pointHoverBackgroundColor: '#fff',
-		  pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+			backgroundColor: 'rgba(148,159,177,0.2)',
+			borderColor: 'rgba(148,159,177,1)',
+			pointBackgroundColor: 'rgba(148,159,177,1)',
+			pointBorderColor: '#fff',
+			pointHoverBackgroundColor: '#fff',
+			pointHoverBorderColor: 'rgba(148,159,177,0.8)'
 		},
 		{ // dark grey
-		  backgroundColor: 'rgba(77,83,96,0.2)',
-		  borderColor: 'rgba(77,83,96,1)',
-		  pointBackgroundColor: 'rgba(77,83,96,1)',
-		  pointBorderColor: '#fff',
-		  pointHoverBackgroundColor: '#fff',
-		  pointHoverBorderColor: 'rgba(77,83,96,1)'
+			backgroundColor: 'rgba(77,83,96,0.2)',
+			borderColor: 'rgba(77,83,96,1)',
+			pointBackgroundColor: 'rgba(77,83,96,1)',
+			pointBorderColor: '#fff',
+			pointHoverBackgroundColor: '#fff',
+			pointHoverBorderColor: 'rgba(77,83,96,1)'
 		},
 		{ // grey
-		  backgroundColor: 'rgba(148,159,177,0.2)',
-		  borderColor: 'rgba(148,159,177,1)',
-		  pointBackgroundColor: 'rgba(148,159,177,1)',
-		  pointBorderColor: '#fff',
-		  pointHoverBackgroundColor: '#fff',
-		  pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+			backgroundColor: 'rgba(148,159,177,0.2)',
+			borderColor: 'rgba(148,159,177,1)',
+			pointBackgroundColor: 'rgba(148,159,177,1)',
+			pointBorderColor: '#fff',
+			pointHoverBackgroundColor: '#fff',
+			pointHoverBorderColor: 'rgba(148,159,177,0.8)'
 		}
-	  ];
-	  public lineChartLegend:boolean = true;
-	  public lineChartType:string = 'line';
-	 
-	  public randomize():void {
-		let _lineChartData:Array<any> = new Array(this.lineChartData.length);
+	];
+	public lineChartLegend: boolean = true;
+	public lineChartType: string = 'line';
+
+	public randomize(): void {
+		let _lineChartData: Array<any> = new Array(this.lineChartData.length);
 		for (let i = 0; i < this.lineChartData.length; i++) {
-		  _lineChartData[i] = {data: new Array(this.lineChartData[i].data.length), label: this.lineChartData[i].label};
-		  for (let j = 0; j < this.lineChartData[i].data.length; j++) {
-			_lineChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
-		  }
+			_lineChartData[i] = { data: new Array(this.lineChartData[i].data.length), label: this.lineChartData[i].label };
+			for (let j = 0; j < this.lineChartData[i].data.length; j++) {
+				_lineChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
+			}
 		}
 		this.lineChartData = _lineChartData;
-	  }
-	 
-	  // events
-	  public chartClicked(e:any):void {
-		console.log(e);
-	  }
-	 
-	  public chartHovered(e:any):void {
-		console.log(e);
-	  }
+	}
 
+	// events
+	public chartClicked(e: any): void {
+		console.log(e);
+	}
+
+	public chartHovered(e: any): void {
+		console.log(e);
+	}
+	// high charts line start
+	// highcharts = Highcharts;
+	// chartOptions = {   
+	//    chart: {
+	// 	  type: "spline",
+	// 	  height: null,
+	// 	  width: null,
+	//    },
+	//    title: {
+	// 	  text: "Monthly Average Temperature"
+	//    },
+	//    subtitle: {
+	// 	  text: "Source: WorldClimate.com"
+	//    },
+	//    xAxis:{
+	// 	  categories:["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+	// 		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	//    },
+	//    yAxis: {          
+	// 	  title:{
+	// 		 text:"Temperature °C"
+	// 	  } 
+	//    },
+	//    tooltip: {
+	// 	  valueSuffix:" °C"
+	//    },
+	//    series: [{
+	// 	  name: 'Tokyo',
+	// 	  data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2,26.5, 23.3, 18.3, 13.9, 9.6]
+	//    },
+	//    {
+	// 	  name: 'New York',
+	// 	  data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8,24.1, 20.1, 14.1, 8.6, 2.5]
+	//    },
+	//    {
+	// 	  name: 'Berlin',
+	// 	  data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+	//    },
+	//    {
+	// 	  name: 'London',
+	// 	  data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+	//    }]
+	// }; 
+	// high charts line end
 }
