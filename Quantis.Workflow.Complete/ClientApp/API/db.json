@@ -50,15 +50,18 @@
   "widgets": [
     {
       "name": "Radar Chart",
-      "uiidentifier": "radar_chart"
+      "uiidentifier": "radar_chart",
+      "iconurl": "https://www.tutorialspoint.com/images/facebookIcon.jpg"
     },
     {
       "name": "Doughnut Chart",
-      "uiidentifier": "doughnut_chart"
+      "uiidentifier": "doughnut_chart",
+      "iconurl": "https://www.tutorialspoint.com/images/facebookIcon.jpg"
     },
     {
       "name": "Line Chart",
-      "uiidentifier": "line_chart"
+      "uiidentifier": "line_chart",
+      "iconurl": "https://www.tutorialspoint.com/images/facebookIcon.jpg"
     }
   ]
 }

@@ -89,6 +89,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     });
   }
 
+  dashboardNavigation(id) {
+    this.router.navigate(['/dashboard/dashboard', id]);
+  }
+
   filterMenuByPermission(navItems, permissions, permittedMenu) {
     if (navItems) {
       navItems.forEach((item:any)=>{

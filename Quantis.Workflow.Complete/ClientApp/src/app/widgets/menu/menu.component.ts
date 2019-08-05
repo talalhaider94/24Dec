@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
 		// We make a get request to get all widgets from our REST API
 		this.emitter.loadingStatus(true);
 		this._ds.getWidgets().subscribe(widgets => {
+			console.log('getWidgets', widgets);
 			this.widgetCollection = widgets;
 			let data = { type: 'widgets', widgets };
 			this.emitter.sendNext(data);
