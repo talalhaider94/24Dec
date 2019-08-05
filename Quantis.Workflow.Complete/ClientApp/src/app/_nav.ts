@@ -270,7 +270,7 @@ export const navItems: NavData[] = [
         url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
         version: '0.0.6',
-        key: 'VIEW_CONGIGURATION_USER_PROFILING' 
+        key: 'VIEW_CONGIGURATION_USER_PROFILING'
       }
     ]
   },
