@@ -1,4 +1,13 @@
-<app-menu></app-menu>
+<div class="row justify-content-between">
+  <div class="col align-self-center">
+    <app-menu></app-menu>
+  </div>
+  <div class="col align-self-center text-right">
+    <button class="btn btn-success m-2" (click)="itemChange()">Save</button>
+  </div>
+</div>
+
+
 <!-- Gridster grid -->
 <gridster [options]="options" (drop)="onDrop($event)" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
@@ -23,10 +32,8 @@
           ndc-dynamic tag is from ng-dynamic-component library 
           it generates a dynamic component on the fly
         -->
-        <ndc-dynamic class="no-drag" 
-        [ndcDynamicComponent]="item.component"
-        [ndcDynamicInputs]="inputs" 
-        (moduleInfo)="display($event)">
+        <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="inputs"
+          (moduleInfo)="display($event)">
         </ndc-dynamic>
       </div>
     </div>

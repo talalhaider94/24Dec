@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
 	protected options: GridsterConfig;
 	protected dashboardId: number;
 	protected dashboardCollection: DashboardModel;
-	protected dashboardArray: DashboardContentModel[];
+	protected dashboardArray: DashboardContentModel[] = [];
 	emitterSubscription: Subscription;
 
 	protected componentCollection = [
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
 		// Grid options
 		this.options = {
 			gridType: GridType.Fit,
-			displayGrid: DisplayGrid.Always,
+			displayGrid: DisplayGrid.OnDragAndResize,
 			pushItems: true,
 			swap: false,
 			resizable: {
