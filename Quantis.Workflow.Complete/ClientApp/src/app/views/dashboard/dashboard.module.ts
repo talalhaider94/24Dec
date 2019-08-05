@@ -8,6 +8,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -31,7 +32,8 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
       DoughnutChartComponent,
       RadarChartComponent
     ]),
-    HighchartsChartModule
+    HighchartsChartModule,
+    ModalModule.forRoot()
   ],
   declarations: [ 
     DashboardComponent,

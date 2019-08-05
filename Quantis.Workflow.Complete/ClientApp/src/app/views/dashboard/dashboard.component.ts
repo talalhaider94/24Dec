@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
-import { DashboardService } from '../../_services';
+import { DashboardService, EmitterService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DashboardModel, DashboardContentModel } from '../../_models';
-
+import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_models';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
@@ -16,18 +17,32 @@ import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.compo
 	styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
-	constructor(private _ds: DashboardService, private _route: ActivatedRoute) { }
+	protected widgetCollection: WidgetModel[];
 	protected options: GridsterConfig;
 	protected dashboardId: number;
 	protected dashboardCollection: DashboardModel;
 	protected dashboardArray: DashboardContentModel[];
+	emitterSubscription: Subscription;
+
 	protected componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
 		{ name: "Radar Chart", componentInstance: RadarChartComponent }
 	];
+
+	constructor(
+		private _ds: DashboardService,
+		private _route: ActivatedRoute,
+		private emitter: EmitterService,
+		private toastr: ToastrService
+	) { }
+
 	isCollapsed = true;
+
+	inputs = {
+		hello: 'world from input',
+		something: () => 'can be really complex'
+	};
 
 	ngOnInit(): void {
 		// Grid options
@@ -58,6 +73,7 @@ export class DashboardComponent implements OnInit {
 			emptyCellDropCallback: this.onDrop,
 			pushDirections: { north: true, east: true, south: true, west: true },
 			itemChangeCallback: this.itemChange.bind(this),
+			itemResizeCallback: DashboardComponent.itemResize,
 			minCols: 10,
 			maxCols: 100,
 			minRows: 10,
@@ -66,6 +82,11 @@ export class DashboardComponent implements OnInit {
 			scrollSpeed: 20,
 		};
 		this.getData();
+		this.emitterSubscription = this.emitter.getData().subscribe(data => {
+			if (data.type === 'widgets') {
+				this.widgetCollection = data.widgets;
+			}
+		})
 	}
 
 	getData() {
@@ -74,15 +95,18 @@ export class DashboardComponent implements OnInit {
 			// + is used to cast string to int
 			this.dashboardId = +params["id"];
 			// We make a get request with the dashboard id
+			this.emitter.loadingStatus(true);
 			this._ds.getDashboard(this.dashboardId).subscribe(dashboard => {
-				debugger
 				// We fill our dashboardCollection with returned Observable
 				this.dashboardCollection = dashboard;
 				// We parse serialized Json to generate components on the fly
 				this.parseJson(this.dashboardCollection);
 				// We copy array without reference
 				this.dashboardArray = this.dashboardCollection.dashboardwidgets.slice();
-
+				this.emitter.loadingStatus(false);
+			}, error => {
+				this.toastr.error('Error while fetching dashboards');
+				this.emitter.loadingStatus(false);
 			});
 		});
 	}
@@ -109,11 +133,12 @@ export class DashboardComponent implements OnInit {
 		// let parsed: DashboardModel = JSON.parse(tmp);
 		// this.serialize(parsed.dashboardwidgets);
 		// console.log(this.dashboardArray);
-		debugger
+		this.emitter.loadingStatus(true);
 		this._ds.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
-			debugger
+			this.emitter.loadingStatus(false);
 		}, error => {
-			debugger
+			console.log('updateDashboard', error);
+			this.emitter.loadingStatus(false);
 		});
 	}
 
@@ -133,7 +158,6 @@ export class DashboardComponent implements OnInit {
 
 	onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
-		debugger
 		switch (componentType) {
 			case "radar_chart":
 				return this.dashboardArray.push({
@@ -168,16 +192,18 @@ export class DashboardComponent implements OnInit {
 	}
 
 	changedOptions() {
-		debugger
 		this.options.api.optionsChanged();
 	}
 
 	removeItem(item) {
-		debugger
 		this.dashboardArray.splice(
 			this.dashboardArray.indexOf(item),
 			1
 		);
 		this.itemChange();
+	}
+	
+	static itemResize(item, itemComponent) {
+		console.info('itemResized', item, itemComponent);
 	}
 }
