@@ -3,9 +3,9 @@
 
   
   <div class="table-responsive" style="background: #ffffff; padding: 10px">
-    <br><h2 style="color:#565656">BOOKLET</h2>
+    <br><h2 style="color:#565656">GENERAZIONE BOOKLET</h2>
     
-     <span style="margin-left: 75%; font-size: 20px"><b>DATA CORRENTE: {{datacorrente}}</b></span><br>
+     <span style="margin-left: 75%; font-size: 20px"><b>PERIODO CORRENTE: {{datacorrente}}</b></span><br>
 
     
     <div class="row ml-3 mr-1">
@@ -19,14 +19,14 @@
 <span>&nbsp;&nbsp;</span>
     
    <br> <br>
-    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
    
-
+ 
       <thead style="background: #20a8d8; color:white">
       <tr>
           <th style="align-content: center">SELEZIONA</th>
           <th style="align-content: center">CLIENTE</th>
-          <th style="align-content: center">NOME CONTRATTO</th>
+          <th style="align-content: center">CONTRATTO</th>
           <th style="align-content: center">PRECEDENTE <span>&nbsp;</span>{{dataprecedente}}</th>
           <th style="align-content: center">CORRENTE<span>&nbsp;</span> {{datacorrente}}</th>
           
