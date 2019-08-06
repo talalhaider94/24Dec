@@ -95,19 +95,25 @@ export class DashboardComponent implements OnInit {
 			// + is used to cast string to int
 			this.dashboardId = +params["id"];
 			// We make a get request with the dashboard id
-			this.emitter.loadingStatus(true);
-			this._ds.getDashboard(this.dashboardId).subscribe(dashboard => {
-				// We fill our dashboardCollection with returned Observable
-				this.dashboardCollection = dashboard;
-				// We parse serialized Json to generate components on the fly
-				this.parseJson(this.dashboardCollection);
-				// We copy array without reference
-				this.dashboardArray = this.dashboardCollection.dashboardwidgets.slice();
-				this.emitter.loadingStatus(false);
-			}, error => {
-				this.toastr.error('Error while fetching dashboards');
-				this.emitter.loadingStatus(false);
-			});
+			this.getDashboardWidgetsData(this.dashboardId);
+		});
+	}
+
+	getDashboardWidgetsData(dashboardId) {
+		this.emitter.loadingStatus(true);
+		this._ds.getDashboard(dashboardId).subscribe(dashboard => {
+			// We fill our dashboardCollection with returned Observable
+			console.log('getDashboardWidgetsData',dashboard);
+			this.dashboardCollection = dashboard;
+			// We parse serialized Json to generate components on the fly
+			this.parseJson(this.dashboardCollection);
+			// We copy array without reference
+			this.dashboardArray = this.dashboardCollection.dashboardwidgets.slice();
+			this.emitter.loadingStatus(false);
+		}, error => {
+			console.log('getDashboardWidgetsData',error);
+			this.toastr.error('Error while fetching dashboards');
+			this.emitter.loadingStatus(false);
 		});
 	}
 
@@ -136,6 +142,7 @@ export class DashboardComponent implements OnInit {
 		this.emitter.loadingStatus(true);
 		this._ds.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
+			this.getDashboardWidgetsData(this.dashboardId);
 		}, error => {
 			console.log('updateDashboard', error);
 			this.emitter.loadingStatus(false);
@@ -202,7 +209,7 @@ export class DashboardComponent implements OnInit {
 		);
 		this.itemChange();
 	}
-	
+
 	static itemResize(item, itemComponent) {
 		console.info('itemResized', item, itemComponent);
 	}
