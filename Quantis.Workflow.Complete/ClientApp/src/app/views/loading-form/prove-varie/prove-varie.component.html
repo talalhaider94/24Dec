@@ -91,7 +91,7 @@
                     class="panel-body bg-white" [formGroupName]="i">
                     <div class="row align-items-center mb-2">
                       <div class="col-md-5 col-form-label"
-                        *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer'">
+                        *ngIf="(arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer') && arrayFormElements[i].name != 'Is_Dato_Mancante'">
                         <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
                         <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
                         <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
@@ -112,12 +112,12 @@
                           formControlName="valoreUtente" disabled>
 
                         <input [readonly]="!readOnlyUserForm" type="number"
-                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0"
+                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
 
                         <input [readonly]="!readOnlyUserForm" type="number"
-                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0"
+                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                           [(ngModel)]="numero[i] = arrayFormElements[i].defaultvalue"
                           value='{{arrayFormElements[i].defaultvalue}}' placeholder="Input" class="form-control"
@@ -140,7 +140,7 @@
                 <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
-                    <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
+                    <label class="form-check-label" for="inline-checkbox1">Nessun Evento</label><!--Dati non Pervenuti-->
                   </div>
                 </div>
                 <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">

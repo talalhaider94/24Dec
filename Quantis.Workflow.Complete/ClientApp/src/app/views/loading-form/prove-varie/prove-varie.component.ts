@@ -343,7 +343,7 @@ export class ProveVarieComponent implements OnInit {
       }
       this.numeroForm = numero;
       // CHECK BOX DISPLAY CONDITION START
-      const checkboxFieldExists = this.arrayFormElements.find(field => (field.name === 'Dato_Mancante' || field.name === 'Is_Dato_Mancante') && field.type === 'integer');
+      const checkboxFieldExists = this.arrayFormElements.find(field => (field.name === 'Dato_Mancante' || field.name === 'Is_Dato_Mancante') && (field.type === 'integer' || field.type === 'string'));
       if (checkboxFieldExists) {
         this.displayUserFormCheckBox = true;
       }
