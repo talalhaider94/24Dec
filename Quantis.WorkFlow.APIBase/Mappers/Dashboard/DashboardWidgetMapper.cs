@@ -26,16 +26,19 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 UIIdentifier=e.Widget.UIIdentifier
                 
             };
-            dto.Properties = e.DashboardWidgetSettings.Where(o => o.SettingType == 0).Select(o => new DashboardWidgetPropertyDTO()
+            dto.Properties = new Dictionary<string, string>();
+            dto.Filters= new Dictionary<string, string>();
+            foreach(var val in e.DashboardWidgetSettings)
             {
-                Key = o.SettingKey,
-                Value = o.SettingValue
-            }).ToList();
-            dto.Filters = e.DashboardWidgetSettings.Where(o => o.SettingType == 1).Select(o => new DashboardWidgetFilterDTO()
-            {
-                Key = o.SettingKey,
-                Value = o.SettingValue
-            }).ToList();
+                if (val.SettingType == 0)
+                {
+                    dto.Properties.Add(val.SettingKey, val.SettingValue);
+                }
+                else
+                {
+                    dto.Filters.Add(val.SettingKey, val.SettingValue);
+                }
+            }           
             return dto;
             
         }
@@ -51,10 +54,10 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 e.WidgetId = o.WidgetId;
                 e.DashboardId = e.DashboardId;
             }
-            foreach(var p in o.Properties)
+            foreach (var p in o.Properties)
             {
-                var prop =e.DashboardWidgetSettings.FirstOrDefault(r => r.SettingType == 0 && r.SettingKey == p.Key);
-                if (prop!=null)
+                var prop = e.DashboardWidgetSettings.FirstOrDefault(r => r.SettingType == 0 && r.SettingKey == p.Key);
+                if (prop != null)
                 {
                     prop.SettingValue = p.Value;
                 }

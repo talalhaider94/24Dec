@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Quantis.WorkFlow.APIBase.Framework;
+using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
 
@@ -10,6 +11,13 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 {
     public class KPICountTrend : BaseWidgetController
     {
+        private IGlobalFilterService _globalfilterService;
+        private IWidgetService _widgetService;
+        public KPICountTrend(IGlobalFilterService globalfilterService, IWidgetService widgetService)
+        {
+            _globalfilterService = globalfilterService;
+            _widgetService = widgetService;
+        }
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
             vm.ShowMeasure = true;
@@ -28,13 +36,9 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override object GetData(WidgetParametersDTO props)
         {
-            var list = new List<XYDTO>();
-            list.Add(new XYDTO() { XValue = "03/19", YValue = 10 });
-            list.Add(new XYDTO() { XValue = "04/19", YValue = 11 });
-            list.Add(new XYDTO() { XValue = "05/19", YValue = 12 });
-            list.Add(new XYDTO() { XValue = "06/19", YValue = 11 });
-            list.Add(new XYDTO() { XValue = "07/19", YValue = 14 });
-            return list;
+            var dto=_globalfilterService.MapAggOptionWidget(props);
+            var result=_widgetService.GetKPICountTrend(dto);
+            return result;
         }
     }
 }

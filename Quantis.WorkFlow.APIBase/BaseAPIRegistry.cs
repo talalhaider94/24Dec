@@ -38,6 +38,8 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<ISMTPService, SMTPService>();
             services.AddTransient<IInformationService, InformationService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IWidgetService, WidgetService>();
+            services.AddTransient<IGlobalFilterService, GlobalFilterService>();
         }
         public static void RegisterMappers(IServiceCollection services)
         {
