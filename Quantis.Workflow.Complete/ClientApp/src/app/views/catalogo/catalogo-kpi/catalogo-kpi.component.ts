@@ -58,6 +58,7 @@ export class CatalogoKpiComponent implements OnInit {
       "visible": false,
       "searchable": true
     }],
+    deferRender: true,
     language: {
       processing: "Elaborazione...",
       search: "Cerca:",
@@ -119,11 +120,14 @@ export class CatalogoKpiComponent implements OnInit {
     enable_wf: '',
     enable_rm: '',
     contract: '',
+    contract_name: '',
     wf_last_sent: '',
     rm_last_sent: '',
     supply: '',
     primary_contract_party: '',
+    primary_contract_party_name: '',
     secondary_contract_party: '',
+    secondary_contract_party_name: '',
     kpi_name_bsi: '',
     global_rule_id_bsi: '',
     sla_id_bsi: ''
@@ -176,10 +180,11 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtOptions = {
       //'dom': 'rtip',
       "columnDefs": [{
-        "targets": [11],
+        "targets": [12],
         "visible": false,
         "searchable": true
       }],
+      deferRender: true,
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -245,11 +250,14 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.enable_wf = data.enable_wf;
     this.modalData.enable_rm = data.enable_rm;
     this.modalData.contract = data.contract;
+    this.modalData.contract_name = data.contract_name;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
     this.modalData.supply = data.supply;
     this.modalData.primary_contract_party = data.primary_contract_party;
     this.modalData.secondary_contract_party = data.secondary_contract_party;
+    this.modalData.primary_contract_party_name = data.primary_contract_party_name;
+    this.modalData.secondary_contract_party_name = data.secondary_contract_party_name;
     this.modalData.kpi_name_bsi = data.kpi_name_bsi;
     this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
     this.modalData.sla_id_bsi = data.sla_id_bsi;
@@ -258,6 +266,32 @@ export class CatalogoKpiComponent implements OnInit {
   updateKpi(modal) {
     console.log(modal);
     this.toastr.info('Valore in aggiornamento..', 'Info');
+    switch (this.modalData.tracking_period) {
+      case 'MENSILE':
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+      case 'TRIMESTRALE':
+        this.modalData.month = '1,4,7,10';
+        this.modalData.monthtrigger = '1,4,7,10';
+        break;
+      case 'QUADRIMESTRALE':
+        this.modalData.month = '1,5,9';
+        this.modalData.monthtrigger = '1,5,9';
+        break;
+      case 'SEMESTRALE':
+        this.modalData.month = '1,7';
+        this.modalData.monthtrigger = '1,7';
+        break;
+      case 'ANNUALE':
+        this.modalData.month = '1';
+        this.modalData.monthtrigger = '1';
+        break;
+      default:
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+    }
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getKpis(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
@@ -266,7 +300,6 @@ export class CatalogoKpiComponent implements OnInit {
       } else {
         $('#referentiModal').modal('toggle').hide();
       }
-      
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       if (modal == 'kpi') {
@@ -282,7 +315,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtTrigger.next();
 
     this.setUpDataTableDependencies();
-    this.getKpis1();
+   // this.getKpis1();
     this.getKpis();
     //this.rerender();
   }
@@ -300,18 +333,13 @@ export class CatalogoKpiComponent implements OnInit {
       // Call the dtTrigger to rerender again
       this.dtTrigger.next(); 
       this.setUpDataTableDependencies();
-      
+      this.loading = false;
     });
     
   }
 
   setUpDataTableDependencies() {
 
-    // let datatable_Ref = $(this.block.nativeElement).DataTable({
-    //   'dom': 'rtip'
-    // });
-
-    // #column3_search is a <input type="text"> element
     $(this.searchCol1.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
@@ -320,9 +348,6 @@ export class CatalogoKpiComponent implements OnInit {
           .draw();
       });
     });
-
-
-
     $(this.searchCol2.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
@@ -334,7 +359,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-          .columns(11)
+          .columns(12)
           .search( this.value )
           .draw();
       });
@@ -348,7 +373,7 @@ export class CatalogoKpiComponent implements OnInit {
         const select = $($this.searchCol4.nativeElement)
           .on( 'change', function () {
             that
-              .search( $(this).val() )
+              .search( $(this).val(),false,false,false )
               .draw();
           } );
 
@@ -364,9 +389,8 @@ export class CatalogoKpiComponent implements OnInit {
     });
 
     $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-      datatable_Ref.columns(4).every( function () {
+      datatable_Ref.columns(5).every( function () {
         const that = this;
-
         // Create the select list and search operation
         const select = $($this.searchCol5.nativeElement)
           .on( 'change', function () {
@@ -374,14 +398,6 @@ export class CatalogoKpiComponent implements OnInit {
               .search( $(this).val() )
               .draw();
           } );
-
-        // Get the search data for the first column and add to the select list
-        /*this
-          .cache('search')
-          .unique();
-          .each( function ( d ) {
-            select.append( $('<option value="' + d + '">' + d + '</option>') );
-          } );*/
       });
     });
 
@@ -463,7 +479,7 @@ export class CatalogoKpiComponent implements OnInit {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
       this.rerender();
-      this.loading = false;
+      
     });
   }
 

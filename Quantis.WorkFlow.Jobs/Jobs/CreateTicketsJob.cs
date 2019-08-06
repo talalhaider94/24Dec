@@ -40,9 +40,9 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                         {
                             try
                             {
-                                if(dbcontext.SDMTicketLogs.Any(o => o.global_rule_id == k.global_rule_id_bsi))
+                                if(dbcontext.SDMTicketFact.Any(o => o.global_rule_id == k.global_rule_id_bsi))
                                 {
-                                    var lastPeriod = dbcontext.SDMTicketLogs.Where(o => o.global_rule_id == k.global_rule_id_bsi).Max(p => p.create_timestamp);
+                                    var lastPeriod = dbcontext.SDMTicketFact.Where(o => o.global_rule_id == k.global_rule_id_bsi).Max(p => p.created_on);
                                     if (lastPeriod.Month+(lastPeriod.Year*12) != DateTime.Now.Month + (DateTime.Now.Year * 12))
                                     {
                                         var tic = sdmservice.CreateTicketByKPIID(k.id);

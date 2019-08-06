@@ -310,6 +310,26 @@ namespace Quantis.WorkFlow.APIBase.API
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
 
                 ret = parseNewTicket(ticket);
+                var sdm_fact = new SDM_TicketFact()
+                {
+                    complaint = (dto.Description.IndexOf("[Complaint]") != -1),
+                    created_on = DateTime.Now,
+                    global_rule_id = int.Parse(dto.zz3_KpiIds.Split('|')[1]),
+                    notcalculated = (dto.Description.IndexOf("[Non Calcolato]") != -1),
+                    notcomplaint = (dto.Description.IndexOf("[Non Complaint]") != -1),
+                    period_month = DateTime.Now.AddMonths(-1).Month,
+                    period_year = DateTime.Now.AddMonths(-1).Year,
+                    primary_contract_party_id = dto.GroupCategoryId,
+                    refused = false,
+                    result_value = dto.zz2_calcValue,
+                    secondary_contract_party_id = dto.SecondaryContractParty,
+                    ticket_id = int.Parse(ret.Id),
+                    ticket_refnum = int.Parse(ret.ref_num),
+                    customer_id = _infomationAPI.GetContractIdByGlobalRuleId(int.Parse(dto.zz3_KpiIds.Split('|')[1]))
+
+                };
+                _dbcontext.SDMTicketFact.Add(sdm_fact);
+                _dbcontext.SaveChanges();
                 var attachments = _dataService.GetAttachmentsByKPIID(Id);
                 foreach(var att in attachments)
                 {
@@ -321,12 +341,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     param.Add("fileName", att.doc_name);
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
-                var log = new SDM_TicketLog();
-                log.global_rule_id = _dbcontext.CatalogKpi.Single(o => o.id == Id).global_rule_id_bsi;
-                log.period = dto.Period;
-                log.ticket_id = int.Parse(ret.ref_num);
-                log.create_timestamp = DateTime.Now;
-                _dbcontext.SDMTicketLogs.Add(log);
                 _dbcontext.SaveChanges();
 
             }
@@ -580,9 +594,59 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     dto.IsBSIStatusChanged = true;
                 }
+                if (_dbcontext.SDMTicketFact.Any(o => o.ticket_id == id))
+                {
+                    var fact = _dbcontext.SDMTicketFact.Single(o => o.ticket_id == id);
+                    var log = new SDM_TicketLog()
+                    {
+                        created_on = DateTime.Now,
+                        log_type = "D",
+                        note = description,
+                        TicketFact = fact,
+                        ticket_fact_id = fact.id
+                    };
+                    _dbcontext.SDMTicketLogs.Add(log);
+                    _dbcontext.SaveChanges();
+                }
                 return dto;
             }
             catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                LogOut();
+            }
+        }
+
+        public void UpdateTicketValue(HttpContext context,TicketValueDTO dto)
+        {
+            
+            try
+            {
+                var user = context.User as AuthUser;
+                if (user == null)
+                {
+                    throw new Exception("No user Login to Get Tickets by user");
+                }
+                var userid = _dataService.GetUserIdByUserName(user.UserName);
+                var desc=GetTicketByID(dto.TicketId).Description;
+                if (desc.IndexOf("VALORE: [Non Calcolato]") == -1)
+                {
+                    throw new Exception("Description format saved in ticket is not correct");
+                }
+                var newstring = string.Format("VALORE: {0} {1} {2}", dto.Value, dto.Sign, dto.Type == 1 ? "[Compliant]" : "[Non Compliant]");
+                var newdesc = desc.Replace("VALORE: [Non Calcolato]", newstring).ToString();
+
+                var tickethandle = "cr:" + dto.TicketId;
+                LogIn();
+                var changeojb=_sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "description", newdesc }, new string[0]);
+                changeojb.Wait();
+                var note = string.Format("Aggiornato il valore del ticket da parte dell’utente: {0}  Questa è la nota inserita: {1}", userid.Split('\\')[1], dto.Note);
+                _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, note, "LOG", 0, false).Wait();
+            }
+            catch(Exception e)
             {
                 throw e;
             }
@@ -660,10 +724,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     dto.ShowArchivedMsg = true;
                     try
                     {
-                        if (ticket.Summary.Split('|').Length == 3)
+                        if (ticket.Summary.Split('|').Length <= 4)
                         {
-                            var kpiid = int.Parse(ticket.KpiIds.Split('|').FirstOrDefault());
-                            var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == kpiid);
+                            var kpiid = int.Parse(ticket.KpiIds.Split('|').Last());
+                            var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == kpiid);
                             ARulesDTO ardto = new ARulesDTO()
                             {
                                 contract_name = kpi.contract,
@@ -678,10 +742,12 @@ namespace Quantis.WorkFlow.APIBase.API
                                 rule_id_bsi = kpi.global_rule_id_bsi,
                                 close_timestamp_ticket = DateTime.Now,
                                 ticket_id = int.Parse(ticket.ref_num),
-                                value_kpi = (ticket.calcValue == "N/A") ? "N/A" : ticket.calcValue.Split(' ').FirstOrDefault().Trim(),
-                                symbol = (ticket.calcValue == "N/A") ? "N/A" : ticket.calcValue.Split(' ').ElementAt(1).Trim(),
+                                value_kpi = (ticket.calcValue == "[Non Calcolato]") ? "[Non Calcolato]" : ticket.calcValue.Split(' ').FirstOrDefault().Trim(),
+                                symbol = (ticket.calcValue == "[Non Calcolato]") ? "N/A" : ticket.calcValue.Split(' ').ElementAt(1).Trim(),
                             };
                             _dataService.AddArchiveKPI(ardto);
+                            _dataService.AddArchiveRawData(kpi.global_rule_id_bsi, ticket.Period, kpi.tracking_period);
+
                             dto.IsArchived = true;
                         }
                     }
@@ -690,6 +756,20 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.LogInformation("Error: " + e.Message);
                     }
 
+                }
+                if (_dbcontext.SDMTicketFact.Any(o => o.ticket_id == id))
+                {
+                    var fact = _dbcontext.SDMTicketFact.Single(o => o.ticket_id == id);
+                    var log = new SDM_TicketLog()
+                    {
+                        created_on = DateTime.Now,
+                        log_type = "A",
+                        note = description,
+                        TicketFact = fact,
+                        ticket_fact_id = fact.id
+                    };
+                    _dbcontext.SDMTicketLogs.Add(log);
+                    _dbcontext.SaveChanges();
                 }
                 return dto;
 
