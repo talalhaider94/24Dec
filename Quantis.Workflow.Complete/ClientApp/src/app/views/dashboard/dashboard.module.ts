@@ -15,6 +15,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
+import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 
 @NgModule({
@@ -30,7 +31,8 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
     DynamicModule.withComponents([
       LineChartComponent,
       DoughnutChartComponent,
-      RadarChartComponent
+      RadarChartComponent,
+      BarchartComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot()
@@ -40,7 +42,8 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
     DoughnutChartComponent,
     LineChartComponent,
     RadarChartComponent,
-    MenuComponent
+    MenuComponent,
+    BarchartComponent
   ]
 })
 export class DashboardModule { }

@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
+import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 
 @Component({
 	templateUrl: 'dashboard.component.html',
@@ -21,13 +22,14 @@ export class DashboardComponent implements OnInit {
 	options: GridsterConfig;
 	dashboardId: number;
 	dashboardCollection: DashboardModel;
-	dashboardArray: DashboardContentModel[];
+	dashboardArray: DashboardContentModel[] = [];
 	emitterSubscription: Subscription;
 
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
-		{ name: "Radar Chart", componentInstance: RadarChartComponent }
+		{ name: "Radar Chart", componentInstance: RadarChartComponent },
+		{ name: "Count Trend", componentInstance: BarchartComponent },
 	];
 
 	constructor(
@@ -142,7 +144,6 @@ export class DashboardComponent implements OnInit {
 		this.emitter.loadingStatus(true);
 		this._ds.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
-			this.getDashboardWidgetsData(this.dashboardId);
 		}, error => {
 			console.log('updateDashboard', error);
 			this.emitter.loadingStatus(false);
@@ -173,7 +174,12 @@ export class DashboardComponent implements OnInit {
 					x: 0,
 					y: 0,
 					component: RadarChartComponent,
-					name: "Radar Chart"
+					name: "Radar Chart",
+					filters: [], // need to update this code
+					properties:[],
+					dashboardid: 1,
+					widgetid: 2,
+					id: 0 // 0 because we are adding them
 				});
 			case "line_chart":
 				return this.dashboardArray.push({
@@ -184,7 +190,12 @@ export class DashboardComponent implements OnInit {
 					minItemRows: 5,
 					minItemCols: 5,
 					component: LineChartComponent,
-					name: "Line Chart"
+					name: "Line Chart",
+					filters: [], // need to update this code
+					properties:[],
+					dashboardid: 1,
+					widgetid: 4,
+					id: 0 
 				});
 			case "doughnut_chart":
 				return this.dashboardArray.push({
@@ -193,7 +204,26 @@ export class DashboardComponent implements OnInit {
 					x: 0,
 					y: 0,
 					component: DoughnutChartComponent,
-					name: "Doughnut Chart"
+					name: "Doughnut Chart",
+					filters: [], // need to update this code
+					properties:[],
+					dashboardid: 1,
+					widgetid: 3,
+					id: 0
+				});
+			case "count_trend":
+				return this.dashboardArray.push({
+					cols: 5,
+					rows: 5,
+					x: 0,
+					y: 0,
+					component: BarchartComponent,
+					name: "Count Trend",
+					filters: [], // need to update this code
+					properties:[],
+					dashboardid: 1,
+					widgetid: 1,
+					id: 0
 				});
 		}
 	}
@@ -207,10 +237,10 @@ export class DashboardComponent implements OnInit {
 			this.dashboardArray.indexOf(item),
 			1
 		);
-		this.itemChange();
+		// this.itemChange();
 	}
 
 	static itemResize(item, itemComponent) {
-		console.info('itemResized', item, itemComponent);
+		// console.info('itemResized', item, itemComponent);
 	}
 }

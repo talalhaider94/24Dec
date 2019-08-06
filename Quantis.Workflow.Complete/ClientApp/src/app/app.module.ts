@@ -50,7 +50,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SafePipe } from './_pipes/safe.pipe';
 // import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { BarchartComponent } from './widgets/barchart/barchart.component';
 // import { LoadingFormComponent } from './views/loading-form/loading-form.component';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
@@ -84,7 +83,6 @@ import { BarchartComponent } from './widgets/barchart/barchart.component';
     RegisterComponent,
     ForgetComponent,
     SafePipe,
-    BarchartComponent,
    // FilterUsersPipe
     // LoadingFormComponent,
     // CommingsoonComponent

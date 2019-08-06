@@ -56,7 +56,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     ).subscribe(x => {
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
-      this.currentVerion = this.returnedNode.version || '0.0.1';
+      // Danial: was getting error so commented. check later
+      // this.currentVerion = this.returnedNode.version || '0.0.1';
+      this.currentVerion = '0.0.1';
     });
     
     // We make get request to get all dashboards from our REST API

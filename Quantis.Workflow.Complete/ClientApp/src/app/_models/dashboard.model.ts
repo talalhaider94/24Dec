@@ -19,6 +19,11 @@ export interface DashboardContentModel {
     minItemCols?: number;
     component?: any;
     name: string;
+    filters: Array<any>;
+    properties: Array<any>;
+    widgetid: number;
+    dashboardid: number;
+    id: number;
 }
 
 export interface DashboardModel {
@@ -28,18 +33,3 @@ export interface DashboardModel {
     createdon: Date,
     dashboardwidgets: Array<DashboardContentModel>;
 }
-
-// export const WidgetsMock: WidgetModel[] = [
-//     {
-//         name: 'Radar Chart',
-//         identifier: 'radar_chart'
-//     },
-//     {
-//         name: 'Doughnut Chart',
-//         identifier: 'doughnut_chart'
-//     },
-//     {
-//         name: 'Line Chart',
-//         identifier: 'line_chart'
-//     }
-// ]
