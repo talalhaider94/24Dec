@@ -24,7 +24,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public returnedNode:any;
   currentUser: any;
   loading: boolean = true;
-  protected dashboardCollection: DashboardModel[];
+  dashboardCollection: DashboardModel[];
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,

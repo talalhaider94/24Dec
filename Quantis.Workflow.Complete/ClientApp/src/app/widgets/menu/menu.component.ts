@@ -8,7 +8,7 @@ import { WidgetModel, DashboardModel } from "../../_models";
 	styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-	protected widgetCollection: WidgetModel[];
+	widgetCollection: WidgetModel[];
 	
 	constructor(
 		private _ds: DashboardService,

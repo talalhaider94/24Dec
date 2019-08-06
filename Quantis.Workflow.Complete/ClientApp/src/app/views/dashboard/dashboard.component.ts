@@ -17,14 +17,14 @@ import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.compo
 	styleUrls: ['dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-	protected widgetCollection: WidgetModel[];
-	protected options: GridsterConfig;
-	protected dashboardId: number;
-	protected dashboardCollection: DashboardModel;
-	protected dashboardArray: DashboardContentModel[] = [];
+	widgetCollection: WidgetModel[];
+	options: GridsterConfig;
+	dashboardId: number;
+	dashboardCollection: DashboardModel;
+	dashboardArray: DashboardContentModel[];
 	emitterSubscription: Subscription;
 
-	protected componentCollection = [
+	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
 		{ name: "Radar Chart", componentInstance: RadarChartComponent }
