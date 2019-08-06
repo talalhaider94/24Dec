@@ -65,6 +65,7 @@ namespace Quantis.WorkFlow.Services.API
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
         
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
+        DistributionPslDTO GetDistributionByContract(string period, int sla_id);
 
     }
 }

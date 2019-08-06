@@ -289,10 +289,17 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetRawIdsFromRulePeriod(ruleId, period);
         }*/
+
         [HttpGet("AddArchiveRawData")]
         public bool AddArchiveRawData(int global_rule_id, string period, string tracking_period)
         {
             return _dataAPI.AddArchiveRawData(global_rule_id, period, tracking_period);
+        }
+
+        [HttpGet("GetDistributionByContract")]
+        public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
+        {
+            return _dataAPI.GetDistributionByContract(period, sla_id);
         }
     }
 }

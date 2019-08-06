@@ -1039,6 +1039,80 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
+        public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
+        {
+            try
+            {
+                var currentDistribution = new PslResultDTO();
+                var previousDistribution = new PslResultDTO();
+                int currentCompliant = 0;
+                int currentNotCompliant = 0;
+                int currentNotCalculated = 0;
+                int previousCompliant = 0;
+                int previousNotCompliant = 0;
+                int previousNotCalculated = 0;
+                string query = "select r.global_rule_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and m.sla_id = :sla_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":sla_id", sla_id);
+                    _dbcontext.Database.OpenConnection();
+                    var currentPeriod = DateTime.Now.AddMonths(-8).ToString("MM/yy");
+                    var previousPeriod = DateTime.Now.AddMonths(-9).ToString("MM/yy");
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            var currentPsl = _oracleAPI.GetPsl(currentPeriod, result.GetInt32(result.GetOrdinal("global_rule_id")), "MENSILE");
+                            if (currentPsl != null && currentPsl.Any())
+                            {
+                                if (currentPsl.FirstOrDefault().result == "[Non Compliant]") { currentNotCompliant++; }
+                                if (currentPsl.FirstOrDefault().result == "[Compliant]") { currentCompliant++; }
+                                if (currentPsl.FirstOrDefault().result == "[Non Calcolato]") { currentNotCalculated++; }
+                            }
+                            else
+                            {
+                                currentNotCalculated++;
+                            }
+
+                            var previousPsl = _oracleAPI.GetPsl(previousPeriod, result.GetInt32(result.GetOrdinal("global_rule_id")), "MENSILE");
+                            if (previousPsl != null && previousPsl.Any())
+                            {
+                                if (previousPsl.FirstOrDefault().result == "[Non Compliant]") { previousNotCompliant++; }
+                                if (previousPsl.FirstOrDefault().result == "[Compliant]") { previousCompliant++; }
+                                if (previousPsl.FirstOrDefault().result == "[Non Calcolato]") { previousNotCalculated++; }
+                            }
+                            else
+                            {
+                                previousNotCalculated++;
+                            }
+                        }
+
+                        currentDistribution.Compliant = currentCompliant;
+                        currentDistribution.NonCompliant = currentNotCompliant;
+                        currentDistribution.NonCalcolato = currentNotCalculated;
+                        currentDistribution.Escalation = null;
+                        previousDistribution.Compliant = previousCompliant;
+                        previousDistribution.NonCompliant = previousNotCompliant;
+                        previousDistribution.NonCalcolato = previousNotCalculated;
+                        previousDistribution.Escalation = null;
+
+                        DistributionPslDTO distributionResult = new DistributionPslDTO();
+                        distributionResult.currentPeriod = currentDistribution;
+                        distributionResult.previousPeriod = previousDistribution;
+                        return distributionResult;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi,List<int> globalruleIds)
         {
             try
