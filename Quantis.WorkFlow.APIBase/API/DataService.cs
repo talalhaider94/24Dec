@@ -503,7 +503,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var users = _dbcontext.CatalogUsers.ToList();
+                var users = _dbcontext.CatalogUsers.Where(o=>o.ca_bsi_user_id != null).ToList();
                 return _userMapper.GetDTOs(users.ToList());                
             }
             catch (Exception e)
