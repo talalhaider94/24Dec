@@ -8,6 +8,7 @@ import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_model
 import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
@@ -27,7 +28,9 @@ export class DashboardComponent implements OnInit {
 	emitterSubscription: Subscription; // need to destroy this subscription later
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
-
+	// FORM
+	widgetParametersForm: FormGroup;
+	submitted: boolean = false;
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
@@ -39,7 +42,8 @@ export class DashboardComponent implements OnInit {
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
 		private emitter: EmitterService,
-		private toastr: ToastrService
+		private toastr: ToastrService,
+		private formBuilder: FormBuilder,
 	) { }
 
 	outputs = {
@@ -58,6 +62,11 @@ export class DashboardComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.widgetParametersForm = this.formBuilder.group({
+			chartTypes: ['', Validators.required],
+			aggregations: ['', Validators.required],
+			measures: ['', Validators.required]
+		});
 		// Grid options
 		this.options = {
 			gridType: GridType.Fit,
@@ -270,5 +279,11 @@ export class DashboardComponent implements OnInit {
 
 	static itemResize(item, itemComponent) {
 		// console.info('itemResized', item, itemComponent);
+	}
+	
+	get f() { return this.widgetParametersForm.controls; }
+
+	onWidgetParametersFormSubmit(){
+		debugger
 	}
 }

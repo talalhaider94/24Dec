@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
+import { forkJoin } from 'rxjs';
 
 @Component({
 	selector: 'app-barchart',
@@ -28,11 +29,48 @@ export class BarchartComponent implements OnInit {
 		console.log('BarchartComponent', this.name, this.url);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
-			this.getWidgetParameters(this.url);
-			this.getWidgetIndex(this.url);
+			// this.getWidgetParameters(this.url);
+			// this.getWidgetIndex(this.url);
+			this.getChartParametersAndData(this.url);
 		}
 	}
 
+	getChartParametersAndData(url) {
+		let getWidgetIndex = this.dashboardService.getWidgetIndex(url);
+		let getWidgetParameters = this.dashboardService.getWidgetParameters(url);
+		forkJoin([getWidgetParameters, getWidgetIndex]).subscribe(result => {
+			if(result) {
+				const [getWidgetParameters, getWidgetIndex] = result;
+				// populate modal with widget parameters
+				if(getWidgetParameters) {
+					this.barChartWidgetParameters = getWidgetParameters;
+					this.barChartParent.emit({
+						type: 'barChartParams',
+						data: {
+							...getWidgetParameters,
+							name: this.name,
+							url: this.url,
+							filters: this.filters,
+							properties: this.properties,
+							widgetid: this.widgetid,
+							dashboardid: this.dashboardid,
+							id: this.id
+						}
+					});					
+				}
+				// popular chart data
+				if(getWidgetIndex) {
+
+				}
+
+			}
+			this.loading = false;
+			this.emitter.loadingStatus(false);
+		}, error => {
+			this.loading = false;
+			this.emitter.loadingStatus(false);
+		})	
+	}
 	getWidgetParameters(url: string) {
 		//  need to improve this method by keeping parameters check in case 
 		// of dashboard has multiple widgets of same type.

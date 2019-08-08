@@ -48,28 +48,28 @@
         <p>
           <strong>Widget:</strong> {{barChartWidgetParameters.name}}
         </p>
-        <form>
+        <form [formGroup]="widgetParametersForm" (ngSubmit)="onWidgetParametersFormSubmit()">
           <tabset>
             <tab heading="PROPERTIES" id="tab1">
               <div class="form-group">
                 <label for="chartTypes">Chart Type</label>
-                <select class="form-control" id="chartTypes">
-                  <option>1</option>
-                  <option>2</option>
+                <select class="form-control" id="chartTypes" formControlName="chartTypes">
+                  <option>1sd</option>
+                  <option>sdsd2</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="aggregations">Aggregations</label>
-                <select class="form-control" id="aggregations">
-                  <option>1</option>
-                  <option>2</option>
+                <select class="form-control" id="aggregations" formControlName="aggregations">
+                  <option>1pp</option>
+                  <option>2ss</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="measures">Measures</label>
-                <select class="form-control" id="measures">
-                  <option>1</option>
-                  <option>2</option>
+                <select class="form-control" id="measures" formControlName="measures">
+                  <option>sad1</option>
+                  <option>2sd</option>
                 </select>
               </div>
             </tab>
@@ -82,8 +82,8 @@
                 <span class="fa fa-spinner fa-spin"></span> Apply
               </button>
               <button type="submit" class="btn btn-primary px-4">
-                  <span class="fa fa-spinner fa-spin"></span> Cancel
-                </button>
+                <span class="fa fa-spinner fa-spin"></span> Cancel
+              </button>
             </div>
           </div>
         </form>
