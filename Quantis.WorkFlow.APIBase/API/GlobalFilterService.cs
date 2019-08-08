@@ -26,9 +26,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 var range = daterange.Split(':');
                 dto.DateRange = new Tuple<DateTime, DateTime>(DateTime.ParseExact(range[0], "MM/yy", CultureInfo.InvariantCulture), DateTime.ParseExact(range[1], "MM/yy", CultureInfo.InvariantCulture));
             }
-            if (props.Filters.ContainsKey("measures"))
+            if (props.Properties.ContainsKey("measure"))
             {
-                dto.Measures = new List<Measures>() { (Measures)Int32.Parse(props.Filters["measures"]) };
+                dto.Measures = new List<Measures>() { (Measures)Int32.Parse(props.Properties["measure"]) };
             }
             else
             {
@@ -46,9 +46,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 KPIs=map.KPIs,
                 Measures=map.Measures,
             };
-            if (props.Filters.ContainsKey("aggregationoption"))
+            if (props.Properties.ContainsKey("aggregationoption"))
             {
-                dto.AggregationOption = props.Filters["aggregationoption"];                
+                dto.AggregationOption = props.Properties["aggregationoption"];                
             }
             else
             {
