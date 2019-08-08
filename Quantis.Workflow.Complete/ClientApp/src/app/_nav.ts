@@ -208,23 +208,23 @@ export const navItems: NavData[] = [
     name: 'Configurazione',
     url: '/config-menu',
     icon: 'fa fa-gear',
-    key: ['VIEW_CONGIGURATION_GENERAL','VIEW_CONGIGURATION_ADVANCED','VIEW_CONGIGURATION_SDM_GROUP',
-    'VIEW_CONGIGURATION_SDM_TICKET_STATUS','VIEW_CONGIGURATION_ROLES','VIEW_CONGIGURATION_USER_ROLES',
-    'VIEW_CONGIGURATION_USER_PROFILING'],
+    key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
+    'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
+    'VIEW_CONFIGURATION_USER_PROFILING'],
     children: [
       {
         name: 'Generali',
         url: '/tconfiguration/general',
         icon: 'fa fa-check-circle-o',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_GENERAL'
+        key: 'VIEW_CONFIGURATION_GENERAL'
       },
       {
         name: 'Avanzate',
         url: '/tconfiguration/advanced',
         icon: 'fa fa-check-circle-o',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_ADVANCED'
+        key: 'VIEW_CONFIGURATION_ADVANCED'
       },
       /*{ // maybe not needed
         name: 'Workflow',
@@ -242,35 +242,35 @@ export const navItems: NavData[] = [
         url: '/sdmgroup',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_SDM_GROUP'
+        key: 'VIEW_CONFIGURATION_SDM_GROUP'
       },
       {
         name: 'SDM Ticket Status',
         url: '/sdmstatus',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_SDM_TICKET_STATUS'
+        key: 'VIEW_CONFIGURATION_SDM_TICKET_STATUS'
       },
       {
         name: 'Gestione Ruoli',
         url: '/adminroles',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_ROLES'
+        key: 'VIEW_CONFIGURATION_ROLES'
       },  
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONGIGURATION_USER_ROLES' 
+        key: 'VIEW_CONFIGURATION_USER_ROLES' 
       }, 
       {
         name: 'Profilazione Utente',
         url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
         version: '0.0.6',
-        key: 'VIEW_CONGIGURATION_USER_PROFILING'
+        key: 'VIEW_CONFIGURATION_USER_PROFILING'
       }
     ]
   },
