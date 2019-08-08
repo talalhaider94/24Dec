@@ -4,7 +4,7 @@ import { WidgetModel, DashboardModel, DashboardContentModel } from '../_models';
 import { UUID } from 'angular2-uuid';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {environment} from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -89,4 +89,18 @@ export class DashboardService {
 		}
 		return this.http.post<DashboardModel>(`${environment.API_URL_103}/dashboard/AddUpdateDasboard`, newParams);
 	}
+
+	getWidgetParameters(url: string): Observable<any> {
+		return this.http.get(`${environment.API_URL_103}/${url}/GetWidgetParameters`);
+	}
+
+	getWidgetIndex(url: string): Observable<any> {
+		const widgetIndexEndPoint = `${environment.API_URL_103}/${url}/Index`;
+		let params = {
+			GlobalFilterId: 0, Properties: { measure: 1, aggregationoption: 'Period', charttype: 'Bar' },
+			Filters: { daterange: '03/19:06/19' }
+		}
+		return this.http.post(widgetIndexEndPoint, params, { observe: 'response' });
+	}
+	
 }

@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../_services';
 import { ActivatedRoute } from '@angular/router';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_models';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
@@ -22,8 +23,10 @@ export class DashboardComponent implements OnInit {
 	options: GridsterConfig;
 	dashboardId: number;
 	dashboardCollection: DashboardModel;
-	dashboardArray: DashboardContentModel[] = [];
-	emitterSubscription: Subscription;
+	dashboardWidgetsArray: DashboardContentModel[] = [];
+	emitterSubscription: Subscription; // need to destroy this subscription later
+	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
+	barChartWidgetParameters: any;
 
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
@@ -33,18 +36,26 @@ export class DashboardComponent implements OnInit {
 	];
 
 	constructor(
-		private _ds: DashboardService,
+		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
 		private emitter: EmitterService,
 		private toastr: ToastrService
 	) { }
 
-	isCollapsed = true;
-
-	inputs = {
-		hello: 'world from input',
-		something: () => 'can be really complex'
+	outputs = {
+		barChartParent: childData => {
+			if(childData.type === 'barChartParams') {
+				this.barChartWidgetParameters = childData.data;
+			}
+			if(childData.type === 'openModal') {
+				this.widgetParametersModal.show();
+			}
+		}
 	};
+
+	componentCreated(compRef: ComponentRef<any>) {
+		console.log('Component Created', compRef);
+	}
 
 	ngOnInit(): void {
 		// Grid options
@@ -83,43 +94,58 @@ export class DashboardComponent implements OnInit {
 			scrollSensitivity: 10,
 			scrollSpeed: 20,
 		};
-		this.getData();
-		this.emitterSubscription = this.emitter.getData().subscribe(data => {
-			if (data.type === 'widgets') {
-				this.widgetCollection = data.widgets;
-			}
-		})
-	}
 
-	getData() {
-		// We get the id in get current router dashboard/:id
 		this._route.params.subscribe(params => {
-			// + is used to cast string to int
 			this.dashboardId = +params["id"];
-			// We make a get request with the dashboard id
-			this.getDashboardWidgetsData(this.dashboardId);
+			this.emitter.loadingStatus(true);
+			this.getData(this.dashboardId);
 		});
 	}
 
-	getDashboardWidgetsData(dashboardId) {
-		this.emitter.loadingStatus(true);
-		this._ds.getDashboard(dashboardId).subscribe(dashboard => {
-			// We fill our dashboardCollection with returned Observable
-			console.log('getDashboardWidgetsData',dashboard);
-			this.dashboardCollection = dashboard;
-			// We parse serialized Json to generate components on the fly
-			this.parseJson(this.dashboardCollection);
-			// We copy array without reference
-			this.dashboardArray = this.dashboardCollection.dashboardwidgets.slice();
+	getData(dashboardId: number) {
+		const getAllWidgets = this.dashboardService.getWidgets();
+		const getDashboardWidgets = this.dashboardService.getDashboard(dashboardId);
+		forkJoin([getAllWidgets, getDashboardWidgets]).subscribe(result => {
+			if (result) {
+				const [allWidgets, dashboardData] = result;
+				console.log('allWidgets', allWidgets);
+				console.log('dashboardData', dashboardData);
+				if (allWidgets && allWidgets.length > 0) {
+					this.widgetCollection = allWidgets;
+				}
+				if (dashboardData) {
+					this.dashboardCollection = dashboardData;
+					// parsing serialized Json to generate components on the fly
+					this.parseJson(this.dashboardCollection);
+					// copying array without reference to re-render.
+					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
+				}
+			} else {
+				console.log('WHY NO DASHBOARD DATA');
+			}
 			this.emitter.loadingStatus(false);
 		}, error => {
-			console.log('getDashboardWidgetsData',error);
-			this.toastr.error('Error while fetching dashboards');
 			this.emitter.loadingStatus(false);
-		});
-	}
+			this.toastr.error('Error while fetching dashboards');
+			console.error('Get Dashboard Data', error);
+		})
 
-	// Super TOKENIZER 2.0 POWERED BY NATCHOIN
+	}
+	// might have to re-use it later when updating dashboard on save.
+	// getDashboardWidgetsData(dashboardId) {
+	// 	this.emitter.loadingStatus(true);
+	// 	this.dashboardService.getDashboard(dashboardId).subscribe(dashboard => {
+	// 		this.dashboardCollection = dashboard;
+	// 		this.parseJson(this.dashboardCollection);
+	// 		this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
+	// 		this.emitter.loadingStatus(false);
+	// 	}, error => {
+	// 		console.log('getDashboardWidgetsData', error);
+	// 		this.toastr.error('Error while fetching dashboards');
+	// 		this.emitter.loadingStatus(false);
+	// 	});
+	// }
+
 	parseJson(dashboardCollection: DashboardModel) {
 		// We loop on our dashboardCollection
 		dashboardCollection.dashboardwidgets.forEach(dashboard => {
@@ -136,18 +162,19 @@ export class DashboardComponent implements OnInit {
 	}
 
 	itemChange() {
-		this.dashboardCollection.dashboardwidgets = this.dashboardArray;
+		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
 		// let tmp = JSON.stringify(this.dashboardCollection);
 		// let parsed: DashboardModel = JSON.parse(tmp);
 		// this.serialize(parsed.dashboardwidgets);
-		// console.log(this.dashboardArray);
-		this.emitter.loadingStatus(true);
-		this._ds.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
-			this.emitter.loadingStatus(false);
-		}, error => {
-			console.log('updateDashboard', error);
-			this.emitter.loadingStatus(false);
-		});
+		// console.log(this.dashboardWidgetsArray);
+		
+		// this.emitter.loadingStatus(true);
+		// this.dashboardService.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
+		// 	this.emitter.loadingStatus(false);
+		// }, error => {
+		// 	console.log('updateDashboard', error);
+		// 	this.emitter.loadingStatus(false);
+		// });
 	}
 
 	serialize(dashboardCollection) {
@@ -168,7 +195,7 @@ export class DashboardComponent implements OnInit {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
 		switch (componentType) {
 			case "radar_chart":
-				return this.dashboardArray.push({
+				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
@@ -176,13 +203,13 @@ export class DashboardComponent implements OnInit {
 					component: RadarChartComponent,
 					name: "Radar Chart",
 					filters: [], // need to update this code
-					properties:[],
+					properties: [],
 					dashboardid: 1,
 					widgetid: 2,
-					id: 0 // 0 because we are adding them
+					id: 0, // 0 because we are adding them
 				});
 			case "line_chart":
-				return this.dashboardArray.push({
+				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
@@ -192,13 +219,13 @@ export class DashboardComponent implements OnInit {
 					component: LineChartComponent,
 					name: "Line Chart",
 					filters: [], // need to update this code
-					properties:[],
+					properties: [],
 					dashboardid: 1,
 					widgetid: 4,
-					id: 0 
+					id: 0
 				});
 			case "doughnut_chart":
-				return this.dashboardArray.push({
+				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
@@ -206,13 +233,13 @@ export class DashboardComponent implements OnInit {
 					component: DoughnutChartComponent,
 					name: "Doughnut Chart",
 					filters: [], // need to update this code
-					properties:[],
+					properties: [],
 					dashboardid: 1,
 					widgetid: 3,
 					id: 0
 				});
 			case "count_trend":
-				return this.dashboardArray.push({
+				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
@@ -220,10 +247,11 @@ export class DashboardComponent implements OnInit {
 					component: BarchartComponent,
 					name: "Count Trend",
 					filters: [], // need to update this code
-					properties:[],
+					properties: [],
 					dashboardid: 1,
 					widgetid: 1,
-					id: 0
+					id: 0,
+					url: this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').url
 				});
 		}
 	}
@@ -233,8 +261,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 	removeItem(item) {
-		this.dashboardArray.splice(
-			this.dashboardArray.indexOf(item),
+		this.dashboardWidgetsArray.splice(
+			this.dashboardWidgetsArray.indexOf(item),
 			1
 		);
 		// this.itemChange();
