@@ -84,6 +84,7 @@ export class ProveVarieComponent implements OnInit {
   numeroForm: number;
   title: string = '';
   checked: boolean;
+  Is_Dato_Mancante: boolean = false;
   displayComparisonRules: string[] = [];
   isCollapsed = true;
   fileUploadMonth: string[] = [];
@@ -117,7 +118,9 @@ export class ProveVarieComponent implements OnInit {
       this._getAttachmentsByFormIdEndPoint(+this.formId, true);
     });
   }
-
+  onCheck() {
+    console.log(this.Is_Dato_Mancante);
+  }
   initInputForm() {
     return this.fb.group({
       valoreUtente: [''], // user value
@@ -203,11 +206,27 @@ export class ProveVarieComponent implements OnInit {
             formFields.FieldValue = this.dt[index] || '';
             break;
           case 'string':
-            formFields.FieldValue = this.stringa[index] || '';
+            if (element.name == 'Is_Dato_Mancante' || element.name == 'Dato_Mancante') {
+              if (this.Is_Dato_Mancante === true) {
+                formFields.FieldValue = '1';
+              } else {
+                formFields.FieldValue = '0';
+              }
+            } else {
+              formFields.FieldValue = this.stringa[index] || '';
+            }
             break;
           default:
             // for real and integer
-            formFields.FieldValue = String(this.numero[index] || '');
+            if (element.name == 'Is_Dato_Mancante' || element.name == 'Dato_Mancante') {
+              if (this.Is_Dato_Mancante === true) {
+                formFields.FieldValue = '1';
+              } else {
+                formFields.FieldValue = '0';
+              }
+            } else {
+              formFields.FieldValue = String(this.numero[index] || '');
+            }
             break;
         }
         userSubmit.inputs.push(formFields);

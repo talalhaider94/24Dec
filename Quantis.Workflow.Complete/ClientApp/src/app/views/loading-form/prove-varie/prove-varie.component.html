@@ -139,7 +139,7 @@
               <div class="row mb-3 align-items-center">
                 <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" [(ngModel)]="Is_Dato_Mancante" value="true">
+                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" [(ngModel)]="Is_Dato_Mancante" value="true" (change)="onCheck()">
                     <label class="form-check-label" for="inline-checkbox1"><b>Nessun Evento</b></label><!--Dati non Pervenuti-->
                   </div>
                 </div>
