@@ -14,6 +14,7 @@ namespace Quantis.WorkFlow.Models.Information
         public string value { get; set; }
         public bool enable { get; set; }
         public bool isvisible { get; set; }
+        public bool iseditable { get; set; }
         public string description { get; set; }
         public string category { get; set; }
     }

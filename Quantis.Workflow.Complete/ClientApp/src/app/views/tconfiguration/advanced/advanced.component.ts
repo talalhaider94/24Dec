@@ -19,7 +19,8 @@ export class TConfigurationAdvancedComponent implements OnInit {
   key: any = '';
   value: any =  '';
   owner: any = '';
-  isenable: boolean =  false;
+  isenable: boolean = false;
+  iseditable: boolean = true;
   description: any =  '';
 
   dtOptions: DataTables.Settings = {
@@ -52,6 +53,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     value: '',
     owner: '',
     isenable: true,
+    iseditable: true,
     description: '',
   };
 
@@ -60,6 +62,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     value: '',
     owner: '',
     isenable: false,
+    iseditable: true,
     description: ''
   };
 
@@ -70,6 +73,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
       value: 'value',
       owner: 'owner',
       isenable: true,
+      iseditable: true,
       description: 'description',
     }
   ]
@@ -89,6 +93,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     this.modalData.owner = data.owner;
     this.modalData.value = data.value;
     this.modalData.isenable = data.isenable;
+    this.modalData.iseditable = data.iseditable;
     this.modalData.description = data.description;
   }
 
@@ -97,6 +102,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     this.addData.owner = this.owner;
     this.addData.value = this.value;
     this.addData.isenable = this.isenable;
+    this.addData.iseditable = this.iseditable;
     this.addData.description = this.description;
 
     this.toastr.info('Valore in aggiornamento..', 'Info');
