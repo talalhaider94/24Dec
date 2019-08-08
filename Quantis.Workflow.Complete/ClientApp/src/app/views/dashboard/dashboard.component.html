@@ -1,6 +1,6 @@
 <div class="row justify-content-between">
   <div class="col align-self-center">
-    <app-menu></app-menu>
+    <app-menu [widgetCollection]="widgetCollection"></app-menu>
   </div>
   <div class="col align-self-center text-right">
     <button class="btn btn-success m-2" (click)="itemChange()">Save</button>
@@ -11,7 +11,7 @@
 <!-- Gridster grid -->
 <gridster [options]="options" (drop)="onDrop($event)" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
-  <gridster-item [item]="item" *ngFor="let item of dashboardArray">
+  <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
     <div class="card">
       <div class="card-body">
         <div class="float-right">
@@ -30,9 +30,65 @@
           here item is DashboardContentModel
         -->
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
-          (moduleInfo)="display($event)">
+          [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
       </div>
     </div>
   </gridster-item>
 </gridster>
+<!-- modal start -->
+<div bsModal #widgetParametersModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body" *ngIf="barChartWidgetParameters">
+        <!-- <p>
+          {{ barChartWidgetParameters | json }}
+        </p> -->
+        <p>
+          <strong>Widget:</strong> {{barChartWidgetParameters.name}}
+        </p>
+        <form>
+          <tabset>
+            <tab heading="PROPERTIES" id="tab1">
+              <div class="form-group">
+                <label for="chartTypes">Chart Type</label>
+                <select class="form-control" id="chartTypes">
+                  <option>1</option>
+                  <option>2</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="aggregations">Aggregations</label>
+                <select class="form-control" id="aggregations">
+                  <option>1</option>
+                  <option>2</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="measures">Measures</label>
+                <select class="form-control" id="measures">
+                  <option>1</option>
+                  <option>2</option>
+                </select>
+              </div>
+            </tab>
+            <tab heading="FILTERS">Some filter form inputs here.</tab>
+            <tab heading="HELP">Some help text here.</tab>
+          </tabset>
+          <div class="row justify-content-end mt-3">
+            <div class="col-6">
+              <button type="submit" class="btn btn-primary px-4">
+                <span class="fa fa-spinner fa-spin"></span> Apply
+              </button>
+              <button type="submit" class="btn btn-primary px-4">
+                  <span class="fa fa-spinner fa-spin"></span> Cancel
+                </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal end -->

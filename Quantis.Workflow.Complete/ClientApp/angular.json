@@ -21,7 +21,6 @@
             ],
             "styles": [
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/@coreui/icons/css/coreui-icons.css",
@@ -30,7 +29,8 @@
               "node_modules/simple-line-icons/css/simple-line-icons.css",
               "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "src/scss/style.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "src/assets/gridster/jquery.dsmorse-gridster.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -40,14 +40,14 @@
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js",
               "node_modules/jszip/dist/jszip.js",
               "node_modules/datatables.net-buttons/js/dataTables.buttons.js",
               "node_modules/datatables.net-buttons/js/buttons.colVis.js",
               "node_modules/datatables.net-buttons/js/buttons.flash.js",
               "node_modules/datatables.net-buttons/js/buttons.html5.js",
-              "node_modules/datatables.net-buttons/js/buttons.print.js"
+              "node_modules/datatables.net-buttons/js/buttons.print.js",
+              "src/assets/gridster/jquery.dsmorse-gridster.min.js"
             ]
           },
           "configurations": {

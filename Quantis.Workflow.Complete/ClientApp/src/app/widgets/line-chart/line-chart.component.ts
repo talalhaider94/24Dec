@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -7,14 +7,10 @@ import * as Highcharts from 'highcharts';
 	styleUrls: ['./line-chart.component.scss']
 })
 export class LineChartComponent implements OnInit {
-	@Input() inputs: any;
-	@Input() hello: string;
-	isCollapsed = true;
 	constructor() { }
 
 	ngOnInit() {
-		console.log('LINE CHART COMPONENT', this.inputs);
-		console.log('LINE CHART COMPONENT', this.hello);
+		console.log('LineChartComponent');
 	}
 	// lineChart
 	public lineChartData: Array<any> = [

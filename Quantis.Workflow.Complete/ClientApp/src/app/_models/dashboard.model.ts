@@ -24,6 +24,7 @@ export interface DashboardContentModel {
     widgetid: number;
     dashboardid: number;
     id: number;
+    url?: string;
 }
 
 export interface DashboardModel {
