@@ -183,7 +183,7 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.source_type = data.source_type;
     this.modalData.computing_variable = data.computing_variable;
     this.modalData.computing_mode = data.computing_mode;
-    this.modalData.tracking_period = data.tracking_period;
+    this.modalData.tracking_period = 'MENSILE';
     this.modalData.measure_unit = data.measure_unit;
     this.modalData.kpi_type = data.kpi_type;
     this.modalData.escalation = data.escalation;
@@ -199,11 +199,11 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.referent_2 = data.referent_2;
     this.modalData.referent_3 = data.referent_3;
     this.modalData.referent_4 = data.referent_4;
-    this.modalData.frequency = data.frequency;
-    this.modalData.month = data.month;
-    this.modalData.day = data.day;
-    this.modalData.daytrigger = data.daytrigger;
-    this.modalData.monthtrigger = data.monthtrigger;
+    this.modalData.frequency = '0';
+    this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+    this.modalData.day = '1'; // forse non è usato
+    this.modalData.daytrigger = '5'; // forse non è usato
+    this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
     this.modalData.enable = data.enable;
     this.modalData.enable_wf = data.enable_wf;
     this.modalData.enable_rm = data.enable_rm;
@@ -221,6 +221,33 @@ export class AdminKpiComponent implements OnInit {
   updateKpi(modal) {
     console.log(modal);
     this.toastr.info('KPI in aggiornamento..', 'Info');
+    switch (this.modalData.tracking_period) {
+      case 'MENSILE':
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+      case 'TRIMESTRALE':
+        this.modalData.month = '1,4,7,10';
+        this.modalData.monthtrigger = '1,4,7,10';
+        break;
+      case 'QUADRIMESTRALE':
+        this.modalData.month = '1,5,9';
+        this.modalData.monthtrigger = '1,5,9';
+        break;
+      case 'SEMESTRALE':
+        this.modalData.month = '1,7';
+        this.modalData.monthtrigger = '1,7';
+        break;
+      case 'ANNUALE':
+        this.modalData.month = '1';
+        this.modalData.monthtrigger = '1';
+        break;
+      default:
+        this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
+        this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
+        break;
+    }
+    console.log(this.modalData);
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       this.getTRules(); // this should refresh the main table on page
       this.toastr.success('KPI Consolidato', 'Success');

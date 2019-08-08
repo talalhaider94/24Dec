@@ -14,6 +14,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { AmministrazioneComponent } from './amministrazione/amministrazione.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     FileUploadModule,
     CollapseModule.forRoot(),
   ],
-  declarations: [ KPIComponent, RicercaComponent ]
+  declarations: [ KPIComponent, RicercaComponent, AmministrazioneComponent ]
 })
 export class KPIModule { }

@@ -110,7 +110,15 @@ export const routes: Routes = [
       { 
         path: 'specialreporting',
         loadChildren: './views/email/email.module#EmailModule'
-      }
+      }, 
+      { 
+        path: 'datigrezzi',
+        loadChildren: './views/datigrezzi/datigrezzi.module#DatiModule'
+      },
+      {
+        path: 'booklet',
+        loadChildren: './views/booklet/booklet.module#BookletModule'
+      },
     ]
   },
   { path: '**', component: P404Component }

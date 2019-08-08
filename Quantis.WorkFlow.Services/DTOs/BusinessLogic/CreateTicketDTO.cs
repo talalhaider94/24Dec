@@ -8,6 +8,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
     {
         public string Summary { get; set; }
         public string Description { get; set; }
+        public int? SecondaryContractParty { get; set; }
         
         public string Status { get; set; }
         public int GroupCategoryId { get; set; }

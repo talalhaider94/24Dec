@@ -19,6 +19,7 @@
                                         <option value="" selected>Tutti</option>
                                         <option value="[Compliant]">Compliant</option>
                                         <option value="[Non Compliant]">Non Compliant</option>
+                                        <option value="[Non Calcolato]">Non Calcolato</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -92,7 +93,10 @@
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
                                     <td class="pl-3">
                                         <label class="checkbox-container border"
-                                            [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
+                                            [ngClass]="ticket.description.includes('[Compliant]') ?
+                                             'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
+                                              'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
+                                              'checkbox-container-primary border-primary' : 'checkbox-container-default border-secondary' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
                                                 [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
@@ -454,10 +458,10 @@
                     <table class="table table-responsive-sm table-hover table-outline text-center">
                         <tr>
                             <th>No.</th>
-                            <th>Ticket Number</th>
-                            <th>SDM Status</th>
-                            <th>BSI Status</th>
-                            <th>Ticket Status</th>
+                            <th>Rif. Num</th>
+                            <th>SDM</th>
+                            <th>BSI</th>
+                            <th>Stato</th>
                         </tr>
                         <tbody>
                             <tr *ngIf="ticketsStatus.length === 0 && !loading">

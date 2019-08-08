@@ -275,7 +275,35 @@ namespace Quantis.WorkFlow.APIBase.API
         }
 
 
+        public int GetContractIdByGlobalRuleId(int globalruleid)
+        {
+            try
+            {
+                int res= 0;
+                string query = "select r.global_rule_id, m.sla_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and r.global_rule_id=:global_rule_id";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":global_rule_id", globalruleid);
+                    _dbcontext.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            res = Decimal.ToInt32((Decimal)result[1]);                          
+                        }
+                    }                    
 
+                }
+                return res;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId)
         {
             try

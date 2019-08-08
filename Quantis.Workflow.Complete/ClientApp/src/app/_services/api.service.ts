@@ -13,6 +13,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  getBooklet(): Observable<any> {
+    const getBookletEndPoint = `${environment.API_URL}/Oracle/GetBooklets`;
+    return this.http.get(getBookletEndPoint, Headers.setHeaders('GEt'));
+  }
   getCatalogoUsers(): Observable<any> {
     const getUtentiEndPoint = `${environment.API_URL}/data/GetAllUsers`;
     return this.http.get(getUtentiEndPoint);
@@ -26,16 +30,22 @@ export class ApiService {
     return this.http.get(getTRulesEndPoint);
   }
 
-  getKpiArchivedData(id,month,year): Observable<any>{ 
+  getKpiArchivedRawData(id,month,year): Observable<any>{ 
+    const getDateKpiId = `${environment.API_URL}/data/GetArchivedRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
+    return this.http.get(getDateKpiId);
+  }
+  getKpiRawData(id, month, year): Observable<any> {
     const getDateKpiId = `${environment.API_URL}/data/GetRawDataByKpiID?id_kpi=${id}&month=${month}&year=${year}`;
     return this.http.get(getDateKpiId);
   }
-
   getCatalogoKpis(): Observable<any> {
     const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpis`;
     return this.http.get(getKpiEndPoint);
   }
-
+  getCatalogoKpisByUserId(): Observable<any> {
+    const getKpiEndPoint = `${environment.API_URL}/data/GetAllKpisByUserId`;
+    return this.http.get(getKpiEndPoint);
+  }
   getConfigurations(): Observable<any> {
     const getConfigurationsEndPoint = `${environment.API_URL}/Information/GetAllBasicConfigurations`;
     return this.http.get(getConfigurationsEndPoint);
