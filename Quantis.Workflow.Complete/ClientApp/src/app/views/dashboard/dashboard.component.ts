@@ -312,14 +312,12 @@ export class DashboardComponent implements OnInit {
 			this.dashboardWidgetsArray.indexOf(item),
 			1
 		);
-		// this.itemChange();
+		this.itemChange();
 	}
 
 	static itemResize(item, itemComponent) {
 		// console.info('itemResized', item, itemComponent);
 	}
-
-	get f() { return this.widgetParametersForm.controls; }
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
