@@ -15,22 +15,24 @@ export interface DashboardContentModel {
     rows: number;
     y: number;
     x: number;
-    minItemRows?: number;
-    minItemCols?: number;
     component?: any;
-    name: string;
+    widgetname: string;
     filters: Array<any>;
     properties: Array<any>;
     widgetid: number;
     dashboardid: number;
     id: number;
+    uiidentifier: string;
     url?: string;
+    minItemRows?: number;
+    minItemCols?: number;
 }
 
 export interface DashboardModel {
     id: number;
     name: string;
-    owner: string,
-    createdon: Date,
+    owner: string;
+    createdon: Date;
+    globalfilterid: number, 
     dashboardwidgets: Array<DashboardContentModel>;
 }

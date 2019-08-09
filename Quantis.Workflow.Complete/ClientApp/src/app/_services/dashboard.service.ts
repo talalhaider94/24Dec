@@ -36,16 +36,17 @@ export class DashboardService {
 				if (result.dashboardwidgets.length > 0) {
 					dashboardwidgets = result.dashboardwidgets.map(widget => {
 						return {
-							cols: widget.sizex,
-							rows: widget.sizey,
+							cols: widget.sizey,
+							rows: widget.sizex,
 							x: widget.locationx,
 							y: widget.locationy,
 							component: widget.widgetname,
-							name: widget.widgetname,
+							widgetname: widget.widgetname,
 							filters: widget.filters,
 							properties: widget.properties,
 							widgetid: widget.widgetid,
 							dashboardid: widget.dashboardid,
+							uiidentifier: widget.uiidentifier,
 							id: widget.id
 						}
 					});
@@ -57,6 +58,7 @@ export class DashboardService {
 					dashboardwidgets,
 					globalfilterid: result.globalfilterid
 				}
+				debugger
 				return createObj;
 			}));
 	}
@@ -67,12 +69,12 @@ export class DashboardService {
 		if (params.dashboardwidgets.length > 0) {
 			dashboardwidgets = params.dashboardwidgets.map(widget => {
 				return {
-					sizex: widget.sizex,
-					sizey: widget.sizey,
-					locationx: widget.locationx,
-					locationy: widget.locationy,
-					component: widget.widgetname,
-					name: widget.widgetname,
+					sizex: widget.rows,
+					sizey: widget.cols,
+					locationx: widget.x,
+					locationy: widget.y,
+					component: widget.name,
+					name: widget.name,
 					filters: widget.filters,
 					properties: widget.properties,
 					widgetid: widget.widgetid,
@@ -94,13 +96,9 @@ export class DashboardService {
 		return this.http.get(`${environment.API_URL_103}/${url}/GetWidgetParameters`);
 	}
 
-	getWidgetIndex(url: string): Observable<any> {
+	getWidgetIndex(url: string, formValues: any): Observable<any> {
 		const widgetIndexEndPoint = `${environment.API_URL_103}/${url}/Index`;
-		let params = {
-			GlobalFilterId: 0, Properties: { measure: 1, aggregationoption: 'Period', charttype: 'Bar' },
-			Filters: { daterange: '03/19:06/19' }
-		}
-		return this.http.post(widgetIndexEndPoint, params, { observe: 'response' });
+		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
 	
 }

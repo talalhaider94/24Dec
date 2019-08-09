@@ -8,7 +8,7 @@ import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_model
 import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
@@ -48,10 +48,23 @@ export class DashboardComponent implements OnInit {
 
 	outputs = {
 		barChartParent: childData => {
-			if(childData.type === 'barChartParams') {
+			if (childData.type === 'barChartParams') {
 				this.barChartWidgetParameters = childData.data;
 			}
-			if(childData.type === 'openModal') {
+			if (childData.type === 'openModal') {
+				if (this.barChartWidgetParameters) {
+					this.widgetParametersForm.setValue({
+						GlobalFilterId: 0,
+						Properties: {
+							charttype: 'bar',
+							aggregationoption: 'period',
+							measure: '0'
+						},
+						Filters: {
+							daterange: '03/19:06/19'
+						}
+					})
+				}
 				this.widgetParametersModal.show();
 			}
 		}
@@ -63,9 +76,15 @@ export class DashboardComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.widgetParametersForm = this.formBuilder.group({
-			chartTypes: ['', Validators.required],
-			aggregations: ['', Validators.required],
-			measures: ['', Validators.required]
+			GlobalFilterId: [null],
+			Properties: this.formBuilder.group({
+				charttype: [null],
+				aggregationoption: [null],
+				measure: [null]
+			}),
+			Filters: this.formBuilder.group({
+				daterange: [null]
+			})
 		});
 		// Grid options
 		this.options = {
@@ -125,6 +144,7 @@ export class DashboardComponent implements OnInit {
 				if (dashboardData) {
 					this.dashboardCollection = dashboardData;
 					// parsing serialized Json to generate components on the fly
+					// attaching component instance with widget.component key
 					this.parseJson(this.dashboardCollection);
 					// copying array without reference to re-render.
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
@@ -157,14 +177,14 @@ export class DashboardComponent implements OnInit {
 
 	parseJson(dashboardCollection: DashboardModel) {
 		// We loop on our dashboardCollection
-		dashboardCollection.dashboardwidgets.forEach(dashboard => {
+		dashboardCollection.dashboardwidgets.forEach(widget => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
-				if (dashboard.component === component.name) {
+				if (widget.component === component.name) {
 					// If it is, we replace our serialized key by our component instance
-					dashboard.component = component.componentInstance;
+					widget.component = component.componentInstance;
 				}
 			});
 		});
@@ -174,16 +194,22 @@ export class DashboardComponent implements OnInit {
 		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
 		// let tmp = JSON.stringify(this.dashboardCollection);
 		// let parsed: DashboardModel = JSON.parse(tmp);
-		// this.serialize(parsed.dashboardwidgets);
-		// console.log(this.dashboardWidgetsArray);
-		
-		// this.emitter.loadingStatus(true);
-		// this.dashboardService.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
-		// 	this.emitter.loadingStatus(false);
-		// }, error => {
-		// 	console.log('updateDashboard', error);
-		// 	this.emitter.loadingStatus(false);
-		// });
+		// let changedDashboardWidgets: DashboardContentModel = this.dashboardCollection.dashboardwidgets
+		// this.serialize(changedDashboardWidgets);
+		console.log(this.dashboardWidgetsArray);
+	}
+
+	saveDashboard() {
+		this.emitter.loadingStatus(true);
+		this.dashboardService.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
+			this.emitter.loadingStatus(false);
+			debugger
+		}, error => {
+			console.log('updateDashboard', error);
+			debugger
+			this.emitter.loadingStatus(false);
+		});
+
 	}
 
 	serialize(dashboardCollection) {
@@ -204,63 +230,72 @@ export class DashboardComponent implements OnInit {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
 		switch (componentType) {
 			case "radar_chart":
+				let radarWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'radar_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
 					y: 0,
 					component: RadarChartComponent,
-					name: "Radar Chart",
+					widgetname: radarWidget.name,
+					uiidentifier: radarWidget.uiidentifier,
 					filters: [], // need to update this code
 					properties: [],
-					dashboardid: 1,
-					widgetid: 2,
+					dashboardid: this.dashboardId,
+					widgetid: radarWidget.id,
 					id: 0, // 0 because we are adding them
+					url: radarWidget.url
 				});
 			case "line_chart":
+				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
 					y: 0,
-					minItemRows: 5,
-					minItemCols: 5,
 					component: LineChartComponent,
-					name: "Line Chart",
+					widgetname: lineWidget.name,
+					uiidentifier: lineWidget.uiidentifier,
 					filters: [], // need to update this code
 					properties: [],
-					dashboardid: 1,
-					widgetid: 4,
-					id: 0
+					dashboardid: this.dashboardId,
+					widgetid: lineWidget.id,
+					id: 0,
+					url: lineWidget.url
 				});
 			case "doughnut_chart":
+				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'doughnut_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
 					rows: 5,
 					x: 0,
 					y: 0,
 					component: DoughnutChartComponent,
-					name: "Doughnut Chart",
+					widgetname: doughnutWidget.name,
+					uiidentifier: doughnutWidget.uiidentifier,
 					filters: [], // need to update this code
 					properties: [],
-					dashboardid: 1,
-					widgetid: 3,
-					id: 0
+					dashboardid: this.dashboardId,
+					widgetid: doughnutWidget.id,
+					id: 0,
+					url: doughnutWidget.url
 				});
 			case "count_trend":
+				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 5,
+					cols: 6,
+					rows: 6,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
-					name: "Count Trend",
+					widgetname: countWidget.name,
+					uiidentifier: countWidget.uiidentifier,
 					filters: [], // need to update this code
 					properties: [],
-					dashboardid: 1,
-					widgetid: 1,
+					dashboardid: this.dashboardId,
+					widgetid: countWidget.id,
 					id: 0,
-					url: this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').url
+					url: countWidget.url
 				});
 		}
 	}
@@ -280,10 +315,22 @@ export class DashboardComponent implements OnInit {
 	static itemResize(item, itemComponent) {
 		// console.info('itemResized', item, itemComponent);
 	}
-	
+
 	get f() { return this.widgetParametersForm.controls; }
 
-	onWidgetParametersFormSubmit(){
-		debugger
+	onWidgetParametersFormSubmit() {
+		let formValues = this.widgetParametersForm.value;
+		const { url, widgetid } = this.barChartWidgetParameters;
+		this.emitter.loadingStatus(true);
+		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
+			this.emitter.sendNext({
+				type: 'barChart',
+				widgetid,
+				data: result
+			})
+			this.emitter.loadingStatus(false);
+		}, error => {
+			this.emitter.loadingStatus(false);
+		})
 	}
 }

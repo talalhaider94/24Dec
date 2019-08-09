@@ -63,17 +63,19 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     
     // We make get request to get all dashboards from our REST API
 		this.dashboardService.getDashboards().subscribe(dashboards => {
-      this.loading = false;
+      this.emitter.loadingStatus(false);
       this.dashboardCollection = dashboards;
       console.log('getDashboards', dashboards);
     }, error => {
       console.error('getDashboards', error);
       this.toastr.error('Error while loading dashboards');
-      this.loading = false;
+      this.emitter.loadingStatus(false);
     });
     this.emitter.getData().subscribe(data => {
       if(data.type === 'loading') {
-        this.loading = data.loading;
+        if(this.loading !== data.loading) {
+          this.loading = data.loading;
+        }
       }
     })
     

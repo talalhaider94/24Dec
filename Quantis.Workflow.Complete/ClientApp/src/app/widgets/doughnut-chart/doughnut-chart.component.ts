@@ -6,7 +6,6 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: ['./doughnut-chart.component.scss']
 })
 export class DoughnutChartComponent implements OnInit {
-	isCollapsed = true;
 	constructor() { }
 
 	ngOnInit() {
