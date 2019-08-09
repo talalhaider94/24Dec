@@ -72,12 +72,12 @@ export class DashboardService {
 					sizey: widget.cols,
 					locationx: widget.x,
 					locationy: widget.y,
-					component: widget.name,
-					name: widget.name,
+					widgetname: widget.widgetname,
 					filters: widget.filters,
 					properties: widget.properties,
 					widgetid: widget.widgetid,
 					dashboardid: widget.dashboardid,
+					uiidentifier: widget.uiidentifier,
 					id: widget.id
 				}
 			});
@@ -86,6 +86,7 @@ export class DashboardService {
 			id: params.id,
 			name: params.name,
 			createdon: params.createdon,
+			globalfilterid: params.globalfilterid,
 			dashboardwidgets
 		}
 		return this.http.post<DashboardModel>(`${environment.API_URL_103}/dashboard/AddUpdateDasboard`, newParams);
