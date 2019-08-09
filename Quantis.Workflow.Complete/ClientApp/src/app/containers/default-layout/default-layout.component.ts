@@ -74,7 +74,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.emitter.getData().subscribe(data => {
       if(data.type === 'loading') {
         if(this.loading !== data.loading) {
-          this.loading = data.loading;
+          setTimeout(() => {
+            this.loading = data.loading;
+          })
+          
         }
       }
     })

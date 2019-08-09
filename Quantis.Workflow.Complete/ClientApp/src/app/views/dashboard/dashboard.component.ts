@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
 		{ name: "Radar Chart", componentInstance: RadarChartComponent },
 		{ name: "Count Trend", componentInstance: BarchartComponent },
 	];
-
+	helpText: string = '';
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit {
 						}
 					})
 				}
+				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
 			}
 		}
@@ -192,15 +193,13 @@ export class DashboardComponent implements OnInit {
 
 	itemChange() {
 		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
-		// let tmp = JSON.stringify(this.dashboardCollection);
-		// let parsed: DashboardModel = JSON.parse(tmp);
-		// let changedDashboardWidgets: DashboardContentModel = this.dashboardCollection.dashboardwidgets
-		// this.serialize(changedDashboardWidgets);
-		console.log(this.dashboardWidgetsArray);
+		let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
+		// this.serialize(changedDashboardWidgets.dashboardwidgets);
 	}
 
 	saveDashboard() {
 		this.emitter.loadingStatus(true);
+		debugger
 		this.dashboardService.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
 			debugger
@@ -212,15 +211,15 @@ export class DashboardComponent implements OnInit {
 
 	}
 
-	serialize(dashboardCollection) {
+	serialize(dashboardwidgets) {
 		// We loop on our dashboardCollection
-		dashboardCollection.forEach(dashboard => {
+		dashboardwidgets.forEach(widget => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
-				if (dashboard.name === component.name) {
-					dashboard.component = component.name;
+				if (widget.widgetname === component.name) {
+					widget.component = component.name;
 				}
 			});
 		});
@@ -229,7 +228,7 @@ export class DashboardComponent implements OnInit {
 	onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
 		switch (componentType) {
-			case "radar_chart":
+			case "radar_chart": {
 				let radarWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'radar_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
@@ -246,7 +245,8 @@ export class DashboardComponent implements OnInit {
 					id: 0, // 0 because we are adding them
 					url: radarWidget.url
 				});
-			case "line_chart":
+			}
+			case "line_chart": {
 				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
@@ -263,7 +263,8 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: lineWidget.url
 				});
-			case "doughnut_chart":
+			}
+			case "doughnut_chart": {
 				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'doughnut_chart');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
@@ -280,11 +281,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: doughnutWidget.url
 				});
-			case "count_trend":
+			}
+			case "count_trend": {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 6,
-					rows: 6,
+					cols: 5,
+					rows: 5,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
@@ -297,6 +299,7 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: countWidget.url
 				});
+			}
 		}
 	}
 

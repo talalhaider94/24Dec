@@ -51,15 +51,14 @@ export class DashboardService {
 						}
 					});
 				}
-				let createObj = {
+				let createDashboardObj = {
 					id: result.id,
 					name: result.name,
 					createdon: result.createdon,
 					dashboardwidgets,
 					globalfilterid: result.globalfilterid
 				}
-				debugger
-				return createObj;
+				return createDashboardObj;
 			}));
 	}
 

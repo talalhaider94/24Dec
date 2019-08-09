@@ -89,7 +89,9 @@
                 </div>
               </div>
             </tab>
-            <tab heading="HELP">Some help text here.</tab>
+            <tab heading="HELP">
+              {{ helpText }}
+            </tab>
           </tabset>
           <div class="row justify-content-end mt-3">
             <div class="col-6 text-right">
@@ -97,7 +99,7 @@
                 <!-- <span class="fa fa-spinner fa-spin"></span>  -->
                 Apply
               </button>
-              <button type="submit" class="btn btn-outline-primary btn-sm px-4">
+              <button type="submit" (click)="widgetParametersModal.hide()" class="btn btn-outline-primary btn-sm px-4">
                 Cancel
               </button>
             </div>
