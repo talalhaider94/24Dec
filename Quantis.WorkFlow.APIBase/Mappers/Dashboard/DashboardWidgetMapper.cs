@@ -49,6 +49,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             e.LocationY = o.LocationY;
             e.SizeX = o.SizeX;
             e.SizeY = o.SizeY;
+            e.WidgetName = o.WidgetName;
             if (e.Id == 0)
             {
                 e.WidgetId = o.WidgetId;
