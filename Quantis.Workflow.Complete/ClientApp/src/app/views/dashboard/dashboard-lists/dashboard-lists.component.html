@@ -33,10 +33,10 @@
                   <td>{{ dashboard.name }}</td>
                   <td>{{ dashboard.owner }}</td>
                   <td>
-                    <button [routerLink]="['/dashboard/dashboard', dashboard.id]" class="btn btn-sm btn-primary">
+                    <button [routerLink]="['/dashboard/public', dashboard.id]" class="btn btn-sm btn-primary">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button [routerLink]="['/dashboard/public', dashboard.id]" class="btn btn-sm btn-success">
+                    <button [routerLink]="['/dashboard/dashboard', dashboard.id]" class="btn btn-sm btn-success">
                       <i class="fa fa-edit"></i>
                     </button>
                   </td>
