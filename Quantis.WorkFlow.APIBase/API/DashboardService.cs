@@ -41,7 +41,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public void AddUpdateDasboard(DashboardDetailDTO dto)
+        public int AddUpdateDasboard(DashboardDetailDTO dto)
         {
             try
             {
@@ -60,6 +60,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     entdb.DashboardWidgets = dbwidgets;
                     _dbcontext.DB_Dashboards.Add(entdb);
                     _dbcontext.SaveChanges();
+                    return entdb.Id;
                 }
                 else
                 {
@@ -76,6 +77,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         var ent = new DB_DashboardWidget();
                         ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
+                        ent.DashboardId = dto.Id;
                         dbwidgets.Add(ent);
                     }
                     _dbcontext.DB_DashboardWidgets.AddRange(dbwidgets.ToArray());
@@ -90,6 +92,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var dashboard=_dbcontext.DB_Dashboards.Single(o => o.Id == dto.Id);
                     dashboard.GlobalFilterId = dto.GlobalFilterId;
                     _dbcontext.SaveChanges();
+                    return dto.Id;
                 }
             }
             catch (Exception e)
@@ -114,13 +117,14 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entities = _dbcontext.DB_Dashboards.Include(o => o.DashboardWidgets).Single(o => o.Id == id);
-                var widgets= _dashboardWidgetMapper.GetDTOs(entities.DashboardWidgets.ToList());
+                var db = _dbcontext.DB_Dashboards.Single(o => o.Id == id);
+                var entities = _dbcontext.DB_DashboardWidgets.Include(o => o.Widget).Include(o=>o.DashboardWidgetSettings).Where(o => o.DashboardId == id);
+                var widgets= _dashboardWidgetMapper.GetDTOs(entities.ToList());
                 return new DashboardDetailDTO()
                 {
-                    Id = entities.Id,
-                    Name = entities.Name,
-                    GlobalFilterId = entities.GlobalFilterId,
+                    Id = db.Id,
+                    Name = db.Name,
+                    GlobalFilterId = db.GlobalFilterId,
                     DashboardWidgets = widgets
                 };
 

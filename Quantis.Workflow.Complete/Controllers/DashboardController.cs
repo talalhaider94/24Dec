@@ -28,9 +28,11 @@ namespace Quantis.Workflow.Complete.Controllers
             return _dashboardAPI.GetDashboards();
         }
         [HttpPost("AddUpdateDasboard")]
-        public void AddUpdateDasboard([FromBody]DashboardDetailDTO dto)
+        public DashboardDetailDTO AddUpdateDasboard([FromBody]DashboardDetailDTO dto)
         {
-            _dashboardAPI.AddUpdateDasboard(dto);
+            var id = _dashboardAPI.AddUpdateDasboard(dto);
+            return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
+
         }
         [HttpGet("GetAllWidgets")]
         public List<WidgetDTO> GetAllWidgets()
