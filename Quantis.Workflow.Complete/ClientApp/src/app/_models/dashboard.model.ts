@@ -17,8 +17,8 @@ export interface DashboardContentModel {
     x: number;
     component?: any;
     widgetname: string;
-    filters: Array<any>;
-    properties: Array<any>;
+    filters: {};
+    properties: {};
     widgetid: number;
     dashboardid: number;
     id: number;

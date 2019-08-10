@@ -206,8 +206,9 @@ export class DashboardComponent implements OnInit {
 	saveDashboard() {
 		this.emitter.loadingStatus(true);
 		debugger
-		this.dashboardService.updateDashboard(this.dashboardId, this.dashboardCollection).subscribe(updatedDashboard => {
+		this.dashboardService.updateDashboard(this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
+			this.toastr.success('Dashboard saved successfully.');
 			debugger
 		}, error => {
 			console.log('updateDashboard', error);
@@ -244,8 +245,8 @@ export class DashboardComponent implements OnInit {
 					component: RadarChartComponent,
 					widgetname: radarWidget.name,
 					uiidentifier: radarWidget.uiidentifier,
-					filters: [], // need to update this code
-					properties: [],
+					filters: {}, // need to update this code
+					properties: {},
 					dashboardid: this.dashboardId,
 					widgetid: radarWidget.id,
 					id: 0, // 0 because we are adding them
@@ -262,8 +263,8 @@ export class DashboardComponent implements OnInit {
 					component: LineChartComponent,
 					widgetname: lineWidget.name,
 					uiidentifier: lineWidget.uiidentifier,
-					filters: [], // need to update this code
-					properties: [],
+					filters: {}, // need to update this code
+					properties: {},
 					dashboardid: this.dashboardId,
 					widgetid: lineWidget.id,
 					id: 0,
@@ -280,8 +281,8 @@ export class DashboardComponent implements OnInit {
 					component: DoughnutChartComponent,
 					widgetname: doughnutWidget.name,
 					uiidentifier: doughnutWidget.uiidentifier,
-					filters: [], // need to update this code
-					properties: [],
+					filters: {}, // need to update this code
+					properties: {},
 					dashboardid: this.dashboardId,
 					widgetid: doughnutWidget.id,
 					id: 0,
@@ -298,8 +299,8 @@ export class DashboardComponent implements OnInit {
 					component: BarchartComponent,
 					widgetname: countWidget.name,
 					uiidentifier: countWidget.uiidentifier,
-					filters: [], // need to update this code
-					properties: [],
+					filters: {}, // need to update this code
+					properties: {},
 					dashboardid: this.dashboardId,
 					widgetid: countWidget.id,
 					id: 0,

@@ -56,13 +56,13 @@ export class DashboardService {
 					name: result.name,
 					createdon: result.createdon,
 					dashboardwidgets,
-					globalfilterid: result.globalfilterid
+					globalfilterid: result.globalfilterid || 0
 				}
 				return createDashboardObj;
 			}));
 	}
 
-	updateDashboard(id: number, params): Observable<DashboardModel> {
+	updateDashboard(params): Observable<DashboardModel> {
 		// return this.http.put<DashboardModel>(`http://localhost:3000/dashboards/${id}`, params);
 		let dashboardwidgets = [];
 		if (params.dashboardwidgets.length > 0) {
@@ -99,11 +99,6 @@ export class DashboardService {
 	getWidgetIndex(url: string, formValues: any): Observable<any> {
 		const widgetIndexEndPoint = `${environment.API_URL_103}/${url}/Index`;
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
-	}
-
-	createDashboard(params): Observable<any> {
-		const createDashboardEndPoint = `${environment.API_URL_103}/dashboard/createDashboard`;
-		return this.http.post(createDashboardEndPoint, params);
 	}
 
 }

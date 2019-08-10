@@ -64,11 +64,11 @@
         <!-- create dashboard model body start -->
         <form [formGroup]="createDashboardForm" (ngSubmit)="onDashboardFormSubmit()">
           <div class="form-group">
-            <input type="text" formControlName="dashboardName" class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && f.dashboardName.errors }" placeholder="Enter Dashboard Name" autocomplete="dashboardName">
+            <input type="text" formControlName="name" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.name.errors }" placeholder="Enter Dashboard Name" autocomplete="name">
           </div>
-          <!-- display dashboardName error -->
-          <span class="text-danger mb-3" *ngIf="submitted && f.dashboardName.errors && f.dashboardName.errors.required">Dashboard name
+          <!-- display name error -->
+          <span class="text-danger mb-3" *ngIf="submitted && f.name.errors && f.name.errors.required">Dashboard name
             obbligatorio</span>
           <div class="row">
             <div class="col-6">

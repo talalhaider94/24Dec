@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { DashboardService } from '../../../_services';
+import { DashboardService, AuthService } from '../../../_services';
 
 @Component({
   selector: 'app-dashboard-lists',
@@ -21,6 +21,7 @@ export class DashboardListsComponent implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private toastr: ToastrService,
+    private authService: AuthService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -28,7 +29,12 @@ export class DashboardListsComponent implements OnInit {
   
   ngOnInit() {
     this.createDashboardForm = this.formBuilder.group({
-      dashboardName: ['', Validators.required]
+      id: ['', Validators.required],
+      name: ['', Validators.required],
+      owner: ['', Validators.required],
+      globalfilterId: ['', Validators.required],
+      createdon: ['', Validators.required],
+      dashboardwidgets: [''],
     });
     this.getUserDashboards();
   }
@@ -45,6 +51,14 @@ export class DashboardListsComponent implements OnInit {
   }
 
   createDashboard() {
+    let loggedInUser = this.authService.currentUserValue;
+    this.createDashboardForm.patchValue({
+      id: 0,
+      owner: loggedInUser.username,
+      globalfilterId: 0,
+      createdon: new Date(),      
+      dashboardwidgets: []
+    })
     this.createDashboardModal.show();
   }
 
@@ -55,7 +69,7 @@ export class DashboardListsComponent implements OnInit {
     } else {
       this.createDashboardModal.show();
       this.formLoading = true;
-      this.dashboardService.createDashboard(this.createDashboardForm.value).subscribe(dashboardCreated => {
+      this.dashboardService.updateDashboard(this.createDashboardForm.value).subscribe(dashboardCreated => {
         this.createDashboardModal.hide();
         this.getUserDashboards();
         this.formLoading = false;
