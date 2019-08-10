@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { DashboardService } from '../../../_services';
 
 @Component({
   selector: 'app-dashboard-lists',
@@ -6,10 +11,62 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard-lists.component.scss']
 })
 export class DashboardListsComponent implements OnInit {
+  loading: boolean = true;
+  formLoading: boolean = false;
+  submitted: boolean = false;
+  dashboards: Array<any> = [];
+  createDashboardForm: FormGroup;
 
-  constructor() { }
+  @ViewChild('createDashboardModal') public createDashboardModal: ModalDirective;
+  constructor(
+    private dashboardService: DashboardService,
+    private toastr: ToastrService,
+    private formBuilder: FormBuilder
+  ) { }
 
+  get f() { return this.createDashboardForm.controls; }
+  
   ngOnInit() {
+    this.createDashboardForm = this.formBuilder.group({
+      dashboardName: ['', Validators.required]
+    });
+    this.getUserDashboards();
+  }
+
+  getUserDashboards() {
+    this.dashboardService.getDashboards().subscribe(dashboards => {
+      this.dashboards = dashboards;
+      this.loading = false;
+    }, error => {
+      console.error('getDashboards', error);
+      this.toastr.error('Error while loading dashboards');
+      this.loading = false;
+    });
+  }
+
+  createDashboard() {
+    this.createDashboardModal.show();
+  }
+
+  onDashboardFormSubmit() {
+    this.submitted = true;
+    if (this.createDashboardForm.invalid) {
+      this.createDashboardModal.show();
+    } else {
+      this.createDashboardModal.show();
+      this.formLoading = true;
+      this.dashboardService.createDashboard(this.createDashboardForm.value).subscribe(dashboardCreated => {
+        this.createDashboardModal.hide();
+        this.getUserDashboards();
+        this.formLoading = false;
+        this.toastr.success('Dashboard created successfully');
+      }, error => {
+        this.createDashboardModal.hide();
+        this.formLoading = false;
+        this.toastr.error('Error while creating dashboard');
+      })
+    }
+
   }
 
 }

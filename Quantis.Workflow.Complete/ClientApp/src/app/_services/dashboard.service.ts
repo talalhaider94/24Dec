@@ -100,5 +100,10 @@ export class DashboardService {
 		const widgetIndexEndPoint = `${environment.API_URL_103}/${url}/Index`;
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
-	
+
+	createDashboard(params): Observable<any> {
+		const createDashboardEndPoint = `${environment.API_URL_103}/dashboard/createDashboard`;
+		return this.http.post(createDashboardEndPoint, params);
+	}
+
 }
