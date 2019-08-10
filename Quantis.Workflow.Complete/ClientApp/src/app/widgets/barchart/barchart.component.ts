@@ -139,16 +139,16 @@ export class BarchartComponent implements OnInit {
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'line';
 
-	public randomize(): void {
-		let _barChartData: Array<any> = new Array(this.barChartData.length);
-		for (let i = 0; i < this.barChartData.length; i++) {
-			_barChartData[i] = { data: new Array(this.barChartData[i].data.length), label: this.barChartData[i].label };
-			for (let j = 0; j < this.barChartData[i].data.length; j++) {
-				_barChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
-			}
-		}
-		this.barChartData = _barChartData;
-	}
+	// public randomize(): void {
+	// 	let _barChartData: Array<any> = new Array(this.barChartData.length);
+	// 	for (let i = 0; i < this.barChartData.length; i++) {
+	// 		_barChartData[i] = { data: new Array(this.barChartData[i].data.length), label: this.barChartData[i].label };
+	// 		for (let j = 0; j < this.barChartData[i].data.length; j++) {
+	// 			_barChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
+	// 		}
+	// 	}
+	// 	this.barChartData = _barChartData;
+	// }
 
 	// events
 	public chartClicked(e: any): void {

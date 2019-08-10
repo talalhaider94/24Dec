@@ -19,6 +19,7 @@ import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.compo
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
+import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { PublicComponent } from './public/public.component';
     RadarChartComponent,
     MenuComponent,
     BarchartComponent,
-    PublicComponent
+    PublicComponent,
+    DashboardListsComponent
   ]
 })
 export class DashboardModule { }

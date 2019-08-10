@@ -1,3 +1,87 @@
-<p>
-  public works!
-</p>
+<!-- Gridster grid -->
+<gridster [options]="options" (drop)="onDrop($event)" class="bg-white">
+  <!-- Earch grister-item is generated with *ngFor -->
+  <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
+    <div class="card">
+      <div class="card-body">
+        <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
+          [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
+        </ndc-dynamic>
+      </div>
+    </div>
+  </gridster-item>
+</gridster>
+<!-- modal start -->
+<div bsModal #widgetParametersModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body" *ngIf="barChartWidgetParameters">
+        <!-- <p>
+          {{ barChartWidgetParameters | json }}
+        </p> -->
+        <p>
+          <strong>Widget:</strong> {{barChartWidgetParameters.name}}
+        </p>
+        <form [formGroup]="widgetParametersForm" (ngSubmit)="onWidgetParametersFormSubmit()">
+          <tabset>
+            <tab heading="PROPERTIES" id="tab1">
+              <div formGroupName="Properties">
+                <div class="form-group" *ngIf="barChartWidgetParameters.showcharttype">
+                  <label for="charttype">Chart Type</label>
+                  <select class="form-control" id="charttype" formControlName="charttype">
+                    <option *ngFor="let type of barChartWidgetParameters.charttypes | keyvalue; let i = index"
+                      [attr.selected]="!i" [ngValue]="type.key">
+                      {{ type.value }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group" *ngIf="barChartWidgetParameters.showaggregationoption">
+                  <label for="aggregationoption">Aggregations</label>
+                  <select class="form-control" id="aggregationoption" formControlName="aggregationoption">
+                    <option *ngFor="let option of barChartWidgetParameters.aggregationoptions | keyvalue; let i = index"
+                      [ngValue]="option.key" [attr.selected]="!i">
+                      {{ option.value }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group" *ngIf="barChartWidgetParameters.showmeasure">
+                  <label for="measure">Measures</label>
+                  <select class="form-control" id="measure" formControlName="measure">
+                    <option *ngFor="let measure of barChartWidgetParameters.measures | keyvalue; let i = index"
+                      [attr.selected]="!i" [ngValue]="measure.key">
+                      {{ measure.value }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </tab>
+            <tab heading="FILTERS">
+              <div formGroupName="Filters">
+                <div class="form-group">
+                  <label for="daterange">Date Range</label>
+                  <input type="text" formControlName="daterange" class="form-control" placeholder="Date Range" />
+                </div>
+              </div>
+            </tab>
+            <tab heading="HELP">
+              {{ helpText }}
+            </tab>
+          </tabset>
+          <div class="row justify-content-end mt-3">
+            <div class="col-6 text-right">
+              <button type="submit" class="btn btn-outline-primary btn-sm px-4">
+                <!-- <span class="fa fa-spinner fa-spin"></span>  -->
+                Apply
+              </button>
+              <button type="submit" (click)="widgetParametersModal.hide()" class="btn btn-outline-primary btn-sm px-4">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal end -->

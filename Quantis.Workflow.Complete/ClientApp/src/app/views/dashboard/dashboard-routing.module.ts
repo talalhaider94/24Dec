@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PublicComponent } from './public/public.component';
 import { DashboardComponent } from './dashboard.component';
-
+import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 const routes: Routes = [
   // {
   //   path: '',
@@ -28,6 +28,13 @@ const routes: Routes = [
     component: PublicComponent,
     data: {
       title: 'Public Dashboard'
+    }
+  },
+  { 
+    path: 'list',
+    component: DashboardListsComponent,
+    data: {
+      title: 'Dashboards'
     }
   },
 ];

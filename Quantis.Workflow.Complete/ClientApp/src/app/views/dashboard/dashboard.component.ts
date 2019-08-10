@@ -188,6 +188,10 @@ export class DashboardComponent implements OnInit {
 				if (widget.component === component.name) {
 					// If it is, we replace our serialized key by our component instance
 					widget.component = component.componentInstance;
+					// this logic needs to be update because in future widget name will be different
+					// need to make this match on the basis on uiidentifier
+					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname ).url;
+					widget.url = url;
 				}
 			});
 		});

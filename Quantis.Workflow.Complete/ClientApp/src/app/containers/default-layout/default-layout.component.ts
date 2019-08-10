@@ -99,6 +99,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   dashboardNavigation(id) {
     this.router.navigate(['/dashboard/dashboard', id]);
   }
+  
+  dashboardList() {
+    this.router.navigate(['/dashboard/list']);
+  }
 
   filterMenuByPermission(navItems, permissions, permittedMenu) {
     if (navItems) {
