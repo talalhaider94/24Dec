@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 	styleUrls: ['./barchart.component.scss']
 })
 export class BarchartComponent implements OnInit {
-	@Input() name: string;
+	@Input() widgetname: string;
 	@Input() url: string;
 	@Input() filters: Array<any>;
 	@Input() properties: Array<any>;
@@ -26,7 +26,7 @@ export class BarchartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('BarchartComponent', this.name, this.url);
+		console.log('BarchartComponent', this.widgetname, this.url);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
 			// this.getWidgetParameters(this.url);
@@ -37,7 +37,10 @@ export class BarchartComponent implements OnInit {
 			const { type, widgetid, data } = result;
 			if (type === 'barChart') {
 				if (widgetid === this.widgetid) {
-					this.updateChart(data.body);
+					setTimeout(() => {
+						this.barChartType = data.barChartWidgetParameterValues.Properties.charttype;
+					});
+					this.updateChart(data.result.body);
 				}
 			}
 		})
@@ -62,9 +65,9 @@ export class BarchartComponent implements OnInit {
 						type: 'barChartParams',
 						data: {
 							...getWidgetParameters,
-							name: this.name,
+							widgetname: this.widgetname,
 							url: this.url,
-							filters: this.filters,
+							filters: this.filters, // ya kahan sa aye gi.
 							properties: this.properties,
 							widgetid: this.widgetid,
 							dashboardid: this.dashboardid,
@@ -159,9 +162,8 @@ export class BarchartComponent implements OnInit {
 	openModal() {
 		this.barChartParent.emit({ type: 'openModal' });
 	}
-
-	openModal2() {
-		this.barChartType = 'bar';
+	closeModal() {
+		this.barChartParent.emit({ type: 'closeModal' });
 	}
 
 	updateChart(chartIndexData) {
@@ -179,6 +181,7 @@ export class BarchartComponent implements OnInit {
 		this.barChartData = [{ data: allData, label: 'Series' }]
 		this.barChartLabels.length = 0;
 		this.barChartLabels.push(...allLabels);
+		this.closeModal();
 	}
 
 }

@@ -18,6 +18,7 @@ import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-ch
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
+import { PublicComponent } from './public/public.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
     LineChartComponent,
     RadarChartComponent,
     MenuComponent,
-    BarchartComponent
+    BarchartComponent,
+    PublicComponent
   ]
 })
 export class DashboardModule { }

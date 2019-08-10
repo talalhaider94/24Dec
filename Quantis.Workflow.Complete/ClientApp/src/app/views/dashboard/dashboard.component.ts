@@ -67,6 +67,8 @@ export class DashboardComponent implements OnInit {
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
+			} else if (childData.type === 'closeModal') {
+				this.widgetParametersModal.hide();
 			}
 		}
 	};
@@ -327,7 +329,11 @@ export class DashboardComponent implements OnInit {
 			this.emitter.sendNext({
 				type: 'barChart',
 				widgetid,
-				data: result
+				data: {
+					result,
+					barChartWidgetParameters: this.barChartWidgetParameters,
+					barChartWidgetParameterValues: formValues
+				}
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
