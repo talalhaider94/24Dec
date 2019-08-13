@@ -16,7 +16,8 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public int SizeY { get; set; }
         public int LocationX { get; set; }
         public int LocationY { get; set; }
-        public string WidgetName { get; set; }         
+        public string WidgetName { get; set; }   
+        public string Note { get; set; }
         public virtual DB_Widget Widget { get; set; }
         public virtual DB_Dashboard Dashboard { get; set; }        
         public virtual List<DB_DashboardWidgetSetting> DashboardWidgetSettings { get; set; }

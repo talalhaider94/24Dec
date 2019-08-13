@@ -23,7 +23,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 SizeY = e.SizeY,
                 WidgetId = e.WidgetId,
                 WidgetName = e.WidgetName ?? e.Widget.Name,
-                UIIdentifier=e.Widget.UIIdentifier
+                UIIdentifier=e.Widget.UIIdentifier,
+                Note=e.Note
                 
             };
             dto.Properties = new Dictionary<string, string>();
@@ -50,6 +51,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             e.SizeX = o.SizeX;
             e.SizeY = o.SizeY;
             e.WidgetName = o.WidgetName;
+            e.Note = o.Note;
             if (e.Id == 0)
             {
                 e.WidgetId = o.WidgetId;

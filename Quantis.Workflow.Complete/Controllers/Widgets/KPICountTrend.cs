@@ -23,6 +23,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowMeasure = true;
             vm.ShowChartType = true;
             vm.ShowAggregationOption = true;
+            vm.ShowDateType = true;
             vm.ShowDateRangeFilter = true;
             vm.AddMeasure(Measures.Number_of_ticket_in_KPI_in_Verifica);
             vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Compliant);

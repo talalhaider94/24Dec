@@ -22,15 +22,24 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             return GetData(props);
         }
         [HttpGet("GetWidgetParameters")]
-        public WidgetViewModel GetWidgetParameters()
+        public WidgetViewModel GetWidgetParameSters()
         {
             var vm = new WidgetViewModel();
+            FillDateTypes(vm);
             FillWidgetParameters(vm);
             return vm;
         }
 
         internal abstract void FillWidgetParameters(WidgetViewModel vm);
         internal abstract object GetData(WidgetParametersDTO props);
+        private void FillDateTypes(WidgetViewModel vm)
+        {
+            vm.DateTypes.Add(0, "Custom");
+            vm.DateTypes.Add(1, "Last Month");
+            vm.DateTypes.Add(2, "Last 2 Months");
+            vm.DateTypes.Add(3, "Last 3 Months");
+            vm.DateTypes.Add(4, "Last 6 Months");
+        }
 
     }
 }

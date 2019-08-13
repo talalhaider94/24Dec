@@ -12,11 +12,15 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public bool ShowMeasure { get; set; }
         public bool ShowChartType { get; set; }
         public bool ShowAggregationOption { get; set; }
+        public bool ShowDateType { get; set; }
         public bool ShowDateRangeFilter { get; set; }
+        public bool ShowDateFilter { get; set; }
+        public bool ShowOrganization { get; set; }
 
         public Dictionary<int,string> Measures { get; set; }
         public Dictionary<string,string> ChartTypes { get; set; }
         public Dictionary<string,string> AggregationOptions { get; set; }
+        public Dictionary<int,string> DateTypes { get; set; }
 
         public WidgetViewModel()
         {
@@ -24,7 +28,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             ShowChartType = false;
             ShowDateRangeFilter = false;
             ShowMeasure = false;
-
+            ShowDateFilter = false;
             Measures = new Dictionary<int, string>();
             ChartTypes = new Dictionary<string, string>();
             AggregationOptions = new Dictionary<string, string>();
