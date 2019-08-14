@@ -5,7 +5,7 @@
 	<i class="fa fa-cog"></i>
 </button>
 <div style="display: block;">
-  <p>{{ name }}</p>
+  <p>{{ widgetname }}</p>
   <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
      [legend]="barChartLegend" [chartType]="barChartType"
     (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>

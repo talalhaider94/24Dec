@@ -167,17 +167,18 @@ export class BarchartComponent implements OnInit {
 	}
 
 	updateChart(chartIndexData) {
-		let a = [
-			{ xvalue: "6/2019", yvalue: 10 },
-			{ xvalue: "7/2019", yvalue: 20 },
-			{ xvalue: "8/2019", yvalue: 30 },
-			{ xvalue: "9/2019", yvalue: 40 },
-			{ xvalue: "10/2019", yvalue: 50 },
-			{ xvalue: "11/2019", yvalue: 60 },
-			{ xvalue: "12/2019", yvalue: 70 },
-		];
-		let allLabels = a.map(label => label.xvalue);
-		let allData = a.map(data => data.yvalue);
+		// demo data
+		// let a = [
+		// 	{ xvalue: "6/2019", yvalue: 10 },
+		// 	{ xvalue: "7/2019", yvalue: 20 },
+		// 	{ xvalue: "8/2019", yvalue: 30 },
+		// 	{ xvalue: "9/2019", yvalue: 40 },
+		// 	{ xvalue: "10/2019", yvalue: 50 },
+		// 	{ xvalue: "11/2019", yvalue: 60 },
+		// 	{ xvalue: "12/2019", yvalue: 70 },
+		// ];
+		let allLabels = chartIndexData.map(label => label.xvalue);
+		let allData = chartIndexData.map(data => data.yvalue);
 		this.barChartData = [{ data: allData, label: 'Series' }]
 		this.barChartLabels.length = 0;
 		this.barChartLabels.push(...allLabels);
