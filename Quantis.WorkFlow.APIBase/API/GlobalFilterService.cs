@@ -10,7 +10,18 @@ namespace Quantis.WorkFlow.APIBase.API
 {
     public class GlobalFilterService: IGlobalFilterService
     {
+        private readonly IInformationService _infoService;
         private string defaultDateRange = "03/19:07/19";
+        public GlobalFilterService(IInformationService infoService)
+        {
+            _infoService = infoService;
+            var val=_infoService.GetConfiguration("default date range", "dashboard");
+            if (val != null)
+            {
+                defaultDateRange = val.Value;
+            }
+        }
+        
         public BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props)
         {
             var dto = new BaseWidgetDTO();
@@ -25,6 +36,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 var daterange = defaultDateRange;
                 var range = daterange.Split(':');
                 dto.DateRange = new Tuple<DateTime, DateTime>(DateTime.ParseExact(range[0], "MM/yy", CultureInfo.InvariantCulture), DateTime.ParseExact(range[1], "MM/yy", CultureInfo.InvariantCulture));
+            }
+            if (props.Filters.ContainsKey("date"))
+            {
+                var range = props.Filters["date"];
+                dto.Date = DateTime.ParseExact(range, "MM/yy", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                dto.Date = DateTime.Now.AddMonths(-1);
             }
             if (props.Properties.ContainsKey("measure"))
             {

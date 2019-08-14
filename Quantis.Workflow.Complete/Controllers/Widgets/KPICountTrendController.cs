@@ -9,11 +9,11 @@ using Quantis.WorkFlow.Services.DTOs.Widgets;
 
 namespace Quantis.Workflow.Complete.Controllers.Widgets
 {
-    public class KPICountTrend : BaseWidgetController
+    public class KPICountTrendController : BaseWidgetController
     {
         private IGlobalFilterService _globalfilterService;
         private IWidgetService _widgetService;
-        public KPICountTrend(IGlobalFilterService globalfilterService, IWidgetService widgetService)
+        public KPICountTrendController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
             _globalfilterService = globalfilterService;
             _widgetService = widgetService;

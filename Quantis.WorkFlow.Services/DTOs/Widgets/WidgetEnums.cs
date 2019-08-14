@@ -47,5 +47,9 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     {
         public static KeyValuePair<string, string> PERIOD = new KeyValuePair<string, string>("period", "Period");
         public static KeyValuePair<string, string> ANNAUL = new KeyValuePair<string, string>("annual", "Annual");
+
+        public static KeyValuePair<string, string> KPI = new KeyValuePair<string, string>("kpi", "KPI");
+        public static KeyValuePair<string, string> CONTRACT = new KeyValuePair<string, string>("contract", "Contract");
+        public static KeyValuePair<string, string> CONTRACTPARTY = new KeyValuePair<string, string>("contractparty", "Contract Party");
     }
 }
