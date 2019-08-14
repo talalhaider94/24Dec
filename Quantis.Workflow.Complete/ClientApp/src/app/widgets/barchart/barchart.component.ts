@@ -8,13 +8,15 @@ import { forkJoin } from 'rxjs';
 	styleUrls: ['./barchart.component.scss']
 })
 export class BarchartComponent implements OnInit {
-	@Input() widgetname: string;
+	@Input() widgetname: string; 
 	@Input() url: string;
 	@Input() filters: Array<any>;
 	@Input() properties: Array<any>;
-	@Input() widgetid: number;
+	// this widgetid is from widgets Collection and can be duplicate
+	// it will be used for common functionality of same component instance type
+	@Input() widgetid: number; 
 	@Input() dashboardid: number;
-	@Input() id: number;
+	@Input() id: number; // this is unique id 
 
 	loading: boolean = true;
 	barChartWidgetParameters: any;
@@ -36,11 +38,12 @@ export class BarchartComponent implements OnInit {
 		this.emitter.getData().subscribe(result => {
 			const { type, widgetid, data } = result;
 			if (type === 'barChart') {
-				if (widgetid === this.widgetid) {
+				let currentWidgetId = result.data.barChartWidgetParameters.id;
+				if (currentWidgetId === this.id) {
 					setTimeout(() => {
 						this.barChartType = data.barChartWidgetParameterValues.Properties.charttype;
 					});
-					this.updateChart(data.result.body);
+					this.updateChart(data.result.body, data);
 				}
 			}
 		})
@@ -78,7 +81,7 @@ export class BarchartComponent implements OnInit {
 				// popular chart data
 				if (getWidgetIndex) {
 					const chartIndexData = getWidgetIndex.body;
-					this.updateChart(chartIndexData);
+					this.updateChart(chartIndexData, null);
 				}
 
 			}
@@ -165,8 +168,9 @@ export class BarchartComponent implements OnInit {
 	closeModal() {
 		this.barChartParent.emit({ type: 'closeModal' });
 	}
-
-	updateChart(chartIndexData) {
+	// dashboardComponentData is result of data coming from 
+	// posting data to parameters widget
+	updateChart(chartIndexData, dashboardComponentData) {
 		// demo data
 		// let a = [
 		// 	{ xvalue: "6/2019", yvalue: 10 },
@@ -177,9 +181,14 @@ export class BarchartComponent implements OnInit {
 		// 	{ xvalue: "11/2019", yvalue: 60 },
 		// 	{ xvalue: "12/2019", yvalue: 70 },
 		// ];
+		let label = 'Series';
+		if(dashboardComponentData) {
+			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
+			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
+		}
 		let allLabels = chartIndexData.map(label => label.xvalue);
 		let allData = chartIndexData.map(data => data.yvalue);
-		this.barChartData = [{ data: allData, label: 'Series' }]
+		this.barChartData = [{ data: allData, label: label }]
 		this.barChartLabels.length = 0;
 		this.barChartLabels.push(...allLabels);
 		this.closeModal();
