@@ -8,13 +8,15 @@ import { forkJoin } from 'rxjs';
 	styleUrls: ['./barchart.component.scss']
 })
 export class BarchartComponent implements OnInit {
-	@Input() widgetname: string;
+	@Input() widgetname: string; 
 	@Input() url: string;
 	@Input() filters: Array<any>;
 	@Input() properties: Array<any>;
-	@Input() widgetid: number;
+	// this widgetid is from widgets Collection and can be duplicate
+	// it will be used for common functionality of same component instance type
+	@Input() widgetid: number; 
 	@Input() dashboardid: number;
-	@Input() id: number;
+	@Input() id: number; // this is unique id 
 
 	loading: boolean = true;
 	barChartWidgetParameters: any;
@@ -36,7 +38,8 @@ export class BarchartComponent implements OnInit {
 		this.emitter.getData().subscribe(result => {
 			const { type, widgetid, data } = result;
 			if (type === 'barChart') {
-				if (widgetid === this.widgetid) {
+				let currentWidgetId = result.data.barChartWidgetParameters.id;
+				if (currentWidgetId === this.id) {
 					setTimeout(() => {
 						this.barChartType = data.barChartWidgetParameterValues.Properties.charttype;
 					});
