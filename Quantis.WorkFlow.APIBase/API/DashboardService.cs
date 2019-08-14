@@ -105,7 +105,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entities = _dbcontext.DB_Widgets.ToList();
+                var entities = _dbcontext.DB_Widgets.Where(o=>o.IsActive==true).ToList();
                 return _widgetMapper.GetDTOs(entities);
             }
             catch (Exception e)

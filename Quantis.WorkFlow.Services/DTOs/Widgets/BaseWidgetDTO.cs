@@ -8,6 +8,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     {
         public List<Measures> Measures { get; set; }
         public Tuple<DateTime,DateTime> DateRange { get; set; }
+        public DateTime Date { get; set; }
         public List<int> KPIs { get; set; }
     }
 }
