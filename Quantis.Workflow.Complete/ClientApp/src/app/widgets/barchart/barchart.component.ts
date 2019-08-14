@@ -40,7 +40,7 @@ export class BarchartComponent implements OnInit {
 					setTimeout(() => {
 						this.barChartType = data.barChartWidgetParameterValues.Properties.charttype;
 					});
-					this.updateChart(data.result.body);
+					this.updateChart(data.result.body, data);
 				}
 			}
 		})
@@ -78,7 +78,7 @@ export class BarchartComponent implements OnInit {
 				// popular chart data
 				if (getWidgetIndex) {
 					const chartIndexData = getWidgetIndex.body;
-					this.updateChart(chartIndexData);
+					this.updateChart(chartIndexData, null);
 				}
 
 			}
@@ -165,8 +165,9 @@ export class BarchartComponent implements OnInit {
 	closeModal() {
 		this.barChartParent.emit({ type: 'closeModal' });
 	}
-
-	updateChart(chartIndexData) {
+	// dashboardComponentData is result of data coming from 
+	// posting data to parameters widget
+	updateChart(chartIndexData, dashboardComponentData) {
 		// demo data
 		// let a = [
 		// 	{ xvalue: "6/2019", yvalue: 10 },
@@ -177,9 +178,14 @@ export class BarchartComponent implements OnInit {
 		// 	{ xvalue: "11/2019", yvalue: 60 },
 		// 	{ xvalue: "12/2019", yvalue: 70 },
 		// ];
+		let label = 'Series';
+		if(dashboardComponentData) {
+			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
+			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
+		}
 		let allLabels = chartIndexData.map(label => label.xvalue);
 		let allData = chartIndexData.map(data => data.yvalue);
-		this.barChartData = [{ data: allData, label: 'Series' }]
+		this.barChartData = [{ data: allData, label: label }]
 		this.barChartLabels.length = 0;
 		this.barChartLabels.push(...allLabels);
 		this.closeModal();
