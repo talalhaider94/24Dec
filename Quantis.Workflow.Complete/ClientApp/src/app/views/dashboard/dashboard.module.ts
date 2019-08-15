@@ -20,6 +20,7 @@ import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.compo
       BarchartComponent
     ]),
     HighchartsChartModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   declarations: [ 
     DashboardComponent,

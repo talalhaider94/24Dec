@@ -1,6 +1,7 @@
 import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../_services';
+import { DateTimeService } from '../../_helpers';
 import { ActivatedRoute } from '@angular/router';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
+		private dateTime: DateTimeService
 	) { }
 
 	outputs = {
@@ -61,7 +63,7 @@ export class DashboardComponent implements OnInit {
 							measure: '0'
 						},
 						Filters: {
-							daterange: '03/19:06/19'
+							daterange: [new Date( this.dateTime.subtractMonth(1) ), new Date(this.dateTime.getDateTime())]
 						}
 					})
 				}
@@ -293,7 +295,7 @@ export class DashboardComponent implements OnInit {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
-					rows: 5,
+					rows: 8,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
@@ -329,6 +331,7 @@ export class DashboardComponent implements OnInit {
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
 		const { url, widgetid } = this.barChartWidgetParameters;
+		debugger
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
 			this.emitter.sendNext({

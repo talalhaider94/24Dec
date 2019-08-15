@@ -8,6 +8,14 @@ export class DateTimeService {
 
   constructor() { }
 
+  getDateTime() {
+    return moment().format();
+  }
+
+  subtractMonth(no: number) {
+    return moment().subtract(no, 'month').format();
+  }
+
   getMonthYear() {
     let month = moment().subtract(1, 'months').format('MM');
     let year = moment().format('YY');

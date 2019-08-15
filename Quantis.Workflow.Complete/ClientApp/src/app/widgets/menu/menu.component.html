@@ -1,6 +1,6 @@
 <ul class="list-group list-group-horizontal-sm m-2">
   <li class="list-group-item text-center py-2" *ngFor="let widget of widgetCollection">
-    <a draggable="true" class="pointer-grab" role="button" (dragstart)="onDrag($event, widget.uiidentifier)">
+    <a draggable="true" class="pointer-grab d-block" role="button" (dragstart)="onDrag($event, widget.uiidentifier)">
       <img [src]="widget.iconurl" width="30" height="30">
       <p class="m-0">{{ widget.name }}</p>
     </a>

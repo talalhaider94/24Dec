@@ -20,9 +20,9 @@
             <i class="fa fa-trash"></i>
           </button>
           <!-- Drag button (need drag-handler class) -->
-          <button class="btn btn-sm btn-primary drag-handler">
+          <!-- <button class="btn btn-sm btn-primary drag-handler">
             <i class="fa fa-arrows-alt"></i>
-          </button>
+          </button> -->
         </div>
         <!-- 
           ndc-dynamic tag is from ng-dynamic-component library 
@@ -85,7 +85,9 @@
               <div formGroupName="Filters">
                 <div class="form-group">
                   <label for="daterange">Date Range</label>
-                  <input type="text" formControlName="daterange" class="form-control" placeholder="Date Range" />
+                  <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
+                   bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
+                  <!-- <input type="text" formControlName="daterange" class="form-control" placeholder="Date Range" /> -->
                 </div>
               </div>
             </tab>
@@ -100,7 +102,8 @@
                 Apply
               </button>
 
-              <a (click)="widgetParametersModal.hide()" role="button" class="btn btn-primary pointer-cursor btn-sm px-4">
+              <a (click)="widgetParametersModal.hide()" role="button"
+                class="btn btn-primary pointer-cursor btn-sm px-4">
                 Cancel
               </a>
             </div>

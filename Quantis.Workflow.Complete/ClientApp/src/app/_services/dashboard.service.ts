@@ -85,7 +85,7 @@ export class DashboardService {
 		let newParams = {
 			id: params.id,
 			name: params.name,
-			createdon: params.createdon,
+			// createdon: params.createdon,
 			globalfilterid: params.globalfilterid,
 			dashboardwidgets
 		}

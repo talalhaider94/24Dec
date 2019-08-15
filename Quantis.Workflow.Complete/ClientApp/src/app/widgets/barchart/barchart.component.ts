@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
+import { DateTimeService } from '../../_helpers';
 
 @Component({
 	selector: 'app-barchart',
@@ -8,13 +9,13 @@ import { forkJoin } from 'rxjs';
 	styleUrls: ['./barchart.component.scss']
 })
 export class BarchartComponent implements OnInit {
-	@Input() widgetname: string; 
+	@Input() widgetname: string;
 	@Input() url: string;
 	@Input() filters: Array<any>;
 	@Input() properties: Array<any>;
 	// this widgetid is from widgets Collection and can be duplicate
 	// it will be used for common functionality of same component instance type
-	@Input() widgetid: number; 
+	@Input() widgetid: number;
 	@Input() dashboardid: number;
 	@Input() id: number; // this is unique id 
 
@@ -24,17 +25,19 @@ export class BarchartComponent implements OnInit {
 	barChartParent = new EventEmitter<any>();
 	constructor(
 		private dashboardService: DashboardService,
-		private emitter: EmitterService
+		private emitter: EmitterService,
+		private dateTime: DateTimeService
 	) { }
 
 	ngOnInit() {
-		console.log('BarchartComponent', this.widgetname, this.url);
+		console.log('BarchartComponent', this.widgetname, this.url, this.id);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
 			// this.getWidgetParameters(this.url);
 			// this.getWidgetIndex(this.url);
 			this.getChartParametersAndData(this.url);
 		}
+		// coming from dashboard component
 		this.emitter.getData().subscribe(result => {
 			const { type, widgetid, data } = result;
 			if (type === 'barChart') {
@@ -48,19 +51,21 @@ export class BarchartComponent implements OnInit {
 			}
 		})
 	}
-
+	// invokes on component initialization
 	getChartParametersAndData(url) {
 		// these are default parameters need to update this logic
 		// might have to make both API calls in sequence instead of parallel
 		let params = {
-			GlobalFilterId: 0, Properties: { measure: 1, aggregationoption: 'Period', charttype: 'Bar' },
-			Filters: { daterange: '03/19:06/19' }
-		}
+			GlobalFilterId: 0,
+			Properties: this.properties,
+			Filters: this.filters
+		};
 		let getWidgetIndex = this.dashboardService.getWidgetIndex(url, params);
 		let getWidgetParameters = this.dashboardService.getWidgetParameters(url);
 		forkJoin([getWidgetParameters, getWidgetIndex]).subscribe(result => {
 			if (result) {
 				const [getWidgetParameters, getWidgetIndex] = result;
+				debugger
 				// populate modal with widget parameters
 				if (getWidgetParameters) {
 					this.barChartWidgetParameters = getWidgetParameters;
@@ -182,7 +187,7 @@ export class BarchartComponent implements OnInit {
 		// 	{ xvalue: "12/2019", yvalue: 70 },
 		// ];
 		let label = 'Series';
-		if(dashboardComponentData) {
+		if (dashboardComponentData) {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
 		}
