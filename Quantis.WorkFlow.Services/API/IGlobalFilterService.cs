@@ -1,4 +1,5 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.Dashboard;
+using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,7 @@ namespace Quantis.WorkFlow.Services.API
     {
         BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props);
         WidgetwithAggOptionDTO MapAggOptionWidget(WidgetParametersDTO props);
+
+        List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId);
     }
 }
