@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public bool ShowDateRangeFilter { get; set; }
         public bool ShowDateFilter { get; set; }
         public bool ShowOrganization { get; set; }
+        public string DefaultDateRange { get; set; }
 
         public Dictionary<int,string> Measures { get; set; }
         public Dictionary<string,string> ChartTypes { get; set; }

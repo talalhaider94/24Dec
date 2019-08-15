@@ -16,18 +16,21 @@ namespace Quantis.WorkFlow.APIBase.API
     {
         private readonly IInformationService _infoService;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
-        private string defaultDateRange = "03/19:07/19";
+        private string defaultDateRange = "06/2019-08/2019";
         public GlobalFilterService(IInformationService infoService,WorkFlowPostgreSqlContext dbcontext)
         {
             _infoService = infoService;
             _dbcontext = dbcontext;
-            var val=_infoService.GetConfiguration("default date range", "dashboard");
+            var val=_infoService.GetConfiguration("defaultdaterange", "dashboard");
             if (val != null)
             {
                 defaultDateRange = val.Value;
             }
         }
-        
+        public string GetDefualtDateRange()
+        {
+            return defaultDateRange;
+        }
         public BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props)
         {
             var dto = new BaseWidgetDTO();
