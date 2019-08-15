@@ -5,7 +5,7 @@ import * as moment from 'moment';
   providedIn: 'root'
 })
 export class DateTimeService {
-
+  public moment: any = moment;
   constructor() { }
 
   getDateTime() {
