@@ -37,13 +37,13 @@ namespace Quantis.WorkFlow.APIBase.API
             if (props.Filters.ContainsKey("daterange"))
             {
                 var daterange = props.Filters["daterange"];
-                var range = daterange.Split(':');
+                var range = daterange.Split('-');
                 dto.DateRange = new Tuple<DateTime, DateTime>(DateTime.ParseExact(range[0], "MM/yy", CultureInfo.InvariantCulture), DateTime.ParseExact(range[1], "MM/yy", CultureInfo.InvariantCulture));
             }
             else
             {
                 var daterange = defaultDateRange;
-                var range = daterange.Split(':');
+                var range = daterange.Split('-');
                 dto.DateRange = new Tuple<DateTime, DateTime>(DateTime.ParseExact(range[0], "MM/yy", CultureInfo.InvariantCulture), DateTime.ParseExact(range[1], "MM/yy", CultureInfo.InvariantCulture));
             }
             if (props.Filters.ContainsKey("date"))
