@@ -16,13 +16,13 @@ export class DashboardService {
 	// Return Array of WidgetModel
 	getWidgets(): Observable<Array<WidgetModel>> {
 		// return this.http.get<Array<WidgetModel>>(`http://localhost:3000/widgets`);
-		return this.http.get<Array<WidgetModel>>(`${environment.API_URL_103}/dashboard/GetAllWidgets`);
+      return this.http.get<Array<WidgetModel>>(`${environment.API_URL}/dashboard/GetAllWidgets`);
 	}
 
 	// Return Array of DashboardModel
 	getDashboards(): Observable<Array<DashboardModel>> {
 		// return this.http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
-		return this.http.get<Array<DashboardModel>>(`${environment.API_URL_103}/dashboard/GetDashboards`);
+      return this.http.get<Array<DashboardModel>>(`${environment.API_URL}/dashboard/GetDashboards`);
 	}
 
 	// Return an object
@@ -30,7 +30,7 @@ export class DashboardService {
 		// return this.http.get(`http://localhost:3000/dashboards/${id}`);
 		const params = new HttpParams().set('id', id.toString());
 		return this.http.get<any>(
-			`${environment.API_URL_103}/dashboard/GetDashboardWigetsByDashboardId`,
+			`${environment.API_URL}/dashboard/GetDashboardWigetsByDashboardId`,
 			{ params }).pipe(map(result => {
 				let dashboardwidgets = [];
 				if (result.dashboardwidgets.length > 0) {
@@ -89,15 +89,15 @@ export class DashboardService {
 			globalfilterid: params.globalfilterid,
 			dashboardwidgets
 		}
-		return this.http.post<DashboardModel>(`${environment.API_URL_103}/dashboard/AddUpdateDasboard`, newParams);
+		return this.http.post<DashboardModel>(`${environment.API_URL}/dashboard/AddUpdateDasboard`, newParams);
 	}
 
 	getWidgetParameters(url: string): Observable<any> {
-		return this.http.get(`${environment.API_URL_103}/${url}/GetWidgetParameters`);
+		return this.http.get(`${environment.API_URL}/${url}/GetWidgetParameters`);
 	}
 
 	getWidgetIndex(url: string, formValues: any): Observable<any> {
-		const widgetIndexEndPoint = `${environment.API_URL_103}/${url}/Index`;
+		const widgetIndexEndPoint = `${environment.API_URL}/${url}/Index`;
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
 
