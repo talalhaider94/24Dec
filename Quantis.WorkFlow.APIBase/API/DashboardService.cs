@@ -135,6 +135,52 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public void SaveDashboardState(List<DashboardWidgetBaseDTO> dtos)
+        {
+            foreach(var dto in dtos)
+            {
+                foreach (var p in dto.Properties)
+                {
+                    var prop = _dbcontext.DB_DashboardWidgetSettings.FirstOrDefault(r=>r.DashboardWidgetId==dto.Id && r.SettingType == 0 && r.SettingKey == p.Key);
+                    if (prop != null)
+                    {
+                        prop.SettingValue = p.Value;
+                    }
+                    else
+                    {
+                        var setting=new DB_DashboardWidgetSetting()
+                        {
+                            SettingKey = p.Key,
+                            SettingType = 0,
+                            SettingValue = p.Value,
+                            DashboardWidgetId=dto.Id
+                        };
+                        _dbcontext.DB_DashboardWidgetSettings.Add(setting);
+                    }
+                }
+                foreach (var p in dto.Filters)
+                {
+                    var prop = _dbcontext.DB_DashboardWidgetSettings.FirstOrDefault(r => r.DashboardWidgetId == dto.Id && r.SettingType == 1 && r.SettingKey == p.Key);
+                    if (prop != null)
+                    {
+                        prop.SettingValue = p.Value;
+                    }
+                    else
+                    {
+                        var setting=new DB_DashboardWidgetSetting()
+                        {
+                            SettingKey = p.Key,
+                            SettingType = 1,
+                            SettingValue = p.Value,
+                            DashboardWidgetId = dto.Id
+                        };
+                        _dbcontext.DB_DashboardWidgetSettings.Add(setting);
+                    }
+                }
+                _dbcontext.SaveChanges();
+            }
+        }
+
 
 
     }

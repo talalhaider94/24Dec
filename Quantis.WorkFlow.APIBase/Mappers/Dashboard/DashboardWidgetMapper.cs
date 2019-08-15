@@ -56,41 +56,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             {
                 e.WidgetId = o.WidgetId;
                 e.DashboardId = e.DashboardId;
-            }
-            foreach (var p in o.Properties)
-            {
-                var prop = e.DashboardWidgetSettings.FirstOrDefault(r => r.SettingType == 0 && r.SettingKey == p.Key);
-                if (prop != null)
-                {
-                    prop.SettingValue = p.Value;
-                }
-                else
-                {
-                    e.DashboardWidgetSettings.Add(new DB_DashboardWidgetSetting()
-                    {
-                        SettingKey = p.Key,
-                        SettingType = 0,
-                        SettingValue = p.Value
-                    });
-                }
-            }
-            foreach (var p in o.Filters)
-            {
-                var prop = e.DashboardWidgetSettings.FirstOrDefault(r => r.SettingType == 1 && r.SettingKey == p.Key);
-                if (prop != null)
-                {
-                    prop.SettingValue = p.Value;
-                }
-                else
-                {
-                    e.DashboardWidgetSettings.Add(new DB_DashboardWidgetSetting()
-                    {
-                        SettingKey = p.Key,
-                        SettingType = 1,
-                        SettingValue = p.Value
-                    });
-                }
-            }
+            }            
             return e;
         }
     }

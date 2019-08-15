@@ -44,6 +44,11 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
         }
+        [HttpPost("SaveDashboardState")]
+        public void SaveDashboardState(List<DashboardWidgetBaseDTO> dtos)
+        {
+            _dashboardAPI.SaveDashboardState(dtos);
+        }
 
 
     }

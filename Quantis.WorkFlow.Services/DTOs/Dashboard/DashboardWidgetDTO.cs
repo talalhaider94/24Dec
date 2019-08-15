@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.Dashboard
 {
-    public class DashboardWidgetDTO
+    public class DashboardWidgetDTO: DashboardWidgetBaseDTO
     {
-        public int Id { get; set; }
         public int WidgetId { get; set; }
         public int DashboardId { get; set; }
         public int SizeX { get; set; }
@@ -16,7 +15,5 @@ namespace Quantis.WorkFlow.Services.DTOs.Dashboard
         public string WidgetName { get; set; }
         public string UIIdentifier { get; set; }
         public string Note { get; set; }
-        public Dictionary<string,string> Properties { get; set; }
-        public Dictionary<string,string> Filters { get; set; }
     }
 }

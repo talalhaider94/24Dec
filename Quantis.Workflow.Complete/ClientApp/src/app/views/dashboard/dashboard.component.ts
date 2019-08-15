@@ -328,11 +328,11 @@ export class DashboardComponent implements OnInit {
 		// console.info('itemResized', item, itemComponent);
 	}
 
-	onWidgetParametersFormSubmit() {
+  onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
 		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
 		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
-		formValues.daterange = `${startDate} - ${endDate}`;
+    formValues.Filters.daterange = `${startDate} - ${endDate}`;
 		const { url, widgetid } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
