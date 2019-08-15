@@ -32,6 +32,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             Measures = new Dictionary<int, string>();
             ChartTypes = new Dictionary<string, string>();
             AggregationOptions = new Dictionary<string, string>();
+            DateTypes = new Dictionary<int, string>();
         }
 
         public void AddMeasure(Measures m)
