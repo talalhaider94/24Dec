@@ -21,6 +21,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         }
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
+            vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();
             vm.ShowDateRangeFilter = true;
         }
 
