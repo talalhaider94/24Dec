@@ -330,8 +330,10 @@ export class DashboardComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
+		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
+		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
+		formValues.daterange = `${startDate} - ${endDate}`;
 		const { url, widgetid } = this.barChartWidgetParameters;
-		debugger
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
 			this.emitter.sendNext({
