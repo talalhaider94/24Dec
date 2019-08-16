@@ -63,7 +63,7 @@ namespace Quantis.WorkFlow.Services.API
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
-        
+        List<EventResourceName> GetEventResourceNames();
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
         DistributionPslDTO GetDistributionByContract(string period, int sla_id);
 

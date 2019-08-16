@@ -295,7 +295,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.AddArchiveRawData(global_rule_id, period, tracking_period);
         }
-
+        [HttpGet("GetEventResourceNames")]
+        public List<EventResourceName> GetEventResourceNames()
+        {
+            return _dataAPI.GetEventResourceNames();
+        }
         [HttpGet("GetDistributionByContract")]
         public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
         {
