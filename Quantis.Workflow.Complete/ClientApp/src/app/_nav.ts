@@ -120,7 +120,7 @@ export const navItems: NavData[] = [
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
         icon: 'fa fa-file-archive-o',
-        version: '0.0.1',
+        version: '0.0.3',
         key: 'VIEW_CATALOG_KPI'
       },
       {
