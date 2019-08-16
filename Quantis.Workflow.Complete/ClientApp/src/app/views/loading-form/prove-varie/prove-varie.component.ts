@@ -80,7 +80,7 @@ export class ProveVarieComponent implements OnInit {
   arrayFormElements: any = [];
 
   jsonForm: any = [];
-
+  defaultTimestamp;
   numeroForm: number;
   title: string = '';
   checked: boolean;
@@ -105,6 +105,7 @@ export class ProveVarieComponent implements OnInit {
     this.getAnno();
     const currentUser = this.authService.getUser();
     this.monthOption = moment().subtract(1, 'month').format('MM');
+    this.defaultTimestamp = moment().subtract(1, 'month').endOf('month').toDate();
     this.yearOption = moment().format('YYYY');
     if(this.monthOption === '12') {
       this.yearOption = moment().subtract(1, 'year').format('YYYY');
@@ -359,6 +360,10 @@ export class ProveVarieComponent implements OnInit {
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
         this.addInputForm();
+      }
+      var indexOfTimestamp = this.arrayFormElements.findIndex(field => (field.name === 'Timestamp') && (field.type === 'time'));
+      if (indexOfTimestamp) {
+        this.dt[indexOfTimestamp] = this.defaultTimestamp;
       }
       this.numeroForm = numero;
       // CHECK BOX DISPLAY CONDITION START
