@@ -52,7 +52,9 @@ export class DatiGrezziComponent implements OnInit {
   datiGrezzi=[];
   monthVar: any;
   yearVar: any;
-  countCampiData=[];
+  countCampiData = [];
+  eventTypes: any = {};
+  resources: any = {};
 id_kpi_temp = '';
 loadingModalDati:boolean=false;
   fitroDataById: any = [
@@ -147,10 +149,26 @@ loadingModalDati:boolean=false;
     this.yearVar = moment().format('YYYY');
     //this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
     this.getAnno();
+    this.getEventResourceNames()
     //this.setUpDataTableDependencies();
   }
 
-
+  getEventResourceNames() {
+    this.apiService.getEventResourceNames().subscribe((dati: any) => {
+      //this.EventResourceNames = dati;
+      var eventTypes = {};
+      var resources = {};
+      dati.forEach(function (item) {
+        if (item.type === 'EVENT_TYPE') {
+          eventTypes[item.id] = item.name + ' [' + item.id + ']';
+        } else {
+          resources[item.id] = item.name + ' [' + item.id + ']';
+        }
+      });
+      this.eventTypes = eventTypes;
+      this.resources = resources;
+    })
+  }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
@@ -312,6 +330,8 @@ clear(){
               this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
               break;
           }
+          this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+          this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
           this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
           this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
           this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
