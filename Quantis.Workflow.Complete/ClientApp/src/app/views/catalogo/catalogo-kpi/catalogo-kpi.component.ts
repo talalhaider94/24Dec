@@ -1,10 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { DataTableDirective } from 'angular-datatables';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../_services/api.service';
 import { LoadingFormService } from '../../../_services/loading-form.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from '../../../_services/auth.service';
 
 declare var $;
 let $this;
@@ -21,6 +24,9 @@ export class CatalogoKpiComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
     private LoadingFormService: LoadingFormService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private auth: AuthService
   ) {
     $this = this;
   }
@@ -31,6 +37,11 @@ export class CatalogoKpiComponent implements OnInit {
   public ref1: string;
   public ref2: string;
   public ref3: string;
+  public kpiButtonState: any;
+
+  gatheredData = {
+    roleId: 0
+  };
 
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
@@ -210,6 +221,9 @@ export class CatalogoKpiComponent implements OnInit {
     };
     this.getForms();
 
+    //this.gatheredData.roleId = this.auth.getUser().roleid;
+    this.gatheredData.roleId = 2;
+    this.getPermissions();
   }
 
 
@@ -293,7 +307,7 @@ export class CatalogoKpiComponent implements OnInit {
         break;
     }
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
-      this.getKpis(); // this should refresh the main table on page
+      //this.getKpis(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
       if (modal == 'kpi') {
         $('#kpiModal').modal('toggle').hide();
@@ -483,10 +497,29 @@ export class CatalogoKpiComponent implements OnInit {
     });
   }
 
+  reload(){
+    this.getKpis();
+  }
+
   getForms() {
     this.LoadingFormService.getLoadingForms().subscribe((data: any) => {
       this.allForms = data;
       console.log('forms ', data);
     });
   }
+
+  getPermissions(){
+    console.log('999999999999999999999 => ', this.gatheredData);
+    this.apiService.getPermissionsByRoldId(this.gatheredData.roleId).subscribe( data => {
+      console.log('0000000000000000000000000000000 => ', data);
+      data.forEach(permission => {
+        if(permission.name=='EDIT_CATALOG_KPI'){
+          console.log('permission.name => ', permission.name);
+          this.kpiButtonState = '1';
+        }
+        console.log('this.kpiButtonState => ', this.kpiButtonState);
+      });
+    });
+  }
+
 }

@@ -72,6 +72,10 @@ export const routes: Routes = [
         loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
       },
       {
+        path: 'go-back',
+        loadChildren: './views/goback/goback.module#GobackModule'
+      },
+      {
         path: 'workflow',
         loadChildren: './views/workflow/kpi.module#KPIModule'
       },
