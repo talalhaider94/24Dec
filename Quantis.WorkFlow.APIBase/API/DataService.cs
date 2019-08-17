@@ -1236,6 +1236,37 @@ namespace Quantis.WorkFlow.APIBase.API
             return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
 
+        public List<EventResourceName> GetEventResourceNames()
+        {
+            try
+            {
+                List<EventResourceName> list = new List<EventResourceName>();
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var query = @"select * from t_event_resource_names";
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    using (var readerTmp = command.ExecuteReader())
+                    {
+                        while (readerTmp.Read())
+                        {
+                            EventResourceName e_r_name = new EventResourceName();
+                            e_r_name.id = readerTmp.GetInt32(readerTmp.GetOrdinal("id"));
+                            e_r_name.name = readerTmp.GetString(readerTmp.GetOrdinal("name"));
+                            e_r_name.type = readerTmp.GetString(readerTmp.GetOrdinal("type"));
+                            list.Add(e_r_name);
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             try

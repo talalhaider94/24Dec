@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { ToastrService } from 'ngx-toastr';
+import { forEach } from '@angular/router/src/utils/collection';
 
 declare var $;
 var $this;
@@ -75,11 +76,14 @@ export class ArchivedKpiComponent implements OnInit {
   };
 
   
-kpisData = [];
-datiGrezzi=[];
-countCampiData=[];
-id_kpi_temp = '';
-intervalloPeriodo='';
+  kpisData = [];
+  EventResourceNames = [];
+  eventTypes:any = {};
+  resources:any = {};
+  datiGrezzi=[];
+  countCampiData=[];
+  id_kpi_temp = '';
+  intervalloPeriodo='';
 
   fitroDataById: any = [
     {
@@ -146,31 +150,42 @@ intervalloPeriodo='';
    this.monthVar = moment().subtract(1, 'month').format('MM');
    this.yearVar = moment().subtract(1, 'month').format('YYYY');
    //this.populateDateFilter();
-   
+   this.getEventResourceNames();
+  }
+
+
+  getEventResourceNames() {
+    this.apiService.getEventResourceNames().subscribe((dati: any) => {
+      //this.EventResourceNames = dati;
+      var eventTypes = {};
+      var resources = {};
+      dati.forEach(function (item) {
+        if (item.type === 'EVENT_TYPE') {
+          eventTypes[item.id] = item.name + ' [' + item.id + ']';
+        } else {
+          resources[item.id] = item.name + ' [' + item.id + ']';
+        }
+      });
+      this.eventTypes = eventTypes;
+      this.resources = resources;
+    })
   }
 
   populateModalData(data) {
     this.reset();
-    this.loadingModal1=true;
-   
+    this.loadingModal1 = true;
+
     this.apiService.getArchivedKpiById(data.global_rule_id).subscribe((kpis: any) => {
-    this.kpisData = kpis;
-    this.loadingModal1=false;
-   
-   console.log('pop',this.kpisData);
+      this.kpisData = kpis;
+      this.loadingModal1 = false;
+
+      console.log('pop', this.kpisData);
     });
   }
 
-  
-
-
-
-  populateDateFilter() {
-    
+  populateDateFilter() {    
      this.loading=true;
-     
       this.apiService.getArchivedKpis(this.monthVar, this.yearVar).subscribe((data: any) => {
-     
       this.ArchivedKpiBodyData = data;
       //console.log("kpi1",data);
      // this.getNumeroContratti();
@@ -282,7 +297,9 @@ intervalloPeriodo='';
             default:
               this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
               break;
-          }
+            }
+          this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+          this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
           this.fitroDataById[key].modify_date=moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
           this.fitroDataById[key].create_date=moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
           this.fitroDataById[key].time_stamp=moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
