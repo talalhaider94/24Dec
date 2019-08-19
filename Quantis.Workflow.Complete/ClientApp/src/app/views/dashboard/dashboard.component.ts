@@ -53,18 +53,28 @@ export class DashboardComponent implements OnInit {
 			if (childData.type === 'barChartParams') {
 				this.barChartWidgetParameters = childData.data;
 			}
-			if (childData.type === 'openModal') {
+			if (childData.type === 'openBarChartModal') {
 				if (this.barChartWidgetParameters) {
+					console.log('CILD DATA', childData.data);
+					debugger
 					this.widgetParametersForm.setValue({
 						GlobalFilterId: 0,
+						// Properties: {
+						// 	charttype: 'bar',
+						// 	aggregationoption: 'period',
+						// 	measure: '0'
+						// },
+						// Filters: {
+						// 	daterange: [new Date(this.dateTime.subtractMonth(1)), new Date(this.dateTime.getDateTime())]
+						// }
 						Properties: {
-							charttype: 'bar',
-							aggregationoption: 'period',
-							measure: '0'
+							measure: Object.keys(childData.data.measures)[0],
+							charttype: Object.keys(childData.data.charttypes)[0],
+							aggregationoption: Object.keys(childData.data.aggregationoptions)[0]
 						},
 						Filters: {
-							daterange: [new Date( this.dateTime.subtractMonth(1) ), new Date(this.dateTime.getDateTime())]
-						}
+							defaultdaterange: this.dateTime.buildRangeDate(childData.data.defaultdaterange)
+						},
 					})
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
@@ -88,7 +98,7 @@ export class DashboardComponent implements OnInit {
 				measure: [null]
 			}),
 			Filters: this.formBuilder.group({
-				daterange: [null]
+				defaultdaterange: [null]
 			})
 		});
 		// Grid options
@@ -192,7 +202,7 @@ export class DashboardComponent implements OnInit {
 					widget.component = component.componentInstance;
 					// this logic needs to be update because in future widget name will be different
 					// need to make this match on the basis on uiidentifier
-					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname ).url;
+					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname).url;
 					widget.url = url;
 				}
 			});
@@ -328,11 +338,12 @@ export class DashboardComponent implements OnInit {
 		// console.info('itemResized', item, itemComponent);
 	}
 
-  onWidgetParametersFormSubmit() {
+	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
-		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
-    formValues.Filters.daterange = `${startDate} - ${endDate}`;
+		let startDate = this.dateTime.moment(formValues.Filters.defaultdaterange[0]).format('MM/YYYY');
+		let endDate = this.dateTime.moment(formValues.Filters.defaultdaterange[1]).format('MM/YYYY');
+		formValues.Filters.defaultdaterange = `${startDate}-${endDate}`;
+		debugger
 		const { url, widgetid } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
@@ -347,6 +358,7 @@ export class DashboardComponent implements OnInit {
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
+			debugger
 			this.emitter.loadingStatus(false);
 		})
 	}

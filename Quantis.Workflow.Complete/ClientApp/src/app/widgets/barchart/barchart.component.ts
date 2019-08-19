@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
 import { DateTimeService } from '../../_helpers';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-barchart',
@@ -30,7 +31,7 @@ export class BarchartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('BarchartComponent', this.widgetname, this.url, this.id);
+		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid ,this.filters, this.properties);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
 			// this.getWidgetParameters(this.url);
@@ -55,47 +56,93 @@ export class BarchartComponent implements OnInit {
 	getChartParametersAndData(url) {
 		// these are default parameters need to update this logic
 		// might have to make both API calls in sequence instead of parallel
-		let params = {
-			GlobalFilterId: 0,
-			Properties: this.properties,
-			Filters: this.filters
-		};
-		let getWidgetIndex = this.dashboardService.getWidgetIndex(url, params);
-		let getWidgetParameters = this.dashboardService.getWidgetParameters(url);
-		forkJoin([getWidgetParameters, getWidgetIndex]).subscribe(result => {
-			if (result) {
-				const [getWidgetParameters, getWidgetIndex] = result;
-				debugger
-				// populate modal with widget parameters
-				if (getWidgetParameters) {
-					this.barChartWidgetParameters = getWidgetParameters;
-					this.barChartParent.emit({
-						type: 'barChartParams',
-						data: {
-							...getWidgetParameters,
-							widgetname: this.widgetname,
-							url: this.url,
-							filters: this.filters, // ya kahan sa aye gi.
-							properties: this.properties,
-							widgetid: this.widgetid,
-							dashboardid: this.dashboardid,
-							id: this.id
-						}
-					});
-				}
-				// popular chart data
-				if (getWidgetIndex) {
-					const chartIndexData = getWidgetIndex.body;
-					this.updateChart(chartIndexData, null);
-				}
-
+		let myWidgetParameters = null;
+		this.dashboardService.getWidgetParameters(url).pipe(
+			mergeMap((getWidgetParameters: any) => {
+				myWidgetParameters = getWidgetParameters;
+				// Map Params for widget index when widgets initializes for first time
+				this.barChartData[0].label = getWidgetParameters.measures[0];
+				let params = {
+					GlobalFilterId: 0,
+					// Properties: {
+					// 	measure: Object.keys(getWidgetParameters.measures)[0],
+					// 	charttype: Object.keys(getWidgetParameters.charttypes)[0],
+					// 	aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
+					// },
+					// Filters: {
+					// 	daterange: this.dateTime.buildRangeDate(getWidgetParameters.defaultdaterange) 	
+					// },
+					Properties: this.properties,
+					Filters: this.filters
+				};
+				return this.dashboardService.getWidgetIndex(url, params);
+			})
+		).subscribe(getWidgetIndex => {
+			// populate modal with widget parameters
+			console.log('getWidgetIndex', getWidgetIndex);
+			console.log('myWidgetParameters', myWidgetParameters);
+			if (myWidgetParameters) {
+				this.barChartWidgetParameters = myWidgetParameters;
+				this.barChartParent.emit({
+					type: 'barChartParams',
+					data: {
+						...myWidgetParameters,
+						widgetname: this.widgetname,
+						url: this.url,
+						filters: this.filters, // ya kahan sa aye gi.
+						properties: this.properties,
+						widgetid: this.widgetid,
+						dashboardid: this.dashboardid,
+						id: this.id
+					}
+				});
+			}
+			// popular chart data
+			if (getWidgetIndex) {
+				const chartIndexData = getWidgetIndex.body;
+				this.updateChart(chartIndexData, null);
 			}
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
-		})
+		});
+		// let getWidgetIndex;
+		// forkJoin([getWidgetParameters, getWidgetIndex]).subscribe(result => {
+		// 	if (result) {
+		// 		const [getWidgetParameters, getWidgetIndex] = result;
+		// 		debugger
+		// 		// populate modal with widget parameters
+		// 		if (getWidgetParameters) {
+		// 			this.barChartWidgetParameters = getWidgetParameters;
+		// 			this.barChartParent.emit({
+		// 				type: 'barChartParams',
+		// 				data: {
+		// 					...getWidgetParameters,
+		// 					widgetname: this.widgetname,
+		// 					url: this.url,
+		// 					filters: this.filters, // ya kahan sa aye gi.
+		// 					properties: this.properties,
+		// 					widgetid: this.widgetid,
+		// 					dashboardid: this.dashboardid,
+		// 					id: this.id
+		// 				}
+		// 			});
+		// 		}
+		// 		// popular chart data
+		// 		if (getWidgetIndex) {
+		// 			const chartIndexData = getWidgetIndex.body;
+		// 			this.updateChart(chartIndexData, null);
+		// 		}
+
+		// 	}
+		// 	this.loading = false;
+		// 	this.emitter.loadingStatus(false);
+		// }, error => {
+		// 	this.loading = false;
+		// 	this.emitter.loadingStatus(false);
+		// })
 	}
 	// getWidgetParameters(url: string) {
 	// 	//  need to improve this method by keeping parameters check in case 
@@ -147,28 +194,20 @@ export class BarchartComponent implements OnInit {
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'line';
 
-	// public randomize(): void {
-	// 	let _barChartData: Array<any> = new Array(this.barChartData.length);
-	// 	for (let i = 0; i < this.barChartData.length; i++) {
-	// 		_barChartData[i] = { data: new Array(this.barChartData[i].data.length), label: this.barChartData[i].label };
-	// 		for (let j = 0; j < this.barChartData[i].data.length; j++) {
-	// 			_barChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
-	// 		}
-	// 	}
-	// 	this.barChartData = _barChartData;
-	// }
-
 	// events
 	public chartClicked(e: any): void {
-		console.log(e);
+		// console.log(e);
 	}
 
 	public chartHovered(e: any): void {
-		console.log(e);
+		// console.log(e);
 	}
 
 	openModal() {
-		this.barChartParent.emit({ type: 'openModal' });
+		this.barChartParent.emit({ 
+			type: 'openBarChartModal',
+			data: this.barChartWidgetParameters
+		 });
 	}
 	closeModal() {
 		this.barChartParent.emit({ type: 'closeModal' });
@@ -186,6 +225,7 @@ export class BarchartComponent implements OnInit {
 		// 	{ xvalue: "11/2019", yvalue: 60 },
 		// 	{ xvalue: "12/2019", yvalue: 70 },
 		// ];
+		debugger
 		let label = 'Series';
 		if (dashboardComponentData) {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
