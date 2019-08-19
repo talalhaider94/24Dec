@@ -242,7 +242,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     getConfigurations = true;
                 }
                 var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
-                //per comodità prendo il cutoff dalla t_configurations e non dalla t_catalog_kpi
+                //per comodit prendo il cutoff dalla t_configurations e non dalla t_catalog_kpi
                 string todayDayValue = DateTime.Now.ToString("dd");
                 int todayDay = Int32.Parse(todayDayValue);
                 int day_cutoff = Int32.Parse(day_cutoffValue.value);
@@ -669,7 +669,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var e = new Exception("Configuration of BSI or Oracle does not exist");
                     throw e;
                 }
-                using (var client = new HttpClient())
+                /*using (var client = new HttpClient())
                 {
                     string basePath = bsiconf.value;
                     string apiPath = "/api/OracleCon/GetOracleConnection";
@@ -689,6 +689,8 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 }
                 string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
+                */
+                string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
                 return finalconfig;
             }
             catch(Exception e)
