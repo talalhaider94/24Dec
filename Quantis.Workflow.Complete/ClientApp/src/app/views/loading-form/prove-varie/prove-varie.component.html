@@ -60,8 +60,8 @@
                     <div class="row align-items-center mb-2">
                       <div class="col-md-5 col-form-label">
                         <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                        <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
-                        <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                        <ng-template #trueBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span><b>{{arrayFormElements[i].label}}</b></label></ng-template>
+                        <ng-template #falseBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span>{{arrayFormElements[i].name}}</label></ng-template>
 
                       </div>
                       <div class="col-sm-7">
@@ -93,8 +93,8 @@
                       <div class="col-md-5 col-form-label"
                         *ngIf="(arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer') && arrayFormElements[i].name != 'Is_Dato_Mancante'">
                         <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                        <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
-                        <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                        <ng-template #trueBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span><b>{{arrayFormElements[i].label}}</b></label></ng-template>
+                        <ng-template #falseBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span>{{arrayFormElements[i].name}}</label></ng-template>
                       </div>
                       <div class="col-sm-7">
 
