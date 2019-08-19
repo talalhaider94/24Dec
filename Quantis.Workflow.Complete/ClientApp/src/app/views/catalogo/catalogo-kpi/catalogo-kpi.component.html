@@ -18,7 +18,7 @@
       </select>
       <span>&nbsp;&nbsp;</span>
       <button class="ml-2" #btnExporta>Esporta CSV</button>
-      <button class="btn btn-primary ml-2" (click)="reload()">Refresh Table</button>
+      <!-- <button class="btn btn-primary ml-2" (click)="reload()">Refresh Table</button> -->
     </div><br />
     <h5 *ngIf="loading" class="text-center text-primary">   
         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
@@ -60,7 +60,7 @@
           <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)="populateModalData(row)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
           <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
           <td class="notExportCsv" align="center">
-            <button [disabled]="kpiButtonState !== '1'" style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+            <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
                     data-target="#kpiModal">
               <i class="fa fa-pencil"></i>
             </button>
@@ -144,24 +144,24 @@
               <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknown'"><b>Primario: </b>[{{modalData.primary_contract_party}}] {{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow'"><b>Secondario: </b>[{{modalData.secondary_contract_party}}] {{modalData.secondary_contract_party_name}}</span></td></tr>
               <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
               <tr><th>NOME KPI BSI</th><td colspan="2">[{{modalData.global_rule_id_bsi}}] {{modalData.kpi_name_bsi}}</td></tr>
-              <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
-              <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
-              <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
-              <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
+              <tr><th>DESCRIZIONE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
+              <tr><th>CALCOLO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
+              <tr><th>ID KPI</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
+              <tr><th>TITOLO BREVE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
               <tr>
                 <th>LOADING FORM</th>
                 <td colspan="2">
-                  <select class="form-control" [(ngModel)]="modalData.id_form">
+                  <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.id_form">
                     <option value="">Loading Form: </option>
                     <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
                   </select>
                 </td>
               </tr>
-              <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
+              <tr><th>CARICAMENTO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
               <tr>
                 <th>FREQUENZA</th>
                 <td colspan="2">
-                  <select class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
+                  <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
                     <option value="MENSILE">MENSILE</option>
                     <option value="TRIMESTRALE">TRIMESTRALE</option>
                     <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
@@ -176,14 +176,18 @@
             </thead>
             <tbody>
               <tr style="text-align:center"><th >ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
-              <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_wf" /></td></tr>
+              <tr>
+                <td align="center"><input [disabled]="kpiButtonState !== '1'" type="checkbox" [(ngModel)]="modalData.enable" /></td>
+                <td align="center"><input [disabled]="kpiButtonState !== '1'" type="checkbox" [(ngModel)]="modalData.enable_rm" /></td>
+                <td align="center"><input [disabled]="kpiButtonState !== '1'" type="checkbox" [(ngModel)]="modalData.enable_wf" /></td>
+              </tr>
 
             </tbody>
           </table>
         </div>
       </div>
       <div class="modal-footer">
-        <button (click)="updateKpi('kpi')" class="btn btn-success">Aggiorna</button>
+        <button [disabled]="kpiButtonState !== '1'" (click)="updateKpi('kpi')" class="btn btn-success">Aggiorna</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
       </div>
     </div>

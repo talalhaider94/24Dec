@@ -38,6 +38,8 @@ export class CatalogoKpiComponent implements OnInit {
   public ref2: string;
   public ref3: string;
   public kpiButtonState: any;
+  public userPermissions: any;
+  public checkEditPermission: any;
 
   gatheredData = {
     roleId: 0
@@ -221,9 +223,24 @@ export class CatalogoKpiComponent implements OnInit {
     };
     this.getForms();
 
-    //this.gatheredData.roleId = this.auth.getUser().roleid;
-    this.gatheredData.roleId = 2;
-    this.getPermissions();
+    this.userPermissions = this.auth.getUser().permissions;
+    console.log('this.userPermissions =>',this.userPermissions);
+
+    this.checkEditPermission = this.userPermissions.indexOf("EDIT_CATALOG_KPI");
+
+    if(this.checkEditPermission !== -1){
+      this.kpiButtonState = '1';
+    }
+      // if(permission.EDIT_CATALOG_KPI == true || permission.EDIT_CATALOG_KPI == 1){
+      //   console.log('permission.EDIT_CATALOG_KPI => ', permission.EDIT_CATALOG_KPI);
+      //   this.kpiButtonState = '1';
+      // }
+    console.log('this.checkEditPermission => ', this.checkEditPermission);  
+    console.log('this.kpiButtonState => ', this.kpiButtonState);
+    
+
+    // this.gatheredData.roleId = 2;
+    // this.getPermissions();
   }
 
 
@@ -308,7 +325,7 @@ export class CatalogoKpiComponent implements OnInit {
     }
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       //this.getKpis(); // this should refresh the main table on page
-      this.toastr.success('Valore Aggiornato', 'Success');
+      this.toastr.success('Valore Aggiornato</br>Click su "Aggiorna" per aggiornare la tabella', 'Success');
       if (modal == 'kpi') {
         $('#kpiModal').modal('toggle').hide();
       } else {
@@ -511,7 +528,7 @@ export class CatalogoKpiComponent implements OnInit {
   getPermissions(){
     console.log('999999999999999999999 => ', this.gatheredData);
     this.apiService.getPermissionsByRoldId(this.gatheredData.roleId).subscribe( data => {
-      console.log('0000000000000000000000000000000 => ', data);
+      console.log('000000000000000000000 => ', data);
       data.forEach(permission => {
         if(permission.name=='EDIT_CATALOG_KPI'){
           console.log('permission.name => ', permission.name);
