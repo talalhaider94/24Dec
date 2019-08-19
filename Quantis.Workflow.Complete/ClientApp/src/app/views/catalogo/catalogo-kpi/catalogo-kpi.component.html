@@ -141,9 +141,9 @@
             <thead style="background: #20a8d8">
             </thead>
             <tbody>
-              <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknow'"><b>Primario: </b>{{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow'"><b>Secondario: </b>{{modalData.secondary_contract_party_name}}</span></td></tr>
+              <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknown'"><b>Primario: </b>[{{modalData.primary_contract_party}}] {{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow'"><b>Secondario: </b>[{{modalData.secondary_contract_party}}] {{modalData.secondary_contract_party_name}}</span></td></tr>
               <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
-              <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
+              <tr><th>NOME KPI BSI</th><td colspan="2">[{{modalData.global_rule_id_bsi}}] {{modalData.kpi_name_bsi}}</td></tr>
               <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
               <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
               <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
