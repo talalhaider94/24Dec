@@ -52,11 +52,12 @@ export class DatiGrezziComponent implements OnInit {
   datiGrezzi=[];
   monthVar: any;
   yearVar: any;
+  idKpi: any;
   countCampiData = [];
   eventTypes: any = {};
   resources: any = {};
-id_kpi_temp = '';
-loadingModalDati:boolean=false;
+  id_kpi_temp = '';
+  loadingModalDati:boolean=false;
   fitroDataById: any = [
     {
       event_type_id: '   ',
@@ -295,7 +296,15 @@ clear(){
 
   }
 
+
+  setId(id){
+    this.idKpi = id;
+    console.log('this.idKpi =>',this.idKpi);
+  }
+
+
   getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    console.log('id_kpi =>',id_kpi);
     this.clear();
     
     this.id_kpi_temp = id_kpi;
