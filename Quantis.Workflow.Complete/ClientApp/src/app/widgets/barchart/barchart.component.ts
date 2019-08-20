@@ -68,20 +68,16 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				// this.barChartData[0].label = getWidgetParameters.measures[0];
-				// Filters/Properties are commented becuase getting error from server side.
 				let params = {
 					GlobalFilterId: 0,
-					// Properties: {
-					// 	measure: Object.keys(getWidgetParameters.measures)[0],
-					// 	charttype: Object.keys(getWidgetParameters.charttypes)[0],
-					// 	aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					// },
-					// Filters: {
-					// 	daterange: getWidgetParameters.defaultdaterange 	
-					// },
-					Properties: this.properties,
-					Filters: this.filters
+					Properties: {
+						measure: Object.keys(getWidgetParameters.measures)[0],
+						charttype: Object.keys(getWidgetParameters.charttypes)[0],
+						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
+					},
+					Filters: {
+						daterange: getWidgetParameters.defaultdaterange 	
+					}
 				};
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
