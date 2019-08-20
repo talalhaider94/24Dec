@@ -7,6 +7,7 @@ import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { DateTimeService } from '../../../_helpers';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
@@ -30,11 +31,12 @@ export class PublicComponent implements OnInit {
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
+	// move to Dashboard service
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
 		{ name: "Radar Chart", componentInstance: RadarChartComponent },
-		{ name: "Count Trend", componentInstance: BarchartComponent },
+		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 	];
 	helpText: string = '';
 	constructor(
@@ -43,26 +45,22 @@ export class PublicComponent implements OnInit {
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
+		private dateTime: DateTimeService
 	) { }
 
 	outputs = {
 		barChartParent: childData => {
-			if (childData.type === 'barChartParams') {
-				this.barChartWidgetParameters = childData.data;
-			}
-			if (childData.type === 'openModal') {
+			// if (childData.type === 'barChartParams') {
+			// 	this.barChartWidgetParameters = childData.data;
+			// }
+			if (childData.type === 'openBarChartModal') {
+				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
-					this.widgetParametersForm.setValue({
-						GlobalFilterId: 0,
-						Properties: {
-							charttype: 'bar',
-							aggregationoption: 'period',
-							measure: '0'
-						},
-						Filters: {
-							daterange: '03/19:06/19'
-						}
-					})
+					console.log('CHILD DATA', childData.data.barChartWidgetParameters);
+					debugger
+					setTimeout(() => {
+						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
+					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
@@ -115,7 +113,7 @@ export class PublicComponent implements OnInit {
 			enableEmptyCellDrop: true,
 			// emptyCellDropCallback: this.onDrop,
 			pushDirections: { north: true, east: true, south: true, west: true },
-			// itemChangeCallback: this.itemChange.bind(this),
+			itemChangeCallback: this.itemChange.bind(this),
 			// itemResizeCallback: PublicComponent.itemResize,
 			minCols: 10,
 			maxCols: 100,
@@ -162,6 +160,20 @@ export class PublicComponent implements OnInit {
 		})
 
 	}
+	// might have to re-use it later when updating dashboard on save.
+	// getDashboardWidgetsData(dashboardId) {
+	// 	this.emitter.loadingStatus(true);
+	// 	this.dashboardService.getDashboard(dashboardId).subscribe(dashboard => {
+	// 		this.dashboardCollection = dashboard;
+	// 		this.parseJson(this.dashboardCollection);
+	// 		this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
+	// 		this.emitter.loadingStatus(false);
+	// 	}, error => {
+	// 		console.log('getDashboardWidgetsData', error);
+	// 		this.toastr.error('Error while fetching dashboards');
+	// 		this.emitter.loadingStatus(false);
+	// 	});
+	// }
 
 	parseJson(dashboardCollection: DashboardModel) {
 		// We loop on our dashboardCollection
@@ -169,27 +181,150 @@ export class PublicComponent implements OnInit {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
-				// is equal to our component name key in our componentCollection
-				if (widget.component === component.name) {
+				// is equal to our component name/uiidentifier key in our componentCollection
+				// if (widget.component === component.name) {
+				if (widget.uiidentifier === component.uiidentifier) {
 					// If it is, we replace our serialized key by our component instance
 					widget.component = component.componentInstance;
 					// this logic needs to be update because in future widget name will be different
 					// need to make this match on the basis on uiidentifier
-					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname).url;
+					// let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname).url;
+					let url = this.widgetCollection.find(myWidget => myWidget.uiidentifier === widget.uiidentifier).url;
 					widget.url = url;
 				}
 			});
 		});
 	}
 
+	itemChange() {
+		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+		let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
+		// this.serialize(changedDashboardWidgets.dashboardwidgets);
+	}
+
+	saveDashboardState() {
+		console.log('implementation is needed');
+	}
+
+	serialize(dashboardwidgets) {
+		// We loop on our dashboardCollection
+		dashboardwidgets.forEach(widget => {
+			// We loop on our componentCollection
+			this.componentCollection.forEach(component => {
+				// We check if component key in our dashboardCollection
+				// is equal to our component name key in our componentCollection
+				if (widget.widgetname === component.name) {
+					widget.component = component.name;
+				}
+			});
+		});
+	}
+
+	// onDrop(ev) {
+	// 	const componentType = ev.dataTransfer.getData("widgetIdentifier");
+	// 	switch (componentType) {
+	// 		case "radar_chart": {
+	// 			let radarWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'radar_chart');
+	// 			return this.dashboardWidgetsArray.push({
+	// 				cols: 5,
+	// 				rows: 5,
+	// 				x: 0,
+	// 				y: 0,
+	// 				component: RadarChartComponent,
+	// 				widgetname: radarWidget.name,
+	// 				uiidentifier: radarWidget.uiidentifier,
+	// 				filters: {}, // need to update this code
+	// 				properties: {},
+	// 				dashboardid: this.dashboardId,
+	// 				widgetid: radarWidget.id,
+	// 				id: 0, // 0 because we are adding them
+	// 				url: radarWidget.url
+	// 			});
+	// 		}
+	// 		case "line_chart": {
+	// 			let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
+	// 			return this.dashboardWidgetsArray.push({
+	// 				cols: 5,
+	// 				rows: 5,
+	// 				x: 0,
+	// 				y: 0,
+	// 				component: LineChartComponent,
+	// 				widgetname: lineWidget.name,
+	// 				uiidentifier: lineWidget.uiidentifier,
+	// 				filters: {}, // need to update this code
+	// 				properties: {},
+	// 				dashboardid: this.dashboardId,
+	// 				widgetid: lineWidget.id,
+	// 				id: 0,
+	// 				url: lineWidget.url
+	// 			});
+	// 		}
+	// 		case "doughnut_chart": {
+	// 			let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'doughnut_chart');
+	// 			return this.dashboardWidgetsArray.push({
+	// 				cols: 5,
+	// 				rows: 5,
+	// 				x: 0,
+	// 				y: 0,
+	// 				component: DoughnutChartComponent,
+	// 				widgetname: doughnutWidget.name,
+	// 				uiidentifier: doughnutWidget.uiidentifier,
+	// 				filters: {}, // need to update this code
+	// 				properties: {},
+	// 				dashboardid: this.dashboardId,
+	// 				widgetid: doughnutWidget.id,
+	// 				id: 0,
+	// 				url: doughnutWidget.url
+	// 			});
+	// 		}
+	// 		case "count_trend": {
+	// 			let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
+	// 			return this.dashboardWidgetsArray.push({
+	// 				cols: 5,
+	// 				rows: 8,
+	// 				x: 0,
+	// 				y: 0,
+	// 				component: BarchartComponent,
+	// 				widgetname: countWidget.name,
+	// 				uiidentifier: countWidget.uiidentifier,
+	// 				filters: {}, // need to update this code
+	// 				properties: {},
+	// 				dashboardid: this.dashboardId,
+	// 				widgetid: countWidget.id,
+	// 				id: 0,
+	// 				url: countWidget.url
+	// 			});
+	// 		}
+	// 	}
+	// }
+
+	changedOptions() {
+		this.options.api.optionsChanged();
+	}
+
+	removeItem(item) {
+		this.dashboardWidgetsArray.splice(
+			this.dashboardWidgetsArray.indexOf(item),
+			1
+		);
+		this.itemChange();
+	}
+
+	// static itemResize(item, itemComponent) {
+		// console.info('itemResized', item, itemComponent);
+	// }
+
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		const { url, widgetid } = this.barChartWidgetParameters;
+		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
+		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
+		formValues.Filters.daterange = `${startDate}-${endDate}`;
+		debugger
+		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
 			this.emitter.sendNext({
 				type: 'barChart',
-				widgetid,
 				data: {
 					result,
 					barChartWidgetParameters: this.barChartWidgetParameters,
@@ -198,6 +333,7 @@ export class PublicComponent implements OnInit {
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
+			debugger
 			this.emitter.loadingStatus(false);
 		})
 	}

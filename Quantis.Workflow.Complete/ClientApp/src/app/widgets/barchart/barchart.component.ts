@@ -3,6 +3,7 @@ import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
 import { DateTimeService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-barchart',
@@ -27,10 +28,12 @@ export class BarchartComponent implements OnInit {
 	constructor(
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
-		private dateTime: DateTimeService
+		private dateTime: DateTimeService,
+		private router:Router
 	) { }
 
 	ngOnInit() {
+		console.log('CURRENT ROUTE', this.router.url)
 		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid ,this.filters, this.properties);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
@@ -63,20 +66,20 @@ export class BarchartComponent implements OnInit {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
 				// this.barChartData[0].label = getWidgetParameters.measures[0];
+				// Filters/Properties are commented becuase getting error from server side.
 				let params = {
 					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(getWidgetParameters.measures)[0],
-						charttype: Object.keys(getWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: getWidgetParameters.defaultdaterange 	
-					},
-					// Properties: this.properties,
-					// Filters: this.filters
+					// Properties: {
+					// 	measure: Object.keys(getWidgetParameters.measures)[0],
+					// 	charttype: Object.keys(getWidgetParameters.charttypes)[0],
+					// 	aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
+					// },
+					// Filters: {
+					// 	daterange: getWidgetParameters.defaultdaterange 	
+					// },
+					Properties: this.properties,
+					Filters: this.filters
 				};
-				debugger
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
@@ -192,4 +195,17 @@ export class BarchartComponent implements OnInit {
 		this.closeModal();
 	}
 
+	widgetnameChange(event){
+		console.log('WIDGET NAME CHANE', event)
+		this.barChartParent.emit({ 
+			type: 'changeBarChartWidgetName',
+			data: {
+				barChart: {
+					widgetname: event,
+					id: this.id,
+					widgetid: this.widgetid
+				}
+			}
+		 });
+	}
 }

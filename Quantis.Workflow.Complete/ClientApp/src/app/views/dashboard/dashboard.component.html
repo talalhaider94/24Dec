@@ -20,9 +20,9 @@
             <i class="fa fa-trash"></i>
           </button>
           <!-- Drag button (need drag-handler class) -->
-          <!-- <button class="btn btn-sm btn-primary drag-handler">
-            <i class="fa fa-arrows-alt"></i>
-          </button> -->
+          <button class="btn btn-sm btn-primary no-drag">
+            <i class="fa fa-copy"></i>
+          </button>
         </div>
         <!-- 
           ndc-dynamic tag is from ng-dynamic-component library 
@@ -46,7 +46,7 @@
           {{ barChartWidgetParameters | json }}
         </p> -->
         <p>
-          <strong>Widget:</strong> {{barChartWidgetParameters.name}}
+          <strong>Widget:</strong> {{barChartWidgetParameters.widgetname}}
         </p>
         <form [formGroup]="widgetParametersForm" (ngSubmit)="onWidgetParametersFormSubmit()">
           <tabset>

@@ -32,11 +32,13 @@ export class DashboardComponent implements OnInit {
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
+	// move the component collection to dashboard service to access commonly in multiple components
+	// uiidentifier is necessary
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent },
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
 		{ name: "Radar Chart", componentInstance: RadarChartComponent },
-		{ name: "Count Trend", componentInstance: BarchartComponent },
+		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 	];
 	helpText: string = '';
 	constructor(
@@ -66,6 +68,24 @@ export class DashboardComponent implements OnInit {
 				this.widgetParametersModal.show();
 			} else if (childData.type === 'closeModal') {
 				this.widgetParametersModal.hide();
+			} else if (childData.type === 'changeBarChartWidgetName') {
+				let barChartdata = childData.data.barChart;
+				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
+				console.log('dashboardWidgetsArray', dashboardWidgetsArray);
+				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
+					if(widget.id === barChartdata.id && widget.widgetid === barChartdata.widgetid){
+						let updatename = {
+							...widget,
+							widgetname: barChartdata.widgetname,
+						}
+						debugger
+						return updatename
+					} else {
+						return widget;
+					}
+				});
+				console.log('updatedDashboardWidgetsArray', updatedDashboardWidgetsArray);
+				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
 			}
 		}
 	};
@@ -124,6 +144,7 @@ export class DashboardComponent implements OnInit {
 		};
 
 		this._route.params.subscribe(params => {
+			debugger
 			this.dashboardId = +params["id"];
 			this.emitter.loadingStatus(true);
 			this.getData(this.dashboardId);
@@ -175,19 +196,20 @@ export class DashboardComponent implements OnInit {
 	// 	});
 	// }
 
+	// need to move this to dashboard service as well
 	parseJson(dashboardCollection: DashboardModel) {
 		// We loop on our dashboardCollection
 		dashboardCollection.dashboardwidgets.forEach(widget => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
-				// is equal to our component name key in our componentCollection
-				if (widget.component === component.name) {
+				// is equal to our component name/uiidentifier key in our componentCollection
+				if (widget.uiidentifier === component.uiidentifier) {
 					// If it is, we replace our serialized key by our component instance
 					widget.component = component.componentInstance;
 					// this logic needs to be update because in future widget name will be different
 					// need to make this match on the basis on uiidentifier
-					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname).url;
+					let url = this.widgetCollection.find(myWidget => myWidget.uiidentifier === widget.uiidentifier).url;
 					widget.url = url;
 				}
 			});

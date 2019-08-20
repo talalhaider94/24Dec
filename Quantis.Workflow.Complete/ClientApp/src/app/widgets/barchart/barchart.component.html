@@ -1,4 +1,8 @@
-<p class="float-left"><b>{{id}}: {{ widgetname }}</b></p>
+<p class="float-left no-drag">
+  {{id}}:
+  <input type="text" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
+  {{ widgetname }}
+</p>
 <button type="button" class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
   <i class="fa fa-cog"></i>
 </button>
