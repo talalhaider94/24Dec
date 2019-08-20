@@ -50,14 +50,10 @@ export class PublicComponent implements OnInit {
 
 	outputs = {
 		barChartParent: childData => {
-			// if (childData.type === 'barChartParams') {
-			// 	this.barChartWidgetParameters = childData.data;
-			// }
+			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
-					console.log('CHILD DATA', childData.data.barChartWidgetParameters);
-					debugger
 					setTimeout(() => {
 						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
 					});
@@ -319,7 +315,6 @@ export class PublicComponent implements OnInit {
 		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
 		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
-		debugger
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
@@ -333,7 +328,7 @@ export class PublicComponent implements OnInit {
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
-			debugger
+			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 		})
 	}
