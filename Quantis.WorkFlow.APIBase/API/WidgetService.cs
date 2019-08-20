@@ -29,8 +29,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
                     {
                         XValue = p.Key + "",
-                        YValue = p.Count()
-                    }).OrderBy(o=>o.XValue).ToList();
+                        YValue = p.Count(r=>(p.Key == r.period_year ? true : false))  //was p.Count() @SHAHZAD pls check this, it was not working "exception near AS"
+                    }).OrderBy(o => o.XValue).ToList();
                 }
                 else
                 {
