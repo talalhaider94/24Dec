@@ -50,32 +50,17 @@ export class DashboardComponent implements OnInit {
 
 	outputs = {
 		barChartParent: childData => {
-			if (childData.type === 'barChartParams') {
-				this.barChartWidgetParameters = childData.data;
-			}
+			// if (childData.type === 'barChartParams') {
+			// 	this.barChartWidgetParameters = childData.data;
+			// }
 			if (childData.type === 'openBarChartModal') {
+				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
-					console.log('CILD DATA', childData.data);
+					console.log('CHILD DATA', childData.data.barChartWidgetParameters);
 					debugger
-					this.widgetParametersForm.setValue({
-						GlobalFilterId: 0,
-						// Properties: {
-						// 	charttype: 'bar',
-						// 	aggregationoption: 'period',
-						// 	measure: '0'
-						// },
-						// Filters: {
-						// 	daterange: [new Date(this.dateTime.subtractMonth(1)), new Date(this.dateTime.getDateTime())]
-						// }
-						Properties: {
-							measure: Object.keys(childData.data.measures)[0],
-							charttype: Object.keys(childData.data.charttypes)[0],
-							aggregationoption: Object.keys(childData.data.aggregationoptions)[0]
-						},
-						Filters: {
-							defaultdaterange: this.dateTime.buildRangeDate(childData.data.defaultdaterange)
-						},
-					})
+					setTimeout(() => {
+						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
+					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
@@ -98,7 +83,7 @@ export class DashboardComponent implements OnInit {
 				measure: [null]
 			}),
 			Filters: this.formBuilder.group({
-				defaultdaterange: [null]
+				daterange: [null]
 			})
 		});
 		// Grid options
@@ -340,16 +325,15 @@ export class DashboardComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		let startDate = this.dateTime.moment(formValues.Filters.defaultdaterange[0]).format('MM/YYYY');
-		let endDate = this.dateTime.moment(formValues.Filters.defaultdaterange[1]).format('MM/YYYY');
-		formValues.Filters.defaultdaterange = `${startDate}-${endDate}`;
+		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
+		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
+		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		debugger
-		const { url, widgetid } = this.barChartWidgetParameters;
+		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
 			this.emitter.sendNext({
 				type: 'barChart',
-				widgetid,
 				data: {
 					result,
 					barChartWidgetParameters: this.barChartWidgetParameters,
