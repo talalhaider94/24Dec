@@ -23,18 +23,22 @@ export class BarchartComponent implements OnInit {
 
 	loading: boolean = true;
 	barChartWidgetParameters: any;
+	editWidgetName: boolean = true;
 	@Output()
 	barChartParent = new EventEmitter<any>();
 	constructor(
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
-		private router:Router
+		private router: Router
 	) { }
 
 	ngOnInit() {
-		console.log('CURRENT ROUTE', this.router.url)
-		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid ,this.filters, this.properties);
+		console.log('CURRENT ROUTE', this.router.url);
+		if (this.router.url.includes('dashboard/public')) {
+			this.editWidgetName = false;
+		}
+		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
 			// this.getWidgetParameters(this.url);
@@ -45,7 +49,6 @@ export class BarchartComponent implements OnInit {
 		this.emitter.getData().subscribe(result => {
 			const { type, data } = result;
 			if (type === 'barChart') {
-				debugger;
 				let currentWidgetId = result.data.barChartWidgetParameters.id;
 				if (currentWidgetId === this.id) {
 					setTimeout(() => {
@@ -65,20 +68,16 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				// this.barChartData[0].label = getWidgetParameters.measures[0];
-				// Filters/Properties are commented becuase getting error from server side.
 				let params = {
 					GlobalFilterId: 0,
-					// Properties: {
-					// 	measure: Object.keys(getWidgetParameters.measures)[0],
-					// 	charttype: Object.keys(getWidgetParameters.charttypes)[0],
-					// 	aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					// },
-					// Filters: {
-					// 	daterange: getWidgetParameters.defaultdaterange 	
-					// },
-					Properties: this.properties,
-					Filters: this.filters
+					Properties: {
+						measure: Object.keys(getWidgetParameters.measures)[0],
+						charttype: Object.keys(getWidgetParameters.charttypes)[0],
+						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
+					},
+					Filters: {
+						daterange: getWidgetParameters.defaultdaterange 	
+					}
 				};
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
@@ -144,7 +143,7 @@ export class BarchartComponent implements OnInit {
 
 	openModal() {
 		console.log('OPEN MODAL BAR CHART', JSON.stringify(this.barChartWidgetParameters));
-		this.barChartParent.emit({ 
+		this.barChartParent.emit({
 			type: 'openBarChartModal',
 			data: {
 				barChartWidgetParameters: this.barChartWidgetParameters,
@@ -160,7 +159,7 @@ export class BarchartComponent implements OnInit {
 					},
 				}
 			}
-		 });
+		});
 	}
 	closeModal() {
 		this.barChartParent.emit({ type: 'closeModal' });
@@ -183,7 +182,7 @@ export class BarchartComponent implements OnInit {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
 		}
-		if(currentWidgetComponentData) {
+		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
 			label = currentWidgetComponentData.measures[0];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
@@ -196,9 +195,9 @@ export class BarchartComponent implements OnInit {
 		this.closeModal();
 	}
 
-	widgetnameChange(event){
+	widgetnameChange(event) {
 		console.log('WIDGET NAME CHANE', event)
-		this.barChartParent.emit({ 
+		this.barChartParent.emit({
 			type: 'changeBarChartWidgetName',
 			data: {
 				barChart: {
@@ -207,6 +206,6 @@ export class BarchartComponent implements OnInit {
 					widgetid: this.widgetid
 				}
 			}
-		 });
+		});
 	}
 }

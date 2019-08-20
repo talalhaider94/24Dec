@@ -144,7 +144,6 @@ export class DashboardComponent implements OnInit {
 		};
 
 		this._route.params.subscribe(params => {
-			debugger
 			this.dashboardId = +params["id"];
 			this.emitter.loadingStatus(true);
 			this.getData(this.dashboardId);
@@ -367,5 +366,9 @@ export class DashboardComponent implements OnInit {
 			debugger
 			this.emitter.loadingStatus(false);
 		})
+	}
+
+	cloneWidget() {
+
 	}
 }
