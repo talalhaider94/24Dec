@@ -50,22 +50,17 @@ export class DashboardComponent implements OnInit {
 
 	outputs = {
 		barChartParent: childData => {
-			if (childData.type === 'barChartParams') {
-				this.barChartWidgetParameters = childData.data;
-			}
-			if (childData.type === 'openModal') {
+			// if (childData.type === 'barChartParams') {
+			// 	this.barChartWidgetParameters = childData.data;
+			// }
+			if (childData.type === 'openBarChartModal') {
+				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
-					this.widgetParametersForm.setValue({
-						GlobalFilterId: 0,
-						Properties: {
-							charttype: 'bar',
-							aggregationoption: 'period',
-							measure: '0'
-						},
-						Filters: {
-							daterange: [new Date( this.dateTime.subtractMonth(1) ), new Date(this.dateTime.getDateTime())]
-						}
-					})
+					console.log('CHILD DATA', childData.data.barChartWidgetParameters);
+					debugger
+					setTimeout(() => {
+						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
+					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
@@ -192,7 +187,7 @@ export class DashboardComponent implements OnInit {
 					widget.component = component.componentInstance;
 					// this logic needs to be update because in future widget name will be different
 					// need to make this match on the basis on uiidentifier
-					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname ).url;
+					let url = this.widgetCollection.find(myWidget => myWidget.name === widget.widgetname).url;
 					widget.url = url;
 				}
 			});
@@ -328,17 +323,17 @@ export class DashboardComponent implements OnInit {
 		// console.info('itemResized', item, itemComponent);
 	}
 
-  onWidgetParametersFormSubmit() {
+	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
 		let startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
 		let endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
-    formValues.Filters.daterange = `${startDate} - ${endDate}`;
-		const { url, widgetid } = this.barChartWidgetParameters;
+		formValues.Filters.daterange = `${startDate}-${endDate}`;
+		debugger
+		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
 			this.emitter.sendNext({
 				type: 'barChart',
-				widgetid,
 				data: {
 					result,
 					barChartWidgetParameters: this.barChartWidgetParameters,
@@ -347,6 +342,7 @@ export class DashboardComponent implements OnInit {
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
+			debugger
 			this.emitter.loadingStatus(false);
 		})
 	}
