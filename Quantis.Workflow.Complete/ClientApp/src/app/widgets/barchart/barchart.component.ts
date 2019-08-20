@@ -130,7 +130,7 @@ export class BarchartComponent implements OnInit {
 		legend: { position: 'bottom' }
 	};
 	public barChartLegend: boolean = true;
-	public barChartType: string = 'bar';
+	public barChartType: string = 'bar'; 
 
 	// events
 	public chartClicked(e: any): void {
