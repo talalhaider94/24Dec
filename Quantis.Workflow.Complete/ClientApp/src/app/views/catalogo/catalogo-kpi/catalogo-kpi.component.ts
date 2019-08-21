@@ -325,7 +325,7 @@ export class CatalogoKpiComponent implements OnInit {
     }
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
       //this.getKpis(); // this should refresh the main table on page
-      this.toastr.success('Valore Aggiornato</br>Click su "Aggiorna" per aggiornare la tabella', 'Success');
+      this.toastr.success('Valore Aggiornato. Click su "Aggiorna" per aggiornare la tabella', 'Success');
       if (modal == 'kpi') {
         $('#kpiModal').modal('toggle').hide();
       } else {
