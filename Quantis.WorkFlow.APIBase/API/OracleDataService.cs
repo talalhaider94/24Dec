@@ -669,7 +669,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var e = new Exception("Configuration of BSI or Oracle does not exist");
                     throw e;
                 }
-                using (var client = new HttpClient())
+                /*using (var client = new HttpClient())
                 {
                     string basePath = bsiconf.value;
                     string apiPath = "/api/OracleCon/GetOracleConnection";
@@ -689,6 +689,8 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 }
                 string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
+                */
+                string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
                 return finalconfig;
             }
             catch(Exception e)
