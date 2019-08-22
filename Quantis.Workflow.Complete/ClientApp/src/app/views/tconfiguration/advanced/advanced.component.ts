@@ -86,6 +86,10 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   ngOnInit() {
+    setInterval(() => {
+      this.getCOnfigurations(); 
+      console.log("Auto Refresh...");
+    }, 600000); 
   }
 
   populateModalData(data) {
