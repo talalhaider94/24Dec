@@ -356,6 +356,7 @@ export class ProveVarieComponent implements OnInit {
           this.readOnlyUserForm = false;
         }
       }
+      this.readOnlyUserForm = data[0].cutoff ? false : true; // readOnly is mentally inverted
       this.arrayFormElements = data[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {

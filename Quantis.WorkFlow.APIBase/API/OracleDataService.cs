@@ -247,7 +247,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 int todayDay = Int32.Parse(todayDayValue);
                 int day_cutoff = Int32.Parse(day_cutoffValue.value);
                 bool cutoff_result;
-                if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
+                if(day_cutoff == 0) {
+                    cutoff_result = false;
+                } else {
+                    if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
+                }
+                
 
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
