@@ -55,7 +55,8 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
 					setTimeout(() => {
-						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
+						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+						// this.widgetParametersForm.get('daterange').disable();
 					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
@@ -79,7 +80,9 @@ export class PublicComponent implements OnInit {
 				measure: [null]
 			}),
 			Filters: this.formBuilder.group({
-				daterange: [null]
+				daterange: [{ value: null, disabled: false }],
+				dateTypes: [null],
+				date: [null]
 			})
 		});
 		// Grid options
