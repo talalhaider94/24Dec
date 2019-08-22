@@ -310,8 +310,8 @@ export class DashboardComponent implements OnInit {
 			case "count_trend": {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 8,
+					cols: 4,
+					rows:6,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
