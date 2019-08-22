@@ -143,13 +143,17 @@
                     <label class="form-check-label" for="inline-checkbox1"><b>Nessun Evento</b></label><!--Dati non Pervenuti-->
                   </div>
                 </div>
-                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
+                <div class="col-sm-5 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
                   <button type="submit" class="btn btn-primary"
-                    [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/loading-form/utente']"
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva e Esci
+                  </button>
                   <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
-                    class="btn btn-danger text-white">Annulla</a>
+                     class="btn btn-danger text-white">Annulla</a>
                 </div>
               </div>
             </form>
