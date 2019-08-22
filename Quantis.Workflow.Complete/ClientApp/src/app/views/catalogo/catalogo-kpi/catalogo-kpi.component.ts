@@ -241,6 +241,14 @@ export class CatalogoKpiComponent implements OnInit {
 
     // this.gatheredData.roleId = 2;
     // this.getPermissions();
+    $(function () {
+      $(".wrapper1").scroll(function () {
+        $(".wrapper2").scrollLeft($(".wrapper1").scrollLeft());
+      });
+      $(".wrapper2").scroll(function () {
+        $(".wrapper1").scrollLeft($(".wrapper2").scrollLeft());
+      });
+    });
   }
 
 
