@@ -23,6 +23,7 @@ export class BarchartComponent implements OnInit {
 
 	loading: boolean = true;
 	barChartWidgetParameters: any;
+	setWidgetFormValues: any;
 	editWidgetName: boolean = true;
 	@Output()
 	barChartParent = new EventEmitter<any>();
@@ -49,11 +50,12 @@ export class BarchartComponent implements OnInit {
 		this.emitter.getData().subscribe(result => {
 			const { type, data } = result;
 			if (type === 'barChart') {
-				let currentWidgetId = result.data.barChartWidgetParameters.id;
+				let currentWidgetId = data.barChartWidgetParameters.id;
 				if (currentWidgetId === this.id) {
-					setTimeout(() => {
-						this.barChartType = data.barChartWidgetParameterValues.Properties.charttype;
-					});
+					// updating parameter form widget setValues 
+					let barChartFormValues = data.barChartWidgetParameterValues;
+					barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
+					this.setWidgetFormValues = barChartFormValues;
 					this.updateChart(data.result.body, data, null);
 				}
 			}
@@ -76,7 +78,7 @@ export class BarchartComponent implements OnInit {
 						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
 					},
 					Filters: {
-						daterange: getWidgetParameters.defaultdaterange 	
+						daterange: getWidgetParameters.defaultdaterange
 					}
 				};
 				return this.dashboardService.getWidgetIndex(url, params);
@@ -103,6 +105,18 @@ export class BarchartComponent implements OnInit {
 				this.barChartWidgetParameters = barChartParams.data;
 				// have to use setTimeout if i am not emitting it in dashbaordComponent
 				// this.barChartParent.emit(barChartParams);
+				// setting initial Paramter form widget values
+				this.setWidgetFormValues = {
+					GlobalFilterId: 0,
+					Properties: {
+						measure: Object.keys(this.barChartWidgetParameters.measures)[0],
+						charttype: Object.keys(this.barChartWidgetParameters.charttypes)[0],
+						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
+					},
+					Filters: {
+						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange)
+					},
+				}
 			}
 			// popular chart data
 			if (getWidgetIndex) {
@@ -142,22 +156,13 @@ export class BarchartComponent implements OnInit {
 	}
 
 	openModal() {
-		console.log('OPEN MODAL BAR CHART', JSON.stringify(this.barChartWidgetParameters));
+		console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
+		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues)
 		this.barChartParent.emit({
 			type: 'openBarChartModal',
 			data: {
 				barChartWidgetParameters: this.barChartWidgetParameters,
-				setWidgetFormValues: {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.barChartWidgetParameters.measures)[0],
-						charttype: Object.keys(this.barChartWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange)
-					},
-				}
+				setWidgetFormValues: this.setWidgetFormValues
 			}
 		});
 	}
@@ -167,16 +172,6 @@ export class BarchartComponent implements OnInit {
 	// dashboardComponentData is result of data coming from 
 	// posting data to parameters widget
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-		// demo data
-		// let a = [
-		// 	{ xvalue: "6/2019", yvalue: 10 },
-		// 	{ xvalue: "7/2019", yvalue: 20 },
-		// 	{ xvalue: "8/2019", yvalue: 30 },
-		// 	{ xvalue: "9/2019", yvalue: 40 },
-		// 	{ xvalue: "10/2019", yvalue: 50 },
-		// 	{ xvalue: "11/2019", yvalue: 60 },
-		// 	{ xvalue: "12/2019", yvalue: 70 },
-		// ];
 		let label = 'Series';
 		if (dashboardComponentData) {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
@@ -196,7 +191,7 @@ export class BarchartComponent implements OnInit {
 	}
 
 	widgetnameChange(event) {
-		console.log('WIDGET NAME CHANE', event)
+		console.log('widgetnameChange', this.id, event);
 		this.barChartParent.emit({
 			type: 'changeBarChartWidgetName',
 			data: {

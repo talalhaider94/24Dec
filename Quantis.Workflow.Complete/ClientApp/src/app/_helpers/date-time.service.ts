@@ -37,7 +37,7 @@ export class DateTimeService {
     let [startMonth, startYear] = startDate.split('/');
     let [endMonth, endYear] = endDate.split('/');
     let dateRangeArray = [new Date(`${startMonth}/01/${startYear}`), new Date(`${endMonth}/01/${endYear}`)];
-    return dateRangeArray;
+    return {value:dateRangeArray} ;
   }
 
 }
