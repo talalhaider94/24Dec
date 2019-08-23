@@ -67,7 +67,7 @@ export class CatalogoKpiComponent implements OnInit {
   dtOptions = {
     //'dom': 'rtip',
     "columnDefs": [{
-      "targets": [11],
+      "targets": [14],
       "visible": false,
       "searchable": true
     }],
@@ -193,7 +193,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtOptions = {
       //'dom': 'rtip',
       "columnDefs": [{
-        "targets": [12],
+        "targets": [14],
         "visible": false,
         "searchable": true
       }],
@@ -241,6 +241,14 @@ export class CatalogoKpiComponent implements OnInit {
 
     // this.gatheredData.roleId = 2;
     // this.getPermissions();
+    $(function () {
+      $(".wrapper1").scroll(function () {
+        $(".wrapper2").scrollLeft($(".wrapper1").scrollLeft());
+      });
+      $(".wrapper2").scroll(function () {
+        $(".wrapper1").scrollLeft($(".wrapper2").scrollLeft());
+      });
+    });
   }
 
 
@@ -390,7 +398,7 @@ export class CatalogoKpiComponent implements OnInit {
     $(this.searchCol3.nativeElement).on( 'keyup', function () {
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-          .columns(12)
+          .columns(14)
           .search( this.value )
           .draw();
       });
@@ -500,13 +508,13 @@ export class CatalogoKpiComponent implements OnInit {
   }
 
   getKpis1() {
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
+    this.apiService.getCatalogoKpisByUserId().subscribe((data: any) => {
     });
   }
 
   getKpis() {
     this.loading = true;
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
+    this.apiService.getCatalogoKpisByUserId().subscribe((data: any) => {
       this.kpiTableBodyData = data;
       console.log('Kpis ', data);
       this.rerender();

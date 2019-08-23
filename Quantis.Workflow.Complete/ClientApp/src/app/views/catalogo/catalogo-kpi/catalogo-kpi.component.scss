@@ -4,4 +4,15 @@
 .leftAlign {
     text-align: left;
 }
-  
+.wrapper2 {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100vh;
+}
+.div2 {
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

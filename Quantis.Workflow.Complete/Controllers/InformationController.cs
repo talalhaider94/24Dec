@@ -201,7 +201,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
         [HttpGet("GetVersion")]
         public IActionResult GetVersion()
         {
-            var json = new { API = "v. 1.3.3", UI = "v. 1.3.3b" };
+            var json = new { API = "v. 1.3.4", UI = "v. 1.3.4b" };
             return Ok(json);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]

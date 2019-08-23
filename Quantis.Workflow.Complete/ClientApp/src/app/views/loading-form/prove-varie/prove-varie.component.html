@@ -71,7 +71,7 @@
                           <mat-label>Data</mat-label>
                           <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
                             [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm"
-                            [disabled]="!readOnlyUserForm">
+                            [disabled]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'">
                           <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm">
                           </mat-datepicker-toggle>
                           <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
@@ -99,24 +99,24 @@
                       <div class="col-sm-7">
 
 
-                        <input [readonly]="!readOnlyUserForm"
+                        <input [readonly]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length === 0"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                        <input [readonly]="!readOnlyUserForm"
+                        <input [readonly]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length > 0"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                           [(ngModel)]="stringa[i] = arrayFormElements[i].defaultvalue"
                           value='{{arrayFormElements[i].defaultvalue}}' placeholder="Input" class="form-control"
                           formControlName="valoreUtente" disabled>
 
-                        <input [readonly]="!readOnlyUserForm" type="number"
+                        <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                        <input [readonly]="!readOnlyUserForm" type="number"
+                        <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                           [(ngModel)]="numero[i] = arrayFormElements[i].defaultvalue"
@@ -143,13 +143,17 @@
                     <label class="form-check-label" for="inline-checkbox1"><b>Nessun Evento</b></label><!--Dati non Pervenuti-->
                   </div>
                 </div>
-                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
+                <div class="col-sm-5 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
                   <button type="submit" class="btn btn-primary"
-                    [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/loading-form/utente']"
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva e Esci
+                  </button>
                   <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
-                    class="btn btn-danger text-white">Annulla</a>
+                     class="btn btn-danger text-white">Annulla</a>
                 </div>
               </div>
             </form>
