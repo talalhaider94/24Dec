@@ -3,6 +3,8 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
+//import { clearTimeout } from 'timers';
 
 declare var $;
 var $this;
@@ -46,6 +48,12 @@ export class TConfigurationComponent implements OnInit {
       }
     }
   };
+  valuesCheck = {
+    day_cutoff_value: null,
+    day_notify_value: null,
+    day_workflow_value: null,
+    tempModal: null,
+  }
 
   modalData = {
     key: '',
@@ -98,8 +106,25 @@ export class TConfigurationComponent implements OnInit {
     this.modalData.isenable = data.isenable;
     this.modalData.iseditable = data.iseditable;
     this.modalData.description = data.description;
+    this.valuesCheck.tempModal = data.key;
   }
-
+  timer = null;
+  changeModal(value) {
+    this.modalData.value = value;
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      console.log(value, this.valuesCheck.tempModal, this.valuesCheck.day_cutoff_value);
+      if (this.valuesCheck.tempModal == "day_workflow") {
+        if (parseInt(value) < parseInt(this.valuesCheck.day_cutoff_value)) { this.toastr.warning('La data del Workflow è minore del Cutoff', 'Attenzione'); }
+        let today = parseInt(moment().format('DD'));
+        console.log(today)
+        if (value > today && parseInt(this.valuesCheck.day_workflow_value) < today) { this.toastr.error('Il Workflow ripartirà nel mese corrente per eventuali ticket non aperti', 'Attenzione'); }
+      }
+      if (this.valuesCheck.tempModal == "day_cutoff") {
+        if (parseInt(value) > parseInt(this.valuesCheck.day_workflow_value)) { this.toastr.warning('La data del Cutoff è minore del Workflow', 'Attenzione'); }
+      }
+    }, 500) //time to wait in ms before do the check
+  }
   addConfig() {
     this.addData.key = this.key;
     this.addData.owner = this.owner;
@@ -185,8 +210,22 @@ export class TConfigurationComponent implements OnInit {
   }
 
   getCOnfigurations() {
-    this.apiService.getConfigurations().subscribe((data) =>{
+    this.apiService.getConfigurations().subscribe((data) => {
       this.ConfigTableBodyData = data;
+      let valuesCheck = { day_cutoff_value: null, day_notify_value: null, day_workflow_value: null, tempModal: null };
+      data.forEach(function (config) {    
+        if (config.key == "day_cutoff") {
+          valuesCheck.day_cutoff_value = config.value;
+        }
+        if (config.key == "day_notify") {
+          valuesCheck.day_notify_value = config.value;
+        }
+        if (config.key == "day_workflow") {
+          valuesCheck.day_workflow_value = config.value;
+        }      
+      }
+      );
+      this.valuesCheck = valuesCheck;
       console.log('Configs ', data);
       this.rerender();
     });
