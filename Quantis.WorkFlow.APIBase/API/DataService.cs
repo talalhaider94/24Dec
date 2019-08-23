@@ -1210,6 +1210,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     zz2_calcValue= 
                         (psl != null && psl.Any()) ? 
                         psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]"
+                        : psl.FirstOrDefault().result.Contains("[Nessun Evento]") ? "[Nessun Evento]"
                         : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result 
                         :
                         "[Non Calcolato]",
