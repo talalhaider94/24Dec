@@ -1,3 +1,20 @@
-<p>
-  kpi-count-summary works!
-</p>
+<div class="card text-white bg-danger mt-3">
+  <div class="card-body pb-0">
+    <div class="btn-group float-right" dropdown>
+      <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+        <i class="icon-settings"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div>
+    <div class="text-value">9.823</div>
+    <div>KPI Count Summary</div>
+  </div>
+  <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+    <canvas baseChart class="chart" [datasets]="barChart1Data" [labels]="barChart1Labels" [options]="barChart1Options"
+      [colors]="barChart1Colours" [legend]="barChart1Legend" [chartType]="barChart1Type"></canvas>
+  </div>
+</div>

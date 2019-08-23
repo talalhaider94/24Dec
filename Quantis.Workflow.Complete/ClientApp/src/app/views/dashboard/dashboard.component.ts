@@ -326,6 +326,24 @@ export class DashboardComponent implements OnInit {
 					url: countWidget.url
 				});
 			}
+			case "kpi_count_summary": {
+				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
+				return this.dashboardWidgetsArray.push({
+					cols: 4,
+					rows:6,
+					x: 0,
+					y: 0,
+					component: KpiCountSummaryComponent,
+					widgetname: summaryWidget.name,
+					uiidentifier: summaryWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: summaryWidget.id,
+					id: 0,
+					url: summaryWidget.url
+				});
+			}
 		}
 	}
 

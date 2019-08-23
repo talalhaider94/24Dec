@@ -21,7 +21,7 @@ import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
+import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 @NgModule({
   imports: [
     FormsModule,
@@ -38,7 +38,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
       LineChartComponent,
       DoughnutChartComponent,
       RadarChartComponent,
-      BarchartComponent
+      BarchartComponent,
+      KpiCountSummaryComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -52,7 +53,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     MenuComponent,
     BarchartComponent,
     PublicComponent,
-    DashboardListsComponent
+    DashboardListsComponent,
+    KpiCountSummaryComponent
   ]
 })
 export class DashboardModule { }

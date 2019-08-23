@@ -11,7 +11,7 @@
 <!-- Gridster grid -->
 <gridster [options]="options" (drop)="onDrop($event)" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
-  <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
+  <gridster-item [ngClass]="(item.uiidentifier == 'kpi_count_summary') ? 'kpi_count_summary' : 'other-widgets'" [item]="item" *ngFor="let item of dashboardWidgetsArray">
     <div class="card">
       <div class="card-body">
         <div class="float-right">
@@ -24,6 +24,7 @@
             <i class="fa fa-copy"></i>
           </button>
         </div>
+        <div class="clearfix"></div>
         <!-- 
           ndc-dynamic tag is from ng-dynamic-component library 
           it generates a dynamic component on the fly
@@ -86,7 +87,7 @@
                 <div class="form-group">
                   <label for="daterange">Date Range</label>
                   <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                   bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
+                    bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
                 </div>
               </div>
             </tab>
