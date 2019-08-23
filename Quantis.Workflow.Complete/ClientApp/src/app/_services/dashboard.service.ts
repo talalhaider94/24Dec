@@ -78,7 +78,7 @@ export class DashboardService {
 					widgetid: widget.widgetid,
 					dashboardid: widget.dashboardid,
 					uiidentifier: widget.uiidentifier,
-					id: widget.id
+					id: (typeof widget.id === "number") ? widget.id : 0  // for new / cloned widgets id will be zero
 				}
 			});
 		}

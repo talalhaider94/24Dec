@@ -15,7 +15,7 @@ import { LineChartComponent } from '../../widgets/line-chart/line-chart.componen
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
-
+import { UUID } from 'angular2-uuid';
 @Component({
 	templateUrl: 'dashboard.component.html',
 	styleUrls: ['dashboard.component.scss']
@@ -78,8 +78,7 @@ export class DashboardComponent implements OnInit {
 							...widget,
 							widgetname: barChartdata.widgetname,
 						}
-						debugger
-						return updatename
+						return updatename;
 					} else {
 						return widget;
 					}
@@ -363,12 +362,19 @@ export class DashboardComponent implements OnInit {
 			})
 			this.emitter.loadingStatus(false);
 		}, error => {
-			debugger
+			console.error('getWidgetIndex', error);
 			this.emitter.loadingStatus(false);
 		})
 	}
 
-	cloneWidget() {
-
+	cloneWidget(widget) {
+		let cloneWidget = {
+			...widget,
+			id: UUID.UUID(),
+			x: 0,
+			y: 0,
+		}
+		this.dashboardWidgetsArray.push(cloneWidget);
+		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
 	}
 }
