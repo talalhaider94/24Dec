@@ -15,6 +15,7 @@ import { LineChartComponent } from '../../widgets/line-chart/line-chart.componen
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
+import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { UUID } from 'angular2-uuid';
 @Component({
 	templateUrl: 'dashboard.component.html',
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit {
 		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
 		{ name: "Radar Chart", componentInstance: RadarChartComponent },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
+		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 	];
 	helpText: string = '';
 	constructor(
