@@ -121,6 +121,11 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   updateConfig() {
+    var value = +this.modalData.value;
+    console.log("value ->",value);
+    if((this.modalData.key=='day_cutoff' || this.modalData.key=='day_workflow') && (value<1 || value>30)){
+      this.toastr.error('Value should be between 0 and 31 for this key. Please enter again', 'Error');
+    }else{
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateAdvancedConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
@@ -130,6 +135,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
       this.toastr.error('Errore durante update.', 'Error');
       $('#configModal').modal('toggle').hide();
       });
+    }
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
