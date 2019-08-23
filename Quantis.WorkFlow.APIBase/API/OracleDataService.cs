@@ -173,11 +173,11 @@ namespace Quantis.WorkFlow.APIBase.API
                             provided_ce = (o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5]),
                             time_stamp_utc = (DateTime)o[6],
                             result = (o[5] == DBNull.Value) ? "[Non Calcolato]" :
-                                ((o[7].ToString() == "NLT") ? 
-                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Non Compliant]" : "[Compliant]")
+                                (string)o[5] == "-999" ? "[Nessun Evento]" :
+                                (o[7].ToString() == "NLT") ? 
+                                (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Non Compliant]" : "[Compliant]")
                                 :
-                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Compliant]" : "[Non Compliant]")),
-
+                                (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Compliant]" : "[Non Compliant]"),
                             target = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
                             relation = o[7].ToString(),
                             symbol = o[9].ToString()
