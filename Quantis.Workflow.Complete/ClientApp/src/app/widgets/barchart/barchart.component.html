@@ -9,8 +9,8 @@
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
 </div>
-<div style="display: block;">
-  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+<div style="display: block; position:relative">
+  <canvas id="chart" baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
     [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"
     (chartClick)="chartClicked($event)"></canvas>
 </div>
