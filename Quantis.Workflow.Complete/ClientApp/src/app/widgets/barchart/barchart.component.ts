@@ -79,7 +79,8 @@ export class BarchartComponent implements OnInit {
 					},
 					Filters: {
 						daterange: getWidgetParameters.defaultdaterange
-					}
+					},
+					Note: ''
 				};
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
@@ -114,8 +115,10 @@ export class BarchartComponent implements OnInit {
 						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
 					},
 					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange)
+						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange),
+						dateTypes: barChartParams.data.datetypes[0]
 					},
+					Note: ''
 				}
 			}
 			// popular chart data

@@ -61,34 +61,38 @@
             </tab>
             <tab heading="FILTERS">
               <div formGroupName="Filters">
-                <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
-                  <label for="daterange">Date Range</label>
-                  <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                    bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
-                </div>
-                <!-- current showdatefilter is coming false so while developing ! is added will remove later -->
-                <div class="form-group" *ngIf="barChartWidgetParameters.showdatefilter">
-                  <label for="date">Select Date</label>
-                  <input type="text" formControlName="date" placeholder="Pick Date" class="form-control" bsDatepicker
-                    [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
-                </div>
-                
-                <div class="form-group" *ngIf="barChartWidgetParameters.showdatetype">
+                <div class="form-group">
                   <label for="dateTypes">Date Types</label>
-                  <select class="form-control" id="dateTypes" formControlName="dateTypes">
+                  <select class="form-control" id="dateTypes" formControlName="dateTypes"
+                    (change)="customDateTypes($event)">
                     <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
-                      [attr.selected]="!i" [ngValue]="datetype.key">
+                      [attr.selected]="!i" [ngValue]="datetype.value">
                       {{ datetype.value }}
                     </option>
                   </select>
                 </div>
+                <span *ngIf="showDateRangeInFilters">
+                  <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
+                    <label for="daterange">Date Range</label>
+                    <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
+                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
+                  </div>
+                </span>
+                <!-- current showdatefilter is coming false so while developing ! is added will remove later -->
+                <span *ngIf="showDateInFilters">
+                  <div class="form-group" *ngIf="!barChartWidgetParameters.showdatefilter">
+                    <label for="date">Select Date</label>
+                    <input type="text" formControlName="date" placeholder="Pick Date" class="form-control" bsDatepicker
+                      [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
+                  </div>
+                </span>
               </div>
             </tab>
             <tab heading="HELP">
               {{ helpText }}
             </tab>
             <tab heading="NOTE">
-              <textarea placeholder="Enter Note" class="form-control">
+              <textarea placeholder="Enter Note" class="form-control" formControlName="Note">
 
                 </textarea>
             </tab>
