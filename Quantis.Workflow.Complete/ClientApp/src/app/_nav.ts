@@ -216,14 +216,14 @@ export const navItems: NavData[] = [
         name: 'Generali',
         url: '/tconfiguration/general',
         icon: 'fa fa-check-circle-o',
-        version: '0.0.1',
+        version: '0.0.2',
         key: 'VIEW_CONFIGURATION_GENERAL'
       },
       {
         name: 'Avanzate',
         url: '/tconfiguration/advanced',
         icon: 'fa fa-check-circle-o',
-        version: '0.0.1',
+        version: '0.0.2',
         key: 'VIEW_CONFIGURATION_ADVANCED'
       },
       /*{ // maybe not needed
