@@ -73,11 +73,13 @@
                                     <th>Rif. Num</th>
                                     <th>Titolo</th>
                                     <th>KPI ID</th>
+                                    <th>Tipologia</th>
                                     <th>Sommario</th>
                                     <th>Descrizione</th>
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Periodo</th>
+                                    <th>Riferimento Input</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
                                     <th>Riferimento S3</th>
@@ -113,6 +115,7 @@
                                         </button>
                                     </td>
                                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                                    <td>{{ ticket.tipologia  }}</td>
                                     <td>
                                         <ng-template #popSummary>
                                             <ul class="list-group list-group-flush"
@@ -158,6 +161,7 @@
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>{{ ticket.period || 'N/A' }}</td>
+                                    <td>{{ ticket.riferimento_input  }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark"

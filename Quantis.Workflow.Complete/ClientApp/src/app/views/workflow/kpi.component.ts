@@ -259,11 +259,11 @@ export class KPIComponent implements OnInit, OnDestroy {
     const { description } = this.approveValues;
     this.loading = true;
     this.ticketsStatus = [];
+    this.ticketStatusModal.show();
+    this.approveModal.hide();
     const myObserver = {
       next: status => {
         this.ticketsStatus.push(status);
-        this.ticketStatusModal.show();
-        this.approveModal.hide();
       },
       error: err => {
         this.approveModal.hide();
