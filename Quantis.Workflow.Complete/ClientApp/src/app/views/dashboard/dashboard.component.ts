@@ -3,9 +3,7 @@ import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService } from '../../_helpers';
 import { ActivatedRoute } from '@angular/router';
-import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_models';
+import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../_models';
 import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -36,9 +34,9 @@ export class DashboardComponent implements OnInit {
 	// move the component collection to dashboard service to access commonly in multiple components
 	// uiidentifier is necessary
 	componentCollection = [
-		{ name: "Line Chart", componentInstance: LineChartComponent },
-		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
-		{ name: "Radar Chart", componentInstance: RadarChartComponent },
+		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
+		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
+		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 	];
@@ -224,17 +222,13 @@ export class DashboardComponent implements OnInit {
 
 	saveDashboard() {
 		this.emitter.loadingStatus(true);
-		debugger
 		this.dashboardService.updateDashboard(this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard saved successfully.');
-			debugger
 		}, error => {
 			console.log('updateDashboard', error);
-			debugger
 			this.emitter.loadingStatus(false);
 		});
-
 	}
 
 	serialize(dashboardwidgets) {
@@ -290,11 +284,11 @@ export class DashboardComponent implements OnInit {
 					url: lineWidget.url
 				});
 			}
-			case "doughnut_chart": {
-				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'doughnut_chart');
+			case "distribution_by_verifica": {
+				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
-					rows: 5,
+					rows: 6,
 					x: 0,
 					y: 0,
 					component: DoughnutChartComponent,
@@ -330,7 +324,7 @@ export class DashboardComponent implements OnInit {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
 				return this.dashboardWidgetsArray.push({
 					cols: 4,
-					rows:6,
+					rows:4,
 					x: 0,
 					y: 0,
 					component: KpiCountSummaryComponent,

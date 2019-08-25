@@ -2,7 +2,7 @@ import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
 import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
-import { DashboardModel, DashboardContentModel, WidgetModel } from '../../../_models';
+import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../../_models';
 import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -32,10 +32,10 @@ export class PublicComponent implements OnInit {
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
 	// move to Dashboard service
-	componentCollection = [
-		{ name: "Line Chart", componentInstance: LineChartComponent },
-		{ name: "Doughnut Chart", componentInstance: DoughnutChartComponent },
-		{ name: "Radar Chart", componentInstance: RadarChartComponent },
+	componentCollection: Array<ComponentCollection> = [
+		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
+		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
+		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 	];
