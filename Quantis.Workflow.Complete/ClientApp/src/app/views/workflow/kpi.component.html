@@ -20,6 +20,7 @@
                                         <option value="[Compliant]">Compliant</option>
                                         <option value="[Non Compliant]">Non Compliant</option>
                                         <option value="[Non Calcolato]">Non Calcolato</option>
+                                        <option value="[Nessun Evento]">Nessun Evento</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -93,12 +94,16 @@
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index"
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
-                                    <td class="pl-3">
-                                        <label class="checkbox-container border"
+                                    <td class="pl-3" popover="Verde -> KPI Compliant
+                                        Rosso -> KPI Non Compliant
+                                        Grigio -> KPI Non Calcolato
+                                        Blu -> KPI con Nessun Evento
+                                        Bianco -> altri casi " triggers="hover" placement="top">
+                                        <label  class="checkbox-container border"
                                             [ngClass]="ticket.description.includes('[Compliant]') ?
                                              'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
                                               'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
-                                              'checkbox-container-primary border-primary' : 'checkbox-container-default border-secondary' ">
+                                              'checkbox-container-default border-secondary' : ticket.description.includes('[Nessun Evento]') ? 'checkbox-container-primary border-primary' : 'checkbox-container-white border-white' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
                                                 [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
