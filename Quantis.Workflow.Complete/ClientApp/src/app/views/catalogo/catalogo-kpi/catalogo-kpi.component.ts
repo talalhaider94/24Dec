@@ -53,6 +53,9 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExporta') btnExporta: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+  @ViewChild('topScrollContainer') topScrollContainer: ElementRef;
+  @ViewChild('topScroll') topScroll: ElementRef;
+  @ViewChild('topScrollTblContainer') topScrollTblContainer: ElementRef;
 
   viewModel = {
     filters: {
@@ -454,7 +457,24 @@ export class CatalogoKpiComponent implements OnInit {
         //$this.table2csv(datatable_Ref, 'full', '.kpiTable');
       });
     });
+
+    setTimeout(()=>{this.applyScrollOnTopOfTable();},100);
     
+  }
+
+  applyScrollOnTopOfTable(){
+    let topScrollContainer = $(this.topScrollContainer.nativeElement),
+    topScroll = $(this.topScroll.nativeElement),
+    topScrollTable = $(this.block.nativeElement),
+    topScrollTblContainer = $(this.topScrollTblContainer.nativeElement);
+
+    topScroll.width(topScrollTable.width());
+    topScrollContainer.scroll(function() {
+      topScrollTblContainer.scrollLeft(topScrollContainer.scrollLeft());
+    });
+    topScrollTblContainer.scroll(function() {
+      topScrollContainer.scrollLeft(topScrollTblContainer.scrollLeft());
+    });
   }
 
   isNumber(val){
