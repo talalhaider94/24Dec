@@ -1,6 +1,6 @@
 <div class="row justify-content-between">
   <div class="col align-self-center text-right">
-    <button class="btn btn-success m-2" (click)="saveDashboardState()">Save</button>
+    <button class="btn btn-success m-2" (click)="saveDashboardState()">Salva</button>
   </div>
 </div>
 
@@ -28,10 +28,11 @@
         </p>
         <form [formGroup]="widgetParametersForm" (ngSubmit)="onWidgetParametersFormSubmit()">
           <tabset>
-            <tab heading="PROPERTIES" id="tab1">
+            <!-- PROPERTIES -->
+            <tab heading="PROPRIETA" id="tab1">
               <div formGroupName="Properties">
                 <div class="form-group" *ngIf="barChartWidgetParameters.showcharttype">
-                  <label for="charttype">Chart Type</label>
+                  <label for="charttype">Typo di Grafico</label><!-- Chart Type -->
                   <select class="form-control" id="charttype" formControlName="charttype">
                     <option *ngFor="let type of barChartWidgetParameters.charttypes | keyvalue; let i = index"
                       [attr.selected]="!i" [ngValue]="type.key">
@@ -40,7 +41,7 @@
                   </select>
                 </div>
                 <div class="form-group" *ngIf="barChartWidgetParameters.showaggregationoption">
-                  <label for="aggregationoption">Aggregations</label>
+                  <label for="aggregationoption">Aggregazioni</label><!-- Aggregations -->
                   <select class="form-control" id="aggregationoption" formControlName="aggregationoption">
                     <option *ngFor="let option of barChartWidgetParameters.aggregationoptions | keyvalue; let i = index"
                       [ngValue]="option.key" [attr.selected]="!i">
@@ -49,7 +50,7 @@
                   </select>
                 </div>
                 <div class="form-group" *ngIf="barChartWidgetParameters.showmeasure">
-                  <label for="measure">Measures</label>
+                  <label for="measure">Le misure</label><!-- Measure -->
                   <select class="form-control" id="measure" formControlName="measure">
                     <option *ngFor="let measure of barChartWidgetParameters.measures | keyvalue; let i = index"
                       [attr.selected]="!i" [ngValue]="measure.key">
@@ -59,10 +60,11 @@
                 </div>
               </div>
             </tab>
-            <tab heading="FILTERS">
+            <!-- FILTERS -->
+            <tab heading="FILTRI">
               <div formGroupName="Filters">
                 <div class="form-group">
-                  <label for="dateTypes">Date Types</label>
+                  <label for="dateTypes">Tipi di data</label><!-- Date Type -->
                   <select class="form-control" id="dateTypes" formControlName="dateTypes"
                     (change)="customDateTypes($event)">
                     <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
@@ -73,7 +75,7 @@
                 </div>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
-                    <label for="daterange">Date Range</label>
+                    <label for="daterange">Intervallo di date</label><!-- Date Range -->
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
                       bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
                   </div>
@@ -81,17 +83,19 @@
                 <!-- current showdatefilter is coming false so while developing ! is added will remove later -->
                 <span *ngIf="showDateInFilters">
                   <div class="form-group" *ngIf="!barChartWidgetParameters.showdatefilter">
-                    <label for="date">Select Date</label>
+                    <label for="date">Seleziona la data</label><!-- Select Date -->
                     <input type="text" formControlName="date" placeholder="Pick Date" class="form-control" bsDatepicker
                       [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                   </div>
                 </span>
               </div>
             </tab>
-            <tab heading="HELP">
+            <!-- HELP -->
+            <tab heading="AIUTO">
               {{ helpText }}
             </tab>
-            <tab heading="NOTE">
+            <!-- NOTE -->
+            <tab heading="NOTA">
               <textarea placeholder="Enter Note" class="form-control" formControlName="Note">
 
                 </textarea>
@@ -99,14 +103,16 @@
           </tabset>
           <div class="row justify-content-end mt-3">
             <div class="col-6 text-right">
+              <!-- Apply -->
               <button type="submit" class="btn btn-outline-primary btn-sm px-4">
                 <!-- <span class="fa fa-spinner fa-spin"></span>  -->
-                Apply
+                Applicare
               </button>
 
+              <!-- Cancel -->
               <a (click)="widgetParametersModal.hide()" role="button"
                 class="btn btn-primary pointer-cursor btn-sm px-4">
-                Cancel
+                Annulla
               </a>
             </div>
           </div>

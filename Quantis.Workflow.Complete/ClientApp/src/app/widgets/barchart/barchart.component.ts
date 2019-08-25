@@ -82,6 +82,7 @@ export class BarchartComponent implements OnInit {
 					},
 					Note: ''
 				};
+				/// To be used -> getWidgetIndex method ////
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
@@ -174,6 +175,8 @@ export class BarchartComponent implements OnInit {
 	}
 	// dashboardComponentData is result of data coming from 
 	// posting data to parameters widget
+
+	/// To be used ////
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
 		if (dashboardComponentData) {
