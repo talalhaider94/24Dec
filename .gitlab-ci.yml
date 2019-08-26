@@ -9,6 +9,8 @@ build:
     stage: build
     only:
         - schedules
+    tags:
+        - dashboard
     script:
         - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
