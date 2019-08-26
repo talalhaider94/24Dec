@@ -19,4 +19,3 @@ build:
         - "systemctl start supervisord"
         - "rm -rf /opt/WorkFlowAPI/DotnetPublish"
 
-
