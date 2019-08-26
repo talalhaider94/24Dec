@@ -1,4 +1,3 @@
-
 stages:
     - build
     
@@ -9,7 +8,7 @@ before_script:
 build:
     stage: build
     only:
-        - dashboard
+        - schedules
     script:
         - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
@@ -19,5 +18,4 @@ build:
         - "cp -a /opt/WorkFlowAPI/DotnetPublish/. /opt/WorkFlowAPI/dotnetcore_modules/"
         - "systemctl start supervisord"
         - "rm -rf /opt/WorkFlowAPI/DotnetPublish"
-
 
