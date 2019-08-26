@@ -19,5 +19,4 @@ build:
         - "mkdir /opt/WorkFlowAPI/dotnetcore_modules" 
         - "cp -a /opt/WorkFlowAPI/DotnetPublish/. /opt/WorkFlowAPI/dotnetcore_modules/"
         - "supervisorctl start all"
-        - "rm -rf /opt/WorkFlowAPI/DotnetPublish"
 
