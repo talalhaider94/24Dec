@@ -55,10 +55,9 @@ namespace Quantis.WorkFlow.Complete
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
-            });
-            var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
-            RegisterServices(services);
-            
+            });            
+
+            var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");                       
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
                 options.UseLazyLoadingProxies().UseNpgsql(
                     sqlConnectionString,
@@ -82,6 +81,7 @@ namespace Quantis.WorkFlow.Complete
             });
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, QuantisPermissionHandler>();
+            RegisterServices(services);
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
