@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DateTimeService } from '../../../_helpers';
+import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
@@ -28,6 +29,17 @@ export class PublicComponent implements OnInit {
 	emitterSubscription: Subscription; // need to destroy this subscription later
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
+
+	treesArray = [];
+	isTreeLoaded = false;
+	public treeFields: any = {
+		dataSource: [],
+		id: 'id',
+		text: 'name',
+		child: 'children',
+		title: 'name'
+	};
+
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
@@ -143,6 +155,15 @@ export class PublicComponent implements OnInit {
 				this.showDateInFilters = false;
 			}
 		});
+
+		////Tree View////
+		console.log('--- Tree View ---');
+		this.dashboardService.GetOrganizationHierarcy().subscribe(data=>{
+		console.log('GetOrganizationHierarcy ==> ', data);
+		//this.treeFields.dataSource = data;
+		this.createTrees(data);
+		}, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
+
 	}
 
 	getData(dashboardId: number) {
@@ -271,5 +292,38 @@ export class PublicComponent implements OnInit {
 	}
 	customDateTypes(event) {
 		// debugger
+	}
+
+	addLoaderToTrees(add = true){
+		let load = false;
+		if(add === false){
+		  load = true;
+		}
+		this.treesArray.forEach((itm:any) => {
+		  itm.loaded = load;
+		});
+	}
+
+	syncSelectedNodesArray(event, treeRef){
+	  console.log('cheked ');//, treeRef);
+	  treeRef.loaded = true;
+	  //this.selectedData.checked = this.permissionsTree.checkedNodes;
+	}
+
+	createTrees(treesData){
+		treesData.forEach((itm:any)=>{
+			let settings = { dataSource: [itm], id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
+			this.treesArray.push({
+				name: itm.name,
+				settings: settings,
+				checkedNodes: [],
+				id: itm.id,
+				elementId: `permissions_tree_${itm.id}`,
+				loaded: true
+			});
+			console.log('this.treesArray ->',this.treesArray);
+		});
+
+		this.isTreeLoaded = true;
 	}
 }
