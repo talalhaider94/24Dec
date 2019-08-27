@@ -58,10 +58,6 @@ namespace Quantis.WorkFlow.Complete
             });            
 
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
-            if (string.IsNullOrEmpty(sqlConnectionString))
-            {
-                sqlConnectionString = "User ID=bsi_be;Password=bsi_be_password;Host=10.10.10.102;Port=5432;Database=bsi;Pooling=true;";
-            }
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
                 options.UseLazyLoadingProxies().UseNpgsql(
                     sqlConnectionString,
