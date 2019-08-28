@@ -54,6 +54,7 @@ export class KPIComponent implements OnInit, OnDestroy {
   monthOption;
   yearOption;
   statoKPIOption;
+  dataFromWidgetsPage;
 
   ticketsStatus: any = [];
   constructor(
@@ -71,8 +72,11 @@ export class KPIComponent implements OnInit, OnDestroy {
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
-    this.monthOption = moment().subtract(1, 'months').format('MM');
-    this.yearOption = moment().format('YY');
+    this.dataFromWidgetsPage = window.history.state;
+    console.log('dataFromWidgetsPage: ', this.dataFromWidgetsPage);
+
+    this.monthOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.month : moment().subtract(1, 'months').format('MM');
+    this.yearOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.year : moment().format('YY');
     this.statoKPIOption = '';
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
