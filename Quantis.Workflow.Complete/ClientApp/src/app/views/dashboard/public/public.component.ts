@@ -26,6 +26,7 @@ export class PublicComponent implements OnInit {
 	dashboardId: number;
 	dashboardCollection: DashboardModel;
 	dashboardWidgetsArray: DashboardContentModel[] = [];
+	cloneDashboardWidgetsArrayState: DashboardContentModel[] = [];
 	emitterSubscription: Subscription; // need to destroy this subscription later
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
@@ -70,9 +71,9 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openBarChartModal') {
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
+					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
 					setTimeout(() => {
 						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-						// this.widgetParametersForm.get('daterange').disable();
 					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
@@ -84,7 +85,7 @@ export class PublicComponent implements OnInit {
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-		console.log('Component Created', compRef);
+		// console.log('Component Created', compRef);
 	}
 
 	ngOnInit(): void {
@@ -225,7 +226,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	saveDashboardState() {
-		console.log('implementation is needed');
+		console.log('saveDashboardState params', this.cloneDashboardWidgetsArrayState);
+		this.dashboardService.saveDashboardState(this.cloneDashboardWidgetsArrayState).subscribe(result => {
+			console.log('saveDashboardState', result);
+		}, error => {
+			console.error('saveDashboardState', error);
+		});
 	}
 
 	serialize(dashboardwidgets) {
@@ -253,7 +259,6 @@ export class PublicComponent implements OnInit {
 		);
 		this.itemChange();
 	}
-
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
@@ -325,5 +330,27 @@ export class PublicComponent implements OnInit {
 		});
 
 		this.isTreeLoaded = true;
+	}
+
+	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
+		console.log(this.dashboardWidgetsArray);
+		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
+			if(widget.id === widgetId) {
+				let a = {
+					...widget,
+					filters: widgetFormValues.Filters,
+					properties: widgetFormValues.Properties,
+				}
+				return a;
+			} else {
+				return widget;
+			}
+		});
+		console.log('updatedDashboardArray', updatedDashboardArray);
+		console.log('this.dashboardWidgetsArray', this.dashboardWidgetsArray);
+		// this.dashboardWidgetsArray = updatedDashboardArray;
+		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
+		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering
+		// this.dashboardCollection.dashboardwidgets = updatedDashboardArray;
 	}
 }

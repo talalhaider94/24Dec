@@ -80,25 +80,23 @@
                       bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
                   </div>
                 </span>
-                <!-- current showdatefilter is coming false so while developing ! is added will remove later -->
                 <span *ngIf="showDateInFilters">
-                  <div class="form-group" *ngIf="!barChartWidgetParameters.showdatefilter">
+                  <div class="form-group" *ngIf="barChartWidgetParameters.showdatefilter">
                     <label for="date">Seleziona la data</label><!-- Select Date -->
                     <input type="text" formControlName="date" placeholder="Pick Date" class="form-control" bsDatepicker
                       [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                   </div>
                 </span>
-                <div *ngFor="let treeObj of treesArray; let i = index" >
-                  <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
-                  <ejs-treeview [hidden]="!treeObj.loaded"
-                    #permissionsTree 
-                    id="{{treeObj.elementId}}" 
-                    [fields]='treeObj.settings' 
-                    [showCheckBox]='true' 
-                    [checkedNodes]="treeObj.checkedNodes" 
-                    (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
-                  </ejs-treeview>
-                </div>
+                <span *ngIf="barChartWidgetParameters.showorganization">
+                  <div *ngFor="let treeObj of treesArray; let i = index">
+                    <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary"
+                      style="padding-left: 35px; height: 35px;">loading..</span>
+                    <ejs-treeview [hidden]="!treeObj.loaded" #permissionsTree id="{{treeObj.elementId}}"
+                      [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="treeObj.checkedNodes"
+                      (nodeChecked)='syncSelectedNodesArray($event, treeObj)'>
+                    </ejs-treeview>
+                  </div>
+                </span>
               </div>
             </tab>
             <!-- HELP -->

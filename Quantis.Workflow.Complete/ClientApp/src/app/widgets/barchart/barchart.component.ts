@@ -161,7 +161,7 @@ export class BarchartComponent implements OnInit {
 
 	openModal() {
 		console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
-		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues)
+		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
 		this.barChartParent.emit({
 			type: 'openBarChartModal',
 			data: {
