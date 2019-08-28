@@ -49,6 +49,16 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             _dashboardAPI.SaveDashboardState(dtos);
         }
+        [HttpGet("ActivateDashboard")]
+        public void ActivateDashboard(int id)
+        {
+            _dashboardAPI.ActivateDashboard(id);
+        }
+        [HttpGet("DeactivateDashboard")]
+        public void DeactivateDashboard(int id)
+        {
+            _dashboardAPI.DeactivateDashboard(id);
+        }
 
 
     }
