@@ -75,8 +75,13 @@ export class KPIComponent implements OnInit, OnDestroy {
     this.dataFromWidgetsPage = window.history.state;
     console.log('dataFromWidgetsPage: ', this.dataFromWidgetsPage);
 
-    this.monthOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.month : moment().subtract(1, 'months').format('MM');
+    if(this.dataFromWidgetsPage.data.month == 'all'){
+      this.monthOption = 'all';
+    }else{
+      this.monthOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.month : moment().subtract(1, 'months').format('MM');
+    }
     this.yearOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.year : moment().format('YY');
+    console.log('this.monthOption: ', this.monthOption,', this.yearOption: ',this.yearOption);
     this.statoKPIOption = '';
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],

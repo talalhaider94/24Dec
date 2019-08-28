@@ -153,6 +153,7 @@ export class BarchartComponent implements OnInit {
 	// events
 	public chartClicked(e: any): void {
 		console.log("Bar Chart Clicked ->",e);
+		this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
 	}
 
 	public chartHovered(e: any): void {

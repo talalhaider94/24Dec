@@ -11,6 +11,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -35,6 +36,7 @@ import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-co
     CollapseModule.forRoot(),
     CommonModule,
     TreeViewModule,
+    PerfectScrollbarModule,
     GridsterModule,
     DynamicModule.withComponents([
       LineChartComponent,
