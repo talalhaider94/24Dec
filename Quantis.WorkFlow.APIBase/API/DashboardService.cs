@@ -41,6 +41,32 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public void ActivateDashboard(int id)
+        {
+            try
+            {
+                var dash = _dbcontext.DB_Dashboards.Single(o => o.Id == id);
+                dash.IsActive = true;
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void DeactivateDashboard(int id)
+        {
+            try
+            {
+                var dash = _dbcontext.DB_Dashboards.Single(o => o.Id == id);
+                dash.IsActive = false;
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public int AddUpdateDasboard(DashboardDetailDTO dto)
         {
             try
