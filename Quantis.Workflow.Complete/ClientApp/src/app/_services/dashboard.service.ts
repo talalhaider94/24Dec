@@ -114,6 +114,8 @@ export class DashboardService {
 				Properties: widget.properties
 			}
 		})
+		
+		debugger
 		return this.http.post(`${environment.API_URL}/dashbaord/SaveDashboardState`, params);
 	}
 }

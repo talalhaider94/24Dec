@@ -227,11 +227,11 @@ export class PublicComponent implements OnInit {
 
 	saveDashboardState() {
 		console.log('saveDashboardState params', this.cloneDashboardWidgetsArrayState);
-		// this.dashboardService.saveDashboardState(this.cloneDashboardWidgetsArrayState).subscribe(result => {
-		// 	console.log('saveDashboardState', result);
-		// }, error => {
-		// 	console.error('saveDashboardState', error);
-		// });
+		this.dashboardService.saveDashboardState(this.cloneDashboardWidgetsArrayState).subscribe(result => {
+			console.log('saveDashboardState', result);
+		}, error => {
+			console.error('saveDashboardState', error);
+		});
 	}
 
 	serialize(dashboardwidgets) {
