@@ -88,6 +88,17 @@
                       [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                   </div>
                 </span>
+                <div *ngFor="let treeObj of treesArray; let i = index" >
+                  <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
+                  <ejs-treeview [hidden]="!treeObj.loaded"
+                    #permissionsTree 
+                    id="{{treeObj.elementId}}" 
+                    [fields]='treeObj.settings' 
+                    [showCheckBox]='true' 
+                    [checkedNodes]="treeObj.checkedNodes" 
+                    (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
+                  </ejs-treeview>
+                </div>
               </div>
             </tab>
             <!-- HELP -->

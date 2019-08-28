@@ -152,7 +152,7 @@ export class BarchartComponent implements OnInit {
 
 	// events
 	public chartClicked(e: any): void {
-		console.log("Chart Clicked ->",e);
+		console.log("Bar Chart Clicked ->",e);
 	}
 
 	public chartHovered(e: any): void {

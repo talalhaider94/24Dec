@@ -10,6 +10,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -33,6 +34,7 @@ import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-co
     ButtonsModule.forRoot(),
     CollapseModule.forRoot(),
     CommonModule,
+    TreeViewModule,
     GridsterModule,
     DynamicModule.withComponents([
       LineChartComponent,
