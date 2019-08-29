@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
-
+import Swal from 'sweetalert2';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, retryWhen } from 'rxjs/operators';
 
@@ -349,6 +349,17 @@ export class ProveVarieComponent implements OnInit {
       this.cutOff = data[0].cutoff;
       this.day_cutoff = data[0].day_cutoff;
       this.modifyDate = data[0].modify_date;
+      const lastSubmittedDate = data[0].latest_input_date;
+      if(moment(lastSubmittedDate).isSame(moment(), 'month')) {
+        Swal.fire({
+          type: 'info',
+          html: `E' già stato inserito un valore nel periodo di rilevazione corrente. Sei sicuro di voler proseguire?`,
+          showCloseButton: true,
+          focusConfirm: false,
+          confirmButtonText:
+            'Chiudi',
+        })
+      }
       if (data[0].cutoff) {
         let currentDate = moment().format();
         let isDateBefore = moment(data[0].day_cutoff).isBefore(currentDate);
