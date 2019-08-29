@@ -42,8 +42,6 @@ export class BarchartComponent implements OnInit {
 		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
-			// this.getWidgetParameters(this.url);
-			// this.getWidgetIndex(this.url);
 			this.getChartParametersAndData(this.url);
 		}
 		// coming from dashboard component

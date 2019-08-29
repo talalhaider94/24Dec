@@ -342,7 +342,6 @@ export class PublicComponent implements OnInit {
 				elementId: `permissions_tree_${itm.id}`,
 				loaded: true
 			});
-			console.log('this.treesArray ->',this.treesArray);
 		});
 
 		this.isTreeLoaded = true;

@@ -100,9 +100,7 @@ export class DashboardService {
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
 
-	// GetOrganizationHierarcy
 	GetOrganizationHierarcy(): Observable<any> {
-		// return this.http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
 		return this.http.get(`${environment.API_URL}/globalfilter/GetOrganizationHierarcy?globalFilterId=0`);
 	}
 
