@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { WorkFlowService, AuthService } from '../../_services';
 import { first, delay, mergeMap, retryWhen, concatMap, map } from 'rxjs/operators';
 import { Subject, Observable, of, throwError, forkJoin, from } from 'rxjs';
@@ -63,7 +64,9 @@ export class KPIComponent implements OnInit, OnDestroy {
     private _FileSaverService: FileSaverService,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     $this = this;
   }
@@ -72,16 +75,13 @@ export class KPIComponent implements OnInit, OnDestroy {
   get rejectValues() { return this.rejectForm.controls; }
 
   ngOnInit() {
-    this.dataFromWidgetsPage = window.history.state;
+    //this.dataFromWidgetsPage = window.history.state;
+    this.dataFromWidgetsPage = this.route.snapshot.queryParamMap['params'];
+    this.location.replaceState('/workflow/verifica'); // remove query params from url after getting its value
     console.log('dataFromWidgetsPage: ', this.dataFromWidgetsPage);
 
-    if(this.dataFromWidgetsPage.data.month == 'all'){
-      this.monthOption = 'all';
-    }else{
-      this.monthOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.month : moment().subtract(1, 'months').format('MM');
-    }
-    this.yearOption = this.dataFromWidgetsPage.data ? this.dataFromWidgetsPage.data.year : moment().format('YY');
-    console.log('this.monthOption: ', this.monthOption,', this.yearOption: ',this.yearOption);
+    this.monthOption = this.dataFromWidgetsPage.m || moment().subtract(1, 'months').format('MM');
+    this.yearOption = this.dataFromWidgetsPage.y || moment().format('YY');
     this.statoKPIOption = '';
     this.verificaCheckBoxForm = this.formBuilder.group({
       selectTicket: [''],
