@@ -31,6 +31,7 @@ export class DatiGrezziComponent implements OnInit {
   public filter: string;
   public comparator: any;
   public p: any;
+  public periodFilter: number;
 
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
@@ -58,6 +59,14 @@ export class DatiGrezziComponent implements OnInit {
   resources: any = {};
   id_kpi_temp = '';
   loadingModalDati:boolean=false;
+
+  modalData = {
+    campo1: 0,
+    campo2: '',
+    campo3: '',
+    campo4: ''
+  };
+
   fitroDataById: any = [
     {
       event_type_id: '   ',
@@ -146,6 +155,7 @@ export class DatiGrezziComponent implements OnInit {
         }
       }
     };
+    this.periodFilter = 0;
     this.monthVar = moment().format('MM');
     this.yearVar = moment().format('YYYY');
     //this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
@@ -304,6 +314,7 @@ clear(){
 
 
   getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.periodFilter = 1;
     console.log('id_kpi =>',id_kpi);
     this.clear();
     
@@ -404,6 +415,14 @@ const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
 
 }
 
+populateEditModal(row){
+  var value:any;
+  console.log('Campo->row.data: ',row.data);
+  Object.entries(row.data).forEach(([key, value]) => {
+    console.log(key,value);
+  // var campo1 = value;
+  });
+}
 
 
 }
