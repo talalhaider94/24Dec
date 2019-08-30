@@ -63,6 +63,7 @@
             <!-- FILTERS -->
             <tab heading="FILTRI">
               <div formGroupName="Filters">
+                <label for="">Contraente e Contratto</label>
                 <perfect-scrollbar style="max-height: 260px;">
                 <div *ngFor="let treeObj of treesArray; let i = index" >
                   <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
@@ -118,7 +119,7 @@
             </tab>
             <!-- NOTE -->
             <tab heading="NOTA">
-              <textarea placeholder="Enter Note" class="form-control" formControlName="Note">
+              <textarea placeholder="Enter Note" class="form-control" formControlName="Note" readonly>
 
                 </textarea>
             </tab>

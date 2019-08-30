@@ -112,7 +112,9 @@ export class DoughnutChartComponent implements OnInit {
 	// events
 	public chartClicked(e: any): void {
 		console.log('Chart Clicked ->',e);
-		this.router.navigate(['/workflow/verifica'], {state: {data: {month:'09', year:'19', key: 'donut_chart'}}});
+		//this.router.navigate(['/workflow/verifica'], {state: {data: {month:'07', year:'19', key: 'donut_chart'}}});
+		let params = {month:'09', year:'19', key: 'donut_chart'};
+		window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
 	}
 
 	public chartHovered(e: any): void {
