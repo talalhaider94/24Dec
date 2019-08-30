@@ -100,22 +100,11 @@ export class DashboardService {
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
 
-	// GetOrganizationHierarcy
 	GetOrganizationHierarcy(): Observable<any> {
-		// return this.http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
 		return this.http.get(`${environment.API_URL}/globalfilter/GetOrganizationHierarcy?globalFilterId=0`);
 	}
 
-	saveDashboardState(dashboardWidgetsState): Observable<any> {
-		let params = dashboardWidgetsState.map(widget => {
-			return {
-				id: widget.id,
-				Filters: widget.filters,
-				Properties: widget.properties
-			}
-		})
-		
-		debugger
-		return this.http.post(`${environment.API_URL}/dashbaord/SaveDashboardState`, params);
+	saveDashboardState(dashboardWidgetsState): Observable<any> {	
+		return this.http.post(`${environment.API_URL}/dashboard/SaveDashboardState`, dashboardWidgetsState);
 	}
 }

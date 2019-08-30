@@ -42,8 +42,6 @@ export class BarchartComponent implements OnInit {
 		console.log('BarchartComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.url) {
 			this.emitter.loadingStatus(true);
-			// this.getWidgetParameters(this.url);
-			// this.getWidgetIndex(this.url);
 			this.getChartParametersAndData(this.url);
 		}
 		// coming from dashboard component
@@ -178,13 +176,15 @@ export class BarchartComponent implements OnInit {
 	}
 	// dashboardComponentData is result of data coming from 
 	// posting data to parameters widget
-
-	/// To be used ////
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
 		if (dashboardComponentData) {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
+			let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+			setTimeout(() => {
+				this.barChartType = charttype;
+			});
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load

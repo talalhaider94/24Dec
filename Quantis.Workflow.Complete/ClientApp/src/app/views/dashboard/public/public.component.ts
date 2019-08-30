@@ -26,7 +26,7 @@ export class PublicComponent implements OnInit {
 	dashboardId: number;
 	dashboardCollection: DashboardModel;
 	dashboardWidgetsArray: DashboardContentModel[] = [];
-	cloneDashboardWidgetsArrayState: DashboardContentModel[] = [];
+	cloneDashboardWidgetsArrayState: any = [];
 	emitterSubscription: Subscription; // need to destroy this subscription later
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
@@ -226,10 +226,26 @@ export class PublicComponent implements OnInit {
 	}
 
 	saveDashboardState() {
-		console.log('saveDashboardState params', this.cloneDashboardWidgetsArrayState);
-		this.dashboardService.saveDashboardState(this.cloneDashboardWidgetsArrayState).subscribe(result => {
+		this.emitter.loadingStatus(true);
+		let params = this.cloneDashboardWidgetsArrayState.map(widget => {
+			if(Object.keys(widget.filters).length > 0 ) {
+				if(widget.filters.hasOwnProperty('daterange')) {
+					widget.filters.daterange = this.dateTime.getStringDateRange(widget.filters.daterange);
+				}
+			}
+			return {
+				id: widget.id,
+				Filters: widget.filters,
+				Properties: widget.properties
+			}
+		});
+		this.dashboardService.saveDashboardState(params).subscribe(result => {
+			this.emitter.loadingStatus(false);
+			this.toastr.success('Dashboard state saved successfully');
 			console.log('saveDashboardState', result);
 		}, error => {
+			this.emitter.loadingStatus(false);
+			this.toastr.error('Error while saving dashboard state');
 			console.error('saveDashboardState', error);
 		});
 	}

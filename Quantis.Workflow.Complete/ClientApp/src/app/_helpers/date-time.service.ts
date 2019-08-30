@@ -60,4 +60,11 @@ export class DateTimeService {
     return { startDate, endDate }
   }
 
+  getStringDateRange(dateRange) {
+    let startDate = moment(dateRange[0]).format('MM/YYYY');
+    let endDate = moment(dateRange[1]).format('MM/YYYY');
+    let stringDateRange = `${startDate}-${endDate}`;
+    return stringDateRange;
+  }
+
 }

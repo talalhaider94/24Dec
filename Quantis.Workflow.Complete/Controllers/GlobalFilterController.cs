@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.Workflow.Complete.Controllers
 {
@@ -21,11 +24,12 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             _globalfilterService = globalfilterService;
         }
-
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetOrganizationHierarcy")]
         public List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId)
         {
-            return _globalfilterService.GetOrganizationHierarcy(globalFilterId);
+            var usr = HttpContext.User as AuthUser;
+            return _globalfilterService.GetOrganizationHierarcy(globalFilterId, usr.UserId);
         }
     }
 }
