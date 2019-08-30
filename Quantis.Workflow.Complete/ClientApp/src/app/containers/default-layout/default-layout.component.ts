@@ -6,8 +6,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 import { ObservableLike } from 'rxjs';
-import { DashboardService, EmitterService } from '../../_services';
-import { WidgetModel, DashboardModel } from "../../_models";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,15 +22,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public currentVerion = '0.0.1';
   public returnedNode:any;
   currentUser: any;
-  loading: boolean = true;
-  dashboardCollection: DashboardModel[];
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,
     private router: Router,
-    private dashboardService: DashboardService,
-    private emitter: EmitterService,
-    @Inject(DOCUMENT) _document?: any
+    @Inject(DOCUMENT) _document?: any,
     ) {
       this.currentUser = this.authService.getUser(); 
     
@@ -54,34 +49,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.router.events.pipe(
       filter((event:any) => event instanceof NavigationEnd)
     ).subscribe(x => {
+      console.log('router');
+      console.log(x);
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
-      // Danial: was getting error so commented. check later
-      // this.currentVerion = this.returnedNode.version || '0.0.1';
-      this.currentVerion = '0.0.1';
+      this.currentVerion = this.returnedNode.version || '0.0.1';
     });
-    
-    // We make get request to get all dashboards from our REST API
-		this.dashboardService.getDashboards().subscribe(dashboards => {
-      this.emitter.loadingStatus(false);
-      this.dashboardCollection = dashboards;
-      console.log('getDashboards', dashboards);
-    }, error => {
-      console.error('getDashboards', error);
-      this.toastr.error('Error while loading dashboards');
-      this.emitter.loadingStatus(false);
-    });
-    this.emitter.getData().subscribe(data => {
-      if(data.type === 'loading') {
-        if(this.loading !== data.loading) {
-          setTimeout(() => {
-            this.loading = data.loading;
-          })
-          
-        }
-      }
-    })
-    
   }
 
   ngOnDestroy(): void {
@@ -94,14 +67,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.toastr.success('Success', 'Logout eseguito con successo.');
       this.router.navigate(['/login']);
     });
-  }
-
-  dashboardNavigation(id) {
-    this.router.navigate(['/dashboard/dashboard', id]);
-  }
-  
-  dashboardList() {
-    this.router.navigate(['/dashboard/list']);
   }
 
   filterMenuByPermission(navItems, permissions, permittedMenu) {

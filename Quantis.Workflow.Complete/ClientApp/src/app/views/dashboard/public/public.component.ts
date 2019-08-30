@@ -314,7 +314,7 @@ export class PublicComponent implements OnInit {
 	  treeRef.loaded = true;
 	  //this.selectedData.checked = this.permissionsTree.checkedNodes;
 	}
-
+	checkedNodes:string[];
 	createTrees(treesData){
 		treesData.forEach((itm:any)=>{
 			let settings = { dataSource: [itm], id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
@@ -326,9 +326,9 @@ export class PublicComponent implements OnInit {
 				elementId: `permissions_tree_${itm.id}`,
 				loaded: true
 			});
-			console.log('this.treesArray ->',this.treesArray);
 		});
-
+		console.log('this.treesArray ->',this.treesArray);
+		//console.log('this.checkedNodes ->',this.checkedNodes);
 		this.isTreeLoaded = true;
 	}
 

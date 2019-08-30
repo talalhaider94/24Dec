@@ -287,8 +287,10 @@ export class DashboardComponent implements OnInit {
 			case "distribution_by_verifica": {
 				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 6,
+					cols: 4,
+					rows: 5,
+					minItemCols: 3,
+					minItemRows: 3,
 					x: 0,
 					y: 0,
 					component: DoughnutChartComponent,
@@ -306,7 +308,9 @@ export class DashboardComponent implements OnInit {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
 					cols: 4,
-					rows:6,
+					minItemCols: 3,
+					minItemRows: 3,
+					rows:5,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
@@ -324,7 +328,7 @@ export class DashboardComponent implements OnInit {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
 				return this.dashboardWidgetsArray.push({
 					cols: 4,
-					rows:6,
+					rows:4,
 					x: 0,
 					y: 0,
 					component: KpiCountSummaryComponent,

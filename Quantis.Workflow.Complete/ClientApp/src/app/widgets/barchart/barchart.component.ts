@@ -145,7 +145,7 @@ export class BarchartComponent implements OnInit {
 	public barChartLabels: Array<any> = [];
 	public barChartOptions: any = {
 		responsive: true,
-		legend: { position: 'bottom' }
+		legend: { position: 'bottom' },
 	};
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'bar'; 

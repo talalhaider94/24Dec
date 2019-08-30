@@ -93,7 +93,7 @@
       <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
     </h5>
      
-    <table class="table table-bordered" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
        
 
       <thead style="background: #20a8d8; color:white">
@@ -102,27 +102,27 @@
         <th style="text-align:center">Contratto</th>
         <th style="text-align:center">ID KPI</th>
         <th style="text-align:center">Titolo</th>
-        <th style="text-align:center">Periodo</th>
+        <th style="text-align:center">Frequenza</th>
         <th style="text-align:center">Valore</th>
+        <th style="text-align:center">Periodo</th>
         <th style="text-align:center">Ticket ID</th>
         <th style="text-align:center">Chiusura Ticket</th>
         
-        <th style="text-align:center">Frequenza</th>
         <th style="text-align:center">Azione</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of ArchivedKpiBodyData; index as i">
-          <td  style="text-align:center">{{row.customer_name}}</td>
-          <td  style="text-align:center">{{row.contract_name}}</td>
+        <td  style="text-align:center">{{row.customer_name}}</td>
+        <td  style="text-align:center">{{row.contract_name}}</td>
         <td  style="text-align:center">{{row.id_kpi}}</td>
-        <td  style="text-align:center">{{row.name_kpi}}</td>
-        <td  style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
+        <td  style="text-align:center">{{row.kpi_name_bsi}}</td>
+        <td  style="text-align:center">{{row.tracking_period}}</td>
         <td  style="text-align:center">{{row.value_kpi}} {{row.symbol}}</td>
+        <td  style="text-align:center">{{row.interval_kpi | amDateFormat: 'MM/YYYY' }}</td>
         <td  style="text-align:center">{{row.ticket_id}}</td>
         <td  style="text-align:center">{{row.close_timestamp_ticket | amDateFormat: 'DD/MM/YYYY HH:mm:ss' }}</td>
         
-        <td  style="text-align:center">{{row.tracking_period}}</td>
         <td align="center"><button class="btn btn-primary btn-esempio" data-toggle="modal" (click)="populateModalData(row)"
                                    data-target="#archivedKpiModal" title="VEDI"><i class="fa fa-eye"></i>
                                   </button>
@@ -505,7 +505,7 @@
                  <th style="text-align:center" class="hiddenRow" ><div class="accordian-body collapse"  style="text-align:center" id="demo1">event state id</div></th>-->
    
                  
-                 
+                   
                </tr>
               
                </thead>
