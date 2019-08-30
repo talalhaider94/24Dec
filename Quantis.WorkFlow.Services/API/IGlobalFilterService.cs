@@ -12,6 +12,6 @@ namespace Quantis.WorkFlow.Services.API
         BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props);
         WidgetwithAggOptionDTO MapAggOptionWidget(WidgetParametersDTO props);
         string GetDefualtDateRange();
-        List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId);
+        List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId, int userId);
     }
 }
