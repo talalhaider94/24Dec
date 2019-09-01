@@ -52,9 +52,6 @@ export class DashboardComponent implements OnInit {
 
 	outputs = {
 		barChartParent: childData => {
-			// if (childData.type === 'barChartParams') {
-			// 	this.barChartWidgetParameters = childData.data;
-			// }
 			if (childData.type === 'openBarChartModal') {
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
@@ -86,11 +83,30 @@ export class DashboardComponent implements OnInit {
 				console.log('updatedDashboardWidgetsArray', updatedDashboardWidgetsArray);
 				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
 			}
+		},
+		kpiCountSummaryParent: childData => {
+			console.log('kpiCountSummaryParent childData', childData);
+			if (childData.type === 'changeKpiCountSummaryWidgetName') {
+				let kpiCountSummaryChartdata = childData.data.kpiCountSummaryChart;
+				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
+				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
+					if(widget.id === kpiCountSummaryChartdata.id && widget.widgetid === kpiCountSummaryChartdata.widgetid){
+						let updatename = {
+							...widget,
+							widgetname: kpiCountSummaryChartdata.widgetname,
+						}
+						return updatename;
+					} else {
+						return widget;
+					}
+				});
+				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
+			}
 		}
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-		console.log('Component Created', compRef);
+		// console.log('Component Created', compRef);
 	}
 
 	ngOnInit(): void {

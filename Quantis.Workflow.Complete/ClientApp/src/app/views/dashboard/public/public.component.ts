@@ -56,6 +56,8 @@ export class PublicComponent implements OnInit {
 	showDateRangeInFilters: boolean = false;
 	showDateInFilters: boolean = false;
 
+	isBarChartComponent: boolean = false;
+	isKpiCountSummaryComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -69,7 +71,11 @@ export class PublicComponent implements OnInit {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
+				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
+				// setting the isBarChartComponent value to true on openning modal so that their
+				// state can be saved in their own instance when closing
+				this.isBarChartComponent = childData.data.isBarChartComponent;
 				if (this.barChartWidgetParameters) {
 					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
 					setTimeout(() => {
@@ -78,8 +84,26 @@ export class PublicComponent implements OnInit {
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				this.widgetParametersModal.show();
-			} else if (childData.type === 'closeModal') {
-				this.widgetParametersModal.hide();
+			} else {
+				console.log('WHY HERE');
+			}
+		},
+		kpiCountSummaryParent: childData => {
+			console.log('kpiCountSummaryParent childData', childData);
+			if (childData.type === 'openKpiSummaryCountModal') {
+				// this.barChartWidgetParameters should be a generic name
+				this.barChartWidgetParameters = childData.data.kpiCountSummaryWidgetParameters;
+				this.isKpiCountSummaryComponent = childData.data.isKpiCountSummaryComponent;
+				if (this.barChartWidgetParameters) {
+					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+					setTimeout(() => {
+						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+					});
+				}
+				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
+				this.widgetParametersModal.show();
+			} else {
+				console.log('WHY HERE');
 			}
 		}
 	};
@@ -148,10 +172,10 @@ export class PublicComponent implements OnInit {
 
 		this.widgetParametersForm.get('Filters').get('dateTypes').valueChanges.subscribe((value) => {
 			console.log('Date Type Filter', value);
-			if(value === 'Custom') {
+			if (value === 'Custom') {
 				this.showDateRangeInFilters = true;
 				this.showDateInFilters = true;
-			} else{
+			} else {
 				this.showDateRangeInFilters = false;
 				this.showDateInFilters = false;
 			}
@@ -159,12 +183,13 @@ export class PublicComponent implements OnInit {
 
 		////Tree View////
 		console.log('--- Tree View ---');
-		this.dashboardService.GetOrganizationHierarcy().subscribe(data=>{
-		console.log('GetOrganizationHierarcy ==> ', data);
-		//this.treeFields.dataSource = data;
-		this.createTrees(data);
-		}, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
+		this.dashboardService.GetOrganizationHierarcy().subscribe(data => {
+			console.log('GetOrganizationHierarcy ==> ', data);
+			//this.treeFields.dataSource = data;
+			this.createTrees(data);
+		}, err => { this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info') });
 
+		this.closeModalSubscription();
 	}
 
 	getData(dashboardId: number) {
@@ -228,8 +253,8 @@ export class PublicComponent implements OnInit {
 	saveDashboardState() {
 		this.emitter.loadingStatus(true);
 		let params = this.cloneDashboardWidgetsArrayState.map(widget => {
-			if(Object.keys(widget.filters).length > 0 ) {
-				if(widget.filters.hasOwnProperty('daterange')) {
+			if (Object.keys(widget.filters).length > 0) {
+				if (widget.filters.hasOwnProperty('daterange')) {
 					widget.filters.daterange = this.dateTime.getStringDateRange(widget.filters.daterange);
 				}
 			}
@@ -281,32 +306,53 @@ export class PublicComponent implements OnInit {
 
 		let startDate;
 		let endDate;
-		if(formValues.Filters.dateTypes === 'Custom') {
+		if (formValues.Filters.dateTypes === 'Custom') {
 			startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
 		} else {
 			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
-		}		
+		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		// why it is not copying without reference :/ idiot
-		let copyFormValues =  Object.assign({}, formValues);
+		let copyFormValues = Object.assign({}, formValues);
 		delete formValues.Filters.dateTypes;
 		delete formValues.Filters.date;
+		delete formValues.Properties.aggregationoption;
+		delete formValues.Properties.charttype;
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
+		debugger
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
-			this.emitter.sendNext({
-				type: 'barChart',
-				data: {
-					result,
-					barChartWidgetParameters: this.barChartWidgetParameters,
-					barChartWidgetParameterValues: copyFormValues
-				}
-			})
+			debugger
+			// sending data to bar chart component only.
+			if(this.isBarChartComponent) {
+				this.emitter.sendNext({
+					type: 'barChart',
+					data: {
+						result,
+						barChartWidgetParameters: this.barChartWidgetParameters,
+						barChartWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isBarChartComponent = false;
+			}
+			if(this.isKpiCountSummaryComponent) {
+				debugger
+				this.emitter.sendNext({
+					type: 'kpiCountSummaryChart',
+					data: {
+						result,
+						kpiCountSummaryWidgetParameters: this.barChartWidgetParameters,
+						kpiCountSummaryWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiCountSummaryComponent = false;
+			}
 			this.emitter.loadingStatus(false);
 		}, error => {
+			debugger
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 		})
@@ -315,24 +361,24 @@ export class PublicComponent implements OnInit {
 		// debugger
 	}
 
-	addLoaderToTrees(add = true){
+	addLoaderToTrees(add = true) {
 		let load = false;
-		if(add === false){
-		  load = true;
+		if (add === false) {
+			load = true;
 		}
-		this.treesArray.forEach((itm:any) => {
-		  itm.loaded = load;
+		this.treesArray.forEach((itm: any) => {
+			itm.loaded = load;
 		});
 	}
 
-	syncSelectedNodesArray(event, treeRef){
-	  console.log('cheked ');//, treeRef);
-	  treeRef.loaded = true;
-	  //this.selectedData.checked = this.permissionsTree.checkedNodes;
+	syncSelectedNodesArray(event, treeRef) {
+		console.log('cheked ');//, treeRef);
+		treeRef.loaded = true;
+		//this.selectedData.checked = this.permissionsTree.checkedNodes;
 	}
-	checkedNodes:string[];
-	createTrees(treesData){
-		treesData.forEach((itm:any)=>{
+	checkedNodes: string[];
+	createTrees(treesData) {
+		treesData.forEach((itm: any) => {
 			let settings = { dataSource: [itm], id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
 			this.treesArray.push({
 				name: itm.name,
@@ -343,7 +389,7 @@ export class PublicComponent implements OnInit {
 				loaded: true
 			});
 		});
-		console.log('this.treesArray ->',this.treesArray);
+		console.log('this.treesArray ->', this.treesArray);
 		//console.log('this.checkedNodes ->',this.checkedNodes);
 		this.isTreeLoaded = true;
 	}
@@ -351,7 +397,7 @@ export class PublicComponent implements OnInit {
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
 		console.log(this.dashboardWidgetsArray);
 		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
-			if(widget.id === widgetId) {
+			if (widget.id === widgetId) {
 				let a = {
 					...widget,
 					filters: widgetFormValues.Filters,
@@ -368,5 +414,16 @@ export class PublicComponent implements OnInit {
 		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
 		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering
 		// this.dashboardCollection.dashboardwidgets = updatedDashboardArray;
+	}
+
+	closeModalSubscription() {
+		this.emitter.getData().subscribe(data => {
+			if (data.type === 'closeModal') {
+				debugger
+				this.widgetParametersModal.hide();
+				this.isBarChartComponent = false;
+				this.isKpiCountSummaryComponent = false;
+			}
+		});
 	}
 }

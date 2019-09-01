@@ -57,7 +57,7 @@ export class BarchartComponent implements OnInit {
 					this.updateChart(data.result.body, data, null);
 				}
 			}
-		})
+		});
 	}
 	// invokes on component initialization
 	getChartParametersAndData(url) {
@@ -167,12 +167,13 @@ export class BarchartComponent implements OnInit {
 			type: 'openBarChartModal',
 			data: {
 				barChartWidgetParameters: this.barChartWidgetParameters,
-				setWidgetFormValues: this.setWidgetFormValues
+				setWidgetFormValues: this.setWidgetFormValues,
+				isBarChartComponent: true
 			}
 		});
 	}
 	closeModal() {
-		this.barChartParent.emit({ type: 'closeModal' });
+		this.emitter.sendNext({ type: 'closeModal' });
 	}
 	// dashboardComponentData is result of data coming from 
 	// posting data to parameters widget
