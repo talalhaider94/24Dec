@@ -61,11 +61,13 @@ export class DatiGrezziComponent implements OnInit {
   loadingModalDati:boolean=false;
 
   modalData = {
-    campo1: 0,
+    campo1: '',
     campo2: '',
     campo3: '',
     campo4: ''
   };
+
+  campoData: any = []
 
   fitroDataById: any = [
     {
@@ -302,12 +304,14 @@ export class DatiGrezziComponent implements OnInit {
 clear(){
   this.filter = '';
   this.fitroDataById=[];
+  this.campoData=[];
   this.p=1;
 
   }
 
 
   setId(id){
+    this.periodFilter = 0;
     this.idKpi = id;
     console.log('this.idKpi =>',this.idKpi);
   }
@@ -388,7 +392,7 @@ clear(){
          this.loadingModalDati = false;
       });
   }
-
+  
   getCountCampiData(){
     let maxLength = 0;
     this.fitroDataById.forEach( f => {
@@ -402,7 +406,6 @@ clear(){
       this.countCampiData.push(i);
     }
   }
-  
 
   fireEvent()
 {
@@ -416,12 +419,16 @@ const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
 }
 
 populateEditModal(row){
-  var value:any;
+  var count:number = 0;
+
   console.log('Campo->row.data: ',row.data);
+
   Object.entries(row.data).forEach(([key, value]) => {
     console.log(key,value);
-  // var campo1 = value;
+    this.campoData[count] = value;
+    count++;
   });
+  console.log('this.campoData: ',this.campoData);
 }
 
 

@@ -150,40 +150,6 @@
      </div>
    </div>
 
-  <div id="editModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-   aria-hidden="true">
-   <div class="modal-dialog modal-lg">
-     <div class="modal-content"> 
-       <div class="modal-header">
-         <h5 class="modal-title" id="approveModalLabel">Modifica Dati</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-         <table id="classTable" class="table table-bordered">
-           <thead style="background: #E6E6E6">
-           </thead>
-           <tbody>
-             <!-- <tr><th>Campo 1</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.campo1"></td></tr>
-             <tr><th>Campo 2</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.campo2"></td></tr>
-             <tr><th>Campo 3</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.campo3"></td></tr>
-             <tr><th>Campo 4</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.campo4"></td></tr> -->
-             <tr><th>Campo 1</th><td colspan="2"><input type="text" class="form-control"></td></tr>
-             <tr><th>Campo 2</th><td colspan="2"><input type="text" class="form-control"></td></tr>
-             <tr><th>Campo 3</th><td colspan="2"><input type="number" class="form-control"></td></tr>
-             <tr><th>Campo 4</th><td colspan="2"><input type="number" class="form-control"></td></tr>
-            
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button (click)="updateDati()" class="btn btn-success">Aggiorna</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
    <div id="daModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
       <div class="modal-dialog modal-xl">
@@ -234,6 +200,7 @@
                 <table id="classTable" class="table table-bordered"  #table>
                   <thead style="background: #20a8d8; color:white">  
                   <tr>
+                      <th style="text-align:center"></th>
                      <th style="text-align:center">create date</th>
                      <th style="text-align:center">modify date</th>
                      <th style="text-align:center">raw data id</th>
@@ -254,6 +221,7 @@
               </tr>
             <tr *ngFor="let rec of fitroDataById | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }; index as i">
     
+              <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td>
               <td style="text-align:center">{{rec.create_date }}</td>
               <td style="text-align:center">{{rec.modify_date }}</td>
               <td style="text-align:center">{{rec.raw_data_id}}</td>
@@ -276,4 +244,34 @@
              </div>
            </div>
          </div>
+    </div>
+  
+    
+  <div id="editModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"> 
+      <div class="modal-header">
+        <h5 class="modal-title" id="approveModalLabel">Modifica Dati</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table id="classTable" class="table table-bordered">
+          <thead style="background: #E6E6E6"></thead>
+          <tbody>
+             <tr *ngFor="let row of campoData; index as i">
+                 <th style="text-align:center" >campo {{i+1}}</th>
+                 <td colspan="2"><input type="text" class="form-control" [(ngModel)]="row"></td>
+             </tr>
+           </tbody>
+         </table>
        </div>
+       <div class="modal-footer">
+         <button (click)="updateDati()" class="btn btn-success">Aggiorna</button>
+         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+       </div>
+     </div>
+   </div>
+ </div>
