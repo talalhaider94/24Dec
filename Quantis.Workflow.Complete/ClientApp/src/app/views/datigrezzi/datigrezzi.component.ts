@@ -423,6 +423,8 @@ populateEditModal(row){
   // var campo1 = value;
   });
 }
-
+  updateDati() {
+    //for building
+  }
 
 }
