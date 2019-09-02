@@ -102,6 +102,25 @@ export class DashboardComponent implements OnInit {
 				});
 				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
 			}
+		},
+		verificaDoughnutParent: childData => {
+			console.log('verificaDoughnutParent childData', childData);
+			if (childData.type === 'changeVerificaDoughnutChartWidgetName') {
+				let verificaDoughnutChartdata = childData.data.verificaDoughnutChart;
+				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
+				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
+					if(widget.id === verificaDoughnutChartdata.id && widget.widgetid === verificaDoughnutChartdata.widgetid){
+						let updatename = {
+							...widget,
+							widgetname: verificaDoughnutChartdata.widgetname,
+						}
+						return updatename;
+					} else {
+						return widget;
+					}
+				});
+				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
+			}
 		}
 	};
 

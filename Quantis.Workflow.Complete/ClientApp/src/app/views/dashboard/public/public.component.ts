@@ -58,6 +58,7 @@ export class PublicComponent implements OnInit {
 
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
+	isverificaDoughnutComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -101,6 +102,24 @@ export class PublicComponent implements OnInit {
 					});
 				}
 				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
+				this.widgetParametersModal.show();
+			} else {
+				console.log('WHY HERE');
+			}
+		},
+		verificaDoughnutParent: childData => {
+			console.log('verificaDoughnutParent childData', childData);
+			if (childData.type === 'openVerificaDoughnutChartModal') {
+				// this.barChartWidgetParameters should be a generic name
+				this.barChartWidgetParameters = childData.data.verificaDoughnutChartWidgetParameters;
+				this.isverificaDoughnutComponent = childData.data.isverificaDoughnutComponent;
+				if (this.barChartWidgetParameters) {
+					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+					setTimeout(() => {
+						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+					});
+				}
+				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
 				this.widgetParametersModal.show();
 			} else {
 				console.log('WHY HERE');
@@ -323,9 +342,7 @@ export class PublicComponent implements OnInit {
 		delete formValues.Properties.charttype;
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
-		debugger
 		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
-			debugger
 			// sending data to bar chart component only.
 			if(this.isBarChartComponent) {
 				this.emitter.sendNext({
@@ -339,7 +356,6 @@ export class PublicComponent implements OnInit {
 				this.isBarChartComponent = false;
 			}
 			if(this.isKpiCountSummaryComponent) {
-				debugger
 				this.emitter.sendNext({
 					type: 'kpiCountSummaryChart',
 					data: {
@@ -352,13 +368,11 @@ export class PublicComponent implements OnInit {
 			}
 			this.emitter.loadingStatus(false);
 		}, error => {
-			debugger
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 		})
 	}
 	customDateTypes(event) {
-		// debugger
 	}
 
 	addLoaderToTrees(add = true) {
@@ -419,10 +433,10 @@ export class PublicComponent implements OnInit {
 	closeModalSubscription() {
 		this.emitter.getData().subscribe(data => {
 			if (data.type === 'closeModal') {
-				debugger
 				this.widgetParametersModal.hide();
 				this.isBarChartComponent = false;
 				this.isKpiCountSummaryComponent = false;
+				this.isverificaDoughnutComponent = false;
 			}
 		});
 	}
