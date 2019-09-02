@@ -430,6 +430,8 @@ populateEditModal(row){
   });
   console.log('this.campoData: ',this.campoData);
 }
-
+  updateDati() {
+    //for building
+  }
 
 }
