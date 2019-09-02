@@ -14,6 +14,9 @@ import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-ch
 import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
+import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
+import { DistributionByUserComponent } from '../../widgets/distribution-by-user/distribution-by-user.component';
+
 import { UUID } from 'angular2-uuid';
 @Component({
 	templateUrl: 'dashboard.component.html',
@@ -39,6 +42,8 @@ export class DashboardComponent implements OnInit {
 		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
+		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
+		{ name: "Distribution by User", componentInstance: DistributionByUserComponent, uiidentifier: "distribution_by_user" },
 	];
 	helpText: string = '';
 	constructor(
@@ -214,20 +219,6 @@ export class DashboardComponent implements OnInit {
 		})
 
 	}
-	// might have to re-use it later when updating dashboard on save.
-	// getDashboardWidgetsData(dashboardId) {
-	// 	this.emitter.loadingStatus(true);
-	// 	this.dashboardService.getDashboard(dashboardId).subscribe(dashboard => {
-	// 		this.dashboardCollection = dashboard;
-	// 		this.parseJson(this.dashboardCollection);
-	// 		this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
-	// 		this.emitter.loadingStatus(false);
-	// 	}, error => {
-	// 		console.log('getDashboardWidgetsData', error);
-	// 		this.toastr.error('Error while fetching dashboards');
-	// 		this.emitter.loadingStatus(false);
-	// 	});
-	// }
 
 	// need to move this to dashboard service as well
 	parseJson(dashboardCollection: DashboardModel) {
@@ -362,10 +353,12 @@ export class DashboardComponent implements OnInit {
 			case "kpi_count_summary": {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
 				return this.dashboardWidgetsArray.push({
-					cols: 4,
+					cols: 3,
 					rows:4,
 					x: 0,
 					y: 0,
+					minItemRows: 2,
+					minItemCols: 2,
 					component: KpiCountSummaryComponent,
 					widgetname: summaryWidget.name,
 					uiidentifier: summaryWidget.uiidentifier,
@@ -375,6 +368,46 @@ export class DashboardComponent implements OnInit {
 					widgetid: summaryWidget.id,
 					id: 0,
 					url: summaryWidget.url
+				});
+			}
+			case "distribution_by_user": {
+				let distributionWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_user');
+				return this.dashboardWidgetsArray.push({
+					cols: 4,
+					rows: 5,
+					x: 0,
+					y: 0,
+					minItemRows: 3,
+					minItemCols: 3,
+					component: DistributionByUserComponent,
+					widgetname: distributionWidget.name,
+					uiidentifier: distributionWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: distributionWidget.id,
+					id: 0,
+					url: distributionWidget.url
+				});
+			}
+			case "catalog_pending_count_trends": {
+				let catalogWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'catalog_pending_count_trends');
+				return this.dashboardWidgetsArray.push({
+					cols: 3,
+					rows: 4,
+					x: 0,
+					y: 0,
+					minItemRows: 2,
+					minItemCols: 2,
+					component: CatalogPendingCountTrendsComponent,
+					widgetname: catalogWidget.name,
+					uiidentifier: catalogWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: catalogWidget.id,
+					id: 0,
+					url: catalogWidget.url
 				});
 			}
 		}

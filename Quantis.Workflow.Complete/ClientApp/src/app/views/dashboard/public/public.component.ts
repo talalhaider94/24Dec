@@ -15,6 +15,9 @@ import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut
 import { RadarChartComponent } from '../../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../../widgets/kpi-count-summary/kpi-count-summary.component';
+import { CatalogPendingCountTrendsComponent } from '../../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
+import { DistributionByUserComponent } from '../../../widgets/distribution-by-user/distribution-by-user.component';
+
 @Component({
 	selector: 'app-public',
 	templateUrl: './public.component.html',
@@ -51,6 +54,8 @@ export class PublicComponent implements OnInit {
 		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
+		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
+		{ name: "Distribution by User", componentInstance: DistributionByUserComponent, uiidentifier: "distribution_by_user" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;

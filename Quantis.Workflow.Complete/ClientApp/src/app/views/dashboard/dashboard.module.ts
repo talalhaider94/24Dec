@@ -24,6 +24,9 @@ import { PublicComponent } from './public/public.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
+import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
+import { DistributionByUserComponent } from '../../widgets/distribution-by-user/distribution-by-user.component';
+
 @NgModule({
   imports: [
     FormsModule,
@@ -43,7 +46,9 @@ import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-co
       DoughnutChartComponent,
       RadarChartComponent,
       BarchartComponent,
-      KpiCountSummaryComponent
+      KpiCountSummaryComponent,
+      DistributionByUserComponent,
+      CatalogPendingCountTrendsComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -58,7 +63,9 @@ import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-co
     BarchartComponent,
     PublicComponent,
     DashboardListsComponent,
-    KpiCountSummaryComponent
+    KpiCountSummaryComponent,
+    DistributionByUserComponent,
+    CatalogPendingCountTrendsComponent
   ]
 })
 export class DashboardModule { }
