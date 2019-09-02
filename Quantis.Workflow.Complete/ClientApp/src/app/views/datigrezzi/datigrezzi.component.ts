@@ -31,6 +31,7 @@ export class DatiGrezziComponent implements OnInit {
   public filter: string;
   public comparator: any;
   public p: any;
+  public periodFilter: number;
 
   @ViewChild('kpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
@@ -58,6 +59,16 @@ export class DatiGrezziComponent implements OnInit {
   resources: any = {};
   id_kpi_temp = '';
   loadingModalDati:boolean=false;
+
+  modalData = {
+    campo1: '',
+    campo2: '',
+    campo3: '',
+    campo4: ''
+  };
+
+  campoData: any = []
+
   fitroDataById: any = [
     {
       event_type_id: '   ',
@@ -146,6 +157,7 @@ export class DatiGrezziComponent implements OnInit {
         }
       }
     };
+    this.periodFilter = 0;
     this.monthVar = moment().format('MM');
     this.yearVar = moment().format('YYYY');
     //this.getdati1(this.id_kpi_temp,this.monthVar,this.yearVar);
@@ -292,18 +304,21 @@ export class DatiGrezziComponent implements OnInit {
 clear(){
   this.filter = '';
   this.fitroDataById=[];
+  this.campoData=[];
   this.p=1;
 
   }
 
 
   setId(id){
+    this.periodFilter = 0;
     this.idKpi = id;
     console.log('this.idKpi =>',this.idKpi);
   }
 
 
   getdati1(id_kpi, month = this.monthVar, year = this.yearVar){
+    this.periodFilter = 1;
     console.log('id_kpi =>',id_kpi);
     this.clear();
     
@@ -377,7 +392,7 @@ clear(){
          this.loadingModalDati = false;
       });
   }
-
+  
   getCountCampiData(){
     let maxLength = 0;
     this.fitroDataById.forEach( f => {
@@ -391,7 +406,6 @@ clear(){
       this.countCampiData.push(i);
     }
   }
-  
 
   fireEvent()
 {
@@ -404,6 +418,20 @@ const ws: XLSX.WorkSheet=XLSX.utils.table_to_sheet(this.table.nativeElement);
 
 }
 
+populateEditModal(row){
+  var count:number = 0;
 
+  console.log('Campo->row.data: ',row.data);
+
+  Object.entries(row.data).forEach(([key, value]) => {
+    console.log(key,value);
+    this.campoData[count] = value;
+    count++;
+  });
+  console.log('this.campoData: ',this.campoData);
+}
+  updateDati() {
+    //for building
+  }
 
 }
