@@ -80,11 +80,19 @@
                     {{ dashboard.name }}</a>
                 </b>
               </small>
+              <ng-container *ngIf="dashboard.isactive">
+                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                  <input type="checkbox" class="switch-input" checked>
+                  <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                </label>
+              </ng-container>
+              <ng-container *ngIf="!dashboard.isactive">
+                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                  <input type="checkbox" class="switch-input" unchecked>
+                  <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                </label>
+              </ng-container>
 
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input" checked>
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-              </label>
             </div>
           </div>
         </div>

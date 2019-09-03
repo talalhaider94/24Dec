@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit{
       const { userName, password } = this.f;
       this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-        this.router.navigate([this.returnUrl]);
+        this.router.navigate(['dashboard/dashboard/2']);
         this.toastr.success('Login eseguito con successo.');
         this.loading = false;
       }, error => {

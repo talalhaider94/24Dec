@@ -4,7 +4,7 @@ import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService } from '../../_helpers';
 import { ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../_models';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription, forkJoin, interval } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -134,6 +134,7 @@ export class DashboardComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		//Danial: form is unnecessary here in this component now remove it later
 		this.widgetParametersForm = this.formBuilder.group({
 			GlobalFilterId: [null],
 			Properties: this.formBuilder.group({
@@ -187,6 +188,10 @@ export class DashboardComponent implements OnInit {
 			this.emitter.loadingStatus(true);
 			this.getData(this.dashboardId);
 		});
+		//Danial: need to improve method to call only dashboard widgets and remove widgets call
+		interval(10*60*1000).subscribe(count => {
+			this.getData(this.dashboardId);
+		})
 	}
 
 	getData(dashboardId: number) {
@@ -216,7 +221,7 @@ export class DashboardComponent implements OnInit {
 			this.emitter.loadingStatus(false);
 			this.toastr.error('Error while fetching dashboards');
 			console.error('Get Dashboard Data', error);
-		})
+		});
 
 	}
 
