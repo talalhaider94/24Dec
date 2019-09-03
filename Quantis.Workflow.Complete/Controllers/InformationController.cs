@@ -24,7 +24,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI = infomationAPI;
         }
-        [Authorize(WorkFlowPermissions.VIEW_CONFIGURAION_GENERAL)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_GENERAL)]
         [HttpGet("GetAllBasicConfigurations")]
         public List<ConfigurationDTO> GetAllBasicConfigurations()
         {
@@ -36,7 +36,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetAllAdvancedConfigurations();
         }
-        [Authorize(WorkFlowPermissions.VIEW_CONFIGURAION_GENERAL)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_GENERAL)]
         [HttpGet("DeleteBasicConfiguration")]
         public void DeleteBasicConfiguration(string owner, string key)
         {
@@ -48,7 +48,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.DeleteConfiguration(owner, key);
         }
-        [Authorize(WorkFlowPermissions.VIEW_CONFIGURAION_GENERAL)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_GENERAL)]
         [HttpPost("AddUpdateBasicConfiguration")]
         public void AddUpdateBasicConfiguration([FromBody]ConfigurationDTO dto)
         {
