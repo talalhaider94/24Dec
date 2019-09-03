@@ -33,18 +33,19 @@
                                     <td>{{ dashboard.name }}</td>
                                     <td>{{ dashboard.owner }}</td>
                                     <td>
-                                        <button [routerLink]="['/dashboard/public', dashboard.id]"
+                                        <button *ngIf="dashboard.isactive"
+                                            [routerLink]="['/dashboard/public', dashboard.id]"
                                             class="btn btn-sm btn-primary">
                                             <i class="fa fa-eye"></i>
                                         </button>
-                                        <button [routerLink]="['/dashboard/dashboard', dashboard.id]"
+                                        <button *ngIf="dashboard.isactive"
+                                            [routerLink]="['/dashboard/dashboard', dashboard.id]"
                                             class="btn btn-sm btn-success">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button
-                                        class="btn btn-sm btn-dark">
-                                        <i class="fa fa-power-off"></i>
-                                    </button>
+                                        <button class="btn btn-sm btn-dark" (click)="dashboardStatus(dashboard.id, dashboard.isactive)">
+                                            <i class="fa fa-power-off"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
