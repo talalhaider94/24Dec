@@ -93,10 +93,15 @@ export class TConfigurationComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => {
-      this.getCOnfigurations(); 
-      console.log("Auto Refresh...");
-    }, 600000); 
+    this.apiService.getSeconds().subscribe((data: any) => {
+      var secondsValue = data + '000';
+      var seconds = parseInt(secondsValue);
+      console.log("Auto Refresh Seconds: ",seconds);
+      
+      setInterval(() => {
+        this.getCOnfigurations(); 
+      }, seconds);  
+    }); 
   }
 
   populateModalData(data) {
@@ -109,6 +114,7 @@ export class TConfigurationComponent implements OnInit {
     this.valuesCheck.tempModal = data.key;
   }
   timer = null;
+
   changeModal(value) {
     this.modalData.value = value;
     clearTimeout(this.timer);
@@ -125,6 +131,8 @@ export class TConfigurationComponent implements OnInit {
       }
     }, 500) //time to wait in ms before do the check
   }
+
+
   addConfig() {
     this.addData.key = this.key;
     this.addData.owner = this.owner;
@@ -236,10 +244,4 @@ export class TConfigurationComponent implements OnInit {
       this.rerender();
     });
   }
-
- /* getCOnfigurations1() {
-    this.apiService.getConfigurations().subscribe((data: any) => {
-    });
-
-  }*/
 }
