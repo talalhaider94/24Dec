@@ -8,6 +8,7 @@ import { Subscription, forkJoin, interval } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ApiService } from '../../_services/api.service';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit {
 	helpText: string = '';
 	constructor(
 		private dashboardService: DashboardService,
+		private apiService: ApiService,
 		private _route: ActivatedRoute,
 		private emitter: EmitterService,
 		private toastr: ToastrService,
@@ -189,9 +191,16 @@ export class DashboardComponent implements OnInit {
 			this.getData(this.dashboardId);
 		});
 		//Danial: need to improve method to call only dashboard widgets and remove widgets call
-		interval(10*60*1000).subscribe(count => {
-			this.getData(this.dashboardId);
-		})
+		this.apiService.getSeconds().subscribe((data: any) => {
+			var secondsValue = data + '000';
+			var seconds = parseInt(secondsValue);
+			console.log("Auto Refresh Seconds: ",seconds);
+			 
+			interval(seconds).subscribe(count => {
+				this.getData(this.dashboardId);
+			})
+		}); 
+		
 	}
 
 	getData(dashboardId: number) {
