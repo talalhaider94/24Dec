@@ -4,6 +4,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { DashboardService, AuthService } from '../../../_services';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-dashboard-lists',
@@ -11,7 +12,7 @@ import { DashboardService, AuthService } from '../../../_services';
   styleUrls: ['./dashboard-lists.component.scss']
 })
 export class DashboardListsComponent implements OnInit {
-  loading: boolean = true;
+  loading: boolean = false;
   formLoading: boolean = false;
   submitted: boolean = false;
   dashboards: Array<any> = [];
@@ -26,7 +27,7 @@ export class DashboardListsComponent implements OnInit {
   ) { }
 
   get f() { return this.createDashboardForm.controls; }
-  
+
   ngOnInit() {
     this.createDashboardForm = this.formBuilder.group({
       id: ['', Validators.required],
@@ -40,6 +41,7 @@ export class DashboardListsComponent implements OnInit {
   }
 
   getUserDashboards() {
+    this.loading = true;
     this.dashboardService.getDashboards().subscribe(dashboards => {
       this.dashboards = dashboards;
       this.loading = false;
@@ -56,7 +58,7 @@ export class DashboardListsComponent implements OnInit {
       id: 0,
       owner: loggedInUser.username,
       globalfilterId: 0,
-      createdon: new Date(),      
+      createdon: new Date(),
       dashboardwidgets: []
     })
     this.createDashboardModal.show();
@@ -83,4 +85,24 @@ export class DashboardListsComponent implements OnInit {
 
   }
 
+  dashboardStatus(dashboardId, status) {
+    this.loading = true;
+    if(status) {
+      this.dashboardService.deactivateDashboard(dashboardId).subscribe(result => {
+        this.loading = false;
+        this.getUserDashboards();
+      }, error => {
+        this.loading = false;
+        this.toastr.error('Error while deactivating dashboard');
+      })
+    } else {
+      this.dashboardService.activateDashboard(dashboardId).subscribe(result => {
+        this.loading = false;
+        this.getUserDashboards();
+      }, error => {
+        this.loading = false;
+        this.toastr.error('Error while activating dashboard');
+      })
+    }
+  }
 }

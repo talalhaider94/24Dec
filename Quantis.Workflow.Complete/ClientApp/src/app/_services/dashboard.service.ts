@@ -15,13 +15,13 @@ export class DashboardService {
 	// Return Array of WidgetModel
 	getWidgets(): Observable<Array<WidgetModel>> {
 		// return this.http.get<Array<WidgetModel>>(`http://localhost:3000/widgets`);
-      return this.http.get<Array<WidgetModel>>(`${environment.API_URL}/dashboard/GetAllWidgets`);
+		return this.http.get<Array<WidgetModel>>(`${environment.API_URL}/dashboard/GetAllWidgets`);
 	}
 
 	// Return Array of DashboardModel
 	getDashboards(): Observable<Array<DashboardModel>> {
 		// return this.http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
-      return this.http.get<Array<DashboardModel>>(`${environment.API_URL}/dashboard/GetDashboards`);
+		return this.http.get<Array<DashboardModel>>(`${environment.API_URL}/dashboard/GetDashboards`);
 	}
 
 	// Return an object
@@ -104,7 +104,18 @@ export class DashboardService {
 		return this.http.get(`${environment.API_URL}/globalfilter/GetOrganizationHierarcy?globalFilterId=0`);
 	}
 
-	saveDashboardState(dashboardWidgetsState): Observable<any> {	
+	saveDashboardState(dashboardWidgetsState): Observable<any> {
 		return this.http.post(`${environment.API_URL}/dashboard/SaveDashboardState`, dashboardWidgetsState);
 	}
+
+	activateDashboard(id: number) {
+		const params = new HttpParams().set('id', id.toString());
+		return this.http.get<any>(`${environment.API_URL}/dashboard/ActiveDashboard`,{ params });
+	}
+
+	deactivateDashboard(id: number) {
+		const params = new HttpParams().set('id', id.toString());
+		return this.http.get<any>(`${environment.API_URL}/dashboard/DeactivateDashboard`,{ params });
+	}
+
 }

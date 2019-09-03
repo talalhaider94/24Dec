@@ -313,6 +313,20 @@ export class PublicComponent implements OnInit {
 		});
 	}
 
+	fromCalendar(container1) {
+		container1.monthSelectHandler = (event: any): void => {
+		  container1._store.dispatch(container1._actions.select(event.date));
+		};     
+		container1.setViewMode('month');
+	}
+
+	toCalendar(container2) {
+		container2.monthSelectHandler = (event: any): void => {
+		  container2._store.dispatch(container2._actions.select(event.date));
+		};     
+		container2.setViewMode('month');
+	}
+
 	changedOptions() {
 		this.options.api.optionsChanged();
 	}
