@@ -121,7 +121,7 @@ export class TConfigurationComponent implements OnInit {
         if (value > today && parseInt(this.valuesCheck.day_workflow_value) < today) { this.toastr.error('Il Workflow ripartirà nel mese corrente per eventuali ticket non aperti', 'Attenzione'); }
       }
       if (this.valuesCheck.tempModal == "day_cutoff") {
-        if (parseInt(value) > parseInt(this.valuesCheck.day_workflow_value)) { this.toastr.warning('La data del Cutoff è minore del Workflow', 'Attenzione'); }
+        if (parseInt(value) > parseInt(this.valuesCheck.day_workflow_value)) { this.toastr.warning('La data del Cutoff è maggiore del Workflow', 'Attenzione'); }
       }
     }, 500) //time to wait in ms before do the check
   }
@@ -147,8 +147,8 @@ export class TConfigurationComponent implements OnInit {
   updateConfig() {
     var value = +this.modalData.value;
     console.log("value ->",value);
-    if((this.modalData.key=='day_cutoff' || this.modalData.key=='day_workflow') && (value<1 || value>30)){
-      this.toastr.error('Value should be between 0 and 31 for this key. Please enter again', 'Error');
+    if((this.modalData.key=='day_cutoff' || this.modalData.key=='day_workflow') && (value<0 || value>31)){
+      this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
     }else{
       this.toastr.info('Valore in aggiornamento..', 'Info');
       this.apiService.updateConfig(this.modalData).subscribe(data => {

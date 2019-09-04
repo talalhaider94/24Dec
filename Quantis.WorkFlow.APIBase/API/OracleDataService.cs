@@ -38,7 +38,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                string query = @"select document_name, document_id from T_DOCUMENT_REPOSITORY where document_file_type='docx' and document_type_id='2' order by document_name desc";                
+                string query = @"select document_name, document_id from T_DOCUMENT_REPOSITORY where document_file_type='docx' and document_type_id='2' order by document_name asc";                
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -674,7 +674,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var e = new Exception("Configuration of BSI or Oracle does not exist");
                     throw e;
                 }
-                /*using (var client = new HttpClient())
+                using (var client = new HttpClient())
                 {
                     string basePath = bsiconf.value;
                     string apiPath = "/api/OracleCon/GetOracleConnection";
@@ -683,19 +683,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        
+
                         config = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
                     }
                     else
                     {
-                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}",basePath,apiPath));
+                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}", basePath, apiPath));
                         throw e;
                     }
 
                 }
                 string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
-                */
-                string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
+
+                //string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
                 return finalconfig;
             }
             catch(Exception e)
