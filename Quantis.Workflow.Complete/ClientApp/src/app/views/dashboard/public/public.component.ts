@@ -34,6 +34,7 @@ export class PublicComponent implements OnInit {
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
 
+	@ViewChild('permissionsTree') permissionsTree: TreeViewComponent;
 	treesArray = [];
 	isTreeLoaded = false;
 	public treeFields: any = {
@@ -43,6 +44,9 @@ export class PublicComponent implements OnInit {
 		child: 'children',
 		title: 'name'
 	};
+	preSelectedNodes = ['1075','1000','1065','1055','1090','1050','1005','1015','1085','1080','1020','1001'];
+	allLeafNodesIds = [];
+	uncheckedNodes = [];
 
 	// FORM
 	widgetParametersForm: FormGroup;
@@ -313,6 +317,20 @@ export class PublicComponent implements OnInit {
 		});
 	}
 
+	fromCalendar(container1) {
+		container1.monthSelectHandler = (event: any): void => {
+		  container1._store.dispatch(container1._actions.select(event.date));
+		};     
+		container1.setViewMode('month');
+	}
+
+	toCalendar(container2) {
+		container2.monthSelectHandler = (event: any): void => {
+		  container2._store.dispatch(container2._actions.select(event.date));
+		};     
+		container2.setViewMode('month');
+	}
+
 	changedOptions() {
 		this.options.api.optionsChanged();
 	}
@@ -391,26 +409,42 @@ export class PublicComponent implements OnInit {
 	}
 
 	syncSelectedNodesArray(event, treeRef) {
-		console.log('cheked ');//, treeRef);
+		// this.allLeafNodesIds = [];
+		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
+		this.uncheckedNodes = this.allLeafNodesIds.filter( value => this.permissionsTree.checkedNodes.indexOf(value.toString())==-1);
+		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
 		treeRef.loaded = true;
-		//this.selectedData.checked = this.permissionsTree.checkedNodes;
 	}
-	checkedNodes: string[];
 	createTrees(treesData) {
-		treesData.forEach((itm: any) => {
-			let settings = { dataSource: [itm], id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
+		console.log('treesData ->', treesData);
+		//treesData.forEach((itm: any) => {
+			let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
 			this.treesArray.push({
-				name: itm.name,
+				name: treesData.name,
 				settings: settings,
-				checkedNodes: [],
-				id: itm.id,
-				elementId: `permissions_tree_${itm.id}`,
+				checkedNodes: this.preSelectedNodes,
+				id: treesData.id,
+				elementId: `permissions_tree_${treesData.id}`,
 				loaded: true
 			});
-		});
+			this.allLeafNodesIds = [];
+			this.getAllLeafNodesIds(treesData);
+			this.permissionsTree.checkAll(this.allLeafNodesIds);
+		//});
 		console.log('this.treesArray ->', this.treesArray);
-		//console.log('this.checkedNodes ->',this.checkedNodes);
 		this.isTreeLoaded = true;
+	}
+	getAllLeafNodesIds(complexJson) {
+		if (complexJson) {
+			complexJson.forEach((item:any)=>{
+			if (item.children) {
+				this.getAllLeafNodesIds(item.children);
+			} else {
+				this.allLeafNodesIds.push(item.id);
+			}
+			});
+			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
+		}
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {

@@ -71,7 +71,7 @@
                     id="{{treeObj.elementId}}" 
                     [fields]='treeObj.settings' 
                     [showCheckBox]='true' 
-                    [checkedNodes]="['1075','1000','1065','1055','1090','1050','1005','1015','1085','1080','1020','1001']" 
+                    [checkedNodes]="preSelectedNodes" 
                     (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
                   </ejs-treeview>
                 </div>
@@ -88,9 +88,31 @@
                 </div>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
-                    <label for="daterange">Intervallo di date</label><!-- Date Range -->
+                    <!-- Date Range -->
+                    <!-- <label for="daterange">Intervallo di date</label>
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
+                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }"> -->
+                    <label for="daterange">Intervallo di date</label><br>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="fromdate" style="text-align: center">From</label>
+                        <form class="container1">
+                          <input autocomplete="off" class="form-control" name="date" 
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
+                          (onShown)="fromCalendar($event)">
+                          <!-- Result: <p>{{modelDate}}</p> -->
+                        </form>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="todate">To</label>
+                        <form class="container2">
+                          <input autocomplete="off" class="form-control" name="date" 
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
+                          (onShown)="toCalendar($event)">
+                          <!-- Result: <p>{{modelDate}}</p> -->
+                        </form>
+                      </div>
+                    </div> 
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">
