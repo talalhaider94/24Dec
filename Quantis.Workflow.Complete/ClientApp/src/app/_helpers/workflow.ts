@@ -34,4 +34,9 @@ export default class WorkFlowHelper {
     static getDescriptionField(description, field) {
         return this.formatDescription(description).find(column => column.key === field);
     }
+
+    static formatCheckBoxColumn() {
+        return `Verde -> KPI Compliant Rosso -> KPI Non Compliant Grigio -> KPI Non Calcolato Blu -> KPI con Nessun Evento Bianco -> altri casi `.trim().split('->');
+    }
+    
 }

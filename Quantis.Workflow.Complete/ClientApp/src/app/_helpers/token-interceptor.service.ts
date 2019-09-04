@@ -13,15 +13,14 @@ export class TokenInterceptorService implements HttpInterceptor {
     console.log('TOKEN INTERCEPTOR', request);
     let currentUser = this.authService.currentUserValue;
     if (currentUser && currentUser.token) {
-        request = request.clone({
-            setHeaders: {
-                Authorization: `Basic ${btoa("Quantis:WorkflowAPI")}`,
-                AuthToken: currentUser.token,
-                'Content-Type': 'application/json',
-            }
-        });
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Basic ${btoa("Quantis:WorkflowAPI")}`,
+          AuthToken: currentUser.token,
+          'Content-Type': 'application/json',
+        }
+      });
     }
-
     return next.handle(request);
-}
+  }
 }
