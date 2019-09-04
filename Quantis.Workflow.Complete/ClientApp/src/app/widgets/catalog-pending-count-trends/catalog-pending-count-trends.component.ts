@@ -59,7 +59,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 	setWidgetFormValues: any;
 	editWidgetName: boolean = true;
 	sumKPICount: number = 0;
-	widgetTitle: string = 'Distribution By User';
+	widgetTitle: string = 'Catalog Pending Count Trends';
 	@Output() kpiCountSummaryParent = new EventEmitter<any>();
 	// INPUT, OUTPUT PARAMS END 
 	constructor(
@@ -102,6 +102,8 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
+				console.log(this.filters);
+				console.log(this.properties);
 				// Map Params for widget index when widgets initializes for first time
 				let params = {
 					GlobalFilterId: 0,
@@ -119,6 +121,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
+			debugger
 			// populate modal with widget parameters
 			console.log('KPI COUNT SUMMARY getWidgetIndex', getWidgetIndex);
 			console.log('KPI COUNT SUMMARY myWidgetParameters', myWidgetParameters);
