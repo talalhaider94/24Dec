@@ -84,4 +84,16 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
       return false
     }
   }
+
+  formatInputDate(date) {
+    if(date) {
+      if(moment(date).isSame(moment('01/01/0001, 12:00 AM'))) {
+        return 'Nessun caricamento';
+      } else {
+        return moment(date).format('DD/MM/YYYY, h:mm a');
+      }
+    } else {
+      return 'N/A';  
+    }
+  }
 }
