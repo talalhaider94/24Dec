@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
 				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
 				console.log('dashboardWidgetsArray', dashboardWidgetsArray);
 				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
-					if(widget.id === barChartdata.id && widget.widgetid === barChartdata.widgetid){
+					if (widget.id === barChartdata.id && widget.widgetid === barChartdata.widgetid) {
 						let updatename = {
 							...widget,
 							widgetname: barChartdata.widgetname,
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit {
 				let kpiCountSummaryChartdata = childData.data.kpiCountSummaryChart;
 				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
 				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
-					if(widget.id === kpiCountSummaryChartdata.id && widget.widgetid === kpiCountSummaryChartdata.widgetid){
+					if (widget.id === kpiCountSummaryChartdata.id && widget.widgetid === kpiCountSummaryChartdata.widgetid) {
 						let updatename = {
 							...widget,
 							widgetname: kpiCountSummaryChartdata.widgetname,
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
 				let verificaDoughnutChartdata = childData.data.verificaDoughnutChart;
 				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
 				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
-					if(widget.id === verificaDoughnutChartdata.id && widget.widgetid === verificaDoughnutChartdata.widgetid){
+					if (widget.id === verificaDoughnutChartdata.id && widget.widgetid === verificaDoughnutChartdata.widgetid) {
 						let updatename = {
 							...widget,
 							widgetname: verificaDoughnutChartdata.widgetname,
@@ -194,13 +194,34 @@ export class DashboardComponent implements OnInit {
 		this.apiService.getSeconds().subscribe((data: any) => {
 			var secondsValue = data + '000';
 			var seconds = parseInt(secondsValue);
-			console.log("Auto Refresh Seconds: ",seconds);
-			 
+			console.log("Auto Refresh Seconds: ", seconds);
+
 			interval(seconds).subscribe(count => {
 				this.getData(this.dashboardId);
 			})
-		}); 
-		
+		});
+		this.changeWidgetName();
+
+	}
+
+	changeWidgetName() {
+		this.emitter.getData().subscribe(data => {
+			if (data.type === 'changeWidgetName') {
+				// change widget name code start
+				let dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets;
+				let updatedDashboardWidgetsArray = dashboardWidgetsArray.map(widget => {
+					console.log(widget.id, data.data.id, widget.widgetid, data.data.widgetid);
+					if (widget.id === data.data.id && widget.widgetid === data.data.widgetid) {
+						let updatename = { ...widget, widgetname: data.data.widgetname };
+						return updatename;
+					} else {
+						return widget;
+					}
+				});
+				this.dashboardCollection.dashboardwidgets = updatedDashboardWidgetsArray;
+				// change widget name code end
+			}
+		})
 	}
 
 	getData(dashboardId: number) {
@@ -350,7 +371,7 @@ export class DashboardComponent implements OnInit {
 					cols: 5,
 					minItemCols: 5,
 					minItemRows: 5,
-					rows:5,
+					rows: 5,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
@@ -368,7 +389,7 @@ export class DashboardComponent implements OnInit {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
 				return this.dashboardWidgetsArray.push({
 					cols: 6,
-					rows:6,
+					rows: 6,
 					minItemCols: 6,
 					minItemRows: 6,
 					x: 0,
@@ -459,7 +480,7 @@ export class DashboardComponent implements OnInit {
 					barChartWidgetParameters: this.barChartWidgetParameters,
 					barChartWidgetParameterValues: formValues
 				}
-			})
+			});
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.error('getWidgetIndex', error);

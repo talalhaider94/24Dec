@@ -59,7 +59,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 	setWidgetFormValues: any;
 	editWidgetName: boolean = true;
 	sumKPICount: number = 0;
-	widgetTitle: string = 'Distribution By User';
+	widgetTitle: string = 'Catalog Pending Count Trends';
 	@Output() kpiCountSummaryParent = new EventEmitter<any>();
 	// INPUT, OUTPUT PARAMS END 
 	constructor(
@@ -102,6 +102,8 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
+				console.log(this.filters);
+				console.log(this.properties);
 				// Map Params for widget index when widgets initializes for first time
 				let params = {
 					GlobalFilterId: 0,
@@ -119,6 +121,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
+			// debugger
 			// populate modal with widget parameters
 			console.log('KPI COUNT SUMMARY getWidgetIndex', getWidgetIndex);
 			console.log('KPI COUNT SUMMARY myWidgetParameters', myWidgetParameters);
@@ -170,42 +173,30 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 	}
 
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-		let label = 'Series';
-		if (dashboardComponentData) {
-			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
-			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
-			let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
-		}
-		if (currentWidgetComponentData) {
-			// setting chart label and type on first load
-			label = currentWidgetComponentData.measures[0];
-		}
-		// temporary fix because getting single object instead of array
-		let temporaryFix = [chartIndexData];
-		let allLabels = temporaryFix.map(label => label.xvalue);
-		let allData = temporaryFix.map(data => data.yvalue);
-		// setTimeout(()=> {
-		this.sumKPICount = allData.reduce((total, currentValue) => total + currentValue, 0);
-		// })
-
-		this.barChart1Data = [{ data: allData, label: label }]
-		this.barChart1Labels.length = 0;
-		this.barChart1Labels.push(...allLabels);
+		this.sumKPICount = chartIndexData.yvalue;
 		this.closeModal();
 	}
 
 	widgetnameChange(event) {
 		console.log('widgetnameChange', this.id, event);
-		this.kpiCountSummaryParent.emit({
-			type: 'changeKpiCountSummaryWidgetName',
+		this.emitter.sendNext({
+			type: 'changeWidgetName',
 			data: {
-				kpiCountSummaryChart: {
-					widgetname: event,
-					id: this.id,
-					widgetid: this.widgetid
-				}
+				widgetname: event,
+				id: this.id,
+				widgetid: this.widgetid
 			}
 		});
+		// this.kpiCountSummaryParent.emit({
+		// 	type: 'changeKpiCountSummaryWidgetName',
+		// 	data: {
+		// 		kpiCountSummaryChart: {
+		// 			widgetname: event,
+		// 			id: this.id,
+		// 			widgetid: this.widgetid
+		// 		}
+		// 	}
+		// });
 	}
 
 	openModal() {
