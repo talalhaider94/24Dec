@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.Workflow.Complete.Controllers
 {
@@ -27,10 +28,23 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             return _dashboardAPI.GetDashboards();
         }
+        [HttpGet("SetDefaultDashboard")]
+        public void SetDefaultDashboard(int id)
+        {
+            var user = HttpContext.User as AuthUser;
+            _dashboardAPI.SetDefaultDashboard(id, user.UserId);
+        }
+        [HttpGet("GetDefaultDashboardId")]
+        public int GetDefaultDashboardId()
+        {
+            var user = HttpContext.User as AuthUser;
+            return _dashboardAPI.GetDefaultDashboardId(user.UserId);
+        }
         [HttpPost("AddUpdateDasboard")]
         public DashboardDetailDTO AddUpdateDasboard([FromBody]DashboardDetailDTO dto)
         {
-            var id = _dashboardAPI.AddUpdateDasboard(dto);
+            var user = HttpContext.User as AuthUser;
+            var id = _dashboardAPI.AddUpdateDasboard(dto,user.UserId);
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
 
         }

@@ -8,5 +8,6 @@ namespace Quantis.WorkFlow.Services.DTOs.Dashboard
     {   
         public string Owner { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

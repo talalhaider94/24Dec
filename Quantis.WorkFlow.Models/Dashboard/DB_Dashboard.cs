@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public virtual T_User User { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDefault { get; set; }
         public int? GlobalFilterId { get; set; }
         [ForeignKey("GlobalFilterId")]
         public virtual DB_GlobalFilter GlobalFilter { get; set; }

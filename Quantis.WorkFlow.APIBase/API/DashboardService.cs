@@ -54,6 +54,47 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public int GetDefaultDashboardId(int userId)
+        {
+            try
+            {
+                var dash = _dbcontext.DB_Dashboards.FirstOrDefault(o => o.UserId == userId && o.IsDefault);
+                if (dash == null)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return dash.Id;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void SetDefaultDashboard(int id,int userId)
+        {
+            try
+            {
+                var dashnew = _dbcontext.DB_Dashboards.FirstOrDefault(o => o.Id == id && o.UserId == userId);
+                var dash = _dbcontext.DB_Dashboards.FirstOrDefault(o => o.UserId == userId && o.IsDefault);
+                if (dash != null && dashnew != null)
+                {
+                    dash.IsDefault = false;
+                    _dbcontext.SaveChanges();
+                }
+                if (dashnew != null)
+                {
+                    dashnew.IsDefault = true;
+                    _dbcontext.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public void DeactivateDashboard(int id)
         {
             try
@@ -67,7 +108,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public int AddUpdateDasboard(DashboardDetailDTO dto)
+        public int AddUpdateDasboard(DashboardDetailDTO dto,int userId)
         {
             try
             {
@@ -84,6 +125,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     entdb.Name = dto.Name;
                     entdb.GlobalFilterId = dto.GlobalFilterId;
                     entdb.DashboardWidgets = dbwidgets;
+                    entdb.UserId = userId;
+
                     _dbcontext.DB_Dashboards.Add(entdb);
                     _dbcontext.SaveChanges();
                     return entdb.Id;
