@@ -121,7 +121,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
-			debugger
+			// debugger
 			// populate modal with widget parameters
 			console.log('KPI COUNT SUMMARY getWidgetIndex', getWidgetIndex);
 			console.log('KPI COUNT SUMMARY myWidgetParameters', myWidgetParameters);
@@ -179,16 +179,24 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 
 	widgetnameChange(event) {
 		console.log('widgetnameChange', this.id, event);
-		this.kpiCountSummaryParent.emit({
-			type: 'changeKpiCountSummaryWidgetName',
+		this.emitter.sendNext({
+			type: 'changeWidgetName',
 			data: {
-				kpiCountSummaryChart: {
-					widgetname: event,
-					id: this.id,
-					widgetid: this.widgetid
-				}
+				widgetname: event,
+				id: this.id,
+				widgetid: this.widgetid
 			}
 		});
+		// this.kpiCountSummaryParent.emit({
+		// 	type: 'changeKpiCountSummaryWidgetName',
+		// 	data: {
+		// 		kpiCountSummaryChart: {
+		// 			widgetname: event,
+		// 			id: this.id,
+		// 			widgetid: this.widgetid
+		// 		}
+		// 	}
+		// });
 	}
 
 	openModal() {

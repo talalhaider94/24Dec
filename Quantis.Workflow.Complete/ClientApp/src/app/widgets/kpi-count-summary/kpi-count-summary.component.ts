@@ -176,16 +176,24 @@ export class KpiCountSummaryComponent implements OnInit {
 
 	widgetnameChange(event) {
 		console.log('widgetnameChange', this.id, event);
-		this.kpiCountSummaryParent.emit({
-			type: 'changeKpiCountSummaryWidgetName',
+		this.emitter.sendNext({
+			type: 'changeWidgetName',
 			data: {
-				kpiCountSummaryChart: {
-					widgetname: event,
-					id: this.id,
-					widgetid: this.widgetid
-				}
+				widgetname: event,
+				id: this.id,
+				widgetid: this.widgetid
 			}
 		});
+		// this.kpiCountSummaryParent.emit({
+		// 	type: 'changeKpiCountSummaryWidgetName',
+		// 	data: {
+		// 		kpiCountSummaryChart: {
+		// 			widgetname: event,
+		// 			id: this.id,
+		// 			widgetid: this.widgetid
+		// 		}
+		// 	}
+		// });
 	}
 
 	openModal() {
