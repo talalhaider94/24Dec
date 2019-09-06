@@ -142,5 +142,14 @@ namespace Quantis.WorkFlow.APIBase.API
             res.Add(new XYDTO() { XValue = "07/2019", YValue = 22 });
             return res;
         }
+        public List<XYDTO> GetKPIReportTrend(BaseWidgetDTO dto)
+        {
+            var res = new List<XYDTO>();
+            res.Add(new XYDTO() { XValue = "04/2019", YValue = 26 });
+            res.Add(new XYDTO() { XValue = "05/2019", YValue = 20 });
+            res.Add(new XYDTO() { XValue = "06/2019", YValue = 25 });
+            res.Add(new XYDTO() { XValue = "07/2019", YValue = 22 });
+            return res;
+        }
     }
 }
