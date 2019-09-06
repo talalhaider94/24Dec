@@ -30,6 +30,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             ShowDateRangeFilter = false;
             ShowMeasure = false;
             ShowDateFilter = false;
+            ShowOrganization = true;
             Measures = new Dictionary<int, string>();
             ChartTypes = new Dictionary<string, string>();
             AggregationOptions = new Dictionary<string, string>();
