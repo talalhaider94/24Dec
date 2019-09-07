@@ -17,7 +17,6 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
-import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
@@ -26,6 +25,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
 import { DistributionByUserComponent } from '../../widgets/distribution-by-user/distribution-by-user.component';
+import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
+import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
+import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 
 @NgModule({
   imports: [
@@ -44,11 +46,13 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
     DynamicModule.withComponents([
       LineChartComponent,
       DoughnutChartComponent,
-      RadarChartComponent,
       BarchartComponent,
       KpiCountSummaryComponent,
       DistributionByUserComponent,
-      CatalogPendingCountTrendsComponent
+      CatalogPendingCountTrendsComponent,
+      KpiReportTrendComponent,
+      NotificationTrendComponent,
+      KpiCountByOrganizationComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -58,14 +62,16 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
     DashboardComponent,
     DoughnutChartComponent,
     LineChartComponent,
-    RadarChartComponent,
     MenuComponent,
     BarchartComponent,
     PublicComponent,
     DashboardListsComponent,
     KpiCountSummaryComponent,
     DistributionByUserComponent,
-    CatalogPendingCountTrendsComponent
+    CatalogPendingCountTrendsComponent,
+    KpiReportTrendComponent,
+    NotificationTrendComponent,
+    KpiCountByOrganizationComponent
   ]
 })
 export class DashboardModule { }

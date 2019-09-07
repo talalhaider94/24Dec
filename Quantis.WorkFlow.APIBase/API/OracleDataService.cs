@@ -31,7 +31,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _informationService = informationService;
             if (_connectionstring == null)
             {
-                _connectionstring = getConnectionString();
+                _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
             }
         }
         public List<OracleBookletDTO> GetBooklets()
@@ -657,49 +657,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        private string getConnectionString()
-        {
-            try
-            {
-                Dictionary<string, string> config = null;
-                var bsiconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_bsi" && o.key == "bsi_api_url");
-                var oracleconf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_oracle" && o.key == "con_str");
-                if (bsiconf == null || oracleconf == null)
-                {
-                    var e = new Exception("Configuration of BSI or Oracle does not exist");
-                    throw e;
-                }
-                using (var client = new HttpClient())
-                {
-                    string basePath = bsiconf.value;
-                    string apiPath = "/api/OracleCon/GetOracleConnection";
-                    var output = QuantisUtilities.FixHttpURLForCall(basePath, apiPath);
-                    client.BaseAddress = new Uri(output.Item1);
-                    var response = client.GetAsync(output.Item2).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
 
-                        config = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
-                    }
-                    else
-                    {
-                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}", basePath, apiPath));
-                        throw e;
-                    }
-
-                }
-                string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
-                //string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
-                return finalconfig;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-            
-            
-
-        }
 
         public List<FormConfigurationDTO> GetFormConfiguration(string schema)
         {

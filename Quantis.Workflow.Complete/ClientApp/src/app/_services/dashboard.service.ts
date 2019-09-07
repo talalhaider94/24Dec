@@ -96,6 +96,7 @@ export class DashboardService {
 	}
 
 	getWidgetIndex(url: string, formValues: any): Observable<any> {
+		console.log('getWidgetIndex formValues', formValues);
 		const widgetIndexEndPoint = `${environment.API_URL}/${url}/Index`;
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}
@@ -110,7 +111,7 @@ export class DashboardService {
 
 	activateDashboard(id: number) {
 		const params = new HttpParams().set('id', id.toString());
-		return this.http.get<any>(`${environment.API_URL}/dashboard/ActiveDashboard`,{ params });
+		return this.http.get<any>(`${environment.API_URL}/dashboard/ActivateDashboard`,{ params });
 	}
 
 	deactivateDashboard(id: number) {

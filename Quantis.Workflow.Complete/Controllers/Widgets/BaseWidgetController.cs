@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.Workflow.Complete.Controllers.Widgets
 {
@@ -19,6 +20,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         [HttpPost("Index")]
         public object Index(WidgetParametersDTO props)
         {
+            props.UserId = GetUserId();
             return GetData(props);
         }
         [HttpGet("GetWidgetParameters")]
@@ -39,6 +41,16 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.DateTypes.Add(2, "Last 2 Months");
             vm.DateTypes.Add(3, "Last 3 Months");
             vm.DateTypes.Add(4, "Last 6 Months");
+        }
+
+        private int GetUserId()
+        {
+            var usr = HttpContext.User as AuthUser;
+            if (usr == null)
+            {
+                return -1;
+            }
+            return usr.UserId;
         }
 
     }

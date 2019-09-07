@@ -30,6 +30,8 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Compliant);
             vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Non_Calcolato);
             vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Non_Compliant);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_compliant);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_not_compliant);
             vm.ChartTypes.Add(ChartType.BAR);
             vm.ChartTypes.Add(ChartType.LINE);
             vm.AggregationOptions.Add(AggregationOption.ANNAUL);
