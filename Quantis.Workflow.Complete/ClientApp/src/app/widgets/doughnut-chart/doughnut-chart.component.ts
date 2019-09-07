@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -44,7 +44,7 @@ export class DoughnutChartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('Distribution by Verifica', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+		console.log('DoughnutChartComponent Distribution by Verifica', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
 			this.editWidgetName = false;
 		}
@@ -79,8 +79,20 @@ export class DoughnutChartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-				return this.dashboardService.getWidgetIndex(url, newParams);
+				let params = {
+					GlobalFilterId: 0,
+					Properties: {
+						measure: Object.keys(getWidgetParameters.measures)[0],
+						charttype: Object.keys(getWidgetParameters.charttypes)[0],
+						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
+					},
+					Filters: {
+						daterange: getWidgetParameters.defaultdaterange
+					},
+					Note: ''
+				};
+				/// To be used -> getWidgetIndex method ////
+				return this.dashboardService.getWidgetIndex(url, params);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
@@ -160,12 +172,15 @@ export class DoughnutChartComponent implements OnInit {
 	}
 
 	widgetnameChange(event) {
-		this.emitter.sendNext({
-			type: 'changeWidgetName',
+		console.log('widgetnameChange', this.id, event);
+		this.verificaDoughnutParent.emit({
+			type: 'changeVerificaDoughnutChartWidgetName',
 			data: {
-				widgetname: event,
-				id: this.id,
-				widgetid: this.widgetid
+				verificaDoughnutChart: {
+					widgetname: event,
+					id: this.id,
+					widgetid: this.widgetid
+				}
 			}
 		});
 	}
@@ -187,7 +202,7 @@ export class DoughnutChartComponent implements OnInit {
 			// get value by index
 			const value = chart.data.datasets[0].data[clickedElementIndex];
 			console.log('Chart Clicked ->',clickedElementIndex, label, value);
-			window.open(`/#/workflow/verifica/?id=${clickedElementIndex}&value=${value}`, '_blank');
+			//window.open(`/#/workflow/verifica/?id=${clickedElementIndex}&value=${value}`, '_blank');
 		  }
 		}
 	  }
