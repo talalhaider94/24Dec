@@ -12,7 +12,6 @@ import { ApiService } from '../../_services/api.service';
 // importing chart components
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
-import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
@@ -43,7 +42,6 @@ export class DashboardComponent implements OnInit {
 	componentCollection = [
 		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
-		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
@@ -315,24 +313,6 @@ export class DashboardComponent implements OnInit {
 	onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
 		switch (componentType) {
-			case "radar_chart": {
-				let radarWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'radar_chart');
-				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 5,
-					x: 0,
-					y: 0,
-					component: RadarChartComponent,
-					widgetname: radarWidget.name,
-					uiidentifier: radarWidget.uiidentifier,
-					filters: {}, // need to update this code
-					properties: {},
-					dashboardid: this.dashboardId,
-					widgetid: radarWidget.id,
-					id: 0, // 0 because we are adding them
-					url: radarWidget.url
-				});
-			}
 			case "line_chart": {
 				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
 				return this.dashboardWidgetsArray.push({

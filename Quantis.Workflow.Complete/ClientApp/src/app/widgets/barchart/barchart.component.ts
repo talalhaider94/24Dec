@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService } from '../../_helpers';
+import { DateTimeService, WidgetsHelper } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -84,20 +84,8 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let params = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(getWidgetParameters.measures)[0],
-						charttype: Object.keys(getWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: getWidgetParameters.defaultdaterange
-					},
-					Note: ''
-				};
-				/// To be used -> getWidgetIndex method ////
-				return this.dashboardService.getWidgetIndex(url, params);
+				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
@@ -205,14 +193,12 @@ export class BarchartComponent implements OnInit {
 
 	widgetnameChange(event) {
 		console.log('widgetnameChange', this.id, event);
-		this.barChartParent.emit({
-			type: 'changeBarChartWidgetName',
+		this.emitter.sendNext({
+			type: 'changeWidgetName',
 			data: {
-				barChart: {
-					widgetname: event,
-					id: this.id,
-					widgetid: this.widgetid
-				}
+				widgetname: event,
+				id: this.id,
+				widgetid: this.widgetid
 			}
 		});
 	}

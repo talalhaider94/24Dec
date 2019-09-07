@@ -17,7 +17,6 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
-import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
@@ -47,7 +46,6 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     DynamicModule.withComponents([
       LineChartComponent,
       DoughnutChartComponent,
-      RadarChartComponent,
       BarchartComponent,
       KpiCountSummaryComponent,
       DistributionByUserComponent,
@@ -64,7 +62,6 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     DashboardComponent,
     DoughnutChartComponent,
     LineChartComponent,
-    RadarChartComponent,
     MenuComponent,
     BarchartComponent,
     PublicComponent,
