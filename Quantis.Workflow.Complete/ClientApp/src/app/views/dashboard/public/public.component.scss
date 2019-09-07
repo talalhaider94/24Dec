@@ -8,3 +8,9 @@ perfect-scrollbar {
     border: 1px solid #ccc;
     border-radius: 10px;
 }
+:host {
+    gridster {
+      height: calc(100vh - 115px);
+    }
+  }
+  
