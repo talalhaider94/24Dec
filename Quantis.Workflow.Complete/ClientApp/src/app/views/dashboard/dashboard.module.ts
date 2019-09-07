@@ -26,6 +26,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
 import { DistributionByUserComponent } from '../../widgets/distribution-by-user/distribution-by-user.component';
+import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
+import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
+import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 
 @NgModule({
   imports: [
@@ -48,7 +51,10 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
       BarchartComponent,
       KpiCountSummaryComponent,
       DistributionByUserComponent,
-      CatalogPendingCountTrendsComponent
+      CatalogPendingCountTrendsComponent,
+      KpiReportTrendComponent,
+      NotificationTrendComponent,
+      KpiCountByOrganizationComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -65,7 +71,10 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
     DashboardListsComponent,
     KpiCountSummaryComponent,
     DistributionByUserComponent,
-    CatalogPendingCountTrendsComponent
+    CatalogPendingCountTrendsComponent,
+    KpiReportTrendComponent,
+    NotificationTrendComponent,
+    KpiCountByOrganizationComponent
   ]
 })
 export class DashboardModule { }

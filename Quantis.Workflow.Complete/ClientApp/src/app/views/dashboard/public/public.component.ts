@@ -17,6 +17,9 @@ import { BarchartComponent } from '../../../widgets/barchart/barchart.component'
 import { KpiCountSummaryComponent } from '../../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
 import { DistributionByUserComponent } from '../../../widgets/distribution-by-user/distribution-by-user.component';
+import { KpiReportTrendComponent } from '../../../widgets/kpi-report-trend/kpi-report-trend.component';
+import { NotificationTrendComponent } from '../../../widgets/notification-trend/notification-trend.component';
+import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 
 @Component({
 	selector: 'app-public',
@@ -60,6 +63,9 @@ export class PublicComponent implements OnInit {
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
 		{ name: "Distribution by User", componentInstance: DistributionByUserComponent, uiidentifier: "distribution_by_user" },
+		{ name: "KPI Report Trend", componentInstance: KpiReportTrendComponent, uiidentifier: "kpi_report_trend" },
+		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
+		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;

@@ -17,8 +17,11 @@ import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
 import { DistributionByUserComponent } from '../../widgets/distribution-by-user/distribution-by-user.component';
-
+import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
+import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
+import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { UUID } from 'angular2-uuid';
+
 @Component({
 	templateUrl: 'dashboard.component.html',
 	styleUrls: ['dashboard.component.scss']
@@ -45,6 +48,9 @@ export class DashboardComponent implements OnInit {
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
 		{ name: "Distribution by User", componentInstance: DistributionByUserComponent, uiidentifier: "distribution_by_user" },
+		{ name: "KPI Report Trend", componentInstance: KpiReportTrendComponent, uiidentifier: "kpi_report_trend" },
+		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
+		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
 	];
 	helpText: string = '';
 	constructor(
@@ -443,6 +449,66 @@ export class DashboardComponent implements OnInit {
 					widgetid: catalogWidget.id,
 					id: 0,
 					url: catalogWidget.url
+				});
+			}
+			case "kpi_report_trend": {
+				let kpiReportTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_report_trend');
+				return this.dashboardWidgetsArray.push({
+					cols: 5,
+					rows: 6,
+					minItemCols: 5,
+					minItemRows: 6,
+					x: 0,
+					y: 0,
+					component: KpiReportTrendComponent,
+					widgetname: kpiReportTrendWidget.name,
+					uiidentifier: kpiReportTrendWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: kpiReportTrendWidget.id,
+					id: 0,
+					url: kpiReportTrendWidget.url
+				});
+			}
+			case "notification_trend": {
+				let notificationTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'notification_trend');
+				return this.dashboardWidgetsArray.push({
+					cols: 5,
+					rows: 6,
+					minItemCols: 5,
+					minItemRows: 6,
+					x: 0,
+					y: 0,
+					component: NotificationTrendComponent,
+					widgetname: notificationTrendWidget.name,
+					uiidentifier: notificationTrendWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: notificationTrendWidget.id,
+					id: 0,
+					url: notificationTrendWidget.url
+				});
+			}
+			case "kpi_count_by_organization": {
+				let kpiOragnizationWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_by_organization');
+				return this.dashboardWidgetsArray.push({
+					cols: 5,
+					rows: 6,
+					minItemCols: 5,
+					minItemRows: 6,
+					x: 0,
+					y: 0,
+					component: NotificationTrendComponent,
+					widgetname: kpiOragnizationWidget.name,
+					uiidentifier: kpiOragnizationWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: kpiOragnizationWidget.id,
+					id: 0,
+					url: kpiOragnizationWidget.url
 				});
 			}
 		}
