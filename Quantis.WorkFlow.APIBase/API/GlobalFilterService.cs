@@ -39,6 +39,10 @@ namespace Quantis.WorkFlow.APIBase.API
         public BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props)
         {
             var dto = new BaseWidgetDTO();
+            if (props.Filters.ContainsKey("customers"))
+            {
+                dto.KPIs = GetGlobalRuleIds(props.UserId, props.Filters["customers"]);
+            }
             if (props.Filters.ContainsKey("daterange"))
             {
                 var daterange = props.Filters["daterange"];
@@ -89,6 +93,35 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.AggregationOption = "";
             }
             return dto;
+        }
+        private List<int> GetGlobalRuleIds(int userId,string customerIds)
+        {
+            var res = new List<int>();
+            string query = @"select r.global_rule_id
+                            from t_rules r 
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id 
+                            left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
+                            where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            and uk.user_id =  :user_id
+                            and m.sla_id in (:customer_ids)";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":user_id", userId);
+                command.Parameters.AddWithValue(":customer_ids", customerIds);
+                command.CommandText = query;
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(Decimal.ToInt32((Decimal)result[0]));
+                    }
+                }
+            }
+            return res;
         }
 
         public List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId,int userId)

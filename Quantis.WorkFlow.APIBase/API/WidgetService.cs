@@ -1,4 +1,5 @@
-﻿using Quantis.WorkFlow.APIBase.Framework;
+﻿using Oracle.ManagedDataAccess.Client;
+using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
@@ -11,8 +12,13 @@ namespace Quantis.WorkFlow.APIBase.API
     public class WidgetService : IWidgetService
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private static string _connectionstring = null;
         public WidgetService(WorkFlowPostgreSqlContext dbcontext){
             _dbcontext = dbcontext;
+            if (_connectionstring == null)
+            {
+                _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
+            }
         }
         public List<XYDTO> GetKPICountTrend(WidgetwithAggOptionDTO dto)
         {
@@ -96,6 +102,100 @@ namespace Quantis.WorkFlow.APIBase.API
                         XValue = p.Key.period_month + "/" + p.Key.period_year,
                         YValue = p.Count(r => r.notcomplaint)
                     }).ToList();
+                }
+            }
+            else if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant || dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+            {
+                string signcomplaint = "<";
+                if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+                {
+                    signcomplaint = ">";
+                }
+                string query = @"select 
+                                psl.end_period,
+                                count(1)
+                                from 
+                                (
+                                  select  
+                                  temp.global_rule_id, 
+                                  temp.time_stamp as timestamp, 
+                                  temp.time_stamp_utc as end_period, 
+                                  temp.begin_time_stamp_utc as start_period, 
+                                  temp.sla_id, 
+                                  temp.rule_id, 
+                                  temp.time_unit,
+                                  temp.interval_length, 
+                                  temp.is_period, 
+                                  temp.service_level_target, 
+                                  temp.service_level_target_ce, 
+                                  temp.provided_ce, 
+                                  temp.deviation_ce, 
+                                  temp.complete_record,
+                                  temp.sla_version_id, 
+                                  temp.metric_type_id, 
+                                  temp.domain_category_id, 
+                                  temp.service_domain_id,
+                                  case 
+                                    when deviation_ce > 0 then 'non compliant'
+                                    when deviation_ce < 0 then 'compliant'
+                                    else 'nc'
+                                  end as resultPsl
+                                  from 
+                                  (
+                                    select * 
+                                    from t_psl_0_month pm
+                                    union all
+                                    select * 
+                                    from t_psl_0_quarter pq
+                                    union all
+                                    select * 
+                                    from t_psl_0_year py
+                                    union all
+                                    select * 
+                                    from t_psl_1_all pa
+                                  ) temp
+                                  where provided is not null 
+                                  and service_level_target is not null
+                                ) psl 
+                                left join t_rules r on  psl.rule_id = r.rule_id
+                                left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                                left join t_slas s on sv.sla_id = s.sla_id
+                                where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
+                                and psl.time_unit='MONTH'
+                                and psl.complete_record=1
+                                and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and psl.global_rule_id in (:global_rule_ids)
+                                and psl.deviation_ce {0} 0
+                                group by psl.end_period";
+                query = string.Format(query, signcomplaint);
+                using (OracleConnection con = new OracleConnection(_connectionstring))
+                {
+                    using (OracleCommand cmd = con.CreateCommand())
+                    {
+                        con.Open();
+                        cmd.BindByName = true;
+                        cmd.CommandText = query;
+                        OracleParameter param1 = new OracleParameter("start_period", dto.DateRange.Item1.AddDays(-1).ToString("yyyy-mm-dd"));
+                        OracleParameter param2 = new OracleParameter("end_period", dto.DateRange.Item2.ToString("yyyy-mm-dd"));
+                        OracleParameter param3 = new OracleParameter("global_rule_ids", string.Join(',', dto.KPIs));
+                        cmd.Parameters.Add(param1);
+                        cmd.Parameters.Add(param2);
+                        cmd.Parameters.Add(param3);
+                        OracleDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            result.Add(new XYDTO()
+                            {
+                                XValue = ((DateTime)reader[0]).ToString("MM/yy"),
+                                YValue = (long)reader[1]
+                            });
+                        }
+                    }
+                }
+                if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
+                {
+                    result=result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
                 }
             }
             return result;
