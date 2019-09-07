@@ -185,11 +185,27 @@ export class DoughnutChartComponent implements OnInit {
 		});
 	}
 	// events
+	// public chartClicked(e: any): void {
+	// 	console.log('Chart Clicked ->', e.active[0]._index);
+	// 	let params = { month: '09', year: '19', key: 'donut_chart' };
+	// 	window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
+	// }
+
 	public chartClicked(e: any): void {
-		console.log('Chart Clicked ->', e);
-		let params = { month: '09', year: '19', key: 'donut_chart' };
-		window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
-	}
+		if (e.active.length > 0) {
+		  const chart = e.active[0]._chart;
+		  const activePoints = chart.getElementAtEvent(e.event);
+		  if ( activePoints.length > 0) {
+			// get the internal index of slice in pie chart
+			const clickedElementIndex = activePoints[0]._index;
+			const label = chart.data.labels[clickedElementIndex];
+			// get value by index
+			const value = chart.data.datasets[0].data[clickedElementIndex];
+			console.log('Chart Clicked ->',clickedElementIndex, label, value);
+			window.open(`/#/workflow/verifica/?id=${clickedElementIndex}&value=${value}`, '_blank');
+		  }
+		}
+	  }
 
 	public chartHovered(e: any): void {
 		console.log('Chart Hovered ->', e);
