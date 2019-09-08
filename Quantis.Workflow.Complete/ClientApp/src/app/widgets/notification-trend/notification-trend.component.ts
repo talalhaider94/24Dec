@@ -137,8 +137,6 @@ export class NotificationTrendComponent implements OnInit {
   }
 
   openModal() {
-    console.log('OPEN MODAL NotificationTrendComponent PARAMS', this.notificationTrendWidgetParameters);
-    console.log('OPEN MODAL NotificationTrendComponent VALUES', this.setWidgetFormValues);
     this.notificationTrendParent.emit({
       type: 'openNotificationTrendModal',
       data: {
@@ -156,9 +154,9 @@ export class NotificationTrendComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     let label = 'Series';
     if (dashboardComponentData) {
-      let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
+      let measureIndex = dashboardComponentData.notificationTrendWidgetParameterValues.Properties.measure;
       label = dashboardComponentData.notificationTrendWidgetParameters.measures[measureIndex];
-      let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+      let charttype = dashboardComponentData.notificationTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
         this.barChartType = charttype;
       });

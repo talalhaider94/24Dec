@@ -151,9 +151,9 @@ export class KpiReportTrendComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     let label = 'Series';
     if (dashboardComponentData) {
-      let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
+      let measureIndex = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.measure;
       label = dashboardComponentData.kpiReportTrendWidgetParameters.measures[measureIndex];
-      let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+      let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
         this.barChartType = charttype;
       });

@@ -169,8 +169,6 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 	}
 
 	openModal() {
-		console.log('OPEN MODAL CatalogPendingCountTrendsComponent PARAMS', this.catalogPendingWidgetParameters);
-		console.log('OPEN MODAL CatalogPendingCountTrendsComponent VALUES', this.setWidgetFormValues);
 		this.catalogPendingParent.emit({
 			type: 'openCatalogPendingModal',
 			data: {

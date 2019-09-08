@@ -76,6 +76,7 @@ export class PublicComponent implements OnInit {
 	isNotificationTrendComponent: boolean = false;
 	isKpiReportTrendComponent: boolean = false;
 	isKpiCountOrgComponent: boolean = false;
+	isDistributionByUserComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -171,7 +172,14 @@ export class PublicComponent implements OnInit {
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_by_organization');
 			}
 		},
-		
+		distributionByUserParent: childData => {
+			console.log('distributionByUserParent childData', childData);
+			if (childData.type === 'openDistributionByUserModal') {
+				this.barChartWidgetParameters = childData.data.distributionByUserWidgetParameters;
+				this.isDistributionByUserComponent = childData.data.isDistributionByUserComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_user');
+			}
+		},
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
@@ -478,6 +486,17 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountOrgComponent = false;
 			}
+			if(this.isDistributionByUserComponent) {
+				this.emitter.sendNext({
+					type: 'distributionByUserChart',
+					data: {
+						result,
+						distributionByUserWidgetParameters: this.barChartWidgetParameters,
+						distributionByUserWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isDistributionByUserComponent = false;
+			}
 			
 			this.emitter.loadingStatus(false);
 		}, error => {
@@ -570,6 +589,7 @@ export class PublicComponent implements OnInit {
 				this.isNotificationTrendComponent = false;
 				this.isKpiReportTrendComponent = false;
 				this.isKpiCountOrgComponent = false;
+				this.isDistributionByUserComponent = false;
 			}
 		});
 	}
