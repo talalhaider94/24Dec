@@ -73,6 +73,7 @@ export class PublicComponent implements OnInit {
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;
 	isCatalogPendingComponent: boolean = false;
+	isNotificationTrendComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -142,6 +143,14 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.catalogPendingWidgetParameters;
 				this.isCatalogPendingComponent = childData.data.isCatalogPendingComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'catalog_pending_count_trends');
+			}
+		},
+		notificationTrendParent: childData => {
+			console.log('notificationTrendParent childData', childData);
+			if (childData.type === 'openNotificationTrendModal') {
+				this.barChartWidgetParameters = childData.data.notificationTrendWidgetParameters;
+				this.isNotificationTrendComponent = childData.data.isNotificationTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'notification_trend');
 			}
 		},
 	};
@@ -417,6 +426,17 @@ export class PublicComponent implements OnInit {
 				});
 				this.isCatalogPendingComponent = false;
 			}
+			if(this.isNotificationTrendComponent) {
+				this.emitter.sendNext({
+					type: 'notificationTrendChart',
+					data: {
+						result,
+						notificationTrendWidgetParameters: this.barChartWidgetParameters,
+						notificationTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isNotificationTrendComponent = false;
+			}
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -505,6 +525,7 @@ export class PublicComponent implements OnInit {
 				this.isKpiCountSummaryComponent = false;
 				this.isverificaDoughnutComponent = false;
 				this.isCatalogPendingComponent = false;
+				this.isNotificationTrendComponent = false;
 			}
 		});
 	}
