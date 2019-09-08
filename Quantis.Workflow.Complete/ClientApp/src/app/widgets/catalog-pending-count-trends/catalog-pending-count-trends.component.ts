@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DateTimeService } from '../../_helpers';
+import { DateTimeService, WidgetsHelper } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DashboardService, EmitterService } from '../../_services';
@@ -79,6 +79,10 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 			this.getChartParametersAndData(this.url);
 		}
 		// coming from dashboard component
+		this.subscriptionForDataChangesFromParent();
+	}
+
+	subscriptionForDataChangesFromParent() {
 		this.emitter.getData().subscribe(result => {
 			const { type, data } = result;
 			if (type === 'kpiCountSummaryChart') {
@@ -102,23 +106,11 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
-				console.log(this.filters);
-				console.log(this.properties);
+				console.log('CatalogPendingCountTrends Filters', this.filters);
+				console.log('CatalogPendingCountTrends Properties', this.properties);
 				// Map Params for widget index when widgets initializes for first time
-				let params = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(getWidgetParameters.measures)[0],
-						charttype: Object.keys(getWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: getWidgetParameters.defaultdaterange
-					},
-					Note: ''
-				};
-				/// To be used -> getWidgetIndex method ////
-				return this.dashboardService.getWidgetIndex(url, params);
+				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// debugger
@@ -143,19 +135,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				}
 				this.kpiCountSummaryWidgetParameters = kpiCountSummaryParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.kpiCountSummaryWidgetParameters.measures)[0],
-						charttype: Object.keys(this.kpiCountSummaryWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.kpiCountSummaryWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.kpiCountSummaryWidgetParameters.defaultdaterange),
-						dateTypes: kpiCountSummaryParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
@@ -178,7 +158,6 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 	}
 
 	widgetnameChange(event) {
-		console.log('widgetnameChange', this.id, event);
 		this.emitter.sendNext({
 			type: 'changeWidgetName',
 			data: {
@@ -187,16 +166,6 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				widgetid: this.widgetid
 			}
 		});
-		// this.kpiCountSummaryParent.emit({
-		// 	type: 'changeKpiCountSummaryWidgetName',
-		// 	data: {
-		// 		kpiCountSummaryChart: {
-		// 			widgetname: event,
-		// 			id: this.id,
-		// 			widgetid: this.widgetid
-		// 		}
-		// 	}
-		// });
 	}
 
 	openModal() {

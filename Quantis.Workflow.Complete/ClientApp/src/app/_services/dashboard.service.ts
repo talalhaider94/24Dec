@@ -96,6 +96,7 @@ export class DashboardService {
 	}
 
 	getWidgetIndex(url: string, formValues: any): Observable<any> {
+		console.log('getWidgetIndex formValues', formValues);
 		const widgetIndexEndPoint = `${environment.API_URL}/${url}/Index`;
 		return this.http.post(widgetIndexEndPoint, formValues, { observe: 'response' });
 	}

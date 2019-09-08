@@ -17,7 +17,6 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
-import { RadarChartComponent } from '../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
@@ -29,6 +28,7 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
 import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
 import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
+import { ChartDataComponent } from './chartdata/chartdata.component';
 
 @NgModule({
   imports: [
@@ -47,7 +47,6 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     DynamicModule.withComponents([
       LineChartComponent,
       DoughnutChartComponent,
-      RadarChartComponent,
       BarchartComponent,
       KpiCountSummaryComponent,
       DistributionByUserComponent,
@@ -64,7 +63,6 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     DashboardComponent,
     DoughnutChartComponent,
     LineChartComponent,
-    RadarChartComponent,
     MenuComponent,
     BarchartComponent,
     PublicComponent,
@@ -74,7 +72,8 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     CatalogPendingCountTrendsComponent,
     KpiReportTrendComponent,
     NotificationTrendComponent,
-    KpiCountByOrganizationComponent
+    KpiCountByOrganizationComponent,
+    ChartDataComponent
   ]
 })
 export class DashboardModule { }

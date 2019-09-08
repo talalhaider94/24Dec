@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService } from '../../_helpers';
+import { DateTimeService, WidgetsHelper } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -84,20 +84,8 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let params = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(getWidgetParameters.measures)[0],
-						charttype: Object.keys(getWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: getWidgetParameters.defaultdaterange
-					},
-					Note: ''
-				};
-				/// To be used -> getWidgetIndex method ////
-				return this.dashboardService.getWidgetIndex(url, params);
+				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
@@ -122,19 +110,9 @@ export class BarchartComponent implements OnInit {
 				// have to use setTimeout if i am not emitting it in dashbaordComponent
 				// this.barChartParent.emit(barChartParams);
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.barChartWidgetParameters.measures)[0],
-						charttype: Object.keys(this.barChartWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange),
-						dateTypes: barChartParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
+				console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
@@ -154,6 +132,7 @@ export class BarchartComponent implements OnInit {
 	// events
 	public chartClicked(e: any): void {
 		console.log("Bar Chart Clicked ->", e);
+		console.log("barChartWidgetParameters ->",this.barChartWidgetParameters);
 		//this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
 		let params = { month: 'all', year: '19', key: 'bar_chart' };
 		window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
@@ -192,7 +171,7 @@ export class BarchartComponent implements OnInit {
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
-			label = currentWidgetComponentData.measures[0];
+			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
 		let allLabels = chartIndexData.map(label => label.xvalue);
@@ -205,14 +184,12 @@ export class BarchartComponent implements OnInit {
 
 	widgetnameChange(event) {
 		console.log('widgetnameChange', this.id, event);
-		this.barChartParent.emit({
-			type: 'changeBarChartWidgetName',
+		this.emitter.sendNext({
+			type: 'changeWidgetName',
 			data: {
-				barChart: {
-					widgetname: event,
-					id: this.id,
-					widgetid: this.widgetid
-				}
+				widgetname: event,
+				id: this.id,
+				widgetid: this.widgetid
 			}
 		});
 	}

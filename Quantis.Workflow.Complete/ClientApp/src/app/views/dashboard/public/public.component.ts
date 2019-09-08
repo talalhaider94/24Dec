@@ -12,7 +12,6 @@ import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
-import { RadarChartComponent } from '../../../widgets/radar-chart/radar-chart.component';
 import { BarchartComponent } from '../../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
@@ -58,7 +57,6 @@ export class PublicComponent implements OnInit {
 	componentCollection: Array<ComponentCollection> = [
 		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
-		{ name: "Radar Chart", componentInstance: RadarChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
