@@ -392,6 +392,7 @@ export class DashboardComponent implements OnInit {
 				});
 			}
 			case "distribution_by_user": {
+				console.log('distribution_by_user', this.widgetCollection)
 				let distributionWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_user');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,

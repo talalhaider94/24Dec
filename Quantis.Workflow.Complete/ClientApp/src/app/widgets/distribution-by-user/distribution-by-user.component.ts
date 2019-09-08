@@ -89,6 +89,7 @@ export class DistributionByUserComponent implements OnInit {
 			// populate modal with widget parameters
 			console.log('getWidgetIndex', getWidgetIndex);
 			console.log('myWidgetParameters', myWidgetParameters);
+			debugger
 			let barChartParams;
 			if (myWidgetParameters) {
 				barChartParams = {
@@ -120,6 +121,7 @@ export class DistributionByUserComponent implements OnInit {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			console.error('Distribution By User', error);
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		});
@@ -156,6 +158,7 @@ export class DistributionByUserComponent implements OnInit {
 	// posting data to parameters widget
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
+		debugger
 		if (dashboardComponentData) {
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
@@ -166,6 +169,7 @@ export class DistributionByUserComponent implements OnInit {
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
+			debugger
 			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}

@@ -130,15 +130,9 @@ export class KpiReportTrendComponent implements OnInit {
 
   // events
   public chartClicked(e: any): void {
-    console.log("Bar Chart Clicked ->", e);
-    console.log("barChartWidgetParameters ->", this.barChartWidgetParameters);
-    //this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
-    let params = { month: 'all', year: '19', key: 'bar_chart' };
-    window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
   }
 
   public chartHovered(e: any): void {
-    // console.log(e);
   }
 
   openModal() {
