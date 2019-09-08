@@ -202,7 +202,7 @@ export class DoughnutChartComponent implements OnInit {
 			// get value by index
 			const value = chart.data.datasets[0].data[clickedElementIndex];
 			console.log('Chart Clicked ->',clickedElementIndex, label, value);
-			//window.open(`/#/workflow/verifica/?id=${clickedElementIndex}&value=${value}`, '_blank');
+			window.open(`/#/dashboard/chartdata/?id=${clickedElementIndex}&value=${value}`, '_blank');
 		  }
 		}
 	  }

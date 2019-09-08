@@ -28,6 +28,7 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
 import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
 import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
+import { ChartDataComponent } from './chartdata/chartdata.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-orga
     CatalogPendingCountTrendsComponent,
     KpiReportTrendComponent,
     NotificationTrendComponent,
-    KpiCountByOrganizationComponent
+    KpiCountByOrganizationComponent,
+    ChartDataComponent
   ]
 })
 export class DashboardModule { }
