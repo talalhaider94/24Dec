@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService } from '../../_helpers';
+import { DateTimeService, WidgetsHelper } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -79,20 +79,9 @@ export class DoughnutChartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let params = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(getWidgetParameters.measures)[0],
-						charttype: Object.keys(getWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(getWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: getWidgetParameters.defaultdaterange
-					},
-					Note: ''
-				};
+				let newParams = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 				/// To be used -> getWidgetIndex method ////
-				return this.dashboardService.getWidgetIndex(url, params);
+				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
@@ -115,19 +104,7 @@ export class DoughnutChartComponent implements OnInit {
 				}
 				this.verificaDoughnutChartWidgetParameters = verificaDoughnutChartParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.verificaDoughnutChartWidgetParameters.measures)[0],
-						charttype: Object.keys(this.verificaDoughnutChartWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.verificaDoughnutChartWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.verificaDoughnutChartWidgetParameters.defaultdaterange),
-						dateTypes: verificaDoughnutChartParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {

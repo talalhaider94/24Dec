@@ -108,19 +108,7 @@ export class DistributionByUserComponent implements OnInit {
 				// have to use setTimeout if i am not emitting it in dashbaordComponent
 				// this.barChartParent.emit(barChartParams);
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.barChartWidgetParameters.measures)[0],
-						charttype: Object.keys(this.barChartWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange),
-						dateTypes: barChartParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
