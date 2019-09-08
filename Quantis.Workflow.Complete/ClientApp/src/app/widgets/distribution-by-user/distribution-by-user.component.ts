@@ -178,7 +178,7 @@ export class DistributionByUserComponent implements OnInit {
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
-			label = currentWidgetComponentData.measures[0];
+			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
 		let allLabels = chartIndexData.map(label => label.xvalue);
