@@ -21,11 +21,11 @@ export class KpiReportTrendComponent implements OnInit {
   @Input() id: number; // this is unique id 
 
   loading: boolean = true;
-  barChartWidgetParameters: any;
+  kpiReportTrendWidgetParameters: any;
   setWidgetFormValues: any;
   editWidgetName: boolean = true;
   @Output()
-  barChartParent = new EventEmitter<any>();
+  kpiReportTrendParent = new EventEmitter<any>();
 
   public barChartData: Array<any> = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
@@ -47,7 +47,7 @@ export class KpiReportTrendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    console.log('KpiReportTrendComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
     }
@@ -62,13 +62,13 @@ export class KpiReportTrendComponent implements OnInit {
   subscriptionForDataChangesFromParent() {
     this.emitter.getData().subscribe(result => {
       const { type, data } = result;
-      if (type === 'barChart') {
-        let currentWidgetId = data.barChartWidgetParameters.id;
+      if (type === 'kpiReportTrendChart') {
+        let currentWidgetId = data.kpiReportTrendWidgetParameters.id;
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
-          let barChartFormValues = data.barChartWidgetParameterValues;
-          barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
-          this.setWidgetFormValues = barChartFormValues;
+          let kpiReportTrendFormValues = data.kpiReportTrendWidgetParameterValues;
+          kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
+          this.setWidgetFormValues = kpiReportTrendFormValues;
           this.updateChart(data.result.body, data, null);
         }
       }
@@ -105,12 +105,8 @@ export class KpiReportTrendComponent implements OnInit {
             id: this.id
           }
         }
-        this.barChartWidgetParameters = barChartParams.data;
-        // have to use setTimeout if i am not emitting it in dashbaordComponent
-        // this.barChartParent.emit(barChartParams);
+        this.kpiReportTrendWidgetParameters = barChartParams.data;
         // setting initial Paramter form widget values
-        console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
-        console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
         this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
       // popular chart data
@@ -136,14 +132,14 @@ export class KpiReportTrendComponent implements OnInit {
   }
 
   openModal() {
-    console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
+    console.log('OPEN MODAL BAR CHART PARAMS', this.kpiReportTrendWidgetParameters);
     console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
-    this.barChartParent.emit({
-      type: 'openBarChartModal',
+    this.kpiReportTrendParent.emit({
+      type: 'openKpiReportTrendModal',
       data: {
-        barChartWidgetParameters: this.barChartWidgetParameters,
+        kpiReportTrendWidgetParameters: this.kpiReportTrendWidgetParameters,
         setWidgetFormValues: this.setWidgetFormValues,
-        isBarChartComponent: true
+        isKpiReportTrendComponent: true
       }
     });
   }
@@ -156,7 +152,7 @@ export class KpiReportTrendComponent implements OnInit {
     let label = 'Series';
     if (dashboardComponentData) {
       let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
-      label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
+      label = dashboardComponentData.kpiReportTrendWidgetParameters.measures[measureIndex];
       let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
         this.barChartType = charttype;

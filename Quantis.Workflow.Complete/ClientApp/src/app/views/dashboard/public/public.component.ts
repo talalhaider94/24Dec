@@ -74,6 +74,7 @@ export class PublicComponent implements OnInit {
 	isverificaDoughnutComponent: boolean = false;
 	isCatalogPendingComponent: boolean = false;
 	isNotificationTrendComponent: boolean = false;
+	isKpiReportTrendComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -153,6 +154,15 @@ export class PublicComponent implements OnInit {
 				this.showWidgetsModalAndSetFormValues(childData.data, 'notification_trend');
 			}
 		},
+		kpiReportTrendParent: childData => {
+			console.log('kpiReportTrendParent childData', childData);
+			if (childData.type === 'openKpiReportTrendModal') {
+				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
+				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
+			}
+		},
+		
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
@@ -437,6 +447,17 @@ export class PublicComponent implements OnInit {
 				});
 				this.isNotificationTrendComponent = false;
 			}
+			if(this.isKpiReportTrendComponent) {
+				this.emitter.sendNext({
+					type: 'kpiReportTrendChart',
+					data: {
+						result,
+						kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+						kpiReportTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiReportTrendComponent = false;
+			}
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -526,6 +547,7 @@ export class PublicComponent implements OnInit {
 				this.isverificaDoughnutComponent = false;
 				this.isCatalogPendingComponent = false;
 				this.isNotificationTrendComponent = false;
+				this.isKpiReportTrendComponent = false;
 			}
 		});
 	}
