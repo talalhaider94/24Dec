@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PublicComponent } from './public/public.component';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
+import { ChartDataComponent } from './chartdata/chartdata.component';
 const routes: Routes = [
   // {
   //   path: '',
@@ -37,6 +38,13 @@ const routes: Routes = [
       title: 'Dashboards'
     }
   },
+  { 
+    path: 'chartdata',
+    component: ChartDataComponent,
+    data: {
+      title: 'Chart Data'
+    }
+  }
 ];
 
 @NgModule({

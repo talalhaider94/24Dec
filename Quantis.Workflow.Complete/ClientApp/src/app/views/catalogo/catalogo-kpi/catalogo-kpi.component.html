@@ -52,7 +52,6 @@
           <tbody>
 
             <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
-              <!--        <td align="center"><input type="checkbox"/></td>-->
               <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
               <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
               <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
