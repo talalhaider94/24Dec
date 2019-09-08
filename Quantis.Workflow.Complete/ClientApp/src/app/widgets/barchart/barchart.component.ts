@@ -48,7 +48,7 @@ export class BarchartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+		console.log('Barchart Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
 			this.editWidgetName = false;
 		}
@@ -124,6 +124,7 @@ export class BarchartComponent implements OnInit {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			console.error('Barchart Count Trend', error);
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		});

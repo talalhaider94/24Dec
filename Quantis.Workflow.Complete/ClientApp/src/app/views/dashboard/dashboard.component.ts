@@ -287,11 +287,12 @@ export class DashboardComponent implements OnInit {
 
 	saveDashboard() {
 		this.emitter.loadingStatus(true);
+		console.log('saveDashboard', this.dashboardCollection);
 		this.dashboardService.updateDashboard(this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard saved successfully.');
 		}, error => {
-			console.log('updateDashboard', error);
+			console.error('saveDashboard', error);
 			this.emitter.loadingStatus(false);
 		});
 	}

@@ -7,7 +7,7 @@ import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { DateTimeService } from '../../../_helpers';
+import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
@@ -81,6 +81,24 @@ export class PublicComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 
+	showWidgetsModalAndSetFormValues(childData, identifier) {
+		if (this.barChartWidgetParameters) {
+			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
+			setTimeout(() => {
+				this.widgetParametersForm.patchValue(childData.setWidgetFormValues)
+			});
+		}
+		this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === identifier).help;
+		this.widgetParametersModal.show();		
+	}
+
+	showPropertyTab(properties){
+		return (Object.keys(properties).length) ? true : false;
+	}
+	showFilterTab(filters){
+		return (Object.keys(filters).length) ? true : false;
+	}
+
 	outputs = {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
@@ -90,14 +108,15 @@ export class PublicComponent implements OnInit {
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
-				this.widgetParametersModal.show();
+				this.showWidgetsModalAndSetFormValues(childData.data, 'count_trend');
+				// if (this.barChartWidgetParameters) {
+				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+				// 	setTimeout(() => {
+				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+				// 	});
+				// }
+				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
+				// this.widgetParametersModal.show();
 			} else {
 				console.log('WHY HERE');
 			}
@@ -108,14 +127,15 @@ export class PublicComponent implements OnInit {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.kpiCountSummaryWidgetParameters;
 				this.isKpiCountSummaryComponent = childData.data.isKpiCountSummaryComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
-				this.widgetParametersModal.show();
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_summary');
+				// if (this.barChartWidgetParameters) {
+				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+				// 	setTimeout(() => {
+				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+				// 	});
+				// }
+				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
+				// this.widgetParametersModal.show();
 			} else {
 				console.log('WHY HERE');
 			}
@@ -126,14 +146,15 @@ export class PublicComponent implements OnInit {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.verificaDoughnutChartWidgetParameters;
 				this.isverificaDoughnutComponent = childData.data.isverificaDoughnutComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
-				this.widgetParametersModal.show();
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_verifica');
+				// if (this.barChartWidgetParameters) {
+				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+				// 	setTimeout(() => {
+				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+				// 	});
+				// }
+				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
+				// this.widgetParametersModal.show();
 			} else {
 				console.log('WHY HERE');
 			}
@@ -296,6 +317,7 @@ export class PublicComponent implements OnInit {
 				Properties: widget.properties
 			}
 		});
+		debugger
 		this.dashboardService.saveDashboardState(params).subscribe(result => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard state saved successfully');
@@ -361,15 +383,11 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
-		// why it is not copying without reference :/ idiot
-		let copyFormValues = Object.assign({}, formValues);
-		delete formValues.Filters.dateTypes;
-		delete formValues.Filters.date;
-		delete formValues.Properties.aggregationoption;
-		delete formValues.Properties.charttype;
+		let copyFormValues = {...formValues, Filters: formValues.Filters, Properties: formValues.Properties};
+		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
-		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
+		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if(this.isBarChartComponent) {
 				this.emitter.sendNext({
@@ -389,6 +407,17 @@ export class PublicComponent implements OnInit {
 						result,
 						kpiCountSummaryWidgetParameters: this.barChartWidgetParameters,
 						kpiCountSummaryWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiCountSummaryComponent = false;
+			}
+			if(this.isKpiCountSummaryComponent) {
+				this.emitter.sendNext({
+					type: 'verificaDoughnutChart',
+					data: {
+						result,
+						verificaDoughnutWidgetParameters: this.barChartWidgetParameters,
+						verificaDoughnutWidgetParameterValues: copyFormValues
 					}
 				});
 				this.isKpiCountSummaryComponent = false;
@@ -452,7 +481,7 @@ export class PublicComponent implements OnInit {
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
-		console.log(this.dashboardWidgetsArray);
+		console.log('Before this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
 			if (widget.id === widgetId) {
 				let a = {
@@ -466,7 +495,7 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		console.log('updatedDashboardArray', updatedDashboardArray);
-		console.log('this.dashboardWidgetsArray', this.dashboardWidgetsArray);
+		console.log('After this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		// this.dashboardWidgetsArray = updatedDashboardArray;
 		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
 		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering

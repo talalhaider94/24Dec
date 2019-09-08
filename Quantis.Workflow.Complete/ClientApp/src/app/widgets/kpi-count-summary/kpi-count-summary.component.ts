@@ -112,8 +112,6 @@ export class KpiCountSummaryComponent implements OnInit {
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
-			console.log('KPI COUNT SUMMARY getWidgetIndex', getWidgetIndex);
-			console.log('KPI COUNT SUMMARY myWidgetParameters', myWidgetParameters);
 			let kpiCountSummaryParams;
 			if (myWidgetParameters) {
 				kpiCountSummaryParams = {

@@ -27,7 +27,7 @@
         </p>
         <form [formGroup]="widgetParametersForm" (ngSubmit)="onWidgetParametersFormSubmit()">
           <tabset>
-            <!-- PROPERTIES -->
+            <!-- PROPERTIES *ngIf="showPropertyTab(barChartWidgetParameters.properties)"-->
             <tab heading="PROPRIETA" id="tab1">
               <div formGroupName="Properties">
                 <div class="form-group" *ngIf="barChartWidgetParameters.showcharttype">
@@ -59,7 +59,7 @@
                 </div>
               </div>
             </tab>
-            <!-- FILTERS -->
+            <!-- FILTERS *ngIf="showPropertyTab(barChartWidgetParameters.filters)"-->
             <tab heading="FILTRI">
               <div formGroupName="Filters">
                 <label for="">Contraente e Contratto</label>
@@ -89,10 +89,10 @@
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
                     <!-- Date Range -->
-                    <!-- <label for="daterange">Intervallo di date</label>
+                    <label for="daterange">Intervallo di date</label>
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }"> -->
-                    <label for="daterange">Intervallo di date</label><br>
+                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY', minMode: 'month' }">
+                    <!-- <label for="daterange">Intervallo di date</label><br>
                     <div class="row">
                       <div class="col-md-6">
                         <label for="fromdate" style="text-align: center">From</label>
@@ -100,7 +100,7 @@
                           <input autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
                           (onShown)="fromCalendar($event)">
-                          <!-- Result: <p>{{modelDate}}</p> -->
+                          Result: <p>{{modelDate}}</p>
                         </form>
                       </div>
                       <div class="col-md-6">
@@ -109,10 +109,10 @@
                           <input autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
                           (onShown)="toCalendar($event)">
-                          <!-- Result: <p>{{modelDate}}</p> -->
+                          Result: <p>{{modelDate}}</p>
                         </form>
                       </div>
-                    </div> 
+                    </div>  -->
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">

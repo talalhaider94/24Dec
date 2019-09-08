@@ -47,7 +47,7 @@ export class NotificationTrendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    console.log('NotificationTrendComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
     }
@@ -122,7 +122,7 @@ export class NotificationTrendComponent implements OnInit {
       this.loading = false;
       this.emitter.loadingStatus(false);
     }, error => {
-      debugger
+      console.error('NotificationTrendComponent', error);
       this.loading = false;
       this.emitter.loadingStatus(false);
     });
