@@ -75,6 +75,7 @@ export class PublicComponent implements OnInit {
 	isCatalogPendingComponent: boolean = false;
 	isNotificationTrendComponent: boolean = false;
 	isKpiReportTrendComponent: boolean = false;
+	isKpiCountOrgComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -160,6 +161,14 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
+			}
+		},
+		kpiCountOrgParent: childData => {
+			console.log('kpiCountOrgParent childData', childData);
+			if (childData.type === 'openKpiCountOrgModal') {
+				this.barChartWidgetParameters = childData.data.kpiCountOrgWidgetParameters;
+				this.isKpiCountOrgComponent = childData.data.isKpiCountOrgComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_by_organization');
 			}
 		},
 		
@@ -458,6 +467,18 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiReportTrendComponent = false;
 			}
+			if(this.isKpiCountOrgComponent) {
+				this.emitter.sendNext({
+					type: 'kpiCountByOrgChart',
+					data: {
+						result,
+						kpiCountOrgWidgetParameters: this.barChartWidgetParameters,
+						kpiCountOrgWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiCountOrgComponent = false;
+			}
+			
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -548,6 +569,7 @@ export class PublicComponent implements OnInit {
 				this.isCatalogPendingComponent = false;
 				this.isNotificationTrendComponent = false;
 				this.isKpiReportTrendComponent = false;
+				this.isKpiCountOrgComponent = false;
 			}
 		});
 	}

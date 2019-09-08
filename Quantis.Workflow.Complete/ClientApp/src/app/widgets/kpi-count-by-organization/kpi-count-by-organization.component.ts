@@ -15,18 +15,16 @@ export class KpiCountByOrganizationComponent implements OnInit {
   @Input() url: string;
   @Input() filters: Array<any>;
   @Input() properties: Array<any>;
-  // this widgetid is from widgets Collection and can be duplicate
-  // it will be used for common functionality of same component instance type
   @Input() widgetid: number;
   @Input() dashboardid: number;
-  @Input() id: number; // this is unique id 
+  @Input() id: number; 
 
   loading: boolean = true;
-  barChartWidgetParameters: any;
+  kpiCountOrgWidgetParameters: any;
   setWidgetFormValues: any;
   editWidgetName: boolean = true;
   @Output()
-  barChartParent = new EventEmitter<any>();
+  kpiCountOrgParent = new EventEmitter<any>();
 
   public barChartData: Array<any> = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
@@ -48,7 +46,7 @@ export class KpiCountByOrganizationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    console.log('KpiCountByOrganizationComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
     }
@@ -63,13 +61,13 @@ export class KpiCountByOrganizationComponent implements OnInit {
   subscriptionForDataChangesFromParent() {
     this.emitter.getData().subscribe(result => {
       const { type, data } = result;
-      if (type === 'barChart') {
-        let currentWidgetId = data.barChartWidgetParameters.id;
+      if (type === 'kpiCountByOrgChart') {
+        let currentWidgetId = data.kpiCountOrgWidgetParameters.id;
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
-          let barChartFormValues = data.barChartWidgetParameterValues;
-          barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
-          this.setWidgetFormValues = barChartFormValues;
+          let kpiCountOrgFormValues = data.kpiCountOrgWidgetParameterValues;
+          kpiCountOrgFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountOrgFormValues.Filters.daterange);
+          this.setWidgetFormValues = kpiCountOrgFormValues;
           this.updateChart(data.result.body, data, null);
         }
       }
@@ -89,8 +87,6 @@ export class KpiCountByOrganizationComponent implements OnInit {
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
-      console.log('getWidgetIndex', getWidgetIndex);
-      console.log('myWidgetParameters', myWidgetParameters);
       let barChartParams;
       if (myWidgetParameters) {
         barChartParams = {
@@ -106,12 +102,8 @@ export class KpiCountByOrganizationComponent implements OnInit {
             id: this.id
           }
         }
-        this.barChartWidgetParameters = barChartParams.data;
-        // have to use setTimeout if i am not emitting it in dashbaordComponent
-        // this.barChartParent.emit(barChartParams);
+        this.kpiCountOrgWidgetParameters = barChartParams.data;
         // setting initial Paramter form widget values
-        console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
-        console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
         this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
       // popular chart data
@@ -137,14 +129,12 @@ export class KpiCountByOrganizationComponent implements OnInit {
   }
 
   openModal() {
-    console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
-    console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
-    this.barChartParent.emit({
-      type: 'openBarChartModal',
+    this.kpiCountOrgParent.emit({
+      type: 'openKpiCountOrgModal',
       data: {
-        barChartWidgetParameters: this.barChartWidgetParameters,
+        kpiCountOrgWidgetParameters: this.kpiCountOrgWidgetParameters,
         setWidgetFormValues: this.setWidgetFormValues,
-        isBarChartComponent: true
+        isKpiCountOrgComponent: true
       }
     });
   }
@@ -156,9 +146,9 @@ export class KpiCountByOrganizationComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     let label = 'Series';
     if (dashboardComponentData) {
-      let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
-      label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
-      let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+      let measureIndex = dashboardComponentData.kpiCountOrgWidgetParameterValues.Properties.measure;
+      label = dashboardComponentData.kpiCountOrgWidgetParameters.measures[measureIndex];
+      let charttype = dashboardComponentData.kpiCountOrgWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
         this.barChartType = charttype;
       });
