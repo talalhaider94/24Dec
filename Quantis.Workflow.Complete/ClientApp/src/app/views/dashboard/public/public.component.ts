@@ -72,6 +72,7 @@ export class PublicComponent implements OnInit {
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;
+	isCatalogPendingComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -117,52 +118,35 @@ export class PublicComponent implements OnInit {
 				// }
 				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
 				// this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
 			}
 		},
 		kpiCountSummaryParent: childData => {
 			console.log('kpiCountSummaryParent childData', childData);
 			if (childData.type === 'openKpiSummaryCountModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.kpiCountSummaryWidgetParameters;
 				this.isKpiCountSummaryComponent = childData.data.isKpiCountSummaryComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_summary');
-				// if (this.barChartWidgetParameters) {
-				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-				// 	setTimeout(() => {
-				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-				// 	});
-				// }
-				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
-				// this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
 			}
 		},
 		verificaDoughnutParent: childData => {
 			console.log('verificaDoughnutParent childData', childData);
 			if (childData.type === 'openVerificaDoughnutChartModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.verificaDoughnutChartWidgetParameters;
 				this.isverificaDoughnutComponent = childData.data.isverificaDoughnutComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_verifica');
-				// if (this.barChartWidgetParameters) {
-				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-				// 	setTimeout(() => {
-				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-				// 	});
-				// }
-				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
-				// this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
 			}
-		}
+		},
+		catalogPendingParent: childData => {
+			console.log('catalogPendingParent childData', childData);
+			if (childData.type === 'openCatalogPendingModal') {
+				this.barChartWidgetParameters = childData.data.catalogPendingWidgetParameters;
+				this.isCatalogPendingComponent = childData.data.isCatalogPendingComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'catalog_pending_count_trends');
+			}
+		},
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-		// console.log('Component Created', compRef);
 	}
 
 	ngOnInit(): void {
@@ -411,7 +395,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountSummaryComponent = false;
 			}
-			if(this.isKpiCountSummaryComponent) {
+			if(this.isverificaDoughnutComponent) {
 				this.emitter.sendNext({
 					type: 'verificaDoughnutChart',
 					data: {
@@ -420,7 +404,18 @@ export class PublicComponent implements OnInit {
 						verificaDoughnutWidgetParameterValues: copyFormValues
 					}
 				});
-				this.isKpiCountSummaryComponent = false;
+				this.isverificaDoughnutComponent = false;
+			}
+			if(this.isCatalogPendingComponent) {
+				this.emitter.sendNext({
+					type: 'catalogPendingChart',
+					data: {
+						result,
+						catalogPendingWidgetParameters: this.barChartWidgetParameters,
+						catalogPendingWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isCatalogPendingComponent = false;
 			}
 			this.emitter.loadingStatus(false);
 		}, error => {
@@ -509,6 +504,7 @@ export class PublicComponent implements OnInit {
 				this.isBarChartComponent = false;
 				this.isKpiCountSummaryComponent = false;
 				this.isverificaDoughnutComponent = false;
+				this.isCatalogPendingComponent = false;
 			}
 		});
 	}
