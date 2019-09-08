@@ -24,6 +24,8 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowChartType = true;
             vm.ShowDateType = true;
             vm.ShowDateRangeFilter = true;
+            vm.ShowLevelWiseOrganization = true;
+            vm.ShowOrganization = false;
             vm.ChartTypes.Add(ChartType.BAR);
             vm.ChartTypes.Add(ChartType.LINE);
         }

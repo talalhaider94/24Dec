@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public bool ShowDateRangeFilter { get; set; }
         public bool ShowDateFilter { get; set; }
         public bool ShowOrganization { get; set; }
+        public bool ShowLevelWiseOrganization { get; set; }
         public string DefaultDateRange { get; set; }
 
         public Dictionary<int,string> Measures { get; set; }
@@ -31,6 +32,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             ShowMeasure = false;
             ShowDateFilter = false;
             ShowOrganization = true;
+            ShowLevelWiseOrganization = false;
             Measures = new Dictionary<int, string>();
             ChartTypes = new Dictionary<string, string>();
             AggregationOptions = new Dictionary<string, string>();
