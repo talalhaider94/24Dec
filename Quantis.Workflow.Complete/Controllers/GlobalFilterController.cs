@@ -31,5 +31,26 @@ namespace Quantis.Workflow.Complete.Controllers
             var usr = HttpContext.User as AuthUser;
             return _globalfilterService.GetOrganizationHierarcy(globalFilterId, usr.UserId);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetContractParties")]
+        public List<KeyValuePair<int, string>> GetContractParties(int globalFilterId)
+        {
+            var usr = HttpContext.User as AuthUser;
+            return _globalfilterService.GetContractParties(globalFilterId, usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetContracts")]
+        public List<KeyValuePair<int, string>> GetContracts(int globalFilterId,int contractpartyId)
+        {
+            var usr = HttpContext.User as AuthUser;
+            return _globalfilterService.GetContracts(globalFilterId, usr.UserId,contractpartyId);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetKPIs")]
+        public List<KeyValuePair<int, string>> GetKPIs(int globalFilterId, int contractId)
+        {
+            var usr = HttpContext.User as AuthUser;
+            return _globalfilterService.GetKPIs(globalFilterId, usr.UserId,contractId);
+        }
     }
 }
