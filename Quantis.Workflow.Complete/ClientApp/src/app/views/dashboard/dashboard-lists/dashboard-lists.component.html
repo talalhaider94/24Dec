@@ -10,7 +10,7 @@
                         <div class="float-right mb-3">
                             <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                 (click)="createDashboard()">
-                                <span class="fa fa-plus"></span> Create Dashboard
+                                <span class="fa fa-plus"></span> Crea Dashboard
                             </button>
                         </div>
                         <table class=" table table-hover table-outline text-center mb-0">
@@ -18,14 +18,14 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Dashboard ID</th>
-                                    <th>Name</th>
+                                    <th>Nome</th>
                                     <th>Owner</th>
-                                    <th>Actions</th>
+                                    <th>Azione</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngIf="dashboards && dashboards.length === 0">
-                                    <td colspan="5">No dashboard found.</td>
+                                    <td colspan="5">Dashboard non trovata.</td>
                                 </tr>
                                 <tr *ngFor="let dashboard of dashboards; let i = index">
                                     <td>{{ i+1 }}</td>
@@ -72,7 +72,7 @@
                 <form [formGroup]="createDashboardForm" (ngSubmit)="onDashboardFormSubmit()">
                     <div class="form-group">
                         <input type="text" formControlName="name" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }" placeholder="Enter Dashboard Name"
+                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }" placeholder="Nome Dashboard"
                             autocomplete="name">
                     </div>
                     <!-- display name error -->
