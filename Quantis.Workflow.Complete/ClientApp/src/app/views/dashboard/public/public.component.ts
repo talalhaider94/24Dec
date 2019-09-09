@@ -108,8 +108,10 @@ export class PublicComponent implements OnInit {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
+				debugger
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
+				// this.createTrees(childData.data.organizationHierarchy);
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
@@ -197,9 +199,8 @@ export class PublicComponent implements OnInit {
 				daterange: [null],
 				dateTypes: [null],
 				date: [null],
-				organizations: [null] 
 			}),
-			Note: [null],
+			// Note: [null],
 		});
 		// Grid options
 		this.options = {
@@ -254,17 +255,6 @@ export class PublicComponent implements OnInit {
 				this.showDateInFilters = false;
 			}
 		});
-
-		////Tree View////
-		// console.log('--- Tree View ---');
-		// this.dashboardService.GetOrganizationHierarcy().subscribe(data => {
-		// 	console.log('GetOrganizationHierarcy ==> ', data);
-		// 	//this.treeFields.dataSource = data;
-		// 	this.createTrees(data);
-		// }, err => { 
-		// 	this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')
-		//  });
-
 		this.closeModalSubscription();
 	}
 
@@ -408,9 +398,6 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		debugger
-		console.log(this.uncheckedNodes);
-
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === 'Custom') {
@@ -422,6 +409,9 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
+		// Organization hierarchy as Customers
+		this.uncheckedNodes;
+		formValues.Filters.organizations = this.uncheckedNodes.join(',');
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;

@@ -9,7 +9,7 @@ export function removeNullKeysFromObject(obj) {
     Object.keys(obj).forEach(key => {
       if (obj[key] && typeof obj[key] === "object") {
         newObj[key] = removeNullKeysFromObject(obj[key]); // recurse
-      } else if (!!obj[key]) {
+      } else if (obj[key] !== null && obj[key] !== undefined) {
         newObj[key] = obj[key]; // copy value
       }
     });

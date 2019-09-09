@@ -39,6 +39,7 @@ export class BarchartComponent implements OnInit {
 	};
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'bar';
+	getOrgHierarchy: any = [];
 
 	constructor(
 		private dashboardService: DashboardService,
@@ -73,6 +74,11 @@ export class BarchartComponent implements OnInit {
 					this.updateChart(data.result.body, data, null);
 				}
 			}
+			// no idea yet may remove
+			// if(type === 'getOrgHierarcy') {
+			// 	debugger
+			// 	this.getOrgHierarchy = data.getOrgHierarchy;
+			// }
 		});
 	}
 	// invokes on component initialization

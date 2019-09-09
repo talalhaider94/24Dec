@@ -9,9 +9,11 @@
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
     <div class="card">
       <div class="card-body">
+
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
           [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
+        
       </div>
     </div>
   </gridster-item>
@@ -140,7 +142,7 @@
             </tab>
             <!-- NOTE -->
             <tab heading="NOTA">
-              <textarea placeholder="Enter Note" class="form-control" formControlName="Note">
+              <textarea placeholder="Enter Note" class="form-control" >
 
                 </textarea>
             </tab>
