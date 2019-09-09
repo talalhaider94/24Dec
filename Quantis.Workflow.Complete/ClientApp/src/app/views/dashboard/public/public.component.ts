@@ -255,12 +255,14 @@ export class PublicComponent implements OnInit {
 		});
 
 		////Tree View////
-		console.log('--- Tree View ---');
-		this.dashboardService.GetOrganizationHierarcy().subscribe(data => {
-			console.log('GetOrganizationHierarcy ==> ', data);
-			//this.treeFields.dataSource = data;
-			this.createTrees(data);
-		}, err => { this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info') });
+		// console.log('--- Tree View ---');
+		// this.dashboardService.GetOrganizationHierarcy().subscribe(data => {
+		// 	console.log('GetOrganizationHierarcy ==> ', data);
+		// 	//this.treeFields.dataSource = data;
+		// 	this.createTrees(data);
+		// }, err => { 
+		// 	this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')
+		//  });
 
 		this.closeModalSubscription();
 	}
@@ -268,9 +270,11 @@ export class PublicComponent implements OnInit {
 	getData(dashboardId: number) {
 		const getAllWidgets = this.dashboardService.getWidgets();
 		const getDashboardWidgets = this.dashboardService.getDashboard(dashboardId);
-		forkJoin([getAllWidgets, getDashboardWidgets]).subscribe(result => {
+		const getOrgHierarcy = this.dashboardService.GetOrganizationHierarcy();
+
+		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
 			if (result) {
-				const [allWidgets, dashboardData] = result;
+				const [allWidgets, dashboardData, getOrgHierarcy] = result;
 				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
 				if (allWidgets && allWidgets.length > 0) {
@@ -284,11 +288,18 @@ export class PublicComponent implements OnInit {
 					// copying array without reference to re-render.
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
+				
+				if(getOrgHierarcy) {
+					console.log('getOrgHierarcy', getOrgHierarcy);
+					this.createTrees(getOrgHierarcy);
+				}
+
 			} else {
 				console.log('WHY NO DASHBOARD DATA');
 			}
 			this.emitter.loadingStatus(false);
 		}, error => {
+			this.isTreeLoaded = true;
 			this.emitter.loadingStatus(false);
 			this.toastr.error('Error while fetching dashboards');
 			console.error('Get Dashboard Data', error);
