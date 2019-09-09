@@ -411,6 +411,45 @@ export class PublicComponent implements OnInit {
 		this.itemChange();
 	}
 
+	syncSelectedNodesArray(event, treeRef) {
+		// this.allLeafNodesIds = [];
+		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
+		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
+		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
+		treeRef.loaded = true;
+	}
+	createTrees(treesData) {
+		console.log('treesData ->', treesData);
+		//treesData.forEach((itm: any) => {
+			let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
+			this.treesArray.push({
+				name: treesData.name,
+				settings: settings,
+				checkedNodes: this.preSelectedNodes,
+				id: treesData.id,
+				elementId: `permissions_tree_${treesData.id}`,
+				loaded: true
+			});
+			this.allLeafNodesIds = [];
+			this.getAllLeafNodesIds(treesData);
+			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
+		//});
+		console.log('this.treesArray ->', this.treesArray);
+		this.isTreeLoaded = true;
+	}
+	getAllLeafNodesIds(complexJson) {
+		if (complexJson) {
+			complexJson.forEach((item: any) => {
+				if (item.children) {
+					this.getAllLeafNodesIds(item.children);
+				} else {
+					this.allLeafNodesIds.push(item.id);
+				}
+			});
+			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
+		}
+	}
+
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
 		let startDate;
@@ -540,45 +579,6 @@ export class PublicComponent implements OnInit {
 		this.treesArray.forEach((itm: any) => {
 			itm.loaded = load;
 		});
-	}
-
-	syncSelectedNodesArray(event, treeRef) {
-		// this.allLeafNodesIds = [];
-		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
-		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
-		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
-		treeRef.loaded = true;
-	}
-	createTrees(treesData) {
-		console.log('treesData ->', treesData);
-		//treesData.forEach((itm: any) => {
-			let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
-			this.treesArray.push({
-				name: treesData.name,
-				settings: settings,
-				checkedNodes: this.preSelectedNodes,
-				id: treesData.id,
-				elementId: `permissions_tree_${treesData.id}`,
-				loaded: true
-			});
-			this.allLeafNodesIds = [];
-			this.getAllLeafNodesIds(treesData);
-			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
-		//});
-		console.log('this.treesArray ->', this.treesArray);
-		this.isTreeLoaded = true;
-	}
-	getAllLeafNodesIds(complexJson) {
-		if (complexJson) {
-			complexJson.forEach((item: any) => {
-				if (item.children) {
-					this.getAllLeafNodesIds(item.children);
-				} else {
-					this.allLeafNodesIds.push(item.id);
-				}
-			});
-			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
-		}
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
