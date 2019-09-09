@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
@@ -11,22 +10,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    public class GlobalFilterService: IGlobalFilterService
+    public class GlobalFilterService : IGlobalFilterService
     {
         private readonly IInformationService _infoService;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IConfiguration _configuration;
         private string defaultDateRange = "06/2019-08/2019";
-        public GlobalFilterService(IInformationService infoService,WorkFlowPostgreSqlContext dbcontext, IConfiguration configuration)
+        public GlobalFilterService(IInformationService infoService, WorkFlowPostgreSqlContext dbcontext, IConfiguration configuration)
         {
             _infoService = infoService;
             _dbcontext = dbcontext;
             _configuration = configuration;
-            var val=_infoService.GetConfiguration("defaultdaterange", "dashboard");
+            var val = _infoService.GetConfiguration("defaultdaterange", "dashboard");
             if (val != null)
             {
                 defaultDateRange = val.Value;
@@ -39,9 +37,13 @@ namespace Quantis.WorkFlow.APIBase.API
         public BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props)
         {
             var dto = new BaseWidgetDTO();
-            if (props.Filters.ContainsKey("customers"))
+            if (props.Filters.ContainsKey("organizations"))
             {
-                dto.KPIs = GetGlobalRuleIds(props.UserId, props.Filters["customers"]);
+                dto.KPIs = GetGlobalRuleIds(props.UserId, props.Filters["organizations"]);
+            }
+            else
+            {
+                dto.KPIs = new List<int>();
             }
             if (props.Filters.ContainsKey("daterange"))
             {
@@ -72,7 +74,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 dto.Measures = new List<Measures>();
             }
-            dto.KPIs = new List<int>();
+            
             return dto;
         }
         public WidgetwithAggOptionDTO MapAggOptionWidget(WidgetParametersDTO props)
@@ -80,13 +82,13 @@ namespace Quantis.WorkFlow.APIBase.API
             var map = MapBaseWidget(props);
             var dto = new WidgetwithAggOptionDTO()
             {
-                DateRange=map.DateRange,
-                KPIs=map.KPIs,
-                Measures=map.Measures,
+                DateRange = map.DateRange,
+                KPIs = map.KPIs,
+                Measures = map.Measures,
             };
             if (props.Properties.ContainsKey("aggregationoption"))
             {
-                dto.AggregationOption = props.Properties["aggregationoption"];                
+                dto.AggregationOption = props.Properties["aggregationoption"];
             }
             else
             {
@@ -94,7 +96,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return dto;
         }
-        private List<int> GetGlobalRuleIds(int userId,string customerIds)
+        private List<int> GetGlobalRuleIds(int userId, string customerIds)
         {
             var res = new List<int>();
             string query = @"select r.global_rule_id
@@ -104,14 +106,14 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
                             where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
                             and uk.user_id =  :user_id
-                            and m.sla_id in (:customer_ids)";
+                            and m.sla_id in ({0})";
+            query = string.Format(query, customerIds);
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
                 var command = new NpgsqlCommand(query, con);
                 command.CommandType = CommandType.Text;
                 command.Parameters.AddWithValue(":user_id", userId);
-                command.Parameters.AddWithValue(":customer_ids", customerIds);
                 command.CommandText = query;
                 using (var result = command.ExecuteReader())
                 {
@@ -124,7 +126,7 @@ namespace Quantis.WorkFlow.APIBase.API
             return res;
         }
 
-        public List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId,int userId)
+        public List<HierarchicalNameCodeDTO> GetOrganizationHierarcy(int globalFilterId, int userId)
         {
             try
             {
@@ -159,7 +161,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             });
                         }
                     }
-                    var ret=res.GroupBy(o => new { o.Customer_name, o.Customer_Id }).Select(p => new HierarchicalNameCodeDTO(p.Key.Customer_Id, p.Key.Customer_name, p.Key.Customer_name)
+                    var ret = res.GroupBy(o => new { o.Customer_name, o.Customer_Id }).Select(p => new HierarchicalNameCodeDTO(p.Key.Customer_Id, p.Key.Customer_name, p.Key.Customer_name)
                     {
                         Children = p.Select(q => new HierarchicalNameCodeDTO(q.Sla_Id, q.Sla_Name, q.Sla_Name)).ToList()
                     }).ToList();
@@ -173,7 +175,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<KeyValuePair<int,string>> GetContractParties(int globalFilterId, int userId)
+        public List<KeyValuePair<int, string>> GetContractParties(int globalFilterId, int userId)
         {
             try
             {
@@ -200,7 +202,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             res.Add(new KeyValuePair<int, string>(Decimal.ToInt32((Decimal)result[0]), (string)result[1]));
                         }
-                    }                    
+                    }
                     return res;
 
                 }
@@ -211,7 +213,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<KeyValuePair<int, string>> GetContracts(int globalFilterId, int userId,int contractpartyId)
+        public List<KeyValuePair<int, string>> GetContracts(int globalFilterId, int userId, int contractpartyId)
         {
             try
             {

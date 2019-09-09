@@ -165,10 +165,10 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and psl.complete_record=1
                                 and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
                                 and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
-                                and psl.global_rule_id in (:global_rule_ids)
-                                and psl.deviation_ce {0} 0
+                                and psl.global_rule_id in ({0})
+                                and psl.deviation_ce {1} 0
                                 group by psl.end_period";
-                query = string.Format(query, signcomplaint);
+                query = string.Format(query, string.Join(',', dto.KPIs),signcomplaint);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -176,12 +176,10 @@ namespace Quantis.WorkFlow.APIBase.API
                         con.Open();
                         cmd.BindByName = true;
                         cmd.CommandText = query;
-                        OracleParameter param1 = new OracleParameter("start_period", dto.DateRange.Item1.AddDays(-1).ToString("yyyy-mm-dd"));
-                        OracleParameter param2 = new OracleParameter("end_period", dto.DateRange.Item2.ToString("yyyy-mm-dd"));
-                        OracleParameter param3 = new OracleParameter("global_rule_ids", string.Join(',', dto.KPIs));
+                        OracleParameter param1 = new OracleParameter("start_period", dto.DateRange.Item1.AddDays(-1).ToString("yyyy-MM-dd"));
+                        OracleParameter param2 = new OracleParameter("end_period", dto.DateRange.Item2.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
                         cmd.Parameters.Add(param1);
                         cmd.Parameters.Add(param2);
-                        cmd.Parameters.Add(param3);
                         OracleDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
