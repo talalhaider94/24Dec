@@ -38,6 +38,7 @@ namespace Quantis.WorkFlow.Services.API
         void AssignKpisToUserByContractParty(int userId, int contractpartyId, bool assign);
         void AssignKpisToUserByContract(int userId, int contractId, bool assign);
         void AssignKpisToUserByKpis(int userId, int contractId, List<int> kpiIds);
+        int GetContractIdByGlobalRuleId(int globalruleid);
 
     }
 }

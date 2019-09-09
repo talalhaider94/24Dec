@@ -19,7 +19,8 @@ export class TConfigurationAdvancedComponent implements OnInit {
   key: any = '';
   value: any =  '';
   owner: any = '';
-  isenable: boolean =  false;
+  isenable: boolean = false;
+  iseditable: boolean = true;
   description: any =  '';
 
   dtOptions: DataTables.Settings = {
@@ -52,6 +53,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     value: '',
     owner: '',
     isenable: true,
+    iseditable: true,
     description: '',
   };
 
@@ -60,6 +62,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     value: '',
     owner: '',
     isenable: false,
+    iseditable: true,
     description: ''
   };
 
@@ -70,6 +73,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
       value: 'value',
       owner: 'owner',
       isenable: true,
+      iseditable: true,
       description: 'description',
     }
   ]
@@ -82,6 +86,10 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   ngOnInit() {
+    setInterval(() => {
+      this.getCOnfigurations(); 
+      console.log("Auto Refresh...");
+    }, 600000); 
   }
 
   populateModalData(data) {
@@ -89,6 +97,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     this.modalData.owner = data.owner;
     this.modalData.value = data.value;
     this.modalData.isenable = data.isenable;
+    this.modalData.iseditable = data.iseditable;
     this.modalData.description = data.description;
   }
 
@@ -97,6 +106,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
     this.addData.owner = this.owner;
     this.addData.value = this.value;
     this.addData.isenable = this.isenable;
+    this.addData.iseditable = this.iseditable;
     this.addData.description = this.description;
 
     this.toastr.info('Valore in aggiornamento..', 'Info');
@@ -111,6 +121,11 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   updateConfig() {
+    var value = +this.modalData.value;
+    console.log("value ->",value);
+    if((this.modalData.key=='day_cutoff' || this.modalData.key=='day_workflow') && (value<1 || value>30)){
+      this.toastr.error('Value should be between 0 and 31 for this key. Please enter again', 'Error');
+    }else{
     this.toastr.info('Valore in aggiornamento..', 'Info');
     this.apiService.updateAdvancedConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
@@ -120,6 +135,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
       this.toastr.error('Errore durante update.', 'Error');
       $('#configModal').modal('toggle').hide();
       });
+    }
   }
 
   // tslint:disable-next-line:use-life-cycle-interface

@@ -182,3 +182,34 @@
 .width-100 {
   width: 100px;
 }
+
+.btn-esempio {
+  padding: 12px,12px;
+  font-size: 10px;
+}
+//DATATABLES STYLE
+.table.kpiTable {
+  thead {
+    background: #20a8d8;
+    tr {
+      color: white;
+      font-size: 12px;
+    }
+    th {
+      border-bottom: 1px solid #c1c1c1;
+    }
+  }
+}
+.table.dataTable {
+  thead {
+    background: #20a8d8;
+    tr {
+      color: white;
+      font-size: 12px;
+    }
+    th {
+      border-bottom: 1px solid #c1c1c1;
+    }
+  }
+}
+//DATATABLES STYLE

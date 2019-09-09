@@ -71,7 +71,17 @@
                 </td>
               </tr>
               <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
-              <tr><th>FREQUENZA</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.tracking_period"></td></tr>
+              <tr><th>FREQUENZA</th><td colspan="2">
+                <select class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
+                  <option value="MENSILE">MENSILE</option>
+                  <option value="TRIMESTRALE">TRIMESTRALE</option>
+                  <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+                  <option value="SEMESTRALE">SEMESTRALE</option>
+                  <option value="ANNUALE">ANNUALE</option>
+                </select>
+              </td>
+
+              </tr>
               <tr><th>REFERENTI INPUT</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent"></td></tr>
               <tr><th>REFERENTI 1</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_1"></td></tr>
               <tr><th>REFERENTI 2</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_2"></td></tr>

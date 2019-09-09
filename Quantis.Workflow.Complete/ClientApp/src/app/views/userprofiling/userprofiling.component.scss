@@ -113,7 +113,7 @@ perfect-scrollbar {
 }
 
 .modal-lg.kpisModal {
-    max-width: 90%;
+    max-width: 80%;
 }
 
 .fa.fa-arrow-right {
@@ -126,4 +126,8 @@ perfect-scrollbar {
 
 .fa.fa-check {
     color:#239123;
+}
+
+.remove-grey-area{
+    height: -webkit-fill-available;
 }

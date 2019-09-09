@@ -173,11 +173,11 @@ namespace Quantis.WorkFlow.APIBase.API
                             provided_ce = (o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5]),
                             time_stamp_utc = (DateTime)o[6],
                             result = (o[5] == DBNull.Value) ? "[Non Calcolato]" :
-                                ((o[7].ToString() == "NLT") ? 
-                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Non Compliant]" : "[Compliant]")
+                                (string)o[5] == "-999" ? "[Nessun Evento]" :
+                                (o[7].ToString() == "NLT") ? 
+                                (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Non Compliant]" : "[Compliant]")
                                 :
-                                ((((o[5] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[5])) < (Decimal)o[8]) ? "[Compliant]" : "[Non Compliant]")),
-
+                                (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Compliant]" : "[Non Compliant]"),
                             target = (o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
                             relation = o[7].ToString(),
                             symbol = o[9].ToString()
@@ -196,12 +196,42 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
+                bool securityMember = false;
+                if (userid != 0)
+                {
+                    using (OracleConnection con1 = new OracleConnection(_connectionstring))
+                    {
+                        using (OracleCommand cmd = con1.CreateCommand())
+                        {
+                            string query1 = "select user_group_id, security_group_id from t_security_group_members where security_group_id in (select security_group_id from t_security_groups sg where sg.security_group_name = 'Insight Super Administrators') and user_group_id = :userid";
+                            con1.Open();
+                            cmd.BindByName = true;
+                            cmd.CommandText = query1;
+                            OracleParameter param1 = new OracleParameter("userid", userid);
+                            cmd.Parameters.Add(param1);
+                            OracleDataReader reader = cmd.ExecuteReader();
+                            DataTable dt = new DataTable();
+                            dt.Load(reader);
+                            List<DataRow> userSecurity = dt.AsEnumerable().ToList();
+                            if(userSecurity.Count() >= 1)
+                            {
+                                securityMember = true;
+                            }
+                        }
+                    }
+                }
                 string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date,	ug.user_group_id,ug.user_group_name from t_forms f left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
-                //string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
                 bool getConfigurations = false;
                 if (userid != 0)
                 {
-                    query += " and ug.user_group_id = :userid";
+                    if (!securityMember)
+                    {
+                        query += " and ug.user_group_id = :userid";
+                    }
+                    else
+                    {
+                        query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date from t_forms f where 1 = 1 ";
+                    }
                 }
                 if (id != 0)
                 {
@@ -217,7 +247,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 int todayDay = Int32.Parse(todayDayValue);
                 int day_cutoff = Int32.Parse(day_cutoffValue.value);
                 bool cutoff_result;
-                if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
+                if(day_cutoff == 0) {
+                    cutoff_result = false;
+                } else {
+                    if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
+                }
+                
 
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
@@ -267,11 +302,14 @@ namespace Quantis.WorkFlow.APIBase.API
                                 create_date = (DateTime)o[5],
                                 modify_date = (DateTime)o[6],
                                 reader_configuration = null,
-                                user_group_id = (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
-                                user_group_name = (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
+                                user_group_id = securityMember ? 0 :
+                                    (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
+                                user_group_name = securityMember ? string.Empty : 
+                                    (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
                                 day_cutoff = day_cutoff,
                                 cutoff = (bool)cutoff_result,
-                                latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
+                                latest_input_date = securityMember ? new DateTime(0) :
+                                    _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
                             });
                             return result.ToList();
                         }
@@ -645,17 +683,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
-                        
+
                         config = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
                     }
                     else
                     {
-                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}",basePath,apiPath));
+                        var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}", basePath, apiPath));
                         throw e;
                     }
 
                 }
                 string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
+
+                //string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
                 return finalconfig;
             }
             catch(Exception e)
@@ -857,7 +897,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
                             var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
                             (
-                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top)-5 &&
+                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top)-10 &&
                             Int32.Parse(o.a_top) <= (Int32.Parse(f.a_top) + Int32.Parse(f.a_height))
                             ));
                             if (label != null)

@@ -29,12 +29,14 @@
           <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
           <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
           <td>{{row.description}}</td>
-          <td style="text-align: center">
-            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                    data-target="#configModal" style="font-size:10px">
-              <i class="fa fa-pencil"></i>
-            </button>
-          </td>
+          <td *ngIf="row.iseditable; then showEdit else hideEdit"></td>
+            <ng-template #showEdit>
+            <td style="text-align: center"><button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                      data-target="#configModal" style="font-size:10px">
+                <i class="fa fa-pencil"></i>
+            </button></td>
+            </ng-template>
+          <ng-template #hideEdit><td></td></ng-template>      
         </tr>
       </tbody>
     </table>
@@ -66,7 +68,7 @@
             <tr>
               <td>{{modalData.key}}</td>
               <td>{{modalData.owner}}</td>
-              <td><input type="text" class="form-control" [(ngModel)]="modalData.value"></td>
+              <td><input type="text" class="form-control" [ngModel]="modalData.value" (ngModelChange)="changeModal($event)"></td>
               <td><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
               <td>{{modalData.description}}</td>
             </tr>

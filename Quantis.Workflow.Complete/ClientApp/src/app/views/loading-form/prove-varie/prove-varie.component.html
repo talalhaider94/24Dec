@@ -32,13 +32,13 @@
           <div class="card-header">
             <strong>{{jsonForm.description || title}}</strong>
           </div>
-          <div class="container" style="background:#fdcece">
+          <div class="container" style="background:#eedc00">
             <div *ngFor="let control of myInputForm.get('valories')['controls']; let i=index"
               class="panel panel-default">
               <div *ngIf="arrayFormElements.length > 0 && arrayFormElements[i].type=='Label'" class="panel-body ">
                 <div class="row align-items-center ">
                   <div class="col-md-12 ">
-                    <small><b><i>{{arrayFormElements[i].source}}</i></b></small>
+                    <small><b><i style="color:#0047bb">{{arrayFormElements[i].source}}</i></b></small>
                   </div>
                 </div>
               </div>
@@ -60,8 +60,8 @@
                     <div class="row align-items-center mb-2">
                       <div class="col-md-5 col-form-label">
                         <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                        <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
-                        <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                        <ng-template #trueBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span><b>{{arrayFormElements[i].label}}</b></label></ng-template>
+                        <ng-template #falseBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span>{{arrayFormElements[i].name}}</label></ng-template>
 
                       </div>
                       <div class="col-sm-7">
@@ -71,16 +71,16 @@
                           <mat-label>Data</mat-label>
                           <input matInput [(ngModel)]="dt[i]" [min]="minDate[i]" [max]="maxDate[i]"
                             [matDatepicker]="pickera" formControlName="valoreUtente" [readonly]="!readOnlyUserForm"
-                            [disabled]="!readOnlyUserForm">
+                            [disabled]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'">
                           <mat-datepicker-toggle matSuffix [for]="pickera" [disabled]="!readOnlyUserForm">
                           </mat-datepicker-toggle>
                           <mat-datepicker #pickera [disabled]="!readOnlyUserForm"></mat-datepicker>
                         </mat-form-field>
                         <div class="row">
-                          <div class="col-sm-6" *ngIf="minDate[i].length > 0">
+                          <div class="col-sm-6" *ngIf="minDate[i]!==undefined && minDate[i].length > 0">
                             <small style="color:red">Data minima: {{minDate[i]|date}}</small>
                           </div>
-                          <div class="col-sm-6" *ngIf="maxDate[i].length > 0">
+                          <div class="col-sm-6" *ngIf="maxDate[i]!==undefined && maxDate[i].length > 0">
                             <small style="color:red">Data massima: {{maxDate[i]|date}}</small>
                           </div>
                         </div>
@@ -91,43 +91,43 @@
                     class="panel-body bg-white" [formGroupName]="i">
                     <div class="row align-items-center mb-2">
                       <div class="col-md-5 col-form-label"
-                        *ngIf="arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string'">
+                        *ngIf="(arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer') && arrayFormElements[i].name != 'Is_Dato_Mancante'">
                         <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
-                        <ng-template #trueBlock><label><b>{{arrayFormElements[i].label}}</b></label></ng-template>
-                        <ng-template #falseBlock><label>{{arrayFormElements[i].name}}</label></ng-template>
+                        <ng-template #trueBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span><b>{{arrayFormElements[i].label}}</b></label></ng-template>
+                        <ng-template #falseBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span>{{arrayFormElements[i].name}}</label></ng-template>
                       </div>
                       <div class="col-sm-7">
 
 
-                        <input [readonly]="!readOnlyUserForm"
+                        <input [readonly]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length === 0"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="stringa[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                        <input [readonly]="!readOnlyUserForm"
+                        <input [readonly]="!readOnlyUserForm" [required]="arrayFormElements[i].mandatory == 'yes'"
                           *ngIf="arrayFormElements[i].type=='string' && arrayFormElements[i].defaultvalue.length > 0"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                           [(ngModel)]="stringa[i] = arrayFormElements[i].defaultvalue"
                           value='{{arrayFormElements[i].defaultvalue}}' placeholder="Input" class="form-control"
                           formControlName="valoreUtente" disabled>
 
-                        <input [readonly]="!readOnlyUserForm" type="number"
-                          *ngIf="arrayFormElements[i].type=='real' && arrayFormElements[i].defaultvalue.length === 0"
+                        <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
+                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]"
                           placeholder="Input" class="form-control" formControlName="valoreUtente">
 
-                        <input [readonly]="!readOnlyUserForm" type="number"
-                          *ngIf="arrayFormElements[i].type=='real' && arrayFormElements[i].defaultvalue.length > 0"
+                        <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
+                          *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
                           [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                           [(ngModel)]="numero[i] = arrayFormElements[i].defaultvalue"
                           value='{{arrayFormElements[i].defaultvalue}}' placeholder="Input" class="form-control"
                           formControlName="valoreUtente" disabled>
                         <div class="row"
                           *ngIf="arrayFormElements[i].type=='string' || arrayFormElements[i].type=='real'">
-                          <div class="col-sm-6" *ngIf="numeroMin[i] > 0">
+                          <div class="col-sm-6" *ngIf="numeroMin[i]!==undefined && numeroMin[i] > 0">
                             <small style="color:red">Valore minimo: {{numeroMin[i]}}</small>
                           </div>
-                          <div class="col-sm-6" *ngIf="numeroMax[i] > 0">
+                          <div class="col-sm-6" *ngIf="numeroMax[i]!==undefined && numeroMax[i] > 0">
                             <small style="color:red">Valore massimo: {{numeroMax[i]}}</small>
                           </div>
                         </div>
@@ -139,17 +139,21 @@
               <div class="row mb-3 align-items-center">
                 <div class="col-sm-12" *ngIf="displayUserFormCheckBox">
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" value="true">
-                    <label class="form-check-label" for="inline-checkbox1">Dati non pervenuti</label>
+                    <input class="form-check-input" type="checkbox" formControlName="termsCheck" [(ngModel)]="Is_Dato_Mancante" value="true" (change)="onCheck()">
+                    <label class="form-check-label" for="inline-checkbox1"><b>Nessun Evento</b></label><!--Dati non Pervenuti-->
                   </div>
                 </div>
-                <div class="col-sm-5 offset-sm-7 text-right" *ngIf="readOnlyUserForm">
+                <div class="col-sm-5 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
                   <button type="submit" class="btn btn-primary"
-                    [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
                   </button>
+                  <button type="submit" class="btn btn-primary" [routerLink]="['/loading-form/utente']"
+                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva e Esci
+                  </button>
                   <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
-                    class="btn btn-danger text-white">Annulla</a>
+                     class="btn btn-danger text-white">Annulla</a>
                 </div>
               </div>
             </form>

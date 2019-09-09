@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Information
         public string Key { get; set; }
         public string Value { get; set; }
         public bool IsEnable { get; set; }
+        public bool IsEditable { get; set; }
         public string Description { get; set; }
     }
 }

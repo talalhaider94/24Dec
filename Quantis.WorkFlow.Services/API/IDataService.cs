@@ -17,7 +17,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormLVDTO> GetAllForms();
         List<KeyValuePair<int, string>> GetAllCustomersKP();
         List<UserDTO> GetAllUsers();
-        List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period);
+//        List<int> GetRawIdsFromRulePeriod(int ruleId, string period);
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
         PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);
@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.Services.API
         List<TRuleDTO> GetAllTRules();
         List<EmailNotifierDTO> GetEmailNotifiers(string period);
         List<CatalogKpiDTO> GetAllKpis(); //List<CatalogKPILVDTO> GetAllKpis(); 
+        List<CatalogKpiDTO> GetAllKpisByUserId(List<int> globalruleIds);
         CatalogKpiDTO GetKpiById(int Id);
         bool AddUpdateKpi(CatalogKpiDTO dto);
         List<KPIOnlyContractDTO> GetKpiByFormId(int Id);
@@ -51,17 +52,20 @@ namespace Quantis.WorkFlow.Services.API
         bool SubmitAttachment(List<FormAttachmentDTO> dto);
 
         int ArchiveKPIs(ArchiveKPIDTO dto);
+        bool AddArchiveRawData(int global_rule_id, string period, string tracking_period);
         bool ResetPassword(string username, string email);
         List<UserDTO> GetUsersByRoleId(int roleId);
-        List<ARulesDTO> GetAllArchiveKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
-        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
+        List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
+//        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
         
         List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year);
+        List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year);
 
         string GetUserIdByUserName(string name);
         CreateTicketDTO GetKPICredentialToCreateTicket(int Id);
-
+        List<EventResourceName> GetEventResourceNames();
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
+        DistributionPslDTO GetDistributionByContract(string period, int sla_id);
 
     }
 }

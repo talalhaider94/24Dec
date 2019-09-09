@@ -19,6 +19,8 @@
                                         <option value="" selected>Tutti</option>
                                         <option value="[Compliant]">Compliant</option>
                                         <option value="[Non Compliant]">Non Compliant</option>
+                                        <option value="[Non Calcolato]">Non Calcolato</option>
+                                        <option value="[Nessun Evento]">Nessun Evento</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -72,11 +74,13 @@
                                     <th>Rif. Num</th>
                                     <th>Titolo</th>
                                     <th>KPI ID</th>
+                                    <th>Tipologia</th>
                                     <th>Sommario</th>
                                     <th>Descrizione</th>
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Periodo</th>
+                                    <th>Riferimento Input</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
                                     <th>Riferimento S3</th>
@@ -90,9 +94,16 @@
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index"
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
-                                    <td class="pl-3">
-                                        <label class="checkbox-container border"
-                                            [ngClass]="ticket.description.includes('[Compliant]') ? 'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ? 'checkbox-container-danger border-danger' : 'checkbox-container-default border-secondary' ">
+                                    <td class="pl-3" popover="Verde -> KPI Compliant
+                                        Rosso -> KPI Non Compliant
+                                        Grigio -> KPI Non Calcolato
+                                        Blu -> KPI con Nessun Evento
+                                        Bianco -> altri casi " triggers="hover" placement="top">
+                                        <label  class="checkbox-container border"
+                                            [ngClass]="ticket.description.includes('[Compliant]') ?
+                                             'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
+                                              'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
+                                              'checkbox-container-default border-secondary' : ticket.description.includes('[Nessun Evento]') ? 'checkbox-container-primary border-primary' : 'checkbox-container-white border-white' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
                                                 [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
@@ -109,6 +120,7 @@
                                         </button>
                                     </td>
                                     <td>{{ ticket.id_kpi || 'N/A' }}</td>
+                                    <td>{{ ticket.tipologia  }}</td>
                                     <td>
                                         <ng-template #popSummary>
                                             <ul class="list-group list-group-flush"
@@ -154,6 +166,7 @@
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>{{ ticket.period || 'N/A' }}</td>
+                                    <td>{{ ticket.riferimento_input  }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark"
@@ -454,10 +467,10 @@
                     <table class="table table-responsive-sm table-hover table-outline text-center">
                         <tr>
                             <th>No.</th>
-                            <th>Ticket Number</th>
-                            <th>SDM Status</th>
-                            <th>BSI Status</th>
-                            <th>Ticket Status</th>
+                            <th>Rif. Num</th>
+                            <th>SDM</th>
+                            <th>BSI</th>
+                            <th>Stato</th>
                         </tr>
                         <tbody>
                             <tr *ngIf="ticketsStatus.length === 0 && !loading">

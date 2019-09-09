@@ -72,6 +72,10 @@ export const routes: Routes = [
         loadChildren: './views/comingsoon/comingsoon.module#ComingSoonModule'
       },
       {
+        path: 'go-back',
+        loadChildren: './views/goback/goback.module#GobackModule'
+      },
+      {
         path: 'workflow',
         loadChildren: './views/workflow/kpi.module#KPIModule'
       },
@@ -110,7 +114,15 @@ export const routes: Routes = [
       { 
         path: 'specialreporting',
         loadChildren: './views/email/email.module#EmailModule'
-      }
+      }, 
+      { 
+        path: 'datigrezzi',
+        loadChildren: './views/datigrezzi/datigrezzi.module#DatiModule'
+      },
+      {
+        path: 'booklet',
+        loadChildren: './views/booklet/booklet.module#BookletModule'
+      },
     ]
   },
   { path: '**', component: P404Component }

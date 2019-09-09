@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { FileSaverService } from 'ngx-filesaver';
-
+import Swal from 'sweetalert2';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, retryWhen } from 'rxjs/operators';
 
@@ -80,10 +80,11 @@ export class ProveVarieComponent implements OnInit {
   arrayFormElements: any = [];
 
   jsonForm: any = [];
-
+  defaultTimestamp;
   numeroForm: number;
   title: string = '';
   checked: boolean;
+  Is_Dato_Mancante: boolean = false;
   displayComparisonRules: string[] = [];
   isCollapsed = true;
   fileUploadMonth: string[] = [];
@@ -104,6 +105,7 @@ export class ProveVarieComponent implements OnInit {
     this.getAnno();
     const currentUser = this.authService.getUser();
     this.monthOption = moment().subtract(1, 'month').format('MM');
+    this.defaultTimestamp = moment().subtract(1, 'month').endOf('month').toDate();
     this.yearOption = moment().format('YYYY');
     if(this.monthOption === '12') {
       this.yearOption = moment().subtract(1, 'year').format('YYYY');
@@ -117,7 +119,9 @@ export class ProveVarieComponent implements OnInit {
       this._getAttachmentsByFormIdEndPoint(+this.formId, true);
     });
   }
-
+  onCheck() {
+    console.log(this.Is_Dato_Mancante);
+  }
   initInputForm() {
     return this.fb.group({
       valoreUtente: [''], // user value
@@ -203,11 +207,27 @@ export class ProveVarieComponent implements OnInit {
             formFields.FieldValue = this.dt[index] || '';
             break;
           case 'string':
-            formFields.FieldValue = this.stringa[index] || '';
+            if (element.name == 'Is_Dato_Mancante' || element.name == 'Dato_Mancante') {
+              if (this.Is_Dato_Mancante === true) {
+                formFields.FieldValue = '1';
+              } else {
+                formFields.FieldValue = '0';
+              }
+            } else {
+              formFields.FieldValue = this.stringa[index] || '';
+            }
             break;
           default:
             // for real and integer
-            formFields.FieldValue = String(this.numero[index] || '');
+            if (element.name == 'Is_Dato_Mancante' || element.name == 'Dato_Mancante') {
+              if (this.Is_Dato_Mancante === true) {
+                formFields.FieldValue = '1';
+              } else {
+                formFields.FieldValue = '0';
+              }
+            } else {
+              formFields.FieldValue = String(this.numero[index] || '');
+            }
             break;
         }
         userSubmit.inputs.push(formFields);
@@ -329,6 +349,17 @@ export class ProveVarieComponent implements OnInit {
       this.cutOff = data[0].cutoff;
       this.day_cutoff = data[0].day_cutoff;
       this.modifyDate = data[0].modify_date;
+      const lastSubmittedDate = data[0].latest_input_date;
+      if(moment(lastSubmittedDate).isSame(moment(), 'month')) {
+        Swal.fire({
+          type: 'info',
+          html: `E' già stato inserito un valore nel periodo di rilevazione corrente. Sei sicuro di voler proseguire?`,
+          showCloseButton: true,
+          focusConfirm: false,
+          confirmButtonText:
+            'Chiudi',
+        })
+      }
       if (data[0].cutoff) {
         let currentDate = moment().format();
         let isDateBefore = moment(data[0].day_cutoff).isBefore(currentDate);
@@ -336,14 +367,19 @@ export class ProveVarieComponent implements OnInit {
           this.readOnlyUserForm = false;
         }
       }
+      this.readOnlyUserForm = data[0].cutoff ? false : true; // readOnly is mentally inverted
       this.arrayFormElements = data[0].reader_configuration.inputformatfield;
       console.log('this.arrayFormElements', this.arrayFormElements);
       for (let i = 0; i < this.arrayFormElements.length - 1; i++) {
         this.addInputForm();
       }
+      var indexOfTimestamp = this.arrayFormElements.findIndex(field => (field.name === 'Timestamp') && (field.type === 'time'));
+      if (indexOfTimestamp) {
+        this.dt[indexOfTimestamp] = this.defaultTimestamp;
+      }
       this.numeroForm = numero;
       // CHECK BOX DISPLAY CONDITION START
-      const checkboxFieldExists = this.arrayFormElements.find(field => (field.name === 'Dato_Mancante' || field.name === 'Is_Dato_Mancante') && field.type === 'integer');
+      const checkboxFieldExists = this.arrayFormElements.find(field => (field.name === 'Dato_Mancante' || field.name === 'Is_Dato_Mancante') && (field.type === 'integer' || field.type === 'string'));
       if (checkboxFieldExists) {
         this.displayUserFormCheckBox = true;
       }

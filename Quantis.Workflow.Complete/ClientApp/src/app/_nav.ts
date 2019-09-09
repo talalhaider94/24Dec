@@ -71,36 +71,43 @@ export const navItems: NavData[] = [
     name: 'Workflow',
     url: '/workflow-menu',
     icon: 'fa fa-code-fork',
-    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA'],
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
     children: [
       {
         name: 'KPI in Verifica',
         url: '/workflow/verifica',
         icon: 'fa fa-file-text-o',
-        version: '0.0.12',
+        version: '0.1.5',
         key: 'VIEW_WORKFLOW_KPI_VERIFICA'
       },
       {
         name: 'Ricerca',
         url: '/workflow/ricerca',
         icon: 'fa fa-search',
-        version: '0.0.12',
+        version: '0.1.5',
         key: ['VIEW_WORKFLOW_RICERCA']
       },
+      {
+        name: 'Amministrazione',
+        url: '/workflow/amministrazione',
+        icon: 'fa fa-users',
+        version: '0.0.2',
+        key: ['VIEW_WORKFLOW_ADMIN']
+      }
     ]
   },
   {
     name: 'Catalogo',
     url: '/catalogo',
     icon: 'fa fa-folder-open-o',
-    key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI', 'VIEW_UTENTI_DA_CONSOLIDARE'],
+    key: ['VIEW_CATALOG_KPI', 'VIEW_CATALOG_UTENTI', 'VIEW_UTENTI_DA_CONSOLIDARE', 'VIEW_KPI_DA_CONSOLIDARE'],
     children: [
       {
         name: 'KPI da Consolidare',
         url: '/catalogo/admin-kpi',
         icon: 'fa fa-file-archive-o',
         version: '0.0.1',
-        key: 'VIEW_CATALOG_KPI'
+        key: 'VIEW_KPI_DA_CONSOLIDARE'
       },
       {
         name: 'Utenti da Consolidare',
@@ -113,7 +120,7 @@ export const navItems: NavData[] = [
         name: 'Catalogo KPI',
         url: '/catalogo/kpi',
         icon: 'fa fa-file-archive-o',
-        version: '0.0.1',
+        version: '0.0.4',
         key: 'VIEW_CATALOG_KPI'
       },
       {
@@ -171,8 +178,8 @@ export const navItems: NavData[] = [
   {
     name: 'Report',
     url: '/report',
-    icon: 'fa fa-pencil-square-o',
-    key: 'VIEW_NOTIFIER_EMAILS',
+    icon: 'fa fa-bar-chart',
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -180,6 +187,20 @@ export const navItems: NavData[] = [
         icon: 'fa fa-envelope',
         version: '0.0.4',
         key: 'VIEW_NOTIFIER_EMAILS'
+      },
+      {
+        name: 'Dati Grezzi',
+        url: '/datigrezzi',
+        icon: 'fa fa-copy',
+        version: '0.0.1',
+        key: 'VIEW_RAW_DATA'
+      },
+      {
+        name: 'Booklet',
+        url: '/booklet',
+        icon: 'fa fa-book',
+        version: '0.0.1',
+        key: 'VIEW_DEBUG'
       }
     ]
   },
@@ -187,21 +208,23 @@ export const navItems: NavData[] = [
     name: 'Configurazione',
     url: '/config-menu',
     icon: 'fa fa-gear',
-    key: ['VIEW_CONFIGURATIONS','VIEW_WORKFLOW_CONFIGURATIONS'],
+    key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
+    'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
+    'VIEW_CONFIGURATION_USER_PROFILING'],
     children: [
       {
         name: 'Generali',
         url: '/tconfiguration/general',
         icon: 'fa fa-check-circle-o',
-        version: '0.0.1',
-        key: 'VIEW_CONFIGURATIONS'
+        version: '0.0.2',
+        key: 'VIEW_CONFIGURATION_GENERAL'
       },
       {
         name: 'Avanzate',
         url: '/tconfiguration/advanced',
         icon: 'fa fa-check-circle-o',
-        version: '0.0.1',
-        key: 'VIEW_CONFIGURATIONS'
+        version: '0.0.2',
+        key: 'VIEW_CONFIGURATION_ADVANCED'
       },
       /*{ // maybe not needed
         name: 'Workflow',
@@ -219,35 +242,35 @@ export const navItems: NavData[] = [
         url: '/sdmgroup',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
+        key: 'VIEW_CONFIGURATION_SDM_GROUP'
       },
       {
         name: 'SDM Ticket Status',
         url: '/sdmstatus',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
+        key: 'VIEW_CONFIGURATION_SDM_TICKET_STATUS'
       },
       {
         name: 'Gestione Ruoli',
         url: '/adminroles',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_CONFIGURATION_ROLES'
       },  
       {
         name: 'Ruoli Utente',
         url: '/userprofiling/rolepermissions',
         icon: 'fa fa-gear',
         version: '0.0.1',
-        key: 'VIEW_CONFIGURATIONS' 
+        key: 'VIEW_CONFIGURATION_USER_ROLES' 
       }, 
       {
         name: 'Profilazione Utente',
         url: '/userprofiling/userpermissions',
         icon: 'fa fa-gear',
         version: '0.0.6',
-        key: 'VIEW_CONFIGURATIONS'
+        key: 'VIEW_CONFIGURATION_USER_PROFILING'
       }
     ]
   },
@@ -257,7 +280,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.3.2b',
+    name: 'Version 1.3.4b',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
