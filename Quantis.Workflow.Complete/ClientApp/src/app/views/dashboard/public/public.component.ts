@@ -289,7 +289,7 @@ export class PublicComponent implements OnInit {
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
 				
-				if(getOrgHierarcy) {
+				if(getOrgHierarcy && getOrgHierarcy.length > 0) {
 					console.log('getOrgHierarcy', getOrgHierarcy);
 					this.createTrees(getOrgHierarcy);
 				}
