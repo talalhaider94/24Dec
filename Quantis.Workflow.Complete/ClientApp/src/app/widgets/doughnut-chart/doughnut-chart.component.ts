@@ -122,8 +122,8 @@ export class DoughnutChartComponent implements OnInit {
 	}
 
 	openModal() {
-		console.log('OPEN MODAL BAR CHART PARAMS', this.verificaDoughnutChartWidgetParameters);
-		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
+		console.log('OPEN MODAL DoughnutChartComponent Distribution by Verifica PARAMS', this.verificaDoughnutChartWidgetParameters);
+		console.log('OPEN MODAL DoughnutChartComponent Distribution by Verifica VALUES', this.setWidgetFormValues);
 		this.verificaDoughnutParent.emit({
 			type: 'openVerificaDoughnutChartModal',
 			data: {

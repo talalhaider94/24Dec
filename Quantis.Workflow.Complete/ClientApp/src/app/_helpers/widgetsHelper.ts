@@ -45,7 +45,7 @@ export class WidgetsHelper {
             }
             return buildParams;
         } catch(error) {
-            console.log('initWidgetParameters', error);
+            console.error('initWidgetParameters', error);
         }
     }
 }

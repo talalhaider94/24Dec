@@ -7,7 +7,7 @@ import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { DateTimeService } from '../../../_helpers';
+import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
@@ -46,10 +46,11 @@ export class PublicComponent implements OnInit {
 		child: 'children',
 		title: 'name'
 	};
-	preSelectedNodes = ['1075','1000','1065','1055','1090','1050','1005','1015','1085','1080','1020','1001'];
+	preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
 	allLeafNodesIds = [];
 	uncheckedNodes = [];
-
+	from_changed;
+	to_changed;
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
@@ -68,10 +69,16 @@ export class PublicComponent implements OnInit {
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
 	showDateInFilters: boolean = false;
+	showCustomDate: boolean = false;
 
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;
+	isCatalogPendingComponent: boolean = false;
+	isNotificationTrendComponent: boolean = false;
+	isKpiReportTrendComponent: boolean = false;
+	isKpiCountOrgComponent: boolean = false;
+	isDistributionByUserComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -81,67 +88,105 @@ export class PublicComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 
+	showWidgetsModalAndSetFormValues(childData, identifier) {
+		if (this.barChartWidgetParameters) {
+			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
+			setTimeout(() => {
+				this.widgetParametersForm.patchValue(childData.setWidgetFormValues)
+			});
+		}
+		this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === identifier).help;
+		this.widgetParametersModal.show();
+	}
+
+	showPropertyTab(properties) {
+		return (Object.keys(properties).length) ? true : false;
+	}
+	showFilterTab(filters) {
+		return (Object.keys(filters).length) ? true : false;
+	}
+
 	outputs = {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
+				debugger
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
+				// this.createTrees(childData.data.organizationHierarchy);
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'count_trend');
+				// if (this.barChartWidgetParameters) {
+				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+				// 	setTimeout(() => {
+				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+				// 	});
+				// }
+				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
+				// this.widgetParametersModal.show();
 			}
 		},
 		kpiCountSummaryParent: childData => {
 			console.log('kpiCountSummaryParent childData', childData);
 			if (childData.type === 'openKpiSummaryCountModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.kpiCountSummaryWidgetParameters;
 				this.isKpiCountSummaryComponent = childData.data.isKpiCountSummaryComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_summary');
 			}
 		},
 		verificaDoughnutParent: childData => {
 			console.log('verificaDoughnutParent childData', childData);
 			if (childData.type === 'openVerificaDoughnutChartModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.verificaDoughnutChartWidgetParameters;
 				this.isverificaDoughnutComponent = childData.data.isverificaDoughnutComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_verifica');
 			}
-		}
+		},
+		catalogPendingParent: childData => {
+			console.log('catalogPendingParent childData', childData);
+			if (childData.type === 'openCatalogPendingModal') {
+				this.barChartWidgetParameters = childData.data.catalogPendingWidgetParameters;
+				this.isCatalogPendingComponent = childData.data.isCatalogPendingComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'catalog_pending_count_trends');
+			}
+		},
+		notificationTrendParent: childData => {
+			console.log('notificationTrendParent childData', childData);
+			if (childData.type === 'openNotificationTrendModal') {
+				this.barChartWidgetParameters = childData.data.notificationTrendWidgetParameters;
+				this.isNotificationTrendComponent = childData.data.isNotificationTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'notification_trend');
+			}
+		},
+		kpiReportTrendParent: childData => {
+			console.log('kpiReportTrendParent childData', childData);
+			if (childData.type === 'openKpiReportTrendModal') {
+				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
+				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
+			}
+		},
+		kpiCountOrgParent: childData => {
+			console.log('kpiCountOrgParent childData', childData);
+			if (childData.type === 'openKpiCountOrgModal') {
+				this.barChartWidgetParameters = childData.data.kpiCountOrgWidgetParameters;
+				this.isKpiCountOrgComponent = childData.data.isKpiCountOrgComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_by_organization');
+			}
+		},
+		distributionByUserParent: childData => {
+			console.log('distributionByUserParent childData', childData);
+			if (childData.type === 'openDistributionByUserModal') {
+				this.barChartWidgetParameters = childData.data.distributionByUserWidgetParameters;
+				this.isDistributionByUserComponent = childData.data.isDistributionByUserComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_user');
+			}
+		},
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-		// console.log('Component Created', compRef);
 	}
 
 	ngOnInit(): void {
@@ -155,9 +200,9 @@ export class PublicComponent implements OnInit {
 			Filters: this.formBuilder.group({
 				daterange: [null],
 				dateTypes: [null],
-				date: [null]
+				date: [null],
 			}),
-			Note: [null],
+			// Note: [null],
 		});
 		// Grid options
 		this.options = {
@@ -199,8 +244,14 @@ export class PublicComponent implements OnInit {
 		this._route.params.subscribe(params => {
 			this.dashboardId = +params["id"];
 			this.emitter.loadingStatus(true);
-			this.getData(this.dashboardId);
+			this.getData(this.dashboardId); /////
 		});
+
+		// if(this.from_changed==1){
+		// 	this.showCustomDate=false;
+		// }else{
+		// 	this.showCustomDate=true;
+		// }
 
 		this.widgetParametersForm.get('Filters').get('dateTypes').valueChanges.subscribe((value) => {
 			console.log('Date Type Filter', value);
@@ -212,26 +263,21 @@ export class PublicComponent implements OnInit {
 				this.showDateInFilters = false;
 			}
 		});
-
-		////Tree View////
-		console.log('--- Tree View ---');
-		this.dashboardService.GetOrganizationHierarcy().subscribe(data => {
-			console.log('GetOrganizationHierarcy ==> ', data);
-			//this.treeFields.dataSource = data;
-			this.createTrees(data);
-		}, err => { this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info') });
-
 		this.closeModalSubscription();
 	}
 
 	getData(dashboardId: number) {
 		const getAllWidgets = this.dashboardService.getWidgets();
 		const getDashboardWidgets = this.dashboardService.getDashboard(dashboardId);
-		forkJoin([getAllWidgets, getDashboardWidgets]).subscribe(result => {
+		const getOrgHierarcy = this.dashboardService.GetOrganizationHierarcy();
+
+		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
 			if (result) {
-				const [allWidgets, dashboardData] = result;
+				const [allWidgets, dashboardData, getOrgHierarcy] = result;
 				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
+				console.log('getOrgHierarcy', getOrgHierarcy);
+
 				if (allWidgets && allWidgets.length > 0) {
 					this.widgetCollection = allWidgets;
 				}
@@ -243,11 +289,17 @@ export class PublicComponent implements OnInit {
 					// copying array without reference to re-render.
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
+
+				if (getOrgHierarcy && getOrgHierarcy.length > 0) {
+					this.createTrees(getOrgHierarcy);
+				}
+
 			} else {
 				console.log('WHY NO DASHBOARD DATA');
 			}
 			this.emitter.loadingStatus(false);
 		}, error => {
+			this.isTreeLoaded = true;
 			this.emitter.loadingStatus(false);
 			this.toastr.error('Error while fetching dashboards');
 			console.error('Get Dashboard Data', error);
@@ -296,6 +348,7 @@ export class PublicComponent implements OnInit {
 				Properties: widget.properties
 			}
 		});
+		debugger
 		this.dashboardService.saveDashboardState(params).subscribe(result => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard state saved successfully');
@@ -323,16 +376,27 @@ export class PublicComponent implements OnInit {
 
 	fromCalendar(container1) {
 		container1.monthSelectHandler = (event: any): void => {
-		  container1._store.dispatch(container1._actions.select(event.date));
-		};     
+			container1._store.dispatch(container1._actions.select(event.date));
+			this.from_changed=1;
+
+			if(this.from_changed==1){
+				this.showCustomDate=false;
+			}else{
+				this.showCustomDate=true;
+			}
+		};
 		container1.setViewMode('month');
 	}
 
 	toCalendar(container2) {
 		container2.monthSelectHandler = (event: any): void => {
-		  container2._store.dispatch(container2._actions.select(event.date));
-		};     
+			container2._store.dispatch(container2._actions.select(event.date));
+		};
 		container2.setViewMode('month');
+	} 
+
+	fromChanged(){
+		console.log('fromChanged');
 	}
 
 	changedOptions() {
@@ -349,7 +413,6 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === 'Custom') {
@@ -361,17 +424,16 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
-		// why it is not copying without reference :/ idiot
-		let copyFormValues = Object.assign({}, formValues);
-		delete formValues.Filters.dateTypes;
-		delete formValues.Filters.date;
-		delete formValues.Properties.aggregationoption;
-		delete formValues.Properties.charttype;
+		// Organization hierarchy as Customers
+		this.uncheckedNodes;
+		formValues.Filters.organizations = this.uncheckedNodes.join(',');
+		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
+		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
-		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
+		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
-			if(this.isBarChartComponent) {
+			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
 					type: 'barChart',
 					data: {
@@ -382,7 +444,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isBarChartComponent = false;
 			}
-			if(this.isKpiCountSummaryComponent) {
+			if (this.isKpiCountSummaryComponent) {
 				this.emitter.sendNext({
 					type: 'kpiCountSummaryChart',
 					data: {
@@ -393,6 +455,73 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountSummaryComponent = false;
 			}
+			if (this.isverificaDoughnutComponent) {
+				this.emitter.sendNext({
+					type: 'verificaDoughnutChart',
+					data: {
+						result,
+						verificaDoughnutWidgetParameters: this.barChartWidgetParameters,
+						verificaDoughnutWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isverificaDoughnutComponent = false;
+			}
+			if (this.isCatalogPendingComponent) {
+				this.emitter.sendNext({
+					type: 'catalogPendingChart',
+					data: {
+						result,
+						catalogPendingWidgetParameters: this.barChartWidgetParameters,
+						catalogPendingWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isCatalogPendingComponent = false;
+			}
+			if (this.isNotificationTrendComponent) {
+				this.emitter.sendNext({
+					type: 'notificationTrendChart',
+					data: {
+						result,
+						notificationTrendWidgetParameters: this.barChartWidgetParameters,
+						notificationTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isNotificationTrendComponent = false;
+			}
+			if (this.isKpiReportTrendComponent) {
+				this.emitter.sendNext({
+					type: 'kpiReportTrendChart',
+					data: {
+						result,
+						kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+						kpiReportTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiReportTrendComponent = false;
+			}
+			if (this.isKpiCountOrgComponent) {
+				this.emitter.sendNext({
+					type: 'kpiCountByOrgChart',
+					data: {
+						result,
+						kpiCountOrgWidgetParameters: this.barChartWidgetParameters,
+						kpiCountOrgWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiCountOrgComponent = false;
+			}
+			if (this.isDistributionByUserComponent) {
+				this.emitter.sendNext({
+					type: 'distributionByUserChart',
+					data: {
+						result,
+						distributionByUserWidgetParameters: this.barChartWidgetParameters,
+						distributionByUserWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isDistributionByUserComponent = false;
+			}
+
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -400,6 +529,7 @@ export class PublicComponent implements OnInit {
 		})
 	}
 	customDateTypes(event) {
+		//console.log('customDateTypes', event);
 	}
 
 	addLoaderToTrees(add = true) {
@@ -415,7 +545,7 @@ export class PublicComponent implements OnInit {
 	syncSelectedNodesArray(event, treeRef) {
 		// this.allLeafNodesIds = [];
 		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
-		this.uncheckedNodes = this.allLeafNodesIds.filter( value => this.permissionsTree.checkedNodes.indexOf(value.toString())==-1);
+		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
 		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
 		treeRef.loaded = true;
 	}
@@ -433,26 +563,26 @@ export class PublicComponent implements OnInit {
 			});
 			this.allLeafNodesIds = [];
 			this.getAllLeafNodesIds(treesData);
-			this.permissionsTree.checkAll(this.allLeafNodesIds);
+			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
 		this.isTreeLoaded = true;
 	}
 	getAllLeafNodesIds(complexJson) {
 		if (complexJson) {
-			complexJson.forEach((item:any)=>{
-			if (item.children) {
-				this.getAllLeafNodesIds(item.children);
-			} else {
-				this.allLeafNodesIds.push(item.id);
-			}
+			complexJson.forEach((item: any) => {
+				if (item.children) {
+					this.getAllLeafNodesIds(item.children);
+				} else {
+					this.allLeafNodesIds.push(item.id);
+				}
 			});
 			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
-		console.log(this.dashboardWidgetsArray);
+		console.log('Before this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
 			if (widget.id === widgetId) {
 				let a = {
@@ -466,7 +596,7 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		console.log('updatedDashboardArray', updatedDashboardArray);
-		console.log('this.dashboardWidgetsArray', this.dashboardWidgetsArray);
+		console.log('After this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		// this.dashboardWidgetsArray = updatedDashboardArray;
 		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
 		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering
@@ -480,6 +610,11 @@ export class PublicComponent implements OnInit {
 				this.isBarChartComponent = false;
 				this.isKpiCountSummaryComponent = false;
 				this.isverificaDoughnutComponent = false;
+				this.isCatalogPendingComponent = false;
+				this.isNotificationTrendComponent = false;
+				this.isKpiReportTrendComponent = false;
+				this.isKpiCountOrgComponent = false;
+				this.isDistributionByUserComponent = false;
 			}
 		});
 	}

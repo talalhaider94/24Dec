@@ -39,6 +39,7 @@ export class BarchartComponent implements OnInit {
 	};
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'bar';
+	getOrgHierarchy: any = [];
 
 	constructor(
 		private dashboardService: DashboardService,
@@ -48,7 +49,7 @@ export class BarchartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+		console.log('Barchart Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
 			this.editWidgetName = false;
 		}
@@ -73,6 +74,11 @@ export class BarchartComponent implements OnInit {
 					this.updateChart(data.result.body, data, null);
 				}
 			}
+			// no idea yet may remove
+			// if(type === 'getOrgHierarcy') {
+			// 	debugger
+			// 	this.getOrgHierarchy = data.getOrgHierarchy;
+			// }
 		});
 	}
 	// invokes on component initialization
@@ -124,6 +130,7 @@ export class BarchartComponent implements OnInit {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			console.error('Barchart Count Trend', error);
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		});

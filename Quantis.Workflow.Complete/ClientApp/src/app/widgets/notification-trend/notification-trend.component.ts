@@ -21,11 +21,11 @@ export class NotificationTrendComponent implements OnInit {
   @Input() id: number; // this is unique id 
 
   loading: boolean = true;
-  barChartWidgetParameters: any;
+  notificationTrendWidgetParameters: any;
   setWidgetFormValues: any;
   editWidgetName: boolean = true;
   @Output()
-  barChartParent = new EventEmitter<any>();
+  notificationTrendParent = new EventEmitter<any>();
 
   public barChartData: Array<any> = [
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
@@ -47,7 +47,7 @@ export class NotificationTrendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('BarchartComponent Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    console.log('NotificationTrendComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
     }
@@ -62,13 +62,13 @@ export class NotificationTrendComponent implements OnInit {
   subscriptionForDataChangesFromParent() {
     this.emitter.getData().subscribe(result => {
       const { type, data } = result;
-      if (type === 'barChart') {
-        let currentWidgetId = data.barChartWidgetParameters.id;
+      if (type === 'notificationTrendChart') {
+        let currentWidgetId = data.notificationTrendWidgetParameters.id;
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
-          let barChartFormValues = data.barChartWidgetParameterValues;
-          barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
-          this.setWidgetFormValues = barChartFormValues;
+          let notificationTrendFormValues = data.notificationTrendWidgetParameters;
+          notificationTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(notificationTrendFormValues.Filters.daterange);
+          this.setWidgetFormValues = notificationTrendFormValues;
           this.updateChart(data.result.body, data, null);
         }
       }
@@ -106,9 +106,9 @@ export class NotificationTrendComponent implements OnInit {
             id: this.id
           }
         }
-        this.barChartWidgetParameters = barChartParams.data;
+        this.notificationTrendWidgetParameters = barChartParams.data;
         // have to use setTimeout if i am not emitting it in dashbaordComponent
-        // this.barChartParent.emit(barChartParams);
+        // this.notificationTrendParent.emit(barChartParams);
         // setting initial Paramter form widget values
         this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
@@ -122,7 +122,7 @@ export class NotificationTrendComponent implements OnInit {
       this.loading = false;
       this.emitter.loadingStatus(false);
     }, error => {
-      debugger
+      console.error('NotificationTrendComponent', error);
       this.loading = false;
       this.emitter.loadingStatus(false);
     });
@@ -130,10 +130,6 @@ export class NotificationTrendComponent implements OnInit {
 
   // events
   public chartClicked(e: any): void {
-    console.log("Bar Chart Clicked ->", e);
-    //this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
-    let params = { month: 'all', year: '19', key: 'bar_chart' };
-    window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
   }
 
   public chartHovered(e: any): void {
@@ -141,14 +137,12 @@ export class NotificationTrendComponent implements OnInit {
   }
 
   openModal() {
-    console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
-    console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
-    this.barChartParent.emit({
-      type: 'openBarChartModal',
+    this.notificationTrendParent.emit({
+      type: 'openNotificationTrendModal',
       data: {
-        barChartWidgetParameters: this.barChartWidgetParameters,
+        notificationTrendWidgetParameters: this.notificationTrendWidgetParameters,
         setWidgetFormValues: this.setWidgetFormValues,
-        isBarChartComponent: true
+        isNotificationTrendComponent: true
       }
     });
   }
@@ -160,9 +154,9 @@ export class NotificationTrendComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     let label = 'Series';
     if (dashboardComponentData) {
-      let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
-      label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
-      let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+      let measureIndex = dashboardComponentData.notificationTrendWidgetParameterValues.Properties.measure;
+      label = dashboardComponentData.notificationTrendWidgetParameters.measures[measureIndex];
+      let charttype = dashboardComponentData.notificationTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
         this.barChartType = charttype;
       });

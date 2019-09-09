@@ -9,9 +9,11 @@
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
     <div class="card">
       <div class="card-body">
+
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
           [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
+        
       </div>
     </div>
   </gridster-item>
@@ -76,6 +78,7 @@
                   </ejs-treeview>
                 </div>
                 </perfect-scrollbar><br>
+                <span>
                 <div class="form-group">
                   <label for="dateTypes">Tipi di data</label><!-- Date Type -->
                   <select class="form-control" id="dateTypes" formControlName="dateTypes"
@@ -86,21 +89,21 @@
                     </option>
                   </select>
                 </div>
+                </span>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
                     <!-- Date Range -->
-                    <!-- <label for="daterange">Intervallo di date</label>
+                    <label for="daterange">Intervallo di date</label>
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }"> -->
-                    <label for="daterange">Intervallo di date</label><br>
+                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
+                    <!-- <label for="daterange">Intervallo di date</label><br>
                     <div class="row">
                       <div class="col-md-6">
                         <label for="fromdate" style="text-align: center">From</label>
                         <form class="container1">
-                          <input autocomplete="off" class="form-control" name="date" 
+                          <input formControlName="fromDateType" autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
-                          (onShown)="fromCalendar($event)">
-                          <!-- Result: <p>{{modelDate}}</p> -->
+                          (onShown)="fromCalendar($event)" (dateChange)="fromChanged()">
                         </form>
                       </div>
                       <div class="col-md-6">
@@ -109,10 +112,9 @@
                           <input autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
                           (onShown)="toCalendar($event)">
-                          <!-- Result: <p>{{modelDate}}</p> -->
                         </form>
                       </div>
-                    </div> 
+                    </div>  -->
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">
@@ -122,7 +124,7 @@
                       [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                   </div>
                 </span>
-                <span *ngIf="barChartWidgetParameters.showorganization">
+                <!-- <span *ngIf="barChartWidgetParameters.showorganization">
                   <div *ngFor="let treeObj of treesArray; let i = index">
                     <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary"
                       style="padding-left: 35px; height: 35px;">loading..</span>
@@ -131,7 +133,7 @@
                       (nodeChecked)='syncSelectedNodesArray($event, treeObj)'>
                     </ejs-treeview>
                   </div>
-                </span>
+                </span> -->
               </div>
             </tab>
             <!-- HELP -->
@@ -140,7 +142,7 @@
             </tab>
             <!-- NOTE -->
             <tab heading="NOTA">
-              <textarea placeholder="Enter Note" class="form-control" formControlName="Note">
+              <textarea placeholder="Enter Note" class="form-control" >
 
                 </textarea>
             </tab>
