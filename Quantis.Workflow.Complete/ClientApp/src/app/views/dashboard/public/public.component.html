@@ -100,7 +100,6 @@
                           <input autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
                           (onShown)="fromCalendar($event)">
-                          <!-- Result: <p>{{modelDate}}</p> -->
                         </form>
                       </div>
                       <div class="col-md-6">
@@ -122,7 +121,7 @@
                       [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                   </div>
                 </span>
-                <span *ngIf="barChartWidgetParameters.showorganization">
+                <!-- <span *ngIf="barChartWidgetParameters.showorganization">
                   <div *ngFor="let treeObj of treesArray; let i = index">
                     <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary"
                       style="padding-left: 35px; height: 35px;">loading..</span>
@@ -131,7 +130,7 @@
                       (nodeChecked)='syncSelectedNodesArray($event, treeObj)'>
                     </ejs-treeview>
                   </div>
-                </span>
+                </span> -->
               </div>
             </tab>
             <!-- HELP -->

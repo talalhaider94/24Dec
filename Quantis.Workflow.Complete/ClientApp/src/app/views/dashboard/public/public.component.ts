@@ -433,7 +433,7 @@ export class PublicComponent implements OnInit {
 			});
 			this.allLeafNodesIds = [];
 			this.getAllLeafNodesIds(treesData);
-			this.permissionsTree.checkAll(this.allLeafNodesIds);
+			//this.permissionsTree.checkAll(this.allLeafNodesIds);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
 		this.isTreeLoaded = true;
