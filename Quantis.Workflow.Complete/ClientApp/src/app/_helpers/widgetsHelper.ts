@@ -31,13 +31,21 @@ export class WidgetsHelper {
             }
             if(apiParams.showdaterangefilter) {
                 // dateTypes custom condition may be needed
-                let dateRangeValue = (!!filters.daterange) ? filters.daterange : apiParams.defaultdaterange;
+                // if defaultdaterange is null need to write custom method for it.
+                let dateRangeValue;
+                if(!!filters.daterange) {
+                    dateRangeValue = filters.daterange;
+                } else if(!!apiParams.defaultdaterange) {
+                    dateRangeValue = apiParams.defaultdaterange;
+                } else {
+                    dateRangeValue = '01/2019-12/2019';
+                }
+                //  (!!filters.daterange) ? filters.daterange : (!!apiParams.defaultdaterange) ? apiParams.defaultdaterange : '01/2019-12/2019';
                 buildParams.Filters.daterange = dateRangeValue;
             }
             return buildParams;
         } catch(error) {
-            console.log('initWidgetParameters', error);
-            debugger;
+            console.error('initWidgetParameters', error);
         }
     }
 }

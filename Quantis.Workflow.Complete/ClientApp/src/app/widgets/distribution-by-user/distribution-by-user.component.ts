@@ -14,18 +14,16 @@ export class DistributionByUserComponent implements OnInit {
 	@Input() url: string;
 	@Input() filters: Array<any>;
 	@Input() properties: Array<any>;
-	// this widgetid is from widgets Collection and can be duplicate
-	// it will be used for common functionality of same component instance type
 	@Input() widgetid: number;
 	@Input() dashboardid: number;
-	@Input() id: number; // this is unique id 
+	@Input() id: number; 
 
 	loading: boolean = true;
-	barChartWidgetParameters: any;
+	distributionByUserWidgetParameters: any;
 	setWidgetFormValues: any;
 	editWidgetName: boolean = true;
 	@Output()
-	barChartParent = new EventEmitter<any>();
+	distributionByUserParent = new EventEmitter<any>();
 
 	public barChartData: Array<any> = [
 		{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
@@ -62,13 +60,13 @@ export class DistributionByUserComponent implements OnInit {
 	subscriptionForDataChangesFromParent() {
 		this.emitter.getData().subscribe(result => {
 			const { type, data } = result;
-			if (type === 'barChart') {
-				let currentWidgetId = data.barChartWidgetParameters.id;
+			if (type === 'distributionByUserChart') {
+				let currentWidgetId = data.distributionByUserWidgetParameters.id;
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
-					let barChartFormValues = data.barChartWidgetParameterValues;
-					barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
-					this.setWidgetFormValues = barChartFormValues;
+					let distributionByUserFormValues = data.distributionByUserWidgetParameterValues;
+					distributionByUserFormValues.Filters.daterange = this.dateTime.buildRangeDate(distributionByUserFormValues.Filters.daterange);
+					this.setWidgetFormValues = distributionByUserFormValues;
 					this.updateChart(data.result.body, data, null);
 				}
 			}
@@ -89,6 +87,7 @@ export class DistributionByUserComponent implements OnInit {
 			// populate modal with widget parameters
 			console.log('getWidgetIndex', getWidgetIndex);
 			console.log('myWidgetParameters', myWidgetParameters);
+			debugger
 			let barChartParams;
 			if (myWidgetParameters) {
 				barChartParams = {
@@ -104,23 +103,9 @@ export class DistributionByUserComponent implements OnInit {
 						id: this.id
 					}
 				}
-				this.barChartWidgetParameters = barChartParams.data;
-				// have to use setTimeout if i am not emitting it in dashbaordComponent
-				// this.barChartParent.emit(barChartParams);
+				this.distributionByUserWidgetParameters = barChartParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.barChartWidgetParameters.measures)[0],
-						charttype: Object.keys(this.barChartWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.barChartWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.barChartWidgetParameters.defaultdaterange),
-						dateTypes: barChartParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
@@ -132,6 +117,7 @@ export class DistributionByUserComponent implements OnInit {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			console.error('Distribution By User', error);
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		});
@@ -146,18 +132,15 @@ export class DistributionByUserComponent implements OnInit {
 	}
 
 	public chartHovered(e: any): void {
-		// console.log(e);
 	}
 
 	openModal() {
-		console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
-		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
-		this.barChartParent.emit({
-			type: 'openBarChartModal',
+		this.distributionByUserParent.emit({
+			type: 'openDistributionByUserModal',
 			data: {
-				barChartWidgetParameters: this.barChartWidgetParameters,
+				distributionByUserWidgetParameters: this.distributionByUserWidgetParameters,
 				setWidgetFormValues: this.setWidgetFormValues,
-				isBarChartComponent: true
+				isDistributionByUserComponent: true
 			}
 		});
 	}
@@ -169,16 +152,17 @@ export class DistributionByUserComponent implements OnInit {
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
 		if (dashboardComponentData) {
-			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
-			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
-			let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
+			let measureIndex = dashboardComponentData.distributionByUserWidgetParameterValues.Properties.measure;
+			label = dashboardComponentData.distributionByUserWidgetParameters.measures[measureIndex];
+			let charttype = dashboardComponentData.distributionByUserWidgetParameterValues.Properties.charttype;
 			setTimeout(() => {
 				this.barChartType = charttype;
 			});
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
-			label = currentWidgetComponentData.measures[0];
+			debugger
+			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
 		let allLabels = chartIndexData.map(label => label.xvalue);

@@ -112,8 +112,6 @@ export class KpiCountSummaryComponent implements OnInit {
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
-			console.log('KPI COUNT SUMMARY getWidgetIndex', getWidgetIndex);
-			console.log('KPI COUNT SUMMARY myWidgetParameters', myWidgetParameters);
 			let kpiCountSummaryParams;
 			if (myWidgetParameters) {
 				kpiCountSummaryParams = {
@@ -131,19 +129,7 @@ export class KpiCountSummaryComponent implements OnInit {
 				}
 				this.kpiCountSummaryWidgetParameters = kpiCountSummaryParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = {
-					GlobalFilterId: 0,
-					Properties: {
-						measure: Object.keys(this.kpiCountSummaryWidgetParameters.measures)[0],
-						charttype: Object.keys(this.kpiCountSummaryWidgetParameters.charttypes)[0],
-						aggregationoption: Object.keys(this.kpiCountSummaryWidgetParameters.aggregationoptions)[0]
-					},
-					Filters: {
-						daterange: this.dateTime.buildRangeDate(this.kpiCountSummaryWidgetParameters.defaultdaterange),
-						dateTypes: kpiCountSummaryParams.data.datetypes[0]
-					},
-					Note: ''
-				}
+				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {

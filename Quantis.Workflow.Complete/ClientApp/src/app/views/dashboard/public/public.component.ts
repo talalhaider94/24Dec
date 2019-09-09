@@ -7,7 +7,7 @@ import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { DateTimeService } from '../../../_helpers';
+import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
@@ -72,6 +72,11 @@ export class PublicComponent implements OnInit {
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;
+	isCatalogPendingComponent: boolean = false;
+	isNotificationTrendComponent: boolean = false;
+	isKpiReportTrendComponent: boolean = false;
+	isKpiCountOrgComponent: boolean = false;
+	isDistributionByUserComponent: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -80,6 +85,24 @@ export class PublicComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService
 	) { }
+
+	showWidgetsModalAndSetFormValues(childData, identifier) {
+		if (this.barChartWidgetParameters) {
+			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
+			setTimeout(() => {
+				this.widgetParametersForm.patchValue(childData.setWidgetFormValues)
+			});
+		}
+		this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === identifier).help;
+		this.widgetParametersModal.show();		
+	}
+
+	showPropertyTab(properties){
+		return (Object.keys(properties).length) ? true : false;
+	}
+	showFilterTab(filters){
+		return (Object.keys(filters).length) ? true : false;
+	}
 
 	outputs = {
 		barChartParent: childData => {
@@ -90,58 +113,76 @@ export class PublicComponent implements OnInit {
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'count_trend');
+				// if (this.barChartWidgetParameters) {
+				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
+				// 	setTimeout(() => {
+				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
+				// 	});
+				// }
+				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
+				// this.widgetParametersModal.show();
 			}
 		},
 		kpiCountSummaryParent: childData => {
 			console.log('kpiCountSummaryParent childData', childData);
 			if (childData.type === 'openKpiSummaryCountModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.kpiCountSummaryWidgetParameters;
 				this.isKpiCountSummaryComponent = childData.data.isKpiCountSummaryComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_summary');
 			}
 		},
 		verificaDoughnutParent: childData => {
 			console.log('verificaDoughnutParent childData', childData);
 			if (childData.type === 'openVerificaDoughnutChartModal') {
-				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.verificaDoughnutChartWidgetParameters;
 				this.isverificaDoughnutComponent = childData.data.isverificaDoughnutComponent;
-				if (this.barChartWidgetParameters) {
-					this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-					setTimeout(() => {
-						this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-					});
-				}
-				this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica').help;
-				this.widgetParametersModal.show();
-			} else {
-				console.log('WHY HERE');
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_verifica');
 			}
-		}
+		},
+		catalogPendingParent: childData => {
+			console.log('catalogPendingParent childData', childData);
+			if (childData.type === 'openCatalogPendingModal') {
+				this.barChartWidgetParameters = childData.data.catalogPendingWidgetParameters;
+				this.isCatalogPendingComponent = childData.data.isCatalogPendingComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'catalog_pending_count_trends');
+			}
+		},
+		notificationTrendParent: childData => {
+			console.log('notificationTrendParent childData', childData);
+			if (childData.type === 'openNotificationTrendModal') {
+				this.barChartWidgetParameters = childData.data.notificationTrendWidgetParameters;
+				this.isNotificationTrendComponent = childData.data.isNotificationTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'notification_trend');
+			}
+		},
+		kpiReportTrendParent: childData => {
+			console.log('kpiReportTrendParent childData', childData);
+			if (childData.type === 'openKpiReportTrendModal') {
+				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
+				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
+			}
+		},
+		kpiCountOrgParent: childData => {
+			console.log('kpiCountOrgParent childData', childData);
+			if (childData.type === 'openKpiCountOrgModal') {
+				this.barChartWidgetParameters = childData.data.kpiCountOrgWidgetParameters;
+				this.isKpiCountOrgComponent = childData.data.isKpiCountOrgComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_count_by_organization');
+			}
+		},
+		distributionByUserParent: childData => {
+			console.log('distributionByUserParent childData', childData);
+			if (childData.type === 'openDistributionByUserModal') {
+				this.barChartWidgetParameters = childData.data.distributionByUserWidgetParameters;
+				this.isDistributionByUserComponent = childData.data.isDistributionByUserComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_user');
+			}
+		},
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-		// console.log('Component Created', compRef);
 	}
 
 	ngOnInit(): void {
@@ -296,6 +337,7 @@ export class PublicComponent implements OnInit {
 				Properties: widget.properties
 			}
 		});
+		debugger
 		this.dashboardService.saveDashboardState(params).subscribe(result => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard state saved successfully');
@@ -361,15 +403,11 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
-		// why it is not copying without reference :/ idiot
-		let copyFormValues = Object.assign({}, formValues);
-		delete formValues.Filters.dateTypes;
-		delete formValues.Filters.date;
-		delete formValues.Properties.aggregationoption;
-		delete formValues.Properties.charttype;
+		let copyFormValues = {...formValues, Filters: formValues.Filters, Properties: formValues.Properties};
+		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
-		this.dashboardService.getWidgetIndex(url, formValues).subscribe(result => {
+		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if(this.isBarChartComponent) {
 				this.emitter.sendNext({
@@ -393,6 +431,73 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountSummaryComponent = false;
 			}
+			if(this.isverificaDoughnutComponent) {
+				this.emitter.sendNext({
+					type: 'verificaDoughnutChart',
+					data: {
+						result,
+						verificaDoughnutWidgetParameters: this.barChartWidgetParameters,
+						verificaDoughnutWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isverificaDoughnutComponent = false;
+			}
+			if(this.isCatalogPendingComponent) {
+				this.emitter.sendNext({
+					type: 'catalogPendingChart',
+					data: {
+						result,
+						catalogPendingWidgetParameters: this.barChartWidgetParameters,
+						catalogPendingWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isCatalogPendingComponent = false;
+			}
+			if(this.isNotificationTrendComponent) {
+				this.emitter.sendNext({
+					type: 'notificationTrendChart',
+					data: {
+						result,
+						notificationTrendWidgetParameters: this.barChartWidgetParameters,
+						notificationTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isNotificationTrendComponent = false;
+			}
+			if(this.isKpiReportTrendComponent) {
+				this.emitter.sendNext({
+					type: 'kpiReportTrendChart',
+					data: {
+						result,
+						kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+						kpiReportTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiReportTrendComponent = false;
+			}
+			if(this.isKpiCountOrgComponent) {
+				this.emitter.sendNext({
+					type: 'kpiCountByOrgChart',
+					data: {
+						result,
+						kpiCountOrgWidgetParameters: this.barChartWidgetParameters,
+						kpiCountOrgWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiCountOrgComponent = false;
+			}
+			if(this.isDistributionByUserComponent) {
+				this.emitter.sendNext({
+					type: 'distributionByUserChart',
+					data: {
+						result,
+						distributionByUserWidgetParameters: this.barChartWidgetParameters,
+						distributionByUserWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isDistributionByUserComponent = false;
+			}
+			
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -452,7 +557,7 @@ export class PublicComponent implements OnInit {
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
-		console.log(this.dashboardWidgetsArray);
+		console.log('Before this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
 			if (widget.id === widgetId) {
 				let a = {
@@ -466,7 +571,7 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		console.log('updatedDashboardArray', updatedDashboardArray);
-		console.log('this.dashboardWidgetsArray', this.dashboardWidgetsArray);
+		console.log('After this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		// this.dashboardWidgetsArray = updatedDashboardArray;
 		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
 		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering
@@ -480,6 +585,11 @@ export class PublicComponent implements OnInit {
 				this.isBarChartComponent = false;
 				this.isKpiCountSummaryComponent = false;
 				this.isverificaDoughnutComponent = false;
+				this.isCatalogPendingComponent = false;
+				this.isNotificationTrendComponent = false;
+				this.isKpiReportTrendComponent = false;
+				this.isKpiCountOrgComponent = false;
+				this.isDistributionByUserComponent = false;
 			}
 		});
 	}

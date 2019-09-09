@@ -287,11 +287,12 @@ export class DashboardComponent implements OnInit {
 
 	saveDashboard() {
 		this.emitter.loadingStatus(true);
+		console.log('saveDashboard', this.dashboardCollection);
 		this.dashboardService.updateDashboard(this.dashboardCollection).subscribe(updatedDashboard => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard saved successfully.');
 		}, error => {
-			console.log('updateDashboard', error);
+			console.error('saveDashboard', error);
 			this.emitter.loadingStatus(false);
 		});
 	}
@@ -392,6 +393,7 @@ export class DashboardComponent implements OnInit {
 				});
 			}
 			case "distribution_by_user": {
+				console.log('distribution_by_user', this.widgetCollection)
 				let distributionWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_user');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
