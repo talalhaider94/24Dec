@@ -46,7 +46,7 @@ export class PublicComponent implements OnInit {
 		child: 'children',
 		title: 'name'
 	};
-	preSelectedNodes = ['1075','1000','1065','1055','1090','1050','1005','1015','1085','1080','1020','1001'];
+	preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
 	allLeafNodesIds = [];
 	uncheckedNodes = [];
 
@@ -94,13 +94,13 @@ export class PublicComponent implements OnInit {
 			});
 		}
 		this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === identifier).help;
-		this.widgetParametersModal.show();		
+		this.widgetParametersModal.show();
 	}
 
-	showPropertyTab(properties){
+	showPropertyTab(properties) {
 		return (Object.keys(properties).length) ? true : false;
 	}
-	showFilterTab(filters){
+	showFilterTab(filters) {
 		return (Object.keys(filters).length) ? true : false;
 	}
 
@@ -277,6 +277,8 @@ export class PublicComponent implements OnInit {
 				const [allWidgets, dashboardData, getOrgHierarcy] = result;
 				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
+				console.log('getOrgHierarcy', getOrgHierarcy);
+
 				if (allWidgets && allWidgets.length > 0) {
 					this.widgetCollection = allWidgets;
 				}
@@ -288,9 +290,8 @@ export class PublicComponent implements OnInit {
 					// copying array without reference to re-render.
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
-				
-				if(getOrgHierarcy && getOrgHierarcy.length > 0) {
-					console.log('getOrgHierarcy', getOrgHierarcy);
+
+				if (getOrgHierarcy && getOrgHierarcy.length > 0) {
 					this.createTrees(getOrgHierarcy);
 				}
 
@@ -376,15 +377,15 @@ export class PublicComponent implements OnInit {
 
 	fromCalendar(container1) {
 		container1.monthSelectHandler = (event: any): void => {
-		  container1._store.dispatch(container1._actions.select(event.date));
-		};     
+			container1._store.dispatch(container1._actions.select(event.date));
+		};
 		container1.setViewMode('month');
 	}
 
 	toCalendar(container2) {
 		container2.monthSelectHandler = (event: any): void => {
-		  container2._store.dispatch(container2._actions.select(event.date));
-		};     
+			container2._store.dispatch(container2._actions.select(event.date));
+		};
 		container2.setViewMode('month');
 	}
 
@@ -414,13 +415,13 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
-		let copyFormValues = {...formValues, Filters: formValues.Filters, Properties: formValues.Properties};
+		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
-			if(this.isBarChartComponent) {
+			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
 					type: 'barChart',
 					data: {
@@ -431,7 +432,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isBarChartComponent = false;
 			}
-			if(this.isKpiCountSummaryComponent) {
+			if (this.isKpiCountSummaryComponent) {
 				this.emitter.sendNext({
 					type: 'kpiCountSummaryChart',
 					data: {
@@ -442,7 +443,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountSummaryComponent = false;
 			}
-			if(this.isverificaDoughnutComponent) {
+			if (this.isverificaDoughnutComponent) {
 				this.emitter.sendNext({
 					type: 'verificaDoughnutChart',
 					data: {
@@ -453,7 +454,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isverificaDoughnutComponent = false;
 			}
-			if(this.isCatalogPendingComponent) {
+			if (this.isCatalogPendingComponent) {
 				this.emitter.sendNext({
 					type: 'catalogPendingChart',
 					data: {
@@ -464,7 +465,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isCatalogPendingComponent = false;
 			}
-			if(this.isNotificationTrendComponent) {
+			if (this.isNotificationTrendComponent) {
 				this.emitter.sendNext({
 					type: 'notificationTrendChart',
 					data: {
@@ -475,7 +476,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isNotificationTrendComponent = false;
 			}
-			if(this.isKpiReportTrendComponent) {
+			if (this.isKpiReportTrendComponent) {
 				this.emitter.sendNext({
 					type: 'kpiReportTrendChart',
 					data: {
@@ -486,7 +487,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiReportTrendComponent = false;
 			}
-			if(this.isKpiCountOrgComponent) {
+			if (this.isKpiCountOrgComponent) {
 				this.emitter.sendNext({
 					type: 'kpiCountByOrgChart',
 					data: {
@@ -497,7 +498,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiCountOrgComponent = false;
 			}
-			if(this.isDistributionByUserComponent) {
+			if (this.isDistributionByUserComponent) {
 				this.emitter.sendNext({
 					type: 'distributionByUserChart',
 					data: {
@@ -508,7 +509,7 @@ export class PublicComponent implements OnInit {
 				});
 				this.isDistributionByUserComponent = false;
 			}
-			
+
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
@@ -531,37 +532,37 @@ export class PublicComponent implements OnInit {
 	syncSelectedNodesArray(event, treeRef) {
 		// this.allLeafNodesIds = [];
 		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
-		this.uncheckedNodes = this.allLeafNodesIds.filter( value => this.permissionsTree.checkedNodes.indexOf(value.toString())==-1);
+		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
 		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
 		treeRef.loaded = true;
 	}
 	createTrees(treesData) {
 		console.log('treesData ->', treesData);
 		//treesData.forEach((itm: any) => {
-			let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
-			this.treesArray.push({
-				name: treesData.name,
-				settings: settings,
-				checkedNodes: this.preSelectedNodes,
-				id: treesData.id,
-				elementId: `permissions_tree_${treesData.id}`,
-				loaded: true
-			});
-			this.allLeafNodesIds = [];
-			this.getAllLeafNodesIds(treesData);
-			//this.permissionsTree.checkAll(this.allLeafNodesIds);
+		let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
+		this.treesArray.push({
+			name: treesData.name,
+			settings: settings,
+			checkedNodes: this.preSelectedNodes,
+			id: treesData.id,
+			elementId: `permissions_tree_${treesData.id}`,
+			loaded: true
+		});
+		this.allLeafNodesIds = [];
+		this.getAllLeafNodesIds(treesData);
+		//this.permissionsTree.checkAll(this.allLeafNodesIds);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
 		this.isTreeLoaded = true;
 	}
 	getAllLeafNodesIds(complexJson) {
 		if (complexJson) {
-			complexJson.forEach((item:any)=>{
-			if (item.children) {
-				this.getAllLeafNodesIds(item.children);
-			} else {
-				this.allLeafNodesIds.push(item.id);
-			}
+			complexJson.forEach((item: any) => {
+				if (item.children) {
+					this.getAllLeafNodesIds(item.children);
+				} else {
+					this.allLeafNodesIds.push(item.id);
+				}
 			});
 			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
