@@ -80,6 +80,8 @@
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Periodo</th>
+                                    <th>Target</th>
+                                    <th>Value</th>
                                     <th>Riferimento Input</th>
                                     <th>Riferimento S1 </th>
                                     <th>Riferimento S2</th>
@@ -94,12 +96,17 @@
                                 </tr>
                                 <tr *ngFor="let ticket of allTickets; let i = index"
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
-                                    <td class="pl-3" popover="Verde -> KPI Compliant
-                                        Rosso -> KPI Non Compliant
-                                        Grigio -> KPI Non Calcolato
-                                        Blu -> KPI con Nessun Evento
-                                        Bianco -> altri casi " triggers="hover" placement="top">
-                                        <label  class="checkbox-container border"
+                                    <ng-template #popCheckBox>
+                                        <ul class="list-group list-group-flush"
+                                            *ngFor="let obj of formatCheckColumn()">
+                                            <li class="list-group-item">
+                                                {{ obj }}
+                                            </li>
+                                        </ul>
+                                    </ng-template>
+
+                                    <td class="pl-3" [popover]="popCheckBox" triggers="hover" placement="right">
+                                        <label class="checkbox-container border"
                                             [ngClass]="ticket.description.includes('[Compliant]') ?
                                              'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
                                               'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
@@ -139,25 +146,25 @@
                                         </button>
                                     </td>
                                     <td>
-                                            <ng-template #popTemplate>
-                                                <ul class="list-group list-group-flush"
-                                                    *ngFor="let obj of formatDescriptionColumn(ticket.description)">
-                                                    <li *ngIf="obj.key" class="list-group-item">
-                                                        <b>{{obj.key}}</b> {{obj.value}}
-                                                    </li>
-                                                    <li *ngIf="!obj.key" class="list-group-item">
-                                                        {{obj}}
-                                                    </li>
-                                                </ul>
-                                            </ng-template>
-                                            <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
-                                                triggers="focus" placement="top">
-                                                {{ ticket.description | slice:0:15 || 'N/A' }}
-                                                <span class="d-none">
-                                                    {{ ticket.description | slice:15 || 'N/A' }}
-                                                </span>
-                                            </button>
-                                        </td>
+                                        <ng-template #popTemplate>
+                                            <ul class="list-group list-group-flush"
+                                                *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                                <li *ngIf="obj.key" class="list-group-item">
+                                                    <b>{{obj.key}}</b> {{obj.value}}
+                                                </li>
+                                                <li *ngIf="!obj.key" class="list-group-item">
+                                                    {{obj}}
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
+                                            triggers="focus" placement="top">
+                                            {{ ticket.description | slice:0:15 || 'N/A' }}
+                                            <span class="d-none">
+                                                {{ ticket.description | slice:15 || 'N/A' }}
+                                            </span>
+                                        </button>
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group"
                                             triggers="focus">
@@ -166,7 +173,9 @@
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>{{ ticket.period || 'N/A' }}</td>
-                                    <td>{{ ticket.riferimento_input  }}</td>
+                                    <td>{{ ticket.target || 'N/A' }}</td>
+                                    <td>{{ ticket.value || 'N/A' }}</td>
+                                    <td>{{ ticket.riferimento_input || 'N/A' }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">
                                             <button type="button" class="btn btn-ghost-dark"

@@ -66,7 +66,7 @@ export class ProveVarieComponent implements OnInit {
   // filto per le date
   maxDate: any[] = [];
   minDate: any[] = [];
-
+  actionOnSubmit: string = '';
   dt: any[] = [];
   numero: number[] = [];
   stringa: string[] = [];
@@ -152,7 +152,9 @@ export class ProveVarieComponent implements OnInit {
       }
     });
   }
-
+  after_submit(action) {
+    this.actionOnSubmit = action;
+  }
   saveUser(model: any) {
     let utenteFormData;
     if (!!model.value.termsCheck) {
@@ -257,6 +259,9 @@ export class ProveVarieComponent implements OnInit {
       } else {
         this.userLoadingFormErrors = [];
         this.toastr.success('Form inviato correttamente.', 'Success');
+        if (this.actionOnSubmit == 'saveExit') {
+          this.router.navigate(['/loading-form/utente']);
+        }
       }
     }, error => {
       this.loading = false;

@@ -443,4 +443,9 @@ export class KPIComponent implements OnInit, OnDestroy {
     )
     ))
   }
+
+  formatCheckColumn() {
+    let a = WorkFlowHelper.formatCheckBoxColumn();
+    return a;
+  }
 }

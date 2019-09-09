@@ -46,7 +46,10 @@
                   </div>
                 </td>
                 <td>
-                  <div class="text-center">{{ loadingForm.latest_input_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}
+                  <div class="text-center">
+                    <span [ngClass]="formatInputDate(loadingForm.latest_input_date) === 'Nessun caricamento' ? 'badge badge-success' : ''">
+                        {{ formatInputDate(loadingForm.latest_input_date) }}
+                    </span>
                   </div>
                 </td>
                 <td>
