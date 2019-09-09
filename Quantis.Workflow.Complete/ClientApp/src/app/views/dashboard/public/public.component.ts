@@ -196,7 +196,8 @@ export class PublicComponent implements OnInit {
 			Filters: this.formBuilder.group({
 				daterange: [null],
 				dateTypes: [null],
-				date: [null]
+				date: [null],
+				organizations: [null] 
 			}),
 			Note: [null],
 		});
@@ -240,7 +241,7 @@ export class PublicComponent implements OnInit {
 		this._route.params.subscribe(params => {
 			this.dashboardId = +params["id"];
 			this.emitter.loadingStatus(true);
-			this.getData(this.dashboardId);
+			this.getData(this.dashboardId); /////
 		});
 
 		this.widgetParametersForm.get('Filters').get('dateTypes').valueChanges.subscribe((value) => {
@@ -377,6 +378,10 @@ export class PublicComponent implements OnInit {
 		container2.setViewMode('month');
 	}
 
+	fromChanged(){
+		console.log('fromChanged');
+	}
+
 	changedOptions() {
 		this.options.api.optionsChanged();
 	}
@@ -391,6 +396,8 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
+		debugger
+		console.log(this.uncheckedNodes);
 
 		let startDate;
 		let endDate;
@@ -505,6 +512,7 @@ export class PublicComponent implements OnInit {
 		})
 	}
 	customDateTypes(event) {
+		//console.log('customDateTypes', event);
 	}
 
 	addLoaderToTrees(add = true) {
@@ -538,7 +546,7 @@ export class PublicComponent implements OnInit {
 			});
 			this.allLeafNodesIds = [];
 			this.getAllLeafNodesIds(treesData);
-			//this.permissionsTree.checkAll(this.allLeafNodesIds);
+			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
 		this.isTreeLoaded = true;
