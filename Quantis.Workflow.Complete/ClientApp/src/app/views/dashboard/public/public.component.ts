@@ -426,7 +426,7 @@ export class PublicComponent implements OnInit {
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		// Organization hierarchy as Customers
 		this.uncheckedNodes;
-		formValues.Filters.organizations = this.uncheckedNodes.join(',');
+		formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
