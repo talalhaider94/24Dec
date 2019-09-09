@@ -401,9 +401,9 @@ namespace Quantis.WorkFlow.APIBase.API
                     tickets.AddRange(parseTickets(select_result));
                     ret = tickets.ToList();
                     var ids = ret.Select(o => o.kpiIdPK).ToList();
-                    var titolos = _dataService.GetKPITitolo(ids);
+                    var titolos = _dataService.GetKPISDMExtraInformation(ids);
                     return (from tks in ret
-                            join tito in titolos on tks.kpiIdPK equals tito.Key
+                            join tito in titolos on tks.kpiIdPK equals tito.id
                             into gj
                             from subset in gj.DefaultIfEmpty()
                             select new SDMTicketLVDTO()
@@ -425,7 +425,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 calcValue = tks.calcValue,
                                 KpiIds = tks.KpiIds,
                                 LastModifiedDate = tks.LastModifiedDate,
-                                Titolo = subset.Value ?? string.Empty
+                                Titolo = subset.titolo ?? string.Empty,
+                                reference_input=subset.referent?? string.Empty,
+                                tipologia=subset.tipologia?? string.Empty
                             }).ToList();
 
                 }
@@ -491,9 +493,9 @@ namespace Quantis.WorkFlow.APIBase.API
                     var select_result = select_a.Result.doSelectReturn;
                     var tckts= parseTickets(select_result).Where(o=> kpiIds.Contains(o.kpiIdPK)).ToList();
                     var ids = tckts.Select(o => o.kpiIdPK).ToList();
-                    var titolos=_dataService.GetKPITitolo(ids);
+                    var titolos=_dataService.GetKPISDMExtraInformation(ids);
                     return (from tks in tckts
-                            join tito in titolos on tks.kpiIdPK equals tito.Key
+                            join tito in titolos on tks.kpiIdPK equals tito.id
                             into gj
                             from subset in gj.DefaultIfEmpty()
                             select new SDMTicketLVDTO()
@@ -515,7 +517,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 calcValue = tks.calcValue,
                                 KpiIds = tks.KpiIds,
                                 LastModifiedDate = tks.LastModifiedDate,
-                                Titolo = subset.Value ?? string.Empty
+                                Titolo = subset.titolo ?? string.Empty,
+                                reference_input = subset.referent ?? string.Empty,
+                                tipologia = subset.tipologia ?? string.Empty
                             }).ToList();
 
 

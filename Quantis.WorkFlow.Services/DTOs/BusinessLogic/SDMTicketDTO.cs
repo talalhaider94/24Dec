@@ -25,5 +25,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string Titolo { get; set; }
         public int kpiIdPK { get; set; }
         public string LastModifiedDate { get; set; }
+        public string reference_input { get; set; }
+        public string tipologia { get; set; }
     }
 }

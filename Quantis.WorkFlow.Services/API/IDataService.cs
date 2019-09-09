@@ -30,7 +30,7 @@ namespace Quantis.WorkFlow.Services.API
         List<GroupDTO> GetAllGroups();
         GroupDTO GetGroupById(int Id);
         bool AddUpdateGroup(GroupDTO dto);
-        List<KeyValuePair<int, string>> GetKPITitolo(List<int> ids);
+        List<KPISDMExtraDTO> GetKPISDMExtraInformation(List<int> ids);
         List<TUserDTO> GetAllTUsers();
         List<TRuleDTO> GetAllTRules();
         List<EmailNotifierDTO> GetEmailNotifiers(string period);

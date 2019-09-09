@@ -1490,12 +1490,17 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<KeyValuePair<int,string>> GetKPITitolo(List<int> ids)
+        public List<KPISDMExtraDTO> GetKPISDMExtraInformation(List<int> ids)
         {
             try
             {
                 var form = _dbcontext.CatalogKpi.Where(o=>ids.Contains(o.id));
-                return form.Select(o => new KeyValuePair<int, string>(o.id, o.short_name)).ToList();
+                return form.Select(o => new KPISDMExtraDTO(){
+                    id=o.id,
+                    titolo=o.short_name,
+                    referent=o.referent,
+                    tipologia=o.kpi_type
+                }).ToList();
               
 
             }
