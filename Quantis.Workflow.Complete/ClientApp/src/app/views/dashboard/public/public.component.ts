@@ -49,7 +49,8 @@ export class PublicComponent implements OnInit {
 	preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
 	allLeafNodesIds = [];
 	uncheckedNodes = [];
-
+	from_changed;
+	to_changed;
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
@@ -68,6 +69,7 @@ export class PublicComponent implements OnInit {
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
 	showDateInFilters: boolean = false;
+	showCustomDate: boolean = false;
 
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
@@ -245,6 +247,12 @@ export class PublicComponent implements OnInit {
 			this.getData(this.dashboardId); /////
 		});
 
+		// if(this.from_changed==1){
+		// 	this.showCustomDate=false;
+		// }else{
+		// 	this.showCustomDate=true;
+		// }
+
 		this.widgetParametersForm.get('Filters').get('dateTypes').valueChanges.subscribe((value) => {
 			console.log('Date Type Filter', value);
 			if (value === 'Custom') {
@@ -369,6 +377,13 @@ export class PublicComponent implements OnInit {
 	fromCalendar(container1) {
 		container1.monthSelectHandler = (event: any): void => {
 			container1._store.dispatch(container1._actions.select(event.date));
+			this.from_changed=1;
+
+			if(this.from_changed==1){
+				this.showCustomDate=false;
+			}else{
+				this.showCustomDate=true;
+			}
 		};
 		container1.setViewMode('month');
 	}
@@ -378,7 +393,7 @@ export class PublicComponent implements OnInit {
 			container2._store.dispatch(container2._actions.select(event.date));
 		};
 		container2.setViewMode('month');
-	}
+	} 
 
 	fromChanged(){
 		console.log('fromChanged');
