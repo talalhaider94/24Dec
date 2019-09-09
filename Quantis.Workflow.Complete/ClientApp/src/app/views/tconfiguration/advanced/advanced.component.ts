@@ -22,6 +22,7 @@ export class TConfigurationAdvancedComponent implements OnInit {
   isenable: boolean = false;
   iseditable: boolean = true;
   description: any =  '';
+  secondsValue: any = '';
 
   dtOptions: DataTables.Settings = {
     language: {
@@ -86,10 +87,15 @@ export class TConfigurationAdvancedComponent implements OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => {
-      this.getCOnfigurations(); 
-      console.log("Auto Refresh...");
-    }, 600000); 
+    this.apiService.getSeconds().subscribe((data: any) => {
+      var secondsValue = data + '000';
+      var seconds = parseInt(secondsValue);
+      console.log("Auto Refresh Seconds: ",seconds);
+      
+      setInterval(() => {
+        this.getCOnfigurations(); 
+      }, seconds);  
+    }); 
   }
 
   populateModalData(data) {
@@ -199,9 +205,4 @@ export class TConfigurationAdvancedComponent implements OnInit {
     });
   }
 
- /* getCOnfigurations1() {
-    this.apiService.getConfigurations().subscribe((data: any) => {
-    });
-
-  }*/
 }

@@ -174,6 +174,10 @@ export class ApiService {
     const getKpisEndPoint = `${environment.API_URL}/information/GetAllKpisByUserId?userId=${userId}&contractId=${contractId}`;
     return this.http.get(getKpisEndPoint);
   }
+  getSeconds(): Observable<any> {
+    const getSecondsEndPoint = `${environment.API_URL}/information/GetDashboardTickInterval`;
+    return this.http.get(getSecondsEndPoint);
+  }
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)

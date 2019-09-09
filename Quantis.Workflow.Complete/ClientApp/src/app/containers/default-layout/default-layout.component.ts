@@ -6,6 +6,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 import { ObservableLike } from 'rxjs';
+import { DashboardService, EmitterService } from '../../_services';
+import { WidgetModel, DashboardModel } from "../../_models";
 
 
 @Component({
@@ -20,18 +22,23 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public element: HTMLElement;
   private currentUrl = '0.0.1';
   public currentVerion = '0.0.1';
-  public returnedNode:any;
+  public returnedNode: any;
   currentUser: any;
+  loading: boolean = true;
+  dashboardCollection: DashboardModel[];
+
   constructor(
     private toastr: ToastrService,
     private authService: AuthService,
     private router: Router,
+    private dashboardService: DashboardService,
+    private emitter: EmitterService,
     @Inject(DOCUMENT) _document?: any,
-    ) {
-      this.currentUser = this.authService.getUser(); 
-    
-      this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
-      this.navItems = this.permittedMenuItems; 
+  ) {
+    this.currentUser = this.authService.getUser();
+
+    this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
+    this.navItems = this.permittedMenuItems;
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -41,20 +48,24 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       attributes: true,
       attributeFilter: ['class']
     });
-    
+
   }
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
     this.router.events.pipe(
-      filter((event:any) => event instanceof NavigationEnd)
+      filter((event: any) => event instanceof NavigationEnd)
     ).subscribe(x => {
       console.log('router');
       console.log(x);
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
-      this.currentVerion = this.returnedNode.version || '0.0.1';
+      this.currentVerion = '0.0.1';
+      // Danial: Commenting out version line because getting error. Talal please see this :p
+      // this.currentVerion = this.returnedNode.version || '0.0.1';
     });
+    this.loadingSpinnerSubscription();
+    this.getAllDashboards();
   }
 
   ngOnDestroy(): void {
@@ -71,10 +82,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   filterMenuByPermission(navItems, permissions, permittedMenu) {
     if (navItems) {
-      navItems.forEach((item:any)=>{
-        let isExist:boolean =  item.title || item.divider || item.key == 'alwaysShow' || this.checkArrays(item.key === undefined ? ['$#%^&'] : typeof(item.key) === 'string' ? [item.key] : item.key, permissions);
-        let cloneItem = {...{}, ...item};
-        if(isExist){ // || item.title || item.divider || item.key == 'alwaysShow'
+      navItems.forEach((item: any) => {
+        let isExist: boolean = item.title || item.divider || item.key == 'alwaysShow' || this.checkArrays(item.key === undefined ? ['$#%^&'] : typeof (item.key) === 'string' ? [item.key] : item.key, permissions);
+        let cloneItem = { ...{}, ...item };
+        if (isExist) { // || item.title || item.divider || item.key == 'alwaysShow'
           cloneItem.children = [];
           permittedMenu.push(cloneItem);
         }
@@ -89,8 +100,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   checkArrays(arr1, arr2) {
     let isExist = false;
-    arr1.forEach((item:any)=>{
-      if(arr2.indexOf(item) > -1 ){
+    arr1.forEach((item: any) => {
+      if (arr2.indexOf(item) > -1) {
         isExist = true;
       }
     });
@@ -98,9 +109,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   }
 
   findUrlDataByName(itemsArray, url) {
-    if(itemsArray){
-      itemsArray.forEach((item:any)=>{
-        if(item.url === url){
+    if (itemsArray) {
+      itemsArray.forEach((item: any) => {
+        if (item.url === url) {
           this.returnedNode = item;
         }
         if (item.children) {
@@ -111,5 +122,35 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     }
   }
 
+  dashboardList() {
+    this.router.navigate(['/dashboard/list']);
+  }
+
+  dashboardNavigation(id) {
+    this.router.navigate(['/dashboard/dashboard', id]);
+  }
+
+  loadingSpinnerSubscription() {
+    this.emitter.getData().subscribe(data => {
+      if (data.type === 'loading') {
+        if (this.loading !== data.loading) {
+          setTimeout(() => {
+            this.loading = data.loading;
+          })
+
+        }
+      }
+    });
+  }
+
+  getAllDashboards() {
+    this.dashboardService.getDashboards().subscribe(dashboards => {
+      this.emitter.loadingStatus(false);
+      this.dashboardCollection = dashboards;
+    }, error => {
+      this.toastr.error('Error while loading dashboards');
+      this.emitter.loadingStatus(false);
+    });
+  }
 
 }

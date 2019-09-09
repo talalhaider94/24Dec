@@ -15,7 +15,7 @@
           <th style="text-align:center">CHIAVE</th>
           <th style="text-align:center">OWNER</th>
           <th style="text-align:center">VALORE</th>
-          <th style="text-align:center">ABILITATO</th>
+          <th style="display:none; text-align:center">ABILITATO</th>
           <th style="text-align:center">DESCRIZIONE</th>
           <th style="text-align:center">AZIONE</th>
         </tr>
@@ -25,9 +25,9 @@
           <td>{{row.key}}</td>
           <td>{{row.owner}}</td>
           <td>{{row.value}}</td>
-          <td align="center" *ngIf="row.isenable; then trueBlock else falseBlock"></td>
-          <ng-template #trueBlock><td align="center">&#10004;</td> </ng-template>
-          <ng-template #falseBlock><td align="center">&#10006;</td> </ng-template>
+          <td style="display:none" align="center" *ngIf="row.isenable; then trueBlock else falseBlock"></td>
+          <ng-template #trueBlock><td align="center" style="display:none">&#10004;</td> </ng-template>
+          <ng-template #falseBlock><td align="center" style="display:none">&#10006;</td> </ng-template>
           <td>{{row.description}}</td>
           <td *ngIf="row.iseditable; then showEdit else hideEdit"></td>
             <ng-template #showEdit>
@@ -60,7 +60,7 @@
               <th>Key</th>
               <th>Owner</th>
               <th>Value</th>
-              <th>Abilitato</th>
+              <th style="display:none">Abilitato</th>
               <th>Descrizione</th>
             </tr>
           </thead>
@@ -69,7 +69,7 @@
               <td>{{modalData.key}}</td>
               <td>{{modalData.owner}}</td>
               <td><input type="text" class="form-control" [ngModel]="modalData.value" (ngModelChange)="changeModal($event)"></td>
-              <td><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
+              <td style="display:none"><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px"/></td>
               <td>{{modalData.description}}</td>
             </tr>
           </tbody>

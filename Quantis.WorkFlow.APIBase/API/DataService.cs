@@ -127,6 +127,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
  /*       public List<int> GetRawIdsFromRulePeriod(int ruleId,string period)
         {
+
             try
             {
                 var config = new List<KPIRegistrationDTO>();

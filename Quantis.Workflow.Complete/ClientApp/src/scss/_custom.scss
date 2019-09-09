@@ -1,3 +1,6 @@
+// .container-fluid {
+//   height: 100%;
+// }
 // Here you can add other styles
 .sidebar {
   .nav-link {
@@ -183,33 +186,29 @@
   width: 100px;
 }
 
-.btn-esempio {
-  padding: 12px,12px;
-  font-size: 10px;
+.fill-height {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  min-height: 100px;
 }
-//DATATABLES STYLE
-.table.kpiTable {
-  thead {
-    background: #20a8d8;
-    tr {
-      color: white;
-      font-size: 12px;
-    }
-    th {
-      border-bottom: 1px solid #c1c1c1;
-    }
+
+.gridster-column {
+  border-left: 1px solid #ccc !important;
+  border-right: 1px solid #ccc !important;
+}
+
+.gridster-row {
+  border-top: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+.pointer-grab {
+  &:hover {
+    cursor: grab;
   }
 }
-.table.dataTable {
-  thead {
-    background: #20a8d8;
-    tr {
-      color: white;
-      font-size: 12px;
-    }
-    th {
-      border-bottom: 1px solid #c1c1c1;
-    }
-  }
+
+.text-gray {
+  color: #73818f !important;
 }
-//DATATABLES STYLE

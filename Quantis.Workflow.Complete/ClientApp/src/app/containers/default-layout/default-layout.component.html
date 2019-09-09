@@ -1,21 +1,23 @@
-<app-header [navbarBrandRouterLink]="['/dashboard']"
-            [fixed]="true"
-            [navbarBrandFull]="{src: 'assets/img/brand/logo.jpg',  alt: 'KPI Management'}"
-            [navbarBrandMinimized]="{src: 'assets/img/brand/logo.jpg', alt: 'KPI Management'}"
-            [sidebarToggler]="'lg'"
-            [asideMenuToggler]="'lg'">
-  <!-- <ul class="nav navbar-nav d-md-down-none">width: 125, height: 21, width: 125, height: 21,
+<app-header [navbarBrandRouterLink]="['/dashboard']" [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/brand/logo.jpg',  alt: 'KPI Management'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/logo.jpg', alt: 'KPI Management'}" [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'lg'">
+  <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
-      <a class="nav-link" href="#">Dashboard</a>
+      <a class="nav-link text-gray" class="pointer-cursor text-gray" (click)="dashboardList()">Dashboards</a>
     </li>
-  </ul> -->
+  </ul>
   <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item" *ngIf="loading">
+      <i class="fa fa-spin fa-spinner text-info fa-2x"></i>
+    </li>
     <li>
       <a href="#" routerLink="/go-back" title="refresh"><i class="fa fa-refresh"></i></a>
     </li>
-    
+
     <li class="nav-item dropdown" dropdown placement="bottom right">
-      <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+      <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle
+        (click)="false">
         <i class="icon-bell"></i>
         <span class="badge badge-pill badge-danger">0</span>
       </a>
@@ -26,7 +28,8 @@
       </div>
     </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">
-      <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+      <a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle
+        (click)="false">
         <i class="icon-user"></i> {{currentUser.username}}
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
@@ -51,13 +54,11 @@
     <!-- Breadcrumb -->
     <!-- breaking change 'cui-breadcrumb' -->
     <cui-breadcrumb>
-      <!-- <li class="breadcrumb-menu d-md-down-none">
+      <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-          <a class="btn" href="#"><i class="icon-speech"></i></a>
-          <a class="btn" [routerLink]="['/dashboard']"><i class="icon-graph"></i> &nbsp;Dashboard</a>
+          <a class="btn text-gray" href="#"><i class="icon-graph"></i> v{{currentVerion}}</a>
         </div>
-      </li> -->
-      <span style="width:98%; position:absolute; color:#bbb; text-align:right"> v {{currentVerion}} </span>
+      </li>
     </cui-breadcrumb>
     <div class="container-fluid">
       <!-- Danial: center area to display content -->
@@ -70,33 +71,28 @@
         <ng-template tabHeading><i class="icon-settings"></i></ng-template>
         <div class="p-3">
           <h6>Home Page</h6>
-          <p>Selezionare la Home Page da visualizzare dopo il login.</p>
-          <div class="aside-options">
+          <p>Selezionare la Dashboard da visualizzare dopo il login.</p>
+          <div class="aside-options" *ngFor="let dashboard of dashboardCollection">
             <div class="clearfix mt-4">
-              <small><b>Contraenti</b></small>
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input" checked>
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-              </label>
-            </div>
-          </div>
-          <div class="aside-options">
-            <div class="clearfix mt-3">
-              <small><b>Contratti</b></small>
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input">
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-              </label>
-            </div>
-          </div>
-          <div class="aside-options">
-            <div class="clearfix mt-3">
-              <small><b>My Dashboard</b></small>
-              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                <input type="checkbox" class="switch-input">
-                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                <span class="switch-handle"></span>
-              </label>
+              <small>
+                <b>
+                  <a class="pointer-cursor" (click)="dashboardNavigation(dashboard.id)">{{ dashboard.id }}
+                    {{ dashboard.name }}</a>
+                </b>
+              </small>
+              <ng-container *ngIf="dashboard.isactive">
+                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                  <input type="checkbox" class="switch-input" checked>
+                  <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                </label>
+              </ng-container>
+              <ng-container *ngIf="!dashboard.isactive">
+                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                  <input type="checkbox" class="switch-input" unchecked>
+                  <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                </label>
+              </ng-container>
+
             </div>
           </div>
         </div>

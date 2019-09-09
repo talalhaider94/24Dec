@@ -218,6 +218,13 @@ namespace Quantis.WorkFlow.Complete.Controllers
             var conf=_infomationAPI.GetConfiguration("bsi_server", "bsi_webserver");
             return (conf==null)?null:conf.Value;
         }
+        [HttpGet("GetDashboardTickInterval")]
+        public string GetDashboardTickInterval()
+        {
+            var conf = _infomationAPI.GetConfiguration("dashboard", "tick_interval");
+            return (conf == null) ? "30" : conf.Value;
+        }
+
 
     }
 }
