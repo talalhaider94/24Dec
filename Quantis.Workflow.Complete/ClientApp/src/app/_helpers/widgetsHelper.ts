@@ -9,12 +9,12 @@ export class WidgetsHelper {
             buildParams.Filters = {};
 
             buildParams.GlobalFilterId = 0;
-            buildParams.Note = '';
+            // buildParams.Note = '';
             // PROPERTIES
             if(apiParams.showmeasure) {
-                let index = (!!properties.measure) ? properties.measure : 0;
-                let value = Object.keys(apiParams.measures)[index];
-                buildParams.Properties.measure = value;
+                let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : '0';
+                // let value = Object.keys(apiParams.measures)[index];
+                buildParams.Properties.measure = index;
             }
             if(apiParams.showcharttype) {
                 let index = (!!properties.charttype) ? properties.charttype : Object.keys(apiParams.charttypes)[0];
@@ -26,7 +26,8 @@ export class WidgetsHelper {
             }
             // FILTERS
             if(apiParams.showdatetype) {
-                let dateType = (!!filters.showdatetype) ? filters.dateTypes : 'Custom';
+                // need to change it base on key error might be in filters.dateTypes
+                let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
                 buildParams.Filters.dateTypes = dateType;
             }
             if(apiParams.showdaterangefilter) {

@@ -201,7 +201,7 @@ export class PublicComponent implements OnInit {
 			Filters: this.formBuilder.group({
 				daterange: [null],
 				dateTypes: [null],
-				date: [null],
+				date: [''],
 			}),
 			// Note: [null],
 		});
@@ -353,6 +353,7 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		debugger
+		// removeNullKeysFromObject()
 		this.dashboardService.saveDashboardState(params).subscribe(result => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard state saved successfully');
@@ -456,6 +457,7 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
+		debugger
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === 'Custom') {

@@ -69,16 +69,12 @@ export class BarchartComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let barChartFormValues = data.barChartWidgetParameterValues;
+					debugger
 					barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
 					this.setWidgetFormValues = barChartFormValues;
 					this.updateChart(data.result.body, data, null);
 				}
 			}
-			// no idea yet may remove
-			// if(type === 'getOrgHierarcy') {
-			// 	debugger
-			// 	this.getOrgHierarchy = data.getOrgHierarchy;
-			// }
 		});
 	}
 	// invokes on component initialization
@@ -90,13 +86,13 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
+				debugger
 				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				console.log('BarChart newParams', JSON.stringify(newParams));
 				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
-			console.log('getWidgetIndex', getWidgetIndex);
-			console.log('myWidgetParameters', myWidgetParameters);
 			let barChartParams;
 			if (myWidgetParameters) {
 				barChartParams = {
@@ -118,7 +114,9 @@ export class BarchartComponent implements OnInit {
 				// setting initial Paramter form widget values
 				console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
 				console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
+				debugger
 				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+				console.log('BarChart this.setWidgetFormValues', this.setWidgetFormValues);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
@@ -130,7 +128,7 @@ export class BarchartComponent implements OnInit {
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
-			console.error('Barchart Count Trend', error);
+			console.error('Barchart Count Trend', error, this.setWidgetFormValues);
 			this.loading = false;
 			this.emitter.loadingStatus(false);
 		});
@@ -169,6 +167,7 @@ export class BarchartComponent implements OnInit {
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
 		if (dashboardComponentData) {
+			debugger
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
 			let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
@@ -181,12 +180,15 @@ export class BarchartComponent implements OnInit {
 			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
-		let allLabels = chartIndexData.map(label => label.xvalue);
-		let allData = chartIndexData.map(data => data.yvalue);
-		this.barChartData = [{ data: allData, label: label }]
-		this.barChartLabels.length = 0;
-		this.barChartLabels.push(...allLabels);
-		this.closeModal();
+		setTimeout(() => {
+			let allLabels = chartIndexData.map(label => label.xvalue);
+			let allData = chartIndexData.map(data => data.yvalue);
+			this.barChartData = [{ data: allData, label: label }]
+			this.barChartLabels.length = 0;
+			this.barChartLabels.push(...allLabels);
+			this.closeModal();
+		})
+
 	}
 
 	widgetnameChange(event) {

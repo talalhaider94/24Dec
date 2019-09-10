@@ -102,10 +102,10 @@
                     <label for="daterange">Intervallo di date</label>
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
                       bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
-                    <!-- <label for="daterange">Intervallo di date</label><br>
+                    <!-- <label for="daterange">Tipo di intervallo</label>
                     <div class="row">
                       <div class="col-md-6">
-                        <label for="fromdate" style="text-align: center">From</label>
+                        <label for="fromdate" style="text-align: center">Da</label>
                         <form class="container1">
                           <input formControlName="fromDateType" autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
@@ -113,14 +113,14 @@
                         </form>
                       </div>
                       <div class="col-md-6">
-                        <label for="todate">To</label>
+                        <label for="todate">A</label>
                         <form class="container2">
                           <input autocomplete="off" class="form-control" name="date" 
                           bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
                           (onShown)="toCalendar($event)">
                         </form>
                       </div>
-                    </div>  -->
+                    </div>   -->
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">
