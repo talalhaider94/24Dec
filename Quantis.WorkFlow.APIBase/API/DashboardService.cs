@@ -29,11 +29,11 @@ namespace Quantis.WorkFlow.APIBase.API
             _dashboardWidgetMapper = dashboardWidgetMapper;
         }
 
-        public List<DashboardDTO> GetDashboards()
+        public List<DashboardDTO> GetDashboards(int userId)
         {
             try
             {
-                var entities=_dbcontext.DB_Dashboards.Include(o=>o.User).ToList();
+                var entities=_dbcontext.DB_Dashboards.Where(o=>o.UserId==userId).Include(o=>o.User).OrderBy(o=>o.Name).ToList();
                 return _dashboardMapper.GetDTOs(entities);
             }
             catch(Exception e)

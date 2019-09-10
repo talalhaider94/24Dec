@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.Framework;
@@ -23,17 +25,21 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             _dashboardAPI = dashboardAPI;
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDashboards")]
         public List<DashboardDTO> GetDashboards()
         {
-            return _dashboardAPI.GetDashboards();
+            var user = HttpContext.User as AuthUser;
+            return _dashboardAPI.GetDashboards(user.UserId);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("SetDefaultDashboard")]
         public void SetDefaultDashboard(int id)
         {
             var user = HttpContext.User as AuthUser;
             _dashboardAPI.SetDefaultDashboard(id, user.UserId);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDefaultDashboardId")]
         public int GetDefaultDashboardId()
         {

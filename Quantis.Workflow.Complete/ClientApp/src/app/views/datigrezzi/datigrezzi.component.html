@@ -41,7 +41,9 @@
             <td width="10%" align="center">
               <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="setId(row.global_rule_id_bsi)" data-target="#searchModal" title="Search"><i class="fa fa-search"></i>
               </button>
-              <button style="font-size:10px" class="btn btn-primary ml-1" data-toggle="modal" (click)="getdati1(row.global_rule_id_bsi,monthVar,yearVar)" data-target="#daModal" title="DATI"><i class="fa fa-table"></i>
+              <!-- <button style="font-size:10px" class="btn btn-primary ml-1" data-toggle="modal" (click)="getdati1(row.global_rule_id_bsi,monthVar,yearVar)" data-target="#daModal" title="DATI"><i class="fa fa-table"></i>
+              </button> -->
+              <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="getdati1(row.global_rule_id_bsi,monthVar,yearVar)" data-target="#daModal" title="DATI"><i class="fa fa-table"></i>
               </button>
             </td>
           </tr>
@@ -49,8 +51,6 @@
       </table>
     </div>
 </div>
-
-
 
 
 <div id="searchModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">

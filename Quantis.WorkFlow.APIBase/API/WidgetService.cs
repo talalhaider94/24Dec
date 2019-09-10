@@ -240,14 +240,101 @@ namespace Quantis.WorkFlow.APIBase.API
             res.Add(new XYDTO() { XValue = "07/2019", YValue = 22 });
             return res;
         }
-        public List<XYDTO> GetKPIReportTrend(BaseWidgetDTO dto)
+        public List<XYZDTO> GetKPIReportTrend(BaseWidgetDTO dto)
         {
-            var res = new List<XYDTO>();
-            res.Add(new XYDTO() { XValue = "04/2019", YValue = 26 });
-            res.Add(new XYDTO() { XValue = "05/2019", YValue = 20 });
-            res.Add(new XYDTO() { XValue = "06/2019", YValue = 25 });
-            res.Add(new XYDTO() { XValue = "07/2019", YValue = 22 });
-            return res;
+            var result = new List<XYZDTO>();
+            string query = @"select
+                            psl.end_period,
+                            psl.service_level_target_ce,
+                            psl.provided_ce,
+                            psl.resultpsl
+                            from 
+                            (
+                              select  
+                              temp.global_rule_id, 
+                              to_char(temp.time_stamp,'YYYY-MM-DD') as timestamp, 
+                              to_char(temp.time_stamp_utc,'YYYY-MM-DD') as end_period, 
+                              to_char(temp.begin_time_stamp_utc,'YYYY-MM-DD') as start_period, 
+                              temp.sla_id, 
+                              temp.rule_id, 
+                              temp.time_unit,
+                              temp.interval_length, 
+                              temp.is_period, 
+                              temp.service_level_target, 
+                              temp.service_level_target_ce, 
+                              temp.provided_ce, 
+                              temp.deviation_ce, 
+                              temp.complete_record,
+                              temp.sla_version_id, 
+                              temp.metric_type_id, 
+                              temp.domain_category_id, 
+                              temp.service_domain_id,
+                              case 
+                                when deviation_ce > 0 then 'non compliant'
+                                when deviation_ce < 0 then 'compliant'
+                                else 'nc'
+                              end as resultPsl
+                              from 
+                              (
+                                select * 
+                                from t_psl_0_month pm
+                                union all
+                                select * 
+                                from t_psl_0_quarter pq
+                                union all
+                                select * 
+                                from t_psl_0_year py
+                                union all
+                                select * 
+                                from t_psl_1_all pa
+                              ) temp
+                              where provided is not null 
+                              and service_level_target is not null
+                            ) psl 
+                            left join t_rules r on  psl.rule_id = r.rule_id
+                            left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
+                            left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                            left join t_slas s on sv.sla_id = s.sla_id
+                            where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
+                            and psl.time_unit='MONTH'
+                            and psl.complete_record=1
+                            and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
+                            and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                            and psl.global_rule_id =:global_rule_id";
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleParameter param1 = new OracleParameter("start_period", dto.DateRange.Item1.AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param2 = new OracleParameter("end_period", dto.DateRange.Item2.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param3 = new OracleParameter("global_rule_id", dto.KPI);
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    cmd.Parameters.Add(param3);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result.Add(new XYZDTO()
+                        {
+                            XValue = ((DateTime)reader[0]).ToString("MM/yy"),
+                            YValue = (long)reader[1],
+                            Description= (string)reader[3],
+                            ZValue="Target"
+                        });
+                        result.Add(new XYZDTO()
+                        {
+                            XValue = ((DateTime)reader[0]).ToString("MM/yy"),
+                            YValue = (long)reader[2],
+                            Description = (string)reader[3],
+                            ZValue = "Value"
+                        });
+                    }
+                }
+            }
+            return result;
         }
     }
 }

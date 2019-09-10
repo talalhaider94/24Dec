@@ -45,6 +45,14 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 dto.KPIs = new List<int>();
             }
+            if (props.Filters.ContainsKey("kpi"))
+            {
+                dto.KPI = int.Parse(props.Filters["organizations"]);
+            }
+            else
+            {
+                dto.KPI = -1;
+            }
             if (props.Filters.ContainsKey("daterange"))
             {
                 var daterange = props.Filters["daterange"];
