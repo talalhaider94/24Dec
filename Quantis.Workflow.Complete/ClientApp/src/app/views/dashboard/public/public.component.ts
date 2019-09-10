@@ -79,6 +79,7 @@ export class PublicComponent implements OnInit {
 	isKpiReportTrendComponent: boolean = false;
 	isKpiCountOrgComponent: boolean = false;
 	isDistributionByUserComponent: boolean = false;
+	dashboardName: string;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -233,12 +234,12 @@ export class PublicComponent implements OnInit {
 			pushDirections: { north: true, east: true, south: true, west: true },
 			itemChangeCallback: this.itemChange.bind(this),
 			// itemResizeCallback: PublicComponent.itemResize,
-			// minCols: 10,
-			// maxCols: 100,
-			maxItemCols: 4,
-			maxItemRows: 7,
-			// minRows: 10,
-			// maxRows: 100,
+			minCols: 10,
+			maxCols: 100,
+			// maxItemCols: 4,
+			// maxItemRows: 7,
+			minRows: 10,
+			maxRows: 100,
 			scrollSensitivity: 10,
 			scrollSpeed: 20,
 		};
@@ -285,6 +286,7 @@ export class PublicComponent implements OnInit {
 				}
 				if (dashboardData) {
 					this.dashboardCollection = dashboardData;
+					this.dashboardName = dashboardData.name;
 					// parsing serialized Json to generate components on the fly
 					// attaching component instance with widget.component key
 					this.parseJson(this.dashboardCollection);

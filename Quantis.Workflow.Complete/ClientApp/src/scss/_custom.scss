@@ -1,7 +1,7 @@
-// .container-fluid {
-//   height: 100%;
-// }
 // Here you can add other styles
+.font-12 {
+  font-size: 12px;
+}
 .sidebar {
   .nav-link {
     padding: 8px;
@@ -65,19 +65,18 @@
   max-width:100% !important;
 }
 .breadcrumb {
-  margin-bottom: 0.2rem;
+  margin-bottom: 1rem;
 }
 .main .container-fluid {
-  padding: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 .animated.fadeIn {
   padding: 0rem 0.2rem;
 }
-.card-body {
-  padding: 1rem;
-}
+
 .card {
-  margin-bottom: 0.2rem;
+  margin-bottom: 1rem;
 }
 
 .nav-dropdown {
@@ -211,4 +210,7 @@
 
 .text-gray {
   color: #73818f !important;
+}
+gridster {
+  margin-bottom: 30px;
 }

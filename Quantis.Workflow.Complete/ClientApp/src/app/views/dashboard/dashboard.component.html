@@ -1,16 +1,25 @@
-<div class="row justify-content-between">
-  <div class="col align-self-center">
-    <app-menu [widgetCollection]="widgetCollection"></app-menu>
+<div class="card">
+  <div class="card-header py-2">
+    <div class="row align-items-center">
+      <div class="col-6">
+        <b>{{dashboardName}}</b>
+      </div>
+      <div class="col-6 text-right">
+        <a [routerLink]="['/dashboard/public', dashboardId]" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+        <button class="btn btn-success btn-sm" (click)="saveDashboard()"><i class="fa fa-save"></i> Salva</button>
+      </div>
+    </div>
   </div>
-  <div class="col align-self-center text-right">
-    <button class="btn btn-success m-2" (click)="saveDashboard()">Salva</button>
+  <div class="card-body p-1">
+    <app-menu [widgetCollection]="widgetCollection"></app-menu>
   </div>
 </div>
 
 <!-- Gridster grid -->
 <gridster [options]="options" (drop)="onDrop($event)" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
-  <gridster-item [ngClass]="(item.uiidentifier == 'kpi_count_summary') ? 'kpi_count_summary' : 'other-widgets'" [item]="item" *ngFor="let item of dashboardWidgetsArray">
+  <gridster-item [ngClass]="(item.uiidentifier == 'kpi_count_summary') ? 'kpi_count_summary' : 'other-widgets'"
+    [item]="item" *ngFor="let item of dashboardWidgetsArray">
     <div class="card">
       <div class="card-body">
         <div class="float-right">
