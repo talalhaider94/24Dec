@@ -12,6 +12,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import {DataTablesModule} from 'angular-datatables';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -44,6 +45,7 @@ import { ChartDataComponent } from './chartdata/chartdata.component';
     TreeViewModule,
     PerfectScrollbarModule,
     GridsterModule,
+    DataTablesModule,
     DynamicModule.withComponents([
       LineChartComponent,
       DoughnutChartComponent,
