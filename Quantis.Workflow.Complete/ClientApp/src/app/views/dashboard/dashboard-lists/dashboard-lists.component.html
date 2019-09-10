@@ -13,7 +13,8 @@
                                 <span class="fa fa-plus"></span> Crea Dashboard
                             </button>
                         </div>
-                        <table class=" table table-hover table-outline text-center mb-0">
+                        <table class="table table-hover table-outline text-center mb-0" #DashboardTable 
+                        datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -24,9 +25,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngIf="dashboards && dashboards.length === 0">
+                                <!-- <tr *ngIf="dashboards && dashboards.length === 0">
                                     <td colspan="5">Dashboard non trovata.</td>
-                                </tr>
+                                </tr> -->
                                 <tr *ngFor="let dashboard of dashboards; let i = index">
                                     <td>{{ i+1 }}</td>
                                     <td>{{ dashboard.id }}</td>
