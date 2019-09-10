@@ -36,11 +36,11 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         internal abstract object GetData(WidgetParametersDTO props);
         private void FillDateTypes(WidgetViewModel vm)
         {
-            vm.DateTypes.Add(0, "Custom");
-            vm.DateTypes.Add(1, "Last Month");
-            vm.DateTypes.Add(2, "Last 2 Months");
-            vm.DateTypes.Add(3, "Last 3 Months");
-            vm.DateTypes.Add(4, "Last 6 Months");
+            vm.DateTypes.Add(0, "Intervallo");
+            vm.DateTypes.Add(1, "Ultimo mese");
+            vm.DateTypes.Add(2, "Ultimi 2 mesi");
+            vm.DateTypes.Add(3, "Ultimi 3 mesi");
+            vm.DateTypes.Add(4, "Ultimi 6 mesi");
         }
 
         private int GetUserId()
