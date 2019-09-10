@@ -43,7 +43,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             else
             {
-                dto.KPIs = new List<int>();
+                dto.KPIs = new List<int>() { -1};
             }
             if (props.Filters.ContainsKey("kpi"))
             {
