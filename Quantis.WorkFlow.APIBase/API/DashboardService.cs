@@ -33,7 +33,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entities=_dbcontext.DB_Dashboards.Where(o=>o.UserId==userId).Include(o=>o.User).ToList();
+                var entities=_dbcontext.DB_Dashboards.Where(o=>o.UserId==userId).Include(o=>o.User).OrderBy(o=>o.Name).ToList();
                 return _dashboardMapper.GetDTOs(entities);
             }
             catch(Exception e)
