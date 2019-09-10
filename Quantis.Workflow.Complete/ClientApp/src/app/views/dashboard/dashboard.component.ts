@@ -37,6 +37,7 @@ export class DashboardComponent implements OnInit {
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
+	dashboardName: string;
 	// move the component collection to dashboard service to access commonly in multiple components
 	// uiidentifier is necessary
 	componentCollection = [
@@ -67,7 +68,6 @@ export class DashboardComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				if (this.barChartWidgetParameters) {
 					console.log('CHILD DATA', childData.data.barChartWidgetParameters);
-					debugger
 					setTimeout(() => {
 						this.widgetParametersForm.setValue(childData.data.setWidgetFormValues)
 					});
@@ -241,6 +241,7 @@ export class DashboardComponent implements OnInit {
 				}
 				if (dashboardData) {
 					this.dashboardCollection = dashboardData;
+					this.dashboardName = dashboardData.name;
 					// parsing serialized Json to generate components on the fly
 					// attaching component instance with widget.component key
 					this.parseJson(this.dashboardCollection);
