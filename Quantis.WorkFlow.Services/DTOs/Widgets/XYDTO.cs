@@ -8,5 +8,6 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     {
         public string XValue { get; set; }
         public double YValue { get; set; }
+        public string Description { get; set; }
     }
 }
