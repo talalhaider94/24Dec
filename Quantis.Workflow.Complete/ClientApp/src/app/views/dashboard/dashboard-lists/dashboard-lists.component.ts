@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
 import { DashboardService, AuthService } from '../../../_services';
 import { debug } from 'util';
 
@@ -17,6 +18,36 @@ export class DashboardListsComponent implements OnInit {
   submitted: boolean = false;
   dashboards: Array<any> = [];
   createDashboardForm: FormGroup;
+
+  @ViewChild('DashboardTable') block: ElementRef;
+  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
+  dtOptions: DataTables.Settings = {
+    language: {
+      processing: "Elaborazione...",
+      search: "Cerca:",
+      lengthMenu: "Visualizza _MENU_ elementi",
+      info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+      infoEmpty: "Vista da 0 a 0 di 0 elementi",
+      infoFiltered: "(filtrati da _MAX_ elementi totali)",
+      infoPostFix: "",
+      loadingRecords: "Caricamento...",
+      zeroRecords: "La ricerca non ha portato alcun risultato.",
+      emptyTable: "Nessun dato presente nella tabella.",
+      paginate: {
+        first: "Primo",
+        previous: "Precedente",
+        next: "Seguente",
+        last: "Ultimo"
+      },
+      aria: {
+        sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+        sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+      }
+    }
+  };
+
+  dtTrigger: Subject<any> = new Subject();
 
   @ViewChild('createDashboardModal') public createDashboardModal: ModalDirective;
   constructor(
@@ -40,11 +71,36 @@ export class DashboardListsComponent implements OnInit {
     this.getUserDashboards();
   }
 
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.setUpDataTableDependencies();
+    this.getUserDashboards();
+  }
+  
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+      this.setUpDataTableDependencies();
+    });
+  }
+
+  setUpDataTableDependencies(){
+  }
+
   getUserDashboards() {
     this.loading = true;
     this.dashboardService.getDashboards().subscribe(dashboards => {
       this.dashboards = dashboards;
       this.loading = false;
+      this.rerender();
     }, error => {
       console.error('getDashboards', error);
       this.toastr.error('Error while loading dashboards');
