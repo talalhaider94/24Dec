@@ -1,6 +1,15 @@
-<div class="row justify-content-between">
-  <div class="col align-self-center text-right">
-    <button class="btn btn-success m-2" (click)="saveDashboardState()">Salva</button>
+<div class="card">
+  <div class="card-header py-2">
+    <div class="row align-items-center">
+      <div class="col-6">
+        <b>{{dashboardName}}</b>
+      </div>
+      <div class="col-6 text-right">
+        <a [routerLink]="['/dashboard/dashboard', dashboardId]" class="btn btn-primary btn-sm"><i
+            class="fa fa-edit"></i></a>
+        <button class="btn btn-success btn-sm" (click)="saveDashboardState()"><i class="fa fa-save"></i> Salva</button>
+      </div>
+    </div>
   </div>
 </div>
 <!-- Gridster grid -->
@@ -13,7 +22,7 @@
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
           [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
-        
+
       </div>
     </div>
   </gridster-item>
@@ -66,29 +75,26 @@
               <div formGroupName="Filters">
                 <label for="">Contraente e Contratto</label>
                 <perfect-scrollbar style="max-height: 260px;">
-                <div *ngFor="let treeObj of treesArray; let i = index" >
-                  <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary" style="padding-left: 35px; height: 35px;">loading..</span>
-                  <ejs-treeview [hidden]="!treeObj.loaded"
-                    #permissionsTree 
-                    id="{{treeObj.elementId}}" 
-                    [fields]='treeObj.settings' 
-                    [showCheckBox]='true' 
-                    [checkedNodes]="preSelectedNodes" 
-                    (nodeChecked)='syncSelectedNodesArray($event, treeObj)' >
-                  </ejs-treeview>
-                </div>
+                  <div *ngFor="let treeObj of treesArray; let i = index">
+                    <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary"
+                      style="padding-left: 35px; height: 35px;">loading..</span>
+                    <ejs-treeview [hidden]="!treeObj.loaded" #permissionsTree id="{{treeObj.elementId}}"
+                      [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
+                      (nodeChecked)='syncSelectedNodesArray($event, treeObj)'>
+                    </ejs-treeview>
+                  </div>
                 </perfect-scrollbar><br>
                 <span>
-                <div class="form-group">
-                  <label for="dateTypes">Tipi di data</label><!-- Date Type -->
-                  <select class="form-control" id="dateTypes" formControlName="dateTypes"
-                    (change)="customDateTypes($event)">
-                    <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
-                      [attr.selected]="!i" [ngValue]="datetype.value">
-                      {{ datetype.value }}
-                    </option>
-                  </select>
-                </div>
+                  <div class="form-group">
+                    <label for="dateTypes">Tipi di data</label><!-- Date Type -->
+                    <select class="form-control" id="dateTypes" formControlName="dateTypes"
+                      (change)="customDateTypes($event)">
+                      <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
+                        [attr.selected]="!i" [ngValue]="datetype.value">
+                        {{ datetype.value }}
+                      </option>
+                    </select>
+                  </div>
                 </span>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
@@ -142,7 +148,7 @@
             </tab>
             <!-- NOTE -->
             <tab heading="NOTA">
-              <textarea placeholder="Enter Note" class="form-control" >
+              <textarea placeholder="Enter Note" class="form-control">
 
                 </textarea>
             </tab>

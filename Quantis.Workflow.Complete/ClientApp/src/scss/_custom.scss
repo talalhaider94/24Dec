@@ -68,7 +68,8 @@
   margin-bottom: 1rem;
 }
 .main .container-fluid {
-  padding: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 .animated.fadeIn {
   padding: 0rem 0.2rem;
@@ -209,4 +210,7 @@
 
 .text-gray {
   color: #73818f !important;
+}
+gridster {
+  margin-bottom: 30px;
 }
