@@ -85,12 +85,16 @@
                   </div>
                 </perfect-scrollbar><br>
                 <span>
+                  <div class="form-group form-check">
+                    <input type="checkbox" formControlName="includeCurrentMonth" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Periodo incompleto</label>
+                  </div>
                   <div class="form-group">
                     <label for="dateTypes">Tipi di data</label><!-- Date Type -->
                     <select class="form-control" id="dateTypes" formControlName="dateTypes"
                       (change)="customDateTypes($event)">
                       <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
-                        [attr.selected]="!i" [ngValue]="datetype.value">
+                        [attr.selected]="!i" [ngValue]="datetype.key">
                         {{ datetype.value }}
                       </option>
                     </select>

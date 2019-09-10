@@ -202,6 +202,7 @@ export class PublicComponent implements OnInit {
 				daterange: [null],
 				dateTypes: [null],
 				date: [''],
+				includeCurrentMonth: [false] 
 			}),
 			// Note: [null],
 		});
@@ -250,15 +251,9 @@ export class PublicComponent implements OnInit {
 			this.getData(this.dashboardId); /////
 		});
 
-		// if(this.from_changed==1){
-		// 	this.showCustomDate=false;
-		// }else{
-		// 	this.showCustomDate=true;
-		// }
-
 		this.widgetParametersForm.get('Filters').get('dateTypes').valueChanges.subscribe((value) => {
 			console.log('Date Type Filter', value);
-			if (value === 'Custom') {
+			if (value === '0') {
 				this.showDateRangeInFilters = true;
 				this.showDateInFilters = true;
 			} else {
@@ -458,9 +453,10 @@ export class PublicComponent implements OnInit {
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
 		debugger
+		delete formValues.Filters.includeCurrentMonth;
 		let startDate;
 		let endDate;
-		if (formValues.Filters.dateTypes === 'Custom') {
+		if (formValues.Filters.dateTypes === '0') {
 			startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
 		} else {
