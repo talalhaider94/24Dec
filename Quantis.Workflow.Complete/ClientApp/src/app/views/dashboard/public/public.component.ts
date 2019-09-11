@@ -452,7 +452,7 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		debugger
+		//debugger
 		delete formValues.Filters.includeCurrentMonth;
 		let startDate;
 		let endDate;

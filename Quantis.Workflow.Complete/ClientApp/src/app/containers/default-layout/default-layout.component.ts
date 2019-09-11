@@ -61,8 +61,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = '0.0.1';
-      // Danial: Commenting out version line because getting error. Talal please see this :p
-      // this.currentVerion = this.returnedNode.version || '0.0.1';
+      if(this.returnedNode){ 
+        this.currentVerion = this.returnedNode.version || '0.0.1';
+      }else{
+        this.currentVerion = '0.0.1';
+      }
     });
     this.loadingSpinnerSubscription();
     this.getAllDashboards();
