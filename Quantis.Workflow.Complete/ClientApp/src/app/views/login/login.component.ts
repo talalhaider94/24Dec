@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
-import { AuthService } from '../../_services';
+import { AuthService, DashboardService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit{
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private dashboardService: DashboardService
   ) {
     //localStorage.removeItem('currentUser');
     if (this.authService.currentUserValue || this.authService.isLoggedIn()) {
@@ -50,9 +51,11 @@ export class LoginComponent implements OnInit{
       const { userName, password } = this.f;
       this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-        this.router.navigate(['dashboard/dashboard/2']);
-        this.toastr.success('Login eseguito con successo.');
-        this.loading = false;
+        this.dashboardService.GetDefaultDashboardId().subscribe(result => {
+          this.router.navigate(['dashboard/public', result]);
+          this.toastr.success('Login eseguito con successo.');
+          this.loading = false;
+        });
       }, error => {
         console.log('onLoginFormSubmit: error', error);
         this.toastr.error(error.error, error.description);
