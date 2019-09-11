@@ -10,7 +10,13 @@ perfect-scrollbar {
 }
 :host {
     gridster {
-      height: calc(100vh - 115px);
+      height: calc(100vh + 200px);
     }
   }
+  .card {
+    border: 0px solid #c8ced3 !important;
+  }
   
+  gridster-item {
+    border: 1px solid #c8ced3;
+  }
