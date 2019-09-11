@@ -52,7 +52,12 @@ export class LoginComponent implements OnInit{
       this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
         this.dashboardService.GetDefaultDashboardId().subscribe(result => {
-          this.router.navigate(['dashboard/public', result]);
+          if(result !== -1) {
+            this.router.navigate(['dashboard/public', result]);
+          } else {
+            this.router.navigate(['dashboard/list']);
+          }
+          
           this.toastr.success('Login eseguito con successo.');
           this.loading = false;
         });
