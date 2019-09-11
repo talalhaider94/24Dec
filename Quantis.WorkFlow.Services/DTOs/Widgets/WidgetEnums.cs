@@ -42,6 +42,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     {
         public static KeyValuePair<string,string> LINE = new KeyValuePair<string, string>("line","Line");
         public static KeyValuePair<string, string> BAR = new KeyValuePair<string, string>("bar", "Bar");
+        public static KeyValuePair<string, string> TABLE = new KeyValuePair<string, string>("table", "Table");
     }
     public static class AggregationOption
     {

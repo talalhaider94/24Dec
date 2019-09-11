@@ -336,5 +336,64 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return result;
         }
+        public List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto)
+        {
+            var result = new List<KPIStatusSummaryDTO>();
+            result.Add(new KPIStatusSummaryDTO()
+            {
+                ContractParty="BP",
+                Contract="BP Contract",
+                IdKPI=1,
+                DescrizioneKPI= "BPSIN019 - RPO per le applicazioni dei Sistemi MF - Copia Sincrona",
+                Tipologia="O",
+                Frequenza="1M",
+                Calcolo="A",
+                Fornitura="C",
+                Escalation=null,
+                ViloreLimiteAtteso="98,5%",
+                Trend=100,
+                GEN= "<font color=\"green\">100</font>",
+                FEB= "<font color=\"green\">100</font>",
+                MAR= "<font color=\"green\">100</font>",
+                APR= "<font color=\"green\">100</font>",
+                MAG= "<font color=\"green\">100</font>",
+                GIU= "<font color=\"green\">100</font>",
+                LUG= "<font color=\"green\">100</font>",
+                AGO= "<font color=\"green\">100</font>",
+                SEP= "<font color=\"green\"></font>",
+                OTT= "<font color=\"green\"></font>",
+                NOV= "<font color=\"green\"></font>",
+                DIC= "<font color=\"green\"></font>"
+
+            });
+            result.Add(new KPIStatusSummaryDTO()
+            {
+                ContractParty = "BP",
+                Contract = "BP Contract",
+                IdKPI = 2,
+                DescrizioneKPI = "BPSIN024 - RTO per l’applicazione ATM",
+                Tipologia = "O",
+                Frequenza = "1M",
+                Calcolo = "M",
+                Fornitura = "C",
+                Escalation = null,
+                ViloreLimiteAtteso = "100%",
+                Trend = 100,
+                GEN = "<font color=\"green\">100</font>",
+                FEB = "<font color=\"green\">100</font>",
+                MAR = "<font color=\"green\">100</font>",
+                APR = "<font color=\"green\">100</font>",
+                MAG = "<font color=\"green\">100</font>",
+                GIU = "<font color=\"green\">100</font>",
+                LUG = "<font color=\"green\">100</font>",
+                AGO = "<font color=\"green\">100</font>",
+                SEP = "<font color=\"green\"></font>",
+                OTT = "<font color=\"green\"></font>",
+                NOV = "<font color=\"green\"></font>",
+                DIC = "<font color=\"green\"></font>"
+
+            });
+            return result;
+        }
     }
 }
