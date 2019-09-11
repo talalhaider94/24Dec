@@ -70,27 +70,23 @@
         <div class="p-3">
           <h6>Home Page</h6>
           <p>Selezionare la Dashboard da visualizzare dopo il login.</p>
+          <p *ngIf="loadingDashboard" class="text-center">
+            <i class="fa fa-spin fa-spinner text-info fa-2x"></i>
+          </p>
           <div class="aside-options" *ngFor="let dashboard of dashboardCollection">
             <div class="clearfix mt-4">
               <small>
                 <b>
-                  <a class="pointer-cursor" (click)="dashboardNavigation(dashboard.id)">{{ dashboard.id }}
-                    {{ dashboard.name }}</a>
+                  <a class="pointer-cursor" (click)="dashboardNavigation(dashboard.id)">{{ dashboard.name }}</a>
                 </b>
               </small>
-              <ng-container *ngIf="dashboard.isactive">
+              <ng-container>
                 <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                  <input type="checkbox" class="switch-input" checked>
+                  <input type="checkbox" class="switch-input" [checked]="dashboard.isdefault" #switchValue checked
+                    (change)="dashboardSwitch(switchValue, dashboard.id)">
                   <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                 </label>
               </ng-container>
-              <ng-container *ngIf="!dashboard.isactive">
-                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
-                  <input type="checkbox" class="switch-input" unchecked>
-                  <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                </label>
-              </ng-container>
-
             </div>
           </div>
         </div>
