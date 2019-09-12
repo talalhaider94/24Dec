@@ -433,6 +433,7 @@ export class PublicComponent implements OnInit {
 			});
 			this.allLeafNodesIds = [];
 			this.getAllLeafNodesIds(treesData);
+			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
@@ -468,8 +469,13 @@ export class PublicComponent implements OnInit {
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		// Organization hierarchy as Customers
 		this.uncheckedNodes;
-		console.log('permissionsTree.checkedNodes->',this.permissionsTree.checkedNodes);
-		formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
+		console.log('permissionsTree length->',this.permissionsTree.checkedNodes.length);
+		console.log('allLeafNodesIds->',this.allLeafNodesIds);
+		if(this.permissionsTree.checkedNodes.length == 0){
+			formValues.Filters.organizations = this.allLeafNodesIds.join(',');
+		}else{
+			formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
+		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
