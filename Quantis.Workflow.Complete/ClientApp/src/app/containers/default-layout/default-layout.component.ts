@@ -25,6 +25,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   public returnedNode: any;
   currentUser: any;
   loading: boolean = true;
+  loadingDashboard: boolean = false;
   dashboardCollection: DashboardModel[];
 
   constructor(
@@ -154,6 +155,21 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.toastr.error('Error while loading dashboards');
       this.emitter.loadingStatus(false);
     });
+  }
+
+  dashboardSwitch(switchValue, id: number){
+    this.loadingDashboard = true;
+    this.dashboardService.setDefaultDashboard(id).subscribe(result => {
+      this.loadingDashboard = false;
+      console.log('dashboardSwitch', result);
+      this.toastr.success('Success', 'Dashboard successfully set as default.');
+      this.getAllDashboards();
+    }, error => {
+      this.loadingDashboard = false;
+      console.error('dashboardSwitch', error);
+      this.toastr.error('Error', 'Unable to set default dashboard.');
+    })
+    
   }
 
 }

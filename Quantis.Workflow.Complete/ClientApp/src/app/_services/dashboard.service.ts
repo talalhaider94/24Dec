@@ -119,4 +119,12 @@ export class DashboardService {
 		return this.http.get<any>(`${environment.API_URL}/dashboard/DeactivateDashboard`,{ params });
 	}
 
+	setDefaultDashboard(id: number) {
+		const params = new HttpParams().set('id', id.toString());
+		return this.http.get<any>(`${environment.API_URL}/dashboard/SetDefaultDashboard`,{ params });
+	}
+	GetDefaultDashboardId() {
+		return this.http.get<any>(`${environment.API_URL}/dashboard/GetDefaultDashboardId`);
+	}
+
 }

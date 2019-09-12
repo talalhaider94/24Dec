@@ -19,6 +19,7 @@ import { DistributionByUserComponent } from '../../../widgets/distribution-by-us
 import { KpiReportTrendComponent } from '../../../widgets/kpi-report-trend/kpi-report-trend.component';
 import { NotificationTrendComponent } from '../../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
+import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
 
 @Component({
 	selector: 'app-public',
@@ -65,6 +66,7 @@ export class PublicComponent implements OnInit {
 		{ name: "KPI Report Trend", componentInstance: KpiReportTrendComponent, uiidentifier: "kpi_report_trend" },
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
+		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
@@ -79,6 +81,7 @@ export class PublicComponent implements OnInit {
 	isKpiReportTrendComponent: boolean = false;
 	isKpiCountOrgComponent: boolean = false;
 	isDistributionByUserComponent: boolean = false;
+	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string;
 	constructor(
 		private dashboardService: DashboardService,
@@ -183,6 +186,14 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.distributionByUserWidgetParameters;
 				this.isDistributionByUserComponent = childData.data.isDistributionByUserComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_user');
+			}
+		},
+		kpiStatusSummaryParent: childData => {
+			console.log('kpiStatusSummaryParent childData', childData);
+			if (childData.type === 'openKpiStatusSummaryModal') {
+				this.barChartWidgetParameters = childData.data.kpiStatusSummaryWidgetParameters;
+				this.isKpiStatusSummaryComponent = childData.data.isKpiStatusSummaryComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'KPIStatusSummary');
 			}
 		},
 	};
@@ -416,6 +427,7 @@ export class PublicComponent implements OnInit {
 		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
 		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
+		console.log('permissionsTree.checkedNodes->', this.permissionsTree.checkedNodes.length);
 		treeRef.loaded = true;
 	}
 	createTrees(treesData) {
@@ -432,6 +444,7 @@ export class PublicComponent implements OnInit {
 			});
 			this.allLeafNodesIds = [];
 			this.getAllLeafNodesIds(treesData);
+			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
 		//});
 		console.log('this.treesArray ->', this.treesArray);
@@ -467,7 +480,13 @@ export class PublicComponent implements OnInit {
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		// Organization hierarchy as Customers
 		this.uncheckedNodes;
-		formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
+		console.log('permissionsTree length->',this.permissionsTree.checkedNodes.length);
+		console.log('allLeafNodesIds->',this.allLeafNodesIds);
+		if(this.permissionsTree.checkedNodes.length == 0){
+			formValues.Filters.organizations = this.allLeafNodesIds.join(',');
+		}else{
+			formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
+		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
@@ -562,6 +581,17 @@ export class PublicComponent implements OnInit {
 				});
 				this.isDistributionByUserComponent = false;
 			}
+			if (this.isKpiStatusSummaryComponent) {
+				this.emitter.sendNext({
+					type: 'kpiStatusSummaryTable',
+					data: {
+						result,
+						kpiStatusSummaryWidgetParameters: this.barChartWidgetParameters,
+						kpiStatusSummaryWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiStatusSummaryComponent = false;
+			}
 
 			this.emitter.loadingStatus(false);
 		}, error => {
@@ -617,6 +647,7 @@ export class PublicComponent implements OnInit {
 				this.isKpiReportTrendComponent = false;
 				this.isKpiCountOrgComponent = false;
 				this.isDistributionByUserComponent = false;
+				this.isKpiStatusSummaryComponent = false;
 			}
 		});
 	}

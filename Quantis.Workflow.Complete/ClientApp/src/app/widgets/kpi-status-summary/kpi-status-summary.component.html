@@ -1,0 +1,49 @@
+<p class="float-left no-drag">
+  <input type="text" *ngIf="editWidgetName" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
+  <span *ngIf="!editWidgetName"> {{ widgetname }}</span>
+</p>
+<button type="button" [disabled]="loading" *ngIf="!editWidgetName"
+  class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
+  <i class="fa fa-cog"></i>
+</button>
+<div class="clearfix"></div>
+<div class="spinner-grow text-primary text-center" *ngIf="loading" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Calcolo</th>
+        <th>Contract</th>
+        <th>Contract Party</th>
+        <th>Descrizione KPI</th>
+        <th>Escalation</th>
+        <th>Fornitura</th>
+        <th>Frequenza</th>
+        <th>ID KPI</th>
+        <th>Tipologia</th>
+        <th>Trend</th>
+        <th>Vilore Limit Eatteso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="kpiStatusSummaryData.length === 0">
+        <td colspan="11">No data found.</td>
+      </tr>
+      <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
+        <td>{{ kpiStatus.calcolo }}</td>
+        <td>{{ kpiStatus.contract }}</td>
+        <td>{{ kpiStatus.contractparty }}</td>
+        <td>{{ kpiStatus.descrizionekpi }}</td>
+        <td>{{ kpiStatus.escalation || 'N/A' }}</td>
+        <td>{{ kpiStatus.fornitura }}</td>
+        <td>{{ kpiStatus.frequenza }}</td>
+        <td>{{ kpiStatus.idkpi }}</td>
+        <td>{{ kpiStatus.tipologia }}</td>
+        <td>{{ kpiStatus.trend }}</td>
+        <td>{{ kpiStatus.vilorelimiteatteso }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
