@@ -16,7 +16,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public string Fornitura { get; set; }
         public string Escalation { get; set; }
         public string ViloreLimiteAtteso { get; set; }
-        public float? Trend { get; set; }
+        public double? Trend { get; set; }
         public string GEN { get; set; }
         public string FEB { get; set; }
         public string MAR { get; set; }
