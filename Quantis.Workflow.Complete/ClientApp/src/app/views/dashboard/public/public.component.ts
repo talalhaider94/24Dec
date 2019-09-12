@@ -19,6 +19,7 @@ import { DistributionByUserComponent } from '../../../widgets/distribution-by-us
 import { KpiReportTrendComponent } from '../../../widgets/kpi-report-trend/kpi-report-trend.component';
 import { NotificationTrendComponent } from '../../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
+import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
 
 @Component({
 	selector: 'app-public',
@@ -65,6 +66,7 @@ export class PublicComponent implements OnInit {
 		{ name: "KPI Report Trend", componentInstance: KpiReportTrendComponent, uiidentifier: "kpi_report_trend" },
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
+		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;

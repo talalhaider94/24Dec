@@ -19,6 +19,7 @@ import { DistributionByUserComponent } from '../../widgets/distribution-by-user/
 import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-report-trend.component';
 import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
+import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-status-summary.component';
 import { UUID } from 'angular2-uuid';
 
 @Component({
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit {
 		{ name: "KPI Report Trend", componentInstance: KpiReportTrendComponent, uiidentifier: "kpi_report_trend" },
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
+		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
 	];
 	helpText: string = '';
 	constructor(
@@ -185,8 +187,6 @@ export class DashboardComponent implements OnInit {
 			maxCols: 100,
 			minRows: 10,
 			maxRows: 100,
-			scrollSensitivity: 10,
-			scrollSpeed: 20,
 		};
 
 		this._route.params.subscribe(params => {
@@ -418,9 +418,9 @@ export class DashboardComponent implements OnInit {
 				let catalogWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'catalog_pending_count_trends');
 				return this.dashboardWidgetsArray.push({
 					cols: 5,
-					rows: 6,
+					rows: 3,
 					minItemCols: 5,
-					minItemRows: 6,
+					minItemRows: 3,
 					x: 0,
 					y: 0,
 					component: CatalogPendingCountTrendsComponent,
@@ -492,6 +492,26 @@ export class DashboardComponent implements OnInit {
 					widgetid: kpiOragnizationWidget.id,
 					id: 0,
 					url: kpiOragnizationWidget.url
+				});
+			}
+			case "KPIStatusSummary": {
+				let kpiStatusSummaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'KPIStatusSummary');
+				return this.dashboardWidgetsArray.push({
+					cols: 5,
+					rows: 6,
+					minItemCols: 5,
+					minItemRows: 6,
+					x: 0,
+					y: 0,
+					component: KpiStatusSummaryComponent,
+					widgetname: kpiStatusSummaryWidget.name,
+					uiidentifier: kpiStatusSummaryWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: kpiStatusSummaryWidget.id,
+					id: 0,
+					url: kpiStatusSummaryWidget.url
 				});
 			}
 		}
