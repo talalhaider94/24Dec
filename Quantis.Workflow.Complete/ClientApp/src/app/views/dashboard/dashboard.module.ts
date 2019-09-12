@@ -30,6 +30,7 @@ import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-repo
 import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { ChartDataComponent } from './chartdata/chartdata.component';
+import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-status-summary.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { ChartDataComponent } from './chartdata/chartdata.component';
       CatalogPendingCountTrendsComponent,
       KpiReportTrendComponent,
       NotificationTrendComponent,
-      KpiCountByOrganizationComponent
+      KpiCountByOrganizationComponent,
+      KpiStatusSummaryComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -75,7 +77,8 @@ import { ChartDataComponent } from './chartdata/chartdata.component';
     KpiReportTrendComponent,
     NotificationTrendComponent,
     KpiCountByOrganizationComponent,
-    ChartDataComponent
+    ChartDataComponent,
+    KpiStatusSummaryComponent
   ]
 })
 export class DashboardModule { }
