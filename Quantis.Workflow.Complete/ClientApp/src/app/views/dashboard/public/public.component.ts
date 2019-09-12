@@ -416,6 +416,7 @@ export class PublicComponent implements OnInit {
 		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
 		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
+		console.log('permissionsTree.checkedNodes->', this.permissionsTree.checkedNodes.length);
 		treeRef.loaded = true;
 	}
 	createTrees(treesData) {
@@ -467,6 +468,7 @@ export class PublicComponent implements OnInit {
 		formValues.Filters.daterange = `${startDate}-${endDate}`;
 		// Organization hierarchy as Customers
 		this.uncheckedNodes;
+		console.log('permissionsTree.checkedNodes->',this.permissionsTree.checkedNodes);
 		formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);

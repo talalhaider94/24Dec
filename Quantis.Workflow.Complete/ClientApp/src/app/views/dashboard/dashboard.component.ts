@@ -181,7 +181,7 @@ export class DashboardComponent implements OnInit {
 			pushDirections: { north: true, east: true, south: true, west: true },
 			itemChangeCallback: this.itemChange.bind(this),
 			itemResizeCallback: DashboardComponent.itemResize,
-			minCols: 10,
+			minCols: 5,
 			maxCols: 100,
 			minRows: 10,
 			maxRows: 100,
@@ -318,8 +318,10 @@ export class DashboardComponent implements OnInit {
 			case "line_chart": {
 				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 5,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: LineChartComponent,
@@ -336,10 +338,10 @@ export class DashboardComponent implements OnInit {
 			case "distribution_by_verifica": {
 				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 5,
-					minItemCols: 5,
-					minItemRows: 5,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: DoughnutChartComponent,
@@ -356,10 +358,10 @@ export class DashboardComponent implements OnInit {
 			case "count_trend": {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					minItemCols: 5,
-					minItemRows: 5,
-					rows: 5,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: BarchartComponent,
@@ -376,10 +378,10 @@ export class DashboardComponent implements OnInit {
 			case "kpi_count_summary": {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
 				return this.dashboardWidgetsArray.push({
-					cols: 6,
-					rows: 6,
-					minItemCols: 6,
-					minItemRows: 6,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: KpiCountSummaryComponent,
@@ -397,10 +399,10 @@ export class DashboardComponent implements OnInit {
 				console.log('distribution_by_user', this.widgetCollection)
 				let distributionWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_user');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 5,
-					minItemCols: 5,
-					minItemRows: 5,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: DistributionByUserComponent,
@@ -417,10 +419,10 @@ export class DashboardComponent implements OnInit {
 			case "catalog_pending_count_trends": {
 				let catalogWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'catalog_pending_count_trends');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 6,
-					minItemCols: 5,
-					minItemRows: 6,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: CatalogPendingCountTrendsComponent,
@@ -437,10 +439,10 @@ export class DashboardComponent implements OnInit {
 			case "kpi_report_trend": {
 				let kpiReportTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_report_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 6,
-					minItemCols: 5,
-					minItemRows: 6,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: KpiReportTrendComponent,
@@ -457,10 +459,10 @@ export class DashboardComponent implements OnInit {
 			case "notification_trend": {
 				let notificationTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'notification_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 6,
-					minItemCols: 5,
-					minItemRows: 6,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: NotificationTrendComponent,
@@ -477,10 +479,10 @@ export class DashboardComponent implements OnInit {
 			case "kpi_count_by_organization": {
 				let kpiOragnizationWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_by_organization');
 				return this.dashboardWidgetsArray.push({
-					cols: 5,
-					rows: 6,
-					minItemCols: 5,
-					minItemRows: 6,
+					cols: 4,
+					rows: 4,
+					minItemCols: 2,
+					minItemRows: 4,
 					x: 0,
 					y: 0,
 					component: NotificationTrendComponent,
