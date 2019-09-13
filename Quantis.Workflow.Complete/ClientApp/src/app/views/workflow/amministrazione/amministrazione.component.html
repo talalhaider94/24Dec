@@ -103,7 +103,7 @@
     <div class="modal-dialog modal-success modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Ticket ID {{editTicketId}}</h4>
+                <h4 class="modal-title">Edit Ref. Number {{editTicketId}}</h4>
                 <button type="button" class="close" (click)="editTicketModal.hide()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -121,7 +121,7 @@
 
                 <div class="input-group mb-3">
                         <input type="text"  formControlName="Sign" class="form-control"
-                         placeholder="Sign"
+                         placeholder="Unita"
                          [ngClass]="{ 'is-invalid': submitted && editTicketValues.Sign.errors }"
                          />
                     </div>
@@ -129,7 +129,7 @@
 
                     <div class="input-group mb-3">
                             <select class="form-control" formControlName="Type" [ngClass]="{ 'is-invalid': submitted && editTicketValues.Type.errors }">
-                            <option value="">Select</option>
+                            <option value="">Seleziona</option>
                             <option value="1">Complaint</option>
                             <option value="2">Non Compliant</option>
                         </select>
@@ -141,7 +141,7 @@
                     <div class="input-group mb-3">
                             <textarea formControlName="Note" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && editTicketValues.Note.errors }"
-                                placeholder="Note" rows="3"></textarea>
+                                placeholder="Nota" rows="3"></textarea>
     
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Note.errors && editTicketValues.Note.errors.required">
