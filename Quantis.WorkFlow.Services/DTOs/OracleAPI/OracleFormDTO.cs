@@ -28,6 +28,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
     {
         public string name { get; set; }
         public string type { get; set; }
+        public string a_type { get; set; }
         public string source { get; set; }
         public string label { get; set; }
         public string mandatory { get; set; }
