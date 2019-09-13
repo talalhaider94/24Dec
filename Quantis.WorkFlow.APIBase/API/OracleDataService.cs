@@ -365,7 +365,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                         mandatory = subset?.a_isMandatory??String.Empty,
                                         defaultValue = subset?.defaultValue??String.Empty,
                                         source = f.source,
-                                        type = f.type
+                                        type = f.type,
+                                        a_type = subset?.a_type??String.Empty,
                                     }).ToList()
             };
         }
