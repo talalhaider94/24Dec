@@ -1193,7 +1193,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var kpi = _dbcontext.CatalogKpi.Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
+                var kpi = _dbcontext.CatalogKpi.Include(o=>o.GlobalRule).Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
                 return new CreateTicketDTO()
@@ -1206,7 +1206,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
                     SecondaryContractParty=kpi.secondary_contract_party,
-                    Summary=kpi.id_kpi+"|"+kpi.kpi_name_bsi+"|"+kpi.contract+"|"+ contractPartyName,
+                    Summary=kpi.id_kpi+"|"+kpi.GlobalRule.global_rule_name+"|"+kpi.contract+"|"+ contractPartyName,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
                     zz2_calcValue= 
                         (psl != null && psl.Any()) ? 
@@ -1235,7 +1235,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 "VALORE: {5}\n" +
                 "AUTORE: {6}\n" +
                 "FREQUENZA: {7}";
-            return string.Format(skeleton, kpi.kpi_name_bsi ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
+            return string.Format(skeleton, kpi.GlobalRule.global_rule_name ?? "", kpi.kpi_description ?? "", kpi.escalation ?? "", kpi.target ?? "", kpi.kpi_type ?? "", calc, kpi.source_name ?? "", kpi.tracking_period ?? "");
         }
 
         public List<EventResourceName> GetEventResourceNames()

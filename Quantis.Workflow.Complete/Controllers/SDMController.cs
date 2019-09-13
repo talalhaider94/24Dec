@@ -39,7 +39,7 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("GetTicketsSearchForViloreByUser")]
         public List<SDMTicketLVDTO> GetTicketsSearchForViloreByUser(string period)
         {
-            var tickets= _sdmAPI.GetTicketsVerificationByUser(HttpContext, period);
+            var tickets= _sdmAPI.GetTicketsAdministratorByPeriod(period);
             return tickets.Where(o => o.Description.IndexOf("VALORE: [Non Calcolato]") != -1).ToList();
         }
         [HttpGet("GetAllTickets")]
