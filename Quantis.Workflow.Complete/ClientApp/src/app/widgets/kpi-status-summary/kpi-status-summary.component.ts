@@ -109,6 +109,8 @@ export class KpiStatusSummaryComponent implements OnInit {
 
 
   openModal() {
+    console.log('KpiStatusSummaryComponent OpenModal kpiStatusSummaryWidgetParameters', this.kpiStatusSummaryWidgetParameters);
+    console.log('KpiStatusSummaryComponent OpenModal setWidgetFormValues', this.setWidgetFormValues);
     this.kpiStatusSummaryParent.emit({
       type: 'openKpiStatusSummaryModal',
       data: {
