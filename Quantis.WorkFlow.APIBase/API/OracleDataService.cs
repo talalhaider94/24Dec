@@ -65,6 +65,132 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<LandingPageDTO> GetLandingPageByUser(int userId)
+        {
+            try
+            {
+                var basedtos = new List<LandingPageBaseDTO>();
+                var kpis=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o=>o.global_rule_id).ToList();
+                if (!kpis.Any())
+                {
+                    return null;
+                }
+                string query = @"select 
+                                c.customer_id, 
+                                c.customer_name, 
+                                s.sla_id, 
+                                s.sla_name, 
+                                gr.global_rule_name, 
+                                gr.global_rule_id, 
+                                psl.service_level_target_ce,
+                                psl.provided_ce,
+                                psl.resultpsl
+                                from 
+                                (
+                                  select  
+                                  temp.global_rule_id, 
+                                  to_char(temp.time_stamp,'YYYY-MM-DD') as timestamp, 
+                                  to_char(temp.time_stamp_utc,'YYYY-MM-DD') as end_period, 
+                                  to_char(temp.begin_time_stamp_utc,'YYYY-MM-DD') as start_period, 
+                                  temp.sla_id, 
+                                  temp.rule_id, 
+                                  temp.time_unit,
+                                  temp.interval_length, 
+                                  temp.is_period, 
+                                  temp.service_level_target, 
+                                  temp.service_level_target_ce, 
+                                  temp.provided_ce, 
+                                  temp.deviation_ce, 
+                                  temp.complete_record,
+                                  temp.sla_version_id, 
+                                  temp.metric_type_id, 
+                                  temp.domain_category_id, 
+                                  temp.service_domain_id,
+                                  case 
+                                    when deviation_ce > 0 then 'non compliant'
+                                    when deviation_ce < 0 then 'compliant'
+                                    else 'nc'
+                                  end as resultPsl
+                                  from 
+                                  (
+                                    select * 
+                                    from t_psl_0_month pm
+                                    union all
+                                    select * 
+                                    from t_psl_0_quarter pq
+                                    union all
+                                    select * 
+                                    from t_psl_0_year py
+                                    union all
+                                    select * 
+                                    from t_psl_1_all pa
+                                  ) temp
+                                  where provided is not null 
+                                  and service_level_target is not null
+                                ) psl 
+                                left join t_rules r on  psl.rule_id = r.rule_id
+                                left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
+                                left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                                left join t_slas s on sv.sla_id = s.sla_id
+                                left join t_customers c on s.customer_id = c.customer_id
+                                where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
+                                and psl.time_unit='MONTH'
+                                and psl.complete_record=1
+                                and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and psl.global_rule_id in ({0})";
+                query = string.Format(query, string.Join(',', kpis));
+                DateTime now = DateTime.Now;
+                var startDate = new DateTime(now.Year, now.Month, 1);
+                using (OracleConnection con = new OracleConnection(_connectionstring))
+                {
+                    using (OracleCommand cmd = con.CreateCommand())
+                    {
+                        con.Open();
+                        cmd.BindByName = true;
+                        cmd.CommandText = query;
+                        OracleParameter param1 = new OracleParameter("start_period", startDate.AddDays(-1).ToString("yyyy-MM-dd"));
+                        OracleParameter param2 = new OracleParameter("end_period", startDate.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+                        cmd.Parameters.Add(param1);
+                        cmd.Parameters.Add(param2);
+                        OracleDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            basedtos.Add(new LandingPageBaseDTO()
+                            {
+                                ContractPartyId = (int)reader[0],
+                                ContractPartyName = (string)reader[1],
+                                ContractId=(int)reader[2],
+                                ContractName=(string)reader[3],
+                                GlobalRuleName=(string)reader[4],
+                                GlobalRuleId=(int)reader[5],
+                                Target= Decimal.ToDouble((Decimal)reader[6]),
+                                Actual= Decimal.ToDouble((Decimal)reader[7]),
+                                Result= (string)reader[8]
+                            });
+                        }
+                        var result=basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
+                        {
+                            ContractPartyId = p.Key.ContractPartyId,
+                            ContractPartyName = p.Key.ContractPartyName,
+                            TotalContracts = p.GroupBy(q => q.ContractId).Count(),
+                            TotalKPIs = p.Count(),
+                            ComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.All(s => s.Result == "complaint")).Count(),
+                            NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.All(s => s.Result != "complaint")).Count(),
+                            ComplaintKPIs = p.Where(q => q.Result == "complaint").Count(),
+                            NonComplaintKPIs = p.Where(q => q.Result == "complaint").Count()
+                        }).ToList();
+                        return result;
+
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<OracleCustomerDTO> GetCustomer(int id,string name)
         {
             try
