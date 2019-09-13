@@ -41,7 +41,16 @@ export class KpiStatusSummaryComponent implements OnInit {
       this.getChartParametersAndData(this.url);
     }
     // coming from dashboard or public parent components
-    this.subscriptionForDataChangesFromParent()
+    this.subscriptionForDataChangesFromParent();
+    
+    this.dashboardService.getContract().subscribe(result => {
+    });
+
+    this.dashboardService.getContractParties().subscribe(result => {
+    });
+
+    this.dashboardService.getKPIs().subscribe(result => {
+    })
   }
 
   subscriptionForDataChangesFromParent() {
@@ -71,6 +80,8 @@ export class KpiStatusSummaryComponent implements OnInit {
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
+      myWidgetParameters;
+      debugger
       let kpiStatusSummaryParams;
       if (myWidgetParameters) {
         kpiStatusSummaryParams = {
@@ -109,6 +120,8 @@ export class KpiStatusSummaryComponent implements OnInit {
 
 
   openModal() {
+    console.log('KpiStatusSummaryComponent OpenModal kpiStatusSummaryWidgetParameters', this.kpiStatusSummaryWidgetParameters);
+    console.log('KpiStatusSummaryComponent OpenModal setWidgetFormValues', this.setWidgetFormValues);
     this.kpiStatusSummaryParent.emit({
       type: 'openKpiStatusSummaryModal',
       data: {
