@@ -208,7 +208,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         while (result.Read())
                         {
-                            res.Add(new KeyValuePair<int, string>(Decimal.ToInt32((Decimal)result[1]), (string)result[0]));
+                            res.Add(new KeyValuePair<int, string>((int)result[1], (string)result[0]));
                         }
                     }
                     return res;
@@ -248,7 +248,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         while (result.Read())
                         {
-                            res.Add(new KeyValuePair<int, string>(Decimal.ToInt32((Decimal)result[0]), (string)result[1]));
+                            res.Add(new KeyValuePair<int, string>((int)result[0], (string)result[1]));
                         }
                     }
                     return res;
@@ -288,7 +288,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         while (result.Read())
                         {
-                            res.Add(new KeyValuePair<int, string>(Decimal.ToInt32((Decimal)result[0]), (string)result[1]));
+                            res.Add(new KeyValuePair<int, string>((int)result[0], (string)result[1]));
                         }
                     }
                     return res;
