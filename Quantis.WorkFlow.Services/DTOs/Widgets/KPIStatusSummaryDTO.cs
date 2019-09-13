@@ -8,7 +8,8 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     {
         public string ContractParty { get; set; }
         public string Contract { get; set; }
-        public int IdKPI { get; set; }
+        public int GlobalRuleId { get; set; }
+        public string IdKPI { get; set; }        
         public string DescrizioneKPI { get; set; }
         public string Tipologia { get; set; }
         public string Frequenza { get; set; }
@@ -16,7 +17,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public string Fornitura { get; set; }
         public string Escalation { get; set; }
         public string ViloreLimiteAtteso { get; set; }
-        public float? Trend { get; set; }
+        public double Trend { get; set; }
         public string GEN { get; set; }
         public string FEB { get; set; }
         public string MAR { get; set; }

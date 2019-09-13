@@ -443,6 +443,59 @@ namespace Quantis.WorkFlow.APIBase.API
             return ret;
 
         }
+        public List<SDMTicketLVDTO> GetTicketsAdministratorByPeriod(string period)
+        {
+            List<SDMTicketLVDTO> ret = null;
+            LogIn();
+            try
+            {
+                List<SDMTicketLVDTO> tickets = new List<SDMTicketLVDTO>();
+
+                var select_a = _sdmClient.doSelectAsync(_sid, "cr", "zz_cned_string4='" + period + "'", 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
+                select_a.Wait();
+                var select_result = select_a.Result.doSelectReturn;
+                tickets.AddRange(parseTickets(select_result));
+                ret = tickets.ToList();
+                var ids = ret.Select(o => o.kpiIdPK).ToList();
+                var titolos = _dataService.GetKPISDMExtraInformation(ids);
+                return (from tks in ret
+                        join tito in titolos on tks.kpiIdPK equals tito.id
+                        into gj
+                        from subset in gj.DefaultIfEmpty()
+                        select new SDMTicketLVDTO()
+                        {
+                            Id = tks.Id,
+                            ref_num = tks.ref_num,
+                            Summary = tks.Summary,
+                            Description = tks.Description,
+                            Status = tks.Status,
+                            Group = tks.Group,
+                            ID_KPI = tks.ID_KPI,
+                            Reference1 = tks.Reference1,
+                            Reference2 = tks.Reference2,
+                            Reference3 = tks.Reference3,
+                            Period = tks.Period,
+                            primary_contract_party = tks.primary_contract_party,
+                            secondary_contract_party = tks.secondary_contract_party,
+                            IsClosed = tks.IsClosed,
+                            calcValue = tks.calcValue,
+                            KpiIds = tks.KpiIds,
+                            LastModifiedDate = tks.LastModifiedDate,
+                            Titolo = subset.titolo ?? string.Empty,
+                            reference_input = subset.referent ?? string.Empty,
+                            tipologia = subset.tipologia ?? string.Empty
+                        }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                LogOut();
+            }
+            
+        }
 
         public List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context,string period)
         {

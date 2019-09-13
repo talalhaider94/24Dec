@@ -186,7 +186,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             result.Add(new XYDTO()
                             {
                                 XValue = ((DateTime)reader[0]).ToString("MM/yy"),
-                                YValue = (long)reader[1]
+                                YValue = Decimal.ToDouble((Decimal)reader[1])
                             });
                         }
                     }
@@ -327,7 +327,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         result.Add(new XYZDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
-                            YValue = (long)reader[2],
+                            YValue = Decimal.ToDouble((Decimal)reader[2]),
                             Description = (string)reader[3],
                             ZValue = "Value"
                         });
@@ -339,60 +339,312 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto)
         {
             var result = new List<KPIStatusSummaryDTO>();
-            result.Add(new KPIStatusSummaryDTO()
-            {
-                ContractParty="BP",
-                Contract="BP Contract",
-                IdKPI=1,
-                DescrizioneKPI= "BPSIN019 - RPO per le applicazioni dei Sistemi MF - Copia Sincrona",
-                Tipologia="O",
-                Frequenza="1M",
-                Calcolo="A",
-                Fornitura="C",
-                Escalation=null,
-                ViloreLimiteAtteso="98,5%",
-                Trend=100,
-                GEN= "<font color=\"green\">100</font>",
-                FEB= "<font color=\"green\">100</font>",
-                MAR= "<font color=\"green\">100</font>",
-                APR= "<font color=\"green\">100</font>",
-                MAG= "<font color=\"green\">100</font>",
-                GIU= "<font color=\"green\">100</font>",
-                LUG= "<font color=\"green\">100</font>",
-                AGO= "<font color=\"green\">100</font>",
-                SEP= "<font color=\"green\"></font>",
-                OTT= "<font color=\"green\"></font>",
-                NOV= "<font color=\"green\"></font>",
-                DIC= "<font color=\"green\"></font>"
+            string query = @"select contract_party, contract, global_rule_id, ""ID KPI"",replace(replace(replace(replace(""DESCRIZIONE KPI"",'(Non Cumulato)'),'(Cumulato)'),'(Non cumulato)'),'(Progressivo)') as ""DESCRIZIONE KPI"",tipologia,
+                            frequenza,calcolo,
+                            fornitura,escalation,""VALORE LIMITE ATTESO"",
+                            case when fornitura = 'C' then mas.valore
+                            when fornitura = 'NC' then med.media end as TREND,
+                            CASE WHEN Gen = 'ND' THEN '<font color=""red"">'
+                            WHEN Gen = 'NA' THEN '<font color=""black"">'
+                            WHEN Gen = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Gen<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Gen > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Gen,1,1) = '.' THEN '0' ELSE '' END || Gen || '</font>' as Gen,
+                            CASE WHEN Feb = 'ND' THEN '<font color=""red"">'
+                            WHEN Feb = 'NA' THEN '<font color=""black"">'
+                            WHEN Feb = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Feb<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Feb > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Feb,1,1) = '.' THEN '0' ELSE '' END || Feb || '</font>' as Feb,
+                            CASE WHEN Mar = 'ND' THEN '<font color=""red"">'
+                            WHEN Mar = 'NA' THEN '<font color=""black"">'
+                            WHEN Mar = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Mar<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Mar > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Mar,1,1) = '.' THEN '0' ELSE '' END || Mar || '</font>' as Mar,
+                            CASE WHEN Apr = 'ND' THEN '<font color=""red"">'
+                            WHEN Apr = 'NA' THEN '<font color=""black"">'
+                            WHEN Apr = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Apr<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Apr > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Apr,1,1) = '.' THEN '0' ELSE '' END || Apr || '</font>' as Apr,
+                            CASE WHEN Mag = 'ND' THEN '<font color=""red"">'
+                            WHEN Mag = 'NA' THEN '<font color=""black"">'
+                            WHEN Mag = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Mag<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Mag > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Mag,1,1) = '.' THEN '0' ELSE '' END || Mag || '</font>' as Mag,
+                            CASE WHEN Giu = 'ND' THEN '<font color=""red"">'
+                            WHEN Giu = 'NA' THEN '<font color=""black"">'
+                            WHEN Giu = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Giu<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Giu > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Giu,1,1) = '.' THEN '0' ELSE '' END || Giu || '</font>' as Giu,
+                            CASE WHEN Lug = 'ND' THEN '<font color=""red"">'
+                            WHEN Lug = 'NA' THEN '<font color=""black"">'
+                            WHEN Lug = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Lug<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Lug > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Lug,1,1) = '.' THEN '0' ELSE '' END || Lug || '</font>' as Lug,
+                            CASE WHEN Ago = 'ND' THEN '<font color=""red"">'
+                            WHEN Ago = 'NA' THEN '<font color=""black"">'
+                            WHEN Ago = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Ago<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Ago > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Ago,1,1) = '.' THEN '0' ELSE '' END || Ago || '</font>' as Ago,
+                            CASE WHEN Sep = 'ND' THEN '<font color=""red"">'
+                            WHEN Sep = 'NA' THEN '<font color=""black"">'
+                            WHEN Sep = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Sep<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Sep > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Sep,1,1) = '.' THEN '0' ELSE '' END || Sep || '</font>' as Sep,
+                            CASE WHEN Ott = 'ND' THEN '<font color=""red"">'
+                            WHEN Ott = 'NA' THEN '<font color=""black"">'
+                            WHEN Ott = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Ott<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Ott > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Ott,1,1) = '.' THEN '0' ELSE '' END || Ott || '</font>' as Ott,
+                            CASE WHEN Nov = 'ND' THEN '<font color=""red"">'
+                            WHEN Nov = 'NA' THEN '<font color=""black"">'
+                            WHEN Nov = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Nov<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Nov > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Nov,1,1) = '.' THEN '0' ELSE '' END || Nov || '</font>' as Nov,
+                            CASE WHEN Dic = 'ND' THEN '<font color=""red"">'
+                            WHEN Dic = 'NA' THEN '<font color=""black"">'
+                            WHEN Dic = 'NE' THEN '<font color=""black"">'
+                            else (case 
+                            WHEN relation = 'NLT' and Dic<target THEN '<font color=""red"">'
+                                 WHEN relation = 'NMT' and Dic > target THEN '<font color=""red"">'
+                                 ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Dic,1,1) = '.' THEN '0' ELSE '' END || Dic || '</font>' as Dic
+                            from(
+                            select distinct replace(substr(note, 1, 4), '*', '') as ""ID KPI"", contract_party, contract, global_rule_id, descrizione_kpi as ""DESCRIZIONE KPI"",
+                            case when substr(note, 14, 1) = 'M' then 'M' else 'A' end calcolo,
+                            substr(note, 45, 1) as tipologia,
+                            case when replace(substr(note, 1,4),'*','') in (0015, 0010, 009) then '6M' else frequenza end frequenza,
+                            case when(descrizione_kpi like '%BPSIN083%'
+                            or descrizione_kpi like '%BPSIN082%'
+                            or descrizione_kpi like '%BPSIN081%'
+                            or descrizione_kpi like '%BPSIN080%'
+                            or descrizione_kpi like '%BPSIN079%'
+                            or descrizione_kpi like '%BPSIN078%'
+                            or descrizione_kpi like '%BPSIN077%'
+                            or descrizione_kpi like '%BPSIN076%'
+                            or descrizione_kpi like '%BPSIN075%'
+                            or descrizione_kpi like '%BPSIN074%'
+                            or descrizione_kpi like '%BPSIN073%'
+                            or descrizione_kpi like '%BPSIN072%'
+                            or descrizione_kpi like '%BPSIN071%'
+                            or descrizione_kpi like '%Report Riep%') then 'NC' else 'C' end fornitura,
+                            replace(replace(replace(replace(substr(note, 46, 12), '*', ''), 'M', '>'), 'm', '<'), '<in', 'min') as escalation,
+                            replace(replace(replace(replace(substr(note, 58, 12), '*', ''), 'M', '>'), 'm', '<'), '<in', 'min') as ""VALORE LIMITE ATTESO"",
+                            relation, target,
+                            case when Gen = -999 then 'NE'
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Gen is null then 'ND'
+                            else TO_CHAR(Gen) end Gen,
+                            case 
+                            when Feb = -999 then 'NE'
+                            when(frequenza = '1M' and Feb is null
+                            ) then 'ND'
+                            when(to_char(sysdate, 'MM') < 3 and to_char(sysdate, 'YYYY') = anno)  then null
+                            when frequenza not in '1M' then 'NA'
+                            else TO_CHAR(Feb)
+                            end Feb,
+                            case when
+                            Mar = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 4 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in ('1M', '3M') then 'NA'
+                            when frequenza in ('1M', '3M') and Mar is null then 'ND'
+                            else TO_CHAR(Mar) end Mar,
+                            case when Apr = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 5 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Apr is null then 'ND'
+                            else TO_CHAR(Apr) end Apr,
+                            case when Mag = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 6 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Mag is null then 'ND'
+                            else TO_CHAR(Mag) end Mag,
+                            case when Giu = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 7 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in ('1M', '3M', '6M') then 'NA'
+                            when frequenza in ('1M', '3M', '6M') and Giu is null then 'ND'
+                            else TO_CHAR(Giu) end Giu,
+                            case when Lug = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 8 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Lug is null then 'ND'
+                            else TO_CHAR(Lug) end Lug,
+                            case when Ago = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 9 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Ago is null then 'ND'
+                            else TO_CHAR(Ago) end Ago,
+                            case when Sep = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 10 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in ('1M', '3M') then 'NA'
+                            when frequenza in ('1M', '3M') and Sep is null then 'ND'
+                            else TO_CHAR(Sep) end Sep,
+                            case when
+                            Ott = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 11 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Ott is null then 'ND'
+                            else TO_CHAR(Ott) end Ott,
+                            case when Nov = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 12 and to_char(sysdate, 'YYYY') = anno then null
+                            when frequenza not in '1M' then 'NA'
+                            when frequenza = '1M' and Nov is null then 'ND'
+                            else TO_CHAR(Nov) end Nov,
+                            case when Dic = -999 then 'NE'
+                            when to_char(sysdate, 'MM') < 13 and to_char(sysdate, 'YYYY') = anno then null
+                            when Dic is null then 'ND'
+                            else TO_CHAR(Dic) end Dic, anno
+                            from(
+                            select r.rule_description as description,
+                            s.sla_name as contract,
+                            cu.customer_name as contract_party,
+                            r.global_rule_id,
+                            replace(replace(CAST(n.note AS VARCHAR(255)), '<font size=3 face=Calibri><font size=3 face=Calibri>', ''), '<p>', '') as note,
+                            r.rule_id,
+                            r.rule_name as descrizione_kpi,
+                            d.domain_category_relation as relation,
+                            r.service_level_target as target,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
+                            CAST(to_char(p3.time_stamp_utc, 'MM') AS int)
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then CAST(to_char(p2.time_stamp_utc, 'MM') AS int)
+                            else CAST(to_char(p.time_stamp_utc, 'MM') AS int) end time_stamp_utc,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then p3.provided_ce
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then p2.provided_ce
+                            when  MONTH_TU_CALC_STATUS = 'ON' then p.provided_ce end provided_ce,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then '12M'
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then '3M'
+                            when MONTH_TU_CALC_STATUS = 'ON' then '1M' end frequenza,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
+                            CAST(to_char(p3.time_stamp_utc, 'YYYY') AS int)
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then CAST(to_char(p2.time_stamp_utc, 'YYYY') AS int)
+                            else CAST(to_char(p.time_stamp_utc, 'YYYY') AS int) end
+                            as anno, MAX(r.rule_id)
+                            from t_rules r
+                            left
+                            join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID
+                            left
+                            join t_slas s on v.sla_id = s.SLA_ID
+                            left
+                            join t_customers cu on s.customer_id = cu.customer_id
+                            left
+                            join t_psl_0_month p on p.rule_id = r.rule_id and r.is_effective = 'Y'
+                                  and to_char(p.time_stamp_utc, 'YYYY') = to_char(sysdate, 'YYYY') and time_unit<> 'DAY' and p.time_stamp_utc is not null
+                            left join t_psl_0_quarter p2 on p2.rule_id = r.rule_id and r.is_effective = 'Y'
+                              and to_char(p2.time_stamp_utc, 'YYYY') = to_char(sysdate, 'YYYY') and p2.time_unit <> 'DAY' and p2.time_stamp_utc is not null
+                            left join t_psl_0_year p3 on p3.rule_id = r.rule_id and r.is_effective = 'Y'
+                              and to_char(p3.time_stamp_utc, 'YYYY') = to_char(sysdate, 'YYYY') and p3.time_unit <> 'DAY' and p3.time_stamp_utc is not null
+                            left join t_domain_categories d on r.domain_category_id = d.domain_category_id
+                            left join t_rule_notes n on n.rule_id = (select MAX(rule_id) from t_rules f where f.global_rule_id = r.global_rule_id )
+                            where s.sla_id = 1405 and r.global_rule_id NOT IN('65350', '65352', '37643', '37645', '37641', '39033', '39035', '39040', '39042',
+                             '37731', '37663', '37956', '37954', '37940', '37937', '37960', '37958', '37942', '37944', '37948', '37946', '38173', '38171', '37964', '37962', '37952', '37950', '37665', '37763', '37633', '37811', '37697', '37669', '37685', '79804', '79812', '59334')--and to_char(p.time_stamp_utc, 'YYYY') = to_char(sysdate, 'YYYY')
+                                                  --and r.global_rule_id not in (77686)
+                            and(p3.time_stamp_utc is not null or p2.time_stamp_utc is not null or p.time_stamp_utc is not null)
+                            group by
+                            s.sla_name,
+                            cu.customer_name,
+                            r.global_rule_id,
+                            r.rule_description,
+                            replace(replace(CAST(n.note AS VARCHAR(255)), '<font size=3 face=Calibri><font size=3 face=Calibri>', ''), '<p>', ''),
+                            r.rule_id,r.rule_name , 
+                            d.domain_category_relation, 
+                            r.service_level_target,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
+                            CAST(to_char(p3.time_stamp_utc, 'MM') AS int)
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then CAST(to_char(p2.time_stamp_utc, 'MM') AS int)
+                            else CAST(to_char(p.time_stamp_utc, 'MM') AS int) end,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then p3.provided_ce
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then p2.provided_ce
+                            when  MONTH_TU_CALC_STATUS = 'ON' then p.provided_ce end,
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then '12M'
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then '3M'
+                            when MONTH_TU_CALC_STATUS = 'ON' then '1M' end, 
+                            case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
+                            CAST(to_char(p3.time_stamp_utc, 'YYYY') AS int)
+                            when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then CAST(to_char(p2.time_stamp_utc, 'YYYY') AS int)
+                            else CAST(to_char(p.time_stamp_utc, 'YYYY') AS int) end
+                            ) 
+                            PIVOT(max(ROUND(provided_ce, 2)) for time_stamp_utc 
+                            in (1 as Gen, 2 as Feb, 3 as Mar, 4 as Apr, 5 as Mag, 6 as Giu, 7 as Lug, 8 as Ago, 9 as Sep, 10 as Ott, 11 as Nov, 12 as Dic
+                             ))
+                                            where
+                                            descrizione_kpi not like '%(OLD)%' AND descrizione_kpi not like '%SLM%' and descrizione_kpi not like '%(Progressivo)%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%(IC)%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN001%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN002%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%(IS)%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN007%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN017%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN042%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN043%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN047%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN048%'
+                            OR descrizione_kpi like '%(Progressivo)%' and descrizione_kpi like '%BPSIN070%'
 
-            });
-            result.Add(new KPIStatusSummaryDTO()
+                            ) f
+                            left join V_TOT_MEDIA med on(f.""DESCRIZIONE KPI"" = med.DESCRIZIONE_KPI and med.ANNO = to_char(sysdate, 'YYYY'))
+                            left join V_TOT_MAX mas on(f.""DESCRIZIONE KPI"" = mas.DESCRIZIONE_KPI and mas.ANNO = to_char(sysdate, 'YYYY'))
+                            where global_rule_id in ({0})
+                            order by ""ID KPI""";
+            query = string.Format(query, string.Join(',', dto.KPIs));
+            using (OracleConnection con = new OracleConnection(_connectionstring))
             {
-                ContractParty = "BP",
-                Contract = "BP Contract",
-                IdKPI = 2,
-                DescrizioneKPI = "BPSIN024 - RTO per l’applicazione ATM",
-                Tipologia = "O",
-                Frequenza = "1M",
-                Calcolo = "M",
-                Fornitura = "C",
-                Escalation = null,
-                ViloreLimiteAtteso = "100%",
-                Trend = 100,
-                GEN = "<font color=\"green\">100</font>",
-                FEB = "<font color=\"green\">100</font>",
-                MAR = "<font color=\"green\">100</font>",
-                APR = "<font color=\"green\">100</font>",
-                MAG = "<font color=\"green\">100</font>",
-                GIU = "<font color=\"green\">100</font>",
-                LUG = "<font color=\"green\">100</font>",
-                AGO = "<font color=\"green\">100</font>",
-                SEP = "<font color=\"green\"></font>",
-                OTT = "<font color=\"green\"></font>",
-                NOV = "<font color=\"green\"></font>",
-                DIC = "<font color=\"green\"></font>"
-
-            });
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result.Add(new KPIStatusSummaryDTO()
+                        {
+                            ContractParty = (reader[0] == DBNull.Value) ? "" : (string)reader[0],
+                            Contract = (reader[1] == DBNull.Value) ? "" : (string)reader[1],
+                            GlobalRuleId= (reader[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)reader[2]),
+                            IdKPI = (reader[3] == DBNull.Value) ? "" : (string)reader[3],
+                            DescrizioneKPI = (reader[4] == DBNull.Value) ? "" : (string)reader[4],
+                            Tipologia = (reader[5] == DBNull.Value) ? "" : (string)reader[5],
+                            Frequenza = (reader[6] == DBNull.Value) ? "" : (string)reader[6],
+                            Calcolo = (reader[7] == DBNull.Value) ? "" : (string)reader[7],
+                            Fornitura = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
+                            Escalation = (reader[9] == DBNull.Value) ? "" : (string)reader[9],
+                            ViloreLimiteAtteso = (reader[10] == DBNull.Value) ? "" : (string)reader[10],
+                            Trend = (reader[11] == DBNull.Value) ? 0.0 : Decimal.ToDouble((Decimal)reader[11]),
+                            GEN = (reader[12] == DBNull.Value) ? "" : (string)reader[12],
+                            FEB = (reader[13] == DBNull.Value) ? "" : (string)reader[13],
+                            MAR = (reader[14] == DBNull.Value) ? "" : (string)reader[14],
+                            APR = (reader[15] == DBNull.Value) ? "" : (string)reader[15],
+                            MAG = (reader[16] == DBNull.Value) ? "" : (string)reader[16],
+                            GIU = (reader[17] == DBNull.Value) ? "" : (string)reader[17],
+                            LUG = (reader[18] == DBNull.Value) ? "" : (string)reader[18],
+                            AGO = (reader[19] == DBNull.Value) ? "" : (string)reader[19],
+                            SEP = (reader[20] == DBNull.Value) ? "" : (string)reader[20],
+                            OTT = (reader[21] == DBNull.Value) ? "" : (string)reader[21],
+                            NOV = (reader[22] == DBNull.Value) ? "" : (string)reader[22],
+                            DIC = (reader[23] == DBNull.Value) ? "" : (string)reader[23]
+                        });
+                    }
+                }
+            }           
             return result;
         }
     }

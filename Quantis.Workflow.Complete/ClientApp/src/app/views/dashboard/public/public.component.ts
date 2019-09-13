@@ -81,6 +81,7 @@ export class PublicComponent implements OnInit {
 	isKpiReportTrendComponent: boolean = false;
 	isKpiCountOrgComponent: boolean = false;
 	isDistributionByUserComponent: boolean = false;
+	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string;
 	constructor(
 		private dashboardService: DashboardService,
@@ -185,6 +186,14 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.distributionByUserWidgetParameters;
 				this.isDistributionByUserComponent = childData.data.isDistributionByUserComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'distribution_by_user');
+			}
+		},
+		kpiStatusSummaryParent: childData => {
+			console.log('kpiStatusSummaryParent childData', childData);
+			if (childData.type === 'openKpiStatusSummaryModal') {
+				this.barChartWidgetParameters = childData.data.kpiStatusSummaryWidgetParameters;
+				this.isKpiStatusSummaryComponent = childData.data.isKpiStatusSummaryComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'KPIStatusSummary');
 			}
 		},
 	};
@@ -572,6 +581,17 @@ export class PublicComponent implements OnInit {
 				});
 				this.isDistributionByUserComponent = false;
 			}
+			if (this.isKpiStatusSummaryComponent) {
+				this.emitter.sendNext({
+					type: 'kpiStatusSummaryTable',
+					data: {
+						result,
+						kpiStatusSummaryWidgetParameters: this.barChartWidgetParameters,
+						kpiStatusSummaryWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiStatusSummaryComponent = false;
+			}
 
 			this.emitter.loadingStatus(false);
 		}, error => {
@@ -627,6 +647,7 @@ export class PublicComponent implements OnInit {
 				this.isKpiReportTrendComponent = false;
 				this.isKpiCountOrgComponent = false;
 				this.isDistributionByUserComponent = false;
+				this.isKpiStatusSummaryComponent = false;
 			}
 		});
 	}

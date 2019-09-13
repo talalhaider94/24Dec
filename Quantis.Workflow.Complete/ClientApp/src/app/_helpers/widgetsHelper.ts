@@ -25,12 +25,12 @@ export class WidgetsHelper {
                 buildParams.Properties.aggregationoption = index;
             }
             // FILTERS
-            if(apiParams.showdatetype) {
-                // need to change it base on key error might be in filters.dateTypes
-                let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
-                buildParams.Filters.dateTypes = dateType;
-            }
             if(apiParams.showdaterangefilter) {
+                if(apiParams.showdatetype) {
+                    // need to change it base on key error might be in filters.dateTypes
+                    let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
+                    buildParams.Filters.dateTypes = dateType;
+                }
                 // dateTypes custom condition may be needed
                 // if defaultdaterange is null need to write custom method for it.
                 let dateRangeValue;

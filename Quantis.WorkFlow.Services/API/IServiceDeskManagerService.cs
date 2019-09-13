@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Services.API
         List<SDMTicketLVDTO> GetAllTickets();
         List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context, string period);
         List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context, string period);
+        List<SDMTicketLVDTO> GetTicketsAdministratorByPeriod(string period);
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);
