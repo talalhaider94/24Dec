@@ -103,28 +103,22 @@
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
                     <!-- Date Range -->
-                    <label for="daterange">Intervallo di date</label>
+                    <!-- <label for="daterange">Intervallo di date</label>
                     <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }">
-                    <!-- <label for="daterange">Tipo di intervallo</label>
+                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }"> -->
+                    <label for="daterange">Tipo di intervallo</label>
                     <div class="row">
                       <div class="col-md-6">
-                        <label for="fromdate" style="text-align: center">Da</label>
-                        <form class="container1">
-                          <input formControlName="fromDateType" autocomplete="off" class="form-control" name="date" 
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
-                          (onShown)="fromCalendar($event)" (dateChange)="fromChanged()">
-                        </form>
+                        <label for="startDate">Da</label>
+                          <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date"
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}"/>
                       </div>
                       <div class="col-md-6">
-                        <label for="todate">A</label>
-                        <form class="container2">
-                          <input autocomplete="off" class="form-control" name="date" 
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" 
-                          (onShown)="toCalendar($event)">
-                        </form>
+                        <label for="endDate">A</label>
+                          <input type="text" formControlName="endDate" class="form-control" placeholder="End Date"
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}"/>
                       </div>
-                    </div>   -->
+                    </div>  
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">

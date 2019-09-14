@@ -211,8 +211,10 @@ export class PublicComponent implements OnInit {
 			}),
 			Filters: this.formBuilder.group({
 				daterange: [null],
+				startDate: [null],
+				endDate: [null],
 				dateTypes: [null],
-				date: [''],
+				date: [null],
 				includeCurrentMonth: [false] 
 			}),
 			// Note: [null],
@@ -348,8 +350,8 @@ export class PublicComponent implements OnInit {
 		this.emitter.loadingStatus(true);
 		let params = this.cloneDashboardWidgetsArrayState.map(widget => {
 			if (Object.keys(widget.filters).length > 0) {
-				if (widget.filters.hasOwnProperty('daterange')) {
-					widget.filters.daterange = this.dateTime.getStringDateRange(widget.filters.daterange);
+				if (widget.filters.hasOwnProperty('startDate') && widget.filters.hasOwnProperty('endDate')) {
+					widget.filters.daterange = this.dateTime.getStringDateRange(widget.filters.startDate, widget.filters.endDate);
 				}
 			}
 			return {
@@ -385,30 +387,30 @@ export class PublicComponent implements OnInit {
 		});
 	}
 
-	fromCalendar(container1) {
-		container1.monthSelectHandler = (event: any): void => {
-			container1._store.dispatch(container1._actions.select(event.date));
-			this.from_changed=1;
+	// fromCalendar(container1) {
+	// 	container1.monthSelectHandler = (event: any): void => {
+	// 		container1._store.dispatch(container1._actions.select(event.date));
+	// 		this.from_changed=1;
 
-			if(this.from_changed==1){
-				this.showCustomDate=false;
-			}else{
-				this.showCustomDate=true;
-			}
-		};
-		container1.setViewMode('month');
-	}
+	// 		if(this.from_changed==1){
+	// 			this.showCustomDate=false;
+	// 		}else{
+	// 			this.showCustomDate=true;
+	// 		}
+	// 	};
+	// 	container1.setViewMode('month');
+	// }
 
-	toCalendar(container2) {
-		container2.monthSelectHandler = (event: any): void => {
-			container2._store.dispatch(container2._actions.select(event.date));
-		};
-		container2.setViewMode('month');
-	} 
+	// toCalendar(container2) {
+	// 	container2.monthSelectHandler = (event: any): void => {
+	// 		container2._store.dispatch(container2._actions.select(event.date));
+	// 	};
+	// 	container2.setViewMode('month');
+	// } 
 
-	fromChanged(){
-		console.log('fromChanged');
-	}
+	// fromChanged(){
+	// 	console.log('fromChanged');
+	// }
 
 	changedOptions() {
 		this.options.api.optionsChanged();
@@ -465,23 +467,28 @@ export class PublicComponent implements OnInit {
 
 	onWidgetParametersFormSubmit() {
 		let formValues = this.widgetParametersForm.value;
-		//debugger
-		delete formValues.Filters.includeCurrentMonth;
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
-			startDate = this.dateTime.moment(formValues.Filters.daterange[0]).format('MM/YYYY');
-			endDate = this.dateTime.moment(formValues.Filters.daterange[1]).format('MM/YYYY');
+			startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
+			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY');
 		} else {
-			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
+			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes, formValues.Filters.includeCurrentMonth);
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
-		formValues.Filters.daterange = `${startDate}-${endDate}`;
+		if(startDate && endDate) {
+			formValues.Filters.daterange = `${startDate}-${endDate}`;
+		} else {
+			formValues.Filters.daterange = null;
+		}
+		
+		delete formValues.Filters.includeCurrentMonth;
+		delete formValues.Filters.startDate;
+		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
-		this.uncheckedNodes;
-		console.log('permissionsTree length->',this.permissionsTree.checkedNodes.length);
-		console.log('allLeafNodesIds->',this.allLeafNodesIds);
+		// console.log('permissionsTree length->',this.permissionsTree.checkedNodes.length);
+		// console.log('allLeafNodesIds->',this.allLeafNodesIds);
 		if(this.permissionsTree.checkedNodes.length == 0){
 			formValues.Filters.organizations = this.allLeafNodesIds.join(',');
 		}else{
@@ -491,6 +498,7 @@ export class PublicComponent implements OnInit {
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
 		this.emitter.loadingStatus(true);
+		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {

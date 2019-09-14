@@ -59,7 +59,7 @@ export class KpiCountSummaryComponent implements OnInit {
 	setWidgetFormValues: any;
 	editWidgetName: boolean = true;
 	sumKPICount: number = 0;
-	widgetTitle: string = 'KPI Count Summary';
+	widgetTitle: string = 'Count Summary';
 	@Output() kpiCountSummaryParent = new EventEmitter<any>();
 	// INPUT, OUTPUT PARAMS END 
 	constructor(
@@ -90,7 +90,9 @@ export class KpiCountSummaryComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let kpiCountSummaryFormValues = data.kpiCountSummaryWidgetParameterValues;
-					kpiCountSummaryFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountSummaryFormValues.Filters.daterange);
+					if(kpiCountSummaryFormValues.Filters.daterange) {
+						kpiCountSummaryFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountSummaryFormValues.Filters.daterange);
+					}
 					this.setWidgetFormValues = kpiCountSummaryFormValues;
 					this.updateChart(data.result.body, data, null);
 				}

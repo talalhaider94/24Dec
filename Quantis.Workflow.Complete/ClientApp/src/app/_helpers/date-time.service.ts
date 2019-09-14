@@ -40,7 +40,8 @@ export class DateTimeService {
     return dateRangeArray;
   }
 
-  timePeriodRange(rangeType) {
+  timePeriodRange(rangeType, includeCurrentMonth) {
+    //TODO : includeCurrentMonth if true include current month in date range
     let startDate;
     let endDate;
 
@@ -60,10 +61,10 @@ export class DateTimeService {
     return { startDate, endDate }
   }
 
-  getStringDateRange(dateRange) {
-    let startDate = moment(dateRange[0]).format('MM/YYYY');
-    let endDate = moment(dateRange[1]).format('MM/YYYY');
-    let stringDateRange = `${startDate}-${endDate}`;
+  getStringDateRange(startDate, endDate) {
+    let formatStartDate = moment(startDate).format('MM/YYYY');
+    let formatEndDate = moment(endDate).format('MM/YYYY');
+    let stringDateRange = `${formatStartDate}-${formatEndDate}`;
     return stringDateRange;
   }
 
