@@ -163,8 +163,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                 where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
                                 and psl.time_unit='MONTH'
                                 and psl.complete_record=1
-                                and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
-                                and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
                                 and psl.global_rule_id in ({0})
                                 and psl.deviation_ce {1} 0
                                 group by psl.end_period";
@@ -298,8 +298,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
                             and psl.time_unit='MONTH'
                             and psl.complete_record=1
-                            and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
-                            and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                            and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                            and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
                             and psl.global_rule_id =:global_rule_id";
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {

@@ -53,6 +53,13 @@ namespace Quantis.WorkFlow.Controllers
             return _oracleAPI.GetForm(id, 0);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetLandingPageByUser")]
+        public List<LandingPageDTO> GetLandingPageByUser(string period)
+        {
+            var usr = HttpContext.User as AuthUser;
+            return _oracleAPI.GetLandingPageByUser(usr.UserId,period);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormsByUser")]
         public List<OrcaleFormWithAttachmentCountDTO> GetFormsByUser()
         {
