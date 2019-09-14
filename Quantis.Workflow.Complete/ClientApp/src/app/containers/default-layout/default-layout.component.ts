@@ -105,8 +105,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   checkArrays(arr1, arr2) {
     let isExist = false;
     arr1.forEach((item: any) => {
-      if (arr2.indexOf(item) > -1) {
-        isExist = true;
+      if(arr2) {
+        if (arr2.indexOf(item) > -1) {
+          isExist = true;
+        }
       }
     });
     return isExist;
