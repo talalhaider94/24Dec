@@ -15,5 +15,6 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public double Target { get; set; }
         public double Actual { get; set; }
         public string Result { get; set; }
+        public double Deviation { get; set; }
     }
 }

@@ -14,6 +14,9 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public int NonComplaintContracts { get; set; }
         public int ComplaintKPIs { get; set; }
         public int NonComplaintKPIs { get; set; }
+        public List<LandingPageContractDTO> BestContracts { get; set; }
+        public List<LandingPageContractDTO> WorstContracts { get; set; }
+
 
     }
 }

@@ -65,7 +65,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<LandingPageDTO> GetLandingPageByUser(int userId)
+        public List<LandingPageDTO> GetLandingPageByUser(int userId,string period)
         {
             try
             {
@@ -84,14 +84,15 @@ namespace Quantis.WorkFlow.APIBase.API
                                 gr.global_rule_id, 
                                 psl.service_level_target_ce,
                                 psl.provided_ce,
-                                psl.resultpsl
+                                psl.resultpsl,
+                                psl.deviation_ce
                                 from 
                                 (
                                   select  
                                   temp.global_rule_id, 
-                                  to_char(temp.time_stamp,'YYYY-MM-DD') as timestamp, 
-                                  to_char(temp.time_stamp_utc,'YYYY-MM-DD') as end_period, 
-                                  to_char(temp.begin_time_stamp_utc,'YYYY-MM-DD') as start_period, 
+                                  temp.time_stamp as timestamp, 
+                                  temp.time_stamp_utc as end_period, 
+                                  temp.begin_time_stamp_utc as start_period, 
                                   temp.sla_id, 
                                   temp.rule_id, 
                                   temp.time_unit,
@@ -136,12 +137,11 @@ namespace Quantis.WorkFlow.APIBase.API
                                 where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
                                 and psl.time_unit='MONTH'
                                 and psl.complete_record=1
-                                and psl.start_period >= TO_DATE(:start_period,'yyyy-mm-dd')
-                                and psl.end_period <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
                                 and psl.global_rule_id in ({0})";
                 query = string.Format(query, string.Join(',', kpis));
-                DateTime now = DateTime.Now;
-                var startDate = new DateTime(now.Year, now.Month, 1);
+                var startDate = new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -158,15 +158,17 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             basedtos.Add(new LandingPageBaseDTO()
                             {
-                                ContractPartyId = (int)reader[0],
+                                ContractPartyId = Decimal.ToInt32((Decimal)reader[0]),
                                 ContractPartyName = (string)reader[1],
-                                ContractId=(int)reader[2],
+                                ContractId= Decimal.ToInt32((Decimal)reader[2]),
                                 ContractName=(string)reader[3],
                                 GlobalRuleName=(string)reader[4],
-                                GlobalRuleId=(int)reader[5],
-                                Target= Decimal.ToDouble((Decimal)reader[6]),
-                                Actual= Decimal.ToDouble((Decimal)reader[7]),
-                                Result= (string)reader[8]
+                                GlobalRuleId= Decimal.ToInt32((Decimal)reader[5]),
+                                Target= (double)reader[6],
+                                Actual= (double)reader[7],
+                                Result= (string)reader[8],
+                                Deviation= (double)reader[9],
+                                
                             });
                         }
                         var result=basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
@@ -175,10 +177,30 @@ namespace Quantis.WorkFlow.APIBase.API
                             ContractPartyName = p.Key.ContractPartyName,
                             TotalContracts = p.GroupBy(q => q.ContractId).Count(),
                             TotalKPIs = p.Count(),
-                            ComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.All(s => s.Result == "complaint")).Count(),
-                            NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.All(s => s.Result != "complaint")).Count(),
-                            ComplaintKPIs = p.Where(q => q.Result == "complaint").Count(),
-                            NonComplaintKPIs = p.Where(q => q.Result == "complaint").Count()
+                            ComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.All(s => s.Result == "compliant")).Count(),
+                            NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.Any(s => s.Result != "compliant")).Count(),
+                            ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
+                            NonComplaintKPIs = p.Where(q => q.Result != "compliant").Count(),
+                            BestContracts=p.GroupBy(q=>new {q.ContractName,q.ContractId }).OrderByDescending(r=>r.Count(s=>s.Result== "compliant") /r.Count()).Take(5).Select(t=>new LandingPageContractDTO()
+                            {
+                                ContractId =t.Key.ContractId,
+                                ContractName =t.Key.ContractName,
+                                TotalKPIs =t.Count(),
+                                ComplaintKPIs =t.Count(u=>u.Result== "compliant"),
+                                NonComplaintKPIs = t.Count(u => u.Result != "compliant"),
+                                ComplaintPercentage= (t.Count(u => u.Result == "compliant") *100)/t.Count(),
+                                AverageDeviation=t.Average(u=>u.Deviation)
+                            }).OrderByDescending(u=>u.ComplaintPercentage).ToList(),
+                            WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderBy(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
+                            {
+                                ContractId = t.Key.ContractId,
+                                ContractName = t.Key.ContractName,
+                                TotalKPIs = t.Count(),
+                                ComplaintKPIs = t.Count(u => u.Result == "compliant"),
+                                NonComplaintKPIs = t.Count(u => u.Result != "compliant"),
+                                ComplaintPercentage = (t.Count(u => u.Result == "compliant") * 100) / t.Count(),
+                                AverageDeviation = t.Average(u => u.Deviation)
+                            }).OrderBy(u => u.ComplaintPercentage).ToList()
                         }).ToList();
                         return result;
 
