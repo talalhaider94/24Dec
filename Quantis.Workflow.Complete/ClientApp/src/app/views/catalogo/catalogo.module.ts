@@ -8,7 +8,7 @@ import { AdminUtentiComponent } from './admin-utenti/admin-utenti.component';
 import { CatalogoRoutingModule } from './catalogo-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [CatalogoKpiComponent, CatalogoUtentiComponent, AdminUtentiComponent, AdminKpiComponent],
@@ -16,7 +16,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CatalogoRoutingModule,
     DataTablesModule,
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot(),
   ]
 })
 export class CatalogoModule { }

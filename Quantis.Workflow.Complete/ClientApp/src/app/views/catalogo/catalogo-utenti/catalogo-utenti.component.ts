@@ -4,10 +4,9 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-
+import { ModalDirective } from 'ngx-bootstrap/modal';
 declare var $;
 var $this;
-
 
 @Component({
   selector: 'app-catalogo-utenti',
@@ -15,7 +14,7 @@ var $this;
   styleUrls: ['./catalogo-utenti.component.scss']
 })
 export class CatalogoUtentiComponent implements OnInit {
-
+  @ViewChild('successModal') public successModal: ModalDirective;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -88,7 +87,7 @@ export class CatalogoUtentiComponent implements OnInit {
       manager: 'RESPONSABILE'
     }
   ]
-  
+
   ngOnInit() {
   }
 
@@ -114,7 +113,7 @@ export class CatalogoUtentiComponent implements OnInit {
       $('#utentiModal').modal('toggle').hide();
     });
   }
- 
+
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit() {
     this.dtTrigger.next();
@@ -149,38 +148,38 @@ export class CatalogoUtentiComponent implements OnInit {
   //   return datatableElement.dtInstance;
   // }
 
-  setUpDataTableDependencies(){
-      // #column3_search is a <input type="text"> element
-      $(this.searchCol1.nativeElement).on( 'keyup', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+  setUpDataTableDependencies() {
+    // #column3_search is a <input type="text"> element
+    $(this.searchCol1.nativeElement).on('keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-            .columns( 1 )
-            .search( this.value )
-            .draw();
+          .columns(1)
+          .search(this.value)
+          .draw();
       });
-      });
-      $(this.searchCol2.nativeElement).on( 'keyup', function () {
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+    });
+    $(this.searchCol2.nativeElement).on('keyup', function () {
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         datatable_Ref
-            .columns( 2 )
-            .search( this.value )
-            .draw();
+          .columns(2)
+          .search(this.value)
+          .draw();
       });
-      });
+    });
 
-      // export only what is visible right now (filters & paginationapplied)
-      $(this.btnExportCSV.nativeElement).click(function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          if($this.viewModel.filters.nome || $this.viewModel.filters.cognome){
-            $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
-          }else {
-            $this.table2csv(datatable_Ref, 'full', '.kpiTable');
-          }
-        });
+    // export only what is visible right now (filters & paginationapplied)
+    $(this.btnExportCSV.nativeElement).click(function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        if ($this.viewModel.filters.nome || $this.viewModel.filters.cognome) {
+          $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
+        } else {
+          $this.table2csv(datatable_Ref, 'full', '.kpiTable');
+        }
       });
-    }
+    });
+  }
 
   table2csv(oTable, exportmode, tableElm) {
     var csv = '';
@@ -188,42 +187,42 @@ export class CatalogoUtentiComponent implements OnInit {
     var rows = [];
 
     // Get header names
-    $(tableElm+' thead').find('th:not(.notExportCsv)').each(function() {
+    $(tableElm + ' thead').find('th:not(.notExportCsv)').each(function () {
       var $th = $(this);
       var text = $th.text();
       var header = '"' + text + '"';
-      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+      if (text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
     });
     csv += headers.join(',') + "\n";
 
     // get table data
     if (exportmode == "full") { // total data
       var totalRows = oTable.data().length;
-      for(let i = 0; i < totalRows; i++) {
-        rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
+      for (let i = 0; i < totalRows; i++) {
+        rows.push(oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join(','));
       }
     } else { // visible rows only
-      $(tableElm+' tbody tr:visible').each(function(index) {
+      $(tableElm + ' tbody tr:visible').each(function (index) {
         var row = [];
-        $(this).find('td:not(.notExportCsv)').each(function(){
+        $(this).find('td:not(.notExportCsv)').each(function () {
           var $td = $(this);
           var text = $td.text();
-          var cell = '"' +text+ '"';
+          var cell = '"' + text + '"';
           row.push(cell);
         });
         rows.push(row);
       })
     }
     csv += rows.join("\n");
-    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
     saveAs(blob, "ExportUtentiTable.csv");
   }
-  
-    strip_tags(html) {
-      var tmp = document.createElement("div");
-      tmp.innerHTML = html;
-      return tmp.textContent||tmp.innerText;
-    }
+
+  strip_tags(html) {
+    var tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText;
+  }
 
 
   getUsers1() {
@@ -232,11 +231,18 @@ export class CatalogoUtentiComponent implements OnInit {
   }
 
   getUsers() {
-    this.apiService.getCatalogoUsers().subscribe((data) =>{
+    this.apiService.getCatalogoUsers().subscribe((data) => {
       this.UtentiTableBodyData = data;
       console.log('Configs ', data);
       this.rerender();
     });
   }
-
+  
+  showModal() {
+    this.successModal.show();
   }
+
+  hideModal() {
+    this.successModal.hide();
+  }
+}
