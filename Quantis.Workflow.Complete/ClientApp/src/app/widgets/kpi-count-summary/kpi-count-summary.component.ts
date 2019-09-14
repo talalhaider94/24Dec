@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DashboardService, EmitterService } from '../../_services';
@@ -66,7 +66,8 @@ export class KpiCountSummaryComponent implements OnInit {
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
-		private router: Router
+		private router: Router,
+		private widgetHelper: WidgetHelpersService
 	) { }
 
 	ngOnInit() {
@@ -109,7 +110,7 @@ export class KpiCountSummaryComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
 				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
@@ -131,7 +132,7 @@ export class KpiCountSummaryComponent implements OnInit {
 				}
 				this.kpiCountSummaryWidgetParameters = kpiCountSummaryParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+				this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {

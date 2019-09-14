@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -45,7 +45,8 @@ export class BarchartComponent implements OnInit {
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
-		private router: Router
+		private router: Router,
+		private widgetHelper: WidgetHelpersService
 	) { }
 
 	ngOnInit() {
@@ -86,7 +87,7 @@ export class BarchartComponent implements OnInit {
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
 				// Map Params for widget index when widgets initializes for first time
-				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
 				console.log('BarChart newParams', JSON.stringify(newParams));
 				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
@@ -113,7 +114,7 @@ export class BarchartComponent implements OnInit {
 				// setting initial Paramter form widget values
 				console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
 				console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
-				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+				this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
 				console.log('BarChart this.setWidgetFormValues', this.setWidgetFormValues);
 			}
 			// popular chart data
