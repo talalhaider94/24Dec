@@ -9,6 +9,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { FormsModule } from '@angular/forms';
 import { FilterUsersPipe } from './../../_pipes/filterRoleUsers.pipe';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [AdminRolesComponent,RolePermissionsComponent,FilterUsersPipe],
@@ -19,7 +20,8 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     AngularDualListBoxModule,
     DataTablesModule,
     FormsModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    ModalModule.forRoot(),
   ]
 })
 export class AdminRolesModule { }

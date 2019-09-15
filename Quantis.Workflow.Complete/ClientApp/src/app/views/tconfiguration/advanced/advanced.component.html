@@ -5,7 +5,7 @@
       <div class="row">
         <!-- <input type="text" class="form-control ml-3" style="width:10%;" placeholder="Chiave" #searchCol1 /> -->
         <button style="margin-left:90%" class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal">
+                data-target="#addConfigModal" (click)="showAddConfigModal()">
           Crea Nuovo
         </button>
       </div><br />
@@ -45,13 +45,13 @@
     </div>
   </div>
   
-  <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="configModal" bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideConfigModal()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -79,20 +79,20 @@
         </div>
         <div class="modal-footer">
           <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
         </div>
       </div>
     </div>
   </div>
   
   
-  <div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="addConfigModal" bsModal #addConfigModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
      aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
 <!--        <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>-->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideAddConfigModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -105,7 +105,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-success" (click)="addConfig()">Aggiungi</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideAddConfigModal()">Chiudi</button>
       </div>
     </div>
   </div>

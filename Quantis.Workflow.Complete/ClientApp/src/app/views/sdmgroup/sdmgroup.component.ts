@@ -3,6 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 var $this;
@@ -13,6 +14,8 @@ var $this;
 })
 
 export class SdmGroupComponent implements OnInit {
+  @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
+  @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('ConfigurationTable') block: ElementRef;
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -98,6 +101,7 @@ export class SdmGroupComponent implements OnInit {
     this.modalData.name = data.name;
     this.modalData.step = data.step;
     this.modalData.category_id = data.category_id;
+    this.showConfigModal();
   }
 
   add() {
@@ -110,10 +114,12 @@ export class SdmGroupComponent implements OnInit {
     this.apiService.addSDMGroup(this.addData).subscribe(data => {
         this.getCOnfigurations(); // this should refresh the main table on page
         this.toastr.success('Valore Aggiornato', 'Success');
-        $('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
+        //$('#addConfigModal').modal('toggle').hide();
     }, error => {
         this.toastr.error('Errore durante update.', 'Error');
-        $('#addConfigModal').modal('toggle').hide();
+        //$('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
     });
   }
 
@@ -123,10 +129,12 @@ export class SdmGroupComponent implements OnInit {
     this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
-      $('#configModal').modal('toggle').hide();
+      this.hideConfigModal();
+      //$('#configModal').modal('toggle').hide();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
-      $('#configModal').modal('toggle').hide();
+      //$('#configModal').modal('toggle').hide();
+      this.hideConfigModal();
       });
   }
 
@@ -214,6 +222,22 @@ export class SdmGroupComponent implements OnInit {
 
   onCancel(dismissMethod: string): void {
     console.log('Cancel ', dismissMethod);
+  }
+  
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
+  }
+
+  showAddConfigModal() {
+    this.addConfigModal.show();
+  }
+
+  hideAddConfigModal() {
+    this.addConfigModal.hide();
   }
   
 }

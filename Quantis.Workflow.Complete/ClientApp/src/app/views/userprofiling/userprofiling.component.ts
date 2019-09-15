@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { ITreeOptions, TreeComponent } from 'angular-tree-component';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 
 export class UserProfilingComponent implements OnInit {
   //@ViewChild('permissionsTree') permissionsTree: TreeViewComponent;
+  @ViewChild('contractsModal') public contractsModal: ModalDirective;
+  @ViewChild('kpisModal') public kpisModal: ModalDirective;
   @ViewChildren('permissionsTree') allTreesNodes !: QueryList<TreeViewComponent>;
   isTreeLoaded = false;
   treesArray = [];
@@ -124,6 +127,7 @@ export class UserProfilingComponent implements OnInit {
     this.apiService.getContracts(this.selectedData.userid,this.selectedData.permid).subscribe(data => {
       this.contractsData = data;
     });
+    this.showContractsModal();
   }
   
   getKpis(data){
@@ -138,8 +142,8 @@ export class UserProfilingComponent implements OnInit {
       data.forEach((item)=>{ 
         item.code == '1' ? this.kpisId.push(item.id) : null;
       });
-
     });
+    this.showKpisModal();
   }
 
   assignedPermissions(data){
@@ -211,6 +215,8 @@ export class UserProfilingComponent implements OnInit {
     this.apiService.assignKpistoUser(this.saveKpisData).subscribe(data => {
       this.toastr.success('Saved', 'Success');
       this.selectRoleItem(this.selectedUserObj, null);
+      this.hideKpisModal();
+      this.hideContractsModal();
     }, error => {
       this.toastr.error('Not Saved', 'Error');
     }); 
@@ -328,6 +334,22 @@ export class UserProfilingComponent implements OnInit {
   //     });
   //   }
   // }
+   
+  showContractsModal() {
+    this.contractsModal.show();
+  }
+
+  hideContractsModal() {
+    this.contractsModal.hide();
+  }
+  
+  showKpisModal() {
+    this.kpisModal.show();
+  }
+
+  hideKpisModal() {
+    this.kpisModal.hide();
+  }
 
 
 }

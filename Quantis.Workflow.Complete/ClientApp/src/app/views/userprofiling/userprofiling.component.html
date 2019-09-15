@@ -71,13 +71,13 @@
   </div>
   
   
-  <div id="contractsModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="contractsModal" bsModal #contractsModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
   aria-hidden="true">
   <div class="modal-dialog modal-lg contractsModal">
     <div class="modal-content"> 
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Modifica Contraente - {{selectedData.contractParty}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideContractsModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -108,20 +108,20 @@
         </div>  
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideContractsModal()">Chiudi</button>
       </div>
     </div>
   </div>
   </div>
   
   
-  <div id="kpisModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="kpisModal" bsModal #kpisModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
   aria-hidden="true">
   <div class="modal-dialog modal-lg kpisModal">
     <div class="modal-content"> 
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Modifica Contratto - {{selectedData.contractName}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideKpisModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -150,9 +150,9 @@
         </div>  
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#contractsModal">Indietro</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#contractsModal" (click)="hideKpisModal()">Indietro</button>
         <button type="button" class="btn btn-success" data-dismiss="modal" (click)="assignKpis()">Salva</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideKpisModal()">Chiudi</button>
       </div>
     </div>
   </div>
