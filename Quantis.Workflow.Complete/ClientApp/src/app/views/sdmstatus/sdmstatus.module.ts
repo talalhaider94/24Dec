@@ -6,6 +6,7 @@ import { SdmStatusRoutingModule } from './sdmstatus-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [SdmStatusComponent],
@@ -14,7 +15,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     SdmStatusRoutingModule,
     DataTablesModule,
     SweetAlert2Module,
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot(),
   ]
 })
 export class SdmStatusModule { }

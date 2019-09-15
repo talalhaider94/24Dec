@@ -3,7 +3,7 @@
     <br>
     <h2 style="color:#565656">SDM Ticket Status</h2><br>
     <button class="btn btn-success" data-toggle="modal"
-            data-target="#addConfigModal">
+            data-target="#addConfigModal" (click)="showAddConfigModal()">
       Nuovo Stato
     </button><br /><br />
     <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
@@ -40,13 +40,13 @@
   </div>
   </div>
   
-  <div id="configModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="configModal" bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideConfigModal()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -64,20 +64,20 @@
         </div>
         <div class="modal-footer">
           <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
         </div>
       </div>
     </div>
   </div>
   
   
-  <div id="addConfigModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="addConfigModal" bsModal #addConfigModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
        aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
          <h5 class="modal-title" id="approveModalLabel">Nuovo Stato</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideAddConfigModal()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -89,7 +89,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-success" (click)="add()">Aggiungi</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideAddConfigModal()">Chiudi</button>
         </div> 
       </div>
     </div>

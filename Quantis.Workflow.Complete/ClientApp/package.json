@@ -45,7 +45,7 @@
     "@sweetalert2/ngx-sweetalert2": "^5.1.0",
     "@syncfusion/ej2-angular-navigations": "^17.1.49",
     "@types/file-saver": "^2.0.1",
-    "@types/jquery": "^3.3.31",
+    "@types/jquery": "^3.3.29",
     "angular-datatables": "^7.0.0",
     "angular-dual-listbox": "^5.0.1",
     "angular-gridster2": "^8.2.0",

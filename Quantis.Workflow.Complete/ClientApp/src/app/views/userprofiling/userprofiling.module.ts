@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 //import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [UserProfilingComponent,UserRolePermissionsComponent, FilterUsersPipe],
@@ -22,7 +23,8 @@ import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
     AngularDualListBoxModule,
     PerfectScrollbarModule,
     FormsModule,
-    TreeViewModule
+    TreeViewModule,
+    ModalModule.forRoot(),
   ]
 })
 export class UserProfilingModule { }

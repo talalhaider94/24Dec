@@ -4,6 +4,7 @@ import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 //import { clearTimeout } from 'timers';
 
 declare var $;
@@ -14,6 +15,8 @@ var $this;
 })
 
 export class TConfigurationComponent implements OnInit {
+  @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
+  @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('ConfigurationTable') block: ElementRef;
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -112,6 +115,7 @@ export class TConfigurationComponent implements OnInit {
     this.modalData.iseditable = data.iseditable;
     this.modalData.description = data.description;
     this.valuesCheck.tempModal = data.key;
+    this.showConfigModal();
   }
   timer = null;
 
@@ -145,10 +149,12 @@ export class TConfigurationComponent implements OnInit {
     this.apiService.addConfig(this.addData).subscribe(data => {
         this.getCOnfigurations(); // this should refresh the main table on page
         this.toastr.success('Valore Aggiornato', 'Success');
-        $('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
+        //$('#addConfigModal').modal('toggle').hide();
     }, error => {
         this.toastr.error('Errore durante add.', 'Error');
-        $('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
+        //$('#addConfigModal').modal('toggle').hide();
     });
   }
 
@@ -162,10 +168,12 @@ export class TConfigurationComponent implements OnInit {
       this.apiService.updateConfig(this.modalData).subscribe(data => {
         this.getCOnfigurations(); // this should refresh the main table on page
         this.toastr.success('Valore Aggiornato', 'Success');
-        $('#configModal').modal('toggle').hide();
+        this.hideConfigModal();
+      //$('#configModal').modal('toggle').hide();
       }, error => {
         this.toastr.error('Errore durante update.', 'Error');
-        $('#configModal').modal('toggle').hide();
+        this.hideConfigModal();
+      //$('#configModal').modal('toggle').hide();
       });
     }
   }
@@ -243,5 +251,21 @@ export class TConfigurationComponent implements OnInit {
       console.log('Configs ', data);
       this.rerender();
     });
+  }
+
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
+  }
+
+  showAddConfigModal() {
+    this.addConfigModal.show();
+  }
+
+  hideAddConfigModal() {
+    this.addConfigModal.hide();
   }
 }

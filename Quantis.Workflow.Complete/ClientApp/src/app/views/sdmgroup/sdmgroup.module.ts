@@ -6,6 +6,7 @@ import { SdmGroupRoutingModule } from './sdmgroup-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     SdmGroupRoutingModule,
     DataTablesModule,
     SweetAlert2Module,
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot(),
   ]
 })
 export class SdmGroupModule { }

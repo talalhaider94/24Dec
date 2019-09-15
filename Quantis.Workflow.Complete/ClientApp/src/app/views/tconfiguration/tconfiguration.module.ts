@@ -6,7 +6,7 @@ import { TConfigurationAdvancedComponent } from './advanced/advanced.component';
 import { TConfigurationRoutingModule } from './tconfiguration-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [TConfigurationComponent,TConfigurationAdvancedComponent],
@@ -14,7 +14,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     TConfigurationRoutingModule,
     DataTablesModule,
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot(),
   ]
 })
 export class TConfigurationModule { }

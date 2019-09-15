@@ -3,6 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 //import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
 declare var $;
 var $this;
@@ -13,6 +14,9 @@ var $this;
 })
 
 export class AdminRolesComponent implements OnInit {
+  @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
+  @ViewChild('configModal') public configModal: ModalDirective;
+  @ViewChild('usersModal') public usersModal: ModalDirective;
   @ViewChild('ConfigurationTable') block: ElementRef;
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -90,12 +94,14 @@ export class AdminRolesComponent implements OnInit {
     this.modalData.id = data.id;
     this.modalData.name = data.name;
     this.modalData.code = data.code;
+    this.showConfigModal();
   }
   
   populateUsersData(data) {
     this.modalData.id = data.id;
     this.modalData.name = data.name;
     this.getUsersList(this.modalData.id);
+    this.showUsersModal();
   }
 
   addRole() {
@@ -105,10 +111,12 @@ export class AdminRolesComponent implements OnInit {
     this.apiService.addRole(this.addData).subscribe(data => {
         this.getCOnfigurations(); // this should refresh the main table on page
         this.toastr.success('Valore Aggiornato', 'Success');
-        $('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
+        //$('#addConfigModal').modal('toggle').hide();
     }, error => {
         this.toastr.error('Errore durante update.', 'Error');
-        $('#addConfigModal').modal('toggle').hide();
+        this.hideAddConfigModal();
+        //$('#addConfigModal').modal('toggle').hide();
     });
   }
 
@@ -128,10 +136,12 @@ export class AdminRolesComponent implements OnInit {
     this.apiService.updateRole(this.modalData).subscribe(data => {
       this.getCOnfigurations(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
-      $('#configModal').modal('toggle').hide();
+      this.hideConfigModal();
+      //$('#configModal').modal('toggle').hide();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
-      $('#configModal').modal('toggle').hide();
+      this.hideConfigModal();
+      //$('#configModal').modal('toggle').hide();
       });
   }
 
@@ -191,5 +201,29 @@ export class AdminRolesComponent implements OnInit {
       console.log('Users ', data);
       //this.rerender();
     });
+  }
+  
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
+  }
+
+  showAddConfigModal() {
+    this.addConfigModal.show();
+  }
+
+  hideAddConfigModal() {
+    this.addConfigModal.hide();
+  }
+  
+  showUsersModal() {
+    this.usersModal.show();
+  }
+
+  hideUsersModal() {
+    this.usersModal.hide();
   }
 }
