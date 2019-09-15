@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { KeysPipePipe } from './keys-pipe.pipe';
 import { Ng2SearchPipeModule } from 'ng2-search-filter'
 import {NgxPaginationModule} from 'ngx-pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 @NgModule({
   declarations: [DatiGrezziComponent, KeysPipePipe],
   imports: [
@@ -17,6 +19,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
     FormsModule,
     Ng2SearchPipeModule,
     NgxPaginationModule,
+    ModalModule.forRoot(),
   ]
 })
 export class DatiModule { }

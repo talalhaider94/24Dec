@@ -5,7 +5,7 @@ import { EmailComponent } from './email.component';
 import { EmailRoutingModule } from './email-routing.module';
 import {DataTablesModule} from 'angular-datatables';
 import { FormsModule } from '@angular/forms';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [EmailComponent],
@@ -13,7 +13,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     EmailRoutingModule,
     DataTablesModule,
-    FormsModule
+    FormsModule,
+    ModalModule.forRoot(),
   ]
 })
 export class EmailModule { }

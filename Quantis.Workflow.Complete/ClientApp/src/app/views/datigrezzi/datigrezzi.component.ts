@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 declare var $;
 let $this;
 
@@ -18,7 +20,9 @@ let $this;
   styleUrls: ['./datigrezzi.component.scss']
 })
 export class DatiGrezziComponent implements OnInit {
-
+  @ViewChild('searchModal') public searchModal: ModalDirective;
+  @ViewChild('daModal') public daModal: ModalDirective;
+  @ViewChild('editModal') public editModal: ModalDirective;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -306,7 +310,7 @@ clear(){
   this.fitroDataById=[];
   this.campoData=[];
   this.p=1;
-
+  this.hideSearchModal();
   }
 
 
@@ -314,6 +318,7 @@ clear(){
     this.periodFilter = 0;
     this.idKpi = id;
     console.log('this.idKpi =>',this.idKpi);
+    this.showSearchModal();
   }
 
 
@@ -387,6 +392,7 @@ clear(){
           console.log(e + '#' + this.eventTypeArray[e]);
         })*/
         this.loadingModalDati = false;
+        this.showDaModal();
     },
       error=>{       
          this.loadingModalDati = false;
@@ -429,9 +435,35 @@ populateEditModal(row){
     count++;
   });
   console.log('this.campoData: ',this.campoData);
+  this.showEditModal();
 }
   updateDati() {
+    this.hideEditModal();
     //for building
+  }
+  
+  showSearchModal() {
+    this.searchModal.show();
+  }
+
+  hideSearchModal() {
+    this.searchModal.hide();
+  }
+
+  showDaModal() {
+    this.daModal.show();
+  }
+
+  hideDaModal() {
+    this.daModal.hide();
+  }
+  
+  showEditModal() {
+    this.editModal.show();
+  }
+
+  hideEditModal() {
+    this.editModal.hide();
   }
 
 }

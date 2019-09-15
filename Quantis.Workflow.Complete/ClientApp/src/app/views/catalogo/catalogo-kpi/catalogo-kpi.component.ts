@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../_services/auth.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 let $this;
@@ -19,7 +20,9 @@ let $this;
   styleUrls: ['./catalogo-kpi.component.scss']
 })
 export class CatalogoKpiComponent implements OnInit {
-
+  @ViewChild('referentiModal') public referentiModal: ModalDirective;
+  @ViewChild('calcoloModal') public calcoloModal: ModalDirective;
+  @ViewChild('kpiModal') public kpiModal: ModalDirective;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -172,6 +175,8 @@ export class CatalogoKpiComponent implements OnInit {
 
   coloBtn( id: string): void {
     this.des = id;
+
+    this.showCalcoloModal();
   }
 
 
@@ -303,6 +308,60 @@ export class CatalogoKpiComponent implements OnInit {
     this.modalData.kpi_name_bsi = data.kpi_name_bsi;
     this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
     this.modalData.sla_id_bsi = data.sla_id_bsi;
+
+    this.showReferentiModal();
+  }
+
+  populateKpiModalData(data) {
+    this.modalData.id = data.id;
+    this.modalData.short_name = data.short_name;
+    this.modalData.group_type = data.group_type;
+    this.modalData.id_kpi = data.id_kpi;
+    this.modalData.id_alm = data.id_alm;
+    this.modalData.id_form = data.id_form;
+    this.modalData.kpi_description = data.kpi_description;
+    this.modalData.kpi_computing_description = data.kpi_computing_description;
+    this.modalData.source_type = data.source_type;
+    this.modalData.computing_variable = data.computing_variable;
+    this.modalData.computing_mode = data.computing_mode;
+    this.modalData.tracking_period = data.tracking_period;
+    this.modalData.measure_unit = data.measure_unit;
+    this.modalData.kpi_type = data.kpi_type;
+    this.modalData.escalation = data.escalation;
+    this.modalData.target = data.target;
+    this.modalData.penalty_value = data.penalty_value;
+    this.modalData.source_name = data.source_name;
+    this.modalData.organization_unit = data.organization_unit;
+    this.modalData.id_booklet = data.id_booklet;
+    this.modalData.file_name = data.file_name;
+    this.modalData.file_path = data.file_path;
+    this.modalData.referent = data.referent;
+    this.modalData.referent_1 = data.referent_1;
+    this.modalData.referent_2 = data.referent_2;
+    this.modalData.referent_3 = data.referent_3;
+    this.modalData.referent_4 = data.referent_4;
+    this.modalData.frequency = data.frequency;
+    this.modalData.month = data.month;
+    this.modalData.day = data.day;
+    this.modalData.daytrigger = data.daytrigger;
+    this.modalData.monthtrigger = data.monthtrigger;
+    this.modalData.enable = data.enable;
+    this.modalData.enable_wf = data.enable_wf;
+    this.modalData.enable_rm = data.enable_rm;
+    this.modalData.contract = data.contract;
+    this.modalData.contract_name = data.contract_name;
+    this.modalData.wf_last_sent = data.wf_last_sent;
+    this.modalData.rm_last_sent = data.rm_last_sent;
+    this.modalData.supply = data.supply;
+    this.modalData.primary_contract_party = data.primary_contract_party;
+    this.modalData.secondary_contract_party = data.secondary_contract_party;
+    this.modalData.primary_contract_party_name = data.primary_contract_party_name;
+    this.modalData.secondary_contract_party_name = data.secondary_contract_party_name;
+    this.modalData.kpi_name_bsi = data.kpi_name_bsi;
+    this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
+    this.modalData.sla_id_bsi = data.sla_id_bsi;
+
+    this.showKpiModal();
   }
 
   updateKpi(modal) {
@@ -350,6 +409,7 @@ export class CatalogoKpiComponent implements OnInit {
         $('#referentiModal').modal('toggle').hide();
       }
     });
+    this.hideKpiModal();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -565,6 +625,30 @@ export class CatalogoKpiComponent implements OnInit {
         console.log('this.kpiButtonState => ', this.kpiButtonState);
       });
     });
+  }
+  
+  showReferentiModal() {
+    this.referentiModal.show();
+  }
+
+  hideReferentiModal() {
+    this.referentiModal.hide();
+  }
+
+  showCalcoloModal() {
+    this.calcoloModal.show();
+  }
+
+  hideCalcoloModal() {
+    this.calcoloModal.hide();
+  }
+  
+  showKpiModal() {
+    this.kpiModal.show();
+  }
+
+  hideKpiModal() {
+    this.kpiModal.hide();
   }
 
 }
