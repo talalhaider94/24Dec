@@ -397,6 +397,8 @@ clear(){
       error=>{       
          this.loadingModalDati = false;
       });
+
+      this.showDaModal();
   }
   
   getCountCampiData(){
