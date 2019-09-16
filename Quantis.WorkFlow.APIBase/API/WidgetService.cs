@@ -252,9 +252,9 @@ namespace Quantis.WorkFlow.APIBase.API
                             (
                               select  
                               temp.global_rule_id, 
-                              to_char(temp.time_stamp,'YYYY-MM-DD') as timestamp, 
-                              to_char(temp.time_stamp_utc,'YYYY-MM-DD') as end_period, 
-                              to_char(temp.begin_time_stamp_utc,'YYYY-MM-DD') as start_period, 
+                              temp.time_stamp as timestamp, 
+                              temp.time_stamp_utc as end_period, 
+                              temp.begin_time_stamp_utc as start_period, 
                               temp.sla_id, 
                               temp.rule_id, 
                               temp.time_unit,

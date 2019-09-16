@@ -425,9 +425,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 calcValue = tks.calcValue,
                                 KpiIds = tks.KpiIds,
                                 LastModifiedDate = tks.LastModifiedDate,
-                                Titolo = subset.titolo ?? string.Empty,
-                                reference_input=subset.referent?? string.Empty,
-                                tipologia=subset.tipologia?? string.Empty
+                                Titolo = subset?.titolo ?? string.Empty,
+                                reference_input=subset?.referent?? string.Empty,
+                                tipologia=subset?.tipologia?? string.Empty
                             }).ToList();
 
                 }
@@ -481,9 +481,9 @@ namespace Quantis.WorkFlow.APIBase.API
                             calcValue = tks.calcValue,
                             KpiIds = tks.KpiIds,
                             LastModifiedDate = tks.LastModifiedDate,
-                            Titolo = subset.titolo ?? string.Empty,
-                            reference_input = subset.referent ?? string.Empty,
-                            tipologia = subset.tipologia ?? string.Empty
+                            Titolo = subset?.titolo ?? string.Empty,
+                            reference_input = subset?.referent ?? string.Empty,
+                            tipologia = subset?.tipologia ?? string.Empty
                         }).ToList();
             }
             catch (Exception e)
@@ -570,9 +570,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 calcValue = tks.calcValue,
                                 KpiIds = tks.KpiIds,
                                 LastModifiedDate = tks.LastModifiedDate,
-                                Titolo = subset.titolo ?? string.Empty,
-                                reference_input = subset.referent ?? string.Empty,
-                                tipologia = subset.tipologia ?? string.Empty
+                                Titolo = subset?.titolo ?? string.Empty,
+                                reference_input = subset?.referent ?? string.Empty,
+                                tipologia = subset?.tipologia ?? string.Empty
                             }).ToList();
 
 
