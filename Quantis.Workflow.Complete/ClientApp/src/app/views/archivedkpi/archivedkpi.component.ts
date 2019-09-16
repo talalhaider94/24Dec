@@ -14,6 +14,7 @@ import * as FileSaver from 'file-saver';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { ToastrService } from 'ngx-toastr';
 import { forEach } from '@angular/router/src/utils/collection';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 var $this;
@@ -25,6 +26,10 @@ const EXCEL_EXTENSION = '.csv';
   templateUrl: './archivedkpi.component.html'
 })
 export class ArchivedKpiComponent implements OnInit {
+  @ViewChild('archivedKpiModal') public archivedKpiModal: ModalDirective;
+  @ViewChild('datiModal') public datiModal: ModalDirective;
+  @ViewChild('datiTempoModal') public datiTempoModal: ModalDirective;
+
   @ViewChild('ArchivedkpiTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -181,6 +186,7 @@ export class ArchivedKpiComponent implements OnInit {
 
       console.log('pop', this.kpisData);
     });
+    this.showArchivedKpiModal();
   }
 
   populateDateFilter() {    
@@ -335,6 +341,8 @@ export class ArchivedKpiComponent implements OnInit {
         error=>{       
          this.loadingModalDati = false;
       });
+
+      this.showDatiModal();
   }
 
 
@@ -441,23 +449,12 @@ addChildren(){
     else{
       this.res[y.contract_name]=[];
       this.res[y.contract_name].push(y.name_kpi)
-    }
-   
-     
-      
-      
-     
-     
-       
-    });
+    }   
+  });
   
-
    console.log('contrattoKPI',this.res);
   }
-    
- 
-
-
+  
   numeroEventi() {
   this.eventTypeArray = [];
   this.fitroDataById.forEach( e => {
@@ -483,7 +480,7 @@ getDatiSecondPop(id_kpi,interval,tracking_period){
     // this.getdati(id_kpi,mese,anno,tracking_period);
      this.getdati(id_kpi,tracking_period,interval,this.meseSelezionato,this.annoSelezionato);
 
-
+     this.showDatiTempoModal();
         
       /*let resources = data["ArchivedKpiBodyData"];
       let resource = resources["interval_kpi"];
@@ -645,12 +642,6 @@ exportAsXLSX():void {
   this.exportAsExcelFile(this.fitroDataById, 'sample');
 }
 
-
-
-
-
-
-
 /*exportExcel(data: any[]){
   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.fitroDataById);
   const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
@@ -663,11 +654,24 @@ clear(){
   this.fitroDataById=[];
   this.p=1;
 
-  }
+  this.hideDatiModal();
 
-  reset() {
-    this.kpisData = [];
-  }
+}
+
+clear1(){
+  this.filter = '';
+  this.fitroDataById=[];
+  this.p=1;
+
+  this.hideDatiTempoModal();
+
+}
+
+reset() {
+  this.kpisData = [];
+
+  this.hideArchivedKpiModal();
+}
 
 arrayPeriodo=[];
 arrayTempo(tracking_period,interval_kpi){
@@ -723,8 +727,30 @@ else if(tracking_period ==='ANNUALE'){
  console.log("semestrale",this.arrayPeriodo);
 }
 
+}
 
+showArchivedKpiModal() {
+  this.archivedKpiModal.show();
+}
 
+hideArchivedKpiModal() {
+  this.archivedKpiModal.hide();
+}
+
+showDatiModal() {
+  this.datiModal.show();
+}
+
+hideDatiModal() {
+  this.datiModal.hide();
+}
+
+showDatiTempoModal() {
+  this.datiTempoModal.show();
+}
+
+hideDatiTempoModal() {
+  this.datiTempoModal.hide();
 }
 
 
