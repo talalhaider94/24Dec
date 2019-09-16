@@ -138,7 +138,7 @@
   </div>
 </div>
 
-<div id="archivedKpiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="archivedKpiModal" bsModal #archivedKpiModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -196,7 +196,7 @@
 
 
 
-<div id="datiModal" class="modal fade modal-right" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true"  >
+<div id="datiModal" bsModal #datiModal="bs-modal" class="modal fade modal-right" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true"  >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -382,14 +382,14 @@
 
 
 
-<div id="datiTempoModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="datiTempoModal" bsModal #datiTempoModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">DATI</h5><br><br>
        
           
-        <button type="button" class="close"  (click)="clear()" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close"  (click)="clear1()" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -547,7 +547,7 @@
            </div>
          </div>
          <div class="modal-footer">
-           <button type="button" class="btn btn-primary" (click)="clear()" data-dismiss="modal">Chiudi</button>
+           <button type="button" class="btn btn-primary" (click)="clear1()" data-dismiss="modal">Chiudi</button>
          </div>
        </div>
      </div>

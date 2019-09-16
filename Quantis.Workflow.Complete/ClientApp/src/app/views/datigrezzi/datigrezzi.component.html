@@ -19,8 +19,8 @@
       <h5 *ngIf="loading" class="text-center text-primary">   
           <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
       </h5>
-      <table class="table stripe "  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" >
-        <thead >
+      <table class="table stripe" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" >
+        <thead style="background: #20a8d8">
           <tr style="color:white;font-size:12px;">
             <th style="text-align:center">CONTRATTO</th>
             <th style="text-align:center">ID</th>
@@ -53,7 +53,7 @@
 </div>
 
 
-<div id="searchModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="searchModal" bsModal #searchModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -143,14 +143,14 @@
           </div>
          </div>
          <div class="modal-footer">
-           <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+           <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideSearchModal()">Chiudi</button>
          </div>
        </div>
      </div>
    </div>
 
 
-   <div id="daModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+   <div id="daModal" bsModal #daModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -198,7 +198,7 @@
                 <table id="classTable" class="table table-bordered"  #table>
                   <thead style="background: #20a8d8; color:white">  
                   <tr>
-                      <th style="text-align:center"></th>
+                     <th style="text-align:center"></th>
                      <th style="text-align:center">create date</th>
                      <th style="text-align:center">modify date</th>
                      <th style="text-align:center">raw data id</th>
@@ -238,20 +238,20 @@
           </div>
              </div>
              <div class="modal-footer">
-               <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+               <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideDaModal()">Chiudi</button>
              </div>
            </div>
          </div>
     </div>
   
      
-  <div id="editModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+  <div id="editModal" bsModal #editModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
   aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content"> 
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Modifica Dati</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideEditModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -268,7 +268,7 @@
        </div>
        <div class="modal-footer">
          <button (click)="updateDati()" class="btn btn-success">Aggiorna</button>
-         <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideEditModal()">Chiudi</button>
        </div>
      </div>
    </div>

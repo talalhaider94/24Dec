@@ -4,6 +4,7 @@ import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 var $this;
@@ -13,6 +14,7 @@ var $this;
 })
 
 export class EmailComponent implements OnInit {
+  @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('ConfigurationTable') block: ElementRef;
   // @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -91,6 +93,7 @@ export class EmailComponent implements OnInit {
 
   populateModalData(data) {
     this.modalData.email_body = data.email_body;
+    this.showConfigModal();
   }
 
   populateDateFilter() {
@@ -205,6 +208,14 @@ export class EmailComponent implements OnInit {
       this.ConfigTableBodyData = [];
       this.loading = false;
     });
+  }
+  
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
   }
 
  /* getCOnfigurations1() {

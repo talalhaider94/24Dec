@@ -29,7 +29,7 @@
       </div>
       <div class="top-scroll-table-container" #topScrollTblContainer>  
         <table class="table stripe kpiTable" #kpiTable id="kpiTable" [ngStyle]="{'display': loading? 'none' : 'unset'}" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-          <thead>
+          <thead style="background: #20a8d8">
             <tr style="color:white;font-size:12px;">
               <th style="text-align:center">CONTRATTO</th>
               <th style="text-align:center">ID</th>
@@ -68,7 +68,7 @@
               <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#referentiModal" (click)="populateModalData(row)"><i class="fa fa-user" style="font-size:20px;"></i></button></td>
               <td class="notExportCsv" align="center"><button class="btn" data-toggle="modal" data-target="#calcoloModal" (click)="coloBtn(row.kpi_computing_description)"><i class="fa fa-edit" style="font-size:20px;"></i></button></td>
               <td class="notExportCsv" align="center">
-                <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                <button style="font-size:10px" class="btn btn-primary" data-toggle="modal" (click)="populateKpiModalData(row)"
                         data-target="#kpiModal">
                   <i class="fa fa-pencil"></i>
                 </button>
@@ -84,12 +84,12 @@
   </div-->
   </div>
 
-<div id="referentiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="referentiModal" bsModal #referentiModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideReferentiModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -109,18 +109,18 @@
         </div>
         <div class="modal-footer">
           <button [disabled]="kpiButtonState !== '1'" (click)="updateKpi('referents')" class="btn btn-success">Aggiorna</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideReferentiModal()">Chiudi</button>
         </div>
       </div>
   </div>
 </div>
 
-<div id="calcoloModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+<div id="calcoloModal" bsModal #calcoloModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Descrizione Calcolo</h5>
-        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" >
+        <button type="button"   class="close" data-dismiss="modal" aria-label="Close" (click)="hideCalcoloModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -128,7 +128,7 @@
         <textarea class="form-control" disabled style="background:white">{{this.des}}</textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideCalcoloModal()">
           Chiudi
         </button>
       </div>
@@ -136,13 +136,13 @@
   </div>
 </div>
 
-<div id="kpiModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+<div id="kpiModal" bsModal #kpiModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
      aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="approveModalLabel">Modifica KPI</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideKpiModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -211,7 +211,7 @@
       </div>
       <div class="modal-footer">
         <button [disabled]="kpiButtonState !== '1'" (click)="updateKpi('kpi')" class="btn btn-success">Aggiorna</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideKpiModal()">Chiudi</button>
       </div>
     </div>
   </div>
