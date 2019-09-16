@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 var $this;
@@ -14,6 +15,7 @@ var $this;
   styleUrls: ['./admin-utenti.component.scss']
 })
 export class AdminUtentiComponent implements OnInit {
+  @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('UserTable') block: ElementRef;
   @ViewChild('searchCol1') searchCol1: ElementRef;
   @ViewChild('searchCol2') searchCol2: ElementRef;
@@ -95,6 +97,8 @@ export class AdminUtentiComponent implements OnInit {
     this.modalData.mail = data.user_email;
     this.modalData.userid = '';
     this.modalData.manager = '';
+
+    this.showConfigModal();
   }
 
   updateUtenti() {
@@ -103,10 +107,12 @@ export class AdminUtentiComponent implements OnInit {
       this.saveAssignedRoles(this.modalData.ca_bsi_user_id);
       this.getUsers(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato', 'Success');
-      $('#utentiModal').modal('toggle').hide();
+      this.hideConfigModal();
+      //$('#utentiModal').modal('toggle').hide();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
-      $('#utentiModal').modal('toggle').hide();
+      this.hideConfigModal();
+      //$('#utentiModal').modal('toggle').hide();
     });
   }
  
@@ -243,5 +249,14 @@ export class AdminUtentiComponent implements OnInit {
         this.toastr.error('Errore durante assegnazione ruolo', 'Error');
       });
     }
-  } 
+  }
+  
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
+  }
+
   }

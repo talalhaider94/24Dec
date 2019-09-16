@@ -5,6 +5,7 @@ import { ApiService } from '../../../_services/api.service';
 import { LoadingFormService } from '../../../_services/loading-form.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var $;
 let $this;
@@ -15,7 +16,7 @@ let $this;
   templateUrl: './admin-kpi.component.html',
 })
 export class AdminKpiComponent implements OnInit {
-
+  @ViewChild('configModal') public configModal: ModalDirective;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -216,6 +217,8 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.kpi_name_bsi = data.rule_name;
     this.modalData.global_rule_id_bsi = data.global_rule_id;
     this.modalData.sla_id_bsi = data.sla_id;
+
+    this.showConfigModal();
   }
 
   updateKpi(modal) {
@@ -252,19 +255,24 @@ export class AdminKpiComponent implements OnInit {
       this.getTRules(); // this should refresh the main table on page
       this.toastr.success('KPI Consolidato', 'Success');
       if (modal == 'kpi') {
-        $('#kpiModal').modal('toggle').hide();
+        this.hideConfigModal();
+        //$('#kpiModal').modal('toggle').hide();
       } else {
-        $('#referentiModal').modal('toggle').hide();
+        this.hideConfigModal();
+        //$('#referentiModal').modal('toggle').hide();
       }
       
     }, error => {
       this.toastr.error('Errore durante consolidamento.', 'Error');
       if (modal == 'kpi') {
-        $('#kpiModal').modal('toggle').hide();
+        this.hideConfigModal();
+        //$('#kpiModal').modal('toggle').hide();
       } else {
-        $('#referentiModal').modal('toggle').hide();
+        this.hideConfigModal();
+        //$('#referentiModal').modal('toggle').hide();
       }
     });
+
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -428,5 +436,13 @@ export class AdminKpiComponent implements OnInit {
       this.allForms = data;
       console.log('forms ', data);
     });
+  }
+  
+  showConfigModal() {
+    this.configModal.show();
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
   }
 }

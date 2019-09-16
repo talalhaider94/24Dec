@@ -397,19 +397,22 @@ export class CatalogoKpiComponent implements OnInit {
       //this.getKpis(); // this should refresh the main table on page
       this.toastr.success('Valore Aggiornato. Click su "Aggiorna" per aggiornare la tabella', 'Success');
       if (modal == 'kpi') {
-        $('#kpiModal').modal('toggle').hide();
+        this.hideKpiModal();
+        //$('#kpiModal').modal('toggle').hide();
       } else {
-        $('#referentiModal').modal('toggle').hide();
+        this.hideReferentiModal();
+        //$('#referentiModal').modal('toggle').hide();
       }
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       if (modal == 'kpi') {
-        $('#kpiModal').modal('toggle').hide();
+        this.hideKpiModal();
+        //$('#kpiModal').modal('toggle').hide();
       } else {
-        $('#referentiModal').modal('toggle').hide();
+        this.hideReferentiModal();
+        //$('#referentiModal').modal('toggle').hide();
       }
     });
-    this.hideKpiModal();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface

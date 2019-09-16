@@ -112,6 +112,7 @@ export class CatalogoUtentiComponent implements OnInit {
       this.toastr.error('Errore durante update.', 'Error');
       $('#utentiModal').modal('toggle').hide();
     });
+    this.hideModal();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface

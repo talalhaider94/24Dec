@@ -38,13 +38,13 @@
     </div>
   </div>
 
-<div id="utentiModal" class="modal fade bs-example-modal-lg" style="width:100% !important" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+<div id="utentiModal" bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" style="width:100% !important" tabindex="-1" role="dialog" aria-labelledby="classInfo"
      aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <!--        <h5 class="modal-title" id="approveModalLabel">Giustificativo</h5>-->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideConfigModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -68,7 +68,7 @@
       </div>
       <div class="modal-footer">
         <button (click)="updateUtenti()" class="btn btn-success">Aggiorna</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
       </div>
     </div>
   </div>
