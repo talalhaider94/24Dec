@@ -8,7 +8,7 @@ namespace Quantis.WorkFlow.Services.API
     public interface IWidgetService
     {
         List<XYDTO> GetKPICountTrend(WidgetwithAggOptionDTO dto);
-        XYDTO GetCatalogPendingCount();
+        XYDTO GetCatalogPendingCount(BaseWidgetDTO dto);
         List<XYDTO> GetDistributionByVerifica(BaseWidgetDTO dto);
         List<XYZDTO> GetKPICountByOrganization(WidgetwithAggOptionDTO dto);
         XYDTO GetKPICountSummary(BaseWidgetDTO dto);

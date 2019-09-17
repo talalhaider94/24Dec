@@ -13,8 +13,11 @@ namespace Quantis.WorkFlow.APIBase.API
     public class WidgetService : IWidgetService
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private IDataService _dataService;
         private static string _connectionstring = null;
-        public WidgetService(WorkFlowPostgreSqlContext dbcontext){
+        public WidgetService(WorkFlowPostgreSqlContext dbcontext, IDataService dataService)
+        {
+            _dataService = dataService;
             _dbcontext = dbcontext;
             if (_connectionstring == null)
             {
@@ -201,13 +204,17 @@ namespace Quantis.WorkFlow.APIBase.API
 
 
         }
-        public XYDTO GetCatalogPendingCount()
+        public XYDTO GetCatalogPendingCount(BaseWidgetDTO dto)
         {
-            return new XYDTO()
+            if(dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
             {
-                XValue = "",
-                YValue = 2
-            };
+                return new XYDTO() { XValue = "", YValue = _dataService.GetAllTRules().Count() };
+            }
+            if (dto.Measures.FirstOrDefault() == Measures.Pending_Users)
+            {
+                return new XYDTO() { XValue = "", YValue = _dataService.GetAllTUsers().Count() };
+            }
+            return null;
         }
         public List<XYDTO> GetDistributionByVerifica(BaseWidgetDTO dto)
         {
