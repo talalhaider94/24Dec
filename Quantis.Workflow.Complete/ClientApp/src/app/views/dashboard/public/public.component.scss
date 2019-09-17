@@ -3,20 +3,22 @@
 @import "@syncfusion/ej2-angular-navigations/styles/material.css";
 @import "@syncfusion/ej2-inputs/styles/material.css";
 @import "@syncfusion/ej2-buttons/styles/material.css";
-
 perfect-scrollbar {
-  border: 1px solid #ccc;
-  border-radius: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
+
 :host {
-  gridster {
-    height: calc(100vh + 200px);
-  }
+    gridster {
+        height: calc(100vh + 200px);
+    }
 }
+
 .card {
-  border: 0px solid #c8ced3 !important;
+    border: 0px solid #c8ced3 !important;
 }
 
 gridster-item {
-  border: 1px solid #c8ced3;
+    border: 1px solid #c8ced3;
+    overflow-y: auto;
 }

@@ -27,5 +27,6 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string LastModifiedDate { get; set; }
         public string reference_input { get; set; }
         public string tipologia { get; set; }
+        public int global_rule_id { get; set; }
     }
 }
