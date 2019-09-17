@@ -31,7 +31,7 @@ namespace Quantis.WorkFlow.Services.API
         void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);        
         List<int> GetGlobalRulesByUserId(int userId);
         void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
-        List<Tuple<int, int>> GetContractPartyByUser(int userId);
+        List<ContractPartyDetailDTO> GetContractPartyByUser(int userId);
         List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId);
         List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId);
         List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId);
