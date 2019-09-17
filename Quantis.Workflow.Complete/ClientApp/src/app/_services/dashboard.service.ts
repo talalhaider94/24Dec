@@ -142,5 +142,10 @@ export class DashboardService {
 		return this.http.get<any>(`${environment.API_URL}/globalfilter/GetKPIs`,{ params });
 	}
 
+	getLandingPage(period: string = '02/2019') {
+		const params = new HttpParams().set('period', period.toString());
+		return this.http.get<any>(`${environment.API_URL}/oracle/GetLandingPageByUser`,{ params });
+	}
+
 
 }

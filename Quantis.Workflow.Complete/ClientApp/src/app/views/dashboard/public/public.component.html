@@ -75,14 +75,12 @@
               <div formGroupName="Filters">
                 <label for="">Contraente e Contratto</label>
                 <perfect-scrollbar style="max-height: 260px;">
-                  <div *ngFor="let treeObj of treesArray; let i = index">
-                    <span [hidden]="treeObj.loaded" class="fa fa-spinner text-primary"
-                      style="padding-left: 35px; height: 35px;">loading..</span>
-                    <ejs-treeview [hidden]="!treeObj.loaded" #permissionsTree id="{{treeObj.elementId}}"
-                      [fields]='treeObj.settings' [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
-                      (nodeChecked)='syncSelectedNodesArray($event, treeObj)'>
+                    <ejs-treeview  #organizationTree id="organizationTreeId"
+                      [fields]='treeDataFields' [showCheckBox]='true'
+                      [checkedNodes]="preSelectedNodes"
+                      (nodeChecked)='organizationTreeNodeCheckEvent($event)' 
+                      (nodeSelected)='organizationTreeNodeSelected($event)'>
                     </ejs-treeview>
-                  </div>
                 </perfect-scrollbar><br>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group form-check">
