@@ -23,7 +23,7 @@ export class KpiStatusSummaryComponent implements OnInit {
   @Output()
   kpiStatusSummaryParent = new EventEmitter<any>();
   kpiStatusSummaryData: any = [];
-  preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
+  preSelectedNodes = [1075,1405,1420,1424,1425,1430,1435,1436,1437,1438,1439,1441,1442,1444,1445,1446,1447,1448,1449,1460,1465,1470,1471,1485];
   constructor(
     private dashboardService: DashboardService,
     private emitter: EmitterService,
