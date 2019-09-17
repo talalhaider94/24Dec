@@ -32,7 +32,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         internal override object GetData(WidgetParametersDTO props)
         {
             var dto = _globalfilterService.MapBaseWidget(props);
-            var result = _widgetService.GetCatalogPendingCount();
+            var result = _widgetService.GetCatalogPendingCount(dto);
             return result;
         }
     }
