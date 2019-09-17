@@ -1,6 +1,7 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
+using Quantis.WorkFlow.Services.DTOs.OracleAPI;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,11 @@ namespace Quantis.WorkFlow.APIBase.API
     public class WidgetService : IWidgetService
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private IDataService _dataService;
         private static string _connectionstring = null;
-        public WidgetService(WorkFlowPostgreSqlContext dbcontext){
+        public WidgetService(WorkFlowPostgreSqlContext dbcontext, IDataService dataService)
+        {
+            _dataService = dataService;
             _dbcontext = dbcontext;
             if (_connectionstring == null)
             {
@@ -200,31 +204,196 @@ namespace Quantis.WorkFlow.APIBase.API
 
 
         }
-        public XYDTO GetCatalogPendingCount()
+        public XYDTO GetCatalogPendingCount(BaseWidgetDTO dto)
         {
-            return new XYDTO()
+            if(dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
             {
-                XValue = "",
-                YValue = 2
-            };
+                return new XYDTO() { XValue = "", YValue = _dataService.GetAllTRules().Count() };
+            }
+            if (dto.Measures.FirstOrDefault() == Measures.Pending_Users)
+            {
+                return new XYDTO() { XValue = "", YValue = _dataService.GetAllTUsers().Count() };
+            }
+            return null;
         }
         public List<XYDTO> GetDistributionByVerifica(BaseWidgetDTO dto)
         {
+            
+            var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
+            if (dto.KPIs.Any())
+            {
+                facts = facts.Where(o => dto.KPIs.Contains(o.global_rule_id));
+            }
+
             var res = new List<XYDTO>();
-            res.Add(new XYDTO() { XValue = "Compliant", YValue = 30 });
-            res.Add(new XYDTO() { XValue = "Non Compliant", YValue = 20 });
-            res.Add(new XYDTO() { XValue = "Non Calculato", YValue = 25 });
-            res.Add(new XYDTO() { XValue = "Refused", YValue = 25 });
+            
+            res.Add(new XYDTO() { XValue = "Compliant", YValue = facts.Where(o => o.complaint).Count()});
+            res.Add(new XYDTO() { XValue = "Non Compliant", YValue = facts.Where(o => o.notcomplaint).Count() });
+            res.Add(new XYDTO() { XValue = "Non Calculato", YValue = facts.Where(o => o.notcalculated).Count() });
             return res;
         }
-        public List<XYDTO> GetKPICountByOrganization(WidgetwithAggOptionDTO dto)
+        public List<XYZDTO> GetKPICountByOrganization(WidgetwithAggOptionDTO dto)
         {
-            var res = new List<XYDTO>();
-            res.Add(new XYDTO() { XValue = "BP", YValue = 30 });
-            res.Add(new XYDTO() { XValue = "Poste Pay", YValue = 20 });
-            res.Add(new XYDTO() { XValue = "Quantis", YValue = 25 });
-            res.Add(new XYDTO() { XValue = "Poste Service", YValue = 22 });
-            return res;
+            try
+            {
+                var result = new List<XYZDTO>();
+                var basedtos = new List<LandingPageBaseDTO>();
+                if (!dto.KPIs.Any())
+                {
+                    return null;
+                }
+                string query = @"select 
+                                c.customer_id, 
+                                c.customer_name, 
+                                s.sla_id, 
+                                s.sla_name, 
+                                gr.global_rule_name, 
+                                gr.global_rule_id, 
+                                psl.service_level_target_ce,
+                                psl.provided_ce,
+                                psl.resultpsl,
+                                psl.deviation_ce
+                                from 
+                                (
+                                  select  
+                                  temp.global_rule_id, 
+                                  temp.time_stamp as timestamp, 
+                                  temp.time_stamp_utc as end_period, 
+                                  temp.begin_time_stamp_utc as start_period, 
+                                  temp.sla_id, 
+                                  temp.rule_id, 
+                                  temp.time_unit,
+                                  temp.interval_length, 
+                                  temp.is_period, 
+                                  temp.service_level_target, 
+                                  temp.service_level_target_ce, 
+                                  temp.provided_ce, 
+                                  temp.deviation_ce, 
+                                  temp.complete_record,
+                                  temp.sla_version_id, 
+                                  temp.metric_type_id, 
+                                  temp.domain_category_id, 
+                                  temp.service_domain_id,
+                                  case 
+                                    when deviation_ce > 0 then 'non compliant'
+                                    when deviation_ce < 0 then 'compliant'
+                                    else 'nc'
+                                  end as resultPsl
+                                  from 
+                                  (
+                                    select * 
+                                    from t_psl_0_month pm
+                                    union all
+                                    select * 
+                                    from t_psl_0_quarter pq
+                                    union all
+                                    select * 
+                                    from t_psl_0_year py
+                                    union all
+                                    select * 
+                                    from t_psl_1_all pa
+                                  ) temp
+                                  where provided is not null 
+                                  and service_level_target is not null
+                                ) psl 
+                                left join t_rules r on  psl.rule_id = r.rule_id
+                                left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
+                                left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                                left join t_slas s on sv.sla_id = s.sla_id
+                                left join t_customers c on s.customer_id = c.customer_id
+                                where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
+                                and psl.time_unit='MONTH'
+                                and psl.complete_record=1
+                                and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and psl.global_rule_id in ({0})";
+                query = string.Format(query, string.Join(',', dto.KPIs));
+                using (OracleConnection con = new OracleConnection(_connectionstring))
+                {
+                    using (OracleCommand cmd = con.CreateCommand())
+                    {
+                        con.Open();
+                        cmd.BindByName = true;
+                        cmd.CommandText = query;
+                        OracleParameter param1 = new OracleParameter("start_period", dto.DateRange.Item1.AddDays(-1).ToString("yyyy-MM-dd"));
+                        OracleParameter param2 = new OracleParameter("end_period", dto.DateRange.Item2.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+                        cmd.Parameters.Add(param1);
+                        cmd.Parameters.Add(param2);
+                        OracleDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            basedtos.Add(new LandingPageBaseDTO()
+                            {
+                                ContractPartyId = Decimal.ToInt32((Decimal)reader[0]),
+                                ContractPartyName = (string)reader[1],
+                                ContractId = Decimal.ToInt32((Decimal)reader[2]),
+                                ContractName = (string)reader[3],
+                                GlobalRuleName = (string)reader[4],
+                                GlobalRuleId = Decimal.ToInt32((Decimal)reader[5]),
+                                Target = (double)reader[6],
+                                Actual = (double)reader[7],
+                                Result = (string)reader[8],
+                                Deviation = (double)reader[9],
+
+                            });
+                        }
+                        
+
+                    }
+                }
+                if(dto.AggregationOption == AggregationOption.KPI.Key)
+                {
+                    result.AddRange(basedtos.Where(o => o.Result == "compliant").GroupBy(o => new { o.GlobalRuleId, o.GlobalRuleName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.GlobalRuleName,
+                        YValue = o.Count(),
+                        ZValue = "Compliant"
+                    }));
+                    result.AddRange(basedtos.Where(o => o.Result != "compliant").GroupBy(o => new { o.GlobalRuleId, o.GlobalRuleName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.GlobalRuleName,
+                        YValue = o.Count(),
+                        ZValue = "Non Compliant"
+                    }));
+                }
+                if (dto.AggregationOption == AggregationOption.CONTRACT.Key)
+                {
+                    result.AddRange(basedtos.Where(o => o.Result == "compliant").GroupBy(o => new { o.ContractId, o.ContractName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.ContractName,
+                        YValue = o.Count(),
+                        ZValue = "Compliant"
+                    }));
+                    result.AddRange(basedtos.Where(o => o.Result != "compliant").GroupBy(o => new { o.ContractId, o.ContractName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.ContractName,
+                        YValue = o.Count(),
+                        ZValue = "Non Compliant"
+                    }));
+                }
+                if (dto.AggregationOption == AggregationOption.CONTRACTPARTY.Key)
+                {
+                    result.AddRange(basedtos.Where(o => o.Result == "compliant").GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.ContractPartyName,
+                        YValue = o.Count(),
+                        ZValue = "Compliant"
+                    }));
+                    result.AddRange(basedtos.Where(o => o.Result != "compliant").GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(o => new XYZDTO()
+                    {
+                        XValue = o.Key.ContractPartyName,
+                        YValue = o.Count(),
+                        ZValue = "Non Compliant"
+                    }));
+                }
+                return result;
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
         public XYDTO GetKPICountSummary(BaseWidgetDTO dto)
         {

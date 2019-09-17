@@ -36,6 +36,11 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         Number_of_escalation_type_1_received,
         [Description("Number of escalation type 2 received")]
         Number_of_escalation_type_2_received,
+        [Description("Number of Pending KPIs")]
+        Pending_KPIs,
+        [Description("Number of Pending Users")]
+        Pending_Users,
+
 
     }
     public static class ChartType

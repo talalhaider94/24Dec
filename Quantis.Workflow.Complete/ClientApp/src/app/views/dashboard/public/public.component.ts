@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
-import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
+import { TreeViewComponent, NodeSelectEventArgs  } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
@@ -37,9 +37,7 @@ export class PublicComponent implements OnInit {
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
 
-	@ViewChild('permissionsTree') permissionsTree: TreeViewComponent;
-	treesArray = [];
-	isTreeLoaded = false;
+	@ViewChild('organizationTree') organizationTree: TreeViewComponent;
 	public treeFields: any = {
 		dataSource: [],
 		id: 'id',
@@ -47,7 +45,9 @@ export class PublicComponent implements OnInit {
 		child: 'children',
 		title: 'name'
 	};
-	preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
+	// preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
+	preSelectedNodes = [];
+	treeDataFields: Object;
 	allLeafNodesIds = [];
 	uncheckedNodes = [];
 	from_changed;
@@ -114,7 +114,6 @@ export class PublicComponent implements OnInit {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
-				debugger
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				// this.createTrees(childData.data.organizationHierarchy);
@@ -303,7 +302,8 @@ export class PublicComponent implements OnInit {
 				}
 
 				if (getOrgHierarcy && getOrgHierarcy.length > 0) {
-					this.createTrees(getOrgHierarcy);
+					this.treeDataFields = { dataSource: getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
+					this.getAllLeafNodesIds(getOrgHierarcy);
 				}
 
 			} else {
@@ -311,7 +311,6 @@ export class PublicComponent implements OnInit {
 			}
 			this.emitter.loadingStatus(false);
 		}, error => {
-			this.isTreeLoaded = true;
 			this.emitter.loadingStatus(false);
 			this.toastr.error('Error while fetching dashboards');
 			console.error('Get Dashboard Data', error);
@@ -387,31 +386,6 @@ export class PublicComponent implements OnInit {
 		});
 	}
 
-	// fromCalendar(container1) {
-	// 	container1.monthSelectHandler = (event: any): void => {
-	// 		container1._store.dispatch(container1._actions.select(event.date));
-	// 		this.from_changed=1;
-
-	// 		if(this.from_changed==1){
-	// 			this.showCustomDate=false;
-	// 		}else{
-	// 			this.showCustomDate=true;
-	// 		}
-	// 	};
-	// 	container1.setViewMode('month');
-	// }
-
-	// toCalendar(container2) {
-	// 	container2.monthSelectHandler = (event: any): void => {
-	// 		container2._store.dispatch(container2._actions.select(event.date));
-	// 	};
-	// 	container2.setViewMode('month');
-	// } 
-
-	// fromChanged(){
-	// 	console.log('fromChanged');
-	// }
-
 	changedOptions() {
 		this.options.api.optionsChanged();
 	}
@@ -424,34 +398,15 @@ export class PublicComponent implements OnInit {
 		this.itemChange();
 	}
 
-	syncSelectedNodesArray(event, treeRef) {
-		// this.allLeafNodesIds = [];
-		// this.getAllLeafNodesIds(treeRef.settings.dataSource);
-		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.permissionsTree.checkedNodes.indexOf(value.toString()) == -1);
-		console.log(this.uncheckedNodes, this.uncheckedNodes.join(','));
-		console.log('permissionsTree.checkedNodes->', this.permissionsTree.checkedNodes.length);
-		treeRef.loaded = true;
+	organizationTreeNodeCheckEvent($event) {
+		alert("All Checked Nodes" + this.organizationTree.checkedNodes);
+		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
-	createTrees(treesData) {
-		console.log('treesData ->', treesData);
-		//treesData.forEach((itm: any) => {
-			let settings = { dataSource: treesData, id: 'id', text: 'name', title: 'name', child: 'children', hasChildren: 'children' };
-			this.treesArray.push({
-				name: treesData.name,
-				settings: settings,
-				checkedNodes: this.preSelectedNodes,
-				id: treesData.id,
-				elementId: `permissions_tree_${treesData.id}`,
-				loaded: true
-			});
-			this.allLeafNodesIds = [];
-			this.getAllLeafNodesIds(treesData);
-			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
-			//this.permissionsTree.uncheckAll(this.uncheckedNodes);
-		//});
-		console.log('this.treesArray ->', this.treesArray);
-		this.isTreeLoaded = true;
+	
+	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
+        alert("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
+	
 	getAllLeafNodesIds(complexJson) {
 		if (complexJson) {
 			complexJson.forEach((item: any) => {
@@ -461,7 +416,7 @@ export class PublicComponent implements OnInit {
 					this.allLeafNodesIds.push(item.id);
 				}
 			});
-			//console.log('allLeafNodesIds ->', this.allLeafNodesIds);
+			console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
 	}
 
@@ -487,12 +442,10 @@ export class PublicComponent implements OnInit {
 		delete formValues.Filters.startDate;
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
-		// console.log('permissionsTree length->',this.permissionsTree.checkedNodes.length);
-		// console.log('allLeafNodesIds->',this.allLeafNodesIds);
-		if(this.permissionsTree.checkedNodes.length == 0){
+		if(this.organizationTree.checkedNodes.length == 0){
 			formValues.Filters.organizations = this.allLeafNodesIds.join(',');
 		}else{
-			formValues.Filters.organizations = this.permissionsTree.checkedNodes.join(',');
+			formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
@@ -616,9 +569,9 @@ export class PublicComponent implements OnInit {
 		if (add === false) {
 			load = true;
 		}
-		this.treesArray.forEach((itm: any) => {
-			itm.loaded = load;
-		});
+		// this.treesArray.forEach((itm: any) => {
+		// 	itm.loaded = load;
+		// });
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {

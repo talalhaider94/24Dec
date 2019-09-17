@@ -22,12 +22,17 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
-            
+            vm.ShowMeasure = true;
+            vm.ShowOrganization = false;
+            vm.AddMeasure(Measures.Pending_KPIs);
+            vm.AddMeasure(Measures.Pending_Users);
+
         }
 
         internal override object GetData(WidgetParametersDTO props)
         {
-            var result = _widgetService.GetCatalogPendingCount();
+            var dto = _globalfilterService.MapBaseWidget(props);
+            var result = _widgetService.GetCatalogPendingCount(dto);
             return result;
         }
     }
