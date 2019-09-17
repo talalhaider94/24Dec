@@ -55,10 +55,15 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('searchCol4') searchCol4: ElementRef;
   @ViewChild('searchCol5') searchCol5: ElementRef;
   @ViewChild('btnExporta') btnExporta: ElementRef;
-  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
   @ViewChild('topScrollContainer') topScrollContainer: ElementRef;
   @ViewChild('topScroll') topScroll: ElementRef;
   @ViewChild('topScrollTblContainer') topScrollTblContainer: ElementRef;
+  @ViewChild(DataTableDirective)
+  datatableElement: DataTableDirective;
+  dtTrigger: Subject<any> = new Subject();
+  // dtOptions: DataTables.Settings = {};
+  // dtOptions: any = {};
+  //dtTrigger = new Subject();
 
   viewModel = {
     filters: {
@@ -73,7 +78,7 @@ export class CatalogoKpiComponent implements OnInit {
   dtOptions = {
     //'dom': 'rtip',
     "columnDefs": [{
-      "targets": [14],
+      "targets": [11],
       "visible": false,
       "searchable": true
     }],
@@ -152,7 +157,6 @@ export class CatalogoKpiComponent implements OnInit {
     sla_id_bsi: ''
   };
 
-  dtTrigger: Subject<any> = new Subject();
   kpiTableHeadData = [
     {
       ABILITATO: 'ABILITATO',
@@ -201,7 +205,7 @@ export class CatalogoKpiComponent implements OnInit {
     this.dtOptions = {
       //'dom': 'rtip',
       "columnDefs": [{
-        "targets": [14],
+        "targets": [12],
         "visible": false,
         "searchable": true
       }],
@@ -229,6 +233,7 @@ export class CatalogoKpiComponent implements OnInit {
         }
       }
     };
+    
     this.getForms();
 
     this.userPermissions = this.auth.getUser().permissions;

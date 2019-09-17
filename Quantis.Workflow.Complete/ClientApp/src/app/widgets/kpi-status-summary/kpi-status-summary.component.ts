@@ -23,7 +23,7 @@ export class KpiStatusSummaryComponent implements OnInit {
   @Output()
   kpiStatusSummaryParent = new EventEmitter<any>();
   kpiStatusSummaryData: any = [];
-
+  preSelectedNodes = ['1075', '1000', '1065', '1055', '1090', '1050', '1005', '1015', '1085', '1080', '1020', '1001'];
   constructor(
     private dashboardService: DashboardService,
     private emitter: EmitterService,
@@ -75,7 +75,9 @@ export class KpiStatusSummaryComponent implements OnInit {
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
+        debugger
         let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+        newParams.Filters.organizations = this.preSelectedNodes.join(',');
         return this.dashboardService.getWidgetIndex(url, newParams);
       })
     ).subscribe(getWidgetIndex => {
