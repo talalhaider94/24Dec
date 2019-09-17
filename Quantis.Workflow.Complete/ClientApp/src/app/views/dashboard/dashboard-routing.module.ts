@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PublicComponent } from './public/public.component';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
+import { LandingPageComponent } from './landingpage/landingpage.component';
 import { ChartDataComponent } from './chartdata/chartdata.component';
 const routes: Routes = [
   // {
@@ -43,6 +44,13 @@ const routes: Routes = [
     component: ChartDataComponent,
     data: {
       title: 'Chart Data'
+    }
+  },
+  { 
+    path: 'landingpage',
+    component: LandingPageComponent,
+    data: {
+      title: 'Landing Page'
     }
   }
 ];

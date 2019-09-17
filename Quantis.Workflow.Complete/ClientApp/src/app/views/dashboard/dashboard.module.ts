@@ -21,6 +21,7 @@ import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-ch
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
+import { LandingPageComponent } from './landingpage/landingpage.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
@@ -78,7 +79,8 @@ import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-
     NotificationTrendComponent,
     KpiCountByOrganizationComponent,
     ChartDataComponent,
-    KpiStatusSummaryComponent
+    KpiStatusSummaryComponent,
+    LandingPageComponent
   ]
 })
 export class DashboardModule { }
