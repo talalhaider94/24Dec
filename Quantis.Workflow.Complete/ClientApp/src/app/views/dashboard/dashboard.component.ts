@@ -195,15 +195,15 @@ export class DashboardComponent implements OnInit {
 			this.getData(this.dashboardId);
 		});
 		//Danial: need to improve method to call only dashboard widgets and remove widgets call
-		this.apiService.getSeconds().subscribe((data: any) => {
-			var secondsValue = data + '000';
-			var seconds = parseInt(secondsValue);
-			console.log("Auto Refresh Seconds: ", seconds);
+		// this.apiService.getSeconds().subscribe((data: any) => {
+		// 	var secondsValue = data + '000';
+		// 	var seconds = parseInt(secondsValue);
+		// 	console.log("Auto Refresh Seconds: ", seconds);
 
-			interval(seconds).subscribe(count => {
-				this.getData(this.dashboardId);
-			})
-		});
+		// 	interval(seconds).subscribe(count => {
+		// 		this.getData(this.dashboardId);
+		// 	})
+		// });
 		this.changeWidgetName();
 
 	}
