@@ -313,6 +313,13 @@ clear(){
   this.hideSearchModal();
   }
 
+clear1(){
+    this.filter = '';
+    this.fitroDataById=[];
+    this.campoData=[];
+    this.p=1;
+    this.hideDaModal();
+    }
 
   setId(id){
     this.periodFilter = 0;
