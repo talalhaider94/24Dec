@@ -14,10 +14,10 @@
     <!-- Main row -->
     <div class="row">
       <!-- Left col -->
-       <section class="col-lg-3 connectedSortable">
+       <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
         <div class= "box box-danger box-solid" style="border:2px solid #dd4b39">
          <div class="box-header with-border">
-          <h3 class="box-title">Banco Posta</h3>
+          <h3 class="box-title">{{row.contractpartyname}}</h3>
             <!-- /.box-tools -->
         </div>
           <div class= "box-body">
@@ -32,7 +32,7 @@
             <div class="row">
               <div class="col-sm-6 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">22</h5>
+                  <h5 class="description-header">{{row.totalcontracts}}</h5>
                   <p class="description-text">Contratti</p>
                 </div>
                 <!-- /.description-block -->
@@ -40,7 +40,7 @@
               <!-- /.col -->
               <div class="col-sm-6">
                 <div class="description-block">
-                  <h5 class="description-header">41</h5>
+                  <h5 class="description-header">{{row.totalkpis}}</h5>
                   <p class="description-text">KPI</p>
                 </div>
                 <!-- /.description-block -->
@@ -50,26 +50,24 @@
           </div>
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
-                <li><a href="#">Severity Contratti
+                <li class="top-border"><a href="#">Severity Contratti
               <div class="progress" style="height: 20px">
                 <div class="progress-bar active progress-bar-success" role="progressbar" style="width:77%; height:100%">17</div>
               <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:5%; height:100%;">1</div>
               <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:18%; height:100%;">4</div>
             </div></a></li>
-              <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">9</span></a></li>
-              <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">11</span></a></li>
-              <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">21</span></a></li>
+              <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li>
+              <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">{{row.noncomplaintkpis}}</span></a></li>
+              <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">{{row.complaintkpis}}</span></a></li>
             </ul>
             
           </div>
           <!-- /.box-body -->
         </div>
-          <div class="box box-default box-solid" style="border: 1px solid #999">
+          <!-- <div class="box box-default box-solid" style="border: 1px solid #999">
           <div class="box-header with-border" style="padding:5px;">
             <h3 class="box-title" style= "font-size: 18px">Underperforming Contract</h3>
-            <!-- /.box-tools -->
           </div>
-          <!-- /.box-header -->
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
               <li><a href="#">Nome Contratto<span class="pull-right"><b>Disciplinare SI</b></span></a></li>
@@ -82,11 +80,10 @@
             </div></a></li>
             </ul>
           </div>
-          <!-- /.box-body -->
-        </div>
-         <div class="box box-default box-solid" style="border: 1px solid #999">
+        </div> -->
+        <div class="box box-default box-solid" style="border: 1px solid #999">
           <div class="box-header with-border" style="padding:5px;">
-            <h3 class="box-title" style= "font-size: 18px">Underperforming Contracts</h3>
+            <h3 class="box-title" style= "font-size: 18px">Better Performing Contracts</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body no-padding">
@@ -95,438 +92,52 @@
                 <th>#</th>
                 <th>Contratto</th>
                 <th></th>
-                <th>Non Compliant</th>
-                <th>Escalation</th>
+                <th>Compliant</th>
+                <!-- <th>Escalation</th> -->
               </tr>
-              <tr>
-                <td>1.</td>
-                <td>Contratto_1</td>
+              <tr *ngFor="let b of row.bestcontracts; index as j">
+                <td>{{j+1}}.</td>
+                <td>{{b.contractname}}</td>
                 <td></td>
-                <td class="center-td"><span class="badge bg-orange">4</span></td>
-                <td class="center-td"><span class="badge bg-red">3</span> </td>
+                <td class="center-td"><span class="badge bg-green">{{b.complaintkpis}}</span></td>
+                <!-- <td class="center-td"><span class="badge bg-red">3</span></td> -->
               </tr>
-              <tr>
-                <td>2.</td>
-                <td>Contratto_2</td>
-                <td></td>
-                <td class="center-td"><span class="badge bg-orange">2</span></td>
-                <td class="center-td"><span class="badge bg-red">3</span></td>
-              </tr>
-              <tr>
-                <td>3.</td>
-                <td>Contratto_3</td>
-                <td></td>
-                <td class="center-td"><span class="badge bg-orange">2</span></td>
-                <td class="center-td"><span class="badge bg-red">2</span></td>
-              </tr>
-              <tr>
-                <td>4.</td>
-                <td>Contratto_4</td>
-                <td>
-                </td>
-                <td class="center-td"><span class="badge bg-orange">2</span></td>
-                <td class="center-td"><span class="badge bg-red">1</span></td>
-              </tr>
-              <tr>
-                <td>5.</td>
-                <td>Contratto_5</td>
-                <td>
-                </td>
-                <td class="center-td"><span class="badge bg-orange">1</span> </td>
-                <td class="center-td"><span class="badge bg-red">0</span></td>
-              </tr>                
             </table>
           </div>
           <!-- /.box-body -->
         </div>
+
+        <div class="box box-default box-solid" style="border: 1px solid #999">
+            <div class="box-header with-border" style="padding:5px;">
+                <h3 class="box-title" style= "font-size: 18px">Under Performing Contracts</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>Contratto</th>
+                    <th></th>
+                    <th>Non Compliant</th>
+                    <!-- <th>Escalation</th> -->
+                </tr>
+                <tr *ngFor="let w of row.worstcontracts; index as k">
+                    <td>{{k+1}}.</td>
+                    <td>{{w.contractname}}</td>
+                    <td></td>
+                    <td class="center-td"><span class="badge bg-orange">{{w.noncomplaintkpis}}</span></td>
+                    <!-- <td class="center-td"><span class="badge bg-red">3</span></td> -->
+                </tr>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div> 
       </div>
     </div>
     </section>
+   </div>
+</section>
   
-        <section class="col-lg-3 connectedSortable">
-          <div class= "box box-warning box-solid" style="border:2px solid #f39c12">
-            <div class="box-header with-border">
-              <h3 class="box-title">PostePay</h3>
-              <!-- /.box-tools -->
-            </div>
-            <div class= "box-body">
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Contratti</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <!--The body of the box-->
-                  <div class="row">
-                    <div class="col-sm-6 border-right">
-                      <div class="description-block">
-                        <h5 class="description-header">11</h5>
-                        <p class="description-text">Contratti</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-6">
-                      <div class="description-block">
-                        <h5 class="description-header">452</h5>
-                        <p class="description-text">KPI</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                </div>
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Severity Contratti
-                      <div class="progress">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:55%; height:100%">6</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:45%; height:100%;">5</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                    <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li>
-                    <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">17</span></a></li>
-                    <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">435</span></a></li>
-                  </ul>
-  
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Underperforming Contract</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Nome Contratto<span class="pull-right"><b>Contratto Unico</b></span></a></li>
-                    <li><a href="#">Numero KPI<span class="pull-right"><b>110</b></span></a></li>
-                    <li><a href="#">Severity KPI
-                      <div class="progress" style="height: 20px">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:91%; height:100%">100</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:9%; height:100%;">10</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                  </ul>
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Underperforming Contracts</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                  <table class="table table-striped">
-                    <tr>
-                      <th>#</th>
-                      <th>Contratto</th>
-  
-                      <th>Non Compliant</th>
-                      <th>Escalation</th>
-                    </tr>
-                    <tr>
-                      <td>1.</td>
-                      <td>Contratto_1</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-orange">10</span></td>
-                      <td style="text-align: center;"><span class="badge bg-red">0</span></td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Contratto_2</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-orange">3</span></td>
-                      <td style="text-align: center;"><span class="badge bg-red">0</span></td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>Contratto_3</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-orange">2</span></td>
-                      <td style="text-align: center;"><span class="badge bg-red">0</span></td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>Contratto_4</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-orange">1</span></td>
-                      <td style="text-align: center;"><span class="badge bg-red">0</span></td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td>Contratto_5</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-orange">1</span></td>
-                      <td style="text-align: center;"><span class="badge bg-red">0</span></td>
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
-            </div>
-          </div>
-        </section>
-  
-        <section class="col-lg-3 connectedSortable">
-          <div class= "box box-success box-solid" style="border:2px solid #00a65a">
-            <div class="box-header with-border" style="padding:7px;">
-              <h3 class="box-title">COO</h3>
-              <!-- /.box-tools -->
-            </div>
-            <div class= "box-body">
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px">
-                  <h3 class="box-title" style= "font-size: 18px">Contratti</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <!--The body of the box-->
-                  <div class="row">
-                    <div class="col-sm-6 border-right">
-                      <div class="description-block">
-                        <h5 class="description-header">5</h5>
-                        <p class="description-text">Contratti</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-6">
-                      <div class="description-block">
-                        <h5 class="description-header">30</h5>
-                        <p class="description-text">KPI</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                </div>
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Severity Contratti
-                      <div class="progress" style="height: 20px">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:100%; height:100%">5</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:0%; height:100%">0</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                    <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li>
-                    <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">0</span></a></li>
-                    <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">30</span></a></li>
-                  </ul>
-  
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px">
-                  <h3 class="box-title" style= "font-size: 18px">Better Performing Contract</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Nome Contratto<span class="pull-right"><b>Contratto Prova</b></span></a></li>
-                    <li><a href="#">Numero KPI<span class="pull-right"><b>10</b></span></a></li>
-                    <li><a href="#">Severity KPI
-                      <div class="progress" style="height: 20px">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:100%; height:100%">10</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:0%; height:100%">0</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                  </ul>
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Better Performing Contracts</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                  <table class="table table-striped">
-                    <tr>
-                      <th>#</th>
-                      <th>Contratto</th>
-  
-                      <th style="text-align: center;">Compliant</th>
-  
-                    </tr>
-                    <tr>
-                      <td>1.</td>
-                      <td>Contratto_1</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">10</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Contratto_2</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">6</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>Contratto_3</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">5</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>Contratto_4</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">5</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td>Contratto_5</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">4</span></td>
-  
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
-            </div>
-          </div>
-        </section>
-  
-        <section class="col-lg-3 connectedSortable">
-          <div class= "box box-success box-solid" style="border:2px solid #00a65a">
-            <div class="box-header with-border" style="padding:7px;">
-              <h3 class="box-title">Disciplinare Banco Posta</h3>
-              <!-- /.box-tools -->
-            </div>
-            <div class= "box-body">
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Contratti</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <!--The body of the box-->
-                  <div class="row">
-                    <div class="col-sm-6 border-right">
-                      <div class="description-block">
-                        <h5 class="description-header">9</h5>
-                        <p class="description-text">Contratti</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-6">
-                      <div class="description-block">
-                        <h5 class="description-header">52</h5>
-                        <p class="description-text">KPI</p>
-                      </div>
-                      <!-- /.description-block -->
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                </div>
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Severity Contratti
-                      <div class="progress" style="height: 20px">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:100%; height:100%">9</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:0%; height:100%">0</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                    <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li>
-                    <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">0</span></a></li>
-                    <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">52</span></a></li>
-                  </ul>
-  
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Better Perfoming Contract</h3>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-footer no-padding">
-                  <ul class="nav nav-stacked">
-                    <li><a href="#">Nome Contratto<span class="pull-right"><b>Contratto Test</b></span></a></li>
-                    <li><a href="#">Numero KPI<span class="pull-right"><b>15</b></span></a></li>
-                    <li><a href="#">Severity KPI
-                      <div class="progress" style="height: 20px">
-                        <div class="progress-bar active progress-bar-success" role="progressbar" style="width:100%; height:100%">15</div>
-                        <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:0%; height:100%">0</div>
-                        <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:0%; height:100%;">0</div>
-                      </div></a></li>
-                  </ul>
-                </div>
-                <!-- /.box-body -->
-              </div>
-              <div class="box box-default box-solid" style="border: 1px solid #999">
-                <div class="box-header with-border" style="padding:5px;">
-                  <h3 class="box-title" style= "font-size: 18px">Better Performing Contracts</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                  <table class="table table-striped">
-                    <tr>
-                      <th>#</th>
-                      <th>Contratto</th>
-  
-                      <th style="text-align: center;">Compliant</th>
-  
-                    </tr>
-                    <tr>
-                      <td>1.</td>
-                      <td>Contratto_1</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">15</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Contratto_2</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">8</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>Contratto_3</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">7</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>Contratto_4</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">5</span></td>
-  
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td>Contratto_5</td>
-  
-                      <td style="text-align: center;"><span class="badge bg-green">5</span></td>
-  
-                    </tr>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
-            </div>
-          </div>
-        </section>
-  
-      </div>
-    </section>
-  
-  </div><!--/.wrapper-->
+</div><!--/.wrapper-->
   
   
