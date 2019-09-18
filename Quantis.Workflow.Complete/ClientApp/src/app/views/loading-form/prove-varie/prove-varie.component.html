@@ -143,7 +143,7 @@
                     <label class="form-check-label" for="inline-checkbox1"><b>Nessun Evento</b></label><!--Dati non Pervenuti-->
                   </div>
                 </div>
-                <div class="col-sm-5 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
+                <div class="col-sm-6 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
                   <button type="submit" class="btn btn-primary" (click)="after_submit('save')"
                           [disabled]="!myInputForm.valid || loading || formElementsLoading">
                     <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
@@ -214,6 +214,9 @@
               </div>
             </div>
             <!--/.row-->
+            <div *ngIf='loadingAttachments' class="text-center mb-3">
+                <span class="fa fa-spin fa-spinner fa-2x text-primary"></span>
+              </div>
             <table class="table table-responsive-sm table-hover table-outline mb-3 text-center">
               <thead>
                 <tr>

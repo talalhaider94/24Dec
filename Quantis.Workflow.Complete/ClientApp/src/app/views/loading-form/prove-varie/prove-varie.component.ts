@@ -89,6 +89,7 @@ export class ProveVarieComponent implements OnInit {
   isCollapsed = true;
   fileUploadMonth: string[] = [];
   fileUploadYear: string[] = [];
+  loadingAttachments: boolean = false;
   constructor(
     private fb: FormBuilder,
     private loadingFormService: LoadingFormService,
@@ -399,13 +400,16 @@ export class ProveVarieComponent implements OnInit {
   }
 
   _getAttachmentsByFormIdEndPoint(formId: number, shouldTrigger: boolean) {
+    this.loadingAttachments = true;
     this.loadingFormService.getAttachmentsByFormId(formId).pipe().subscribe(data => {
+      this.loadingAttachments = false;
       console.log('_getAttachmentsByFormIdEndPoint ==>', data);
       if (data) {
         this.formAttachmentsArray = data;
         this.onDataChange();
       }
     }, error => {
+      this.loadingAttachments = false;
       console.error('_getAttachmentsByFormIdEndPoint ==>', error);
       this.toastr.error('Errore durante la lettura degli allegati.');
     })
