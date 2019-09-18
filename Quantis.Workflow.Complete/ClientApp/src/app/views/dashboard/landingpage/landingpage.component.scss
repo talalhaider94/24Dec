@@ -118,9 +118,10 @@ ul {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     padding-inline-start: 40px;
+    margin-top: -5px;
 }
 li{
-    margin-left: -50px !important;
+    margin-left: -40px !important;
 }
 table {
     border-spacing: 0;
@@ -140,4 +141,16 @@ tbody {
     padding: 1px;
     line-height: 1.42857143;
     vertical-align: top;
+}
+.nav>li>a:hover{
+    color: #444;
+    background: #f7f7f7;
+    text-decoration: none;
+}
+.nav>li>a{
+    margin-left: -10px !important;
+}
+.top-border{
+    border-top: 1px solid #f4f4f4;
+    margin: 0;
 }

@@ -16,7 +16,25 @@ import { UUID } from 'angular2-uuid';
 	 styleUrls: ['landingpage.component.scss']
 })
 export class LandingPageComponent implements OnInit {
+	public period = '02/2019';
+	gridsData: any = [];
+	bestContracts: any = [];
+	count = 0;
+	constructor(
+		private dashboardService: DashboardService,
+		private apiService: ApiService,
+		private _route: ActivatedRoute,
+		private emitter: EmitterService,
+		private toastr: ToastrService,
+		private formBuilder: FormBuilder,
+		private dateTime: DateTimeService
+	) { }
 	ngOnInit(): void {
 
+		this.apiService.getLandingPage(this.period).subscribe((data: any) => {
+			this.gridsData = data;
+			console.log("Landing Page Data: ", this.gridsData);
+			//console.log("bestContracts: ", this.bestContracts);			
+		});
     }
 }

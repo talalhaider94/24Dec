@@ -1,15 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { WorkFlowService } from '../../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FileSaverService } from 'ngx-filesaver';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import WorkFlowHelper from '../../../_helpers/workflow';
-
+import { FileHelpersService } from '../../../_helpers';
 declare var $;
 let $this;
 
@@ -47,10 +45,9 @@ export class RicercaComponent implements OnInit, OnDestroy {
   yearOption;
 
   constructor(
-    private router: Router,
     private workFlowService: WorkFlowService,
-    private _FileSaverService: FileSaverService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private fileHelper: FileHelpersService
   ) {
     $this = this;
   }
@@ -157,29 +154,8 @@ export class RicercaComponent implements OnInit, OnDestroy {
   }
 
   downloadFile(fileName, fileHandler) {
-    let extension = fileName.split('.').pop();
-    let prefix = '';
-
     this.workFlowService.downloadAttachment(fileHandler).pipe(first()).subscribe(base64Data => {
-      if (extension === 'pdf') {
-        prefix = `data:application/pdf;base64,${base64Data}`;
-      } else if (extension === 'png') {
-        prefix = `data:image/png;base64,${base64Data}`;
-      } else if (extension === 'jpg') {
-        prefix = `data:image/jpg;base64,${base64Data}`;
-      } else if (extension === 'csv') {
-        prefix = `data:application/octet-stream;base64,${base64Data}`;
-      } else if (extension === 'xlsx') {
-        prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
-      } else if (extension === 'txt') {
-        prefix = `data:text/plain;base64,${base64Data}`;
-      } else {
-        console.log('DOWNLOADED FILE COULD BE CORRUPTED')
-        prefix = `data:text/plain;base64,${base64Data}`;
-      }
-      fetch(prefix).then(res => res.blob()).then(blob => {
-        this._FileSaverService.save(blob, fileName);
-      });
+      this.fileHelper.downloadFile(base64Data, fileName);
     }, error => {
       this.toastr.error('Error while downloading from Server.')
       console.error('downloadFile ==>', error)
