@@ -4,10 +4,9 @@ import { FileUploader } from 'ng2-file-upload';
 import { FormAttachments, FormField, UserSubmitLoadingForm, Form, FileUploadModel } from '../../../_models';
 import * as moment from 'moment';
 import { LoadingFormService, AuthService } from '../../../_services';
+import { FileHelpersService  } from '../../../_helpers';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from "@angular/router";
-import { HttpClient } from '@angular/common/http';
-import { FileSaverService } from 'ngx-filesaver';
 import Swal from 'sweetalert2';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, retryWhen } from 'rxjs/operators';
@@ -97,8 +96,7 @@ export class ProveVarieComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private _FileSaverService: FileSaverService,
-    private http: HttpClient
+    private fileHelper: FileHelpersService
   ) { }
   monthOption;
   yearOption;
@@ -582,30 +580,7 @@ export class ProveVarieComponent implements OnInit {
   }
 
   downloadFile(base64Data, fileName) {
-    let extension = fileName.split('.').pop();
-    let prefix = '';
-    if (extension === 'pdf') {
-      prefix = `data:application/pdf;base64,${base64Data}`;
-    } else if (extension === 'png') {
-      prefix = `data:image/png;base64,${base64Data}`;
-    } else if (extension === 'jpg') {
-      prefix = `data:image/jpg;base64,${base64Data}`;
-    } else if (extension === 'csv') {
-      prefix = `data:application/octet-stream;base64,${base64Data}`;
-    } else if (extension === 'xlsx') {
-      prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
-    } else if (extension === 'txt') {
-      prefix = `data:text/plain;base64,${base64Data}`;
-    }
-
-    this.http.get(prefix,
-      {
-        observe: 'response',
-        responseType: 'blob'
-      }).subscribe(data => {
-        this._FileSaverService.save(data.body, fileName);
-
-      })
+    this.fileHelper.downloadFile(base64Data, fileName);
   }
   
   onFileSelected(event) {
