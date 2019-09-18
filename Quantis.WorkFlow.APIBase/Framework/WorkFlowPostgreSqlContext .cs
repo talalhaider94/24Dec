@@ -56,6 +56,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<DB_Widget> DB_Widgets { get; set; }
         public DbSet<DB_WidgetCategory> DB_WidgetCategories { get; set; }
         public DbSet<T_Sla> Slas { get; set; }
+        public DbSet<T_UserLandingPage> UserLandingPages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -97,6 +98,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new DB_GlobalFilterSetting_Configuration());
             builder.ApplyConfiguration(new DB_Widget_Configuration());
             builder.ApplyConfiguration(new DB_WidgetCategory_Configuration());
+            builder.ApplyConfiguration(new T_UserLandingPage_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -141,6 +143,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<DB_GlobalFilterSetting>();
             updateUpdatedProperty<DB_Widget>();
             updateUpdatedProperty<DB_WidgetCategory>();
+            updateUpdatedProperty<T_UserLandingPage>();
             return base.SaveChanges();
         }
 

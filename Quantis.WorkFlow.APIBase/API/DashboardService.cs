@@ -89,6 +89,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     dashnew.IsDefault = true;
                     _dbcontext.SaveChanges();
                 }
+                var lp=_dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                if (lp != null)
+                {
+                    lp.selected_landingpage = false;
+                    _dbcontext.SaveChanges();
+                }
+
             }
             catch (Exception e)
             {

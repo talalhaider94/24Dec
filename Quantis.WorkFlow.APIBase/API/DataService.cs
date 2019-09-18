@@ -513,6 +513,117 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             
         }
+        public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
+        {
+            try
+            {
+                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null).ToList();
+                var userDtos= _userMapper.GetDTOs(users.ToList());
+                var landingpages=_dbcontext.UserLandingPages.ToList();
+                return (from usrs in userDtos
+                join landpages in landingpages on usrs.ca_bsi_user_id equals landpages.user_id
+                into gj
+                from subset in gj.DefaultIfEmpty()
+                select new UserLandingPageLVDTO()
+                {
+                    ca_bsi_account = usrs.ca_bsi_account,
+                    ca_bsi_user_id = usrs.ca_bsi_user_id,
+                    id = usrs.id,
+                    mail = usrs.mail,
+                    manager = usrs.manager,
+                    name = usrs.name,
+                    organization = usrs.organization,
+                    surname = usrs.surname,
+                    userid = usrs.userid,
+                    show_landingpage = subset == null ? false : subset.show_landingpage
+                }).ToList();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+        public void SetLandingPageByUser(int userId,bool set)
+        {
+            try
+            {
+                var lp = _dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                if (lp == null)
+                {
+                    var newlp = new T_UserLandingPage()
+                    {
+                        user_id = userId,
+                        show_landingpage = set,
+                        selected_landingpage = false
+                    };
+                    _dbcontext.UserLandingPages.Add(newlp);
+                    _dbcontext.SaveChanges();
+                }
+                else
+                {
+                    lp.show_landingpage = set;
+                    if (set == false)
+                    {
+                        lp.selected_landingpage = false;
+                    }
+                    _dbcontext.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public UserLandingPageDTO GetLandingPageInformation(int userId)
+        {
+            try
+            {
+                var lp = _dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                if (lp == null)
+                {
+                    return new UserLandingPageDTO()
+                    {
+                        UserId = userId,
+                        SelectedLandingPage = false,
+                        ShowLandingPage = false
+                    };
+                }
+                else
+                {
+                    return new UserLandingPageDTO()
+                    {
+                        UserId = userId,
+                        ShowLandingPage = lp.show_landingpage,
+                        SelectedLandingPage = lp.selected_landingpage
+                    };
+                }                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        public void SelectLandingPage(int userId)
+        {
+            try
+            {
+                var lp=_dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                lp.selected_landingpage = true;
+                _dbcontext.SaveChanges();
+                var dashboards=_dbcontext.DB_Dashboards.Where(o => o.UserId == userId);
+                foreach(var db in dashboards)
+                {
+                    db.IsDefault = false;
+                }
+                _dbcontext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<UserDTO> GetUsersByRoleId(int roleId)
         {
             try
