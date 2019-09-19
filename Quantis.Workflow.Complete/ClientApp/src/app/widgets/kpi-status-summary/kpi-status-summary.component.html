@@ -13,7 +13,6 @@
     <table class="table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
             <tr>
-                <th>Contratto</th>
                 <th>ID KPI</th>
                 <th>Descrizione KPI</th>
                 <th>Dettagli</th>
@@ -39,7 +38,6 @@
                 <td colspan="22">No data found.</td>
             </tr>
             <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
-              <td><b>Contraente:</b> {{ kpiStatus.contractparty }}<br /><b>Contratto:</b> {{ kpiStatus.contract }}</td>
                 <td>{{ kpiStatus.idkpi }}</td>
                 <td>{{ kpiStatus.descrizionekpi }}</td>
                 <td>Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>

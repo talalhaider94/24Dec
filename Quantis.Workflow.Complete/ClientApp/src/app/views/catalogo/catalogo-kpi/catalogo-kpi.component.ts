@@ -23,6 +23,8 @@ export class CatalogoKpiComponent implements OnInit {
   @ViewChild('referentiModal') public referentiModal: ModalDirective;
   @ViewChild('calcoloModal') public calcoloModal: ModalDirective;
   @ViewChild('kpiModal') public kpiModal: ModalDirective;
+  dtOptions: any = {};
+
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -32,6 +34,48 @@ export class CatalogoKpiComponent implements OnInit {
     private auth: AuthService
   ) {
     $this = this;
+
+    this.dtOptions = {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'csv',
+          text: '<i class="fa fa-file"></i> Esporta CSV',
+          titleAttr: 'Esporta CSV',
+          className: 'btn btn-primary mb-3'
+        },
+      ],
+      //'dom': 'rtip',
+      "columnDefs": [{
+        "targets": [11],
+        "visible": false,
+        "searchable": true
+      }],
+      deferRender: true,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
+  
   }
   loading: boolean = true;
   public des = '';
@@ -62,7 +106,6 @@ export class CatalogoKpiComponent implements OnInit {
   datatableElement: DataTableDirective;
   dtTrigger: Subject<any> = new Subject();
   // dtOptions: DataTables.Settings = {};
-  // dtOptions: any = {};
   //dtTrigger = new Subject();
 
   viewModel = {
@@ -75,37 +118,6 @@ export class CatalogoKpiComponent implements OnInit {
     }
   };
 
-  dtOptions = {
-    //'dom': 'rtip',
-    "columnDefs": [{
-      "targets": [11],
-      "visible": false,
-      "searchable": true
-    }],
-    deferRender: true,
-    language: {
-      processing: "Elaborazione...",
-      search: "Cerca:",
-      lengthMenu: "Visualizza _MENU_ elementi",
-      info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-      infoEmpty: "Vista da 0 a 0 di 0 elementi",
-      infoFiltered: "(filtrati da _MAX_ elementi totali)",
-      infoPostFix: "",
-      loadingRecords: "Caricamento...",
-      zeroRecords: "La ricerca non ha portato alcun risultato.",
-      emptyTable: "Nessun dato presente nella tabella.",
-      paginate: {
-        first: "Primo",
-        previous: "Precedente",
-        next: "Seguente",
-        last: "Ultimo"
-      },
-      aria: {
-        sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-        sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-      }
-    }
-  };
 
   modalData = {
     id: 0,
@@ -203,12 +215,27 @@ export class CatalogoKpiComponent implements OnInit {
   ngOnInit() {
 
     this.dtOptions = {
-      //'dom': 'rtip',
+      //dom: 'Bfrtip',
       "columnDefs": [{
         "targets": [12],
         "visible": false,
         "searchable": true
       }],
+      // buttons: [
+      //   {
+      //     extend: 'csv',
+      //     text: '<i class="fa fa-file"></i> Esporta CSV',
+      //     titleAttr: 'Esporta CSV',
+      //     className: 'btn btn-primary mb-3'
+      //   },
+      // ],
+      // buttons: [
+      //   'copy',
+      //   'print',
+      //   'csv',
+      //   'excel',
+      //   'pdf'
+      // ],
       deferRender: true,
       language: {
         processing: "Elaborazione...",
@@ -513,8 +540,9 @@ export class CatalogoKpiComponent implements OnInit {
 
 
     // export only what is visible right now (filters & paginationapplied)
-    $(this.btnExporta.nativeElement).click(function (event) {
-      event.preventDefault();
+    $(this.btnExporta.nativeElement).off('click');
+    $(this.btnExporta.nativeElement).on('click', function (event) {
+        event.preventDefault();
       event.stopPropagation();
       $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
         if($this.viewModel.filters.idKpi || $this.viewModel.filters.titoloBreve || $this.viewModel.filters.referenti || $this.viewModel.filters.tuttiContratti || $this.viewModel.filters.tutteLeFrequenze){
@@ -548,6 +576,7 @@ export class CatalogoKpiComponent implements OnInit {
   isNumber(val){
     return !isNaN(val);
   }
+
   table2csv(oTable, exportmode, tableElm) {
     var csv = '';
     var headers = [];
@@ -565,12 +594,22 @@ export class CatalogoKpiComponent implements OnInit {
 
     // get table data
     if (exportmode == "full") { // total data
-      var totalRows = oTable.data().length;
+      let totalRows = oTable.data().length;
       for(let i = 0; i < totalRows; i++) {
-        //var row = oTable.row(i).data();
-        //row = $this.strip_tags(row);
-        //rows.push(row);
-        rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
+        var row = [];
+        $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i,e)=>{
+          var $td = $(e);
+          var text = $td.text();
+          var cell = '' +text+ '';
+          row.push(cell);
+        })
+        rows.push(row);
+        // SOL:1
+        // let row = oTable.row(i).data();
+        // row = $this.strip_tags(row);
+        // rows.push(row);
+        // SOL:2
+        //rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
       }
     } else { // visible rows only
       $(tableElm+' tbody tr:visible').each(function(index) {
