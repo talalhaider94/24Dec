@@ -305,5 +305,28 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetDistributionByContract(period, sla_id);
         }
+        [HttpGet("GetAllUsersLandingPage")]
+        public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
+        {            
+            return _dataAPI.GetAllUsersLandingPage();
+        }
+        [HttpGet("SetLandingPageByUser")]
+        public void SetLandingPageByUser(int userId,bool set)
+        {
+            _dataAPI.SetLandingPageByUser(userId, set);
+        }
+        [HttpGet("GetLandingPageInformation")]
+        public UserLandingPageDTO GetLandingPageInformation()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetLandingPageInformation(usr.UserId);
+        }
+        [HttpGet("SelectLandingPage")]
+        public void SelectLandingPage()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            _dataAPI.SelectLandingPage(usr.UserId);
+        }
+
     }
 }

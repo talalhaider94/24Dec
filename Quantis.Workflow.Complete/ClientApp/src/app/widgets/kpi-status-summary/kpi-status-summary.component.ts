@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetsHelper } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-kpi-status-summary',
   templateUrl: './kpi-status-summary.component.html',
   styleUrls: ['./kpi-status-summary.component.scss']
 })
-export class KpiStatusSummaryComponent implements OnInit {
+export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
   @Input() widgetname: string;
   @Input() url: string;
   @Input() filters: Array<any>;
@@ -23,7 +25,13 @@ export class KpiStatusSummaryComponent implements OnInit {
   @Output()
   kpiStatusSummaryParent = new EventEmitter<any>();
   kpiStatusSummaryData: any = [];
+  // need to update these preselected ndoes
   preSelectedNodes = [1075,1405,1420,1424,1425,1430,1435,1436,1437,1438,1439,1441,1442,1444,1445,1446,1447,1448,1449,1460,1465,1470,1471,1485];
+  @ViewChild(DataTableDirective)
+  datatableElement: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
   constructor(
     private dashboardService: DashboardService,
     private emitter: EmitterService,
@@ -33,6 +41,33 @@ export class KpiStatusSummaryComponent implements OnInit {
 
   ngOnInit() {
     console.log('KpiStatusSummary Table', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ":attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
+
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
     }
@@ -52,7 +87,11 @@ export class KpiStatusSummaryComponent implements OnInit {
     this.dashboardService.getKPIs().subscribe(result => {
     })
   }
-
+  
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
+  }
+  
   subscriptionForDataChangesFromParent() {
     this.emitter.getData().subscribe(result => {
       const { type, data } = result;
@@ -140,8 +179,9 @@ export class KpiStatusSummaryComponent implements OnInit {
 
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
+    console.log('KPI STATUS SUMMARY chartIndexData', chartIndexData);
     this.kpiStatusSummaryData = chartIndexData;
-
+    this.dtTrigger.next();
     if (dashboardComponentData) {
     }
 

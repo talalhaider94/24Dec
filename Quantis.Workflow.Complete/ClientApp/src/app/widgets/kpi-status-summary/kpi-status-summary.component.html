@@ -10,18 +10,12 @@
     <span class="sr-only">Loading...</span>
 </div>
 <div class="table-responsive">
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
             <tr>
-                <th>Contract Party</th>
-                <th>Contract</th>
-                <th>Group Rule ID</th>
                 <th>ID KPI</th>
                 <th>Descrizione KPI</th>
-                <th>Tipologia</th>
-                <th>Frequenza</th>
-                <th>Calcolo</th>
-                <th>Fornitura</th>
+                <th>Dettagli</th>
                 <th>Escalation</th>
                 <th>Valore Limite Atteso</th>
                 <th>Trend</th>
@@ -41,18 +35,12 @@
         </thead>
         <tbody>
             <tr *ngIf="kpiStatusSummaryData.length === 0">
-                <td colspan="11">No data found.</td>
+                <td colspan="22">No data found.</td>
             </tr>
             <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
-                <td>{{ kpiStatus.contractparty }}</td>
-                <td>{{ kpiStatus.contract }}</td>
-                <td>{{ kpiStatus.globalruleid || 'N/A' }}</td>
                 <td>{{ kpiStatus.idkpi }}</td>
                 <td>{{ kpiStatus.descrizionekpi }}</td>
-                <td>{{ kpiStatus.tipologia }}</td>
-                <td>{{ kpiStatus.frequenza }}</td>
-                <td>{{ kpiStatus.calcolo }}</td>
-                <td>{{ kpiStatus.fornitura }}</td>
+                <td>Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>
                 <td>{{ kpiStatus.escalation || 'N/A' }}</td>
                 <td>{{ kpiStatus.vilorelimiteatteso }}</td>
                 <td>{{ kpiStatus.trend }}</td>
