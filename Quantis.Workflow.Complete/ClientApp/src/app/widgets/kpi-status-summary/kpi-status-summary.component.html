@@ -38,24 +38,24 @@
                 <td colspan="18">Nessun dato trovato.</td>
             </tr>
             <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
-                <td>{{ kpiStatus.idkpi }}</td>
-                <td>{{ kpiStatus.descrizionekpi }}</td>
-                <td style="width:100%">Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>
-                <td>{{ kpiStatus.escalation || 'N/A' }}</td>
-                <td>{{ kpiStatus.vilorelimiteatteso }}</td>
-                <td>{{ kpiStatus.trend }}</td>
-                <td [innerHTML]="kpiStatus.gen"></td>
-                <td [innerHTML]="kpiStatus.feb"></td>
-                <td [innerHTML]="kpiStatus.mar"></td>
-                <td [innerHTML]="kpiStatus.apr"></td>
-                <td [innerHTML]="kpiStatus.mag"></td>
-                <td [innerHTML]="kpiStatus.giu"></td>
-                <td [innerHTML]="kpiStatus.lug"></td>
-                <td [innerHTML]="kpiStatus.ago"></td>
-                <td [innerHTML]="kpiStatus.sep"></td>
-                <td [innerHTML]="kpiStatus.ott"></td>
-                <td [innerHTML]="kpiStatus.nov"></td>
-                <td [innerHTML]="kpiStatus.dic"></td>
+                <td style="padding: 1px 2px;">{{ kpiStatus.idkpi }}</td>
+                <td style="padding: 1px 2px;">{{ kpiStatus.descrizionekpi }}</td>
+                <td style="white-space: nowrap; overflow: hidden;padding: 1px 2px;">Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>
+                <td style="padding: 1px 2px;">{{ kpiStatus.escalation || 'N/A' }}</td>
+                <td style="padding: 1px 2px;">{{ kpiStatus.vilorelimiteatteso }}</td>
+                <td style="padding: 1px 2px;">{{ kpiStatus.trend }}</td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.gen"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.feb"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.mar"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.apr"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.mag"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.giu"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.lug"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.ago"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.sep"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.ott"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.nov"></td>
+                <td style="padding: 1px 2px;" [innerHTML]="kpiStatus.dic"></td>
             </tr>
         </tbody>
     </table>
