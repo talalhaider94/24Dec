@@ -10,7 +10,7 @@
     <span class="sr-only">Loading...</span>
 </div>
 <div class="table-responsive">
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead>
             <tr>
                 <th>ID KPI</th>
@@ -35,7 +35,7 @@
         </thead>
         <tbody>
             <tr *ngIf="kpiStatusSummaryData.length === 0">
-                <td colspan="11">No data found.</td>
+                <td colspan="22">No data found.</td>
             </tr>
             <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
                 <td>{{ kpiStatus.idkpi }}</td>

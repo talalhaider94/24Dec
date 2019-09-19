@@ -66,6 +66,10 @@ namespace Quantis.WorkFlow.Services.API
         List<EventResourceName> GetEventResourceNames();
         List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId);
         DistributionPslDTO GetDistributionByContract(string period, int sla_id);
+        List<UserLandingPageLVDTO> GetAllUsersLandingPage();
+        void SetLandingPageByUser(int userId, bool set);
+        UserLandingPageDTO GetLandingPageInformation(int userId);
+        void SelectLandingPage(int userId);
 
     }
 }

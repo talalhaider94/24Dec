@@ -4,6 +4,7 @@ export * from './workflow';
 export * from './date-time.service';
 export * from './widgetsHelper';
 export * from './widget-helpers.service';
+export * from './file-helpers.service';
 
 export function removeNullKeysFromObject(obj) {
     const newObj = {};
