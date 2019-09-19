@@ -35,12 +35,12 @@
         </thead>
         <tbody>
             <tr *ngIf="kpiStatusSummaryData.length === 0">
-                <td colspan="22">No data found.</td>
+                <td colspan="18">Nessun dato trovato.</td>
             </tr>
             <tr *ngFor="let kpiStatus of kpiStatusSummaryData">
                 <td>{{ kpiStatus.idkpi }}</td>
                 <td>{{ kpiStatus.descrizionekpi }}</td>
-                <td>Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>
+                <td style="width:100%">Tipologia: {{ kpiStatus.tipologia }}<br />Frequenza: {{ kpiStatus.frequenza }}<br />Calcolo: {{ kpiStatus.calcolo }}<br />Fornitura: {{ kpiStatus.fornitura }}</td>
                 <td>{{ kpiStatus.escalation || 'N/A' }}</td>
                 <td>{{ kpiStatus.vilorelimiteatteso }}</td>
                 <td>{{ kpiStatus.trend }}</td>
