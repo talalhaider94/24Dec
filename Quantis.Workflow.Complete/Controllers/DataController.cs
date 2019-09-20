@@ -377,6 +377,12 @@ namespace Quantis.WorkFlow.Controllers
 
 
         }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpGet("GetAllUsersAssignedQueries")]
+        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
+        {
+            return _dataAPI.GetAllUsersAssignedQueries(queryid);
+        }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("ExecuteReportQuery")]
         public DataTable ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)

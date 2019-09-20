@@ -1739,7 +1739,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerId = e.owner_id,
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
-                QueryText = e.query_text,
                 ParameterCount = e.Parameters.Count
 
             });
@@ -1755,7 +1754,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerId = e.owner_id,
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
-                QueryText = e.query_text,
                 ParameterCount = e.Parameters.Count
 
             });
@@ -1868,6 +1866,38 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 }
             }
+        }
+        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
+        {
+            try
+            {
+                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null).ToList();
+                var userDtos = _userMapper.GetDTOs(users.ToList());
+                var landingpages = _dbcontext.ReportQueryAssignments.Where(o=>o.query_id== queryid).ToList();
+                return (from usrs in userDtos
+                        join landpages in landingpages on usrs.ca_bsi_user_id equals landpages.user_id
+                        into gj
+                        from subset in gj.DefaultIfEmpty()
+                        select new UserReportQueryAssignmentDTO()
+                        {
+                            ca_bsi_account = usrs.ca_bsi_account,
+                            ca_bsi_user_id = usrs.ca_bsi_user_id,
+                            id = usrs.id,
+                            mail = usrs.mail,
+                            manager = usrs.manager,
+                            name = usrs.name,
+                            organization = usrs.organization,
+                            surname = usrs.surname,
+                            userid = usrs.userid,
+                            isAssigned = subset == null ? false : true
+                        }).ToList();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
         }
 
 

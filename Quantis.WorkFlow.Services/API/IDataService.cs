@@ -79,6 +79,7 @@ namespace Quantis.WorkFlow.Services.API
         void AddEditReportQuery(ReportQueryDetailDTO dto, int userId);
         void DeleteReportQuery(int id, int userId);
         void AssignReportQuery(MultipleRecordsDTO records, int ownerId);
+        List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid);
         DataTable ExecuteReportQuery(ReportQueryDetailDTO dto);
 
     }
