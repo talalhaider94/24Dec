@@ -123,6 +123,10 @@ export const routes: Routes = [
         path: 'booklet',
         loadChildren: './views/booklet/booklet.module#BookletModule'
       },
+      {
+        path: 'standarddashboard',
+        loadChildren: './views/standarddashboard/standarddashboard.module#StandardDashboardModule'
+      },
     ]
   },
   { path: '**', component: P404Component }

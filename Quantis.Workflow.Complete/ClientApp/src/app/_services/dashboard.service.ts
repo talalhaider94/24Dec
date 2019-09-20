@@ -146,6 +146,14 @@ export class DashboardService {
 		const params = new HttpParams().set('period', period.toString());
 		return this.http.get<any>(`${environment.API_URL}/oracle/GetLandingPageByUser`,{ params });
 	}
+	getLandingPageInfo(): Observable<any> {
+		const getLandingPageEndPoint = `${environment.API_URL}/data/GetLandingPageInformation`;
+		return this.http.get(getLandingPageEndPoint);
+	}
+	selectLandingPage(): Observable<any> {
+		const selectLandingPageEndPoint = `${environment.API_URL}/data/SelectLandingPage`;
+		return this.http.get(selectLandingPageEndPoint);
+	}
 
 
 }

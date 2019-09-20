@@ -27,6 +27,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   loading: boolean = true;
   loadingDashboard: boolean = false;
   dashboardCollection: DashboardModel[];
+  public showLandingPage: any;
 
   constructor(
     private toastr: ToastrService,
@@ -70,6 +71,11 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     });
     this.loadingSpinnerSubscription();
     this.getAllDashboards();
+    
+    this.dashboardService.getLandingPageInfo().subscribe(data => {
+      this.showLandingPage = data.showlandingpage;
+      //console.log("Landing Page Info -> ",data.showlandingpage);
+    });
   }
 
   ngOnDestroy(): void {
@@ -170,8 +176,12 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       this.loadingDashboard = false;
       console.error('dashboardSwitch', error);
       this.toastr.error('Error', 'Unable to set default dashboard.');
-    })
-    
+    }) 
+  }
+
+  saveLandingPage(){
+    this.dashboardService.selectLandingPage().subscribe(data => {
+    });
   }
 
 }
