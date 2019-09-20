@@ -210,7 +210,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-gear',
     key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
     'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
-    'VIEW_CONFIGURATION_USER_PROFILING'],
+    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD'],
     children: [
       {
         name: 'Generali',
@@ -271,6 +271,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         version: '0.0.6',
         key: 'VIEW_CONFIGURATION_USER_PROFILING'
+      }, 
+      {
+        name: 'View Standard Dashboard',
+        url: '/standarddashboard',
+        icon: 'fa fa-gear',
+        version: '0.0.1',
+        key: 'VIEW_STANDARD_DASHBOARD'
       }
     ]
   },

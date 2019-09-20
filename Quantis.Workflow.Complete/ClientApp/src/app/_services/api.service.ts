@@ -122,6 +122,10 @@ export class ApiService {
     const getLandingPageEndPoint = `${environment.API_URL}/oracle/GetLandingPageByUser?period=${period}`;
     return this.http.get(getLandingPageEndPoint);
   }
+  getTestLandingPage(): Observable<any>{ 
+    const getLandingPageEndPoint = `${environment.API_URL}/data/GetAllUsersLandingPage`;
+    return this.http.get(getLandingPageEndPoint);
+  }
 
   addRole(data): Observable<any> {
     const addrole = `${environment.API_URL}/information/AddUpdateRole`;
@@ -181,7 +185,7 @@ export class ApiService {
   getSeconds(): Observable<any> {
     const getSecondsEndPoint = `${environment.API_URL}/information/GetDashboardTickInterval`;
     return this.http.get(getSecondsEndPoint);
-  }
+  } 
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)
@@ -307,6 +311,11 @@ export class ApiService {
         error => error
       )
     );
+  }
+       
+  setLandingPagePermission(userId,set): Observable<any> {
+    const lpPermissionsEndPoint = `${environment.API_URL}/data/SetLandingPageByUser?userId=${userId}&set=${set}`;
+    return this.http.get(lpPermissionsEndPoint);
   }
 
 
