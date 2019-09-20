@@ -1,7 +1,9 @@
 <div style="margin-top: -25px; padding: 10px"><br />
   <div class="table-responsive" style="background: #ffffff; padding: 5px">
   <br><h2 style="color:#565656">KPI DA CONSOLIDARE</h2><br>
-
+  <div class="row">
+    <button class="ml-3" #btnExporta>Esporta CSV</button>
+  </div><br />
   <h5 *ngIf="loading" class="text-center text-primary">   
     <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
   </h5>
@@ -14,7 +16,7 @@
         <th style="text-align:center">CONTRAENTE PRIMARIO</th>
         <th style="text-align:center">CONTRAENTE SECONDARIO</th>
         <th style="text-align:center">ULTIMA MODIFICA</th>
-        <th style="text-align:center">AZIONE</th>
+        <th class="notExportCsv" style="text-align:center">AZIONE</th>
       </tr>
     </thead>
     <tbody>

@@ -17,6 +17,7 @@ let $this;
 })
 export class AdminKpiComponent implements OnInit {
   @ViewChild('configModal') public configModal: ModalDirective;
+  @ViewChild('btnExporta') btnExporta: ElementRef;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -355,12 +356,24 @@ export class AdminKpiComponent implements OnInit {
       });
     });
 */
+
+  $(this.btnExporta.nativeElement).off('click');
+  $(this.btnExporta.nativeElement).on('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+      
+        $this.table2csv(datatable_Ref, 'full', '.kpiTable');
+      
+    });
+  });
     
   }
 
   isNumber(val){
     return !isNaN(val);
   }
+  
   table2csv(oTable, exportmode, tableElm) {
     var csv = '';
     var headers = [];
@@ -371,8 +384,9 @@ export class AdminKpiComponent implements OnInit {
       var $th = $(this);
       var text = $th.text();
       var header = '"' + text + '"';
-      // headers.push(header); // original code
-      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+      console.log("th text: ",text)
+      headers.push(header); // original code
+      //if(text != "") headers.push(header); 
     });
     csv += headers.join(',') + "\n";
 
@@ -380,9 +394,6 @@ export class AdminKpiComponent implements OnInit {
     if (exportmode == "full") { // total data
       var totalRows = oTable.data().length;
       for(let i = 0; i < totalRows; i++) {
-        //var row = oTable.row(i).data();
-        //row = $this.strip_tags(row);
-        //rows.push(row);
         rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
       }
     } else { // visible rows only
