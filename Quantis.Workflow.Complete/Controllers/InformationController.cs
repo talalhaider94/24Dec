@@ -224,6 +224,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
             var conf = _infomationAPI.GetConfiguration("dashboard", "tick_interval");
             return (conf == null) ? "30" : conf.Value;
         }
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_PROFILING)]
+        [HttpGet("GetUserProfilingCSV")]
+        public List<UserProfilingDTO> GetUserProfilingCSV()
+        {
+            return _infomationAPI.GetUserProfilingCSV();
+        }
 
 
     }
