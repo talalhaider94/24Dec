@@ -22,6 +22,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Web;
+using Quantis.WorkFlow.Services.DTOs.Information;
+using Oracle.ManagedDataAccess.Client;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -41,6 +43,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly ISMTPService _smtpService;
         private readonly IInformationService _infomationAPI;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+        private static string _connectionstring = null;
         private IMemoryCache _cache;
 
         public DataService(WorkFlowPostgreSqlContext context,
@@ -72,6 +75,10 @@ namespace Quantis.WorkFlow.APIBase.API
             _dbcontext = context;
             _infomationAPI = infomationAPI;
             _cache = memoryCache;
+            if (_connectionstring == null)
+            {
+                _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
+            }
         }
         public bool CronJobsScheduler()
         {
@@ -1721,55 +1728,198 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        #region privateFunctions
 
- /*       private List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period)
+        public List<ReportQueryLVDTO> GetOwnedReportQueries(int userId)
         {
-            try
+            var entities = _dbcontext.ReportQueries.Include(o=>o.Parameters).Where(o => o.owner_id == userId);
+            var dtos=entities.Select(e => new ReportQueryLVDTO()
             {
+                Id = e.id,
+                CreatedOn = e.created_on,
+                OwnerId = e.owner_id,
+                OwnerName = e.Owner.user_name,
+                QueryName = e.query_name,
+                QueryText = e.query_text,
+                ParameterCount = e.Parameters.Count
 
-                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            });
+            return dtos.ToList();
+        }
+        public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
+        {
+            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o=>o.Query).ToList();
+            var dtos = entities.Select(e => new ReportQueryLVDTO()
+            {
+                Id = e.id,
+                CreatedOn = e.created_on,
+                OwnerId = e.owner_id,
+                OwnerName = e.Owner.user_name,
+                QueryName = e.query_name,
+                QueryText = e.query_text,
+                ParameterCount = e.Parameters.Count
+
+            });
+            return dtos.ToList();
+        }
+
+        public ReportQueryDetailDTO GetReportQueryDetailByID(int id,int userId)
+        {
+            if(_dbcontext.ReportQueries.Any(o=>o.id==id && o.owner_id==userId) || _dbcontext.ReportQueryAssignments.Any(o=>o.query_id==id && o.user_id == userId))
+            {
+                var entity=_dbcontext.ReportQueries.Include(o=>o.Parameters).FirstOrDefault(o => o.id == id);
+                var dto = new ReportQueryDetailDTO()
+                {
+                    Id = entity.id,
+                    QueryName = entity.query_name,
+                    QueryText = entity.query_text,
+                    Parameters = entity.Parameters.Select(p => new KeyValuePair<string, string>(p.parameter_key, p.parameter_value)).ToList()
+                };
+                return dto;
+            }
+            return null;
+        }
+        public void AddEditReportQuery(ReportQueryDetailDTO dto,int userId)
+        {
+            if (dto.Id == 0)
+            {
+                var entity = new T_ReportQuery();
+                entity.query_name = dto.QueryName;
+                entity.query_text = dto.QueryText;
+                entity.created_on = DateTime.Now;
+                entity.owner_id = userId;
+                entity.Parameters = dto.Parameters.Select(o => new T_ReportQueryParameter()
+                {
+                    parameter_value=o.Value,
+                    parameter_key=o.Key,
+                    
+                }).ToList();
+                _dbcontext.ReportQueries.Add(entity);
+                _dbcontext.SaveChanges();
+                
+            }
+            else
+            {
+                var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == dto.Id);
+                entity.query_name = dto.QueryName;
+                entity.query_text = dto.QueryText;
+                _dbcontext.SaveChanges();
+                var parameters=_dbcontext.ReportQueryParameters.Where(o => o.query_id == dto.Id);
+                _dbcontext.RemoveRange(parameters.ToArray());
+                var param = dto.Parameters.Select(o => new T_ReportQueryParameter()
+                {
+                    parameter_value=o.Value,
+                    parameter_key=o.Key,
+                    query_id=dto.Id
+                    
+                }).ToList();
+                _dbcontext.ReportQueryParameters.AddRange(param.ToArray());
+                _dbcontext.SaveChanges();
+
+            }
+        }
+
+        public void DeleteReportQuery(int id,int userId)
+        {
+            var entity=_dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
+            if (entity.owner_id == userId)
+            {
+                var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
+                _dbcontext.ReportQueryParameters.RemoveRange(param.ToArray());
+                var assign = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == id);
+                _dbcontext.ReportQueryAssignments.RemoveRange(assign.ToArray());
+                _dbcontext.SaveChanges();
+                _dbcontext.ReportQueries.Remove(entity);
+                _dbcontext.SaveChanges();
+            }
+        }
+        public void AssignReportQuery(MultipleRecordsDTO records,int ownerId)
+        {
+            if(_dbcontext.ReportQueries.Any(o=>o.id==records.Id && o.owner_id == ownerId)){
+                var assigns=_dbcontext.ReportQueryAssignments.Where(o => o.query_id == records.Id);
+                _dbcontext.ReportQueryAssignments.RemoveRange(assigns.ToArray());
+                _dbcontext.SaveChanges();
+                var assignments = records.Ids.Select(o => new T_ReportQueryAssignment()
+                {
+                    query_id = records.Id,
+                    user_id = o
+                }).ToArray();
+                _dbcontext.ReportQueryAssignments.AddRange(assignments);
+                _dbcontext.SaveChanges();
+            }
+        }
+        public DataTable ExecuteReportQuery(ReportQueryDetailDTO dto)
+        {
+            string query = dto.QueryText;
+            foreach(var p in dto.Parameters)
+            {
+                query=query.Replace(p.Key, p.Value);
+            }
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
                 {
                     con.Open();
-                    var output = new List<int>();
-                    var month = period.Split('/').FirstOrDefault();
-                    var year = "20" + period.Split('/').LastOrDefault();
-                    string completewhereStatement = "";
-                    var whereStatements = new List<string>();
-                    foreach (var d in dto)
-                    {
-                        if (d.ResourceId == -1)
-                        {
-                            whereStatements.Add(string.Format("(event_type_id={0})", d.EventId));
-                        }
-                        else
-                        {
-                            whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
-                        }
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    DataTable myTable = new DataTable();
+                    myTable.Load(reader);
+                    return myTable;
 
-                    }
-                    if (dto.Any())
-                    {
-                        completewhereStatement = string.Format(" AND ({0})", string.Join(" OR ", whereStatements));
-                    }
-                    var sp = string.Format("Select event_type_id,resource_id,raw_data_id from t_dt_de_3_{0}_{1} where 1=1 {2}", year, month, completewhereStatement);
-                    var command = new NpgsqlCommand(sp, con);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            output.Add(reader.GetInt32(reader.GetOrdinal("raw_data_id")));
-                        }
-
-                        return output;
-                    }
                 }
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }*/
+        }
+
+
+        #region privateFunctions
+
+        /*       private List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period)
+               {
+                   try
+                   {
+
+                       using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                       {
+                           con.Open();
+                           var output = new List<int>();
+                           var month = period.Split('/').FirstOrDefault();
+                           var year = "20" + period.Split('/').LastOrDefault();
+                           string completewhereStatement = "";
+                           var whereStatements = new List<string>();
+                           foreach (var d in dto)
+                           {
+                               if (d.ResourceId == -1)
+                               {
+                                   whereStatements.Add(string.Format("(event_type_id={0})", d.EventId));
+                               }
+                               else
+                               {
+                                   whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
+                               }
+
+                           }
+                           if (dto.Any())
+                           {
+                               completewhereStatement = string.Format(" AND ({0})", string.Join(" OR ", whereStatements));
+                           }
+                           var sp = string.Format("Select event_type_id,resource_id,raw_data_id from t_dt_de_3_{0}_{1} where 1=1 {2}", year, month, completewhereStatement);
+                           var command = new NpgsqlCommand(sp, con);
+                           using (var reader = command.ExecuteReader())
+                           {
+                               while (reader.Read())
+                               {
+                                   output.Add(reader.GetInt32(reader.GetOrdinal("raw_data_id")));
+                               }
+
+                               return output;
+                           }
+                       }
+                   }
+                   catch (Exception e)
+                   {
+                       throw e;
+                   }
+               }*/
 
         private bool CallFormAdapter(FormAdapterDTO dto)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
+using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.Controllers
@@ -330,6 +332,56 @@ namespace Quantis.WorkFlow.Controllers
         {
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.SelectLandingPage(usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpGet("GetOwnedReportQueries")]
+        public List<ReportQueryLVDTO> GetOwnedReportQueries()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetOwnedReportQueries(usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpGet("GetAssignedReportQueries")]
+        public List<ReportQueryLVDTO> GetAssignedReportQueries()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetAssignedReportQueries(usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpGet("GetReportQueryDetailByID")]
+        public ReportQueryDetailDTO GetReportQueryDetailByID(int id)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetReportQueryDetailByID(id,usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpPost("AddEditReportQuery")]
+        public void AddEditReportQuery([FromBody]ReportQueryDetailDTO dto)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            _dataAPI.AddEditReportQuery(dto, usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpGet("DeleteReportQuery")]
+        public void DeleteReportQuery(int id)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            _dataAPI.DeleteReportQuery(id, usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [HttpPost("AssignReportQuery")]
+        public void AssignReportQuery([FromBody]MultipleRecordsDTO records)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            _dataAPI.AssignReportQuery(records,usr.UserId);
+
+
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("ExecuteReportQuery")]
+        public DataTable ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)
+        {
+            return _dataAPI.ExecuteReportQuery(dto);
         }
 
     }
