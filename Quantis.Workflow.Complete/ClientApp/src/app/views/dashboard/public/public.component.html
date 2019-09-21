@@ -72,24 +72,61 @@
             </tab>
             <!-- FILTERS -->
             <tab heading="FILTRI">
+              <div *ngIf="loadingFiltersDropDown" class="text-center">
+                <span class="fa fa-spinner text-primary fa-2x fa-spin"></span>
+              </div>
               <div formGroupName="Filters">
                 <span *ngIf="barChartWidgetParameters.showorganization">
-                    <label>Contraente e Contratto</label>
-                    <perfect-scrollbar style="max-height: 260px;">
-                        <ejs-treeview  #organizationTree id="organizationTreeId"
-                          [fields]='treeDataFields' [showCheckBox]='true'
-                          [checkedNodes]="preSelectedNodes"
-                          (nodeChecked)='organizationTreeNodeCheckEvent($event)' 
-                          (nodeSelected)='organizationTreeNodeSelected($event)'>
-                        </ejs-treeview>
-                    </perfect-scrollbar>
+                  <label>Contraente e Contratto</label>
+                  <perfect-scrollbar style="max-height: 260px;">
+                    <ejs-treeview #organizationTree id="organizationTreeId" [fields]='treeDataFields'
+                      [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
+                      (nodeChecked)='organizationTreeNodeCheckEvent($event)'
+                      (nodeSelected)='organizationTreeNodeSelected($event)'>
+                    </ejs-treeview>
+                  </perfect-scrollbar>
                 </span>
-                <span *ngIf="barChartWidgetParameters.showlevelwiseorganization">
-                  
+                <span *ngIf="barChartWidgetParameters.filters.contractParties">
+                  <div class="form-group">
+                    <label for="contractParties">Contract Parties</label>
+                    <select class="form-control" formControlName="contractParties"
+                      (change)="contractPartiesDropDown($event)">
+                      <option value="" [attr.selected]="true">Select Contract Parties</option>
+                      <option *ngFor="let org of barChartWidgetParameters.filters.contractParties; let i = index"
+                        [value]="org.key">
+                        {{ org.value }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="contracts">Contracts</label><!-- Date Type -->
+                    <select class="form-control" formControlName="contracts" [attr.disabled]="!!filterContracts.length"
+                      (change)="contractsDropDown($event)">
+                      <option value="" [attr.selected]="true">Select Contracts</option>
+                      <option *ngFor="let contract of filterContracts; let i = index"
+                        [value]="contract.key">
+                        {{ contract.value }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="kpi">KPI's</label><!-- Date Type -->
+                    <select class="form-control" formControlName="kpi" [attr.disabled]="!!filterKpis.length">
+                      <option value="" [attr.selected]="true">Select KPI's</option>
+                      <option *ngFor="let kpi of filterKpis; let i = index"
+                        [value]="kpi.key">
+                        {{ kpi.value }}
+                      </option>
+                    </select>
+                  </div>
+
                 </span>
                 <span *ngIf="barChartWidgetParameters.showdaterangefilter">
                   <div class="form-group form-check">
-                    <input type="checkbox" formControlName="includeCurrentMonth" class="form-check-input" id="exampleCheck1">
+                    <input type="checkbox" formControlName="includeCurrentMonth" class="form-check-input"
+                      id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">Periodo incompleto</label>
                   </div>
                   <div class="form-group">
@@ -110,15 +147,15 @@
                     <div class="row">
                       <div class="col-md-6">
                         <label for="startDate">Da</label>
-                          <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date"
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}"/>
+                        <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date"
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" />
                       </div>
                       <div class="col-md-6">
                         <label for="endDate">A</label>
-                          <input type="text" formControlName="endDate" class="form-control" placeholder="End Date"
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}"/>
+                        <input type="text" formControlName="endDate" class="form-control" placeholder="End Date"
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" />
                       </div>
-                    </div>  
+                    </div>
                   </div>
                 </span>
                 <span *ngIf="showDateInFilters">
@@ -145,10 +182,9 @@
             <div class="col-6 text-right">
               <!-- Apply -->
               <button type="submit" class="btn btn-outline-primary btn-sm px-4">
-                <!-- <span class="fa fa-spinner fa-spin"></span>  -->
+                <span *ngIf="loadingModalForm" class="fa fa-spinner fa-spin"></span>  
                 Applicare
               </button>
-
               <!-- Cancel -->
               <a (click)="widgetParametersModal.hide()" role="button"
                 class="btn btn-primary pointer-cursor btn-sm px-4">
