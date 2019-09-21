@@ -29,7 +29,7 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
   preSelectedNodes = [1075,1405,1420,1424,1425,1430,1435,1436,1437,1438,1439,1441,1442,1444,1445,1446,1447,1448,1449,1460,1465,1470,1471,1485];
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
+  dtOptions: {};
   dtTrigger = new Subject();
 
   constructor(
@@ -44,6 +44,26 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      destroy: false, // check here.
+      dom: 'Bfrtip',
+      search: {
+        caseInsensitive: true
+      },
+      "columnDefs": [{
+        "targets": 0,
+        "orderable": false,
+        "visible": true,
+        "searchable": false
+      },
+      ],
+      buttons: [
+        {
+          extend: 'csv',
+          text: '<i class="fa fa-file"></i> Esporta CSV',
+          titleAttr: 'Esporta CSV',
+          className: 'btn btn-primary mb-3'
+        },
+      ],
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -62,7 +82,7 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
           last: "Ultimo"
         },
         aria: {
-          sortAscending: ":attiva per ordinare la colonna in ordine crescente",
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
           sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
         }
       }
