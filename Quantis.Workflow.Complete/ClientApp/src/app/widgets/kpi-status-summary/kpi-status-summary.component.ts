@@ -97,15 +97,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
     }
     // coming from dashboard or public parent components
     this.subscriptionForDataChangesFromParent();
-    
-    this.dashboardService.getContract().subscribe(result => {
-    });
-
-    this.dashboardService.getContractParties().subscribe(result => {
-    });
-
-    this.dashboardService.getKPIs().subscribe(result => {
-    })
   }
   
   ngOnDestroy() {

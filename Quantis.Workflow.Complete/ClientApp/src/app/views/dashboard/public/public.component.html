@@ -73,7 +73,7 @@
             <!-- FILTERS -->
             <tab heading="FILTRI">
               <div formGroupName="Filters">
-                <span *ngIf="showorganization">
+                <span *ngIf="barChartWidgetParameters.showorganization">
                     <label>Contraente e Contratto</label>
                     <perfect-scrollbar style="max-height: 260px;">
                         <ejs-treeview  #organizationTree id="organizationTreeId"
@@ -83,6 +83,9 @@
                           (nodeSelected)='organizationTreeNodeSelected($event)'>
                         </ejs-treeview>
                     </perfect-scrollbar>
+                </span>
+                <span *ngIf="barChartWidgetParameters.showlevelwiseorganization">
+                  
                 </span>
                 <span *ngIf="barChartWidgetParameters.showdaterangefilter">
                   <div class="form-group form-check">

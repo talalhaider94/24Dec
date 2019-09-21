@@ -91,10 +91,11 @@ export class KpiReportTrendComponent implements OnInit {
       // populate modal with widget parameters
       console.log('getWidgetIndex', getWidgetIndex);
       console.log('myWidgetParameters', myWidgetParameters);
-      let barChartParams;
+      debugger
+      let kpiReportTrendParams;
       if (myWidgetParameters) {
-        barChartParams = {
-          type: 'barChartParams',
+        kpiReportTrendParams = {
+          type: 'kpiReportTrendParams',
           data: {
             ...myWidgetParameters,
             widgetname: this.widgetname,
@@ -106,7 +107,7 @@ export class KpiReportTrendComponent implements OnInit {
             id: this.id
           }
         }
-        this.kpiReportTrendWidgetParameters = barChartParams.data;
+        this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
         // setting initial Paramter form widget values
         this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
@@ -115,7 +116,7 @@ export class KpiReportTrendComponent implements OnInit {
         const chartIndexData = getWidgetIndex.body;
         // third params is current widgets settings current only used when
         // widgets loads first time. may update later for more use cases
-        this.updateChart(chartIndexData, null, barChartParams.data);
+        this.updateChart(chartIndexData, null, kpiReportTrendParams.data);
       }
       this.loading = false;
       this.emitter.loadingStatus(false);

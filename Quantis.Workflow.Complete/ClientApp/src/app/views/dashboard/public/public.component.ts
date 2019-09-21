@@ -407,7 +407,7 @@ export class PublicComponent implements OnInit {
 					this.allLeafNodesIds.push(item.id);
 				}
 			});
-			console.log('allLeafNodesIds ->', this.allLeafNodesIds);
+			// console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
 	}
 
