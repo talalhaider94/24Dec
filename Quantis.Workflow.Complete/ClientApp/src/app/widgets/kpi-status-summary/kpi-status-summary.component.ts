@@ -134,7 +134,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
-        debugger
         let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
         newParams.Filters.organizations = this.preSelectedNodes.join(',');
         return this.dashboardService.getWidgetIndex(url, newParams);
@@ -142,7 +141,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
       myWidgetParameters;
-      debugger
       let kpiStatusSummaryParams;
       if (myWidgetParameters) {
         kpiStatusSummaryParams = {

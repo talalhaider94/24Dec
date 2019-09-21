@@ -116,19 +116,10 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openBarChartModal') {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
-				// this.createTrees(childData.data.organizationHierarchy);
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'count_trend');
-				// if (this.barChartWidgetParameters) {
-				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-				// 	setTimeout(() => {
-				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-				// 	});
-				// }
-				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
-				// this.widgetParametersModal.show();
 			}
 		},
 		kpiCountSummaryParent: childData => {
@@ -399,12 +390,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeCheckEvent($event) {
-		alert("All Checked Nodes" + this.organizationTree.checkedNodes);
+		// alert("All Checked Nodes" + this.organizationTree.checkedNodes);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
 	
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-        alert("The selected node's id: " + this.organizationTree.selectedNodes);
+        // alert("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
 	
 	getAllLeafNodesIds(complexJson) {

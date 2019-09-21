@@ -73,16 +73,18 @@
             <!-- FILTERS -->
             <tab heading="FILTRI">
               <div formGroupName="Filters">
-                <label for="">Contraente e Contratto</label>
-                <perfect-scrollbar style="max-height: 260px;">
-                    <ejs-treeview  #organizationTree id="organizationTreeId"
-                      [fields]='treeDataFields' [showCheckBox]='true'
-                      [checkedNodes]="preSelectedNodes"
-                      (nodeChecked)='organizationTreeNodeCheckEvent($event)' 
-                      (nodeSelected)='organizationTreeNodeSelected($event)'>
-                    </ejs-treeview>
-                </perfect-scrollbar><br>
-                <span *ngIf="showDateRangeInFilters">
+                <span *ngIf="showorganization">
+                    <label>Contraente e Contratto</label>
+                    <perfect-scrollbar style="max-height: 260px;">
+                        <ejs-treeview  #organizationTree id="organizationTreeId"
+                          [fields]='treeDataFields' [showCheckBox]='true'
+                          [checkedNodes]="preSelectedNodes"
+                          (nodeChecked)='organizationTreeNodeCheckEvent($event)' 
+                          (nodeSelected)='organizationTreeNodeSelected($event)'>
+                        </ejs-treeview>
+                    </perfect-scrollbar>
+                </span>
+                <span *ngIf="barChartWidgetParameters.showdaterangefilter">
                   <div class="form-group form-check">
                     <input type="checkbox" formControlName="includeCurrentMonth" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">Periodo incompleto</label>
@@ -100,10 +102,7 @@
                 </span>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
-                    <!-- Date Range -->
-                    <!-- <label for="daterange">Intervallo di date</label>
-                    <input type="text" formControlName="daterange" placeholder="Pick Date Range" class="form-control"
-                      bsDaterangepicker [bsConfig]="{ rangeInputFormat: 'MM/YYYY' }"> -->
+                    <!-- Date Range = Start Date - End Date -->
                     <label for="daterange">Tipo di intervallo</label>
                     <div class="row">
                       <div class="col-md-6">
