@@ -32,6 +32,7 @@ import { NotificationTrendComponent } from '../../widgets/notification-trend/not
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { ChartDataComponent } from './chartdata/chartdata.component';
 import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-status-summary.component';
+import { FreeFormReportComponent } from './free-form-report/free-form-report.component';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-
     KpiCountByOrganizationComponent,
     ChartDataComponent,
     KpiStatusSummaryComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    FreeFormReportComponent
   ]
 })
 export class DashboardModule { }

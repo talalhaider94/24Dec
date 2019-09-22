@@ -32,41 +32,11 @@ export interface NavData {
 }
 
 export const navItems: NavData[] = [
-  /*{ // TEMP HIDDEN
-    name: 'Dashboard',
-    key: '',
-    url: '/dashboard',
-    icon: 'icon-speedometer',
-    badge: {
-      variant: 'info',
-      text: ''
-    }
-  },*/
   {
     title: true,
     name: 'Menu',
     key: 'alwaysShow'
   },
-  /*{ // TEMP HIDDEN
-    name: 'Home',
-    url: '/coming-soon',
-    icon: 'icon-home',
-    key: ['', ''],
-    children: [
-      { // TEMP HIDDEN
-        name: 'Contraenti',
-        url: '/coming-soon',
-        icon: 'fa fa-th-list',
-        key: '',
-      },
-      { // TEMP HIDDEN
-        name: 'Contratti',
-        url: '/coming-soon',
-        icon: 'fa fa-file-text',
-        key: '',
-      },
-    ]
-  },*/
   {
     name: 'Workflow',
     url: '/workflow-menu',
@@ -132,20 +102,6 @@ export const navItems: NavData[] = [
       },
     ]
   },
-  /*{ // TEMP HIDDEN
-    name: 'Report',
-    url: '/coming-soon',
-    icon: 'fa fa-files-o',
-    key: [''],
-    children: [
-      { // TEMP HIDDEN
-        name: 'WorkFlow Reminder',
-        url: '/coming-soon',
-        icon: 'fa fa-check-circle-o',
-        key: '',
-      }
-    ]
-  },*/
   {
     name: 'KPI Certificati',
     url: '/archivedkpi',
@@ -226,17 +182,6 @@ export const navItems: NavData[] = [
         version: '0.0.2',
         key: 'VIEW_CONFIGURATION_ADVANCED'
       },
-      /*{ // maybe not needed
-        name: 'Workflow',
-        url: '/workflow-conf',
-        icon: 'fa fa-gear',
-        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
-      },*/
-      /*{ // TEMP HIDDEN
-        title: true,
-        name: 'Workflow',
-        key: 'VIEW_WORKFLOW_CONFIGURATIONS'
-      },*/
       {
         name: 'SDM Gruppi',
         url: '/sdmgroup',
@@ -280,6 +225,12 @@ export const navItems: NavData[] = [
         key: 'VIEW_STANDARD_DASHBOARD'
       }
     ]
+  },
+  {
+    name: 'Free Form Report',
+    url: '/dashboard/free-form-report',
+    icon: 'fa fa-file-text-o',
+    key: ['VIEW_REPORT_QUERIES'],
   },
   {
     divider: true,
