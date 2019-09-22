@@ -19,7 +19,6 @@ export class FreeFormReportService {
   }
 
   addEditReportQuery(params) {
-    debugger
     return this.http.post(`${environment.API_URL}/data/AddEditReportQuery`, params);
   }
 
