@@ -158,7 +158,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
   getAllDashboards() {
     this.dashboardService.getDashboards().subscribe(dashboards => {
       this.emitter.loadingStatus(false);
-      this.dashboardCollection = dashboards;
+      this.dashboardCollection = dashboards.filter(dashboard => dashboard.isactive);
     }, error => {
       this.toastr.error('Error while loading dashboards');
       this.emitter.loadingStatus(false);
