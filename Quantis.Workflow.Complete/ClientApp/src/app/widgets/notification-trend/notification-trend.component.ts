@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 @Component({
@@ -43,7 +42,8 @@ export class NotificationTrendComponent implements OnInit {
     private dashboardService: DashboardService,
     private emitter: EmitterService,
     private dateTime: DateTimeService,
-    private router: Router
+    private router: Router,
+    private widgetHelper: WidgetHelpersService
   ) { }
 
   ngOnInit() {
@@ -83,7 +83,7 @@ export class NotificationTrendComponent implements OnInit {
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
-        let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+        let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
         
         return this.dashboardService.getWidgetIndex(url, newParams);
       })
@@ -91,10 +91,10 @@ export class NotificationTrendComponent implements OnInit {
       // populate modal with widget parameters
       console.log('getWidgetIndex', getWidgetIndex);
       console.log('myWidgetParameters', myWidgetParameters);
-      let barChartParams;
+      let notificationTrendParams;
       if (myWidgetParameters) {
-        barChartParams = {
-          type: 'barChartParams',
+        notificationTrendParams = {
+          type: 'notificationTrendParams',
           data: {
             ...myWidgetParameters,
             widgetname: this.widgetname,
@@ -106,18 +106,18 @@ export class NotificationTrendComponent implements OnInit {
             id: this.id
           }
         }
-        this.notificationTrendWidgetParameters = barChartParams.data;
+        this.notificationTrendWidgetParameters = notificationTrendParams.data;
         // have to use setTimeout if i am not emitting it in dashbaordComponent
-        // this.notificationTrendParent.emit(barChartParams);
+        // this.notificationTrendParent.emit(notificationTrendParams);
         // setting initial Paramter form widget values
-        this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+        this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
       // popular chart data
       if (getWidgetIndex) {
         const chartIndexData = getWidgetIndex.body;
         // third params is current widgets settings current only used when
         // widgets loads first time. may update later for more use cases
-        this.updateChart(chartIndexData, null, barChartParams.data);
+        this.updateChart(chartIndexData, null, notificationTrendParams.data);
       }
       this.loading = false;
       this.emitter.loadingStatus(false);

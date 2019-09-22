@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 @Component({
@@ -41,7 +41,8 @@ export class DistributionByUserComponent implements OnInit {
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
-		private router: Router
+		private router: Router,
+		private widgetHelper
 	) { }
 
 	ngOnInit() {
@@ -80,18 +81,15 @@ export class DistributionByUserComponent implements OnInit {
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
 				myWidgetParameters = getWidgetParameters;
-				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
 				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
 			// populate modal with widget parameters
-			console.log('getWidgetIndex', getWidgetIndex);
-			console.log('myWidgetParameters', myWidgetParameters);
-			debugger
-			let barChartParams;
+			let distributionByUserParams;
 			if (myWidgetParameters) {
-				barChartParams = {
-					type: 'barChartParams',
+				distributionByUserParams = {
+					type: 'distributionByUserParams',
 					data: {
 						...myWidgetParameters,
 						widgetname: this.widgetname,
@@ -103,16 +101,16 @@ export class DistributionByUserComponent implements OnInit {
 						id: this.id
 					}
 				}
-				this.distributionByUserWidgetParameters = barChartParams.data;
+				this.distributionByUserWidgetParameters = distributionByUserParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+				this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
 				const chartIndexData = getWidgetIndex.body;
 				// third params is current widgets settings current only used when
 				// widgets loads first time. may update later for more use cases
-				this.updateChart(chartIndexData, null, barChartParams.data);
+				this.updateChart(chartIndexData, null, distributionByUserParams.data);
 			}
 			this.loading = false;
 			this.emitter.loadingStatus(false);
