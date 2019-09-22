@@ -37,6 +37,16 @@ export class NotificationTrendComponent implements OnInit {
   };
   public barChartLegend: boolean = true;
   public barChartType: string = 'bar';
+  public notificationTrendColors: Array<any> = [
+    {
+      backgroundColor: 'rgba(76,175,80,1)',
+      borderColor: 'rgba(76,175,80,1)',
+      pointBackgroundColor: 'rgba(76,175,80,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(76,175,80,0.8)'
+    }
+  ];
 
   constructor(
     private dashboardService: DashboardService,
@@ -66,8 +76,11 @@ export class NotificationTrendComponent implements OnInit {
         let currentWidgetId = data.notificationTrendWidgetParameters.id;
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
-          let notificationTrendFormValues = data.notificationTrendWidgetParameters;
-          notificationTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(notificationTrendFormValues.Filters.daterange);
+          let notificationTrendFormValues = data.notificationTrendWidgetParameterValues;
+          // TODO: might be issue here. will see later
+          if(notificationTrendFormValues.Filters.daterange) {
+            notificationTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(notificationTrendFormValues.Filters.daterange);
+          }
           this.setWidgetFormValues = notificationTrendFormValues;
           this.updateChart(data.result.body, data, null);
         }
@@ -89,8 +102,6 @@ export class NotificationTrendComponent implements OnInit {
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
-      console.log('getWidgetIndex', getWidgetIndex);
-      console.log('myWidgetParameters', myWidgetParameters);
       let notificationTrendParams;
       if (myWidgetParameters) {
         notificationTrendParams = {

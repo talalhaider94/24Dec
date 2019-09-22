@@ -39,8 +39,8 @@ export class KpiReportTrendComponent implements OnInit {
   public barChartLegend: boolean = true;
   public barChartType: string = 'bar';
   public kpiReportColors: Array<any> = [
-    { // grey
-      backgroundColor: 'rgba(76,175,80,0.2)',
+    {
+      backgroundColor: 'rgba(76,175,80,1)',
       borderColor: 'rgba(76,175,80,1)',
       pointBackgroundColor: 'rgba(76,175,80,1)',
       pointBorderColor: '#fff',
