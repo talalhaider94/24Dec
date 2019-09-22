@@ -12,5 +12,6 @@
 <div style="display: block; position:relative">
   <canvas id="chart" baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
     [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"
+    [colors]="kpiReportColors"
     (chartClick)="chartClicked($event)"></canvas>
 </div>

@@ -38,6 +38,16 @@ export class KpiReportTrendComponent implements OnInit {
   };
   public barChartLegend: boolean = true;
   public barChartType: string = 'bar';
+  public kpiReportColors: Array<any> = [
+    { // grey
+      backgroundColor: 'rgba(76,175,80,0.2)',
+      borderColor: 'rgba(76,175,80,1)',
+      pointBackgroundColor: 'rgba(76,175,80,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(76,175,80,0.8)'
+    }
+  ];
 
   constructor(
     private dashboardService: DashboardService,
@@ -81,12 +91,6 @@ export class KpiReportTrendComponent implements OnInit {
     });
   }
 
-  // this.dashboardService.getContract().subscribe(result => {
-  // });
-
-  // this.dashboardService.getKPIs().subscribe(result => {
-  // });
-
   // invokes on component initialization
   getChartParametersAndData(url, getContractParties) {
     // these are default parameters need to update this logic
@@ -105,7 +109,7 @@ export class KpiReportTrendComponent implements OnInit {
       console.log('myWidgetParameters', myWidgetParameters);
       let kpiReportTrendParams;
       if (myWidgetParameters) {
-        if(Object.keys(this.filters).length > 0) {
+        if (Object.keys(this.filters).length > 0) {
         } else {
           this.filters.contractParties = getContractParties;
         }
