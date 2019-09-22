@@ -29,6 +29,7 @@ export class AmministrazioneComponent implements OnInit {
   searchedTickets: any = [];
   
   editTicketId: String = '';
+  editTicketTarget: String = '';
 
   constructor(
     private dateTimeHelper: DateTimeService,
@@ -134,6 +135,7 @@ export class AmministrazioneComponent implements OnInit {
 
   openModal(row) {
     this.editTicketId = row.id;
+    this.editTicketTarget = this.parseTargetValue(row.description);
     this.editTicketModal.show();
   }
 

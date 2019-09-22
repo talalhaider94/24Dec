@@ -436,6 +436,9 @@ export class PublicComponent implements OnInit {
 		} else {
 			formValues.Filters.daterange = null;
 		}
+		if(formValues.Filters.date) {
+			formValues.Filters.date = this.dateTime.moment(formValues.Filters.date).format('MM/YYYY');
+		}
 		
 		delete formValues.Filters.includeCurrentMonth;
 		delete formValues.Filters.startDate;
@@ -453,6 +456,7 @@ export class PublicComponent implements OnInit {
 		const { url } = this.barChartWidgetParameters;
 		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
+			debugger
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
