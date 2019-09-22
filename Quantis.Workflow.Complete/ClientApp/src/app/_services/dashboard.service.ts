@@ -132,13 +132,13 @@ export class DashboardService {
 		return this.http.get<any>(`${environment.API_URL}/globalfilter/GetContractParties`,{ params });
 	}
 
-	getContract(globalFilterId: number = 0) {
-		const params = new HttpParams().set('globalFilterId', globalFilterId.toString());
+	getContract(globalFilterId: number = 0, contractpartyId: number = 1) {
+		const params = new HttpParams().set('globalFilterId', globalFilterId.toString()).set('contractpartyId', contractpartyId.toString());
 		return this.http.get<any>(`${environment.API_URL}/globalfilter/GetContracts`,{ params });
 	}
 
-	getKPIs(globalFilterId: number = 0) {
-		const params = new HttpParams().set('globalFilterId', globalFilterId.toString());
+	getKPIs(globalFilterId: number = 0, contractId: number = 1) {
+		const params = new HttpParams().set('globalFilterId', globalFilterId.toString()).set('contractId', contractId.toString());
 		return this.http.get<any>(`${environment.API_URL}/globalfilter/GetKPIs`,{ params });
 	}
 

@@ -1,8 +1,10 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
+using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Quantis.WorkFlow.Services.API
@@ -70,6 +72,15 @@ namespace Quantis.WorkFlow.Services.API
         void SetLandingPageByUser(int userId, bool set);
         UserLandingPageDTO GetLandingPageInformation(int userId);
         void SelectLandingPage(int userId);
+
+        List<ReportQueryLVDTO> GetOwnedReportQueries(int userId);
+        List<ReportQueryLVDTO> GetAssignedReportQueries(int userId);
+        ReportQueryDetailDTO GetReportQueryDetailByID(int id, int userId);
+        void AddEditReportQuery(ReportQueryDetailDTO dto, int userId);
+        void DeleteReportQuery(int id, int userId);
+        void AssignReportQuery(MultipleRecordsDTO records, int ownerId);
+        List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid);
+        DataTable ExecuteReportQuery(ReportQueryDetailDTO dto);
 
     }
 }

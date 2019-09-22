@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_WORKFLOW_ADMIN = "VIEW_WORKFLOW_ADMIN";
         public const string VIEW_DEBUG = "VIEW_DEBUG";
         public const string VIEW_STANDARD_DASHBOARD = "VIEW_STANDARD_DASHBOARD";
+        public const string VIEW_REPORT_QUERIES = "VIEW_REPORT_QUERIES";
     }
 
 }

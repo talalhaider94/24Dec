@@ -496,6 +496,45 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+        public List<UserProfilingDTO> GetUserProfilingCSV()
+        {
+            var res = new List<UserProfilingDTO>();
+            string query = @"select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id,u.user_name,u.user_id
+                            from t_rules r 
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id 
+                            left join t_customers c on m.customer_id = c.customer_id
+                            left join t_user_kpis uk on uk.global_rule_id=r.global_rule_id
+                            left join t_users u on uk.user_id=u.user_id
+                            where s.sla_status = 'EFFECTIVE' 
+                            AND m.sla_status = 'EFFECTIVE'";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new UserProfilingDTO() {
+                            GlobalRuleName=(string)result[0],
+                            GlobalRuleId=Decimal.ToInt32((Decimal)result[1]),
+                            ContractName=(string)result[3],
+                            ContractId= Decimal.ToInt32((Decimal)result[2]),
+                            ContractPartyName=(string)result[4],
+                            ContractPartyId= (int)result[5],
+                            UserName=(string)result[6],
+                            UserId= (int)result[7]
+
+                        });
+                    }
+                }
+                return res;
+
+            }
+        }
         public void AssignKpisToUserByContract(int userId, int contractId, bool assign)
         {
             try

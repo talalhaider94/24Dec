@@ -57,6 +57,9 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<DB_WidgetCategory> DB_WidgetCategories { get; set; }
         public DbSet<T_Sla> Slas { get; set; }
         public DbSet<T_UserLandingPage> UserLandingPages { get; set; }
+        public DbSet<T_ReportQuery> ReportQueries { get; set; }
+        public DbSet<T_ReportQueryParameter> ReportQueryParameters { get; set; }
+        public DbSet<T_ReportQueryAssignment> ReportQueryAssignments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             
@@ -99,6 +102,9 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new DB_Widget_Configuration());
             builder.ApplyConfiguration(new DB_WidgetCategory_Configuration());
             builder.ApplyConfiguration(new T_UserLandingPage_Configuration());
+            builder.ApplyConfiguration(new T_ReportQuery_Configuration());
+            builder.ApplyConfiguration(new T_ReportQueryParameter_Configuration());
+            builder.ApplyConfiguration(new T_ReportQueryAssignment_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -144,6 +150,9 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<DB_Widget>();
             updateUpdatedProperty<DB_WidgetCategory>();
             updateUpdatedProperty<T_UserLandingPage>();
+            updateUpdatedProperty<T_ReportQuery>();
+            updateUpdatedProperty<T_ReportQueryParameter>();
+            updateUpdatedProperty<T_ReportQueryAssignment>();
             return base.SaveChanges();
         }
 

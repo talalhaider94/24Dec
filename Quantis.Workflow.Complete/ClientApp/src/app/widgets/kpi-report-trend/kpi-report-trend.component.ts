@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class KpiReportTrendComponent implements OnInit {
   @Input() widgetname: string;
   @Input() url: string;
-  @Input() filters: Array<any>;
-  @Input() properties: Array<any>;
+  @Input() filters: any;
+  @Input() properties: any;
   // this widgetid is from widgets Collection and can be duplicate
   // it will be used for common functionality of same component instance type
   @Input() widgetid: number;
@@ -54,7 +54,12 @@ export class KpiReportTrendComponent implements OnInit {
     }
     if (this.url) {
       this.emitter.loadingStatus(true);
-      this.getChartParametersAndData(this.url);
+      this.dashboardService.getContractParties().subscribe(result => {
+        this.getChartParametersAndData(this.url, result);
+      }, error => {
+        console.error('getContractParties', error);
+      })
+
     }
     // coming from dashboard or public parent components
     this.subscriptionForDataChangesFromParent()
@@ -75,8 +80,15 @@ export class KpiReportTrendComponent implements OnInit {
       }
     });
   }
+
+  // this.dashboardService.getContract().subscribe(result => {
+  // });
+
+  // this.dashboardService.getKPIs().subscribe(result => {
+  // });
+
   // invokes on component initialization
-  getChartParametersAndData(url) {
+  getChartParametersAndData(url, getContractParties) {
     // these are default parameters need to update this logic
     // might have to make both API calls in sequence instead of parallel
     let myWidgetParameters = null;
@@ -91,10 +103,14 @@ export class KpiReportTrendComponent implements OnInit {
       // populate modal with widget parameters
       console.log('getWidgetIndex', getWidgetIndex);
       console.log('myWidgetParameters', myWidgetParameters);
-      let barChartParams;
+      let kpiReportTrendParams;
       if (myWidgetParameters) {
-        barChartParams = {
-          type: 'barChartParams',
+        if(Object.keys(this.filters).length > 0) {
+        } else {
+          this.filters.contractParties = getContractParties;
+        }
+        kpiReportTrendParams = {
+          type: 'kpiReportTrendParams',
           data: {
             ...myWidgetParameters,
             widgetname: this.widgetname,
@@ -106,7 +122,7 @@ export class KpiReportTrendComponent implements OnInit {
             id: this.id
           }
         }
-        this.kpiReportTrendWidgetParameters = barChartParams.data;
+        this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
         // setting initial Paramter form widget values
         this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
@@ -115,7 +131,7 @@ export class KpiReportTrendComponent implements OnInit {
         const chartIndexData = getWidgetIndex.body;
         // third params is current widgets settings current only used when
         // widgets loads first time. may update later for more use cases
-        this.updateChart(chartIndexData, null, barChartParams.data);
+        this.updateChart(chartIndexData, null, kpiReportTrendParams.data);
       }
       this.loading = false;
       this.emitter.loadingStatus(false);
