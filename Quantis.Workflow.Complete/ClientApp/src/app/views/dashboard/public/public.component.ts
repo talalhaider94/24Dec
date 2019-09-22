@@ -3,7 +3,7 @@ import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../../_models';
-import { Subscription, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -32,8 +32,7 @@ export class PublicComponent implements OnInit {
 	dashboardId: number;
 	dashboardCollection: DashboardModel;
 	dashboardWidgetsArray: DashboardContentModel[] = [];
-	cloneDashboardWidgetsArrayState: any = [];
-	emitterSubscription: Subscription; // need to destroy this subscription later
+	cloneDashboardWidgetsArrayState: any = []; // need to destroy this subscription later
 	@ViewChild('widgetParametersModal') public widgetParametersModal: ModalDirective;
 	barChartWidgetParameters: any;
 
@@ -83,6 +82,10 @@ export class PublicComponent implements OnInit {
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string;
+	filterContracts: Array<any> = [];
+	filterKpis: Array<any> = [];
+	loadingFiltersDropDown: boolean = false;
+	loadingModalForm: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -116,19 +119,10 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openBarChartModal') {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
-				// this.createTrees(childData.data.organizationHierarchy);
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'count_trend');
-				// if (this.barChartWidgetParameters) {
-				// 	this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.data.setWidgetFormValues);
-				// 	setTimeout(() => {
-				// 		this.widgetParametersForm.patchValue(childData.data.setWidgetFormValues)
-				// 	});
-				// }
-				// this.helpText = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend').help;
-				// this.widgetParametersModal.show();
 			}
 		},
 		kpiCountSummaryParent: childData => {
@@ -214,7 +208,10 @@ export class PublicComponent implements OnInit {
 				endDate: [null],
 				dateTypes: [null],
 				date: [null],
-				includeCurrentMonth: [false] 
+				includeCurrentMonth: [false],
+				contractParties: [null],
+				contracts: [null],
+				kpi: [null]
 			}),
 			// Note: [null],
 		});
@@ -399,12 +396,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeCheckEvent($event) {
-		alert("All Checked Nodes" + this.organizationTree.checkedNodes);
+		// alert("All Checked Nodes" + this.organizationTree.checkedNodes);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
 	
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-        alert("The selected node's id: " + this.organizationTree.selectedNodes);
+        // alert("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
 	
 	getAllLeafNodesIds(complexJson) {
@@ -416,11 +413,13 @@ export class PublicComponent implements OnInit {
 					this.allLeafNodesIds.push(item.id);
 				}
 			});
-			console.log('allLeafNodesIds ->', this.allLeafNodesIds);
+			// console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
 	}
 
 	onWidgetParametersFormSubmit() {
+		this.loadingModalForm = true;
+		this.emitter.loadingStatus(true);
 		let formValues = this.widgetParametersForm.value;
 		let startDate;
 		let endDate;
@@ -442,15 +441,16 @@ export class PublicComponent implements OnInit {
 		delete formValues.Filters.startDate;
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
-		if(this.organizationTree.checkedNodes.length == 0){
-			formValues.Filters.organizations = this.allLeafNodesIds.join(',');
-		}else{
-			formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
+		if(this.organizationTree) {
+			if(this.organizationTree.checkedNodes.length == 0){
+				formValues.Filters.organizations = this.allLeafNodesIds.join(',');
+			}else{
+				formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
+			}
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
-		this.emitter.loadingStatus(true);
 		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
@@ -553,15 +553,40 @@ export class PublicComponent implements OnInit {
 				});
 				this.isKpiStatusSummaryComponent = false;
 			}
-
+			this.loadingModalForm = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
+			this.loadingModalForm = false;
 		})
 	}
 	customDateTypes(event) {
 		//console.log('customDateTypes', event);
+	}
+
+	contractPartiesDropDown(event) {
+		this.loadingFiltersDropDown = true;
+		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
+			this.loadingFiltersDropDown = false;
+			this.filterContracts = result;
+		}, error => {
+			this.loadingFiltersDropDown = false;
+			console.error('contractPartiesDropDown', error);
+			this.toastr.error('Error', 'Unable to get Contracts');
+		});
+	}
+
+	contractsDropDown(event) {
+		this.loadingFiltersDropDown = true;
+		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
+			this.filterKpis = result;
+			this.loadingFiltersDropDown = false;
+		}, error => {
+			this.loadingFiltersDropDown = false;
+			console.error('contractsDropDown', error);
+			this.toastr.error('Error', 'Unable to get KPIs');
+		});
 	}
 
 	addLoaderToTrees(add = true) {

@@ -121,11 +121,11 @@
 
                 <div class="input-group mb-3">
                         <input type="text"  formControlName="Sign" class="form-control"
-                         placeholder="Unita"
+                         placeholder="Unità di misura"
                          [ngClass]="{ 'is-invalid': submitted && editTicketValues.Sign.errors }"
                          />
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Sign.errors && editTicketValues.Sign.errors.required">Sign is required</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Sign.errors && editTicketValues.Sign.errors.required">Unità di misura is required</span>
 
                     <div class="input-group mb-3">
                             <select class="form-control" formControlName="Type" [ngClass]="{ 'is-invalid': submitted && editTicketValues.Type.errors }">

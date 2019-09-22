@@ -384,7 +384,6 @@ export class AdminKpiComponent implements OnInit {
       var $th = $(this);
       var text = $th.text();
       var header = '"' + text + '"';
-      console.log("th text: ",text)
       headers.push(header); // original code
       //if(text != "") headers.push(header); 
     });

@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit {
 			pushDirections: { north: true, east: true, south: true, west: true },
 			itemChangeCallback: this.itemChange.bind(this),
 			itemResizeCallback: DashboardComponent.itemResize,
-			minCols: 5,
+			minCols: 10,
 			maxCols: 100,
 			minRows: 10,
 			maxRows: 100,
