@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 @Component({
@@ -42,7 +42,7 @@ export class DistributionByUserComponent implements OnInit {
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
 		private router: Router,
-		private widgetHelper
+		private widgetHelper: WidgetHelpersService
 	) { }
 
 	ngOnInit() {
