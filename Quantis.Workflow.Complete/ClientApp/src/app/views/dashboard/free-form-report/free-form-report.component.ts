@@ -25,6 +25,7 @@ export class FreeFormReportComponent implements OnInit {
 
   @ViewChild('addEditQueryReportModal')
   addEditQueryReportModal: ModalDirective;
+  createDashboardModal: ModalDirective;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -129,7 +130,9 @@ export class FreeFormReportComponent implements OnInit {
     })
     this.addEditQueryReportModal.show();
   }
-
+  createDashboardModalHide() {
+    this.createDashboardModal.hide();
+  }
   onQueryReportFormSubmit() {
     this.submitted = true;
     if (this.addEditQueryForm.invalid) {
