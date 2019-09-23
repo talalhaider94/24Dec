@@ -179,7 +179,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-bar-chart',
-    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG'],
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','EDIT_FREEFORM_REPORT'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -201,6 +201,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-book',
         version: '0.0.1',
         key: 'VIEW_DEBUG'
+      },
+      {
+        name: 'Free Form Report',
+        url: '/formreport',
+        icon: 'fa fa-book',
+        version: '0.0.1',
+        key: 'EDIT_FREEFORM_REPORT'
       }
     ]
   },

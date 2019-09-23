@@ -5,7 +5,12 @@ import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { ITreeOptions, TreeComponent } from 'angular-tree-component';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { saveAs } from 'file-saver';
 
+declare var $;
+let $this;
 
 @Component({
   templateUrl: './userprofiling.component.html',
@@ -17,12 +22,19 @@ export class UserProfilingComponent implements OnInit {
   @ViewChild('contractsModal') public contractsModal: ModalDirective;
   @ViewChild('kpisModal') public kpisModal: ModalDirective;
   @ViewChildren('permissionsTree') allTreesNodes !: QueryList<TreeViewComponent>;
+  @ViewChild('csvTable') block: ElementRef;
+  @ViewChild('btnExporta') btnExporta: ElementRef;
+  @ViewChild(DataTableDirective)
+  datatableElement: DataTableDirective;
+  dtTrigger: Subject<any> = new Subject();
+  dtOptions: any = {};
+
   isTreeLoaded = false;
   treesArray = [];
   allCurrentChildIds = [];
   assign = true;
   unassign = false;
-
+  csvTableData = [];
 
   public treeFields: any = {
       dataSource: [],
@@ -75,10 +87,104 @@ export class UserProfilingComponent implements OnInit {
     private apiService: ApiService,
     private toastr: ToastrService,
   ) {
+    $this = this;
+
+    this.dtOptions = {
+      dom: 'Bfrtip',
+      buttons: [
+        {
+          extend: 'csv',
+          text: '<i class="fa fa-file"></i> Esporta CSV',
+          titleAttr: 'Esporta CSV',
+          className: 'btn btn-primary mb-3'
+        },
+      ],
+      //'dom': 'rtip',
+      "columnDefs": [{
+        "targets": [11],
+        "visible": false,
+        "searchable": true
+      }],
+      deferRender: true,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
   }
 
   ngOnInit() {
 
+    this.dtOptions = {
+      //dom: 'Bfrtip',
+      "columnDefs": [{
+        "targets": [12],
+        "visible": false,
+        "searchable": true
+      }],
+      // buttons: [
+      //   {
+      //     extend: 'csv',
+      //     text: '<i class="fa fa-file"></i> Esporta CSV',
+      //     titleAttr: 'Esporta CSV',
+      //     className: 'btn btn-primary mb-3'
+      //   },
+      // ],
+      // buttons: [
+      //   'copy',
+      //   'print',
+      //   'csv',
+      //   'excel',
+      //   'pdf'
+      // ],
+      deferRender: true,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    };
+
+    this.apiService.getUserProfilingCSV().subscribe((data)=>{
+      console.log('CSV Data => ',data);
+      this.csvTableData = data;
+    });
+    
     this.loading.roles = true;
     this.apiService.getCatalogoUsers().subscribe((res)=>{
       console.log('getCatalogoUsers ==> ', res);
@@ -92,6 +198,29 @@ export class UserProfilingComponent implements OnInit {
     //   //this.treeFields.dataSource = data;
     //   this.createTrees(data);
     // }, err => {this.isTreeLoaded = true; this.toastr.warning('Connection error', 'Info')});
+  }
+
+   // tslint:disable-next-line:use-life-cycle-interface
+   ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.setUpDataTableDependencies();
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
+  }
+
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next(); 
+      this.setUpDataTableDependencies();
+    });
+    
   }
 
   populatePermission(data){
@@ -334,6 +463,52 @@ export class UserProfilingComponent implements OnInit {
   //     });
   //   }
   // }
+
+  setUpDataTableDependencies() {
+    // export only what is visible right now (filters & paginationapplied)
+    $(this.btnExporta.nativeElement).off('click');
+    $(this.btnExporta.nativeElement).on('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        $this.table2csv(datatable_Ref, 'full', '.csvTable');  
+      });
+    });
+  }
+
+  table2csv(oTable, exportmode, tableElm) {
+    var csv = '';
+    var headers = [];
+    var rows = [];
+
+    // Get header names
+    $(tableElm+' thead').find('th:not(.notExportCsv)').each(function() {
+      var $th = $(this);
+      var text = $th.text();
+      var header = '"' + text + '"';
+      // headers.push(header); // original code
+      if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+    });
+    csv += headers.join(',') + "\n";
+
+    // get table data
+    if (exportmode == "full") { // total data
+      let totalRows = oTable.data().length;
+      for(let i = 0; i < totalRows; i++) {
+        var row = [];
+        $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i,e)=>{
+          var $td = $(e);
+          var text = $td.text();
+          var cell = '' +text+ '';
+          row.push(cell);
+        })
+        rows.push(row);
+      }
+    }
+    csv += rows.join("\n");
+    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "ExportUserProfiling.csv");
+  }
    
   showContractsModal() {
     this.contractsModal.show();
@@ -350,6 +525,8 @@ export class UserProfilingComponent implements OnInit {
   hideKpisModal() {
     this.kpisModal.hide();
   }
+
+
 
 
 }

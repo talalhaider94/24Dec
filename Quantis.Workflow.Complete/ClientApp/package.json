@@ -49,7 +49,9 @@
     "angular-datatables": "^7.0.0",
     "angular-dual-listbox": "^5.0.1",
     "angular-gridster2": "^8.2.0",
+    "angular-tree-component": "^8.4.0",
     "angular2-uuid": "^1.1.1",
+    "angular5-csv": "^0.2.11",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "classlist.js": "^1.1.20150312",
@@ -81,6 +83,7 @@
     "ngx-pagination": "^4.0.0",
     "ngx-perfect-scrollbar": "^7.2.1",
     "ngx-toastr": "^10.0.4",
+    "ngx-treeview": "^6.0.2",
     "rxjs": "^6.4.0",
     "sha256": "^0.2.0",
     "simple-line-icons": "^2.4.1",
@@ -89,8 +92,6 @@
     "tsickle": "^0.34.3",
     "tslib": "^1.9.0",
     "xlsx": "^0.14.3",
-    "angular-tree-component": "^8.4.0",
-    "ngx-treeview": "^6.0.2",
     "zone.js": "^0.8.29"
   },
   "devDependencies": {

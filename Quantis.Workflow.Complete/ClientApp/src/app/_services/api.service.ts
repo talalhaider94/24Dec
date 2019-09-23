@@ -185,7 +185,11 @@ export class ApiService {
   getSeconds(): Observable<any> {
     const getSecondsEndPoint = `${environment.API_URL}/information/GetDashboardTickInterval`;
     return this.http.get(getSecondsEndPoint);
-  } 
+  }
+  getUserProfilingCSV(): Observable<any> {
+    const getCSVEndPoint = `${environment.API_URL}/information/GetUserProfilingCSV`;
+    return this.http.get(getCSVEndPoint);
+  }  
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)
