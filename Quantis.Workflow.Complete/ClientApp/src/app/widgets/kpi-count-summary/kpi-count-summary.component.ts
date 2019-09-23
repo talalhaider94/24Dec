@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DashboardService, EmitterService } from '../../_services';

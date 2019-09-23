@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild  } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingFormService, AuthService } from '../../_services';
 import { first } from 'rxjs/operators';
 import { Subject } from 'rxjs';
