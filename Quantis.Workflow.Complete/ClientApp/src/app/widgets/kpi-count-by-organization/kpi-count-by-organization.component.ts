@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -88,10 +88,10 @@ export class KpiCountByOrganizationComponent implements OnInit {
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
-      let barChartParams;
+      let kpiCountOrgsParams;
       if (myWidgetParameters) {
-        barChartParams = {
-          type: 'barChartParams',
+        kpiCountOrgsParams = {
+          type: 'kpiCountOrgsParams',
           data: {
             ...myWidgetParameters,
             widgetname: this.widgetname,
@@ -103,7 +103,7 @@ export class KpiCountByOrganizationComponent implements OnInit {
             id: this.id
           }
         }
-        this.kpiCountOrgWidgetParameters = barChartParams.data;
+        this.kpiCountOrgWidgetParameters = kpiCountOrgsParams.data;
         // setting initial Paramter form widget values
         this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
       }
@@ -112,7 +112,7 @@ export class KpiCountByOrganizationComponent implements OnInit {
         const chartIndexData = getWidgetIndex.body;
         // third params is current widgets settings current only used when
         // widgets loads first time. may update later for more use cases
-        this.updateChart(chartIndexData, null, barChartParams.data);
+        this.updateChart(chartIndexData, null, kpiCountOrgsParams.data);
       }
       this.loading = false;
       this.emitter.loadingStatus(false);

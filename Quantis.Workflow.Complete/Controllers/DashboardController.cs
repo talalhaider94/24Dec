@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +6,7 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.Workflow.Complete.Controllers
 {
@@ -20,10 +17,12 @@ namespace Quantis.Workflow.Complete.Controllers
     public class DashboardController : ControllerBase
     {
         private IDashboardService _dashboardAPI { get; set; }
+        private IDataService _dataAPI { get; set; }
 
-        public DashboardController(IDashboardService dashboardAPI)
+        public DashboardController(IDashboardService dashboardAPI,IDataService dataAPI)
         {
             _dashboardAPI = dashboardAPI;
+            _dataAPI = dataAPI;
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDashboards")]
@@ -31,6 +30,25 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             var user = HttpContext.User as AuthUser;
             return _dashboardAPI.GetDashboards(user.UserId);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetDashboardsHomePage")]
+        public List<DashboardDTO> GetDashboardsHomePage()
+        {
+            var user = HttpContext.User as AuthUser;
+            var landingPage= _dataAPI.GetLandingPageInformation(user.UserId);
+            var dashboards= _dashboardAPI.GetDashboards(user.UserId);
+            if (landingPage.ShowLandingPage)
+            {
+                dashboards.Insert(0, new DashboardDTO()
+                {
+                    Id = -1,
+                    Name = "Standard Landing Page",
+                    IsActive = true,
+                    IsDefault = landingPage.SelectedLandingPage
+                });
+            }
+            return dashboards;
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("SetDefaultDashboard")]

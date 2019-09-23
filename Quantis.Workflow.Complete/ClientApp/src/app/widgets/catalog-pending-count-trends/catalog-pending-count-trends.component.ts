@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DashboardService, EmitterService } from '../../_services';
@@ -66,7 +66,8 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 		private dashboardService: DashboardService,
 		private emitter: EmitterService,
 		private dateTime: DateTimeService,
-		private router: Router
+		private router: Router,
+		private widgetHelper: WidgetHelpersService
 	) { }
 
 	ngOnInit() {
@@ -109,7 +110,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				console.log('CatalogPendingCountTrends Filters', this.filters);
 				console.log('CatalogPendingCountTrends Properties', this.properties);
 				// Map Params for widget index when widgets initializes for first time
-				let newParams = WidgetsHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+				let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
 				return this.dashboardService.getWidgetIndex(url, newParams);
 			})
 		).subscribe(getWidgetIndex => {
@@ -118,10 +119,10 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 			console.log('CatalogPendingCountTrendsComponent getWidgetIndex', getWidgetIndex);
 			console.log('CatalogPendingCountTrendsComponent myWidgetParameters', myWidgetParameters);
 
-			let kpiCountSummaryParams;
+			let catalogPendingParams;
 			if (myWidgetParameters) {
-				kpiCountSummaryParams = {
-					type: 'kpiCountSummaryParams',
+				catalogPendingParams = {
+					type: 'catalogPendingParams',
 					data: {
 						...myWidgetParameters,
 						widgetname: this.widgetname,
@@ -133,16 +134,16 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 						id: this.id
 					}
 				}
-				this.catalogPendingWidgetParameters = kpiCountSummaryParams.data;
+				this.catalogPendingWidgetParameters = catalogPendingParams.data;
 				// setting initial Paramter form widget values
-				this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+				this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
 			}
 			// popular chart data
 			if (getWidgetIndex) {
 				const chartIndexData = getWidgetIndex.body;
 				// third params is current widgets settings current only used when
 				// widgets loads first time. may update later for more use cases
-				this.updateChart(chartIndexData, null, kpiCountSummaryParams.data);
+				this.updateChart(chartIndexData, null, catalogPendingParams.data);
 			}
 			this.loading = false;
 			this.emitter.loadingStatus(false);

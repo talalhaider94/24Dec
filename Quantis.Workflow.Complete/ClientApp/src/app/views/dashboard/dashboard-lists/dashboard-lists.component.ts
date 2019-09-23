@@ -136,7 +136,7 @@ export class DashboardListsComponent implements OnInit {
         this.createDashboardModal.hide();
         this.formLoading = false;
         this.toastr.error('Error while creating dashboard');
-      })
+      });
     }
 
   }

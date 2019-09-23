@@ -39,6 +39,16 @@ export class BarchartComponent implements OnInit {
 	};
 	public barChartLegend: boolean = true;
 	public barChartType: string = 'bar';
+	public barChartColors: Array<any> = [
+		{
+		  backgroundColor: 'rgba(76,175,80,1)',
+		  borderColor: 'rgba(76,175,80,1)',
+		  pointBackgroundColor: 'rgba(76,175,80,1)',
+		  pointBorderColor: '#fff',
+		  pointHoverBackgroundColor: '#fff',
+		  pointHoverBorderColor: 'rgba(76,175,80,0.8)'
+		}
+	  ];
 	getOrgHierarchy: any = [];
 
 	constructor(
@@ -70,7 +80,6 @@ export class BarchartComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let barChartFormValues = data.barChartWidgetParameterValues;
-					debugger
 					barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
 					this.setWidgetFormValues = barChartFormValues;
 					this.updateChart(data.result.body, data, null);

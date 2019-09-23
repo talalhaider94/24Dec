@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 import { LandingPageComponent } from './landingpage/landingpage.component';
 import { ChartDataComponent } from './chartdata/chartdata.component';
+import { FreeFormReportComponent } from './free-form-report/free-form-report.component';
 const routes: Routes = [
   // {
   //   path: '',
@@ -51,6 +52,13 @@ const routes: Routes = [
     component: LandingPageComponent,
     data: {
       title: 'Landing Page'
+    }
+  },
+  { 
+    path: 'free-form-report',
+    component: FreeFormReportComponent,
+    data: {
+      title: 'Free Form Report'
     }
   }
 ];

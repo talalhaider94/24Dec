@@ -35,4 +35,5 @@ export interface DashboardModel {
     createdon: Date;
     globalfilterid: number, 
     dashboardwidgets: Array<DashboardContentModel>;
+    isactive: boolean;
 }
