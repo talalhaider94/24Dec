@@ -68,7 +68,7 @@ namespace Quantis.WorkFlow.APIBase.API
             if (props.Filters.ContainsKey("date"))
             {
                 var range = props.Filters["date"];
-                dto.Date = DateTime.ParseExact(range, "MM/yy", CultureInfo.InvariantCulture);
+                dto.Date = DateTime.ParseExact(range, "MM/yyyy", CultureInfo.InvariantCulture);
             }
             else
             {

@@ -25,10 +25,10 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowMeasure = true;
             vm.ShowDateType = true;
             vm.ShowDateFilter = true;
-            vm.AddMeasure(Measures.Number_of_ticket_in_KPI_in_Verifica);
-            vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Compliant);
-            vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Non_Calcolato);
-            vm.AddMeasure(Measures.Number_of_ticket_of_KPI_Non_Compliant);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_in_verifica);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_compliant);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_not_compliant);
+            vm.AddMeasure(Measures.Number_of_Total_KPI_non_calcolato);            
         }
 
         internal override object GetData(WidgetParametersDTO props)

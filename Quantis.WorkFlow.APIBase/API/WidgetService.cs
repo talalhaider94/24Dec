@@ -397,7 +397,102 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public XYDTO GetKPICountSummary(BaseWidgetDTO dto)
         {
-            return new  XYDTO() { XValue = "", YValue = 30 };
+            var result = new XYDTO();
+
+            string signcomplaint = "";
+            if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant)
+            {
+                signcomplaint = "and psl.deviation_ce < 0";
+            }
+            if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+            {
+                signcomplaint = "and psl.deviation_ce > 0";
+            }
+            if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_non_calcolato)
+            {
+                signcomplaint = "and psl.deviation_ce = 0";
+            }
+            string query = @"select 
+                                psl.end_period,
+                                count(1)
+                                from 
+                                (
+                                  select  
+                                  temp.global_rule_id, 
+                                  temp.time_stamp as timestamp, 
+                                  temp.time_stamp_utc as end_period, 
+                                  temp.begin_time_stamp_utc as start_period, 
+                                  temp.sla_id, 
+                                  temp.rule_id, 
+                                  temp.time_unit,
+                                  temp.interval_length, 
+                                  temp.is_period, 
+                                  temp.service_level_target, 
+                                  temp.service_level_target_ce, 
+                                  temp.provided_ce, 
+                                  temp.deviation_ce, 
+                                  temp.complete_record,
+                                  temp.sla_version_id, 
+                                  temp.metric_type_id, 
+                                  temp.domain_category_id, 
+                                  temp.service_domain_id,
+                                  case 
+                                    when deviation_ce > 0 then 'non compliant'
+                                    when deviation_ce < 0 then 'compliant'
+                                    else 'nc'
+                                  end as resultPsl
+                                  from 
+                                  (
+                                    select * 
+                                    from t_psl_0_month pm
+                                    union all
+                                    select * 
+                                    from t_psl_0_quarter pq
+                                    union all
+                                    select * 
+                                    from t_psl_0_year py
+                                    union all
+                                    select * 
+                                    from t_psl_1_all pa
+                                  ) temp
+                                  where provided is not null 
+                                  and service_level_target is not null
+                                ) psl 
+                                left join t_rules r on  psl.rule_id = r.rule_id
+                                left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
+                                left join t_slas s on sv.sla_id = s.sla_id
+                                where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
+                                and psl.time_unit='MONTH'
+                                and psl.complete_record=1
+                                and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                and psl.global_rule_id in ({0})
+                                {1}
+                                group by psl.end_period";
+            query = string.Format(query, string.Join(',', dto.KPIs), signcomplaint);
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleParameter param1 = new OracleParameter("start_period", dto.Date.AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param2 = new OracleParameter("end_period", dto.Date.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result=new XYDTO()
+                        {
+                            XValue = ((DateTime)reader[0]).ToString("MM/yy"),
+                            YValue = Decimal.ToDouble((Decimal)reader[1])
+                        };
+                    }
+                    return result;
+                }
+            }
 
         }
         public List<XYDTO> GetNotificationTrend(WidgetwithAggOptionDTO dto)
