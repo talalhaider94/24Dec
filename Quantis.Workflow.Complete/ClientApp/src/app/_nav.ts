@@ -135,7 +135,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-bar-chart',
-    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG'],
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','EDIT_FREEFORM_REPORT'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -157,6 +157,20 @@ export const navItems: NavData[] = [
         icon: 'fa fa-book',
         version: '0.0.1',
         key: 'VIEW_DEBUG'
+      },
+      {
+        name: 'Free Form Report',
+        url: '/formreport',
+        icon: 'fa fa-book',
+        version: '0.0.1',
+        key: 'EDIT_FREEFORM_REPORT'
+      }, 
+      {
+        name: 'Free Form Report',
+        url: '/dashboard/free-form-report',
+        icon: 'fa fa-file-text-o',
+        version: '0.0.1',
+        key: 'VIEW_REPORT_QUERIES'
       }
     ]
   },
@@ -166,7 +180,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-gear',
     key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
     'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
-    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD'],
+    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD','VIEW_REPORT_QUERIES'],
     children: [
       {
         name: 'Generali',
@@ -218,7 +232,7 @@ export const navItems: NavData[] = [
         key: 'VIEW_CONFIGURATION_USER_PROFILING'
       }, 
       {
-        name: 'View Standard Dashboard',
+        name: 'Standard Dashboard',
         url: '/standarddashboard',
         icon: 'fa fa-gear',
         version: '0.0.1',
@@ -226,12 +240,12 @@ export const navItems: NavData[] = [
       }
     ]
   },
-  {
-    name: 'Free Form Report',
-    url: '/dashboard/free-form-report',
-    icon: 'fa fa-file-text-o',
-    key: ['VIEW_REPORT_QUERIES'],
-  },
+  // {
+  //   name: 'Free Form Report',
+  //   url: '/dashboard/free-form-report',
+  //   icon: 'fa fa-file-text-o',
+  //   key: ['VIEW_REPORT_QUERIES'],
+  // },
   {
     divider: true,
     key: 'alwaysShow'

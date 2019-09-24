@@ -127,6 +127,10 @@ export const routes: Routes = [
         path: 'standarddashboard',
         loadChildren: './views/standarddashboard/standarddashboard.module#StandardDashboardModule'
       },
+      {
+        path: 'freeformreport',
+        loadChildren: './views/formreport/freeform.module#FreeFormModule'
+      },
     ]
   },
   { path: '**', component: P404Component }

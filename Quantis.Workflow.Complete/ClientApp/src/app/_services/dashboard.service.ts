@@ -21,7 +21,7 @@ export class DashboardService {
 	// Return Array of DashboardModel
 	getDashboards(): Observable<Array<DashboardModel>> {
 		// return this.http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
-		return this.http.get<Array<DashboardModel>>(`${environment.API_URL}/dashboard/GetDashboards`);
+		return this.http.get<Array<DashboardModel>>(`${environment.API_URL}/dashboard/GetDashboardsHomePage`);
 	}
 
 	// Return an object

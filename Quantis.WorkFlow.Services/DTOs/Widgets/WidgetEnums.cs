@@ -40,6 +40,11 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         Pending_KPIs,
         [Description("Number of Pending Users")]
         Pending_Users,
+        [Description("Number of Total KPI in Verifica")]
+        Number_of_Total_KPI_in_verifica,
+        [Description("Number of Total KPI Non Calcolato")]
+        Number_of_Total_KPI_non_calcolato
+
 
 
     }
