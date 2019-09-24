@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-free-form-report',
   templateUrl: './free-form-report.component.html',
@@ -41,6 +42,7 @@ export class FreeFormReportComponent implements OnInit {
   get f() { return this.addEditQueryForm.controls; }
   
   ngOnInit() {
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -141,7 +143,7 @@ export class FreeFormReportComponent implements OnInit {
         this.addEditQueryReportModal.hide();
         this.getReportsData();
         this.formLoading = false;
-        this.toastr.success('Dashboard created successfully');
+        this.toastr.success('Query created successfully');
       }, error => {
         this.addEditQueryReportModal.hide();
         this.formLoading = false;

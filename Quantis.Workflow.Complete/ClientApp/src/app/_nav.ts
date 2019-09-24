@@ -164,6 +164,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-book',
         version: '0.0.1',
         key: 'EDIT_FREEFORM_REPORT'
+      }, 
+      {
+        name: 'Free Form Report',
+        url: '/dashboard/free-form-report',
+        icon: 'fa fa-file-text-o',
+        version: '0.0.1',
+        key: 'VIEW_REPORT_QUERIES'
       }
     ]
   },
@@ -173,7 +180,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-gear',
     key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
     'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
-    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD'],
+    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD','VIEW_REPORT_QUERIES'],
     children: [
       {
         name: 'Generali',
@@ -233,12 +240,12 @@ export const navItems: NavData[] = [
       }
     ]
   },
-  {
-    name: 'Free Form Report',
-    url: '/dashboard/free-form-report',
-    icon: 'fa fa-file-text-o',
-    key: ['VIEW_REPORT_QUERIES'],
-  },
+  // {
+  //   name: 'Free Form Report',
+  //   url: '/dashboard/free-form-report',
+  //   icon: 'fa fa-file-text-o',
+  //   key: ['VIEW_REPORT_QUERIES'],
+  // },
   {
     divider: true,
     key: 'alwaysShow'
