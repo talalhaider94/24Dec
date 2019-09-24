@@ -142,6 +142,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.router.navigate(['/dashboard/dashboard', id]);
   }
 
+  standardDashboardNavigation() {
+    this.router.navigate(['/dashboard/landingpage']);
+  }
+
   loadingSpinnerSubscription() {
     this.emitter.getData().subscribe(data => {
       if (data.type === 'loading') {
@@ -157,6 +161,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   getAllDashboards() {
     this.dashboardService.getDashboards().subscribe(dashboards => {
+      console.log('Home Dashboards -> ',dashboards);
       this.emitter.loadingStatus(false);
       this.dashboardCollection = dashboards.filter(dashboard => dashboard.isactive);
     }, error => {
@@ -167,16 +172,28 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   dashboardSwitch(switchValue, id: number){
     this.loadingDashboard = true;
-    this.dashboardService.setDefaultDashboard(id).subscribe(result => {
-      this.loadingDashboard = false;
-      console.log('dashboardSwitch', result);
-      this.toastr.success('Success', 'Dashboard successfully set as default.');
-      this.getAllDashboards();
-    }, error => {
-      this.loadingDashboard = false;
-      console.error('dashboardSwitch', error);
-      this.toastr.error('Error', 'Unable to set default dashboard.');
-    }) 
+    if(id==-1){
+      this.dashboardService.selectLandingPage().subscribe(data => {
+        this.loadingDashboard = false;
+        this.toastr.success('Success', 'Dashboard successfully set as stanadard.');
+        this.getAllDashboards();
+      }, error => {
+        this.loadingDashboard = false;
+        console.error('dashboardSwitch', error);
+        this.toastr.error('Error', 'Unable to set standard dashboard.');
+      })
+    }else{
+      this.dashboardService.setDefaultDashboard(id).subscribe(result => {
+        this.loadingDashboard = false;
+        console.log('dashboardSwitch', result);
+        this.toastr.success('Success', 'Dashboard successfully set as default.');
+        this.getAllDashboards();
+      }, error => {
+        this.loadingDashboard = false;
+        console.error('dashboardSwitch', error);
+        this.toastr.error('Error', 'Unable to set default dashboard.');
+      })
+    } 
   }
 
   saveLandingPage(){

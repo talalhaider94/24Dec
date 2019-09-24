@@ -232,7 +232,7 @@ export const navItems: NavData[] = [
         key: 'VIEW_CONFIGURATION_USER_PROFILING'
       }, 
       {
-        name: 'View Standard Dashboard',
+        name: 'Standard Dashboard',
         url: '/standarddashboard',
         icon: 'fa fa-gear',
         version: '0.0.1',

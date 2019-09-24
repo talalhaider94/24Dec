@@ -77,7 +77,7 @@
               <small>
                 <b>
                   <!-- <a *ngIf="showLandingPage == true" class="pointer-cursor" (click)="saveLandingPage()">Standard Landing Page</a> -->
-                  <a class="pointer-cursor" (click)="dashboardNavigation(dashboard.id)">{{ dashboard.name }}</a>
+                  <a class="pointer-cursor" (click)="dashboard.id==-1 ? standardDashboardNavigation() : dashboardNavigation(dashboard.id)">{{ dashboard.name }}</a>
                 </b>
               </small>
               <ng-container>

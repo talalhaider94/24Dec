@@ -115,6 +115,7 @@ export class FreeFormReportComponent implements OnInit {
         this.ownedReportQueries = ownedReportQueries;
         this.dtTrigger.next();
         this.loading = false;
+        this.rerender();
       }
     }, error => {
       this.toastr.error('Unable to get Free Form Reports Data.', 'Error');
@@ -147,7 +148,7 @@ export class FreeFormReportComponent implements OnInit {
       }, error => {
         this.addEditQueryReportModal.hide();
         this.formLoading = false;
-        this.toastr.error('Error while creating dashboard');
+        this.toastr.error('Error while creating Query');
       });
     }
   }
@@ -155,6 +156,13 @@ export class FreeFormReportComponent implements OnInit {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
     this.dtTrigger2.unsubscribe();
+  }
+
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
   }
 
 }

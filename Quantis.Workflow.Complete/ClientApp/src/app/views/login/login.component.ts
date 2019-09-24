@@ -54,7 +54,9 @@ export class LoginComponent implements OnInit{
         this.dashboardService.GetDefaultDashboardId().subscribe(result => {
           if(result !== -1) {
             this.router.navigate(['dashboard/public', result]);
-          } else {
+          } else if(result == -1) {
+            this.router.navigate(['dashboard/landingpage']);
+          }else{
             this.router.navigate(['dashboard/list']);
           }
           
