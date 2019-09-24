@@ -18,7 +18,7 @@ namespace Quantis.WorkFlow.Models
         public void Configure(EntityTypeBuilder<T_UserLandingPage> builder)
         {
             builder.ToTable("t_user_landingpages");
-            builder.HasKey(o => o.user_id);
+            builder.HasKey(o => o.id);
         }
     }
 }
