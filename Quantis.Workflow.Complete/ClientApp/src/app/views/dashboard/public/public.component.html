@@ -89,33 +89,28 @@
                 <span *ngIf="barChartWidgetParameters.filters.contractParties">
                   <div class="form-group">
                     <label for="contractParties">Contract Parties</label>
-                    <select class="form-control" formControlName="contractParties"
-                      (change)="contractPartiesDropDown($event)">
-                      <option value="" [attr.selected]="true">Select Contract Parties</option>
-                      <option *ngFor="let org of barChartWidgetParameters.filters.contractParties; let i = index"
-                        [value]="org.key">
-                        {{ org.value }}
+                    <select class="form-control" formControlName="contractParties" (change)="contractPartiesDropDown($event)">
+                      <option [selected]="!i" *ngFor="let org of barChartWidgetParameters.filters.contractParties; let i = index"
+                        [value]="barChartWidgetParameters.filters.contractParties[i].key">
+                        {{ barChartWidgetParameters.filters.contractParties[i].value }}
                       </option>
                     </select>
                   </div>
 
                   <div class="form-group">
                     <label for="contracts">Contracts</label><!-- Date Type -->
-                    <select class="form-control" formControlName="contracts" [attr.disabled]="!!filterContracts.length"
-                      (change)="contractsDropDown($event)">
-                      <option value="" [attr.selected]="true">Select Contracts</option>
-                      <option *ngFor="let contract of filterContracts; let i = index" [value]="contract.key">
-                        {{ contract.value }}
+                    <select class="form-control" formControlName="contracts" (change)="contractsDropDown($event)">
+                      <option [selected]="!i" *ngFor="let contract of filterContracts; let i = index" [value]="filterContracts[i].key">
+                        {{ filterContracts[i].value }}
                       </option>
                     </select>
                   </div>
 
                   <div class="form-group">
                     <label for="kpi">KPI's</label><!-- Date Type -->
-                    <select class="form-control" formControlName="kpi" [attr.disabled]="!!filterKpis.length">
-                      <option value="" [attr.selected]="true">Select KPI's</option>
-                      <option *ngFor="let kpi of filterKpis; let i = index" [value]="kpi.key">
-                        {{ kpi.value }}
+                    <select class="form-control" formControlName="kpi" [disabled]="!filterKpis.length">
+                      <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index" [value]="filterKpis[i].key">
+                        {{ filterKpis[i].value }}
                       </option>
                     </select>
                   </div>

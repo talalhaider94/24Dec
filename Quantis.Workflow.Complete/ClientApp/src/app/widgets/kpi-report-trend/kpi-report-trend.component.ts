@@ -111,7 +111,9 @@ export class KpiReportTrendComponent implements OnInit {
       if (myWidgetParameters) {
         if (Object.keys(this.filters).length > 0) {
         } else {
-          this.filters.contractParties = getContractParties;
+          if(!this.editWidgetName) {
+            this.filters.contractParties = getContractParties;
+          }
         }
         kpiReportTrendParams = {
           type: 'kpiReportTrendParams',

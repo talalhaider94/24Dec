@@ -83,8 +83,8 @@ export class PublicComponent implements OnInit {
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string;
-	filterContracts: Array<any> = [];
-	filterKpis: Array<any> = [];
+	filterContracts: Array<any> = [{key: '', value: 'Select Contracts'}];
+	filterKpis: Array<any> = [{key: '', value: `Select KPI's`}];
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
 	constructor(
@@ -211,11 +211,13 @@ export class PublicComponent implements OnInit {
 				date: [null],
 				includeCurrentMonth: [false],
 				contractParties: [null],
-				contracts: [null],
-				kpi: [null]
+				contracts: [{value: null}],
+				kpi: [{ value: null}]
 			}),
 			// Note: [null],
 		});
+		this.widgetParametersForm.get('Filters.contracts').disable();
+		this.widgetParametersForm.get('Filters.kpi').disable();
 		// Grid options
 		this.options = {
 			gridType: GridType.Fit,
@@ -433,6 +435,7 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		if(startDate && endDate) {
+			delete formValues.Filters.dateTypes;
 			formValues.Filters.daterange = `${startDate}-${endDate}`;
 		} else {
 			formValues.Filters.daterange = null;
@@ -457,7 +460,6 @@ export class PublicComponent implements OnInit {
 		const { url } = this.barChartWidgetParameters;
 		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
-			debugger
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
@@ -573,8 +575,14 @@ export class PublicComponent implements OnInit {
 	contractPartiesDropDown(event) {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
+			this.widgetParametersForm.get('Filters.contracts').enable();
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					contracts: result[0].key
+				}
+			});
 			this.loadingFiltersDropDown = false;
-			this.filterContracts = result;
+			this.filterContracts = [...this.filterContracts, ...result];
 		}, error => {
 			this.loadingFiltersDropDown = false;
 			console.error('contractPartiesDropDown', error);
@@ -585,7 +593,13 @@ export class PublicComponent implements OnInit {
 	contractsDropDown(event) {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
-			this.filterKpis = result;
+			this.widgetParametersForm.get('Filters.kpi').enable();
+			this.filterKpis = [...this.filterKpis, ...result];
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					kpi: result[0].key
+				}
+			});
 			this.loadingFiltersDropDown = false;
 		}, error => {
 			this.loadingFiltersDropDown = false;
