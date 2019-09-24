@@ -389,6 +389,50 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.ExecuteReportQuery(dto);
         }
+        ////////////////////////////
+        [HttpGet("GetFormsByUser")]
+        public List<FormUsersDTO> GetFormsByUser()
+        {
+            var usr = HttpContext.User as AuthUser;
+            if (usr != null)
+            {
+                bool isSecurityMember = _dataAPI.SecurityMembers(usr.UserId);
+                var dtos = _dataAPI.GetAllFormUsers(0, usr.UserId);
+                var attachmentCount = _dataAPI.GetFormDetials(dtos.Select(o => o.form_id).ToList());
 
+                return (from d in dtos
+                        join a in attachmentCount on d.form_id equals a.form_id
+                        select new FormUsersDTO
+                        {
+                            form_id = d.form_id,
+                            AttachmentsCount = a.attachment_count,
+                            //create_date = d.create_date,
+                            cutoff = d.cutoff,
+                            form_description = d.form_description,
+                            form_name = d.form_name,
+                            form_owner_id = d.form_owner_id,
+                            //modify_date = d.modify_date,
+                            reader_configuration = d.reader_configuration,
+                            reader_id = d.reader_id,
+                            user_group_id = d.user_group_id,
+                            user_group_name = d.user_group_name,
+                            latest_input_date = a.latest_modified_date
+                        }).ToList();
+
+                //return dtos;
+            }
+            return null;
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetForms")]
+        public List<FormUsersDTO> GetForms(int id)
+        {
+            return _dataAPI.GetAllFormUsers(0, id);
+        }
+        [HttpGet("GetFormById/{id}")]
+        public List<FormUsersDTO> GetFormById(int id)
+        {
+            return _dataAPI.GetAllFormUsers(id, 0);
+        }
     }
 }

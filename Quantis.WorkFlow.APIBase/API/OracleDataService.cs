@@ -340,6 +340,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/*
         public List<OracleFormDTO> GetForm(int id, int userid)
         {
             try
@@ -518,7 +523,8 @@ namespace Quantis.WorkFlow.APIBase.API
                                     }).ToList()
             };
         }
-
+        */
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public List<OracleGroupDTO> GetGroup(int id,string name)
         {
             try

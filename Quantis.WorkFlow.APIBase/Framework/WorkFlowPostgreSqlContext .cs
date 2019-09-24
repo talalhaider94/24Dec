@@ -19,6 +19,8 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
         public DbSet<T_Group> Groups { get; set; }
         public DbSet<T_Widget> Widgets { get; set; }
+        public DbSet<T_FormUsers> FormUsers { get; set; }
+        public DbSet<T_SecurityMembers> SecurityMembers { get; set; }
         public DbSet<T_Page> Pages { get; set; }
         public DbSet<T_FormRule> FormRules { get; set; }
         public DbSet<T_Form> Forms { get; set; }
@@ -64,6 +66,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         {
             
             builder.ApplyConfiguration(new T_Group_Configuration());
+            builder.ApplyConfiguration(new T_SecurityMembers_Configuration());
             builder.ApplyConfiguration(new T_Page_Configuration());
             builder.ApplyConfiguration(new T_Widget_Configuration());
             builder.ApplyConfiguration(new T_Form_Configuration());
@@ -91,6 +94,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_EmailNotifiers_Configuration());
             builder.ApplyConfiguration(new T_GlobalRule_Configuration());
             builder.ApplyConfiguration(new T_Sla_Configuration());
+            builder.ApplyConfiguration(new T_FormUsers_Configuration());
             builder.ApplyConfiguration(new SDM_TicketLog_Configuration());
             builder.ApplyConfiguration(new SDM_TicketFact_Configuration());
 
@@ -113,9 +117,11 @@ namespace Quantis.WorkFlow.APIBase.Framework
             ChangeTracker.DetectChanges();
 
             updateUpdatedProperty<T_Group>();
+            updateUpdatedProperty<T_SecurityMembers>();
             updateUpdatedProperty<T_Widget>();
             updateUpdatedProperty<T_Page>();
             updateUpdatedProperty<T_Form>();
+            updateUpdatedProperty<T_FormUsers>();
             updateUpdatedProperty<T_FormRule>();
             updateUpdatedProperty<T_APIAuthentication>();
             updateUpdatedProperty<T_Configuration>();

@@ -9,7 +9,7 @@ namespace Quantis.WorkFlow.Services.API
     public interface IOracleDataService
     {
         List<OracleCustomerDTO> GetCustomer(int id, string name);
-        List<OracleFormDTO> GetForm(int id, int userid);
+        //List<OracleFormDTO> GetForm(int id, int userid);
         List<OracleGroupDTO> GetGroup(int id, string name);
         List<OracleSlaDTO> GetSla(int id, string name);
         List<OracleRuleDTO> GetRule(int id, string name);

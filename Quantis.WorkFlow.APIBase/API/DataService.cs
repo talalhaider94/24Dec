@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<WidgetDTO, T_Widget> _widgetMapper;
         private readonly IMappingService<UserDTO, T_CatalogUser> _userMapper;
         private readonly IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
+        private readonly IMappingService<FormUsersDTO, T_FormUsers> _formUsersMapper;
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
         private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
         private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;
@@ -48,7 +49,8 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public DataService(WorkFlowPostgreSqlContext context,
             IMappingService<GroupDTO, T_Group> groupMapper, 
-            IMappingService<PageDTO, T_Page> pageMapper, 
+            IMappingService<PageDTO, T_Page> pageMapper,
+            IMappingService<FormUsersDTO, T_FormUsers> formUsersMapper,
             IMappingService<WidgetDTO, T_Widget> widgetMapper,
             IMappingService<UserDTO, T_CatalogUser> userMapper,
             IMappingService<FormRuleDTO, T_FormRule> formRuleMapper,
@@ -66,6 +68,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _widgetMapper = widgetMapper;
             _userMapper = userMapper;
             _formRuleMapper = formRuleMapper;
+            _formUsersMapper = formUsersMapper;
             _catalogKpiMapper = catalogKpiMapper;
             _apiMapper = apiMapper;
             _oracleAPI = oracleAPI;
@@ -645,6 +648,276 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public bool SecurityMembers(int UserId)
+        {
+            bool isSecurityMember = _dbcontext.SecurityMembers.Any(o => o.user_group_id == UserId);
+            return isSecurityMember;
+        }
+        public List<FormUsersDTO> GetAllFormUsers(int formId, int UserId)
+        {
+            try
+            {
+                var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
+                int todayDay = Int32.Parse(DateTime.Now.ToString("dd"));
+                int day_cutoff = Int32.Parse(day_cutoffValue.value);
+                bool cutoff_result;
+                if (day_cutoff == 0){ cutoff_result = false; }else{ if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }}
+
+                var formUsers = new List<T_FormUsers>();
+                var formUser = new T_FormUsers();
+                var resultList = new List<FormUsersDTO>();
+                if (UserId > 0)
+                {
+                    bool isSecurityMember = _dbcontext.SecurityMembers.Any(o => o.user_group_id == UserId);
+                    if (isSecurityMember)
+                    {
+                        formUsers = _dbcontext.FormUsers.Select(m => new T_FormUsers
+                        {
+                            form_id = m.form_id,
+                            form_name = m.form_name,
+                            form_description = m.form_description,
+                            reader_configuration = m.reader_configuration,
+                            form_schema = m.form_schema,
+                            reader_id = m.reader_id,
+                        }).Distinct().OrderBy(o => o.form_name).ToList();
+                    }
+                    else
+                    {
+                        formUsers = _dbcontext.FormUsers.Where(o => o.user_group_id == UserId).OrderBy(o => o.form_name).ToList();
+                    }
+                    resultList = formUsers.Select(o => new FormUsersDTO()
+                    {
+                        id = 0,
+                        form_id = o.form_id,
+                        form_name = o.form_name,
+                        form_description = o.form_description,
+                        AttachmentsCount = 0,//GetFormDetials(formUsers.Select(f => o.form_id).ToList()),
+                        reader_configuration = null,//GetFormAdapterConfiguration(o.reader_configuration, GetFormConfiguration(o.form_schema)),
+                        form_schema = o.form_schema,
+                        reader_id = o.reader_id,
+                        form_owner_id = isSecurityMember ? UserId : o.form_owner_id,
+                        user_group_id = isSecurityMember ? UserId : o.user_group_id,
+                        user_group_name = isSecurityMember ? UserId.ToString() : o.user_group_name,
+                        day_cutoff = day_cutoff,
+                        cutoff = cutoff_result,
+                        latest_input_date = isSecurityMember ? new DateTime(0) : _dbcontext.FormLogs.Any(p => p.id_form == o.form_id) ? _dbcontext.FormLogs.Where(q => q.id_form == o.form_id).Max(r => r.time_stamp) : new DateTime(0)
+                    }).ToList();
+                }
+                if(formId > 0)
+                {
+                    formUser = _dbcontext.FormUsers.FirstOrDefault(o => o.form_id == formId);
+                    var resultSingle = new FormUsersDTO()
+                    {
+                        id = formUser.id,
+                        form_id = formUser.form_id,
+                        form_name = formUser.form_name,
+                        form_description = formUser.form_description,
+                        reader_configuration = GetFormAdapterConfiguration(formUser.reader_configuration, GetFormConfiguration(formUser.form_schema)),
+                        form_schema = formUser.form_schema,
+                        reader_id = formUser.reader_id,
+                        form_owner_id = formUser.form_owner_id,
+                        user_group_id = formUser.user_group_id,
+                        user_group_name = formUser.user_group_name,
+                        day_cutoff = day_cutoff,
+                        cutoff = cutoff_result,
+                        latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == formId) ? _dbcontext.FormLogs.Where(q => q.id_form == formId).Max(r => r.time_stamp) : new DateTime(0)
+                    };
+                    resultList.Add(resultSingle);
+                }
+                return resultList;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+        }
+        public List<FormConfigurationDTO> GetFormConfiguration(string schema)
+        {
+            //var dto = new APIToWorkflowDTO() { input = schema };
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
+                    var output = QuantisUtilities.FixHttpURLForCall(bsiconf.Value, "/home/APIToWorkflow");
+                    client.BaseAddress = new Uri(output.Item1);
+                    var dataAsString = JsonConvert.SerializeObject(new { input = schema});
+                    var content = new StringContent(dataAsString);
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var response = client.PostAsync(output.Item2, content).Result;
+                    //var response = client.PostAsync(output.Item2, content).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string xml = response.Content.ReadAsStringAsync().Result;
+                        string xmlDecoded = HttpUtility.HtmlDecode(xml);
+                        XDocument xdoc = XDocument.Parse(xmlDecoded);
+                        var lists = from uoslist in xdoc.Element("DataLoadingForms").Element("ControlsXml").Element("Xml").Element("Controls").Elements("Control") select uoslist;
+                        //var labelList = new List<FormConfigurationDTO>();
+                        var labelList = lists.Where(o => o.Attribute("type").Value == "DLFLabel").Select(l => new {
+                            a_id = l.Attribute("id").Value,
+                            a_top = l.Attribute("top").Value,
+                            a_left = l.Attribute("left").Value,
+                            a_width = l.Attribute("width").Value,
+                            a_height = l.Attribute("height").Value,
+                            text = l.Element("text").Value,
+                            a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
+                            a_type = l.Attribute("type").Value
+                        }).ToList();
+                        var formfields = lists.Where(o => o.Attribute("type").Value != "DLFLabel").Select(l => new
+                        {
+                            a_id = l.Attribute("id").Value,
+                            //useless a_name = l.Attribute("name").Value,
+                            a_top = l.Attribute("top").Value,
+                            a_left = l.Attribute("left").Value,
+                            a_width = l.Attribute("width").Value,
+                            a_height = l.Attribute("height").Value,
+                            a_type = l.Attribute("type").Value,
+                            a_dataType = l.Attribute("dataType").Value,
+                            name = l.Element("name").Value,
+                            text = (l.Attribute("type").Value == "DLFLabel") ? l.Element("text").Value
+                                          : (l.Attribute("type").Value == "DLFCheckBox") ? l.Element("text").Value : null,
+
+                            a_isMandatoryLabel = (l.Attribute("type").Value == "DLFLabel") ? l.Attribute("isMandatoryLabel").Value : null,
+
+                            a_controllerDataType = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("controllerDataType").Value
+                                                         : (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("controllerDataType").Value : null,
+
+                            defaultValue = (l.Attribute("defaultValue") != null) ? l.Element("defaultValue").Value : null,
+
+                            a_maxLength = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("maxLength").Value : null,
+                            a_isMandatory = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("isMandatory").Value
+                                                  : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("isMandatory").Value : null,
+
+                            a_labelId = (l.Attribute("type").Value == "DLFTextBox") ? l.Attribute("labelId").Value
+                                              : (l.Attribute("type").Value == "DLFDatePicker") ? l.Attribute("labelId").Value : null,
+
+                            //a_checkedStatus = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedStatus").Value : null,
+                            a_checkedValue = (l.Attribute("checkedValue") != null) ? l.Element("checkedValue").Value : null,
+                            a_unCheckedValue = (l.Attribute("unCheckedValue") != null) ? l.Element("unCheckedValue").Value : null,
+                        });
+                        var outputs = new List<FormConfigurationDTO>();
+                        formfields = formfields.OrderBy(o => Int32.Parse(o.a_top)).ToList();
+                        foreach (var f in formfields)
+                        {
+                            var fields = new FormConfigurationDTO()
+                            {
+                                a_dataType = f.a_dataType,
+                                a_isMandatory = f.a_isMandatory,
+                                name = f.name,
+                                a_type = f.a_type,
+                                defaultValue = f.defaultValue,
+
+                            };
+                            if (fields.a_type == "DLFCheckBox")
+                            {
+                                fields.Extras.Add("a_checkedValue", f.a_checkedValue);
+                                fields.Extras.Add("a_unCheckedValue", f.a_unCheckedValue);
+                            }
+
+                            var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
+                            (
+                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top) - 10 &&
+                            Int32.Parse(o.a_top) <= (Int32.Parse(f.a_top) + Int32.Parse(f.a_height))
+                            ));
+                            if (label != null)
+                            {
+
+                                fields.text = label.text;
+                                labelList.Remove(label);
+                            }
+                            outputs.Add(fields);
+                        }
+                        outputs.AddRange(labelList.Select(o => new FormConfigurationDTO()
+                        {
+                            a_type = o.a_type,
+                            text = o.text
+                        }));
+                        return outputs;
+                    }
+                    _dbcontext.LogInformation(string.Format("Call to API has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
+                    return new List<FormConfigurationDTO>();
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        private ReaderConfiguration GetFormAdapterConfiguration(string xml, List<FormConfigurationDTO> conf)
+        {
+            XDocument xdoc = XDocument.Parse(xml);
+            var lists = from uoslist in xdoc.Element("AdapterConfiguration").Element("InputFormatCollection").Element("InputFormat").Element("InputFormatFields").Elements("InputFormatField") select uoslist;
+            var formfields = new List<FormField>();
+
+            foreach (var l in lists)
+            {
+                formfields.Add(new FormField()
+                {
+                    name = l.Attribute("Name").Value,
+                    type = l.Attribute("Type").Value,
+                    source = l.Attribute("Source").Value,
+
+                });
+
+            }
+            foreach (var s in conf)
+            {
+                if (s.a_type == "DLFLabel" && s.text != "Label" && s.text != null && s.text.Length > 0)
+                {
+                    formfields.Add(new FormField()
+                    {
+                        name = "Label",
+                        type = "Label",
+                        source = s.text
+
+                    });
+                }
+            }
+            return new ReaderConfiguration()
+            {
+                inputformatfield = (from f in formfields
+                                    join c in conf on f.name equals c.name
+                                    into gj
+                                    from subset in gj.DefaultIfEmpty()
+                                    select new FormField()
+                                    {
+                                        name = f.name,
+                                        label = subset?.text ?? String.Empty,
+                                        mandatory = subset?.a_isMandatory ?? String.Empty,
+                                        defaultValue = subset?.defaultValue ?? String.Empty,
+                                        source = f.source,
+                                        type = f.type,
+                                        a_type = subset?.a_type ?? String.Empty,
+                                    }).ToList()
+            };
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public List<WidgetDTO> GetAllWidgets()
         {
             try
@@ -656,7 +929,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
+
         }
 
         public bool RemoveAttachment(int id)

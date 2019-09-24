@@ -1,23 +1,25 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
+namespace Quantis.WorkFlow.Services.DTOs.API
 {
-    public class OracleFormDTO
+    public class FormUsersDTO
     {
+        public int? id { get; set; }
         public int form_id { get; set; }
         public string form_name { get; set; }
         public string form_description { get; set; }
-        public int reader_id { get; set; }
-        public int form_owner_id { get; set; }
-        public DateTime create_date { get; set; }
-        public DateTime modify_date { get; set; }
-        public ReaderConfiguration reader_configuration { get; set; }
-        public int user_group_id { get; set; }
+        // public string reader_configuration { get; set; }
+        public int? AttachmentsCount { get; set; }
+        public string form_schema { get; set; }
+        public int? reader_id { get; set; }
+        public int? form_owner_id { get; set; }
+        public int? user_group_id { get; set; }
         public string user_group_name { get; set; }
         public int day_cutoff { get; set; }
         public bool cutoff { get; set; }
+        public ReaderConfiguration reader_configuration { get; set; }
         public DateTime latest_input_date { get; set; }
         public KpisAssociated kpis_associated { get; set; }
     }

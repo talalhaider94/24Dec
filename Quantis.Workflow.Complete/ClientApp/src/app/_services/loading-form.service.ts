@@ -33,12 +33,12 @@ export class LoadingFormService {
   }
   
   getFormById(form_id:number): Observable<any> {
-    const getFormByIdEndPoint = `${environment.API_URL}/Oracle/GetFormById/${form_id}`
+    const getFormByIdEndPoint = `${environment.API_URL}/Data/GetFormById/${form_id}`
     return this.http.get(getFormByIdEndPoint);
   }
 
   getFormsByUserId(user_id:number): Observable<any> {
-    const formsByUserIdEndPoint = `${environment.API_URL}/oracle/GetFormsByUser`;
+    const formsByUserIdEndPoint = `${environment.API_URL}/Data/GetFormsByUser`;
     return this.http.get(formsByUserIdEndPoint);
   }
   // form submitted by Admin from Loading form

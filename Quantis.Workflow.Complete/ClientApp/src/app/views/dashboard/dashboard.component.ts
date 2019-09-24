@@ -20,6 +20,7 @@ import { KpiReportTrendComponent } from '../../widgets/kpi-report-trend/kpi-repo
 import { NotificationTrendComponent } from '../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-status-summary.component';
+import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 import { UUID } from 'angular2-uuid';
 
 @Component({
@@ -52,6 +53,7 @@ export class DashboardComponent implements OnInit {
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
 		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
+		{ name: "Free Form Report", componentInstance: FreeFormReportsWidgetComponent, uiidentifier: "FreeFormReport" },
 	];
 	helpText: string = '';
 	constructor(
@@ -514,6 +516,26 @@ export class DashboardComponent implements OnInit {
 					widgetid: kpiStatusSummaryWidget.id,
 					id: 0,
 					url: kpiStatusSummaryWidget.url
+				});
+			}
+			case "FreeFormReport": {
+				let freeFormReportWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'FreeFormReport');
+				return this.dashboardWidgetsArray.push({
+					cols: 15,
+					rows: 8,
+					minItemCols: 10,
+					minItemRows: 5,
+					x: 0,
+					y: 0,
+					component: FreeFormReportsWidgetComponent,
+					widgetname: freeFormReportWidget.name,
+					uiidentifier: freeFormReportWidget.uiidentifier,
+					filters: {}, // need to update this code
+					properties: {},
+					dashboardid: this.dashboardId,
+					widgetid: freeFormReportWidget.id,
+					id: 0,
+					url: freeFormReportWidget.url
 				});
 			}
 		}

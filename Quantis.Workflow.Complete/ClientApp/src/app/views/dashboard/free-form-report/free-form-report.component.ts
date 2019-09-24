@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-free-form-report',
   templateUrl: './free-form-report.component.html',
@@ -41,6 +42,7 @@ export class FreeFormReportComponent implements OnInit {
   get f() { return this.addEditQueryForm.controls; }
   
   ngOnInit() {
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -113,6 +115,7 @@ export class FreeFormReportComponent implements OnInit {
         this.ownedReportQueries = ownedReportQueries;
         this.dtTrigger.next();
         this.loading = false;
+        this.rerender();
       }
     }, error => {
       this.toastr.error('Unable to get Free Form Reports Data.', 'Error');
@@ -141,11 +144,11 @@ export class FreeFormReportComponent implements OnInit {
         this.addEditQueryReportModal.hide();
         this.getReportsData();
         this.formLoading = false;
-        this.toastr.success('Dashboard created successfully');
+        this.toastr.success('Query created successfully');
       }, error => {
         this.addEditQueryReportModal.hide();
         this.formLoading = false;
-        this.toastr.error('Error while creating dashboard');
+        this.toastr.error('Error while creating Query');
       });
     }
   }
@@ -153,6 +156,13 @@ export class FreeFormReportComponent implements OnInit {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
     this.dtTrigger2.unsubscribe();
+  }
+
+  rerender(): void {
+    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
   }
 
 }
