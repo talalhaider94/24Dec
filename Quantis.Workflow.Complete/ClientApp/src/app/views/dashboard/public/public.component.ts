@@ -20,7 +20,7 @@ import { KpiReportTrendComponent } from '../../../widgets/kpi-report-trend/kpi-r
 import { NotificationTrendComponent } from '../../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
-
+import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 @Component({
 	selector: 'app-public',
 	templateUrl: './public.component.html',
@@ -66,6 +66,7 @@ export class PublicComponent implements OnInit {
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
 		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
+		{ name: "Free Form Report", componentInstance: FreeFormReportsWidgetComponent, uiidentifier: "FreeFormReport" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
