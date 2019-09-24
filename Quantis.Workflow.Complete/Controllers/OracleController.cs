@@ -46,12 +46,12 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _oracleAPI.GetCustomer(0, name);
         }
-        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        /*[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormById/{id}")]
         public List<OracleFormDTO> GetFormById(int id)
         {
             return _oracleAPI.GetForm(id, 0);
-        }
+        }*/
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetLandingPageByUser")]
         public List<LandingPageDTO> GetLandingPageByUser(string period)
@@ -59,7 +59,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = HttpContext.User as AuthUser;
             return _oracleAPI.GetLandingPageByUser(usr.UserId,period);
         }
-        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        /*[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormsByUser")]
         public List<OrcaleFormWithAttachmentCountDTO> GetFormsByUser()
         {
@@ -96,7 +96,7 @@ namespace Quantis.WorkFlow.Controllers
         public List<OracleFormDTO> GetForms(int id)
         {
             return _oracleAPI.GetForm(0, 0);
-        }
+        }*/
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetGroupById/{id}")]
         public List<OracleGroupDTO> GetGroupById(int id)
