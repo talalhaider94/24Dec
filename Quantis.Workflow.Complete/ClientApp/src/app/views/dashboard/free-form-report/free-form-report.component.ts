@@ -13,14 +13,23 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./free-form-report.component.scss']
 })
 export class FreeFormReportComponent implements OnInit {
+  @ViewChild('configModal') public configModal: ModalDirective;
   assignedReportQueries: any = [];
+  assignedQueriesBodyData: any = [];
   ownedReportQueries: any = [];
   
   loading: boolean = true;
   formLoading: boolean = false;
   submitted: boolean = false;
+  queryId=0;
+  count=0;
+  assignedUsers = [];
+  params = {
+    id: 0,
+    ids: []
+  }
 
-  modalTitle: string = 'Add Query Report';
+  modalTitle: string = 'Users Assigned Queries';
   // @ViewChildren(DataTableDirective)
   // datatableElement: DataTableDirective;
 
@@ -37,6 +46,8 @@ export class FreeFormReportComponent implements OnInit {
   dtTrigger = new Subject();
   dtOptions2: DataTables.Settings = {};
   dtTrigger2 = new Subject();
+  dtOptions3: DataTables.Settings = {};
+  dtTrigger3 = new Subject();
 
   addEditQueryForm: FormGroup;
   constructor(
@@ -103,6 +114,33 @@ export class FreeFormReportComponent implements OnInit {
       },
       destroy:true
     };
+    this.dtOptions3 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+          first: "Primo",
+          previous: "Precedente",
+          next: "Seguente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+          sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+      },
+      destroy:true
+    };
     this.addEditQueryForm = this.formBuilder.group({
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
@@ -115,6 +153,7 @@ export class FreeFormReportComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTrigger2.next();
+    this.dtTrigger3.next();
   }
 
   getReportsData() {
@@ -171,6 +210,7 @@ export class FreeFormReportComponent implements OnInit {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
     this.dtTrigger2.unsubscribe();
+    this.dtTrigger3.unsubscribe();
   }
 
   rerender(): void {
@@ -179,8 +219,65 @@ export class FreeFormReportComponent implements OnInit {
         dtInstance.destroy();
         this.dtTrigger.next();
         this.dtTrigger2.next();
+        this.dtTrigger3.next();
       });
     });
+  }
+
+  populateAssignedUsers(data,event){ 
+    if(event.target.checked==true){   
+      this.assignedUsers[this.count] = data.ca_bsi_user_id;
+      this.count++;
+    }
+  }
+
+  save(){
+    this.params.id = this.queryId;
+    this.params.ids = this.assignedUsers;
+
+    //console.log('save -> ',this.params.id,this.params.ids);
+
+    this.toastr.info('Valore in aggiornamento..', 'Confirm');
+    this._freeFormReport.setUserPermission(this.params).subscribe(data => {
+      this.toastr.success('Valore Aggiornato', 'Success');
+      this.hideConfigModal();
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+      this.hideConfigModal();
+    });
+  }
+
+  getOwnedQueries(){
+    this._freeFormReport.getOwnedReportQueries().subscribe(data => {
+      this.ownedReportQueries = data;
+    });
+  }
+
+  deleteQuery(data){
+    this.toastr.info('Valore in aggiornamento..', 'Confirm');
+    this._freeFormReport.DeleteReportQuery(data.id).subscribe(data => {
+      this.getOwnedQueries();
+      this.toastr.success('Valore Aggiornato', 'Success');
+    }, error => {
+      this.toastr.error('Errore durante update.', 'Error');
+    });
+  }
+
+  onCancel(dismissMethod: string): void {
+    console.log('Cancel ', dismissMethod);
+  }
+
+  showConfigModal(row) {
+    this.queryId = row.id;
+    this._freeFormReport.GetAllUsersAssignedQueries(row.id).subscribe(data => {
+      console.log('GetAllUsersAssignedQueries -> ',data);
+      this.assignedQueriesBodyData = data;
+      this.configModal.show();
+     });  
+  }
+
+  hideConfigModal() {
+    this.configModal.hide();
   }
 
 }

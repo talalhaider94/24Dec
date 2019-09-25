@@ -101,7 +101,7 @@ export class FormReportQueryComponent implements OnInit {
   }
 
   addParameters(): void {
-    this.Parameters = this.addEditQueryForm.get('parameters') as FormArray;
+    this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
     this.Parameters.push(this.createParameters());
   }
 

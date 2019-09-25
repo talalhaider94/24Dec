@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import {Observable} from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,14 +24,32 @@ export class FreeFormReportService {
     return this.http.post(`${environment.API_URL}/data/AddEditReportQuery`, params);
   }
 
-  getReportQueryDetailByID(id: number = 1) {
+  getReportQueryDetailByID(id): Observable<any>  {
     const params = new HttpParams().set('id', id.toString());
 		return this.http.get<any>(`${environment.API_URL}/data/GetReportQueryDetailByID`, { params }); 
+  }
+  getKpis(userId,contractId): Observable<any> {
+    const getKpisEndPoint = `${environment.API_URL}/information/GetAllKpisByUserId?userId=${userId}&contractId=${contractId}`;
+    return this.http.get(getKpisEndPoint);
+  }
+  
+  GetAllUsersAssignedQueries(id): Observable<any>  {
+    const params = `${environment.API_URL}/data/GetAllUsersAssignedQueries?queryid=${id}`;
+    return this.http.get(params); 
   }
   
   deleteReportQuery(id: number = 1) {
     const params = new HttpParams().set('id', id.toString());
 		return this.http.get<any>(`${environment.API_URL}/data/DeleteReportQuery`, { params }); 
+  }
+   
+  setUserPermission(params) {
+    return this.http.post(`${environment.API_URL}/data/AssignReportQuery`, params);
+  }
+   
+  DeleteReportQuery(id): Observable<any> {
+    const params = `${environment.API_URL}/data/DeleteReportQuery?id=${id}`;
+    return this.http.get(params); 
   }
   
 }

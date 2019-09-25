@@ -16,7 +16,7 @@
                     </div>
                     <div class="table-responsive">
                         <table #assigned class="table stripe" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-responsive-sm table-hover table-outline mb-0">
-                            <thead style="background: #20a8d8">
+                            <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
                                     <th>Nome Query</th>
@@ -29,7 +29,7 @@
                                 </tr> -->
                                 <tr *ngFor="let assignedQuery of assignedReportQueries; let i = index">
                                     <td><div>{{ i+1 }}</div></td>
-                                    <td><div>{{ assignedQuery.QueryName }}</div></td>
+                                    <td><div>{{ assignedQuery.queryname }}</div></td>
                                     <td>
                                         <div>
                                             <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="table-responsive">
                         <table #owned class="table stripe" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" class="table table-responsive-sm table-hover table-outline mb-0">
-                            <thead style="background: #20a8d8">
+                            <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
                                     <th>Nome Query</th>
@@ -65,11 +65,18 @@
                                         <div>{{ i+1 }}</div>
                                     </td>
                                     <td>
-                                        <div>{{ ownedQuery.QueryName }}</div>
+                                        <div>{{ ownedQuery.queryname }}</div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                                            <button class="btn btn-primary btn-sm" data-toggle="modal"
+                                                data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
+                                                <span class="fa fa-edit"></span>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Gruppo?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
+                                            (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
+                                                <span class="fa fa-trash"></span>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -84,34 +91,37 @@
     <!--/.row-->
 </div>
 
-<div bsModal #addEditQueryReportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-primary" role="document">
+<div bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">{{ modalTitle }}</h4>
-                <button type="button" class="close" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                <button type="button" class="close" aria-label="Close" (click)="hideConfigModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
-                    <div class="form-group">
-                        <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Query Name">
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserisci nome valido per query</span>
-                    <div class="form-group">
-                        <input type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text">
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserisci testo valido per la query</span>
-                    <div class="row">
-                        <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" class="btn-sm btn btn-primary">
-                            <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <!-- create dashboard model body end -->
+                <table class="table stripe" #assignedQueriesTable datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3">
+                    <thead style="background: #20a8d8">
+                        <tr style="font-size:12px;color:white">
+                            <th style="text-align:center">NAME</th>
+                            <th style="text-align:center">USERNAME</th>
+                            <th style="text-align:center">ASSIGNED QUERIES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of assignedQueriesBodyData; index as i">
+                        <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
+                        <td style="text-align:center">{{row.ca_bsi_account}}</td>
+                        <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="save()">Aggiungi</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
             </div>
         </div>
         <!-- /.modal-content -->
