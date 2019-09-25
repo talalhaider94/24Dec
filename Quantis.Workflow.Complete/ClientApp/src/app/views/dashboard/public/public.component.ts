@@ -20,7 +20,7 @@ import { KpiReportTrendComponent } from '../../../widgets/kpi-report-trend/kpi-r
 import { NotificationTrendComponent } from '../../../widgets/notification-trend/notification-trend.component';
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
-
+import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 @Component({
 	selector: 'app-public',
 	templateUrl: './public.component.html',
@@ -66,6 +66,7 @@ export class PublicComponent implements OnInit {
 		{ name: "Notification Trend", componentInstance: NotificationTrendComponent, uiidentifier: "notification_trend" },
 		{ name: "KPI count by Organization", componentInstance: KpiCountByOrganizationComponent, uiidentifier: "kpi_count_by_organization" },
 		{ name: "KPI Status Summary", componentInstance: KpiStatusSummaryComponent, uiidentifier: "KPIStatusSummary" },
+		{ name: "Free Form Report", componentInstance: FreeFormReportsWidgetComponent, uiidentifier: "FreeFormReport" },
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
@@ -82,8 +83,8 @@ export class PublicComponent implements OnInit {
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string;
-	filterContracts: Array<any> = [];
-	filterKpis: Array<any> = [];
+	filterContracts: Array<any> = [{key: '', value: 'Select Contracts'}];
+	filterKpis: Array<any> = [{key: '', value: `Select KPI's`}];
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
 	constructor(
@@ -210,11 +211,13 @@ export class PublicComponent implements OnInit {
 				date: [null],
 				includeCurrentMonth: [false],
 				contractParties: [null],
-				contracts: [null],
-				kpi: [null]
+				contracts: [{value: null}],
+				kpi: [{ value: null}]
 			}),
 			// Note: [null],
 		});
+		this.widgetParametersForm.get('Filters.contracts').disable();
+		this.widgetParametersForm.get('Filters.kpi').disable();
 		// Grid options
 		this.options = {
 			gridType: GridType.Fit,
@@ -432,6 +435,7 @@ export class PublicComponent implements OnInit {
 			endDate = timePeriodRange.endDate;
 		}
 		if(startDate && endDate) {
+			delete formValues.Filters.dateTypes;
 			formValues.Filters.daterange = `${startDate}-${endDate}`;
 		} else {
 			formValues.Filters.daterange = null;
@@ -456,7 +460,6 @@ export class PublicComponent implements OnInit {
 		const { url } = this.barChartWidgetParameters;
 		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
-			debugger
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
@@ -572,8 +575,14 @@ export class PublicComponent implements OnInit {
 	contractPartiesDropDown(event) {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
+			this.widgetParametersForm.get('Filters.contracts').enable();
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					contracts: result[0].key
+				}
+			});
 			this.loadingFiltersDropDown = false;
-			this.filterContracts = result;
+			this.filterContracts = [...this.filterContracts, ...result];
 		}, error => {
 			this.loadingFiltersDropDown = false;
 			console.error('contractPartiesDropDown', error);
@@ -584,7 +593,13 @@ export class PublicComponent implements OnInit {
 	contractsDropDown(event) {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
-			this.filterKpis = result;
+			this.widgetParametersForm.get('Filters.kpi').enable();
+			this.filterKpis = [...this.filterKpis, ...result];
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					kpi: result[0].key
+				}
+			});
 			this.loadingFiltersDropDown = false;
 		}, error => {
 			this.loadingFiltersDropDown = false;

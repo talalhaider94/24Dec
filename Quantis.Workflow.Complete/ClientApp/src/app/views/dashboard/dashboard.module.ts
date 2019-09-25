@@ -35,6 +35,7 @@ import { KpiStatusSummaryComponent } from '../../widgets/kpi-status-summary/kpi-
 import { FreeFormReportComponent } from './free-form-report/free-form-report.component';
 import { FormReportQueryComponent } from './form-report-query/form-report-query.component';
 import { ImportFormReportComponent } from './import-form-report/import-form-report.component';
+import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { ImportFormReportComponent } from './import-form-report/import-form-repo
       KpiReportTrendComponent,
       NotificationTrendComponent,
       KpiCountByOrganizationComponent,
-      KpiStatusSummaryComponent
+      KpiStatusSummaryComponent,
+      FreeFormReportsWidgetComponent
     ]),
     HighchartsChartModule,
     ModalModule.forRoot(),
@@ -86,7 +88,8 @@ import { ImportFormReportComponent } from './import-form-report/import-form-repo
     LandingPageComponent,
     FreeFormReportComponent,
     FormReportQueryComponent,
-    ImportFormReportComponent
+    ImportFormReportComponent,
+    FreeFormReportsWidgetComponent
   ]
 })
 export class DashboardModule { }

@@ -14,6 +14,7 @@
                 <th class="text-center">No.</th>
                 <th class="text-center">Form ID</th>
                 <th class="text-center">Nome Form</th>
+                <th class="text-center">KPI</th>
                 <th class="text-center">Numero di allegati totali</th>
                 <th class="text-center">Data ultimo caricamento</th>
                 <th class="text-center">Azione</th>
@@ -28,7 +29,7 @@
                 </td>
               </tr>
               <tr *ngFor="let loadingForm of loadingForms; let i = index"
-                [ngClass]="{'active': cutOffRow(loadingForm)}">
+                  [ngClass]="{'active': cutOffRow(loadingForm)}">
                 <td>
                   <div class="text-center">{{ i+1 }}</div>
                 </td>
@@ -37,6 +38,13 @@
                 </td>
                 <td>
                   <div class="text-center">{{ loadingForm.form_name }}</div>
+                </td>
+                <td>
+                  <div class="text-center" *ngIf="loadingForm.kpis_associated != null">
+                    <ul>
+                      <li *ngFor="let kpi of loadingForm.kpis_associated; let i = index">{{ kpi.kpi_name_bsi }}</li>
+                    </ul>
+                  </div>
                 </td>
                 <td>
                   <div class="text-center">
@@ -48,14 +56,14 @@
                 <td>
                   <div class="text-center">
                     <span [ngClass]="formatInputDate(loadingForm.latest_input_date) === 'Nessun caricamento' ? 'badge badge-success' : ''">
-                        {{ formatInputDate(loadingForm.latest_input_date) }}
+                      {{ formatInputDate(loadingForm.latest_input_date) }}
                     </span>
                   </div>
                 </td>
                 <td>
                   <div class="text-center">
                     <a [routerLink]="['/loading-form/utente', loadingForm.form_id, loadingForm.form_name]"
-                      class="btn btn-info btn-sm text-white"><span class="fa fa-edit"></span></a>
+                       class="btn btn-info btn-sm text-white"><span class="fa fa-edit"></span></a>
                   </div>
                 </td>
               </tr>
