@@ -25,10 +25,14 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowMeasure = true;
             vm.ShowDateType = true;
             vm.ShowDateFilter = true;
+            vm.ShowIncompletePeriodCheck = true;
             vm.AddMeasure(Measures.Number_of_Total_KPI_in_verifica);
             vm.AddMeasure(Measures.Number_of_Total_KPI_compliant);
             vm.AddMeasure(Measures.Number_of_Total_KPI_not_compliant);
-            vm.AddMeasure(Measures.Number_of_Total_KPI_non_calcolato);            
+            vm.AddMeasure(Measures.Number_of_Total_KPI_non_calcolato);
+            vm.DateTypes.Clear();
+            vm.DateTypes.Add(0, "Intervallo");
+            vm.DateTypes.Add(1, "Ultimo mese");
         }
 
         internal override object GetData(WidgetParametersDTO props)
