@@ -4,10 +4,10 @@
             <div class="card">
                 <div class="card-body p-3">
                     <div class="clearfix mb-3">
-                        <h5 class="float-left">Assigned Report Queries</h5>
+                        <h5 class="float-left">Report Query Assegnate</h5>
                         <div class="float-right ">
                             <button type="button" class="btn btn-success btn-sm" routerLink="/dashboard/form-report-query">
-                                <span class="fa fa-plus"></span> Add Query Report
+                                <span class="fa fa-plus"></span> Aggiungi Query
                             </button>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                             <thead style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
-                                    <th>Query Name</th>
+                                    <th>Nome Query</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -43,7 +43,7 @@
             </div>
             <div class="card">
                 <div class="card-body p-3">
-                    <h5 class="mb-3">Owned Report Queries</h5>
+                    <h5 class="mb-3">Owner Report Queries</h5>
                     <div *ngIf="loading" class="text-center mb-1">
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </div>
@@ -52,7 +52,7 @@
                             <thead style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
-                                    <th>Query Name</th>
+                                    <th>Nome Query</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -98,15 +98,15 @@
                     <div class="form-group">
                         <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Query Name">
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Enter valid query name</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserisci nome valido per query</span>
                     <div class="form-group">
                         <input type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text">
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Enter valid query text</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserisci testo valido per la query</span>
                     <div class="row">
                         <div class="col-6">
                             <button [disabled]="formLoading" type="submit" class="btn-sm btn btn-primary">
-                            <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Submit
+                            <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
                         </div>
                     </div>
