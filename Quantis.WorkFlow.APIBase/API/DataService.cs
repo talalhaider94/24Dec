@@ -2044,7 +2044,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     Id = entity.id,
                     QueryName = entity.query_name,
                     QueryText = entity.query_text,
-                    Parameters = entity.Parameters.Select(p => new KeyValuePair<string, string>(p.parameter_key, p.parameter_value)).ToList()
+                    Parameters = entity.Parameters.Select(p => new KeyValuePairDTO() {
+                        Key= p.parameter_key,
+                        Value=p.parameter_value
+                    }).ToList()
                 };
                 return dto;
             }
