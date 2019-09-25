@@ -19,8 +19,10 @@ export class FormReportQueryComponent implements OnInit {
   ownedReportQueries: any = [];
   QueryName;
   QueryText;
-  key = '';
-  value = '';
+  parametersData = {
+    key: '',
+    value: ''
+  };
   form: FormGroup;
   
   loading: boolean = true;
@@ -86,8 +88,8 @@ export class FormReportQueryComponent implements OnInit {
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
       parameters: this.formBuilder.array([
-          this.key = '',
-          this.value = ''
+          this.parametersData.key = '',
+          this.parametersData.value = ''
       ]),
     //   key: this.formBuilder.array([
     //     ''
