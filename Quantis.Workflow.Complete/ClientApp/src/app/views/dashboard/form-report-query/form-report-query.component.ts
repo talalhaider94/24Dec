@@ -104,9 +104,15 @@ export class FormReportQueryComponent implements OnInit {
     this.Parameters = this.addEditQueryForm.get('parameters') as FormArray;
     this.Parameters.push(this.createParameters());
   }
+
+//   addCreds() {
+//     const creds = this.form.controls.credentials as FormArray;
+//     creds.push(this.fb.group({
+//       key: '',
+//       value: '',
+//     }));
+//   }
   onQueryReportFormSubmit() {
-    // addEditQueryForm data should be in this
-    // this.addEditQueryForm.value. is variable me sahi values ani chahya
       // const creds = this.form.controls.credentials as FormArray;
       console.log('submit form -> ',this.addEditQueryForm.value);
     this.submitted = true;
@@ -135,12 +141,6 @@ export class FormReportQueryComponent implements OnInit {
 //     });
 //   }
   
-  addCreds() {
-    const creds = this.form.controls.credentials as FormArray;
-    creds.push(this.fb.group({
-      key: '',
-      value: '',
-    }));
-  }
+
 
 }
