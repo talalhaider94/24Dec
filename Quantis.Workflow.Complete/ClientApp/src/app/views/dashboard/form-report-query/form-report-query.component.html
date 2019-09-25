@@ -15,12 +15,18 @@
                         <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Enter valid query text</span>
-                    <div class="row" formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index">
-                        <!-- <ng-container [formGroupName]="i"> -->
-                            <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
-                            <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div><br><br>
-                        <!-- </ng-container> -->
+                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
+                        <div [formGroupName]="i">
+                            <input formControlName="key" placeholder="Key">
+                            <input formControlName="value" placeholder="Value">
+                        </div>
                     </div>
+                    <!-- <div class="row" formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index"> -->
+                    <!-- <ng-container [formGroupName]="i"> -->
+                    <!-- <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
+                            <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div><br><br> -->
+                    <!-- </ng-container> -->
+                    <!-- </div> -->
                     <div class="row">
                         <div class="col-6">
                             <button [disabled]="formLoading" type="submit" class="btn btn-success">
@@ -34,6 +40,6 @@
         </div>
         <!--/.col-->
     </div>
-        <!--/.row-->
+    <!--/.row-->
 
-    </div>
+</div>

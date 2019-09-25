@@ -38,16 +38,18 @@ export class FormReportQueryComponent implements OnInit {
   dtTrigger = new Subject();
 
   addEditQueryForm: FormGroup;
+  Parameters: FormArray;
+
   constructor(
     private _freeFormReport: FreeFormReportService,
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
     private fb: FormBuilder
   ) {
-      this.form = this.fb.group({
-        published: true,
-        credentials: this.fb.array([]),
-      });
+      // this.form = this.fb.group({
+      //   published: true,
+      //   credentials: this.fb.array([]),
+      // });
    }
 
   get f() { return this.addEditQueryForm.controls; }
@@ -85,21 +87,25 @@ export class FormReportQueryComponent implements OnInit {
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
-      parameters: this.formBuilder.array([
-          this.key = '',
-          this.value = ''
-      ]),
-    //   key: this.formBuilder.array([
-    //     ''
-    //   ]),
-    //   value: this.formBuilder.array([
-    //       ''
-    //   ])
+      Parameters: this.formBuilder.array([ this.createParameters() ]),
     });
   }
 
+  createParameters(): FormGroup {
+    return this.formBuilder.group({
+      key: '',
+      value: '',
+    });
+  }
+
+  addParameters(): void {
+    this.Parameters = this.addEditQueryForm.get('parameters') as FormArray;
+    this.Parameters.push(this.createParameters());
+  }
   onQueryReportFormSubmit() {
-      const creds = this.form.controls.credentials as FormArray;
+    // addEditQueryForm data should be in this
+    // this.addEditQueryForm.value. is variable me sahi values ani chahya
+      // const creds = this.form.controls.credentials as FormArray;
       console.log('submit form -> ',this.addEditQueryForm.value);
     this.submitted = true;
     if (this.addEditQueryForm.invalid) {

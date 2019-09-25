@@ -458,7 +458,8 @@ export class PublicComponent implements OnInit {
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 				if(formValues.Filters.hasOwnProperty('contractParties')) {
 					delete formValues.Filters.contractParties;
-					delete formValues.Filters.contract;
+					delete formValues.Filters.contracts;
+					formValues.Filters.kpi = +formValues.Filters.kpi;
 				}
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
