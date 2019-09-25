@@ -584,14 +584,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         result.Add(new XYZDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
-                            YValue = (long)reader[1],
+                            YValue = (double)reader[1],
                             Description= (string)reader[3],
                             ZValue="Target"
                         });
                         result.Add(new XYZDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
-                            YValue = Decimal.ToDouble((Decimal)reader[2]),
+                            YValue = (double)reader[2],
                             Description = (string)reader[3],
                             ZValue = "Value"
                         });

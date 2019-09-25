@@ -653,6 +653,37 @@ namespace Quantis.WorkFlow.APIBase.API
             bool isSecurityMember = _dbcontext.SecurityMembers.Any(o => o.user_group_id == UserId);
             return isSecurityMember;
         }
+        public KpisAssociated GetKpiAssociatedByFormId(int Id)
+        {
+            try
+            {
+                var kpi = _dbcontext.CatalogKpi.Where(o => o.id_form == Id);
+                if (!kpi.Any())
+                {
+                    return null;
+                }
+
+                var result = new List<KPIContractDTO>();
+                result = kpi.Select(o => new KPIContractDTO()
+                {
+                    contract = o.contract,
+                    id_kpi = o.id_kpi,
+                    global_rule_id = o.global_rule_id_bsi,
+                    kpi_name_bsi = o.kpi_name_bsi,
+                    target = o.target
+                }).ToList();
+                return new KpisAssociated()
+                {
+                    Kpis_Associated = result
+                };
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         public List<FormUsersDTO> GetAllFormUsers(int formId, int UserId)
         {
             try
@@ -700,6 +731,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_group_name = isSecurityMember ? UserId.ToString() : o.user_group_name,
                         day_cutoff = day_cutoff,
                         cutoff = cutoff_result,
+                        kpis_associated = GetKpiAssociatedByFormId(o.form_id),
                         latest_input_date = isSecurityMember ? new DateTime(0) : _dbcontext.FormLogs.Any(p => p.id_form == o.form_id) ? _dbcontext.FormLogs.Where(q => q.id_form == o.form_id).Max(r => r.time_stamp) : new DateTime(0)
                     }).ToList();
                 }
