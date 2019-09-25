@@ -6,6 +6,9 @@ import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.compo
 import { LandingPageComponent } from './landingpage/landingpage.component';
 import { ChartDataComponent } from './chartdata/chartdata.component';
 import { FreeFormReportComponent } from './free-form-report/free-form-report.component';
+import { FormReportQueryComponent } from './form-report-query/form-report-query.component';
+import { ImportFormReportComponent } from './import-form-report/import-form-report.component';
+
 const routes: Routes = [
   // {
   //   path: '',
@@ -59,6 +62,20 @@ const routes: Routes = [
     component: FreeFormReportComponent,
     data: {
       title: 'Free Form Report'
+    }
+  },
+  { 
+    path: 'form-report-query',
+    component: FormReportQueryComponent,
+    data: {
+      title: 'Form Report Query'
+    }
+  },
+  { 
+    path: 'import-form-report',
+    component: ImportFormReportComponent,
+    data: {
+      title: 'Import Form Report'
     }
   }
 ];

@@ -1,0 +1,39 @@
+<div style="background: #ffffff; padding: 15px">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="clearfix mb-3">
+                <h5 class="float-left">Form Report Queries</h5>
+            </div>
+            <div class="col-md-6">
+                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
+                    <button type="button" class="btn btn-success float-right" (click)="addCreds()">+ Parameters</button><br><br>
+                    <div class="form-group">
+                        <input type="text" style="margin-top:-10px" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Query Name">
+                    </div>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Enter valid query name</span>
+                    <div class="form-group">
+                        <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text"></textarea>
+                    </div>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Enter valid query text</span>
+                    <div class="row" formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index">
+                        <ng-container [formGroupName]="i">
+                            <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
+                            <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div><br><br>
+                        </ng-container>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button [disabled]="formLoading" type="submit" class="btn btn-success">
+                                <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Submit
+                            </button>
+                            <button [disabled]="formLoading" type="submit" class="btn btn-primary">Debug</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+        <!--/.row-->
+
+    </div>

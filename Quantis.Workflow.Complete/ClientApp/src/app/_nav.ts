@@ -135,7 +135,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-bar-chart',
-    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','EDIT_FREEFORM_REPORT'],
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','VIEW_REPORT_QUERIES','IMPORT_FREEFORM_REPORT'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -171,6 +171,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-file-text-o',
         version: '0.0.1',
         key: 'VIEW_REPORT_QUERIES'
+      }, 
+      {
+        name: 'Import Free Form Report',
+        url: '/dashboard/import-form-report',
+        icon: 'fa fa-file-text-o',
+        version: '0.0.1',
+        key: 'IMPORT_FREEFORM_REPORT'
       }
     ]
   },

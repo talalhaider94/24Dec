@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, OnDestroy, QueryList } from '@angular/core';
 import { FreeFormReportService } from '../../../_services';
 import { forkJoin } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -21,8 +21,14 @@ export class FreeFormReportComponent implements OnInit {
   submitted: boolean = false;
 
   modalTitle: string = 'Add Query Report';
-  @ViewChild(DataTableDirective)
-  datatableElement: DataTableDirective;
+  // @ViewChildren(DataTableDirective)
+  // datatableElement: DataTableDirective;
+
+  // @ViewChild(DataTableDirective)
+  // datatableElement2: DataTableDirective;
+
+  @ViewChildren(DataTableDirective)
+  datatableElements: QueryList<DataTableDirective>;
 
   @ViewChild('addEditQueryReportModal')
   addEditQueryReportModal: ModalDirective;
@@ -67,7 +73,8 @@ export class FreeFormReportComponent implements OnInit {
           sortAscending: ": attiva per ordinare la colonna in ordine crescente",
           sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
         }
-      }
+      },
+      destroy:true
     };
     this.dtOptions2 = {
       pagingType: 'full_numbers',
@@ -93,7 +100,8 @@ export class FreeFormReportComponent implements OnInit {
           sortAscending: ": attiva per ordinare la colonna in ordine crescente",
           sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
         }
-      }
+      },
+      destroy:true
     };
     this.addEditQueryForm = this.formBuilder.group({
       id: [0, Validators.required],
@@ -102,6 +110,11 @@ export class FreeFormReportComponent implements OnInit {
       Parameters: ['']
     });
     this.getReportsData();
+  }
+
+  ngAfterViewInit() {
+    this.dtTrigger.next();
+    this.dtTrigger2.next();
   }
 
   getReportsData() {
@@ -113,7 +126,9 @@ export class FreeFormReportComponent implements OnInit {
         const [assignedReportQueries, ownedReportQueries] = result;
         this.assignedReportQueries = assignedReportQueries;
         this.ownedReportQueries = ownedReportQueries;
-        this.dtTrigger.next();
+        console.log('Queries -> ',this.assignedReportQueries,this.ownedReportQueries);
+        // this.dtTrigger.next();
+        // this.dtTrigger2.next();
         this.loading = false;
         this.rerender();
       }
@@ -159,9 +174,12 @@ export class FreeFormReportComponent implements OnInit {
   }
 
   rerender(): void {
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.dtTrigger.next();
+    this.datatableElements.forEach((dtElement: DataTableDirective) => {
+      dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next();
+        this.dtTrigger2.next();
+      });
     });
   }
 
