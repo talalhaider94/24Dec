@@ -19,8 +19,10 @@ export class FormReportQueryComponent implements OnInit {
   ownedReportQueries: any = [];
   QueryName;
   QueryText;
-  key = '';
-  value = '';
+  parametersData = {
+    key: '',
+    value: ''
+  };
   form: FormGroup;
   
   loading: boolean = true;
