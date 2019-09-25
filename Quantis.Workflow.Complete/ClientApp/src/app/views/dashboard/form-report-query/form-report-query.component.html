@@ -2,19 +2,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="clearfix mb-3">
-                <h5 class="float-left">Form Report Queries</h5>
+                <h5 class="float-left">Query Form Report</h5>
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
                     <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parameters</button><br><br>
                     <div class="form-group">
-                        <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Query Name">
+                        <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Enter valid query name</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                     <div class="form-group">
-                        <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text"></textarea>
+                        <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Enter valid query text</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                     <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
                         <div class="row" [formGroupName]="i">
                             <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
@@ -30,7 +30,7 @@
                     <div class="row">
                         <div class="col-6">
                             <button [disabled]="formLoading" type="submit" class="btn btn-success">
-                                <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Submit
+                                <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
                             <button [disabled]="formLoading" type="submit" class="btn btn-primary">Debug</button>
                         </div>
