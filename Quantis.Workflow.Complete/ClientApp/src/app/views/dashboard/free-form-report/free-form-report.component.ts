@@ -241,6 +241,8 @@ export class FreeFormReportComponent implements OnInit {
     this._freeFormReport.setUserPermission(this.params).subscribe(data => {
       this.toastr.success('Valore Aggiornato', 'Success');
       this.hideConfigModal();
+      this.getAssignedQueries();
+      this.rerender();
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
       this.hideConfigModal();
@@ -250,6 +252,12 @@ export class FreeFormReportComponent implements OnInit {
   getOwnedQueries(){
     this._freeFormReport.getOwnedReportQueries().subscribe(data => {
       this.ownedReportQueries = data;
+    });
+  }
+  
+  getAssignedQueries(){
+    this._freeFormReport.getAssignedReportQueries().subscribe(data => {
+      this.assignedReportQueries = data;
     });
   }
 
