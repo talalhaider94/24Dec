@@ -155,8 +155,6 @@ export class KpiReportTrendComponent implements OnInit {
   }
 
   openModal() {
-    console.log('OPEN MODAL BAR CHART PARAMS', this.kpiReportTrendWidgetParameters);
-    console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
     this.kpiReportTrendParent.emit({
       type: 'openKpiReportTrendModal',
       data: {
