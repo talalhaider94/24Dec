@@ -34,17 +34,22 @@
                                     <td>{{ dashboard.name }}</td>
                                     <td>{{ dashboard.owner }}</td>
                                     <td>
-                                        <button *ngIf="dashboard.isactive"
+                                        <button *ngIf="dashboard.isactive && dashboard.id==-1"
+                                            [routerLink]="['/dashboard/landingpage']"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button *ngIf="dashboard.isactive && dashboard.id!=-1"
                                             [routerLink]="['/dashboard/public', dashboard.id]"
                                             class="btn btn-sm btn-primary">
                                             <i class="fa fa-eye"></i>
                                         </button>
-                                        <button *ngIf="dashboard.isactive"
+                                        <button *ngIf="dashboard.isactive && dashboard.id!=-1"
                                             [routerLink]="['/dashboard/dashboard', dashboard.id]"
                                             class="btn btn-sm btn-success">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                        <button [ngClass]="dashboard.isactive ? '' : 'text-danger'" class="btn btn-sm btn-dark" (click)="dashboardStatus(dashboard.id, dashboard.isactive)">
+                                        <button *ngIf="dashboard.id!=-1" [ngClass]="dashboard.isactive ? '' : 'text-danger'" class="btn btn-sm btn-dark" (click)="dashboardStatus(dashboard.id, dashboard.isactive)">
                                             <i class="fa fa-power-off"></i>
                                         </button>
                                     </td>
