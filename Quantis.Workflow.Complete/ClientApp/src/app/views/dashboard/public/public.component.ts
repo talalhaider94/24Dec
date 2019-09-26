@@ -82,7 +82,8 @@ export class PublicComponent implements OnInit {
 	isKpiCountOrgComponent: boolean = false;
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
-	dashboardName: string;
+	dashboardName: string = 'Loading...!';
+	allContractParties: Array<any> = [{key: '', value: 'Select Contract Parties'}];
 	filterContracts: Array<any> = [{key: '', value: 'Select Contracts'}];
 	filterKpis: Array<any> = [{key: '', value: `Select KPI's`}];
 	loadingFiltersDropDown: boolean = false;
@@ -98,6 +99,9 @@ export class PublicComponent implements OnInit {
 
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
+			if(this.barChartWidgetParameters.allContractParties) {
+				this.allContractParties = [ ...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
+			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
 				this.widgetParametersForm.patchValue(childData.setWidgetFormValues)
