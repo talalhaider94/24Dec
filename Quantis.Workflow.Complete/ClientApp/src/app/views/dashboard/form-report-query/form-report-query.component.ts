@@ -122,6 +122,8 @@ export class FormReportQueryComponent implements OnInit {
       this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
         //this.getReportsData();
         this.formLoading = false;
+        this.submitted = false;
+        this.addEditQueryForm.reset();
         this.toastr.success('Query created successfully');
       }, error => {
         this.formLoading = false;

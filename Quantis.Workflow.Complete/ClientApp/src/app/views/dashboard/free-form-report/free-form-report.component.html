@@ -4,12 +4,7 @@
             <div class="card">
                 <div class="card-body p-3">
                     <div class="clearfix mb-3">
-                        <h5 class="float-left">Report Query Assegnate</h5>
-                        <div class="float-right ">
-                            <button type="button" class="btn btn-success btn-sm" routerLink="/dashboard/form-report-query">
-                                <span class="fa fa-plus"></span> Aggiungi Query
-                            </button>
-                        </div>
+                        <h5 class="float-left">Free Form Report Assegnati</h5>
                     </div>
                     <div *ngIf="loading" class="text-center mb-1">
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
@@ -20,6 +15,7 @@
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
                                     <th>Nome Query</th>
+                                    <th>Report Owner</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -30,6 +26,7 @@
                                 <tr *ngFor="let assignedQuery of assignedReportQueries; let i = index">
                                     <td><div>{{ i+1 }}</div></td>
                                     <td><div>{{ assignedQuery.queryname }}</div></td>
+                                    <td><div>{{ assignedQuery.ownername }}</div></td>
                                     <td>
                                         <div>
                                             <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
@@ -43,7 +40,14 @@
             </div>
             <div class="card">
                 <div class="card-body p-3">
-                    <h5 class="mb-3">Owner Report Queries</h5>
+                    <div class="clearfix mb-3">
+                        <h5 class="float-left">Propri Free Form Report</h5>
+                        <div class="float-right ">
+                            <button type="button" class="btn btn-success btn-sm" routerLink="/dashboard/form-report-query">
+                                <span class="fa fa-plus"></span> Aggiungi Query
+                            </button>
+                        </div>
+                    </div>
                     <div *ngIf="loading" class="text-center mb-1">
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </div>
@@ -73,7 +77,7 @@
                                                 data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 <span class="fa fa-edit"></span>
                                             </button>
-                                            <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Gruppo?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
+                                            <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Query?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
                                             (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
                                                 <span class="fa fa-trash"></span>
                                             </button>
