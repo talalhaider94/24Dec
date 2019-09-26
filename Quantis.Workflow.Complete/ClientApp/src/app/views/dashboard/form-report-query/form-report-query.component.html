@@ -6,13 +6,13 @@
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
-                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parameters</button><br><br>
+                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
                     <div class="form-group">
                         <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                     <div class="form-group">
-                        <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
+                        <textarea formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                     <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters']; let i = index;">
