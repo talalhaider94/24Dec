@@ -28,7 +28,7 @@ export class KpiReportTrendComponent implements OnInit {
   kpiReportTrendParent = new EventEmitter<any>();
 
   public barChartData: Array<any> = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
+    { data: [65, 59, 80, 81, 56, 55, 40], label: 'KPI Report Trend' }
   ];
 
   public barChartLabels: Array<any> = [];
@@ -37,7 +37,7 @@ export class KpiReportTrendComponent implements OnInit {
     legend: { position: 'bottom' },
   };
   public barChartLegend: boolean = true;
-  public barChartType: string = 'bar';
+  public kpiReportTrendChartType: string = 'bar';
   public kpiReportColors: Array<any> = [
     {
       backgroundColor: 'rgba(76,175,80,1)',
@@ -172,23 +172,18 @@ export class KpiReportTrendComponent implements OnInit {
   // dashboardComponentData is result of data coming from 
   // posting data to parameters widget
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-    let label = 'Series';
     if (dashboardComponentData) {
-      let measureIndex = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.measure;
-      label = dashboardComponentData.kpiReportTrendWidgetParameters.measures[measureIndex];
       let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
-        this.barChartType = charttype;
+        this.kpiReportTrendChartType = charttype;
       });
     }
     if (currentWidgetComponentData) {
-      // setting chart label and type on first load
-      label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
-      this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
+      this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
     }
     let allLabels = chartIndexData.map(label => label.xvalue);
     let allData = chartIndexData.map(data => data.yvalue);
-    this.barChartData = [{ data: allData, label: label }]
+    this.barChartData = [{ data: allData, label: 'KPI Report Trend' }]
     this.barChartLabels.length = 0;
     this.barChartLabels.push(...allLabels);
     this.closeModal();
