@@ -112,7 +112,7 @@ export class KpiReportTrendComponent implements OnInit {
         if (Object.keys(this.filters).length > 0) {
         } else {
           if(!this.editWidgetName) {
-            this.filters.contractParties = getContractParties;
+            myWidgetParameters.contractParties = getContractParties;
           }
         }
         kpiReportTrendParams = {
@@ -125,7 +125,8 @@ export class KpiReportTrendComponent implements OnInit {
             properties: this.properties,
             widgetid: this.widgetid,
             dashboardid: this.dashboardid,
-            id: this.id
+            id: this.id,
+            allContractParties: getContractParties
           }
         }
         this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
