@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { forkJoin } from 'rxjs';
 import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { ChartOptions, ChartDataSets } from 'chart.js';
+
 @Component({
   selector: 'app-kpi-report-trend',
   templateUrl: './kpi-report-trend.component.html',
@@ -14,12 +15,9 @@ export class KpiReportTrendComponent implements OnInit {
   @Input() url: string;
   @Input() filters: any;
   @Input() properties: any;
-  // this widgetid is from widgets Collection and can be duplicate
-  // it will be used for common functionality of same component instance type
   @Input() widgetid: number;
   @Input() dashboardid: number;
-  @Input() id: number; // this is unique id 
-
+  @Input() id: number;
   loading: boolean = true;
   kpiReportTrendWidgetParameters: any;
   setWidgetFormValues: any;
@@ -27,14 +25,22 @@ export class KpiReportTrendComponent implements OnInit {
   @Output()
   kpiReportTrendParent = new EventEmitter<any>();
 
-  public barChartData: Array<any> = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'KPI Report Trend' }
+  public kpiReportTrendData: ChartDataSets[] = [
+    { data: [99, 100, 99, 100, 99, 100, 99, 100, 99, 100], label: 'Compliant' },
+    { data: [65, 59, 80], label: 'Non Compliant' },
   ];
 
-  public barChartLabels: Array<any> = [];
-  public barChartOptions: any = {
+  public kpiReportTrendLabels: Array<any> = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public kpiReportTrendOptions: ChartOptions = {
     responsive: true,
     legend: { position: 'bottom' },
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    },
   };
   public barChartLegend: boolean = true;
   public kpiReportTrendChartType: string = 'bar';
@@ -46,6 +52,14 @@ export class KpiReportTrendComponent implements OnInit {
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(76,175,80,0.8)'
+    },
+    {
+      backgroundColor: 'rgba(244,67,54,1)',
+      borderColor: 'rgba(244,67,54,1)',
+      pointBackgroundColor: 'rgba(244,67,54,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(244,67,54,0.8)'
     }
   ];
 
@@ -111,7 +125,7 @@ export class KpiReportTrendComponent implements OnInit {
       if (myWidgetParameters) {
         if (Object.keys(this.filters).length > 0) {
         } else {
-          if(!this.editWidgetName) {
+          if (!this.editWidgetName) {
             myWidgetParameters.contractParties = getContractParties;
           }
         }
@@ -180,11 +194,33 @@ export class KpiReportTrendComponent implements OnInit {
     if (currentWidgetComponentData) {
       this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
     }
-    let allLabels = chartIndexData.map(label => label.xvalue);
-    let allData = chartIndexData.map(data => data.yvalue);
-    this.barChartData = [{ data: allData, label: 'KPI Report Trend' }]
-    this.barChartLabels.length = 0;
-    this.barChartLabels.push(...allLabels);
+    if (chartIndexData.length) {
+      let compliantData = chartIndexData.filter(data => data.description === 'compliant');
+      let nonCompliantData = chartIndexData.filter(data => data.description === 'noncompliant');
+      let allChartLabels = chartIndexData.map(label => label.xvalue);
+
+      let allCompliantData = compliantData.map(data => data.yvalue);
+      let allNonCompliantData = nonCompliantData.map(data => data.yvalue);
+      
+      setTimeout(() => {
+        this.kpiReportTrendLabels.length = 0;
+        this.kpiReportTrendLabels = allChartLabels;
+      }, 0);
+
+      this.kpiReportTrendData = [
+        { data: allCompliantData, label: 'Compliant' },
+        { data: allNonCompliantData, label: 'Non Compliant' },
+      ];
+      // this.kpiReportTrendLabels = this.kpiReportTrendLabels.slice();
+      // this.kpiReportTrendData = this.kpiReportTrendData.slice();
+    } else {
+      this.kpiReportTrendLabels.length = 0;
+      this.kpiReportTrendLabels = [];
+      this.kpiReportTrendData = [
+        { data: [], label: 'No Data in Compliant' },
+        { data: [], label: 'No Data in Non-Compliant' },
+      ];
+    }
     this.closeModal();
   }
 
