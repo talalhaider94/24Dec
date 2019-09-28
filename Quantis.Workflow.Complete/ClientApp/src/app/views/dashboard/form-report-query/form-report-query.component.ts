@@ -28,7 +28,7 @@ export class FormReportQueryComponent implements OnInit {
   loading: boolean = true;
   formLoading: boolean = false;
   submitted: boolean = false;
-
+  isSubmit=0;
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -130,6 +130,7 @@ export class FormReportQueryComponent implements OnInit {
         this.toastr.error('Error while creating Query');
       });
     }
+    this.isSubmit=1;
   }
 
 //   ngOnDestroy(): void {
