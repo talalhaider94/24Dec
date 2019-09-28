@@ -507,7 +507,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join t_user_kpis uk on uk.global_rule_id=r.global_rule_id
                             left join t_users u on uk.user_id=u.user_id
                             where s.sla_status = 'EFFECTIVE' 
-                            AND m.sla_status = 'EFFECTIVE'";
+                            AND m.sla_status = 'EFFECTIVE'
+                            WHERE u.user_name is not null";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
