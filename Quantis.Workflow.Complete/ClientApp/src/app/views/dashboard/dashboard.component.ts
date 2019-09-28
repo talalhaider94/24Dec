@@ -441,8 +441,8 @@ export class DashboardComponent implements OnInit {
 			case "kpi_report_trend": {
 				let kpiReportTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_report_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 4,
-					rows: 4,
+					cols: 8,
+					rows: 6,
 					minItemCols: 2,
 					minItemRows: 4,
 					x: 0,
