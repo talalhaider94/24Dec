@@ -3,11 +3,6 @@
         <div class="col-md-12">
             <div class="clearfix mb-3">
                 <h5 class="float-left">Query Form Report</h5>
-                <div class="float-right ">
-                    <button type="button" class="btn btn-danger" routerLink="/dashboard/free-form-report"> 
-                        Back
-                    </button>
-                </div>
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
@@ -20,7 +15,7 @@
                         <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
-                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters']; let i = index;">
+                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
                         <div class="row" [formGroupName]="i">
                             <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
                             <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
@@ -37,7 +32,7 @@
                             <button [disabled]="formLoading" type="submit" class="btn btn-success">
                                 <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
-                            <button [disabled]="formLoading" type="submit" class="btn btn-primary">Debug</button>
+                            <button [disabled]="isSubmit!=1" type="button" (click)="debug()" class="btn btn-primary">Debug</button>
                         </div>
                     </div>
                 </form>
