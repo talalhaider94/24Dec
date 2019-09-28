@@ -463,7 +463,11 @@ export class PublicComponent implements OnInit {
 				if(formValues.Filters.hasOwnProperty('contractParties')) {
 					delete formValues.Filters.contractParties;
 					delete formValues.Filters.contracts;
-					formValues.Filters.kpi = +formValues.Filters.kpi;
+					if(formValues.Filters.hasOwnProperty('kpi')) {
+						formValues.Filters.kpi = +formValues.Filters.kpi;
+					} else {
+						delete formValues.Filters.kpi;
+					}	
 				}
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
