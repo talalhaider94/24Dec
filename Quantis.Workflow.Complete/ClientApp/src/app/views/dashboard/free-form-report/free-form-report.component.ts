@@ -15,6 +15,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class FreeFormReportComponent implements OnInit {
   @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('viewAssignedModal') public viewAssignedModal: ModalDirective;
+  @ViewChild('executeModal') public executeModal: ModalDirective;
   assignedReportQueries: any = [];
   assignedQueriesBodyData: any = [];
   viewAssignedData: any = [];
@@ -31,8 +32,17 @@ export class FreeFormReportComponent implements OnInit {
     id: 0,
     ids: []
   }
+  debugQueryData: any = [];
+  executeQueryData = {
+    QueryText: '',
+    Parameters: [{
+      key: '',
+      value: ''
+    }]
+  }
 
   modalTitle: string = 'Users Assigned Queries';
+  executeModalTitle: string = 'Execute Query';
   // @ViewChildren(DataTableDirective)
   // datatableElement: DataTableDirective;
 
@@ -280,6 +290,7 @@ export class FreeFormReportComponent implements OnInit {
     this.toastr.info('Valore in aggiornamento..', 'Confirm');
     this._freeFormReport.DeleteReportQuery(data.id).subscribe(data => {
       this.getOwnedQueries();
+      this.getAssignedQueries();
       this.toastr.success('Valore Aggiornato', 'Success');
     }, error => {
       this.toastr.error('Errore durante update.', 'Error');
@@ -310,11 +321,33 @@ export class FreeFormReportComponent implements OnInit {
   hideViewModal() {
     this.viewAssignedModal.hide();
   }
+  
+  showExecuteModal() {
+    this.executeModal.show();
+  }
+
+  hideExecuteModal() {
+    this.executeModal.hide();
+  }
 
   viewAssigned(data){
     this.viewAssignedData = data;
     console.log('viewAssignedData -> ',this.viewAssignedData)
     this.showViewModal();
+  }
+
+  executeAssigned(data){
+    this._freeFormReport.getReportQueryDetailByID(data.id).subscribe(data => {   
+      this.executeQueryData.QueryText = data.querytext;
+      this.executeQueryData.Parameters = data.parameters;
+      console.log('Debug -> ',this.executeQueryData);
+      this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+        this.debugQueryData = data;
+        this.showExecuteModal();
+        console.log('Debug Result -> ',this.debugQueryData);
+      });
+    }); 
+    //this.showViewModal();
   }
 
 }
