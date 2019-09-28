@@ -17,6 +17,7 @@ export class FormReportQueryComponent implements OnInit {
 
   assignedReportQueries: any = [];
   ownedReportQueries: any = [];
+  debugQueryData: any = [];
   executeQueryData = {
       QueryText: '',
       Parameters: [{
@@ -24,6 +25,8 @@ export class FormReportQueryComponent implements OnInit {
         value: ''
       }]
   }
+  debugCount = 0;
+  //heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
   
   QueryName;
   QueryText;
@@ -120,31 +123,38 @@ export class FormReportQueryComponent implements OnInit {
 //       value: '',
 //     }));
 //   }
-  onQueryReportFormSubmit() {
+  onQueryReportFormSubmit(event) {
     // const creds = this.form.controls.credentials as FormArray;
-    //console.log('submit form -> ',this.addEditQueryForm.value);
-    this.submitted = true;
-    if (this.addEditQueryForm.invalid) {
-    } else {
-      this.formLoading = true;
-      this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-        //this.getReportsData();
-        this.formLoading = false;
-        this.toastr.success('Query created successfully');
-      }, error => {
-        this.formLoading = false;
-        this.toastr.error('Error while creating Query');
-      });
+    console.log('submit form -> ',this.addEditQueryForm.value);
+    if(event=='debug'){
+      this.debug();
+    }else{
+      this.submitted = true;
+      if (this.addEditQueryForm.invalid) {
+      } else {
+        this.formLoading = true;
+        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+          //this.getReportsData();
+          this.formLoading = false;
+          this.submitted = false;
+          this.addEditQueryForm.reset();
+          this.toastr.success('Query created successfully');
+        }, error => {
+          this.formLoading = false;
+          this.toastr.error('Error while creating Query');
+        });
+      }
+      this.isSubmit=1;
     }
-    this.isSubmit=1;
   }
 
   debug(){
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
-    console.log('Debug -> ',this.executeQueryData);
+    //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
-      console.log('Debug Result -> ',data);
+      this.debugQueryData = data;
+      console.log('Debug Result -> ',this.debugQueryData);
     });
   }
 

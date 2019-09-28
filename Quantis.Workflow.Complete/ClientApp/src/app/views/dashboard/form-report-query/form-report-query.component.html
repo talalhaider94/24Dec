@@ -5,7 +5,7 @@
                 <h5 class="float-left">Query Form Report</h5>
             </div>
             <div class="col-md-6">
-                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
+                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
                     <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
                     <div class="form-group">
                         <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
@@ -29,10 +29,10 @@
                     <!-- </div> -->
                     <div class="row">
                         <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" class="btn btn-success">
+                            <button [disabled]="formLoading" type="submit" name="save" class="btn btn-success">
                                 <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
-                            <button [disabled]="isSubmit!=1" type="button" (click)="debug()" class="btn btn-primary">Debug</button>
+                            <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Debug</button>
                         </div>
                     </div>
                 </form>
@@ -41,5 +41,21 @@
         <!--/.col-->
     </div>
     <!--/.row-->
+
+    <div class="table-responsive">
+        <br />
+        <table class="table stripe" #ConfigurationTable>
+            <thead style="background: #20a8d8">
+            <!-- <tr style="font-size:12px;color:white">
+                <th style="text-align:center" *ngFor="let row of debugQueryData; index as i">{{row[i]}}</th>
+            </tr> -->
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of debugQueryData; index as i">
+                <td style="text-align:center">{{row}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
