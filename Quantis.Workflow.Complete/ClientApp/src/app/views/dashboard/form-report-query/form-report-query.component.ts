@@ -17,6 +17,14 @@ export class FormReportQueryComponent implements OnInit {
 
   assignedReportQueries: any = [];
   ownedReportQueries: any = [];
+  executeQueryData = {
+      QueryText: '',
+      Parameters: [{
+        key: '',
+        value: ''
+      }]
+  }
+  
   QueryName;
   QueryText;
   parametersData = {
@@ -28,7 +36,7 @@ export class FormReportQueryComponent implements OnInit {
   loading: boolean = true;
   formLoading: boolean = false;
   submitted: boolean = false;
-
+  isSubmit=0;
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -113,8 +121,8 @@ export class FormReportQueryComponent implements OnInit {
 //     }));
 //   }
   onQueryReportFormSubmit() {
-      // const creds = this.form.controls.credentials as FormArray;
-      console.log('submit form -> ',this.addEditQueryForm.value);
+    // const creds = this.form.controls.credentials as FormArray;
+    //console.log('submit form -> ',this.addEditQueryForm.value);
     this.submitted = true;
     if (this.addEditQueryForm.invalid) {
     } else {
@@ -122,14 +130,22 @@ export class FormReportQueryComponent implements OnInit {
       this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
         //this.getReportsData();
         this.formLoading = false;
-        this.submitted = false;
-        this.addEditQueryForm.reset();
         this.toastr.success('Query created successfully');
       }, error => {
         this.formLoading = false;
         this.toastr.error('Error while creating Query');
       });
     }
+    this.isSubmit=1;
+  }
+
+  debug(){
+    this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
+    this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
+    console.log('Debug -> ',this.executeQueryData);
+    this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      console.log('Debug Result -> ',data);
+    });
   }
 
 //   ngOnDestroy(): void {

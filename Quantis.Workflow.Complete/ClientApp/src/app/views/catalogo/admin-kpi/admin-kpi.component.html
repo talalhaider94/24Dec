@@ -10,6 +10,7 @@
   <table class="table stripe" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
     <thead style="background:#20a8d8">
       <tr style="color:white;font-size:12px;">
+        <th style="text-align:center">GLOBAL RULE ID</th>
         <th style="text-align:center">CONTRATTO</th>
         <th width="50%" style="text-align:center">KPI</th>
         <th style="text-align:center">DESCRIZIONE</th>
@@ -21,6 +22,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
+        <td style="text-align: left;">{{row.global_rule_id}}</td>
         <td style="text-align: left;">{{row.sla_name}}</td>
         <td style="text-align: left;">{{row.rule_name}}</td>
         <td class="tagsTip" width="50%" *ngIf="row.rule_description; then trueBlock else falseBlock"></td>

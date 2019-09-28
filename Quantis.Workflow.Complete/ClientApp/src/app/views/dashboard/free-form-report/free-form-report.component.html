@@ -29,7 +29,7 @@
                                     <td><div>{{ assignedQuery.ownername }}</div></td>
                                     <td>
                                         <div>
-                                            <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                                            <button class="btn btn-primary btn-sm" (click)="viewAssigned(assignedQuery)"><span class="fa fa-eye"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -106,22 +106,26 @@ aria-hidden="true">
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stripe" #assignedQueriesTable datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3">
-                    <thead style="background: #20a8d8">
-                        <tr style="font-size:12px;color:white">
-                            <th style="text-align:center">NAME</th>
-                            <th style="text-align:center">USERNAME</th>
-                            <th style="text-align:center">ASSIGNED QUERIES</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let row of assignedQueriesBodyData; index as i">
-                        <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
-                        <td style="text-align:center">{{row.ca_bsi_account}}</td>
-                        <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="txt-filter-user-div col-md-4 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                    [(ngModel)]="filters.searchUsersText" /></div><br>
+                <perfect-scrollbar style="max-height: 400px;">
+                    <table class="table stripe" #assignedQueriesTable>
+                        <thead style="background: #20a8d8">
+                            <tr style="font-size:12px;color:white">
+                                <th style="text-align:center">NAME</th>
+                                <th style="text-align:center">USERNAME</th>
+                                <th style="text-align:center">ASSIGNED QUERIES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of assignedQueriesBodyData | filter : filters.searchUsersText; index as i">
+                            <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
+                            <td style="text-align:center">{{row.ca_bsi_account}}</td>
+                            <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" (click)="save()">Aggiungi</button>
@@ -132,3 +136,31 @@ aria-hidden="true">
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div id="viewAssignedModal" bsModal #viewAssignedModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">View Free Form Report Assegnati</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideViewModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table id="classTable" class="table table-bordered">
+            <thead style="background: #E6E6E6">
+            </thead>
+            <tbody>
+              <tr><th>Nome Query</th><td colspan="2">{{viewAssignedData.queryname}}</td></tr>
+              <tr><th>Text Query</th><td colspan="2">{{viewAssignedData.querytext}}</td></tr>
+              <tr><th>Report Owner</th><td colspan="2">{{viewAssignedData.ownername}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideViewModal()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>

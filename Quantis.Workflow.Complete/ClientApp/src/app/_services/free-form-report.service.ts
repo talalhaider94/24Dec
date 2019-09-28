@@ -47,6 +47,10 @@ export class FreeFormReportService {
     return this.http.post(`${environment.API_URL}/data/AssignReportQuery`, params);
   }
    
+  ExecuteReportQuery(params) {
+    return this.http.post(`${environment.API_URL}/data/ExecuteReportQuery`, params);
+  }
+   
   DeleteReportQuery(id): Observable<any> {
     const params = `${environment.API_URL}/data/DeleteReportQuery?id=${id}`;
     return this.http.get(params); 

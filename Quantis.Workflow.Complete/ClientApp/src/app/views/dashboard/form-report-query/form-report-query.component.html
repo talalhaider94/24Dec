@@ -3,11 +3,6 @@
         <div class="col-md-12">
             <div class="clearfix mb-3">
                 <h5 class="float-left">Query Form Report</h5>
-                <div class="float-right ">
-                    <button type="button" class="btn btn-danger" routerLink="/dashboard/free-form-report"> 
-                        Back
-                    </button>
-                </div>
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
@@ -37,7 +32,7 @@
                             <button [disabled]="formLoading" type="submit" class="btn btn-success">
                                 <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
-                            <button [disabled]="formLoading" type="submit" class="btn btn-primary">Debug</button>
+                            <button [disabled]="isSubmit!=1" type="button" (click)="debug()" class="btn btn-primary">Debug</button>
                         </div>
                     </div>
                 </form>

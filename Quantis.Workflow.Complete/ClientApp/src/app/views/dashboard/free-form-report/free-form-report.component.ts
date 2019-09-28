@@ -14,9 +14,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class FreeFormReportComponent implements OnInit {
   @ViewChild('configModal') public configModal: ModalDirective;
+  @ViewChild('viewAssignedModal') public viewAssignedModal: ModalDirective;
   assignedReportQueries: any = [];
   assignedQueriesBodyData: any = [];
+  viewAssignedData: any = [];
   ownedReportQueries: any = [];
+  reportQueryDetail: any = [];
   
   loading: boolean = true;
   formLoading: boolean = false;
@@ -48,6 +51,9 @@ export class FreeFormReportComponent implements OnInit {
   dtTrigger2 = new Subject();
   dtOptions3: DataTables.Settings = {};
   dtTrigger3 = new Subject();
+  filters: any = {
+    searchUsersText: ''
+  }
 
   addEditQueryForm: FormGroup;
   constructor(
@@ -59,6 +65,8 @@ export class FreeFormReportComponent implements OnInit {
   get f() { return this.addEditQueryForm.controls; }
   
   ngOnInit() {
+
+    this.getReportQueryDetailByID();
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -249,6 +257,13 @@ export class FreeFormReportComponent implements OnInit {
     });
   }
 
+  getReportQueryDetailByID(){
+    this._freeFormReport.getReportQueryDetailByID(1).subscribe(data => {
+      this.reportQueryDetail = data;
+      console.log('reportQueryDetail -> ',this.reportQueryDetail);
+    });
+  }
+
   getOwnedQueries(){
     this._freeFormReport.getOwnedReportQueries().subscribe(data => {
       this.ownedReportQueries = data;
@@ -278,7 +293,7 @@ export class FreeFormReportComponent implements OnInit {
   showConfigModal(row) {
     this.queryId = row.id;
     this._freeFormReport.GetAllUsersAssignedQueries(row.id).subscribe(data => {
-      console.log('GetAllUsersAssignedQueries -> ',data);
+      //console.log('GetAllUsersAssignedQueries -> ',data);
       this.assignedQueriesBodyData = data;
       this.configModal.show();
      });  
@@ -286,6 +301,20 @@ export class FreeFormReportComponent implements OnInit {
 
   hideConfigModal() {
     this.configModal.hide();
+  }
+
+  showViewModal() {
+    this.viewAssignedModal.show();
+  }
+
+  hideViewModal() {
+    this.viewAssignedModal.hide();
+  }
+
+  viewAssigned(data){
+    this.viewAssignedData = data;
+    console.log('viewAssignedData -> ',this.viewAssignedData)
+    this.showViewModal();
   }
 
 }
