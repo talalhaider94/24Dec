@@ -10,11 +10,8 @@
     <span class="sr-only">Loading...</span>
 </div>
 <div class="card text-white bg-primary mt-3">
-    <div class="card-body pb-0">
-        <div class="text-value">{{ sumKPICount }}</div>
-        <div>{{ widgetTitle }}</div>
-    </div>
-    <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
-        <canvas baseChart class="chart" [datasets]="barChart1Data" [labels]="barChart1Labels" [options]="barChart1Options" [colors]="barChart1Colours" [legend]="barChart1Legend" [chartType]="barChart1Type"></canvas>
+    <div class="card-body p-3 text-center">
+        <div class="h1">{{ sumKPICount }}</div>
+        <b>{{ widgetTitle }}</b>
     </div>
 </div>
