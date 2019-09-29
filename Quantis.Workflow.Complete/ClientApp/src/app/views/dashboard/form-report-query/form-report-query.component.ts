@@ -18,6 +18,7 @@ export class FormReportQueryComponent implements OnInit {
   assignedReportQueries: any = [];
   ownedReportQueries: any = [];
   debugQueryData: any = [];
+  debugQueryValue: any = [];
   executeQueryData = {
       QueryText: '',
       Parameters: [{
@@ -147,14 +148,19 @@ export class FormReportQueryComponent implements OnInit {
       this.isSubmit=1;
     }
   }
-
+  valueCount = 0;
   debug(){
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
-      this.debugQueryData = data;
-      console.log('Debug Result -> ',this.debugQueryData);
+      console.log('Debug Result -> ',data[0]);
+      this.debugQueryData = Object.keys(data[0]);
+      Object.keys(data[0]).forEach(key => {
+        this.debugQueryValue[this.valueCount] = data[0][key];  
+        this.valueCount++; 
+      });
+      console.log('debugQueryValue -> ',this.debugQueryValue); 
     });
   }
 
