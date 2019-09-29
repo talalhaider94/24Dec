@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
-	dashboardName: string;
+	dashboardName: string = 'Loading...!';
 	// move the component collection to dashboard service to access commonly in multiple components
 	// uiidentifier is necessary
 	componentCollection = [

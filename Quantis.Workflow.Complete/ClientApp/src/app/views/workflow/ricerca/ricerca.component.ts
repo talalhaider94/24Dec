@@ -61,7 +61,7 @@ export class RicercaComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 10,
       destroy: false,
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
       search: {
         caseInsensitive: true
       },

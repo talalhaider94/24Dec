@@ -56,7 +56,7 @@ export class AmministrazioneComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       destroy: false,
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
       search: {
         caseInsensitive: true
       },

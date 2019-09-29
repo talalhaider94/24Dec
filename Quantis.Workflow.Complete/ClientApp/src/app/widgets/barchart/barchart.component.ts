@@ -21,10 +21,10 @@ export class BarchartComponent implements OnInit {
 	@Input() dashboardid: number;
 	@Input() id: number; // this is unique id 
 
-	loading: boolean = true;
+	loading: boolean = false;
 	barChartWidgetParameters: any;
 	setWidgetFormValues: any;
-	editWidgetName: boolean = true;
+	isDashboardModeEdit: boolean = true;
 	@Output()
 	barChartParent = new EventEmitter<any>();
 
@@ -62,14 +62,14 @@ export class BarchartComponent implements OnInit {
 	ngOnInit() {
 		console.log('Barchart Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
-			this.editWidgetName = false;
+			this.isDashboardModeEdit = false;
+			if (this.url) {
+				this.emitter.loadingStatus(true);
+				this.getChartParametersAndData(this.url);
+			}
+			// coming from dashboard or public parent components
+			this.subscriptionForDataChangesFromParent();
 		}
-		if (this.url) {
-			this.emitter.loadingStatus(true);
-			this.getChartParametersAndData(this.url);
-		}
-		// coming from dashboard or public parent components
-		this.subscriptionForDataChangesFromParent()
 	}
 
 	subscriptionForDataChangesFromParent() {
@@ -91,6 +91,7 @@ export class BarchartComponent implements OnInit {
 	getChartParametersAndData(url) {
 		// these are default parameters need to update this logic
 		// might have to make both API calls in sequence instead of parallel
+		this.loading = true;
 		let myWidgetParameters = null;
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
