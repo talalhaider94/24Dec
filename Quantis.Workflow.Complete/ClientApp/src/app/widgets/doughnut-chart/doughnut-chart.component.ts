@@ -26,11 +26,11 @@ export class DoughnutChartComponent implements OnInit {
 	verificaDoughnutParent = new EventEmitter<any>();
 
 	public doughnutChartLabels: string[] = [
-		"Download Sales",
-		"In-Store Sales",
-		"Mail-Order Sales"
+		"No Data in Compliant",
+		"No Data in Non Compliant",
+		"No Data in Non Calculato"
 	];
-	public doughnutChartData: number[] = [350, 450, 100];
+	public doughnutChartData: number[] = [100, 0, 0];
 	public doughnutChartType: string = "doughnut";
 	public barChartOptions: any = {
 		responsive: true,
@@ -141,11 +141,13 @@ export class DoughnutChartComponent implements OnInit {
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let allLabels = chartIndexData.map(label => label.xvalue);
 		let allData = chartIndexData.map(data => data.yvalue);
-		this.doughnutChartData.length = 0;
-		this.doughnutChartData.push(...allData);
-		this.doughnutChartLabels.length = 0;
-		this.doughnutChartLabels = allLabels;
-		this.closeModal();
+		if(!allData.every(data => data == 0)) {
+			this.doughnutChartData.length = 0;
+			this.doughnutChartData.push(...allData);
+			this.doughnutChartLabels.length = 0;
+			this.doughnutChartLabels = allLabels;
+			this.closeModal();
+		}
 	}
 
 	widgetnameChange(event) {

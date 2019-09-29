@@ -27,7 +27,7 @@ export class NotificationTrendComponent implements OnInit {
   notificationTrendParent = new EventEmitter<any>();
 
   public barChartData: Array<any> = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
+    { data: [], label: 'No data in Notification Trend' }
   ];
 
   public barChartLabels: Array<any> = [];
@@ -78,7 +78,7 @@ export class NotificationTrendComponent implements OnInit {
           // updating parameter form widget setValues 
           let notificationTrendFormValues = data.notificationTrendWidgetParameterValues;
           // TODO: might be issue here. will see later
-          if(notificationTrendFormValues.Filters.daterange) {
+          if (notificationTrendFormValues.Filters.daterange) {
             notificationTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(notificationTrendFormValues.Filters.daterange);
           }
           this.setWidgetFormValues = notificationTrendFormValues;
@@ -97,7 +97,7 @@ export class NotificationTrendComponent implements OnInit {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
         let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-        
+
         return this.dashboardService.getWidgetIndex(url, newParams);
       })
     ).subscribe(getWidgetIndex => {
@@ -177,12 +177,16 @@ export class NotificationTrendComponent implements OnInit {
       label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
       this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
     }
-    let allLabels = chartIndexData.map(label => label.xvalue);
-    let allData = chartIndexData.map(data => data.yvalue);
-    this.barChartData = [{ data: allData, label: label }]
-    this.barChartLabels.length = 0;
-    this.barChartLabels.push(...allLabels);
-    this.closeModal();
+    if (chartIndexData.length) {
+      setTimeout(() => {
+        let allLabels = chartIndexData.map(label => label.xvalue);
+        let allData = chartIndexData.map(data => data.yvalue);
+        this.barChartData = [{ data: allData, label: label }]
+        this.barChartLabels.length = 0;
+        this.barChartLabels.push(...allLabels);
+        this.closeModal();
+      });
+    }
   }
 
   widgetnameChange(event) {

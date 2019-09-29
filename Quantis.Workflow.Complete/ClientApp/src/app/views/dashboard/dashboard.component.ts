@@ -1,10 +1,11 @@
-import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
-import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
+import { Component, OnInit, ComponentRef, ViewChild, HostListener, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService } from '../../_helpers';
 import { ActivatedRoute } from '@angular/router';
-import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../_models';
-import { Subscription, forkJoin, interval } from 'rxjs';
+import { DashboardModel, DashboardContentModel, WidgetModel } from '../../_models';
+import { Subscription, forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -63,8 +64,18 @@ export class DashboardComponent implements OnInit {
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
-		private dateTime: DateTimeService
+		private dateTime: DateTimeService,
+		@Inject(DOCUMENT) private document: Document
 	) { }
+	
+	@HostListener('window:scroll', [])
+	onWindowScroll() {
+	  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+		document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+	  } else {
+		document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+	  }
+	}
 
 	outputs = {
 		barChartParent: childData => {
@@ -441,8 +452,8 @@ export class DashboardComponent implements OnInit {
 			case "kpi_report_trend": {
 				let kpiReportTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_report_trend');
 				return this.dashboardWidgetsArray.push({
-					cols: 4,
-					rows: 4,
+					cols: 8,
+					rows: 6,
 					minItemCols: 2,
 					minItemRows: 4,
 					x: 0,
