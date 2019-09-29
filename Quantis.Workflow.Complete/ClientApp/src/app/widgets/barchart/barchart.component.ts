@@ -158,7 +158,7 @@ export class BarchartComponent implements OnInit {
 			}
 		});
 	}
-	
+
 	closeModal() {
 		this.emitter.sendNext({ type: 'closeModal' });
 	}
@@ -180,16 +180,14 @@ export class BarchartComponent implements OnInit {
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
 		if (chartIndexData.length) {
-			{
-				setTimeout(() => {
-					let allLabels = chartIndexData.map(label => label.xvalue);
-					let allData = chartIndexData.map(data => data.yvalue);
-					this.barChartData = [{ data: allData, label: label }]
-					this.barChartLabels.length = 0;
-					this.barChartLabels.push(...allLabels);
-					this.closeModal();
-				})
-			}
+			setTimeout(() => {
+				let allLabels = chartIndexData.map(label => label.xvalue);
+				let allData = chartIndexData.map(data => data.yvalue);
+				this.barChartData = [{ data: allData, label: label }]
+				this.barChartLabels.length = 0;
+				this.barChartLabels.push(...allLabels);
+				this.closeModal();
+			});
 		}
 	}
 
