@@ -97,7 +97,7 @@ export class KPIComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 10,
       destroy: false, // check here.
-      dom: 'Bfrtip',
+      dom: 'lBfrtip',
       search: {
         caseInsensitive: true
       },
