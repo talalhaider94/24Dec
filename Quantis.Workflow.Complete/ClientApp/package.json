@@ -20,7 +20,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --aot --buildOptimizer --commonChunk --vendorChunk --optimization --progress",
+    "build": "ng build --prod --build-optimizer --vendor-chunk --progress --outputHashing=all --optimization --aot --commonChunk --vendorChunk",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
