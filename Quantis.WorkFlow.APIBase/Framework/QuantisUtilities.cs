@@ -66,5 +66,22 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
 
         }
+
+        public static string GetOracleGlobalRuleInQuery(string variable, List<int> kpis)
+        {
+            var queries = new List<string>();
+            int range = 990;
+            int counter = 0;
+            int currentindex = kpis.Count;
+            while (currentindex > 0)
+            {
+                var currentkpis=kpis.Skip(counter * range).Take(range);
+                queries.Add(string.Format(" {0} in ({1})", variable, string.Join(',', currentkpis)));
+                currentindex = currentindex - range;
+                counter++;
+            }
+            var result= string.Format("( {0} )", string.Join(" OR ", queries));
+            return result;
+        }
     }
 }
