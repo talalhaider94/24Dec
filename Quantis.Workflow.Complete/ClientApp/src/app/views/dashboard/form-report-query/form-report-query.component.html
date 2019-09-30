@@ -7,16 +7,16 @@
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
-                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
+                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parameters</button><br><br>
                     <div class="form-group">
                         <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                     <div class="form-group">
-                        <textarea type="text" formControlName="QueryText" class="form-control" style="font-size:16px" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
+                        <textarea type="text" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
-                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters']; let i = index;">
+                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
                         <div class="row" [formGroupName]="i">
                             <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
                             <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
@@ -30,7 +30,7 @@
                     <!-- </div> -->
                     <div class="row">
                         <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" name="save" class="btn btn-success">
+                            <button [disabled]="formLoading" type="submit" class="btn btn-success">
                                 <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
                             <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Debug</button>
@@ -60,5 +60,4 @@
             </tbody>
         </table>
     </div>
-
 </div>

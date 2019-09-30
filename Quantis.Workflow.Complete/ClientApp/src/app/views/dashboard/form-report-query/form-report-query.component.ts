@@ -21,15 +21,13 @@ export class FormReportQueryComponent implements OnInit {
   debugQueryValue: any = [];
   valueCount = 0;
   executeQueryData = {
-      QueryText: '',
-      Parameters: [{
-        key: '',
-        value: ''
-      }]
+    QueryText: '',
+    Parameters: [{
+      key: '',
+      value: ''
+    }]
   }
   debugCount = 0;
-  //heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
-  
   QueryName;
   QueryText;
   parametersData = {
@@ -42,6 +40,7 @@ export class FormReportQueryComponent implements OnInit {
   formLoading: boolean = false;
   submitted: boolean = false;
   isSubmit=0;
+
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -104,7 +103,6 @@ export class FormReportQueryComponent implements OnInit {
       QueryText: ['', Validators.required],
       Parameters: this.formBuilder.array([ this.createParameters() ]),
     });
-
   }
 
   createParameters(): FormGroup {
@@ -124,13 +122,6 @@ export class FormReportQueryComponent implements OnInit {
     this.Parameters.push(this.createParameters());
   }
 
-//   addCreds() {
-//     const creds = this.form.controls.credentials as FormArray;
-//     creds.push(this.fb.group({
-//       key: '',
-//       value: '',
-//     }));
-//   }
   onQueryReportFormSubmit(event) {
     // const creds = this.form.controls.credentials as FormArray;
     console.log('submit form -> ',this.addEditQueryForm.value);
