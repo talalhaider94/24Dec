@@ -21,15 +21,15 @@ export class BarchartComponent implements OnInit {
 	@Input() dashboardid: number;
 	@Input() id: number; // this is unique id 
 
-	loading: boolean = true;
+	loading: boolean = false;
 	barChartWidgetParameters: any;
 	setWidgetFormValues: any;
-	editWidgetName: boolean = true;
+	isDashboardModeEdit: boolean = true;
 	@Output()
 	barChartParent = new EventEmitter<any>();
 
 	public barChartData: Array<any> = [
-		{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
+		{ data: [], label: 'No Data in Count Trend' }
 	];
 
 	public barChartLabels: Array<any> = [];
@@ -41,14 +41,14 @@ export class BarchartComponent implements OnInit {
 	public barChartType: string = 'bar';
 	public barChartColors: Array<any> = [
 		{
-		  backgroundColor: 'rgba(76,175,80,1)',
-		  borderColor: 'rgba(76,175,80,1)',
-		  pointBackgroundColor: 'rgba(76,175,80,1)',
-		  pointBorderColor: '#fff',
-		  pointHoverBackgroundColor: '#fff',
-		  pointHoverBorderColor: 'rgba(76,175,80,0.8)'
+			backgroundColor: 'rgba(76,175,80,1)',
+			borderColor: 'rgba(76,175,80,1)',
+			pointBackgroundColor: 'rgba(76,175,80,1)',
+			pointBorderColor: '#fff',
+			pointHoverBackgroundColor: '#fff',
+			pointHoverBorderColor: 'rgba(76,175,80,0.8)'
 		}
-	  ];
+	];
 	getOrgHierarchy: any = [];
 
 	constructor(
@@ -62,14 +62,14 @@ export class BarchartComponent implements OnInit {
 	ngOnInit() {
 		console.log('Barchart Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
-			this.editWidgetName = false;
+			this.isDashboardModeEdit = false;
+			if (this.url) {
+				this.emitter.loadingStatus(true);
+				this.getChartParametersAndData(this.url);
+			}
+			// coming from dashboard or public parent components
+			this.subscriptionForDataChangesFromParent();
 		}
-		if (this.url) {
-			this.emitter.loadingStatus(true);
-			this.getChartParametersAndData(this.url);
-		}
-		// coming from dashboard or public parent components
-		this.subscriptionForDataChangesFromParent()
 	}
 
 	subscriptionForDataChangesFromParent() {
@@ -91,6 +91,7 @@ export class BarchartComponent implements OnInit {
 	getChartParametersAndData(url) {
 		// these are default parameters need to update this logic
 		// might have to make both API calls in sequence instead of parallel
+		this.loading = true;
 		let myWidgetParameters = null;
 		this.dashboardService.getWidgetParameters(url).pipe(
 			mergeMap((getWidgetParameters: any) => {
@@ -144,20 +145,11 @@ export class BarchartComponent implements OnInit {
 
 	// events
 	public chartClicked(e: any): void {
-		console.log("Bar Chart Clicked ->", e);
-		console.log("setWidgetFormValues ->",this.setWidgetFormValues);
-		//this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
 		let params = { month: 'all', year: '19', key: 'bar_chart' };
 		window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
 	}
 
-	public chartHovered(e: any): void {
-		// console.log(e);
-	}
-
 	openModal() {
-		console.log('OPEN MODAL BAR CHART PARAMS', this.barChartWidgetParameters);
-		console.log('OPEN MODAL BAR CHART VALUES', this.setWidgetFormValues);
 		this.barChartParent.emit({
 			type: 'openBarChartModal',
 			data: {
@@ -167,6 +159,7 @@ export class BarchartComponent implements OnInit {
 			}
 		});
 	}
+
 	closeModal() {
 		this.emitter.sendNext({ type: 'closeModal' });
 	}
@@ -175,7 +168,6 @@ export class BarchartComponent implements OnInit {
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
 		let label = 'Series';
 		if (dashboardComponentData) {
-			debugger
 			let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
 			label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
 			let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
@@ -188,15 +180,16 @@ export class BarchartComponent implements OnInit {
 			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
-		setTimeout(() => {
-			let allLabels = chartIndexData.map(label => label.xvalue);
-			let allData = chartIndexData.map(data => data.yvalue);
-			this.barChartData = [{ data: allData, label: label }]
-			this.barChartLabels.length = 0;
-			this.barChartLabels.push(...allLabels);
-			this.closeModal();
-		})
-
+		if (chartIndexData.length) {
+			setTimeout(() => {
+				let allLabels = chartIndexData.map(label => label.xvalue);
+				let allData = chartIndexData.map(data => data.yvalue);
+				this.barChartData = [{ data: allData, label: label }]
+				this.barChartLabels.length = 0;
+				this.barChartLabels.push(...allLabels);
+				this.closeModal();
+			});
+		}
 	}
 
 	widgetnameChange(event) {

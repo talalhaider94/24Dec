@@ -104,6 +104,9 @@ export class WidgetHelpersService {
         buildParams.Filters.startDate = dateRangeValue[0];
         buildParams.Filters.endDate = dateRangeValue[1];
       }
+      if(apiParams.contractParties) {
+        buildParams.Filters.contractParties = filters.contractParties || apiParams.contractParties[0].key
+      }
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);

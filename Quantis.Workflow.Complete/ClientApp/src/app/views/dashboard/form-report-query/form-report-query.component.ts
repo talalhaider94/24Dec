@@ -17,6 +17,18 @@ export class FormReportQueryComponent implements OnInit {
 
   assignedReportQueries: any = [];
   ownedReportQueries: any = [];
+  debugQueryData: any = [];
+  debugQueryValue: any = [];
+  executeQueryData = {
+      QueryText: '',
+      Parameters: [{
+        key: '',
+        value: ''
+      }]
+  }
+  debugCount = 0;
+  //heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
+  
   QueryName;
   QueryText;
   parametersData = {
@@ -28,7 +40,7 @@ export class FormReportQueryComponent implements OnInit {
   loading: boolean = true;
   formLoading: boolean = false;
   submitted: boolean = false;
-
+  isSubmit=0;
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -101,7 +113,7 @@ export class FormReportQueryComponent implements OnInit {
   }
 
   addParameters(): void {
-    this.Parameters = this.addEditQueryForm.get('parameters') as FormArray;
+    this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
     this.Parameters.push(this.createParameters());
   }
 
@@ -112,22 +124,44 @@ export class FormReportQueryComponent implements OnInit {
 //       value: '',
 //     }));
 //   }
-  onQueryReportFormSubmit() {
-      // const creds = this.form.controls.credentials as FormArray;
-      console.log('submit form -> ',this.addEditQueryForm.value);
-    this.submitted = true;
-    if (this.addEditQueryForm.invalid) {
-    } else {
-      this.formLoading = true;
-      this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-        //this.getReportsData();
-        this.formLoading = false;
-        this.toastr.success('Query created successfully');
-      }, error => {
-        this.formLoading = false;
-        this.toastr.error('Error while creating Query');
-      });
+  onQueryReportFormSubmit(event) {
+    // const creds = this.form.controls.credentials as FormArray;
+    console.log('submit form -> ',this.addEditQueryForm.value);
+    if(event=='debug'){
+      this.debug();
+    }else{
+      this.submitted = true;
+      if (this.addEditQueryForm.invalid) {
+      } else {
+        this.formLoading = true;
+        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+          //this.getReportsData();
+          this.formLoading = false;
+          this.submitted = false;
+          this.addEditQueryForm.reset();
+          this.toastr.success('Query created successfully');
+        }, error => {
+          this.formLoading = false;
+          this.toastr.error('Error while creating Query');
+        });
+      }
+      this.isSubmit=1;
     }
+  }
+  valueCount = 0;
+  debug(){
+    this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
+    this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
+    //console.log('Debug -> ',this.executeQueryData);
+    this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      console.log('Debug Result -> ',data[0]);
+      this.debugQueryData = Object.keys(data[0]);
+      Object.keys(data[0]).forEach(key => {
+        this.debugQueryValue[this.valueCount] = data[0][key];  
+        this.valueCount++; 
+      });
+      console.log('debugQueryValue -> ',this.debugQueryValue); 
+    });
   }
 
 //   ngOnDestroy(): void {

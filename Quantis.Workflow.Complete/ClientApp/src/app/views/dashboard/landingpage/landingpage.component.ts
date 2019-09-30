@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '../../../_services/api.service';
 import { UUID } from 'angular2-uuid';
+import * as moment from 'moment';
 
 @Component({
 	templateUrl: 'landingpage.component.html',
@@ -19,6 +20,8 @@ export class LandingPageComponent implements OnInit {
 	public period = '02/2019';
 	gridsData: any = [];
 	bestContracts: any = [];
+	monthVar: any;
+  	yearVar: any;
 	count = 0;
 	constructor(
 		private dashboardService: DashboardService,
@@ -30,11 +33,31 @@ export class LandingPageComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 	ngOnInit(): void {
+		this.getAnno();
+		//this.period = this.monthVar/this.yearVar
+		// this.apiService.getLandingPage(2,2019).subscribe((data: any) => {
+		// 	this.gridsData = data;
+		// 	console.log("Landing Page Data: ", this.gridsData);			
+		// });
+	}
 
-		this.apiService.getLandingPage(this.period).subscribe((data: any) => {
-			this.gridsData = data;
-			console.log("Landing Page Data: ", this.gridsData);
-			//console.log("bestContracts: ", this.bestContracts);			
-		});
-    }
+	populateDateFilter() {    
+		if(this.monthVar==null || this.yearVar==null){
+
+		}else{
+			this.apiService.getLandingPage(this.monthVar,this.yearVar).subscribe((data: any) => {
+				this.gridsData = data;
+				console.log("Month Year Var -> ", this.monthVar, this.yearVar);			
+			});
+		}
+	 }
+
+	anni=[];
+	//+(moment().add('months', 6).format('YYYY'))
+	getAnno(){
+		for (var i = 2016; i <=+(moment().add('months', 7).format('YYYY')); i++) {
+			this.anni.push(i);
+		}
+		return this.anni;
+	}
 }

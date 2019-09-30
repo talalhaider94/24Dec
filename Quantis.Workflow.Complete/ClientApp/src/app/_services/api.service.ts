@@ -118,8 +118,8 @@ export class ApiService {
     const getRolesByUserIdEndPoint = `${environment.API_URL}/information/GetRolesByUserId/?userid=${userid}`;
     return this.http.get(getRolesByUserIdEndPoint);
   }
-  getLandingPage(period): Observable<any>{ 
-    const getLandingPageEndPoint = `${environment.API_URL}/oracle/GetLandingPageByUser?period=${period}`;
+  getLandingPage(month,year): Observable<any>{ 
+    const getLandingPageEndPoint = `${environment.API_URL}/oracle/GetLandingPageByUser?period=${month}/${year}`;
     return this.http.get(getLandingPageEndPoint);
   }
   getTestLandingPage(): Observable<any>{ 

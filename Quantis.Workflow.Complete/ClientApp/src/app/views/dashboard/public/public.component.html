@@ -86,13 +86,13 @@
                     </ejs-treeview>
                   </perfect-scrollbar>
                 </span>
-                <span *ngIf="barChartWidgetParameters.filters.contractParties">
+                <span *ngIf="barChartWidgetParameters.allContractParties">
                   <div class="form-group">
                     <label for="contractParties">Contract Parties</label>
                     <select class="form-control" formControlName="contractParties" (change)="contractPartiesDropDown($event)">
-                      <option [selected]="!i" *ngFor="let org of barChartWidgetParameters.filters.contractParties; let i = index"
-                        [value]="barChartWidgetParameters.filters.contractParties[i].key">
-                        {{ barChartWidgetParameters.filters.contractParties[i].value }}
+                      <option [selected]="!i" *ngFor="let org of allContractParties; let i = index"
+                        [value]="allContractParties[i].key">
+                        {{ allContractParties[i].value }}
                       </option>
                     </select>
                   </div>
@@ -141,12 +141,12 @@
                       <div class="col-md-6">
                         <label for="startDate">Da</label>
                         <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date"
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" />
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}" />
                       </div>
                       <div class="col-md-6">
                         <label for="endDate">A</label>
                         <input type="text" formControlName="endDate" class="form-control" placeholder="End Date"
-                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',adaptivePosition: true}" />
+                          bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}" />
                       </div>
                     </div>
                   </div>

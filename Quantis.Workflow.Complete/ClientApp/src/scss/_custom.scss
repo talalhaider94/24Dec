@@ -210,6 +210,19 @@
 .text-gray {
   color: #73818f !important;
 }
+
 gridster {
   margin-bottom: 30px;
+}
+
+.widgetsPositionFixed {
+  position: fixed;
+  top: 54px;
+  z-index: 9999;
+}
+
+body {
+  .dataTables_wrapper .dataTables_length {
+    margin-right: 15px !important;
+  }
 }

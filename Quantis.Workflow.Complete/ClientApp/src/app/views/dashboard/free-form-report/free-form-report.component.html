@@ -4,22 +4,18 @@
             <div class="card">
                 <div class="card-body p-3">
                     <div class="clearfix mb-3">
-                        <h5 class="float-left">Report Query Assegnate</h5>
-                        <div class="float-right ">
-                            <button type="button" class="btn btn-success btn-sm" routerLink="/dashboard/form-report-query">
-                                <span class="fa fa-plus"></span> Aggiungi Query
-                            </button>
-                        </div>
+                        <h5 class="float-left">Free Form Report Assegnati</h5>
                     </div>
                     <div *ngIf="loading" class="text-center mb-1">
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </div>
                     <div class="table-responsive">
                         <table #assigned class="table stripe" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-responsive-sm table-hover table-outline mb-0">
-                            <thead style="background: #20a8d8">
+                            <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
                                     <th>Nome Query</th>
+                                    <th>Report Owner</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -29,10 +25,12 @@
                                 </tr> -->
                                 <tr *ngFor="let assignedQuery of assignedReportQueries; let i = index">
                                     <td><div>{{ i+1 }}</div></td>
-                                    <td><div>{{ assignedQuery.QueryName }}</div></td>
+                                    <td><div>{{ assignedQuery.queryname }}</div></td>
+                                    <td><div>{{ assignedQuery.ownername }}</div></td>
                                     <td>
                                         <div>
-                                            <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                                            <button class="btn btn-primary btn-sm" title="View" (click)="viewAssigned(assignedQuery)"><span class="fa fa-eye"></span></button>
+                                            <button class="btn btn-success btn-sm" title="Execute" (click)="executeAssigned(assignedQuery)"><span class="fa fa-play"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -43,13 +41,20 @@
             </div>
             <div class="card">
                 <div class="card-body p-3">
-                    <h5 class="mb-3">Owner Report Queries</h5>
+                    <div class="clearfix mb-3">
+                        <h5 class="float-left">Propri Free Form Report</h5>
+                        <div class="float-right ">
+                            <button type="button" class="btn btn-success btn-sm" routerLink="/dashboard/form-report-query">
+                                <span class="fa fa-plus"></span> Aggiungi Query
+                            </button>
+                        </div>
+                    </div>
                     <div *ngIf="loading" class="text-center mb-1">
                         <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                     </div>
                     <div class="table-responsive">
                         <table #owned class="table stripe" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" class="table table-responsive-sm table-hover table-outline mb-0">
-                            <thead style="background: #20a8d8">
+                            <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th>No.</th>
                                     <th>Nome Query</th>
@@ -65,11 +70,19 @@
                                         <div>{{ i+1 }}</div>
                                     </td>
                                     <td>
-                                        <div>{{ ownedQuery.QueryName }}</div>
+                                        <div>{{ ownedQuery.queryname }}</div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                                            <button class="btn btn-primary btn-sm" data-toggle="modal"
+                                                data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
+                                                <span class="fa fa-edit"></span>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Query?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
+                                            (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
+                                                <span class="fa fa-trash"></span>
+                                            </button>
+                                            <button class="btn btn-success btn-sm" title="Execute" (click)="executeAssigned(assignedQuery)"><span class="fa fa-play"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -84,37 +97,110 @@
     <!--/.row-->
 </div>
 
-<div bsModal #addEditQueryReportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-primary" role="document">
+<div bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">{{ modalTitle }}</h4>
-                <button type="button" class="close" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                <button type="button" class="close" aria-label="Close" (click)="hideConfigModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit()">
-                    <div class="form-group">
-                        <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Query Name">
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserisci nome valido per query</span>
-                    <div class="form-group">
-                        <input type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Query Text">
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserisci testo valido per la query</span>
-                    <div class="row">
-                        <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" class="btn-sm btn btn-primary">
-                            <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                <!-- create dashboard model body end -->
+                <div class="txt-filter-user-div col-md-4 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                    [(ngModel)]="filters.searchUsersText" /></div><br>
+                <perfect-scrollbar style="max-height: 400px;">
+                    <table class="table stripe" #assignedQueriesTable>
+                        <thead style="background: #20a8d8">
+                            <tr style="font-size:12px;color:white">
+                                <th style="text-align:center">NAME</th>
+                                <th style="text-align:center">USERNAME</th>
+                                <th style="text-align:center">ASSIGNED QUERIES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of assignedQueriesBodyData | filter : filters.searchUsersText; index as i">
+                            <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
+                            <td style="text-align:center">{{row.ca_bsi_account}}</td>
+                            <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="save()">Aggiungi</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<div bsModal #executeModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ executeModalTitle }}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="hideExecuteModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="txt-filter-user-div col-md-4 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                    [(ngModel)]="filters.searchUsersText" /></div><br>
+                <perfect-scrollbar style="max-height: 400px;">
+                    <table class="table stripe" #assignedQueriesTable>
+                        <thead style="background: #20a8d8">
+                            <tr style="font-size:12px;color:white">
+                                <th style="text-align:center">NAME</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of debugQueryData | filter : filters.searchUsersText; index as i">
+                                <td style="text-align:center">{{row[i]}}</td>    
+                            </tr>
+                        </tbody>
+                    </table>
+                </perfect-scrollbar>
+            </div>
+            <div class="modal-footer">
+                <!-- <button class="btn btn-success" (click)="save()">Aggiungi</button> -->
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideExecuteModal()">Chiudi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div id="viewAssignedModal" bsModal #viewAssignedModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">View Free Form Report Assegnati</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideViewModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table id="classTable" class="table table-bordered">
+            <thead style="background: #E6E6E6">
+            </thead>
+            <tbody>
+              <tr><th>Nome Query</th><td colspan="2">{{viewAssignedData.queryname}}</td></tr>
+              <!-- <tr><th>Text Query</th><td colspan="2">{{viewAssignedData.querytext}}</td></tr> -->
+              <tr><th>Report Owner</th><td colspan="2">{{viewAssignedData.ownername}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideViewModal()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -5,9 +5,9 @@ import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-distribution-by-user',
-  templateUrl: './distribution-by-user.component.html',
-  styleUrls: ['./distribution-by-user.component.scss']
+	selector: 'app-distribution-by-user',
+	templateUrl: './distribution-by-user.component.html',
+	styleUrls: ['./distribution-by-user.component.scss']
 })
 export class DistributionByUserComponent implements OnInit {
 	@Input() widgetname: string;
@@ -16,7 +16,7 @@ export class DistributionByUserComponent implements OnInit {
 	@Input() properties: Array<any>;
 	@Input() widgetid: number;
 	@Input() dashboardid: number;
-	@Input() id: number; 
+	@Input() id: number;
 
 	loading: boolean = true;
 	distributionByUserWidgetParameters: any;
@@ -26,7 +26,7 @@ export class DistributionByUserComponent implements OnInit {
 	distributionByUserParent = new EventEmitter<any>();
 
 	public barChartData: Array<any> = [
-		{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
+		{ data: [], label: 'No data in Distribution By User' }
 	];
 
 	public barChartLabels: Array<any> = [];
@@ -159,16 +159,19 @@ export class DistributionByUserComponent implements OnInit {
 		}
 		if (currentWidgetComponentData) {
 			// setting chart label and type on first load
-			debugger
 			label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
 			this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
 		}
-		let allLabels = chartIndexData.map(label => label.xvalue);
-		let allData = chartIndexData.map(data => data.yvalue);
-		this.barChartData = [{ data: allData, label: label }]
-		this.barChartLabels.length = 0;
-		this.barChartLabels.push(...allLabels);
-		this.closeModal();
+		if (chartIndexData.length) {
+			setTimeout(() => {
+				let allLabels = chartIndexData.map(label => label.xvalue);
+				let allData = chartIndexData.map(data => data.yvalue);
+				this.barChartData = [{ data: allData, label: label }]
+				this.barChartLabels.length = 0;
+				this.barChartLabels.push(...allLabels);
+				this.closeModal();
+			});
+		}
 	}
 
 	widgetnameChange(event) {
