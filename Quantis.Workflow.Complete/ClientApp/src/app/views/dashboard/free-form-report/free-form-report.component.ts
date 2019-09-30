@@ -349,5 +349,6 @@ export class FreeFormReportComponent implements OnInit {
     }); 
     //this.showViewModal();
   }
+  
 
 }

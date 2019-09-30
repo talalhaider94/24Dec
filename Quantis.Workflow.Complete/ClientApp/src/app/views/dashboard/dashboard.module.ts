@@ -14,7 +14,7 @@ import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import {DataTablesModule} from 'angular-datatables';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { FilterUsersPipe } from './../../_pipes/filterUsers.pipe';
+import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -93,7 +93,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
     FormReportQueryComponent,
     ImportFormReportComponent,
     FreeFormReportsWidgetComponent,
-    FilterUsersPipe
+    FilterUsersFFRPipe
   ]
 })
 export class DashboardModule { }

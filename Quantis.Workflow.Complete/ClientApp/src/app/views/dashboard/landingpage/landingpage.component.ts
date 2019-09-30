@@ -10,6 +10,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '../../../_services/api.service';
 import { UUID } from 'angular2-uuid';
+import * as moment from 'moment';
 
 @Component({
 	templateUrl: 'landingpage.component.html',
@@ -30,11 +31,19 @@ export class LandingPageComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 	ngOnInit(): void {
-
+		this.getAnno();
 		this.apiService.getLandingPage(this.period).subscribe((data: any) => {
 			this.gridsData = data;
 			console.log("Landing Page Data: ", this.gridsData);
 			//console.log("bestContracts: ", this.bestContracts);			
 		});
-    }
+	}
+	anni=[];
+	//+(moment().add('months', 6).format('YYYY'))
+	getAnno(){
+		for (var i = 2016; i <=+(moment().add('months', 7).format('YYYY')); i++) {
+			this.anni.push(i);
+		}
+		return this.anni;
+	}
 }
