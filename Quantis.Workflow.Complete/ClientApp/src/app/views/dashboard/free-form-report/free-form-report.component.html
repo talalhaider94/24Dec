@@ -82,19 +82,40 @@
                                             (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
                                                 <span class="fa fa-trash"></span>
                                             </button>
-                                            <button class="btn btn-success btn-sm" title="Execute" (click)="executeAssigned(assignedQuery)"><span class="fa fa-play"></span></button>
+                                            <button class="btn btn-success btn-sm" title="Execute" (click)="executeAssigned(ownedQuery)"><span class="fa fa-play"></span></button>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+
+                    <br><br><h5 class="float-left">Query Result</h5><br>
+                    <div class="table-responsive">
+                        <br />
+                        <table class="table stripe" #ConfigurationTable>
+                            <thead style="background: #20a8d8">
+                            <tr style="font-size:12px;color:white">
+                                <!-- <ng-container *ngFor="let eachObject of debugQueryData"> -->
+                                    <th *ngFor="let key of debugQueryData">{{key}}</th>
+                                <!-- </ng-container>     --> 
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td *ngFor="let value of debugQueryValue">{{value}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
         <!--/.col-->
     </div>
     <!--/.row-->
+
 </div>
 
 <div bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"

@@ -3,6 +3,7 @@
         <div class="col-md-12">
             <div class="clearfix mb-3">
                 <h5 class="float-left">Query Form Report</h5>
+                <button type="button" class="btn btn-danger float-right" routerLink="/dashboard/free-form-report">Back</button>
             </div>
             <div class="col-md-6">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
@@ -12,7 +13,7 @@
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                     <div class="form-group">
-                        <textarea type="text" formControlName="QueryText" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
+                        <textarea type="text" formControlName="QueryText" class="form-control" style="font-size:16px" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                     <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
