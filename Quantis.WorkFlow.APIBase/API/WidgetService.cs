@@ -169,10 +169,11 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and psl.complete_record=1
                                 and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                 and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
-                                and psl.global_rule_id in ({0})
+                                and {0}
                                 and psl.deviation_ce {1} 0
                                 group by psl.end_period";
-                query = string.Format(query, string.Join(',', dto.KPIs),signcomplaint);
+                var rules=QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+                query = string.Format(query, rules, signcomplaint);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -306,8 +307,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and psl.complete_record=1
                                 and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                 and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
-                                and psl.global_rule_id in ({0})";
-                query = string.Format(query, string.Join(',', dto.KPIs));
+                                and {0}";
+                var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+                query = string.Format(query, rules);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -466,10 +468,11 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and psl.complete_record=1
                                 and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                 and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
-                                and psl.global_rule_id in ({0})
+                                and {0}
                                 {1}
                                 group by psl.end_period";
-            query = string.Format(query, string.Join(',', dto.KPIs), signcomplaint);
+            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+            query = string.Format(query, rules, signcomplaint);
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
                 using (OracleCommand cmd = con.CreateCommand())
@@ -511,7 +514,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             psl.end_period,
                             psl.service_level_target_ce,
                             psl.provided_ce,
-                            psl.resultpsl
+                            psl.resultpsl,
+                            u.unit_symbol
                             from 
                             (
                               select  
@@ -556,6 +560,8 @@ namespace Quantis.WorkFlow.APIBase.API
                               and service_level_target is not null
                             ) psl 
                             left join t_rules r on  psl.rule_id = r.rule_id
+                            left join t_domain_categories d on r.domain_category_id = d.domain_category_id
+                            left join t_units u on d.unit_id = u.unit_id
                             left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
                             left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                             left join t_slas s on sv.sla_id = s.sla_id
@@ -585,14 +591,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[1],
-                            Description= (string)reader[3],
+                            Description= (string)reader[3] + "|" + (string)reader[4],
                             ZValue="Target"
                         });
                         result.Add(new XYZDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[2],
-                            Description = (string)reader[3],
+                            Description = (string)reader[3] + "|" + (string)reader[4],
                             ZValue = "Value"
                         });
                     }
@@ -866,9 +872,10 @@ namespace Quantis.WorkFlow.APIBase.API
                             ) f
                             left join V_TOT_MEDIA med on(f.""DESCRIZIONE KPI"" = med.DESCRIZIONE_KPI and med.ANNO = to_char(sysdate, 'YYYY'))
                             left join V_TOT_MAX mas on(f.""DESCRIZIONE KPI"" = mas.DESCRIZIONE_KPI and mas.ANNO = to_char(sysdate, 'YYYY'))
-                            where global_rule_id in ({0})
+                            where {0}
                             order by ""ID KPI""";
-            query = string.Format(query, string.Join(',', dto.KPIs));
+            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+            query = string.Format(query, rules);
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
                 using (OracleCommand cmd = con.CreateCommand())

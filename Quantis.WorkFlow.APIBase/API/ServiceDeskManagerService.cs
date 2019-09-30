@@ -989,7 +989,11 @@ namespace Quantis.WorkFlow.APIBase.API
                     int kpiid = 0;
                     int globalruleid = 0;
                     int.TryParse(dto.KpiIds.Split('|').FirstOrDefault(), out kpiid);
-                    int.TryParse(dto.KpiIds.Split('|').ElementAt(1), out globalruleid);
+                    if (dto.KpiIds.Split('|').Count() == 2)
+                    {
+                        int.TryParse(dto.KpiIds.Split('|').ElementAt(1), out globalruleid);
+                    }
+                    
                     dto.kpiIdPK = kpiid;
                     dto.global_rule_id = globalruleid;
                 }

@@ -162,7 +162,10 @@ export class BarchartComponent implements OnInit {
 
 	closeModal() {
 		this.emitter.sendNext({ type: 'closeModal' });
-	}
+    }
+  chartHovered(e) {
+    console.log(e);
+  }
 	// dashboardComponentData is result of data coming from 
 	// posting data to parameters widget
 	updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {

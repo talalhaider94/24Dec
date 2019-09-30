@@ -139,8 +139,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and psl.complete_record=1
                                 and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                 and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
-                                and psl.global_rule_id in ({0})";
-                query = string.Format(query, string.Join(',', kpis));
+                                and {0}";
+                string filter=QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", kpis);
+                query = string.Format(query, filter);
                 var startDate = new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
@@ -165,10 +166,10 @@ namespace Quantis.WorkFlow.APIBase.API
                                 GlobalRuleName=(string)reader[4],
                                 GlobalRuleId= Decimal.ToInt32((Decimal)reader[5]),
                                 Target= (double)reader[6],
-                                Actual= (double)reader[7],
+                                Actual= (reader[7]==DBNull.Value)?-1:(double)reader[7],
                                 Result= (string)reader[8],
-                                Deviation= (double)reader[9],
-                                
+                                Deviation= (reader[9] == DBNull.Value) ? -1 : (double)reader[9],
+
                             });
                         }
                         var result=basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
