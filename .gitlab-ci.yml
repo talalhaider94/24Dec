@@ -10,6 +10,7 @@ build:
     only:
         - schedules
     script:
+        - "rm -rf /opt/WorkFlowAPI/DotnetPublish/"
         - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
         - "rm -rf /opt/WorkFlowAPI/dotnetcore_modules_backup"
@@ -20,5 +21,3 @@ build:
         - "mkdir /opt/WorkFlowAPI/dotnetcore_modules/ClientApp/dist"
         - "cp -a /opt/WorkFlowAPI/DotnetPublish/ClientApp/dist/. /opt/WorkFlowAPI/dotnetcore_modules/ClientApp/dist"
         - "systemctl start supervisord"
-        - "rm -rf /opt/WorkFlowAPI/DotnetPublish/"
-
