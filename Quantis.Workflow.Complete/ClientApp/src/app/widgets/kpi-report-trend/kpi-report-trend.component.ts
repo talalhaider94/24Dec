@@ -43,6 +43,7 @@ export class KpiReportTrendComponent implements OnInit {
     },
   };
   public barChartLegend: boolean = true;
+  public kpiReportTrendLegend: boolean = true;
   public kpiReportTrendChartType: string = 'bar';
   public kpiReportColors: Array<any> = [
     {
