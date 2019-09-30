@@ -45,6 +45,9 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install -S @angular/material @angular/cdk @angular/animations" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm uninstall @angular/core" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install -S @angular/core" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build --prod --outputHashing=all" />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
 
