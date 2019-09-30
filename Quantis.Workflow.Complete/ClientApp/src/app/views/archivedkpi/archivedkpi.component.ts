@@ -201,9 +201,7 @@ export class ArchivedKpiComponent implements OnInit {
       this.addChildren();
       this.loading=false;
       });
-    //  console.log("prova", this.ArchivedKpiBodyData)
-    
-    
+    //  console.log("prova", this.ArchivedKpiBodyData) 
   }
   
  ngAfterViewInit() {
