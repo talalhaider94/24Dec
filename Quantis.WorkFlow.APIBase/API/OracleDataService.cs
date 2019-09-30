@@ -166,10 +166,10 @@ namespace Quantis.WorkFlow.APIBase.API
                                 GlobalRuleName=(string)reader[4],
                                 GlobalRuleId= Decimal.ToInt32((Decimal)reader[5]),
                                 Target= (double)reader[6],
-                                Actual= (double)reader[7],
+                                Actual= (reader[7]==DBNull.Value)?-1:(double)reader[7],
                                 Result= (string)reader[8],
-                                Deviation= (double)reader[9],
-                                
+                                Deviation= (reader[9] == DBNull.Value) ? -1 : (double)reader[9],
+
                             });
                         }
                         var result=basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
