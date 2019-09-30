@@ -514,7 +514,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             psl.end_period,
                             psl.service_level_target_ce,
                             psl.provided_ce,
-                            psl.resultpsl
+                            psl.resultpsl,
+                            u.unit_symbol
                             from 
                             (
                               select  
@@ -559,6 +560,8 @@ namespace Quantis.WorkFlow.APIBase.API
                               and service_level_target is not null
                             ) psl 
                             left join t_rules r on  psl.rule_id = r.rule_id
+                            left join t_domain_categories d on r.domain_category_id = d.domain_category_id
+                            left join t_units u on d.unit_id = u.unit_id
                             left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
                             left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                             left join t_slas s on sv.sla_id = s.sla_id
@@ -588,14 +591,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[1],
-                            Description= (string)reader[3],
+                            Description= (string)reader[3] + "|" + (string)reader[4],
                             ZValue="Target"
                         });
                         result.Add(new XYZDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[2],
-                            Description = (string)reader[3],
+                            Description = (string)reader[3] + "|" + (string)reader[4],
                             ZValue = "Value"
                         });
                     }
