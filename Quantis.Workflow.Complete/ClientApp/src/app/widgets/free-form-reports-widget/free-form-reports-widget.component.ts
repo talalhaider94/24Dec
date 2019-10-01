@@ -19,7 +19,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   @Input() widgetid: number;
   @Input() dashboardid: number;
   @Input() id: number;
-  loading: boolean = true;
+  loading: boolean = false;
   kpiStatusSummaryWidgetParameters: any;
   setWidgetFormValues: any;
   isDashboardModeEdit: boolean = true;
@@ -123,6 +123,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   // invokes on component initialization
   getChartParametersAndData(url) {
     let myWidgetParameters = null;
+    this.loading = true;
     this.dashboardService.getWidgetParameters(url).pipe(
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
