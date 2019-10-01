@@ -22,12 +22,12 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   loading: boolean = true;
   kpiStatusSummaryWidgetParameters: any;
   setWidgetFormValues: any;
-  editWidgetName: boolean = true;
+  isDashboardModeEdit: boolean = true;
   @Output()
   kpiStatusSummaryParent = new EventEmitter<any>();
   kpiStatusSummaryData: any = [];
   // need to update these preselected ndoes
-  preSelectedNodes = [1075,1405,1420,1424,1425,1430,1435,1436,1437,1438,1439,1441,1442,1444,1445,1446,1447,1448,1449,1460,1465,1470,1471,1485];
+  preSelectedNodes = [1075, 1405, 1420, 1424, 1425, 1430, 1435, 1436, 1437, 1438, 1439, 1441, 1442, 1444, 1445, 1446, 1447, 1448, 1449, 1460, 1465, 1470, 1471, 1485];
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
   dtOptions: {};
@@ -91,16 +91,16 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     };
 
     if (this.router.url.includes('dashboard/public')) {
-      this.editWidgetName = false;
+      this.isDashboardModeEdit = false;
+      if (this.url) {
+        this.emitter.loadingStatus(true);
+        this.getChartParametersAndData(this.url);
+      }
+      // coming from dashboard or public parent components
+      this.subscriptionForDataChangesFromParent();
     }
-    if (this.url) {
-      this.emitter.loadingStatus(true);
-      this.getChartParametersAndData(this.url);
-    }
-    // coming from dashboard or public parent components
-    this.subscriptionForDataChangesFromParent();
   }
-  
+
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
