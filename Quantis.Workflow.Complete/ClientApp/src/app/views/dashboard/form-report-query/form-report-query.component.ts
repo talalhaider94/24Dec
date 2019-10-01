@@ -102,7 +102,8 @@ export class FormReportQueryComponent implements OnInit {
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
-      Parameters: this.formBuilder.array([ this.createParameters() ]),
+      Parameters: this.formBuilder.array([]),
+      //Parameters: this.formBuilder.array([ this.createParameters() ]),
     });
   }
 
