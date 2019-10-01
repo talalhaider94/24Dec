@@ -18,6 +18,7 @@ let $this;
 export class AdminKpiComponent implements OnInit {
   @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('btnExporta') btnExporta: ElementRef;
+  @ViewChild('kpiTable') kpiTable: ElementRef;
   constructor(
     private apiService: ApiService,
     private toastr: ToastrService,
@@ -378,37 +379,25 @@ export class AdminKpiComponent implements OnInit {
     var csv = '';
     var headers = [];
     var rows = [];
-
     // Get header names
-    $(tableElm+' thead').find('th:not(.notExportCsv)').each(function() {
-      var $th = $(this);
-      var text = $th.text();
+    $(tableElm + ' thead tr th:not(.notExportCsv)').each(function() {
+      var text = $(this).text();
       var header = '"' + text + '"';
-      headers.push(header); // original code
+      headers.push(text); // original code
       //if(text != "") headers.push(header); 
     });
-    csv += headers.join(',') + "\n";
-
+    //csv += "'" + headers.join("','") + "'\n";
+    csv += '"' + headers.join('","') + '"\r\n';
     // get table data
     if (exportmode == "full") { // total data
       var totalRows = oTable.data().length;
       for(let i = 0; i < totalRows; i++) {
-        rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
+        rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('","') + '"');
       }
-    } else { // visible rows only
-      $(tableElm+' tbody tr:visible').each(function(index) {
-        var row = [];
-        $(this).find('td:not(.notExportCsv)').each(function(){
-          var $td = $(this);
-          var text = $td.text();
-          var cell = '"' +text+ '"';
-          row.push(cell);
-        });
-        rows.push(row);
-      })
-    }
-    csv += rows.join("\n");
-    var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
+    } 
+    csv += rows.join("\r\n");
+    console.log(csv)
+    var blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
     saveAs(blob, "ExportKPITable.csv");
   }
 
@@ -418,23 +407,19 @@ export class AdminKpiComponent implements OnInit {
     return tmp.textContent || tmp.innerText;
   }
 
- /* getKpis1() {
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
-    });
-  }
-
-  getKpis() {
-    this.loading = true;
-    this.apiService.getCatalogoKpis().subscribe((data: any) => {
-      this.kpiTableBodyData = data;
-      console.log('Kpis ', data);
-      this.rerender();
-      this.loading = false;
-    });
-  }*/
   getTRules() {
     this.loading = true;
     this.apiService.getTRules().subscribe((data: any) => {
+      data.forEach(function (item, index) {
+        if (item.rule_description) {
+          data[index].rule_description = item.rule_description.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/, '');
+          // /\n/ig, ''
+        }
+        if (item.rule_name) {
+          data[index].rule_name = item.rule_name.replace(/[\n\r]+/g, ' ').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/, '');
+          // /\n/ig, ''
+        }
+      });
       this.kpiTableBodyData = data;
       console.log('Rules ', data);
       this.rerender();
