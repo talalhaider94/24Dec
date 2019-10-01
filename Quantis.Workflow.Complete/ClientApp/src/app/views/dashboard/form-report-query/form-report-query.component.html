@@ -3,25 +3,29 @@
         <div class="col-md-12">
             <div class="clearfix mb-3">
                 <h5 class="float-left">Query Form Report</h5>
-                <button type="button" class="btn btn-danger float-right" routerLink="/dashboard/free-form-report">Back</button>
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-danger float-right" routerLink="/dashboard/free-form-report">Back</button>
+                </div>    
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
-                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parameters</button><br><br>
-                    <div class="form-group">
+                    <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
+                    <div class="form-group" style="width:50%">
                         <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                     <div class="form-group">
-                        <textarea type="text" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
+                        <textarea type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
-                    <div formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters']; let i = index;">
+                    <!-- <span *ngIf="parameterCount>0"> -->
+                    <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
                         <div class="row" [formGroupName]="i">
                             <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
                             <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
                         </div><br>
                     </div>
+                    <!-- </span> -->
                     <!-- <div class="row" formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index"> -->
                     <!-- <ng-container [formGroupName]="i"> -->
                     <!-- <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>

@@ -9,10 +9,16 @@
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
 </div>
-<div>
+<highcharts-chart
+   [Highcharts] = "highcharts" 
+   [options] = "chartOptions" 
+   [(update)]="chartUpdateFlag"
+   style = "width: 100%; display: block;">
+</highcharts-chart>
+<!-- <div>
   <span class="targetLine"></span>
   <canvas id="chart" baseChart [datasets]="kpiReportTrendData" [labels]="kpiReportTrendLabels" [options]="kpiReportTrendOptions"
     [legend]="kpiReportTrendLegend" [chartType]="kpiReportTrendChartType"
     [colors]="kpiReportColors"
     (chartClick)="chartClicked($event)"></canvas>
-</div>
+</div> -->

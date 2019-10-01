@@ -21,6 +21,7 @@ export class LandingPageComponent implements OnInit {
 	gridsData: any = [];
 	bestContracts: any = [];
 	monthVar: any;
+	month: any;
   	yearVar: any;
 	count = 0;
 	constructor(
@@ -33,6 +34,9 @@ export class LandingPageComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 	ngOnInit(): void {
+		this.month = moment().format('MMMM');
+		this.monthVar = moment().format('MM');
+  		this.yearVar = moment().format('YYYY');
 		this.getAnno();
 		//this.period = this.monthVar/this.yearVar
 		// this.apiService.getLandingPage(2,2019).subscribe((data: any) => {
@@ -47,7 +51,7 @@ export class LandingPageComponent implements OnInit {
 		}else{
 			this.apiService.getLandingPage(this.monthVar,this.yearVar).subscribe((data: any) => {
 				this.gridsData = data;
-				console.log("Month Year Var -> ", this.monthVar, this.yearVar);			
+				console.log("gridsData -> ", this.gridsData);			
 			});
 		}
 	 }

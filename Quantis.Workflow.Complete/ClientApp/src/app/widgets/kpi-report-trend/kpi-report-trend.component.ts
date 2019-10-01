@@ -4,6 +4,9 @@ import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ChartOptions, ChartDataSets } from 'chart.js';
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
 
 @Component({
   selector: 'app-kpi-report-trend',
@@ -18,7 +21,7 @@ export class KpiReportTrendComponent implements OnInit {
   @Input() widgetid: number;
   @Input() dashboardid: number;
   @Input() id: number;
-  loading: boolean = true;
+  loading: boolean = false;
   kpiReportTrendWidgetParameters: any;
   setWidgetFormValues: any;
   editWidgetName: boolean = true;
@@ -63,7 +66,38 @@ export class KpiReportTrendComponent implements OnInit {
       pointHoverBorderColor: 'rgba(244,67,54,0.8)'
     }
   ];
-
+  highcharts = Highcharts;
+  chartOptions = {
+    credits: false,
+    title: {
+      text: 'Combination chart'
+    },
+    xAxis: {
+      categories: ['Apples', 'Oranges', 'Pears', 'Bananas', 'Plums']
+    },
+    series: [{
+      type: 'column',
+      name: 'Compliant',
+      data: [3, 2, 1, 3, 4]
+    }, {
+      type: 'column',
+      name: 'Non Compliant',
+      data: [2, 3, 5, 7, 6]
+    }, {
+      type: 'spline',
+      name: 'Average',
+      data: [3, 2.67, 3, 6.33, 3.33],
+      marker: {
+        lineWidth: 4,
+        lineColor: Highcharts.getOptions().colors[3],
+        fillColor: 'white'
+      }
+    }],
+    exporting: {
+      enabled: true
+    },
+  };
+  chartUpdateFlag: boolean = false;
   constructor(
     private dashboardService: DashboardService,
     private emitter: EmitterService,
@@ -76,18 +110,22 @@ export class KpiReportTrendComponent implements OnInit {
     console.log('KpiReportTrendComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
-    }
-    if (this.url) {
-      this.emitter.loadingStatus(true);
-      this.dashboardService.getContractParties().subscribe(result => {
-        this.getChartParametersAndData(this.url, result);
-      }, error => {
-        console.error('getContractParties', error);
-      })
+      if (this.url) {
+        this.emitter.loadingStatus(true);
+        this.loading = true;
+        this.dashboardService.getContractParties().subscribe(result => {
+          this.getChartParametersAndData(this.url, result);
+        }, error => {
+          console.error('getContractParties', error);
+        })
 
+      }
+      // coming from dashboard or public parent components
+      this.subscriptionForDataChangesFromParent();
     }
-    // coming from dashboard or public parent components
-    this.subscriptionForDataChangesFromParent()
+    window.dispatchEvent(new Event('resize'));
+  }
+  ngAfterViewInit() {
   }
 
   subscriptionForDataChangesFromParent() {
@@ -158,6 +196,7 @@ export class KpiReportTrendComponent implements OnInit {
       this.loading = false;
       this.emitter.loadingStatus(false);
     }, error => {
+      console.error('KPI Report Trend', error);
       this.loading = false;
       this.emitter.loadingStatus(false);
     });
@@ -186,6 +225,12 @@ export class KpiReportTrendComponent implements OnInit {
   // dashboardComponentData is result of data coming from 
   // posting data to parameters widget
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
+    // updating high chart
+    // https://codesandbox.io/s/543l0p0qq4
+    // this.chartOptions.xAxis = {
+    //   categories: ['aaaa', 'aaaaa', 'PDdddrs', 'Bavvvvvnanas', 'yyyPlums']
+    // }
+    // this.chartUpdateFlag = true;
     if (dashboardComponentData) {
       let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
@@ -202,7 +247,7 @@ export class KpiReportTrendComponent implements OnInit {
 
       let allCompliantData = compliantData.map(data => data.yvalue);
       let allNonCompliantData = nonCompliantData.map(data => data.yvalue);
-      
+
       setTimeout(() => {
         this.kpiReportTrendLabels.length = 0;
         this.kpiReportTrendLabels = allChartLabels;

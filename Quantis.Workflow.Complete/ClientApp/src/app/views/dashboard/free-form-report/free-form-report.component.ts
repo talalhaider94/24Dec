@@ -342,7 +342,16 @@ export class FreeFormReportComponent implements OnInit {
     this.showViewModal();
   }
 
+  clearData(){
+    this.debugQueryData = [];
+    this.debugQueryValue = [];
+  }
+
+  valueCount = 0;
   executeAssigned(data){
+    this.valueCount = 0;
+    this.clearData();
+    
     this._freeFormReport.getReportQueryDetailByID(data.id).subscribe(data => {   
       this.executeQueryData.QueryText = data.querytext;
       this.executeQueryData.Parameters = data.parameters;
@@ -362,7 +371,6 @@ export class FreeFormReportComponent implements OnInit {
     //this.showViewModal();
   }
 
-  valueCount = 0;
   debug(){
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;

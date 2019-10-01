@@ -40,6 +40,7 @@ export class FormReportQueryComponent implements OnInit {
   formLoading: boolean = false;
   submitted: boolean = false;
   isSubmit=0;
+  parameterCount=0;
 
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
@@ -101,7 +102,8 @@ export class FormReportQueryComponent implements OnInit {
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
-      Parameters: this.formBuilder.array([ this.createParameters() ]),
+      Parameters: this.formBuilder.array([]),
+      //Parameters: this.formBuilder.array([ this.createParameters() ]),
     });
   }
 
@@ -120,6 +122,7 @@ export class FormReportQueryComponent implements OnInit {
   addParameters(): void {
     this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
     this.Parameters.push(this.createParameters());
+    this.parameterCount=1;
   }
 
   onQueryReportFormSubmit(event) {

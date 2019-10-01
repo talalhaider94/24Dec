@@ -67,14 +67,14 @@ export class DashboardComponent implements OnInit {
 		private dateTime: DateTimeService,
 		@Inject(DOCUMENT) private document: Document
 	) { }
-	
+
 	@HostListener('window:scroll', [])
 	onWindowScroll() {
-	  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-		document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
-	  } else {
-		document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
-	  }
+		if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+			document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+		} else {
+			document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+		}
 	}
 
 	outputs = {
@@ -295,7 +295,7 @@ export class DashboardComponent implements OnInit {
 
 	itemChange() {
 		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
-		let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
+		// let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
 		// this.serialize(changedDashboardWidgets.dashboardwidgets);
 	}
 
@@ -330,7 +330,7 @@ export class DashboardComponent implements OnInit {
 		switch (componentType) {
 			case "line_chart": {
 				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -347,10 +347,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: lineWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "distribution_by_verifica": {
 				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -367,10 +369,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: doughnutWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "count_trend": {
 				let countWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'count_trend');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -387,10 +391,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: countWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "kpi_count_summary": {
 				let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -407,11 +413,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: summaryWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "distribution_by_user": {
-				console.log('distribution_by_user', this.widgetCollection)
 				let distributionWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_user');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -428,10 +435,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: distributionWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "catalog_pending_count_trends": {
 				let catalogWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'catalog_pending_count_trends');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -448,10 +457,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: catalogWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "kpi_report_trend": {
 				let kpiReportTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_report_trend');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 8,
 					rows: 6,
 					minItemCols: 2,
@@ -468,10 +479,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: kpiReportTrendWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "notification_trend": {
 				let notificationTrendWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'notification_trend');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -488,10 +501,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: notificationTrendWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "kpi_count_by_organization": {
 				let kpiOragnizationWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_by_organization');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 4,
 					rows: 4,
 					minItemCols: 2,
@@ -508,10 +523,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: kpiOragnizationWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "KPIStatusSummary": {
 				let kpiStatusSummaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'KPIStatusSummary');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 15,
 					rows: 8,
 					minItemCols: 10,
@@ -528,10 +545,12 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: kpiStatusSummaryWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 			case "FreeFormReport": {
 				let freeFormReportWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'FreeFormReport');
-				return this.dashboardWidgetsArray.push({
+				this.dashboardWidgetsArray.push({
 					cols: 15,
 					rows: 8,
 					minItemCols: 10,
@@ -548,6 +567,8 @@ export class DashboardComponent implements OnInit {
 					id: 0,
 					url: freeFormReportWidget.url
 				});
+				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
+				return this.dashboardWidgetsArray;
 			}
 		}
 	}
