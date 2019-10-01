@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://10.10.10.102/api',
-  //API_URL: 'http://localhost:5001',
+  API_URL: 'http://10.10.10.102/api', //cloud
+  //API_URL: 'https://localhost:5001/api', //localhost
 };
