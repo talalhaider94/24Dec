@@ -7,12 +7,12 @@
   <h5 *ngIf="loading" class="text-center text-primary">   
     <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
   </h5>
-  <table class="table stripe" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+  <table class="table stripe kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
     <thead style="background:#20a8d8">
       <tr style="color:white;font-size:12px;">
         <th style="text-align:center">GLOBAL RULE ID</th>
         <th style="text-align:center">CONTRATTO</th>
-        <th width="50%" style="text-align:center">KPI</th>
+        <th style="text-align:center">KPI</th>
         <th style="text-align:center">DESCRIZIONE</th>
         <th style="text-align:center">CONTRAENTE PRIMARIO</th>
         <th style="text-align:center">CONTRAENTE SECONDARIO</th>
@@ -25,8 +25,8 @@
         <td style="text-align: left;">{{row.global_rule_id}}</td>
         <td style="text-align: left;">{{row.sla_name}}</td>
         <td style="text-align: left;">{{row.rule_name}}</td>
-        <td class="tagsTip" width="50%" *ngIf="row.rule_description; then trueBlock else falseBlock"></td>
-        <ng-template #trueBlock><td class="tagsTip" style="text-align: left;" width="50%" data-ext="" attr.data-ext="{{row.rule_description}}">{{row.rule_description | slice:0:130}} [...]</td></ng-template>
+        <td class="tagsTip" *ngIf="row.rule_description; then trueBlock else falseBlock"></td>
+        <ng-template #trueBlock><td class="tagsTip" style="text-align: left;" width="50%" data-ext="" attr.data-ext="{{row.rule_description}}">{{row.rule_description}}</td></ng-template>
         <ng-template #falseBlock><td align="center"> </td></ng-template>
         <td style="text-align: left;">{{row.primary_contract_party_name}}</td>
         <td style="text-align: left;">{{row.secondary_contract_party_name}}</td>
