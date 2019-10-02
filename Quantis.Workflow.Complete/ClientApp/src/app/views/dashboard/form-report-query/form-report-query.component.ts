@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Directive, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FreeFormReportService } from '../../../_services';
 import { forkJoin } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -13,7 +13,14 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
   templateUrl: './form-report-query.component.html',
 //   styleUrls: ['./free-form-report.component.scss']
 })
+
 export class FormReportQueryComponent implements OnInit { 
+
+  onKeydown(event) {
+    if (event.keyCode === 32 ) {
+      return false;
+    }
+  }
 
   assignedReportQueries: any = [];
   ownedReportQueries: any = [];

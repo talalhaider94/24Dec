@@ -21,23 +21,16 @@
                     <!-- <span *ngIf="parameterCount>0"> -->
                     <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
                         <div class="row" [formGroupName]="i">
-                            <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
+                            <div class="col-md-6"><input (keydown)="onKeydown($event)" placeholder="Key" formControlName="key" class="form-control"></div>
                             <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
                         </div><br>
                     </div>
-                    <!-- </span> -->
-                    <!-- <div class="row" formArrayName="credentials" *ngFor="let creds of form.controls.credentials?.value; let i = index"> -->
-                    <!-- <ng-container [formGroupName]="i"> -->
-                    <!-- <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control"></div>
-                            <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div><br><br> -->
-                    <!-- </ng-container> -->
-                    <!-- </div> -->
                     <div class="row">
-                        <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" class="btn btn-success">
+                        <div class="col-md-12">
+                            <button [disabled]="formLoading" type="submit" class="btn btn-success float-right ml-1">
                                 <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                             </button>
-                            <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Debug</button>
+                            <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary float-right">Debug</button>
                         </div>
                     </div>
                 </form>
