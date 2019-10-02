@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, OnDestroy, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, OnDestroy, QueryList, ElementRef } from '@angular/core';
 import { FreeFormReportService } from '../../../_services';
 import { forkJoin } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -16,6 +16,8 @@ export class FreeFormReportComponent implements OnInit {
   @ViewChild('configModal') public configModal: ModalDirective;
   @ViewChild('viewAssignedModal') public viewAssignedModal: ModalDirective;
   @ViewChild('executeModal') public executeModal: ModalDirective;
+  @ViewChild('ConfigurationTable') public ConfigurationTable: ElementRef;
+
   assignedReportQueries: any = [];
   assignedQueriesBodyData: any = [];
   viewAssignedData: any = [];
@@ -33,6 +35,7 @@ export class FreeFormReportComponent implements OnInit {
     ids: []
   }
   debugQueryData: any = [];
+  debugQueryValue: any = [];
   executeQueryData = {
     QueryText: '',
     Parameters: [{
@@ -166,6 +169,9 @@ export class FreeFormReportComponent implements OnInit {
       Parameters: ['']
     });
     this.getReportsData();
+
+    this.debugQueryData = [];
+    this.debugQueryValue = [];
   }
 
   ngAfterViewInit() {
@@ -336,18 +342,48 @@ export class FreeFormReportComponent implements OnInit {
     this.showViewModal();
   }
 
+  clearData(){
+    this.debugQueryData = [];
+    this.debugQueryValue = [];
+  }
+
+  valueCount = 0;
   executeAssigned(data){
+    this.valueCount = 0;
+    this.clearData();
+    
     this._freeFormReport.getReportQueryDetailByID(data.id).subscribe(data => {   
       this.executeQueryData.QueryText = data.querytext;
       this.executeQueryData.Parameters = data.parameters;
       console.log('Debug -> ',this.executeQueryData);
+
       this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
-        this.debugQueryData = data;
-        this.showExecuteModal();
+        this.debugQueryData = Object.keys(data[0]);
+        Object.keys(data[0]).forEach(key => {
+          this.debugQueryValue[this.valueCount] = data[0][key];  
+          this.valueCount++; 
+        });
+        //this.showExecuteModal();
         console.log('Debug Result -> ',this.debugQueryData);
       });
-    }); 
+
+    });
     //this.showViewModal();
+  }
+
+  debug(){
+    this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
+    this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
+    //console.log('Debug -> ',this.executeQueryData);
+    this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      console.log('Debug Result -> ',data[0]);
+      this.debugQueryData = Object.keys(data[0]);
+      Object.keys(data[0]).forEach(key => {
+        this.debugQueryValue[this.valueCount] = data[0][key];  
+        this.valueCount++; 
+      });
+      console.log('debugQueryValue -> ',this.debugQueryValue); 
+    });
   }
   
 

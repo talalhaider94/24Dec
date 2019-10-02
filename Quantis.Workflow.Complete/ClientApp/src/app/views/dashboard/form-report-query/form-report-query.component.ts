@@ -19,16 +19,15 @@ export class FormReportQueryComponent implements OnInit {
   ownedReportQueries: any = [];
   debugQueryData: any = [];
   debugQueryValue: any = [];
+  valueCount = 0;
   executeQueryData = {
-      QueryText: '',
-      Parameters: [{
-        key: '',
-        value: ''
-      }]
+    QueryText: '',
+    Parameters: [{
+      key: '',
+      value: ''
+    }]
   }
   debugCount = 0;
-  //heroes = ['Windstorm', 'Bombasto', 'Magneta', 'Tornado'];
-  
   QueryName;
   QueryText;
   parametersData = {
@@ -41,6 +40,8 @@ export class FormReportQueryComponent implements OnInit {
   formLoading: boolean = false;
   submitted: boolean = false;
   isSubmit=0;
+  parameterCount=0;
+
   modalTitle: string = 'Add Query Report';
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -101,7 +102,8 @@ export class FormReportQueryComponent implements OnInit {
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
-      Parameters: this.formBuilder.array([ this.createParameters() ]),
+      Parameters: this.formBuilder.array([]),
+      //Parameters: this.formBuilder.array([ this.createParameters() ]),
     });
   }
 
@@ -112,18 +114,17 @@ export class FormReportQueryComponent implements OnInit {
     });
   }
 
+  clearData(){
+    this.debugQueryData = [];
+    this.debugQueryValue = [];
+  }
+
   addParameters(): void {
     this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
     this.Parameters.push(this.createParameters());
+    this.parameterCount=1;
   }
 
-//   addCreds() {
-//     const creds = this.form.controls.credentials as FormArray;
-//     creds.push(this.fb.group({
-//       key: '',
-//       value: '',
-//     }));
-//   }
   onQueryReportFormSubmit(event) {
     // const creds = this.form.controls.credentials as FormArray;
     console.log('submit form -> ',this.addEditQueryForm.value);
@@ -148,18 +149,23 @@ export class FormReportQueryComponent implements OnInit {
       this.isSubmit=1;
     }
   }
-  valueCount = 0;
+  
   debug(){
+    this.valueCount = 0;
+    this.clearData();
+
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
       console.log('Debug Result -> ',data[0]);
       this.debugQueryData = Object.keys(data[0]);
+
       Object.keys(data[0]).forEach(key => {
         this.debugQueryValue[this.valueCount] = data[0][key];  
         this.valueCount++; 
       });
+      
       console.log('debugQueryValue -> ',this.debugQueryValue); 
     });
   }

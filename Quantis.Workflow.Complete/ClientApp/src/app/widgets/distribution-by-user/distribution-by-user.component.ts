@@ -66,7 +66,9 @@ export class DistributionByUserComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let distributionByUserFormValues = data.distributionByUserWidgetParameterValues;
-					distributionByUserFormValues.Filters.daterange = this.dateTime.buildRangeDate(distributionByUserFormValues.Filters.daterange);
+					if(distributionByUserFormValues.Filters.daterange) {
+						distributionByUserFormValues.Filters.daterange = this.dateTime.buildRangeDate(distributionByUserFormValues.Filters.daterange);
+					}
 					this.setWidgetFormValues = distributionByUserFormValues;
 					this.updateChart(data.result.body, data, null);
 				}

@@ -100,7 +100,7 @@ export class KpiCountSummaryComponent implements OnInit {
 			}
 		});
 	}
-
+	
 	// invokes on component initialization
 	getChartParametersAndData(url) {
 		// these are default parameters need to update this logic
