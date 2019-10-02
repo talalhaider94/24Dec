@@ -10,7 +10,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent, NodeSelectEventArgs  } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
-import { LineChartComponent } from '../../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
 import { BarchartComponent } from '../../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../../widgets/kpi-count-summary/kpi-count-summary.component';
@@ -56,7 +55,6 @@ export class PublicComponent implements OnInit {
 	submitted: boolean = false;
 	// move to Dashboard service
 	componentCollection: Array<ComponentCollection> = [
-		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },

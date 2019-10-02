@@ -80,7 +80,9 @@ export class BarchartComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let barChartFormValues = data.barChartWidgetParameterValues;
-					barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
+					if(barChartFormValues.Filters.daterange) {
+						barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
+					}
 					this.setWidgetFormValues = barChartFormValues;
 					this.updateChart(data.result.body, data, null);
 				}

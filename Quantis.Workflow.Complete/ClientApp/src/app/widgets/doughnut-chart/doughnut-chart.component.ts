@@ -64,7 +64,9 @@ export class DoughnutChartComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let verificaDoughnutFormValues = data.verificaDoughnutWidgetParameterValues;
-					verificaDoughnutFormValues.Filters.daterange = this.dateTime.buildRangeDate(verificaDoughnutFormValues.Filters.daterange);
+					if(verificaDoughnutFormValues.Filters.daterange) {
+						verificaDoughnutFormValues.Filters.daterange = this.dateTime.buildRangeDate(verificaDoughnutFormValues.Filters.daterange);
+					}
 					this.setWidgetFormValues = verificaDoughnutFormValues;
 					this.updateChart(data.result.body, data, null);
 				}

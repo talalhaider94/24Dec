@@ -11,7 +11,6 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '../../_services/api.service';
 // importing chart components
-import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
@@ -44,7 +43,6 @@ export class DashboardComponent implements OnInit {
 	// move the component collection to dashboard service to access commonly in multiple components
 	// uiidentifier is necessary
 	componentCollection = [
-		{ name: "Line Chart", componentInstance: LineChartComponent, uiidentifier: "not_implemented" },
 		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
@@ -328,28 +326,6 @@ export class DashboardComponent implements OnInit {
 	onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
 		switch (componentType) {
-			case "line_chart": {
-				let lineWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'line_chart');
-				this.dashboardWidgetsArray.push({
-					cols: 4,
-					rows: 4,
-					minItemCols: 2,
-					minItemRows: 4,
-					x: 0,
-					y: 0,
-					component: LineChartComponent,
-					widgetname: lineWidget.name,
-					uiidentifier: lineWidget.uiidentifier,
-					filters: {}, // need to update this code
-					properties: {},
-					dashboardid: this.dashboardId,
-					widgetid: lineWidget.id,
-					id: 0,
-					url: lineWidget.url
-				});
-				this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
-				return this.dashboardWidgetsArray;
-			}
 			case "distribution_by_verifica": {
 				let doughnutWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'distribution_by_verifica');
 				this.dashboardWidgetsArray.push({
