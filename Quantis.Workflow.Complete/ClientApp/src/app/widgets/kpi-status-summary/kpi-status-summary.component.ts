@@ -114,7 +114,9 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
           let kpiStatusSummaryTableFormValues = data.kpiStatusSummaryWidgetParameterValues;
-          kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
+          if(kpiStatusSummaryTableFormValues.Filters.daterange) {
+            kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
+          }
           this.setWidgetFormValues = kpiStatusSummaryTableFormValues;
           this.updateChart(data.result.body, data, null);
         }

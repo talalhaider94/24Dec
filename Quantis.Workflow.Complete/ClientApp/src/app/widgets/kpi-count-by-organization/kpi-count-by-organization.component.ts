@@ -67,7 +67,9 @@ export class KpiCountByOrganizationComponent implements OnInit {
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
           let kpiCountOrgFormValues = data.kpiCountOrgWidgetParameterValues;
-          kpiCountOrgFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountOrgFormValues.Filters.daterange);
+          if(kpiCountOrgFormValues.Filters.daterange) {
+            kpiCountOrgFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountOrgFormValues.Filters.daterange);
+          }
           this.setWidgetFormValues = kpiCountOrgFormValues;
           this.updateChart(data.result.body, data, null);
         }

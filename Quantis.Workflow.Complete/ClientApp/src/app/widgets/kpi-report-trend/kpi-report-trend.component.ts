@@ -136,7 +136,9 @@ export class KpiReportTrendComponent implements OnInit {
         if (currentWidgetId === this.id) {
           // updating parameter form widget setValues 
           let kpiReportTrendFormValues = data.kpiReportTrendWidgetParameterValues;
-          kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
+          if (kpiReportTrendFormValues.Filters.daterange) {
+            kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
+          }
           this.setWidgetFormValues = kpiReportTrendFormValues;
           this.updateChart(data.result.body, data, null);
         }
