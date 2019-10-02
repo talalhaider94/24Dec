@@ -91,7 +91,9 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
 				if (currentWidgetId === this.id) {
 					// updating parameter form widget setValues 
 					let catalogPendingFormValues = data.catalogPendingWidgetParameterValues;
-					catalogPendingFormValues.Filters.daterange = this.dateTime.buildRangeDate(catalogPendingFormValues.Filters.daterange);
+					if(catalogPendingFormValues.Filters.daterange) {
+						catalogPendingFormValues.Filters.daterange = this.dateTime.buildRangeDate(catalogPendingFormValues.Filters.daterange);
+					}
 					this.setWidgetFormValues = catalogPendingFormValues;
 					this.updateChart(data.result.body, data, null);
 				}

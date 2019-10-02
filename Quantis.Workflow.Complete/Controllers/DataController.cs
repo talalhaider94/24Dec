@@ -375,17 +375,17 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.AssignReportQuery(records,usr.UserId);
 
-
         }
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("GetAllUsersAssignedQueries")]
         public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
         {
-            return _dataAPI.GetAllUsersAssignedQueries(queryid);
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetAllUsersAssignedQueries(queryid, usr.UserId);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("ExecuteReportQuery")]
-        public DataTable ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)
+        public object ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)
         {
             return _dataAPI.ExecuteReportQuery(dto);
         }

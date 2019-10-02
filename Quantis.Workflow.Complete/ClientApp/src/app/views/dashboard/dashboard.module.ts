@@ -18,7 +18,6 @@ import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { LineChartComponent } from '../../widgets/line-chart/line-chart.component';
 import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
@@ -56,7 +55,6 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
     DataTablesModule,
     SweetAlert2Module,
     DynamicModule.withComponents([
-      LineChartComponent,
       DoughnutChartComponent,
       BarchartComponent,
       KpiCountSummaryComponent,
@@ -75,7 +73,6 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
   declarations: [ 
     DashboardComponent,
     DoughnutChartComponent,
-    LineChartComponent,
     MenuComponent,
     BarchartComponent,
     PublicComponent,

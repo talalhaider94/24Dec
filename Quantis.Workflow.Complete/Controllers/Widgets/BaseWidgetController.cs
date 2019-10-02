@@ -43,7 +43,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.DateTypes.Add(4, "Ultimi 6 mesi");
         }
 
-        private int GetUserId()
+        protected int GetUserId()
         {
             var usr = HttpContext.User as AuthUser;
             if (usr == null)
