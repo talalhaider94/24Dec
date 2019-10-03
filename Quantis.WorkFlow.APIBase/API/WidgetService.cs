@@ -874,7 +874,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join V_TOT_MAX mas on(f.""DESCRIZIONE KPI"" = mas.DESCRIZIONE_KPI and mas.ANNO = to_char(sysdate, 'YYYY'))
                             where {0}
                             order by ""ID KPI""";
-            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", dto.KPIs);
             query = string.Format(query, rules);
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
