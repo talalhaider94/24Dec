@@ -40,6 +40,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IWidgetService, WidgetService>();
             services.AddTransient<IGlobalFilterService, GlobalFilterService>();
+            services.AddScoped<IBSIService, BSIService>();
         }
         public static void RegisterMappers(IServiceCollection services)
         {
