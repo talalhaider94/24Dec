@@ -2133,7 +2133,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-        public DataTable ExecuteReportQuery(ReportQueryDetailDTO dto)
+        public object ExecuteReportQuery(ReportQueryDetailDTO dto)
         {
             string query = dto.QueryText;
             foreach(var p in dto.Parameters)
@@ -2144,22 +2144,28 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 using (OracleCommand cmd = con.CreateCommand())
                 {
-                    con.Open();
-                    cmd.BindByName = true;
-                    cmd.CommandText = query;
-                    OracleDataReader reader = cmd.ExecuteReader();
-                    DataTable myTable = new DataTable();
-                    myTable.Load(reader);
-                    return myTable;
-
+                    try
+                    {
+                        con.Open();
+                        cmd.BindByName = true;
+                        cmd.CommandText = query;
+                        OracleDataReader reader = cmd.ExecuteReader();
+                        DataTable myTable = new DataTable();
+                        myTable.Load(reader);
+                        return myTable;
+                    }
+                    catch(Exception e)
+                    {
+                        return e.Message;
+                    }                   
                 }
             }
         }
-        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
+        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid,int userId)
         {
             try
             {
-                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null).ToList();
+                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null && o.ca_bsi_user_id!=userId).ToList();
                 var userDtos = _userMapper.GetDTOs(users.ToList());
                 var landingpages = _dbcontext.ReportQueryAssignments.Where(o=>o.query_id== queryid).ToList();
                 return (from usrs in userDtos
