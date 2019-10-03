@@ -368,28 +368,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        /*public bool AddUpdateKpi(CatalogKpiDTO dto)
-        {
-            try
-            {
-                var entity = new T_CatalogKPI();
-                if (dto.id > 0)
-                {
-                    entity = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == dto.id);
-                }
-                entity = _catalogKpiMapper.GetEntity(dto, entity);
-                if (dto.id == 0)
-                {
-                    _dbcontext.CatalogKpi.Add(entity);
-                }
-                _dbcontext.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }*/
+
         public bool AddUpdateKpi(CatalogKpiDTO dto)
         {
             using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
