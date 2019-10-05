@@ -241,16 +241,16 @@ aria-hidden="true">
                 <!-- <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br> -->
                 <div class="form-group" style="width:50%">
                     <h6>Query Name</h6>
-                    <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" value="{{addEditQueryForm.QueryName}}">
+                    <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" value="{{addEditQueryForm.controls['QueryName'].value}}">
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                 <div class="form-group">
                     <h6>Query Text</h6>
-                    <textarea type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }"  value="{{addEditQueryForm.QueryName}}"></textarea>
+                    <textarea type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }"  value="{{addEditQueryForm.controls['QueryText'].value}}"></textarea>
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                 <!-- <span *ngIf="parameterCount>0"> -->
-                <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
+                <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters'].value; let i = index;">
                     <div class="row" [formGroupName]="i">
                         <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control" readonly></div>
                         <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>

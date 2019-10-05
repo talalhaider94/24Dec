@@ -36,6 +36,9 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_DEBUG = "VIEW_DEBUG";
         public const string VIEW_STANDARD_DASHBOARD = "VIEW_STANDARD_DASHBOARD";
         public const string VIEW_REPORT_QUERIES = "VIEW_REPORT_QUERIES";
+        public const string IMPORT_FREE_FORM_REPORT = "IMPORT_FREE_FORM_REPORT";
+        public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
+        public const string VIEW_CHART_REPORT = "VIEW_CHART_REPORT";
     }
 
 }
