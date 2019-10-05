@@ -33,6 +33,7 @@ export class DateTimeService {
   }
 
   buildRangeDate(dateRange) {
+    console.log('buildRangeDate', dateRange);
     let [startDate, endDate] = dateRange.split('-');
     let [startMonth, startYear] = startDate.split('/');
     let [endMonth, endYear] = endDate.split('/');

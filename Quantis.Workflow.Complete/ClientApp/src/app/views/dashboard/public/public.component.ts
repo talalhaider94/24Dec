@@ -361,7 +361,6 @@ export class PublicComponent implements OnInit {
 				Properties: widget.properties
 			}
 		});
-		debugger
 		// removeNullKeysFromObject()
 		this.dashboardService.saveDashboardState(params).subscribe(result => {
 			this.emitter.loadingStatus(false);
@@ -469,7 +468,6 @@ export class PublicComponent implements OnInit {
 				}
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		const { url } = this.barChartWidgetParameters;
-		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {

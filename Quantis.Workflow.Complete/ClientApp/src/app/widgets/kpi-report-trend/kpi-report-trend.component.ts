@@ -70,29 +70,34 @@ export class KpiReportTrendComponent implements OnInit {
   chartOptions = {
     credits: false,
     title: {
-      text: 'Combination chart'
+      text: this.widgetname
     },
     xAxis: {
-      categories: ['Apples', 'Oranges', 'Pears', 'Bananas', 'Plums']
+      type: 'date',
+      categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
     },
-    series: [{
-      type: 'column',
-      name: 'Compliant',
-      data: [3, 2, 1, 3, 4]
-    }, {
-      type: 'column',
-      name: 'Non Compliant',
-      data: [2, 3, 5, 7, 6]
-    }, {
-      type: 'spline',
-      name: 'Average',
-      data: [3, 2.67, 3, 6.33, 3.33],
-      marker: {
-        lineWidth: 4,
-        lineColor: Highcharts.getOptions().colors[3],
-        fillColor: 'white'
+    series: [
+      {
+        type: 'column',
+        name: 'Compliant',
+        data: [3, 2, 1, 3, 4]
+      },
+      // {
+      //   type: 'column',
+      //   name: 'Non Compliant',
+      //   data: [2, 3, 5, 7, 6]
+      // },
+      {
+        type: 'scatter',
+        name: 'Target', // target
+        data: [3, 2.67, 3, 6.33, 3.33],
+        marker: {
+          // lineWidth: 0,
+          // lineColor: Highcharts.getOptions().colors[3],
+          fillColor: 'orange'
+        }
       }
-    }],
+    ],
     exporting: {
       enabled: true
     },
@@ -229,10 +234,6 @@ export class KpiReportTrendComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     // updating high chart
     // https://codesandbox.io/s/543l0p0qq4
-    // this.chartOptions.xAxis = {
-    //   categories: ['aaaa', 'aaaaa', 'PDdddrs', 'Bavvvvvnanas', 'yyyPlums']
-    // }
-    // this.chartUpdateFlag = true;
     if (dashboardComponentData) {
       let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
       setTimeout(() => {
@@ -243,22 +244,61 @@ export class KpiReportTrendComponent implements OnInit {
       this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
     }
     if (chartIndexData.length) {
-      let compliantData = chartIndexData.filter(data => data.description === 'compliant');
-      let nonCompliantData = chartIndexData.filter(data => data.description === 'noncompliant');
+      let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
+      let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
       let allChartLabels = chartIndexData.map(label => label.xvalue);
 
-      let allCompliantData = compliantData.map(data => data.yvalue);
-      let allNonCompliantData = nonCompliantData.map(data => data.yvalue);
+      let allTargetData = targetData.map(data => data.yvalue);
+      let allValuesData = valueData.map(data => data.yvalue);
+      debugger
+      this.chartOptions.xAxis = {
+        type: 'date',
+        categories: allChartLabels,
+      }
+      this.chartOptions.series[0] = {
+        type: 'column',
+        name: 'Compliant',
+        data: allValuesData
+      }; 
+      this.chartOptions.series[1] = {
+        type: 'scatter',
+        name: 'Target', // target
+        data: allTargetData,
+        marker: {
+          // lineWidth: 0,
+          // lineColor: Highcharts.getOptions().colors[3],
+          fillColor: 'orange'
+        }
+      }; 
+      debugger
+      // this.chartOptions.series = [
+      //   {
+      //     type: 'column',
+      //     name: 'Compliant',
+      //     data: allValuesData
+      //   },
+      //   {
+      //     type: 'spline',
+      //     name: 'Average', // target
+      //     data: allValuesData,
+      //     marker: {
+      //       lineWidth: 4,
+      //       lineColor: Highcharts.getOptions().colors[3],
+      //       fillColor: 'white'
+      //     }
+      //   }
+      // ];
+      this.chartUpdateFlag = true;
 
-      setTimeout(() => {
-        this.kpiReportTrendLabels.length = 0;
-        this.kpiReportTrendLabels = allChartLabels;
-      }, 0);
+      // setTimeout(() => {
+      //   this.kpiReportTrendLabels.length = 0;
+      //   this.kpiReportTrendLabels = allChartLabels;
+      // }, 0);
 
-      this.kpiReportTrendData = [
-        { data: allCompliantData, label: 'Compliant' },
-        { data: allNonCompliantData, label: 'Non Compliant' },
-      ];
+      // this.kpiReportTrendData = [
+      //   { data: allCompliantData, label: 'Compliant' },
+      //   { data: allNonCompliantData, label: 'Non Compliant' },
+      // ];
       // this.kpiReportTrendLabels = this.kpiReportTrendLabels.slice();
       // this.kpiReportTrendData = this.kpiReportTrendData.slice();
     } else {
