@@ -81,8 +81,8 @@ namespace Quantis.WorkFlow.APIBase.API
             var reportInfoTitle = reportInfo.Element("TITLE");
             result.ContractParty = reportInfoTitle.Element("Customer").Value;
             result.Contract = reportInfoTitle.Element("SLA").Value;
-            result.Rule = reportInfoTitle.Element("Customer").Value;
-            result.Application= reportInfoTitle.Element("Customer").Value;
+            result.Rule = reportInfoTitle.Element("Rule").Value;
+            result.Application= reportInfoTitle.Element("Application").Value;
             result.ServiceDomain = reportInfoTitle.Element("ServiceDomain").Value;
             result.DomainCategory = reportInfoTitle.Element("DomainCategory").Value;
             result.Incomplete = reportInfoTitle.Element("Incomplete").Value;

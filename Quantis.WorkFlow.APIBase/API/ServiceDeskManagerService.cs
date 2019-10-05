@@ -356,7 +356,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto)
+        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto,string userName)
         {
             string ret = null;
             LogIn();
@@ -367,6 +367,8 @@ namespace Quantis.WorkFlow.APIBase.API
             param.Add("description", dto.AttachmentName);
             param.Add("fileName", dto.AttachmentName);           
             SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
+            string note = string.Format("Utente {0} ha aggiunto il seguente documento: {1}", userName, dto.AttachmentName);
+            _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, note, "LOG", 0, false).Wait();
             LogOut();
             return ret;
         }
