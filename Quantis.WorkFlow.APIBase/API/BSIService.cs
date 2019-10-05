@@ -1,48 +1,163 @@
-﻿using Quantis.WorkFlow.Services.API;
+﻿using Microsoft.Extensions.Configuration;
+using Quantis.WorkFlow.Services.API;
+using Quantis.WorkFlow.Services.DTOs.BSI;
+using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
     public class BSIService: IBSIService
     {
-        private string _sessionID = null;
         private BSIAuth.OblicoreAuthSoapClient _authService = null;
         private BSIReports.ReportsSoapClient _reportService = null;
-        public BSIService()
+        private readonly IConfiguration _configuration;
+        public BSIService(IConfiguration configuration)
         {
+            _configuration = configuration;
             if (_authService == null)
             {
-                _authService = new BSIAuth.OblicoreAuthSoapClient(BSIAuth.OblicoreAuthSoapClient.EndpointConfiguration.OblicoreAuthSoap);
+                _authService = new BSIAuth.OblicoreAuthSoapClient(BSIAuth.OblicoreAuthSoapClient.EndpointConfiguration.OblicoreAuthSoap, _configuration["BSIAuthWebServices"]);
             }
             if (_reportService == null)
             {
-                _reportService = new BSIReports.ReportsSoapClient(BSIReports.ReportsSoapClient.EndpointConfiguration.ReportsSoap);
+                _reportService = new BSIReports.ReportsSoapClient(BSIReports.ReportsSoapClient.EndpointConfiguration.ReportsSoap, _configuration["BSIReportsWebServices"]);
             }
 
         }
-        private void Login()
+
+        public List<BSIReportLVDTO> GetMyNormalReports(string userName)
         {
-            if (_sessionID != null)
+            
+            var session= Login(userName);
+            var myreports=_reportService.GetMyReportsAsync(session).Result;
+            if (myreports.Nodes[1].Element("Result") == null)
             {
-                _authService.ClearSessionContextAsync(_sessionID);
+                return new List<BSIReportLVDTO>();
             }
-            _sessionID=_authService.CreateSessionContextAsync("samin", "Poste italian").Result;
+            var list = myreports.Nodes[1].Element("Result").Elements();
+            Logout(session);
+            var reports =parseReports(list);
+            return reports.Where(o => o.ReportType == "NORMAL").ToList();
+
         }
-        private void Logout()
+
+        public List<BSIReportLVDTO> GetAllNormalReports(string userName)
         {
-            if (_sessionID != "")
+
+            var session = Login(userName);
+            var myreports = _reportService.GetAllReportsAsync(session).Result;
+            if (myreports.Nodes[1].Element("Result") == null)
             {
-                _authService.ClearSessionContextAsync(_sessionID);
-                _sessionID = "";
+                return new List<BSIReportLVDTO>();
+            }
+            var list = myreports.Nodes[1].Element("Result").Elements();
+            Logout(session);
+            var reports = parseReports(list);
+            return reports.Where(o => o.ReportType == "NORMAL").ToList();
+
+        }
+
+        public BSIReportDetailDTO GetReportDetail(string userName,int reportId)
+        {
+            var result = new BSIReportDetailDTO();
+            var session = Login(userName);
+            var report = _reportService.GetReportDataAsync(session,reportId,0,100,100).Result;
+            Logout(session);
+            var baseElement = report.Elements().FirstOrDefault().Elements().ElementAt(2);
+            var reportInfo = baseElement.Element("REPORT_INFO");
+
+            result.Name = baseElement.Element("NAME").Value;
+            result.XLabel = reportInfo.Element("ByX").Value;
+            result.YLabel = reportInfo.Element("ByY").Value;
+            result.ReportType = reportInfo.Element("Report_Type").Value;            
+            result.ReportTitle = reportInfo.Element("Report_Title").Value;
+            result.FromDate = DateTime.Parse(reportInfo.Element("DateFromOrg").Value);
+            result.ToDate = DateTime.Parse(reportInfo.Element("DateToOrg").Value);
+
+            var reportInfoTitle = reportInfo.Element("TITLE");
+            result.ContractParty = reportInfoTitle.Element("Customer").Value;
+            result.Contract = reportInfoTitle.Element("SLA").Value;
+            result.Rule = reportInfoTitle.Element("Customer").Value;
+            result.Application= reportInfoTitle.Element("Customer").Value;
+            result.ServiceDomain = reportInfoTitle.Element("ServiceDomain").Value;
+            result.DomainCategory = reportInfoTitle.Element("DomainCategory").Value;
+            result.Incomplete = reportInfoTitle.Element("Incomplete").Value;
+            result.MetricType = reportInfoTitle.Element("MetricType").Value;
+            result.DataGranularity = reportInfoTitle.Element("DataGranularity").Value;
+
+            result.DefAgg= reportInfo.Element("DefAgg").Value;
+            result.LocaleId = int.Parse(reportInfo.Element("LocaleId").Value);
+            result.Units = reportInfo.Element("Units").Value;
+            result.GridUnits = reportInfo.Element("GridUnits").Value;
+            result.Messages = new List<string>();
+            var reportInfoMessages = reportInfo.Element("MESSAGES").Elements();
+            foreach(var m in reportInfoMessages)
+            {
+                result.Messages.Add(m.Value);
+            }
+
+            var reportInfoCal = reportInfo.Element("CALC_STATUS");
+            result.CalculationStatusText = reportInfoCal.Element("TEXT").Value;
+            result.CalculationStatusBookletText= reportInfoCal.Element("BOOKLET_TEXT").Value;
+            result.CalculationStatusLastDate = DateTime.Parse(reportInfoCal.Element("LAST_CALC_DATE").Value);
+            result.Data = new List<Services.DTOs.Widgets.XYZDTO>();
+            var reportGrid = reportInfo.Element("GRID").Elements();
+            foreach(var series in reportGrid)
+            {
+                var elems = series.Elements();
+                string label = "";
+                foreach(var data in elems)
+                {
+                    if (data.Name == "TITLE")
+                    {
+                        label = data.Value;
+                    }
+                    else
+                    {
+                        var dto = new XYZDTO();
+                        dto.ZValue = label;
+                        dto.XValue = data.Element("LABLE").Value;
+                        dto.YValue = (data.Element("VALUE").Value == "") ? null : (double?)double.Parse(data.Element("VALUE").Value);
+                        result.Data.Add(dto);
+                    }
+                }
             }            
+            return result;
         }
-
-        public int Sample()
+        private List<BSIReportLVDTO> parseReports(IEnumerable<XElement> elements)
         {
-            Login();
-            return 1;
+            var results = new List<BSIReportLVDTO>();
+            foreach (var element in elements)
+            {
+                var result = new BSIReportLVDTO();
+                result.ItemId=int.Parse(element.Element("ITEM_ID").Value);
+                result.ItemName = element.Element("ITEM_NAME").Value;
+                result.UserId= int.Parse(element.Element("USER_ID").Value);
+                result.FolderId = int.Parse(element.Element("FOLDER_ID").Value);
+                result.FolderName = element.Element("FOLDER_NAME").Value;
+                result.IsParameterized = (element.Element("IS_PARAMETERIZED").Value == "1");
+                result.IsExecutable = (element.Element("IS_EXECUTABLE").Value == "1");
+                result.ReportType = element.Element("REPORT_TYPE").Value;
+                result.ModifiedDate = DateTime.Parse(element.Element("MODIFY_DATE").Value);
+
+                results.Add(result);
+
+            }
+            return results;
+        }
+        private string Login(string userName)
+        {
+
+            var sessionId = _authService.CreateSessionContextAsync(userName, "Poste Italiane").Result;
+            return sessionId;
+        }
+        private void Logout(string sessionID)
+        {
+            _authService.ClearSessionContextAsync(sessionID);
         }
         ~BSIService()
         {
