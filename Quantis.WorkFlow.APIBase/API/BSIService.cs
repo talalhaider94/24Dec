@@ -41,7 +41,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var list = myreports.Nodes[1].Element("Result").Elements();
             Logout(session);
             var reports =parseReports(list);
-            return reports.Where(o => o.ReportType == "NORMAL").ToList();
+            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
 
         }
 
@@ -57,7 +57,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var list = myreports.Nodes[1].Element("Result").Elements();
             Logout(session);
             var reports = parseReports(list);
-            return reports.Where(o => o.ReportType == "NORMAL").ToList();
+            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
 
         }
 
@@ -70,6 +70,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var baseElement = report.Elements().FirstOrDefault().Elements().ElementAt(2);
             var reportInfo = baseElement.Element("REPORT_INFO");
 
+            result.ResultType = report.Attribute("TYPE").Value;
             result.Name = baseElement.Element("NAME").Value;
             result.XLabel = reportInfo.Element("ByX").Value;
             result.YLabel = reportInfo.Element("ByY").Value;

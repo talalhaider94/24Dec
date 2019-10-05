@@ -608,6 +608,10 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto)
         {
+            if (!dto.KPIs.Any())
+            {
+                return new List<KPIStatusSummaryDTO>();
+            }
             var result = new List<KPIStatusSummaryDTO>();
             string query = @"select contract_party, contract, global_rule_id, ""ID KPI"",replace(replace(replace(replace(""DESCRIZIONE KPI"",'(Non Cumulato)'),'(Cumulato)'),'(Non cumulato)'),'(Progressivo)') as ""DESCRIZIONE KPI"",tipologia,
                             frequenza,calcolo,
