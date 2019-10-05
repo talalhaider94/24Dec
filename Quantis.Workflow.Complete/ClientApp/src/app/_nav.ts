@@ -38,6 +38,13 @@ export const navItems: NavData[] = [
     key: 'alwaysShow'
   },
   {
+    name: 'Dashboard',
+    url: '/dashboard/list',
+    icon: 'fa fa-laptop',
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
+    version: '1.0.0',
+  },
+  {
     name: 'Workflow',
     url: '/workflow-menu',
     icon: 'fa fa-code-fork',
@@ -135,7 +142,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-bar-chart',
-    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','VIEW_REPORT_QUERIES','IMPORT_FREEFORM_REPORT'],
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG', 'VIEW_REPORT_QUERIES','IMPORT_FREE_FORM_REPORT'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -177,7 +184,7 @@ export const navItems: NavData[] = [
         url: '/dashboard/import-form-report',
         icon: 'fa fa-file-text-o',
         version: '0.0.1',
-        key: 'IMPORT_FREEFORM_REPORT'
+        key: 'IMPORT_FREE_FORM_REPORT'
       }
     ]
   },
@@ -259,7 +266,7 @@ export const navItems: NavData[] = [
   },
   {
     title: true, 
-    name: 'Version 1.5.0b',
+    name: 'Version 1.5.1b',
     class: 'class-version-nav',
     key: 'alwaysShow'
   },

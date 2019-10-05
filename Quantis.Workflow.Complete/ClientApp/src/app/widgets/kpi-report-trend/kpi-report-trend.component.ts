@@ -39,6 +39,11 @@ export class KpiReportTrendComponent implements OnInit {
       type: 'date',
       categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
     },
+    yAxis: {
+      title: {
+        text: 'Values #'
+      }
+    },
     // plotOptions: {
     //   column: {
     //     zones: [{
@@ -217,12 +222,17 @@ export class KpiReportTrendComponent implements OnInit {
     }
     let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
     let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
-
+    if(valueData.length > 0) {
+      this.chartOptions.yAxis.title = {
+        text: 'Values | ' + valueData[0].description.split('|')[1]
+      }
+    }
     let allChartLabels = chartIndexData.map(label => label.xvalue);
     
     let allTargetData = targetData.map(data => data.yvalue);
     let allValuesData = valueData.map(data => ({
       y: data.yvalue,
+      name: data.description,
       color: data.description.includes('compliant') ? '#379457' : '#f86c6b',
     }));
     this.chartOptions.xAxis = {
