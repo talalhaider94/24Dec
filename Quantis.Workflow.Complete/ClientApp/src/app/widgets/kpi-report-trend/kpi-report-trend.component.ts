@@ -3,7 +3,6 @@ import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ChartOptions, ChartDataSets } from 'chart.js';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 HC_exporting(Highcharts);
@@ -28,72 +27,40 @@ export class KpiReportTrendComponent implements OnInit {
   @Output()
   kpiReportTrendParent = new EventEmitter<any>();
 
-  public kpiReportTrendData: ChartDataSets[] = [
-    { data: [99, 100, 99, 100, 99, 100, 99, 100, 99, 100], label: 'Compliant' },
-    { data: [65, 59, 80], label: 'Non Compliant' },
-  ];
-
-  public kpiReportTrendLabels: Array<any> = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public kpiReportTrendOptions: ChartOptions = {
-    responsive: true,
-    legend: { position: 'bottom' },
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    },
-  };
-  public barChartLegend: boolean = true;
-  public kpiReportTrendLegend: boolean = true;
   public kpiReportTrendChartType: string = 'bar';
-  public kpiReportColors: Array<any> = [
-    {
-      backgroundColor: 'rgba(76,175,80,1)',
-      borderColor: 'rgba(76,175,80,1)',
-      pointBackgroundColor: 'rgba(76,175,80,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(76,175,80,0.8)'
-    },
-    {
-      backgroundColor: 'rgba(244,67,54,1)',
-      borderColor: 'rgba(244,67,54,1)',
-      pointBackgroundColor: 'rgba(244,67,54,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(244,67,54,0.8)'
-    }
-  ];
+  
   highcharts = Highcharts;
   chartOptions = {
     credits: false,
     title: {
-      text: this.widgetname
+      text: 'KPI Report Trend'
     },
     xAxis: {
       type: 'date',
       categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
     },
+    // plotOptions: {
+    //   column: {
+    //     zones: [{
+    //       value: 10, // Values up to 10 (not including) ...
+    //       color: 'green' // ... have the color blue.
+    //     }, {
+    //       color: 'red' // Values from 10 (including) and up have the color red
+    //     }]
+    //   }
+    // },
     series: [
       {
         type: 'column',
-        name: 'Compliant',
-        data: [3, 2, 1, 3, 4]
+        name: 'Values',
+        data: [{"y":0.35451,"color":"#379457"},{"y":0.35081,"color":"#f86c6b"},{"y":0.35702,"color":"#f86c6b"},{"y":0.39275,"color":"#379457"},{"y":0.38562,"color":"#379457"}],
+        color: 'black'
       },
-      // {
-      //   type: 'column',
-      //   name: 'Non Compliant',
-      //   data: [2, 3, 5, 7, 6]
-      // },
       {
         type: 'scatter',
-        name: 'Target', // target
-        data: [3, 2.67, 3, 6.33, 3.33],
+        name: 'Target',
+        data: [2,2,2,2,2],
         marker: {
-          // lineWidth: 0,
-          // lineColor: Highcharts.getOptions().colors[3],
           fillColor: 'orange'
         }
       }
@@ -102,7 +69,7 @@ export class KpiReportTrendComponent implements OnInit {
       enabled: true
     },
   };
-  chartUpdateFlag: boolean = false;
+  chartUpdateFlag: boolean = true;
   constructor(
     private dashboardService: DashboardService,
     private emitter: EmitterService,
@@ -112,7 +79,10 @@ export class KpiReportTrendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('KpiReportTrendComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+    this.chartOptions.title = {
+      text: this.widgetname,
+    };
+    this.chartUpdateFlag = true;
     if (this.router.url.includes('dashboard/public')) {
       this.editWidgetName = false;
       if (this.url) {
@@ -209,13 +179,6 @@ export class KpiReportTrendComponent implements OnInit {
     });
   }
 
-  // events
-  public chartClicked(e: any): void {
-  }
-
-  public chartHovered(e: any): void {
-  }
-
   openModal() {
     this.kpiReportTrendParent.emit({
       type: 'openKpiReportTrendModal',
@@ -243,77 +206,49 @@ export class KpiReportTrendComponent implements OnInit {
     if (currentWidgetComponentData) {
       this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
     }
-    if (chartIndexData.length) {
-      let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
-      let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
-      let allChartLabels = chartIndexData.map(label => label.xvalue);
-
-      let allTargetData = targetData.map(data => data.yvalue);
-      let allValuesData = valueData.map(data => data.yvalue);
-      debugger
-      this.chartOptions.xAxis = {
-        type: 'date',
-        categories: allChartLabels,
-      }
-      this.chartOptions.series[0] = {
-        type: 'column',
-        name: 'Compliant',
-        data: allValuesData
-      }; 
-      this.chartOptions.series[1] = {
-        type: 'scatter',
-        name: 'Target', // target
-        data: allTargetData,
-        marker: {
-          // lineWidth: 0,
-          // lineColor: Highcharts.getOptions().colors[3],
-          fillColor: 'orange'
-        }
-      }; 
-      debugger
-      // this.chartOptions.series = [
-      //   {
-      //     type: 'column',
-      //     name: 'Compliant',
-      //     data: allValuesData
-      //   },
-      //   {
-      //     type: 'spline',
-      //     name: 'Average', // target
-      //     data: allValuesData,
-      //     marker: {
-      //       lineWidth: 4,
-      //       lineColor: Highcharts.getOptions().colors[3],
-      //       fillColor: 'white'
-      //     }
-      //   }
-      // ];
-      this.chartUpdateFlag = true;
-
-      // setTimeout(() => {
-      //   this.kpiReportTrendLabels.length = 0;
-      //   this.kpiReportTrendLabels = allChartLabels;
-      // }, 0);
-
-      // this.kpiReportTrendData = [
-      //   { data: allCompliantData, label: 'Compliant' },
-      //   { data: allNonCompliantData, label: 'Non Compliant' },
-      // ];
-      // this.kpiReportTrendLabels = this.kpiReportTrendLabels.slice();
-      // this.kpiReportTrendData = this.kpiReportTrendData.slice();
+    if (!chartIndexData.length) {
+      this.chartOptions.title = {
+        text: `No data in ${this.widgetname}.`,
+      };
     } else {
-      this.kpiReportTrendLabels.length = 0;
-      this.kpiReportTrendLabels = [];
-      this.kpiReportTrendData = [
-        { data: [], label: 'No Data in Compliant' },
-        { data: [], label: 'No Data in Non-Compliant' },
-      ];
+      this.chartOptions.title = {
+        text: this.widgetname,
+      };
     }
+    let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
+    let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
+
+    let allChartLabels = chartIndexData.map(label => label.xvalue);
+    
+    let allTargetData = targetData.map(data => data.yvalue);
+    let allValuesData = valueData.map(data => ({
+      y: data.yvalue,
+      color: data.description.includes('compliant') ? '#379457' : '#f86c6b',
+    }));
+    this.chartOptions.xAxis = {
+      type: 'date',
+      categories: allChartLabels,
+    }
+    this.chartOptions.series[0] = {
+      type: 'column',
+      name: 'Values',
+      data: allValuesData,
+      color: 'black'
+    };
+    this.chartOptions.series[1] = {
+      type: 'scatter',
+      name: 'Target',
+      data: allTargetData,
+      marker: {
+        fillColor: 'orange'
+      }
+    };
+
+    this.chartUpdateFlag = true;
     this.closeModal();
   }
 
   widgetnameChange(event) {
-    console.log('widgetnameChange', this.id, event);
     this.emitter.sendNext({
       type: 'changeWidgetName',
       data: {

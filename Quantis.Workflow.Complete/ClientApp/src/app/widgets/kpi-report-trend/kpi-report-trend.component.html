@@ -1,6 +1,5 @@
-<p class="float-left no-drag">
-  <input type="text" *ngIf="editWidgetName" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
-  <span *ngIf="!editWidgetName"> {{ widgetname }}</span>
+<p class="float-left no-drag" *ngIf="editWidgetName">
+  <input type="text" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
 </p>
 <button type="button" [disabled]="loading" *ngIf="!editWidgetName" class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
   <i class="fa fa-cog"></i>
@@ -13,12 +12,6 @@
    [Highcharts] = "highcharts" 
    [options] = "chartOptions" 
    [(update)]="chartUpdateFlag"
+   [oneToOne]="true"
    style = "width: 100%; display: block;">
 </highcharts-chart>
-<!-- <div>
-  <span class="targetLine"></span>
-  <canvas id="chart" baseChart [datasets]="kpiReportTrendData" [labels]="kpiReportTrendLabels" [options]="kpiReportTrendOptions"
-    [legend]="kpiReportTrendLegend" [chartType]="kpiReportTrendChartType"
-    [colors]="kpiReportColors"
-    (chartClick)="chartClicked($event)"></canvas>
-</div> -->
