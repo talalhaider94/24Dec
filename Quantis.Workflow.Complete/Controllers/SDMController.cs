@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
+using Quantis.WorkFlow.Services.Framework;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -88,7 +89,8 @@ namespace Quantis.WorkFlow.Controllers
         [DisableRequestSizeLimit]
         public string UploadAttachmentToTicket([FromBody]SDMUploadAttachmentDTO dto)
         {
-            return _sdmAPI.UploadAttachmentToTicket(dto);
+            var user = HttpContext.User as AuthUser;
+            return _sdmAPI.UploadAttachmentToTicket(dto,user.UserName);
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_ADMIN)]
         [HttpPost("UpdateTicketValue")]

@@ -56,6 +56,13 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
           titleAttr: 'Esporta CSV',
           className: 'btn btn-primary mb-3'
         },
+        {
+          extend: 'pdf',
+          text: '<i class="fa fa-file"></i> Esporta PDF',
+          titleAttr: 'Esporta PDF',
+          className: 'btn btn-primary mb-3',
+          orientation: 'landscape',
+        },
       ],
       language: {
         processing: "Elaborazione...",

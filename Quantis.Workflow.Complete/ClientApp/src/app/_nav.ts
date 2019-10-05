@@ -38,6 +38,13 @@ export const navItems: NavData[] = [
     key: 'alwaysShow'
   },
   {
+    name: 'Dashboard',
+    url: '/dashboard/list',
+    icon: 'fa fa-laptop',
+    key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
+    version: '1.0.0',
+  },
+  {
     name: 'Workflow',
     url: '/workflow-menu',
     icon: 'fa fa-code-fork',
