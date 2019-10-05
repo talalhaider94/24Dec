@@ -13,6 +13,7 @@ import * as moment from 'moment';
 })
 export class LoadingFormUserComponent implements OnInit, OnDestroy {
   loadingForms: any = [];
+  detailsForms: any = {};
   loading: boolean = true;
   @ViewChild(DataTableDirective)
   datatableElement: DataTableDirective;
@@ -31,6 +32,22 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      columnDefs: [
+        { "visible": false, "targets": 0 }
+      ],
+      drawCallback: function (settings) {
+        var api = this.api();
+        var rows = api.rows({ page: 'current' }).nodes();
+        var last = null;
+        api.column(0, { page: 'current' }).data().each(function (group, i) {
+          if (last !== group) {
+            $(rows).eq(i).before(
+              '<tr style="background-color:#dedede" class="group"><th colspan="6">' + group + '</th></tr>'
+            );
+            last = group;
+          }
+        });
+      },
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -61,6 +78,25 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
       this.loadingForms = data;
       this.dtTrigger.next();
       this.loading = false;
+      //
+      var groupBy = function (xs, key) {
+        return xs.reduce(function (rv, x) {
+          //(rv[x[key]] = rv[x[key]] || []).push(x);
+          //(rv[x[key]] = rv[x[key]] || [])[x.form_id] = { form_name: x.form_name };
+          var index = (rv[x[key]] = rv[x[key]] || []).findIndex(e => e.form_id == x.form_id);
+          if (index === -1) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+          }
+          return rv;
+        }, {});
+      };
+      this.detailsForms = groupBy(data, 'global_rule_id')
+      console.log(this.detailsForms)
+      console.log(this.detailsForms['37077'])
+      //this.loadingForms = groupBy(data, 'global_rule_id')
+      //console.log(groubedByTeam);
+      //
+
     }, error => {
       console.error('getFormsByUserId', error);
       this.loading = false;
