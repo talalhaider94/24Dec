@@ -20,6 +20,8 @@ import { NotificationTrendComponent } from '../../../widgets/notification-trend/
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
 import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+
 @Component({
 	selector: 'app-public',
 	templateUrl: './public.component.html',
@@ -92,8 +94,11 @@ export class PublicComponent implements OnInit {
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
-		private dateTime: DateTimeService
-	) { }
+		private dateTime: DateTimeService,
+		private _$localeService: BsLocaleService
+	) { 
+		this._$localeService.use('it');
+	}
 
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
@@ -575,6 +580,7 @@ export class PublicComponent implements OnInit {
 			this.loadingModalForm = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			this.toastr.error('Unable to fetch widget data.', 'Error');
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 			this.loadingModalForm = false;
