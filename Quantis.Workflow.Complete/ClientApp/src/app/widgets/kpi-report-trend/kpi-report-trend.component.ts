@@ -84,6 +84,7 @@ export class KpiReportTrendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('KPI REPORT TREND ==>', this.filters, this.properties);
     this.chartOptions.title = {
       text: this.widgetname,
     };
@@ -135,7 +136,7 @@ export class KpiReportTrendComponent implements OnInit {
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
-        let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+        const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
         return this.dashboardService.getWidgetIndex(url, newParams);
       })
     ).subscribe(getWidgetIndex => {
