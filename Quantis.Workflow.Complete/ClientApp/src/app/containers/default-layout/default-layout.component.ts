@@ -159,7 +159,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   getAllDashboards() {
     this.dashboardService.getDashboards().subscribe(dashboards => {
-      console.log('Home Dashboards -> ',dashboards);
       this.emitter.loadingStatus(false);
       this.dashboardCollection = dashboards.filter(dashboard => dashboard.isactive);
     }, error => {

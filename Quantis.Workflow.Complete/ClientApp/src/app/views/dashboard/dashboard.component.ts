@@ -245,7 +245,6 @@ export class DashboardComponent implements OnInit {
 		forkJoin([getAllWidgets, getDashboardWidgets]).subscribe(result => {
 			if (result) {
 				const [allWidgets, dashboardData] = result;
-				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
 				if (allWidgets && allWidgets.length > 0) {
 					this.widgetCollection = allWidgets;

@@ -232,10 +232,10 @@ export class KpiReportTrendComponent implements OnInit {
     
     let allTargetData = targetData.map(data => data.yvalue);
     let allValuesData = valueData.map(data => ({
-      y: data.yvalue,
-      name: data.description,
-      color: data.description.includes('compliant') ? '#379457' : '#f86c6b',
-    }));
+        y: data.yvalue,
+        name: data.description,
+        color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
+      }));
     this.chartOptions.xAxis = {
       type: 'date',
       categories: allChartLabels,

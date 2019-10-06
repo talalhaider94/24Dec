@@ -286,7 +286,6 @@ export class PublicComponent implements OnInit {
 		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
 			if (result) {
 				const [allWidgets, dashboardData, getOrgHierarcy] = result;
-				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
 				console.log('getOrgHierarcy', getOrgHierarcy);
 
