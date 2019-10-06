@@ -4,6 +4,7 @@ import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
+import { ToastrService } from 'ngx-toastr';
 import HC_exporting from 'highcharts/modules/exporting';
 HC_exporting(Highcharts);
 
@@ -28,7 +29,7 @@ export class KpiReportTrendComponent implements OnInit {
   kpiReportTrendParent = new EventEmitter<any>();
 
   public kpiReportTrendChartType: string = 'bar';
-  
+
   highcharts = Highcharts;
   chartOptions = {
     credits: false,
@@ -58,13 +59,13 @@ export class KpiReportTrendComponent implements OnInit {
       {
         type: 'column',
         name: 'Values',
-        data: [{"y":0.35451,"color":"#379457"},{"y":0.35081,"color":"#f86c6b"},{"y":0.35702,"color":"#f86c6b"},{"y":0.39275,"color":"#379457"},{"y":0.38562,"color":"#379457"}],
+        data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
         color: 'black'
       },
       {
         type: 'scatter',
         name: 'Target',
-        data: [2,2,2,2,2],
+        data: [2, 2, 2, 2, 2],
         marker: {
           fillColor: 'orange'
         }
@@ -80,7 +81,8 @@ export class KpiReportTrendComponent implements OnInit {
     private emitter: EmitterService,
     private dateTime: DateTimeService,
     private router: Router,
-    private widgetHelper: WidgetHelpersService
+    private widgetHelper: WidgetHelpersService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -98,6 +100,7 @@ export class KpiReportTrendComponent implements OnInit {
           this.getChartParametersAndData(this.url, result);
         }, error => {
           console.error('getContractParties', error);
+          this.toastr.error('Unable to get Contract Parties', this.widgetname);
         })
 
       }
@@ -141,16 +144,15 @@ export class KpiReportTrendComponent implements OnInit {
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
-      console.log('getWidgetIndex', getWidgetIndex);
-      console.log('myWidgetParameters', myWidgetParameters);
       let kpiReportTrendParams;
       if (myWidgetParameters) {
-        if (Object.keys(this.filters).length > 0) {
-        } else {
-          if (!this.editWidgetName) {
-            myWidgetParameters.contractParties = getContractParties;
-          }
-        }
+        // Danial: No idea why i put this condition headersToString.
+        // if (Object.keys(this.filters).length > 0) {
+        // } else {
+        // if (!this.editWidgetName) {
+        myWidgetParameters.contractParties = getContractParties;
+        // }
+        // }
         kpiReportTrendParams = {
           type: 'kpiReportTrendParams',
           data: {
@@ -180,6 +182,7 @@ export class KpiReportTrendComponent implements OnInit {
       this.emitter.loadingStatus(false);
     }, error => {
       console.error('KPI Report Trend', error);
+      this.toastr.error('Unable to get widget data', this.widgetname);
       this.loading = false;
       this.emitter.loadingStatus(false);
     });
@@ -223,19 +226,19 @@ export class KpiReportTrendComponent implements OnInit {
     }
     let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
     let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
-    if(valueData.length > 0) {
+    if (valueData.length > 0) {
       this.chartOptions.yAxis.title = {
         text: 'Values | ' + valueData[0].description.split('|')[1]
       }
     }
     let allChartLabels = chartIndexData.map(label => label.xvalue);
-    
+
     let allTargetData = targetData.map(data => data.yvalue);
     let allValuesData = valueData.map(data => ({
-        y: data.yvalue,
-        name: data.description,
-        color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
-      }));
+      y: data.yvalue,
+      name: data.description,
+      color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
+    }));
     this.chartOptions.xAxis = {
       type: 'date',
       categories: allChartLabels,

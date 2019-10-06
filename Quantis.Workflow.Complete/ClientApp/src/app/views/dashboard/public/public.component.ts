@@ -575,6 +575,7 @@ export class PublicComponent implements OnInit {
 			this.loadingModalForm = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			this.toastr.error('Unable to fetch widget data.', 'Error');
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 			this.loadingModalForm = false;

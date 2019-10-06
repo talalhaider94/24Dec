@@ -110,6 +110,9 @@ export class WidgetHelpersService {
       if(apiParams.contractParties) {
         buildParams.Filters.contractParties = filters.contractParties || apiParams.contractParties[0].key
       }
+      if(filters.kpi) {
+        buildParams.Filters.kpi = filters.kpi;
+      }
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);
