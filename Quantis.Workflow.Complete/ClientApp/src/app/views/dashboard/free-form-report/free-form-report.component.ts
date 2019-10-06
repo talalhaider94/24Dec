@@ -302,7 +302,7 @@ export class FreeFormReportComponent implements OnInit {
   }
 
   getReportQueryDetailByID(){
-    this._freeFormReport.getReportQueryDetailByID(1).subscribe(data => {
+    this._freeFormReport.getReportQueryDetailByID().subscribe(data => {
       this.reportQueryDetail = data;
       console.log('reportQueryDetail -> ',this.reportQueryDetail);
     });

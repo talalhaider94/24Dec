@@ -24,7 +24,7 @@ export class FreeFormReportService {
     return this.http.post(`${environment.API_URL}/data/AddEditReportQuery`, params);
   }
 
-  getReportQueryDetailByID(id): Observable<any>  {
+  getReportQueryDetailByID(id: number = 1): Observable<any>  {
     const params = new HttpParams().set('id', id.toString());
 		return this.http.get<any>(`${environment.API_URL}/data/GetReportQueryDetailByID`, { params }); 
   }
