@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoadingFormComponent } from './loading-form.component';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
+import { LoadingFormSecurityUserComponent } from './loading-form-securityuser/loading-form-securityuser.component';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
 
@@ -30,6 +31,13 @@ const routes: Routes = [
                 data: {
                     title: 'Utente'
                 }
+            },
+            {
+              path: 'securityuser',
+              component: LoadingFormSecurityUserComponent,
+              data: {
+                title: 'S-Utente'
+              }
             },
             {
                 path: 'admin/:formId/:formName',

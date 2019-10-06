@@ -130,6 +130,13 @@ export const navItems: NavData[] = [
         key: 'VIEW_ADMIN_LOADING_FORM'
       },
       {
+        name: 'S-Utente',
+        url: '/loading-form/securityuser',
+        icon: 'fa fa-user-circle-o',
+        version: '0.0.12',
+        key: 'VIEW_ADMIN_LOADING_FORM'
+      },
+      {
         name: 'Utente',
         url: '/loading-form/utente',
         icon: 'fa fa-user-circle-o',

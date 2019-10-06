@@ -15,5 +15,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string UserEmail { get; set; }
         public string UserName { get; set; }
         public List<string> Permissions { get; set; }
+        public int? DefaultDashboardId { get; set; }
     }
 }

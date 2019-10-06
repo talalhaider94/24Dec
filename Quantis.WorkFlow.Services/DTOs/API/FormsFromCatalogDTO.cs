@@ -22,6 +22,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string monthtrigger { get; set; }
         public string sla_name { get; set; }
         public int? global_rule_id { get; set; }
+        public string tracking_period { get; set; }
 
     }
 }

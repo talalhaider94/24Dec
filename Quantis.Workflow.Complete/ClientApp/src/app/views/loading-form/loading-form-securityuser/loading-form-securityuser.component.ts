@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { first } from 'rxjs/operators';
@@ -7,20 +7,18 @@ import { DataTableDirective } from 'angular-datatables';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-loading-form-user',
-  templateUrl: './loading-form-user.component.html',
-  styleUrls: ['./loading-form-user.component.scss']
+  selector: 'app-loading-form-securityuser',
+  templateUrl: './loading-form-securityuser.component.html',
+  styleUrls: ['./loading-form-securityuser.component.scss']
 })
-export class LoadingFormUserComponent implements OnInit, OnDestroy {
+export class LoadingFormSecurityUserComponent implements OnInit, OnDestroy {
   loadingForms: any = [];
-  detailsForms: any = {};
   loading: boolean = true;
   @ViewChild(DataTableDirective)
-  @ViewChild('showOnReady') showOnReady: ElementRef;
   datatableElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  
+
   constructor(
     private router: Router,
     private loadingFormService: LoadingFormService,
@@ -28,33 +26,11 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    $('#showOnReady').hide();
-        // Danial TODO: Some role permission logic is needed here.
+    // Danial TODO: Some role permission logic is needed here.
     // Admin and super admin can access this
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      columnDefs: [
-        { "visible": false, "targets": 0 }
-      ],
-      drawCallback: function (settings) {
-        var api = this.api();
-        var rows = api.rows({ page: 'current' }).nodes();
-        var last = null;
-        api.column(0, { page: 'current' }).data().each(function (group, i) {
-          if (last !== group) {
-            $(rows).eq(i).before(
-              '<tr style="background-color:#eedc00" class="group"><th colspan="6">' + group + '</th></tr>'
-            );
-            last = group;
-          }
-        });        
-      },
-      initComplete: function () {
-        $('#showOnReady').show();
-        $('#loadingDiv').hide();
-        console.log(this)
-      },
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -80,30 +56,11 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
     };
     const currentUser = this.authService.getUser();
     // getLoadingForms()
-    this.loadingFormService.getFormsByUserId(currentUser.userid).pipe(first()).subscribe(data => {
+    this.loadingFormService.getFormsByUserId(0).pipe(first()).subscribe(data => { //userid = 0 to get all forms like a superuser
       console.log('getFormsByUserId', data);
       this.loadingForms = data;
       this.dtTrigger.next();
-      
-      //
-      var groupBy = function (xs, key) {
-        return xs.reduce(function (rv, x) {
-          //(rv[x[key]] = rv[x[key]] || []).push(x);
-          //(rv[x[key]] = rv[x[key]] || [])[x.form_id] = { form_name: x.form_name };
-          var index = (rv[x[key]] = rv[x[key]] || []).findIndex(e => e.form_id == x.form_id);
-          if (index === -1) {
-            (rv[x[key]] = rv[x[key]] || []).push(x);
-          }
-          return rv;
-        }, {});
-      };
-      this.detailsForms = groupBy(data, 'global_rule_id')
-      console.log(this.detailsForms)
-      console.log(this.detailsForms['37077'])
-      //this.loadingForms = groupBy(data, 'global_rule_id')
-      //console.log(groubedByTeam);
-      //
-      
+      this.loading = false;
     }, error => {
       console.error('getFormsByUserId', error);
       this.loading = false;
@@ -113,31 +70,30 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
-  loadingCompleted() {
-    this.loading = false;
-  }
+
   cutOffRow(row) {
-    if(row.cutoff) {
+    if (row.cutoff) {
       let currentDate = moment().format();
       let isDateBefore = moment(row.modify_date).isBefore(currentDate);
-        if(isDateBefore) {
-          return true;
-        } else {
-          return false;
-        }
+      if (isDateBefore) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return false
     }
   }
+
   formatInputDate(date) {
-    if(date) {
-      if(moment(date).isSame(moment('0001-01-01T00:00:00'))) {
+    if (date) {
+      if (moment(date).isSame(moment('01/01/0001, 12:00 AM'))) {
         return 'Nessun caricamento';
       } else {
         return moment(date).format('DD/MM/YYYY, h:mm a');
       }
     } else {
-      return 'N/A';  
+      return 'N/A';
     }
   }
 }
