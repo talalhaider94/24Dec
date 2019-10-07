@@ -9,11 +9,11 @@
         </h2>
       <!-- <br> -->
       <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-      <div class="row pull-right col-md-5" style="margin-top:-30px">
+      <div class="row pull-right col-md-2" style="margin-top:-30px">
         <h2>
           <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
         </h2>
-        <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:28%;" (change)="populateDateFilter()"  >
+        <!-- <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:28%;" (change)="populateDateFilter()"  >
           <option value="00">Tutti i mesi</option>
           <option value="01">Gennaio</option>
           <option value="02">Febbraio</option>
@@ -31,8 +31,8 @@
         <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:20%;" (change)="populateDateFilter()"  >
           <option value="">Anno</option>
           <option *ngFor="let year of anni" >{{year}}</option>     
-        </select>
-        <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
+        </select> -->
+        <!-- <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div> -->
       </div>
     </section>
     <br>
@@ -108,7 +108,7 @@
             </ul>
           </div>
         </div> -->
-        <div [hidden]="row.noncomplaintkpis >= thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+        <div class="box box-default box-solid" style="border: 1px solid #999">
           <div class="box-header with-border" style="padding:5px;">
             <h3 class="box-title" style= "font-size: 18px">Better Performing Contracts</h3>
           </div>
@@ -133,7 +133,7 @@
           <!-- /.box-body -->
         </div>
 
-        <div [hidden]="row.noncomplaintkpis < thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+        <div class="box box-default box-solid" style="border: 1px solid #999">
             <div class="box-header with-border" style="padding:5px;">
                 <h3 class="box-title" style= "font-size: 18px">Under Performing Contracts</h3>
             </div>
