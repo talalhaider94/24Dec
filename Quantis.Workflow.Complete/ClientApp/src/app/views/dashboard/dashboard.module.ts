@@ -23,6 +23,7 @@ import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
 import { LandingPageComponent } from './landingpage/landingpage.component';
+import { LandingPageDetailsComponent } from './landing-page-details/landing-page-details.component';
 import { DashboardListsComponent } from './dashboard-lists/dashboard-lists.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
@@ -88,6 +89,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
     ChartDataComponent,
     KpiStatusSummaryComponent,
     LandingPageComponent,
+    LandingPageDetailsComponent,
     FreeFormReportComponent,
     FormReportQueryComponent,
     ImportFormReportComponent,
