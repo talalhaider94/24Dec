@@ -61,73 +61,80 @@ namespace Quantis.WorkFlow.APIBase.API
 
         }
 
-        public BSIReportDetailDTO GetReportDetail(string userName,int reportId)
+        public BSIReportMainDTO GetReportDetail(string userName,int reportId)
         {
-            var result = new BSIReportDetailDTO();
+            var results = new BSIReportMainDTO();
+            results.Reports = new List<BSIReportDetailDTO>();
             var session = Login(userName);
             var report = _reportService.GetReportDataAsync(session,reportId,0,100,100).Result;
+            results.Name = report.Elements().FirstOrDefault().Element("NAME").Value;
+            results.ResultType = report.Attribute("TYPE").Value;
             Logout(session);
-            var baseElement = report.Elements().FirstOrDefault().Elements().ElementAt(2);
-            var reportInfo = baseElement.Element("REPORT_INFO");
-
-            result.ResultType = report.Attribute("TYPE").Value;
-            result.Name = baseElement.Element("NAME").Value;
-            result.XLabel = reportInfo.Element("ByX").Value;
-            result.YLabel = reportInfo.Element("ByY").Value;
-            result.ReportType = reportInfo.Element("Report_Type").Value;            
-            result.ReportTitle = reportInfo.Element("Report_Title").Value;
-            result.FromDate = DateTime.Parse(reportInfo.Element("DateFromOrg").Value);
-            result.ToDate = DateTime.Parse(reportInfo.Element("DateToOrg").Value);
-
-            var reportInfoTitle = reportInfo.Element("TITLE");
-            result.ContractParty = reportInfoTitle.Element("Customer").Value;
-            result.Contract = reportInfoTitle.Element("SLA").Value;
-            result.Rule = reportInfoTitle.Element("Rule").Value;
-            result.Application= reportInfoTitle.Element("Application").Value;
-            result.ServiceDomain = reportInfoTitle.Element("ServiceDomain").Value;
-            result.DomainCategory = reportInfoTitle.Element("DomainCategory").Value;
-            result.Incomplete = reportInfoTitle.Element("Incomplete").Value;
-            result.MetricType = reportInfoTitle.Element("MetricType").Value;
-            result.DataGranularity = reportInfoTitle.Element("DataGranularity").Value;
-
-            result.DefAgg= reportInfo.Element("DefAgg").Value;
-            result.LocaleId = int.Parse(reportInfo.Element("LocaleId").Value);
-            result.Units = reportInfo.Element("Units").Value;
-            result.GridUnits = reportInfo.Element("GridUnits").Value;
-            result.Messages = new List<string>();
-            var reportInfoMessages = reportInfo.Element("MESSAGES").Elements();
-            foreach(var m in reportInfoMessages)
+            var baseElements = report.Elements().FirstOrDefault().Elements("ITEM");
+            foreach(var baseElement in baseElements)
             {
-                result.Messages.Add(m.Value);
-            }
+                var result = new BSIReportDetailDTO();
+                var reportInfo = baseElement.Element("REPORT_INFO");
+                result.Name = baseElement.Element("NAME")?.Value;
+                result.XLabel = reportInfo.Element("ByX")?.Value;
+                result.YLabel = reportInfo.Element("ByY")?.Value;
+                result.ReportType = reportInfo.Element("Report_Type")?.Value;
+                result.ReportTitle = reportInfo.Element("Report_Title")?.Value;
+                result.FromDate = DateTime.Parse(reportInfo.Element("DateFromOrg")?.Value);
+                result.ToDate = DateTime.Parse(reportInfo.Element("DateToOrg")?.Value);
 
-            var reportInfoCal = reportInfo.Element("CALC_STATUS");
-            result.CalculationStatusText = reportInfoCal.Element("TEXT").Value;
-            result.CalculationStatusBookletText= reportInfoCal.Element("BOOKLET_TEXT").Value;
-            result.CalculationStatusLastDate = DateTime.Parse(reportInfoCal.Element("LAST_CALC_DATE").Value);
-            result.Data = new List<Services.DTOs.Widgets.XYZDTO>();
-            var reportGrid = reportInfo.Element("GRID").Elements();
-            foreach(var series in reportGrid)
-            {
-                var elems = series.Elements();
-                string label = "";
-                foreach(var data in elems)
+                var reportInfoTitle = reportInfo.Element("TITLE");
+                result.ContractParty = reportInfoTitle.Element("Customer")?.Value;
+                result.Contract = reportInfoTitle.Element("SLA")?.Value;
+                result.Rule = reportInfoTitle.Element("Rule")?.Value;
+                result.Application = reportInfoTitle.Element("Application")?.Value;
+                result.ServiceDomain = reportInfoTitle.Element("ServiceDomain")?.Value;
+                result.DomainCategory = reportInfoTitle.Element("DomainCategory")?.Value;
+                result.Incomplete = reportInfoTitle.Element("Incomplete")?.Value;
+                result.MetricType = reportInfoTitle.Element("MetricType")?.Value;
+                result.DataGranularity = reportInfoTitle.Element("DataGranularity")?.Value;
+
+                result.DefAgg = reportInfo.Element("DefAgg")?.Value;
+                result.LocaleId = int.Parse(reportInfo.Element("LocaleId")?.Value);
+                result.Units = reportInfo.Element("Units")?.Value;
+                result.GridUnits = reportInfo.Element("GridUnits")?.Value;
+                result.Messages = new List<string>();
+                var reportInfoMessages = reportInfo.Element("MESSAGES").Elements();
+                foreach (var m in reportInfoMessages)
                 {
-                    if (data.Name == "TITLE")
+                    result.Messages.Add(m?.Value);
+                }
+
+                var reportInfoCal = reportInfo.Element("CALC_STATUS");
+                result.CalculationStatusText = reportInfoCal.Element("TEXT")?.Value;
+                result.CalculationStatusBookletText = reportInfoCal.Element("BOOKLET_TEXT")?.Value;
+                result.CalculationStatusLastDate = reportInfoCal.Element("LAST_CALC_DATE") == null?DateTime.MinValue: DateTime.Parse(reportInfoCal.Element("LAST_CALC_DATE").Value);
+                result.Data = new List<Services.DTOs.Widgets.XYZDTO>();
+                var reportGrid = reportInfo.Element("GRID").Elements();
+                foreach (var series in reportGrid)
+                {
+                    var elems = series.Elements();
+                    string label = "";
+                    foreach (var data in elems)
                     {
-                        label = data.Value;
-                    }
-                    else
-                    {
-                        var dto = new XYZDTO();
-                        dto.ZValue = label;
-                        dto.XValue = data.Element("LABLE").Value;
-                        dto.YValue = (data.Element("VALUE").Value == "") ? null : (double?)double.Parse(data.Element("VALUE").Value);
-                        result.Data.Add(dto);
+                        if (data.Name == "TITLE")
+                        {
+                            label = data.Value;
+                        }
+                        else
+                        {
+                            var dto = new XYZDTO();
+                            dto.ZValue = label;
+                            dto.XValue = data.Element("LABLE")?.Value;
+                            dto.YValue = (data.Element("VALUE")?.Value == "") ? null : (double?)double.Parse(data.Element("VALUE").Value);
+                            result.Data.Add(dto);
+                        }
                     }
                 }
-            }            
-            return result;
+                results.Reports.Add(result);
+            }
+                  
+            return results;
         }
         private List<BSIReportLVDTO> parseReports(IEnumerable<XElement> elements)
         {
