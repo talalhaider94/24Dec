@@ -48,9 +48,10 @@ export class BSIReportComponent implements OnInit {
       }
     }
   };
-
+  loading: boolean = true;
   dtTrigger: Subject<any> = new Subject();
   AllNormalReportsData: any = [];
+  ReportDetailsData: any = [];
 
   constructor(
     private apiService: ApiService,
@@ -60,7 +61,7 @@ export class BSIReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllNormalReports();
+    //this.getAllNormalReports();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -80,6 +81,7 @@ export class BSIReportComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
+      this.loading = false;
     });
   }
 
@@ -90,9 +92,18 @@ export class BSIReportComponent implements OnInit {
   }
 
   getAllNormalReports() {
+    this.loading = true;
     this.apiService.getAllNormalReports().subscribe((data) =>{
       this.AllNormalReportsData = data;
       console.log('AllNormalReportsData -> ', data);
+      this.rerender();
+    });
+  }
+
+  getReportDetails(reportId){
+    this.apiService.getReportDetails(reportId).subscribe((data) =>{
+      this.ReportDetailsData = data;
+      console.log('ReportDetailsData -> ', data);
       this.rerender();
     });
   }

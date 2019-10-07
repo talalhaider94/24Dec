@@ -9,6 +9,6 @@ namespace Quantis.WorkFlow.Services.API
     {
         List<BSIReportLVDTO> GetMyNormalReports(string userName);
         List<BSIReportLVDTO> GetAllNormalReports(string userName);
-        BSIReportDetailDTO GetReportDetail(string userName, int reportId);
+        BSIReportMainDTO GetReportDetail(string userName, int reportId);
     }
 }

@@ -23,7 +23,8 @@ export class LandingPageDetailsComponent implements OnInit {
 	@ViewChild('compliantModal') public compliantModal: ModalDirective;
 	@ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
 	@ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-	
+	contractPartyId;
+
 	dtOptions: DataTables.Settings = {
 		language: {
 		  processing: "Elaborazione...",
@@ -61,13 +62,16 @@ export class LandingPageDetailsComponent implements OnInit {
 	constructor(
 		private dashboardService: DashboardService,
 		private apiService: ApiService,
-		private _route: ActivatedRoute,
+		private route: ActivatedRoute,
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService
 	) { }
 	ngOnInit(): void {
+		this.contractPartyId = this.route.snapshot.queryParamMap['params'];
+		console.log('contractPartyId -> ',this.contractPartyId.contractpartyid);
+
 		this.thresholdvalue=0;
 		this.month = moment().format('MMMM');
 		this.monthVar = moment().format('MM');

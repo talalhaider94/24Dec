@@ -6,21 +6,34 @@
               data-target="#addConfigModal" (click)="showAddConfigModal()">
         Nuovo Gruppo
       </button><br /><br /> -->
+      <h5 *ngIf="loading" class="text-center text-primary">
+        <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+      </h5>
       <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
         <thead style="background: #20a8d8">
           <tr style="font-size:12px;color:white">
-            <th style="text-align:center">ID</th>
-            <th style="text-align:center">Nome</th>
-            <th style="text-align:center">Descrizione</th>
-            <th style="text-align:center">Utente</th>
+            <th style="text-align:center">Folder Name</th>
+            <th style="text-align:center">Executable</th>
+            <th style="text-align:center">Parameterized</th>
+            <th style="text-align:center">Report Name</th>
+            <th style="text-align:center">Report Type</th>
+            <th style="text-align:center">Modified Date</th>
+            <th style="text-align:center">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td style="text-align:center"></td>
-            <td style="text-align:center"></td>
-            <td style="text-align:center"></td>
-            <td style="text-align:center"></td>
+          <tr *ngFor="let row of AllNormalReportsData; index as i"> 
+            <td style="text-align:center">{{row.foldername}}</td>
+            <td style="text-align:center">{{row.isexecutable}}</td>
+            <td style="text-align:center">{{row.isparameterized}}</td>
+            <td style="text-align:center">{{row.itemname}}</td>
+            <td style="text-align:center">{{row.reporttype}}</td>
+            <td style="text-align:center">{{row.modifieddate}}</td>
+            <td style="text-align:center">
+              <button class="btn btn-primary btn-small" (click)="getReportDetails(row.itemid)" style="font-size:10px">
+              <i class="fa fa-eye"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

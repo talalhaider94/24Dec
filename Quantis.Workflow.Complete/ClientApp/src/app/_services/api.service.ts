@@ -198,6 +198,10 @@ export class ApiService {
     const getPREndPoint = `${environment.API_URL}/bsi/GetAllNormalReports`;
     return this.http.get(getPREndPoint);
   }  
+  getReportDetails(reportId): Observable<any> {
+    const reportIdEndPoint = `${environment.API_URL}/bsi/GetReportDetail?ReportId=${reportId}`;
+    return this.http.get(reportIdEndPoint);
+  }  
 
   updateConfig(config) {
     return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)

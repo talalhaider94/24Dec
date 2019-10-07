@@ -7,7 +7,6 @@ namespace Quantis.WorkFlow.Services.DTOs.BSI
 {
     public class BSIReportDetailDTO
     {
-        public string ResultType { get; set; }
         public string Name { get; set; }
         public string ReportType { get; set; }
         public string ReportTitle { get; set; }

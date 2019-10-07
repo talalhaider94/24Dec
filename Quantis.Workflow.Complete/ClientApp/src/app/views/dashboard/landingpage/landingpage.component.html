@@ -36,16 +36,19 @@
       </div>
     </section>
     <br>
+    <h5 *ngIf="loading" class="text-center text-primary">
+      <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+    </h5> 
     <!-- Main content -->
     <section class="content">
     <!-- Main row -->
     <div class="row">
       <!-- Left col class= "box box-danger box-solid"     
       [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
-       <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
+      <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
         <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
          <div class="box-header with-border">
-          <h3 class="box-title">{{row.contractpartyname}}</h3>
+          <h3 class="box-title"><a (click)="details(row.contractpartyid)">{{row.contractpartyname}}</a></h3>
             <!-- /.box-tools -->
         </div>
           <div class= "box-body">
