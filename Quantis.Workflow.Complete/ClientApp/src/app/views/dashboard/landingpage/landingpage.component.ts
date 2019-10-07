@@ -11,12 +11,45 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '../../../_services/api.service';
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
 	templateUrl: 'landingpage.component.html',
 	 styleUrls: ['landingpage.component.scss']
 })
 export class LandingPageComponent implements OnInit {
+	@ViewChild('thresholdModal') public thresholdModal: ModalDirective;
+	@ViewChild('compliantModal') public compliantModal: ModalDirective;
+	@ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
+	@ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+	
+	dtOptions: DataTables.Settings = {
+		language: {
+		  processing: "Elaborazione...",
+		  search: "Cerca:",
+		  lengthMenu: "Visualizza _MENU_ elementi",
+		  info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+		  infoEmpty: "Vista da 0 a 0 di 0 elementi",
+		  infoFiltered: "(filtrati da _MAX_ elementi totali)",
+		  infoPostFix: "",
+		  loadingRecords: "Caricamento...",
+		  zeroRecords: "La ricerca non ha portato alcun risultato.",
+		  emptyTable: "Nessun dato presente nella tabella.",
+		  paginate: {
+			first: "Primo",
+			previous: "Precedente",
+			next: "Seguente",
+			last: "Ultimo"
+		  },
+		  aria: {
+			sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+			sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+		  }
+		}
+	};
+
+	dtTrigger: Subject<any> = new Subject();
 	public period = '02/2019';
 	gridsData: any = [];
 	bestContracts: any = [];
@@ -24,6 +57,7 @@ export class LandingPageComponent implements OnInit {
 	month: any;
   	yearVar: any;
 	count = 0;
+	thresholdvalue=0;
 	constructor(
 		private dashboardService: DashboardService,
 		private apiService: ApiService,
@@ -34,6 +68,7 @@ export class LandingPageComponent implements OnInit {
 		private dateTime: DateTimeService
 	) { }
 	ngOnInit(): void {
+		this.thresholdvalue=0;
 		this.month = moment().format('MMMM');
 		this.monthVar = moment().format('MM');
   		this.yearVar = moment().format('YYYY');
@@ -43,6 +78,25 @@ export class LandingPageComponent implements OnInit {
 		// 	this.gridsData = data;
 		// 	console.log("Landing Page Data: ", this.gridsData);			
 		// });
+	}
+
+
+	ngAfterViewInit() {
+		this.dtTrigger.next();
+		//this.getCOnfigurations();
+	}
+
+	ngOnDestroy(): void {
+		this.dtTrigger.unsubscribe();
+	}
+	  
+	rerender(): void {
+		this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+		// Destroy the table first
+		dtInstance.destroy();
+		// Call the dtTrigger to rerender again
+		this.dtTrigger.next();
+		});
 	}
 
 	populateDateFilter() {    
@@ -63,5 +117,34 @@ export class LandingPageComponent implements OnInit {
 			this.anni.push(i);
 		}
 		return this.anni;
+	}
+	
+	setThreshold() {
+		console.log(this.thresholdvalue);
+		this.hideThresholdModal();
+	}
+
+	showThresholdModal() {
+		this.thresholdModal.show();
+	}
+
+	hideThresholdModal() {
+		this.thresholdModal.hide();
+	}
+	
+	showCompliantModal() {
+		this.compliantModal.show();
+	}
+	
+	hideCompliantModal() {
+		this.compliantModal.hide();
+	}
+	
+	showNonCompliantModal() {
+		this.nonCompliantModal.show();
+	}
+
+	hideNonCompliantModal() {
+		this.nonCompliantModal.hide();
 	}
 }

@@ -8,6 +8,8 @@ import { ChartDataComponent } from './chartdata/chartdata.component';
 import { FreeFormReportComponent } from './free-form-report/free-form-report.component';
 import { FormReportQueryComponent } from './form-report-query/form-report-query.component';
 import { ImportFormReportComponent } from './import-form-report/import-form-report.component';
+import { BSIReportComponent } from './bsi-report/bsi-report.component';
+import { PersonalReportComponent } from './personal-report/personal-report.component';
 
 const routes: Routes = [
   // {
@@ -76,6 +78,20 @@ const routes: Routes = [
     component: ImportFormReportComponent,
     data: {
       title: 'Import Form Report'
+    }
+  },
+  { 
+    path: 'bsi-report',
+    component: BSIReportComponent,
+    data: {
+      title: 'Report da BSI'
+    }
+  },
+  { 
+    path: 'personal-report',
+    component: PersonalReportComponent,
+    data: {
+      title: 'Report personali'
     }
   }
 ];

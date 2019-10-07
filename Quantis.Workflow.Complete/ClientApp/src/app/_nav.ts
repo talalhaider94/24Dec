@@ -135,7 +135,7 @@ export const navItems: NavData[] = [
     name: 'Report',
     url: '/report',
     icon: 'fa fa-bar-chart',
-    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','VIEW_REPORT_QUERIES','IMPORT_FREEFORM_REPORT'],
+    key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_DEBUG','VIEW_REPORT_QUERIES','VIEW_REPORT_FROM_BSI','VIEW_CHART_REPORT'],
     children: [
       {
         name: 'Notifiche LoadingForm',
@@ -173,11 +173,18 @@ export const navItems: NavData[] = [
         key: 'VIEW_REPORT_QUERIES'
       }, 
       {
-        name: 'Import Free Form Report',
-        url: '/dashboard/import-form-report',
+        name: 'Report da BSI',
+        url: '/dashboard/bsi-report',
         icon: 'fa fa-file-text-o',
         version: '0.0.1',
-        key: 'IMPORT_FREEFORM_REPORT'
+        key: 'VIEW_REPORT_FROM_BSI'
+      }, 
+      {
+        name: 'Report personali',
+        url: '/dashboard/personal-report',
+        icon: 'fa fa-file-text-o',
+        version: '0.0.1',
+        key: 'VIEW_CHART_REPORT'
       }
     ]
   },
@@ -187,7 +194,7 @@ export const navItems: NavData[] = [
     icon: 'fa fa-gear',
     key: ['VIEW_CONFIGURATION_GENERAL','VIEW_CONFIGURATION_ADVANCED','VIEW_CONFIGURATION_SDM_GROUP',
     'VIEW_CONFIGURATION_SDM_TICKET_STATUS','VIEW_CONFIGURATION_ROLES','VIEW_CONFIGURATION_USER_ROLES',
-    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD','VIEW_REPORT_QUERIES'],
+    'VIEW_CONFIGURATION_USER_PROFILING','VIEW_STANDARD_DASHBOARD','VIEW_REPORT_QUERIES','IMPORT_FREE_FORM_REPORT'],
     children: [
       {
         name: 'Generali',
@@ -244,6 +251,13 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         version: '0.0.1',
         key: 'VIEW_STANDARD_DASHBOARD'
+      }, 
+      {
+        name: 'Import Free Form Report',
+        url: '/dashboard/import-form-report',
+        icon: 'fa fa-file-text-o',
+        version: '0.0.1',
+        key: 'IMPORT_FREE_FORM_REPORT'
       }
     ]
   },

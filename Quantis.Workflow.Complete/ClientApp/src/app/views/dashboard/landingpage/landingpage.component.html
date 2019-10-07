@@ -9,7 +9,7 @@
         </h2>
       <!-- <br> -->
       <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-      <div class="row pull-right right-text col-md-5" style="margin-top:-30px">
+      <div class="row pull-right col-md-5" style="margin-top:-30px">
         <h2>
           <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
         </h2>
@@ -32,6 +32,7 @@
           <option value="">Anno</option>
           <option *ngFor="let year of anni" >{{year}}</option>     
         </select>
+        <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
       </div>
     </section>
     <br>
@@ -39,9 +40,10 @@
     <section class="content">
     <!-- Main row -->
     <div class="row">
-      <!-- Left col -->
+      <!-- Left col class= "box box-danger box-solid"     
+      [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
        <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
-        <div class= "box box-danger box-solid" style="border:2px solid #dd4b39">
+        <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
          <div class="box-header with-border">
           <h3 class="box-title">{{row.contractpartyname}}</h3>
             <!-- /.box-tools -->
@@ -78,13 +80,12 @@
             <ul class="nav nav-stacked">
                 <li class="top-border"><a href="#">Severity Contratti
               <div class="progress" style="height: 20px">
-                <div class="progress-bar active progress-bar-success" role="progressbar" style="width:77%; height:100%">17</div>
-              <div class="progress-bar active progress-bar-warning" role="progressbar" style="width:5%; height:100%;">1</div>
-              <div class="progress-bar active progress-bar-danger" role="progressbar" style="width:18%; height:100%;">4</div>
+                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': row.complaintkpis + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+              <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': row.noncomplaintkpis + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
             </div></a></li>
               <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
-              <li><a href="#">KPI non Compliant <span class="pull-right badge bg-orange">{{row.noncomplaintkpis}}</span></a></li>
-              <li><a href="#">KPI Compliant<span class="pull-right badge bg-green">{{row.complaintkpis}}</span></a></li>
+              <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal()">{{row.noncomplaintkpis}}</button></a></li>
+              <li><a>KPI Compliant <button [disabled]="row.complaintkpis==0" class="btn btn-success pull-right badge bg-green" (click)="showCompliantModal()">{{row.complaintkpis}}</button></a></li>
             </ul>
             
           </div>
@@ -112,15 +113,14 @@
             <h3 class="box-title" style= "font-size: 18px">Better Performing Contracts</h3>
           </div>
           <!-- /.box-header -->
-          <div class="box-body no-padding">
+          <div class="box-body no-padding table-responsive" style="height:600px">
             <table class="table table-striped">
-              <tr>
+              <!-- <tr>
                 <th>#</th>
                 <th>Contratto</th>
                 <th></th>
                 <th>Compliant</th>
-                <!-- <th>Escalation</th> -->
-              </tr>
+              </tr> -->
               <tr *ngFor="let b of row.bestcontracts; index as j">
                 <td>{{j+1}}.</td>
                 <td>{{b.contractname}}</td>
@@ -138,20 +138,19 @@
                 <h3 class="box-title" style= "font-size: 18px">Under Performing Contracts</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body no-padding">
+            <div class="box-body no-padding table-responsive" style="height:600px">
                 <table class="table table-striped">
-                <tr>
+                <!-- <tr>
                     <th>#</th>
                     <th>Contratto</th>
                     <th></th>
                     <th>Non Compliant</th>
-                    <!-- <th>Escalation</th> -->
-                </tr>
+                </tr> -->
                 <tr *ngFor="let w of row.worstcontracts; index as k">
                     <td>{{k+1}}.</td>
                     <td>{{w.contractname}}</td>
                     <td></td>
-                    <td class="center-td"><span class="badge bg-orange">{{w.noncomplaintkpis}}</span></td>
+                    <td class="center-td"><span class="badge bg-red">{{w.noncomplaintkpis}}</span></td>
                     <!-- <td class="center-td"><span class="badge bg-red">3</span></td> -->
                 </tr>
                 </table>
@@ -165,5 +164,105 @@
 </section>
   
 </div><!--/.wrapper-->
+
+
+<div id="thresholdModal" bsModal #thresholdModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Threshold Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideThresholdModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body row">
+          <div class="col-md-3">
+            <h5>Threshold Red:</h5>
+          </div>  
+          <div class="col-md-2" style="margin-top:-5px">  
+            <input type="number" class="form-control" [(ngModel)]="thresholdvalue">
+          </div>
+          <div class="col-md-1">  
+            <b> %</b>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="setThreshold()">Salva</button>
+          <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideThresholdModal()">Chiudi</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="compliantModal" bsModal #compliantModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">KPI Compliants</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideCompliantModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table stripe" #CompliantTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead style="background: #20a8d8">
+              <tr style="font-size:12px;color:white">
+                <th style="text-align:center">KPI</th>
+                <th style="text-align:center">KEY</th>
+                <th style="text-align:center">VALUE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align:center">Compliant</td>
+                <td style="text-align:center">key</td>
+                <td style="text-align:center">value</td>
+              </tr>
+            </tbody>
+          </table> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideCompliantModal()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nonCompliantModal" bsModal #nonCompliantModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">Non KPI Compliants</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideNonCompliantModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table stripe" #CompliantTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead style="background: #20a8d8">
+              <tr style="font-size:12px;color:white">
+                <th style="text-align:center">KPI</th>
+                <th style="text-align:center">KEY</th>
+                <th style="text-align:center">VALUE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align:center">Non Compliant</td>
+                <td style="text-align:center">key</td>
+                <td style="text-align:center">value</td>
+              </tr>
+            </tbody>
+          </table> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideNonCompliantModal()">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
   
   

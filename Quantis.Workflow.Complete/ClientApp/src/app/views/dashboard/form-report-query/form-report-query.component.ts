@@ -27,6 +27,8 @@ export class FormReportQueryComponent implements OnInit {
   debugQueryData: any = [];
   debugQueryValue: any = [];
   valueCount = 0;
+  debugResult;
+  hideData=0;
   executeQueryData = {
     QueryText: '',
     Parameters: [{
@@ -150,7 +152,7 @@ export class FormReportQueryComponent implements OnInit {
           this.toastr.success('Query created successfully');
         }, error => {
           this.formLoading = false;
-          this.toastr.error('Error while creating Query');
+          this.toastr.error('Errore esecuzione report');
         });
       }
       this.isSubmit=1;
@@ -165,15 +167,20 @@ export class FormReportQueryComponent implements OnInit {
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      this.debugResult = data;
       console.log('Debug Result -> ',data[0]);
+      ////////////// Setting Key ///////////////
       this.debugQueryData = Object.keys(data[0]);
-
+      ////////////// Setting Value ///////////////
       Object.keys(data[0]).forEach(key => {
         this.debugQueryValue[this.valueCount] = data[0][key];  
         this.valueCount++; 
       });
-      
-      console.log('debugQueryValue -> ',this.debugQueryValue); 
+      //console.log('debugQueryValue -> ',this.debugQueryValue); 
+      if(data[0]=='O'){
+        this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+        this.hideData=1;
+      }
     });
   }
 

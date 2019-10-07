@@ -18,13 +18,13 @@ export class FreeFormReportComponent implements OnInit {
   @ViewChild('viewAssignedModal') public viewAssignedModal: ModalDirective;
   @ViewChild('executeModal') public executeModal: ModalDirective;
   @ViewChild('parametersModal') public parametersModal: ModalDirective;
-  @ViewChild('ConfigurationTable') public ConfigurationTable: ElementRef;
 
   assignedReportQueries: any = [];
   assignedQueriesBodyData: any = [];
   viewAssignedData: any = [];
   ownedReportQueries: any = [];
   reportQueryDetail: any = [];
+  ownername;
   
   loading: boolean = true;
   formLoading: boolean = false;
@@ -32,6 +32,10 @@ export class FreeFormReportComponent implements OnInit {
   queryId=0;
   count=0;
   isSubmit=0;
+  isReadonly=0;
+  isDebug=0;
+  debugResult;
+  hideData=0;
   assignedUsers = [];
   params = {
     id: 0,
@@ -57,7 +61,10 @@ export class FreeFormReportComponent implements OnInit {
   }
 
   modalTitle: string = 'Users Assigned Queries';
-  executeModalTitle: string = 'Execute Query';
+  assigendModalTitle: string = 'Free Form Report Assegnati';
+  ownedModalTitle: string = 'Propri Free Form Report';
+  executeModalTitle: string = '';
+
   // @ViewChildren(DataTableDirective)
   // datatableElement: DataTableDirective;
 
@@ -180,7 +187,7 @@ export class FreeFormReportComponent implements OnInit {
       id: [0, Validators.required],
       QueryName: ['', Validators.required],
       QueryText: ['', Validators.required],
-      Parameters: this.formBuilder.array([ this.createParameters() ])
+      Parameters: this.formBuilder.array([])
     });
 
     this.getReportsData();
@@ -192,7 +199,7 @@ export class FreeFormReportComponent implements OnInit {
   createParameters(): FormGroup {
     return this.formBuilder.group({
       key: '',
-      value: '',
+      value: ''
     });
   }
 
@@ -373,9 +380,12 @@ export class FreeFormReportComponent implements OnInit {
   }
 
   viewAssigned(data){
-    this.viewAssignedData = data;
-    console.log('viewAssignedData -> ',this.viewAssignedData)
-    this.showViewModal();
+    this.ownername = data.ownername;
+    this._freeFormReport.getReportQueryDetailByID(data.id).subscribe(data => {
+      this.viewAssignedData = data;
+      console.log('viewAssignedData -> ',this.viewAssignedData)
+      this.showViewModal();
+    });
   }
 
   clearData(){
@@ -404,21 +414,36 @@ export class FreeFormReportComponent implements OnInit {
   //   });
   // }
 
-  editQuery(data){
+  editQuery(data,table){
+    if(table=='owned'){
+      this.isReadonly=0;
+      this.executeModalTitle = this.ownedModalTitle;
+    }else if(table=='assigned'){
+      this.isReadonly=1;
+      this.executeModalTitle = this.assigendModalTitle;
+    }
     
     this._freeFormReport.getReportQueryDetailByID(data.id).subscribe(data => { 
       this.editQueryData.id = data.id;
       this.editQueryData.QueryName = data.queryname;
       this.editQueryData.QueryText = data.querytext;
-      this.editQueryData.Parameters = data.parameters;
+      console.log('data.parameters -> ',data.parameters.length);
+      if(data.parameters.length==0){   
+      }else{
+        this.editQueryData.Parameters = data.parameters;
+        let a = this.addEditQueryForm.get('Parameters') as FormArray;
+        a.push(this.createParameters());
+      }
       this.addEditQueryForm.patchValue(this.editQueryData);
       console.log('Edit Query -> ',this.addEditQueryForm);
       this.showParametersModal();
     });
     //this.showViewModal();
+    (this.addEditQueryForm.get("Parameters") as FormArray)['controls'].splice(0);
   }
 
   debug(){
+    this.hideData=0;
     this.valueCount = 0;
     this.clearData();
     
@@ -426,13 +451,21 @@ export class FreeFormReportComponent implements OnInit {
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
-      console.log('Debug Result -> ',data[0]);
+      this.debugResult = data;
+      console.log('Debug Result -> ',data);
+      ////////////// Setting Key ///////////////
       this.debugQueryData = Object.keys(data[0]);
+      ////////////// Setting Value ///////////////
       Object.keys(data[0]).forEach(key => {
         this.debugQueryValue[this.valueCount] = data[0][key];  
         this.valueCount++; 
       });
-      console.log('debugQueryValue -> ',this.debugQueryValue); 
+      //console.log('debugQueryValue -> ',this.debugQueryValue); 
+      this.isDebug=1;
+      if(data[0]=='O'){
+        this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+        this.hideData=1;
+      }
     });
     this.hideParametersModal();
   }
