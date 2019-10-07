@@ -48,7 +48,7 @@ export class LandingPageComponent implements OnInit {
 		  }
 		}
 	};
-
+	loading: boolean;
 	dtTrigger: Subject<any> = new Subject();
 	public period = '02/2019';
 	gridsData: any = [];
@@ -96,6 +96,7 @@ export class LandingPageComponent implements OnInit {
 		dtInstance.destroy();
 		// Call the dtTrigger to rerender again
 		this.dtTrigger.next();
+		this.loading = false;
 		});
 	}
 
@@ -103,9 +104,11 @@ export class LandingPageComponent implements OnInit {
 		if(this.monthVar==null || this.yearVar==null){
 
 		}else{
+			this.loading = true;
 			this.apiService.getLandingPage(this.monthVar,this.yearVar).subscribe((data: any) => {
 				this.gridsData = data;
-				console.log("gridsData -> ", this.gridsData);			
+				console.log("gridsData -> ", this.gridsData);
+				this.loading = false;			
 			});
 		}
 	 }
@@ -117,6 +120,11 @@ export class LandingPageComponent implements OnInit {
 			this.anni.push(i);
 		}
 		return this.anni;
+	}
+
+	details(contractpartyid){
+		let params = { contractpartyid: contractpartyid};
+		window.open(`/#/dashboard/landing-page-details/?contractpartyid=${params.contractpartyid}`, '_blank');
 	}
 	
 	setThreshold() {

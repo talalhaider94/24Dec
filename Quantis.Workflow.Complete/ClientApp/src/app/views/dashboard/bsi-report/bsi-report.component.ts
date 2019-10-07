@@ -48,7 +48,7 @@ export class BSIReportComponent implements OnInit {
       }
     }
   };
-
+  loading: boolean = true;
   dtTrigger: Subject<any> = new Subject();
   AllNormalReportsData: any = [];
 
@@ -80,6 +80,7 @@ export class BSIReportComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
+      this.loading = false;
     });
   }
 
@@ -90,6 +91,7 @@ export class BSIReportComponent implements OnInit {
   }
 
   getAllNormalReports() {
+    this.loading = true;
     this.apiService.getAllNormalReports().subscribe((data) =>{
       this.AllNormalReportsData = data;
       console.log('AllNormalReportsData -> ', data);
