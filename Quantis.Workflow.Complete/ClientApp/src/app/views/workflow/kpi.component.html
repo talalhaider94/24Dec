@@ -71,21 +71,20 @@
                                             <span class="checkbox-checkmark"></span>
                                         </label>
                                     </th>
+                                      <th>Sommario</th>
                                     <th>Rif. Num</th>
                                     <th>Titolo</th>
                                     <th>KPI ID</th>
                                     <th>Tipologia</th>
-                                    <th>Sommario</th>
-                                    <th>Descrizione</th>
                                     <th>Gruppo</th>
                                     <th>Stato</th>
                                     <th>Periodo</th>
                                     <th>Target</th>
                                     <th>Value</th>
-                                    <th>Riferimento Input</th>
-                                    <th>Riferimento S1 </th>
-                                    <th>Riferimento S2</th>
-                                    <th>Riferimento S3</th>
+                                    <th>Rif Input</th>
+                                    <th>Ref. Op. </th>
+                                    <th>Ref. Ser.</th>
+                                    <th>Resp. Contratto/Disciplinare</th>
                                     <th>Azioni</th>
                                     <th>Allegati</th>
                                 </tr>
@@ -109,25 +108,13 @@
                                         <label class="checkbox-container border"
                                             [ngClass]="ticket.description.includes('[Compliant]') ?
                                              'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
-                                              'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ? 
+                                              'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ?
                                               'checkbox-container-default border-secondary' : ticket.description.includes('[Nessun Evento]') ? 'checkbox-container-primary border-primary' : 'checkbox-container-white border-white' ">
                                             <input type="checkbox" [disabled]="ticket.isclosed"
                                                 [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
                                             <span class="checkbox-checkmark"></span>
                                         </label>
                                     </td>
-                                    <td>{{ ticket.ref_num || 'N/A' }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
-                                            triggers="focus">
-                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
-                                            <span class="d-none">
-                                                {{ ticket.titolo | slice:15 || 'N/A' }}
-                                            </span>
-                                        </button>
-                                    </td>
-                                    <td>{{ ticket.id_kpi || 'N/A' }}</td>
-                                    <td>{{ ticket.tipologia  }}</td>
                                     <td>
                                         <ng-template #popSummary>
                                             <ul class="list-group list-group-flush"
@@ -145,26 +132,41 @@
                                             </span>
                                         </button>
                                     </td>
+                                    <td>{{ ticket.ref_num || 'N/A' }}</td>
+
                                     <td>
-                                        <ng-template #popTemplate>
-                                            <ul class="list-group list-group-flush"
-                                                *ngFor="let obj of formatDescriptionColumn(ticket.description)">
-                                                <li *ngIf="obj.key" class="list-group-item">
-                                                    <b>{{obj.key}}</b> {{obj.value}}
-                                                </li>
-                                                <li *ngIf="!obj.key" class="list-group-item">
-                                                    {{obj}}
-                                                </li>
-                                            </ul>
-                                        </ng-template>
-                                        <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
-                                            triggers="focus" placement="top">
-                                            {{ ticket.description | slice:0:15 || 'N/A' }}
+                                        <button type="button" class="btn btn-ghost-dark" [popover]="ticket.titolo"
+                                            triggers="focus">
+                                            {{ ticket.titolo | slice:0:15 || 'N/A' }}
                                             <span class="d-none">
-                                                {{ ticket.description | slice:15 || 'N/A' }}
+                                                {{ ticket.titolo | slice:15 || 'N/A' }}
                                             </span>
                                         </button>
                                     </td>
+                                    <td>
+                                      <ng-template #popTemplate>
+                                          <ul class="list-group list-group-flush"
+                                              *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                              <li *ngIf="obj.key" class="list-group-item">
+                                                  <b>{{obj.key}}</b> {{obj.value}}
+                                              </li>
+                                              <li *ngIf="!obj.key" class="list-group-item">
+                                                  {{obj}}
+                                              </li>
+                                          </ul>
+                                      </ng-template>
+
+                                      <button type="button" class="btn btn-ghost-dark" [popover]="popTemplate"
+                                          triggers="focus" placement="top">
+                                          {{ ticket.id_kpi || 'N/A' }}
+                                          <span class="d-none">
+                                              {{ ticket.description | slice:15 || 'N/A' }}
+                                          </span>
+                                      </button>
+                                    </td>
+                                    <td>{{ ticket.tipologia  }}</td>
+
+
                                     <td>
                                         <button type="button" class="btn btn-ghost-dark" [popover]="ticket.group"
                                             triggers="focus">
