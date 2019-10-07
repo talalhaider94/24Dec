@@ -141,9 +141,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 else
                 {
                     var dashboardWidgetIds = dto.DashboardWidgets.Where(o => o.Id != 0).Select(o => o.Id).ToList();
-                    var deletewidgets = _dbcontext.DB_DashboardWidgets.Where(o => o.DashboardId == dto.Id && !dashboardWidgetIds.Contains(o.Id)).ToArray();
+                    var deletewidgets = _dbcontext.DB_DashboardWidgets.Include(o=>o.DashboardWidgetSettings).Where(o => o.DashboardId == dto.Id && !dashboardWidgetIds.Contains(o.Id)).ToArray();
                     if (deletewidgets.Any())
                     {
+                        foreach(var w in deletewidgets)
+                        {
+                            _dbcontext.DB_DashboardWidgetSettings.RemoveRange(w.DashboardWidgetSettings.ToArray());
+                        }
                         _dbcontext.DB_DashboardWidgets.RemoveRange(deletewidgets);
                     }
 

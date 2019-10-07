@@ -13,5 +13,6 @@ namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
         public string TimeStamp { get; set; }
         public string ActionDescription { get; set; }
         public string Description { get; set; }
+        public string Type { get; set; }
     }
 }
