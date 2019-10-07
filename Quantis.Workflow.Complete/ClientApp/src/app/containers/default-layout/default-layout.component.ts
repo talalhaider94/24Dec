@@ -58,8 +58,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     this.router.events.pipe(
       filter((event: any) => event instanceof NavigationEnd)
     ).subscribe(x => {
-      console.log('router');
-      console.log(x);
       this.currentUrl = x.url;
       this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = '0.0.1';
@@ -161,7 +159,6 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   getAllDashboards() {
     this.dashboardService.getDashboards().subscribe(dashboards => {
-      console.log('Home Dashboards -> ',dashboards);
       this.emitter.loadingStatus(false);
       this.dashboardCollection = dashboards.filter(dashboard => dashboard.isactive);
     }, error => {

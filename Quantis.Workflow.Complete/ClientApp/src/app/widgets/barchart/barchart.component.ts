@@ -60,7 +60,7 @@ export class BarchartComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		console.log('Barchart Count Trend', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+		console.log('Barchart Count Trend ==>', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
 		if (this.router.url.includes('dashboard/public')) {
 			this.isDashboardModeEdit = false;
 			if (this.url) {

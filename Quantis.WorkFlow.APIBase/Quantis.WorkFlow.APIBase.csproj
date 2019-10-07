@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="API\BSIService.cs~RFb4b412.TMP" />
     <None Remove="API\InformationService.cs~RF513d2e2.TMP" />
   </ItemGroup>
 

@@ -19,7 +19,7 @@
                         </div>
                         <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                         <!-- <span *ngIf="parameterCount>0"> -->
-                        <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
+                        <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters'].value; let i = index;">
                             <div class="row" [formGroupName]="i">
                                 <div class="col-md-6"><input (keydown)="onKeydown($event)" placeholder="Key" formControlName="key" class="form-control"></div>
                                 <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>

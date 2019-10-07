@@ -51,10 +51,9 @@ export class LoginComponent implements OnInit{
       const { userName, password } = this.f;
       this.loading = true;
       this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-        this.dashboardService.GetDefaultDashboardId().subscribe(result => {
-          if(result !== -1) {
-            this.router.navigate(['dashboard/public', result]);
-          } else if(result == -1) {
+          if(data.defaultdashboardid !== -1) {
+            this.router.navigate(['dashboard/public', data.defaultdashboardid]);
+          } else if (data.defaultdashboardid == -1) {
             this.router.navigate(['dashboard/landingpage']);
           }else{
             this.router.navigate(['dashboard/list']);
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit{
           
           this.toastr.success('Login eseguito con successo.');
           this.loading = false;
-        });
       }, error => {
         console.log('onLoginFormSubmit: error', error);
         this.toastr.error(error.error, error.description);

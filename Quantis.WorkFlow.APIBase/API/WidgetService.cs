@@ -608,6 +608,10 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto)
         {
+            if (!dto.KPIs.Any())
+            {
+                return new List<KPIStatusSummaryDTO>();
+            }
             var result = new List<KPIStatusSummaryDTO>();
             string query = @"select contract_party, contract, global_rule_id, ""ID KPI"",replace(replace(replace(replace(""DESCRIZIONE KPI"",'(Non Cumulato)'),'(Cumulato)'),'(Non cumulato)'),'(Progressivo)') as ""DESCRIZIONE KPI"",tipologia,
                             frequenza,calcolo,
@@ -874,7 +878,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join V_TOT_MAX mas on(f.""DESCRIZIONE KPI"" = mas.DESCRIZIONE_KPI and mas.ANNO = to_char(sysdate, 'YYYY'))
                             where {0}
                             order by ""ID KPI""";
-            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", dto.KPIs);
             query = string.Format(query, rules);
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {

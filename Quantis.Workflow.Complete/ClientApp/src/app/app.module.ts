@@ -10,7 +10,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { FileSaverModule } from 'ngx-filesaver';
 import { TreeviewModule } from 'ngx-treeview';
 import { TokenInterceptorService, ErrorInterceptorService } from '../app/_helpers';
-
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { itLocale } from 'ngx-bootstrap/locale';
+defineLocale('it', itLocale);
 //import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true

@@ -88,6 +88,7 @@ export class DashboardService {
 			globalfilterid: params.globalfilterid,
 			dashboardwidgets
 		}
+		console.log('AddUpdateDasboard ==>', JSON.stringify(newParams))
 		return this.http.post<DashboardModel>(`${environment.API_URL}/dashboard/AddUpdateDasboard`, newParams);
 	}
 

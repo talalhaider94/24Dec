@@ -33,6 +33,7 @@ export class DateTimeService {
   }
 
   buildRangeDate(dateRange) {
+    console.log('buildRangeDate', dateRange);
     let [startDate, endDate] = dateRange.split('-');
     let [startMonth, startYear] = startDate.split('/');
     let [endMonth, endYear] = endDate.split('/');
@@ -49,13 +50,13 @@ export class DateTimeService {
     } else {
       startDate = moment().subtract(1, 'months').format('MM/YYYY');
     }
-    if(rangeType === 'Last 2 Months') {
+    if(rangeType === '2') {
       endDate = moment().subtract(2, 'months').format('MM/YYYY');
-    } else if(rangeType === 'Last 3 Months') {
+    } else if(rangeType === '3') {
       endDate = moment().subtract(3, 'months').format('MM/YYYY');
-    } else if(rangeType === 'Last 6 Months') {
+    } else if(rangeType === '4') {
       endDate = moment().subtract(6, 'months').format('MM/YYYY');
-    } else if(rangeType === 'Last Month') {
+    } else if(rangeType === '1') {
       endDate = moment().subtract(1, 'months').format('MM/YYYY');
     }
     return { startDate, endDate }

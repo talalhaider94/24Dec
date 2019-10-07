@@ -35,6 +35,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IDataService _dataService;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IInformationService _infomationAPI;
+        private readonly IConfiguration _configuration;
         private void LogIn()
         {
             try
@@ -74,20 +75,21 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IInformationService infomationAPI)
+        public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IInformationService infomationAPI, IConfiguration configuration)
         {
             _dbcontext = context;
             _infomationAPI = infomationAPI;
+            _configuration = configuration;
             _groupMapping = _dbcontext.SDMTicketGroup.ToList();
             _statusMapping = _dbcontext.SDMTicketStatus.OrderBy(o=>o.step).ToList();
 
             if (_sdmClient == null)
             {
-                _sdmClient = new SDM.USD_WebServiceSoapClient();
+                _sdmClient = new SDM.USD_WebServiceSoapClient(SDM.USD_WebServiceSoapClient.EndpointConfiguration.USD_WebServiceSoap,_configuration["SDMWebServices"]);
             }
             if (_sdmExtClient == null)
             {
-                _sdmExtClient = new SDMExt.USD_R11_ExtSoapClient(SDMExt.USD_R11_ExtSoapClient.EndpointConfiguration.USD_R11_ExtSoap);
+                _sdmExtClient = new SDMExt.USD_R11_ExtSoapClient(SDMExt.USD_R11_ExtSoapClient.EndpointConfiguration.USD_R11_ExtSoap,_configuration["SDMExtWebServices"]);
             }
             _dataService = dataService;
             var usernameObj = _infomationAPI.GetConfiguration("be_sdm","username");
@@ -354,7 +356,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
-        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto)
+        public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto,string userName)
         {
             string ret = null;
             LogIn();
@@ -365,6 +367,8 @@ namespace Quantis.WorkFlow.APIBase.API
             param.Add("description", dto.AttachmentName);
             param.Add("fileName", dto.AttachmentName);           
             SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, dto.AttachmentContent);
+            string note = string.Format("Utente {0} ha aggiunto il seguente documento: {1}", userName, dto.AttachmentName);
+            _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, note, "LOG", 0, false).Wait();
             LogOut();
             return ret;
         }

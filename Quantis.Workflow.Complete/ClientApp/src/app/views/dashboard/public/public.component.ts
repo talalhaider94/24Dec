@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
-import { TreeViewComponent, NodeSelectEventArgs  } from '@syncfusion/ej2-angular-navigations';
+import { TreeViewComponent, NodeSelectEventArgs } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
 import { BarchartComponent } from '../../../widgets/barchart/barchart.component';
@@ -20,6 +20,8 @@ import { NotificationTrendComponent } from '../../../widgets/notification-trend/
 import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-organization/kpi-count-by-organization.component';
 import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
 import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+
 @Component({
 	selector: 'app-public',
 	templateUrl: './public.component.html',
@@ -81,9 +83,9 @@ export class PublicComponent implements OnInit {
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
 	dashboardName: string = 'Loading...!';
-	allContractParties: Array<any> = [{key: '', value: 'Select Contract Parties'}];
-	filterContracts: Array<any> = [{key: '', value: 'Select Contracts'}];
-	filterKpis: Array<any> = [{key: '', value: `Select KPI's`}];
+	allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
+	filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
+	filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
 	constructor(
@@ -92,13 +94,16 @@ export class PublicComponent implements OnInit {
 		private emitter: EmitterService,
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
-		private dateTime: DateTimeService
-	) { }
+		private dateTime: DateTimeService,
+		private _$localeService: BsLocaleService
+	) { 
+		this._$localeService.use('it');
+	}
 
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
-			if(this.barChartWidgetParameters.allContractParties) {
-				this.allContractParties = [ ...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
+			if (this.barChartWidgetParameters.allContractParties) {
+				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
@@ -213,8 +218,8 @@ export class PublicComponent implements OnInit {
 				date: [null],
 				includeCurrentMonth: [false],
 				contractParties: [null],
-				contracts: [{value: null}],
-				kpi: [{ value: null}]
+				contracts: [{ value: null }],
+				kpi: [{ value: null }]
 			}),
 			// Note: [null],
 		});
@@ -286,7 +291,6 @@ export class PublicComponent implements OnInit {
 		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
 			if (result) {
 				const [allWidgets, dashboardData, getOrgHierarcy] = result;
-				console.log('allWidgets', allWidgets);
 				console.log('dashboardData', dashboardData);
 				console.log('getOrgHierarcy', getOrgHierarcy);
 
@@ -349,10 +353,13 @@ export class PublicComponent implements OnInit {
 
 	saveDashboardState() {
 		this.emitter.loadingStatus(true);
+		console.log('this.cloneDashboardWidgetsArrayState', this.cloneDashboardWidgetsArrayState);
 		let params = this.cloneDashboardWidgetsArrayState.map(widget => {
 			if (Object.keys(widget.filters).length > 0) {
 				if (widget.filters.hasOwnProperty('startDate') && widget.filters.hasOwnProperty('endDate')) {
 					widget.filters.daterange = this.dateTime.getStringDateRange(widget.filters.startDate, widget.filters.endDate);
+					delete widget.filters.startDate;
+					delete widget.filters.endDate;
 				}
 			}
 			return {
@@ -361,9 +368,8 @@ export class PublicComponent implements OnInit {
 				Properties: widget.properties
 			}
 		});
-		debugger
-		// removeNullKeysFromObject()
-		this.dashboardService.saveDashboardState(params).subscribe(result => {
+		const saveWidgetParams = params.map(param => removeNullKeysFromObject(param));
+		this.dashboardService.saveDashboardState(saveWidgetParams).subscribe(result => {
 			this.emitter.loadingStatus(false);
 			this.toastr.success('Dashboard state saved successfully');
 			console.log('saveDashboardState', result);
@@ -404,11 +410,11 @@ export class PublicComponent implements OnInit {
 		// alert("All Checked Nodes" + this.organizationTree.checkedNodes);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
-	
+
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-        // alert("The selected node's id: " + this.organizationTree.selectedNodes);
+		// alert("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
-	
+
 	getAllLeafNodesIds(complexJson) {
 		if (complexJson) {
 			complexJson.forEach((item: any) => {
@@ -436,40 +442,40 @@ export class PublicComponent implements OnInit {
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
-		if(startDate && endDate) {
+		if (startDate && endDate) {
 			delete formValues.Filters.dateTypes;
 			formValues.Filters.daterange = `${startDate}-${endDate}`;
 		} else {
 			formValues.Filters.daterange = null;
 		}
-		if(formValues.Filters.date) {
+		if (formValues.Filters.date) {
 			formValues.Filters.date = this.dateTime.moment(formValues.Filters.date).format('MM/YYYY');
 		}
-		
+
 		delete formValues.Filters.includeCurrentMonth;
 		delete formValues.Filters.startDate;
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
-		if(this.organizationTree) {
-			if(this.organizationTree.checkedNodes.length == 0){
+		if (this.organizationTree) {
+			if (this.organizationTree.checkedNodes.length == 0) {
 				formValues.Filters.organizations = this.allLeafNodesIds.join(',');
-			}else{
+			} else {
 				formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
 			}
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
-				if(formValues.Filters.hasOwnProperty('contractParties')) {
-					delete formValues.Filters.contractParties;
-					delete formValues.Filters.contracts;
-					if(formValues.Filters.hasOwnProperty('kpi')) {
-						formValues.Filters.kpi = +formValues.Filters.kpi;
-					} else {
-						delete formValues.Filters.kpi;
-					}	
-				}
+		if (formValues.Filters.hasOwnProperty('contractParties')) {
+			delete formValues.Filters.contractParties;
+			delete formValues.Filters.contracts;
+			if (formValues.Filters.hasOwnProperty('kpi')) {
+				formValues.Filters.kpi = formValues.Filters.kpi.toString();
+			} else {
+				delete formValues.Filters.kpi;
+			}
+		}
 		let submitFormValues = removeNullKeysFromObject(formValues);
+		this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, submitFormValues);
 		const { url } = this.barChartWidgetParameters;
-		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
@@ -574,6 +580,7 @@ export class PublicComponent implements OnInit {
 			this.loadingModalForm = false;
 			this.emitter.loadingStatus(false);
 		}, error => {
+			this.toastr.error('Unable to fetch widget data.', 'Error');
 			console.log('onWidgetParametersFormSubmit', error);
 			this.emitter.loadingStatus(false);
 			this.loadingModalForm = false;

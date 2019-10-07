@@ -390,7 +390,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.ExecuteReportQuery(dto);
         }
         ////////////////////////////
-        [HttpGet("GetFormsByUser")]
+        /*[HttpGet("GetFormsByUser")]
         public List<FormUsersDTO> GetFormsByUser()
         {
             var usr = HttpContext.User as AuthUser;
@@ -422,17 +422,30 @@ namespace Quantis.WorkFlow.Controllers
                 //return dtos;
             }
             return null;
-        }
+        }*/
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetForms")]
         public List<FormUsersDTO> GetForms(int id)
         {
             return _dataAPI.GetAllFormUsers(0, id);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormById/{id}")]
         public List<FormUsersDTO> GetFormById(int id)
         {
             return _dataAPI.GetAllFormUsers(id, 0);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetFormsByUser/{fakeUserID}")]
+        public List<FormsFromCatalogDTO> GetFormsFromCatalog(int fakeUserID)
+        {
+            var usr = HttpContext.User as AuthUser;
+            if (usr != null)
+            {
+                bool isSecurityMember = _dataAPI.SecurityMembers(usr.UserId);
+                return _dataAPI.GetFormsFromCatalog(usr.UserId, isSecurityMember, fakeUserID);
+            }
+            return null;
         }
     }
 }

@@ -1,20 +1,19 @@
 <div class="animated fadeIn">
-
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-body" >
-          <div *ngIf="loading" class="text-center" id="loadingDiv">
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
           </div>
-          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" id="showOnReady" style="font-size: 12px;width:100%"
-            class="table table-responsive-sm table-hover table-outline mb-0">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                 class="table table-responsive-sm table-hover table-outline mb-0">
             <thead class="thead-light">
               <tr>
-                <th class="text-center" style="display:none">Contratto</th>
-                <th class="text-center" width="40%">KPI</th>
+                <th class="text-center">No.</th>
+                <th class="text-center">Form ID</th>
                 <th class="text-center">Nome Form</th>
-                <th class="text-center">N. allegati totali</th>
+                <th class="text-center">Numero di allegati totali</th>
                 <th class="text-center">Data ultimo caricamento</th>
                 <th class="text-center">Azione</th>
               </tr>
@@ -30,26 +29,24 @@
               <tr *ngFor="let loadingForm of loadingForms; let i = index"
                   [ngClass]="{'active': cutOffRow(loadingForm)}">
                 <td>
-                  <div>{{ loadingForm.sla_name }}</div>
+                  <div class="text-center">{{ i+1 }}</div>
                 </td>
                 <td>
-                  <div>{{ loadingForm.global_rule_name }}</div>
+                  <div class="text-center">{{ loadingForm.form_id }}</div>
                 </td>
                 <td>
-                  <div class="text-center">
-                    {{ detailsForms[loadingForm.global_rule_id][0].form_name }}
-                  </div>
+                  <div class="text-center">{{ loadingForm.form_name }}</div>
                 </td>
                 <td>
                   <div class="text-center">
                     <span class="badge badge-success">
-                      {{ loadingForm.attachmentscount || '0' }}
+                      {{ loadingForm.attachmentscount || 'N/A' }}
                     </span>
                   </div>
                 </td>
                 <td>
                   <div class="text-center">
-                    <span [ngClass]="formatInputDate(loadingForm.latest_input_date) === 'Nessun caricamento' ? 'badge badge-warning' : ''">
+                    <span [ngClass]="formatInputDate(loadingForm.latest_input_date) === 'Nessun caricamento' ? 'badge badge-success' : ''">
                       {{ formatInputDate(loadingForm.latest_input_date) }}
                     </span>
                   </div>
