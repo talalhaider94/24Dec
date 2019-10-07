@@ -766,7 +766,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     secondary_contract_party = secondarycp,
                     ticket_status = _statusMapping.FirstOrDefault(o => o.step == step).name
                 };
-                
+
                 string tickethandle = "cr:" + id;
                 var esca = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "group", newgroup }, new string[0]);
                 esca.Wait();
@@ -855,7 +855,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var selecta = _sdmClient.doSelectAsync(_sid, "alg", "call_req_id='cr:"+ ticketId + "'", 99999, new string[0]);
                 selecta.Wait();
                 var sel = selecta.Result.doSelectReturn;
-                ret = parseLogs(sel).OrderByDescending(o=>int.Parse(o.TimeStamp)).ToList();
+                ret = parseLogs(sel).Where(o=>o.Type!="LOG").OrderByDescending(o=>int.Parse(o.TimeStamp)).ToList();
             }
             catch (Exception e)
             {
@@ -1058,6 +1058,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.TimeStamp = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "time_stamp").Element("AttrValue").Value;
                 dto.ActionDescription = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "action_desc").Element("AttrValue").Value;
                 dto.Description = attributes.FirstOrDefault(o => o.Element("AttrName").Value == "description").Element("AttrValue").Value;
+                dto.Type= attributes.FirstOrDefault(o => o.Element("AttrName").Value == "type").Element("AttrValue").Value;
                 dtos.Add(dto);
             }
             return dtos;
