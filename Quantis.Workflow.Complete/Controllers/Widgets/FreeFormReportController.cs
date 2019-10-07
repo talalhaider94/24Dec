@@ -27,9 +27,13 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             {
                 vm.Measures.Add(q.Id, q.QueryName);
             }
-            foreach (var q in selfqueries)
+            foreach (var q in assignedQueries)
             {
-                vm.Measures.Add(q.Id, q.QueryName);
+                if (!vm.Measures.ContainsKey(q.Id))
+                {
+                    vm.Measures.Add(q.Id, q.QueryName);
+                }
+                
             }
         }
 

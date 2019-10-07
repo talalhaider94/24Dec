@@ -332,10 +332,10 @@ namespace Quantis.WorkFlow.APIBase.API
                                 ContractName = (string)reader[3],
                                 GlobalRuleName = (string)reader[4],
                                 GlobalRuleId = Decimal.ToInt32((Decimal)reader[5]),
-                                Target = (double)reader[6],
-                                Actual = (double)reader[7],
+                                Target = (reader[6]==DBNull.Value)?0:(double)reader[6],
+                                Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                                 Result = (string)reader[8],
-                                Deviation = (double)reader[9],
+                                Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
 
                             });
                         }
