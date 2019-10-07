@@ -5,7 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-free-form-reports-widget',
   templateUrl: './free-form-reports-widget.component.html',
@@ -19,8 +19,8 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   @Input() widgetid: number;
   @Input() dashboardid: number;
   @Input() id: number;
-  loading: boolean = true;
-  kpiStatusSummaryWidgetParameters: any;
+  loading: boolean = false;
+  freeFormReportWidgetParameters: any;
   setWidgetFormValues: any;
   isDashboardModeEdit: boolean = true;
   @Output()
@@ -38,7 +38,8 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     private dateTime: DateTimeService,
     private router: Router,
     private widgetHelper: WidgetHelpersService,
-    private _freeFormReport: FreeFormReportService
+    private _freeFormReport: FreeFormReportService,
+    private $toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -63,6 +64,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
           text: '<i class="fa fa-file"></i> Esporta PDF',
           titleAttr: 'Esporta PDF',
           className: 'btn btn-primary mb-3',
+          orientation: 'landscape',
         },
       ],
       language: {
@@ -93,72 +95,64 @@ export class FreeFormReportsWidgetComponent implements OnInit {
       this.isDashboardModeEdit = false;
       if (this.url) {
         this.emitter.loadingStatus(true);
-        this.getReportQueryDetailByID();
-        // this.getChartParametersAndData(this.url);
+        this._freeFormReport.getReportQueryDetailByID().subscribe(result => {
+          this.getChartParametersAndData(this.url, result);
+        }, error => {
+          console.error('getReportQueryDetailByID', error);
+          this.$toastr.error('Unable to get Report Query Detail.', this.widgetname);
+        });
       }
       // coming from dashboard or public parent components
-      // this.subscriptionForDataChangesFromParent();
+      this.subscriptionForDataChangesFromParent();
     }
-  }
-  
-  getReportQueryDetailByID(){
-    this._freeFormReport.getReportQueryDetailByID().subscribe(data => {
-      this.emitter.loadingStatus(true);
-      this.loading = false;
-      this.freeFormReportData = data;
-      const buildIndexParams = {
-        Properties: {
-          measure: data.id,
-          parameters: data.parameters
-        }
-        
-      }
-    }, error => {
-      console.error(this.widgetname, error);
-      this.emitter.loadingStatus(true);
-      this.loading = false;
-    });
   }
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
   }
   
-  // subscriptionForDataChangesFromParent() {
-  //   this.emitter.getData().subscribe(result => {
-  //     const { type, data } = result;
-  //     if (type === 'kpiStatusSummaryTable') {
-  //       let currentWidgetId = data.kpiStatusSummaryWidgetParameters.id;
-  //       if (currentWidgetId === this.id) {
-  //         // updating parameter form widget setValues 
-  //         let kpiStatusSummaryTableFormValues = data.kpiStatusSummaryWidgetParameterValues;
-  //         if(kpiStatusSummaryTableFormValues.Filters.daterange) {
-  //           kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
-  //         }
-  //         this.setWidgetFormValues = kpiStatusSummaryTableFormValues;
-  //         this.updateChart(data.result.body, data, null);
-  //       }
-  //     }
-  //   });
-  // }
+  subscriptionForDataChangesFromParent() {
+    this.emitter.getData().subscribe(result => {
+      const { type, data } = result;
+      if (type === 'kpiStatusSummaryTable') {
+        let currentWidgetId = data.freeFormReportWidgetParameters.id;
+        if (currentWidgetId === this.id) {
+          // updating parameter form widget setValues 
+          let kpiStatusSummaryTableFormValues = data.kpiStatusSummaryWidgetParameterValues;
+          if(kpiStatusSummaryTableFormValues.Filters.daterange) {
+            kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
+          }
+          this.setWidgetFormValues = kpiStatusSummaryTableFormValues;
+          this.updateChart(data.result.body, data, null);
+        }
+      }
+    });
+  }
   // invokes on component initialization
-  getChartParametersAndData(url) {
+  getChartParametersAndData(url, getReportQueryDetailByID) {
     let myWidgetParameters = null;
     this.loading = true;
     this.dashboardService.getWidgetParameters(url).pipe(
       mergeMap((getWidgetParameters: any) => {
         myWidgetParameters = getWidgetParameters;
         // Map Params for widget index when widgets initializes for first time
-        let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-        return this.dashboardService.getWidgetIndex(url, newParams);
+        // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+        const buildIndexParams = {
+          Properties: {
+            measure: getReportQueryDetailByID.id,
+            parameters: JSON.stringify(getReportQueryDetailByID.parameters)
+          }
+        };
+        return this.dashboardService.getWidgetIndex(url, buildIndexParams);
       })
     ).subscribe(getWidgetIndex => {
       // populate modal with widget parameters
       myWidgetParameters;
-      let kpiStatusSummaryParams;
+      let freeFormReportParams;
       if (myWidgetParameters) {
-        kpiStatusSummaryParams = {
-          type: 'kpiStatusSummaryTableParams',
+        myWidgetParameters.getReportQueryDetailByID = getReportQueryDetailByID;
+        freeFormReportParams = {
+          type: 'freeFormReportTableParams',
           data: {
             ...myWidgetParameters,
             widgetname: this.widgetname,
@@ -167,25 +161,27 @@ export class FreeFormReportsWidgetComponent implements OnInit {
             properties: this.properties,
             widgetid: this.widgetid,
             dashboardid: this.dashboardid,
-            id: this.id
+            id: this.id,
+            getReportQueryDetailByID: getReportQueryDetailByID
           }
         }
-        this.kpiStatusSummaryWidgetParameters = kpiStatusSummaryParams.data;
+        this.freeFormReportWidgetParameters = freeFormReportParams.data;
         // setting initial Paramter form widget values
         this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
-        console.log('KpiStatusSummary Table this.setWidgetFormValues', this.setWidgetFormValues);
+        console.log('freeFormReport Table this.setWidgetFormValues', this.setWidgetFormValues);
       }
       // popular chart data
       if (getWidgetIndex) {
         const chartIndexData = getWidgetIndex.body;
         // third params is current widgets settings current only used when
         // widgets loads first time. may update later for more use cases
-        this.updateChart(chartIndexData, null, kpiStatusSummaryParams.data);
+        this.updateChart(chartIndexData, null, freeFormReportParams.data);
       }
       this.loading = false;
       this.emitter.loadingStatus(false);
     }, error => {
-      console.error('KpiStatusSummary Table', error, this.setWidgetFormValues);
+      console.error('FreeFormReport Table', error, this.setWidgetFormValues);
+      this.$toastr.error('Unable to get widget data.', this.widgetname);
       this.loading = false;
       this.emitter.loadingStatus(false);
     });
@@ -196,7 +192,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     this.freeFormReportParent.emit({
       type: 'openKpiStatusSummaryModal',
       data: {
-        kpiStatusSummaryWidgetParameters: this.kpiStatusSummaryWidgetParameters,
+        freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
         setWidgetFormValues: this.setWidgetFormValues,
         isKpiStatusSummaryComponent: true
       }
@@ -209,19 +205,13 @@ export class FreeFormReportsWidgetComponent implements OnInit {
 
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-    console.log('KPI STATUS SUMMARY chartIndexData', chartIndexData);
+    console.log('freeFormReport chartIndexData', chartIndexData);
     this.freeFormReportData = chartIndexData;
+    debugger
     this.dtTrigger.next();
-    if (dashboardComponentData) {
-    }
-
-    if (currentWidgetComponentData) {
-    }
-
   }
 
   widgetnameChange(event) {
-    console.log('widgetnameChange', this.id, event);
     this.emitter.sendNext({
       type: 'changeWidgetName',
       data: {
