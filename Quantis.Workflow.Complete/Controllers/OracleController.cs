@@ -154,7 +154,7 @@ namespace Quantis.WorkFlow.Controllers
             return _oracleAPI.GetPsl(period, global_rule_id, tracking_period);
         }
 
-        //[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetLandingPageLevel1")]
         public List<LandingPageLevel1DTO> GetLandingPageLevel1(int contractPartyId, string period)
         {
