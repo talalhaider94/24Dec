@@ -51,6 +51,7 @@ export class BSIReportComponent implements OnInit {
   loading: boolean = true;
   dtTrigger: Subject<any> = new Subject();
   AllNormalReportsData: any = [];
+  ReportDetailsData: any = [];
 
   constructor(
     private apiService: ApiService,
@@ -60,7 +61,7 @@ export class BSIReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllNormalReports();
+    //this.getAllNormalReports();
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -95,6 +96,14 @@ export class BSIReportComponent implements OnInit {
     this.apiService.getAllNormalReports().subscribe((data) =>{
       this.AllNormalReportsData = data;
       console.log('AllNormalReportsData -> ', data);
+      this.rerender();
+    });
+  }
+
+  getReportDetails(reportId){
+    this.apiService.getReportDetails(reportId).subscribe((data) =>{
+      this.ReportDetailsData = data;
+      console.log('ReportDetailsData -> ', data);
       this.rerender();
     });
   }
