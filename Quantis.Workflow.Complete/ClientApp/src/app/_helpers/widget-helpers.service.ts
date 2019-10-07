@@ -113,6 +113,9 @@ export class WidgetHelpersService {
       if(filters.kpi) {
         buildParams.Filters.kpi = filters.kpi;
       }
+      if(apiParams.getReportQueryDetailByID) {
+
+      }
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);
