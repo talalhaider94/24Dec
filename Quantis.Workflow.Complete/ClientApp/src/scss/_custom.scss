@@ -226,3 +226,18 @@ body {
     margin-right: 15px !important;
   }
 }
+
+.font-12 {
+  font-size: 12px !important;
+}
+
+.freeFormReportTable {
+  tr {
+    td {
+      padding: 0.25rem !important;
+    }
+    th {
+      padding: 0.25rem !important;
+    }
+  }
+}

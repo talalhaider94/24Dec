@@ -183,8 +183,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
 
 
   openModal() {
-    console.log('KpiStatusSummaryComponent OpenModal kpiStatusSummaryWidgetParameters', this.kpiStatusSummaryWidgetParameters);
-    console.log('KpiStatusSummaryComponent OpenModal setWidgetFormValues', this.setWidgetFormValues);
     this.kpiStatusSummaryParent.emit({
       type: 'openKpiStatusSummaryModal',
       data: {
@@ -201,7 +199,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
 
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-    console.log('KPI STATUS SUMMARY chartIndexData', chartIndexData);
     this.kpiStatusSummaryData = chartIndexData;
     this.rerender();
     // this.dtTrigger.next();
