@@ -29,6 +29,7 @@ export interface NavData {
   class?: string;
   label?: NavLabel;
   wrapper?: NavWrapper;
+  UIVersion?: boolean;
 }
 
 export const navItems: NavData[] = [
@@ -275,42 +276,16 @@ export const navItems: NavData[] = [
       }
     ]
   },
-  // {
-  //   name: 'Free Form Report',
-  //   url: '/dashboard/free-form-report',
-  //   icon: 'fa fa-file-text-o',
-  //   key: ['VIEW_REPORT_QUERIES'],
-  // },
   {
     divider: true,
     key: 'alwaysShow'
   },
   {
     title: true, 
-    name: 'Version 1.5.1b',
+    name: 'UIVersion',
+    UIVersion: true,
     class: 'class-version-nav',
     key: 'alwaysShow'
   },
-  // {
-  //   name: 'Pages',
-  //   url: '/pages',
-  //   icon: 'icon-star',
-  //   children: [
-  //     {
-  //       name: 'Login',
-  //       url: '/login',
-  //       icon: 'icon-star'
-  //     },
-  //     {
-  //       name: 'Error 404',
-  //       url: '/404',
-  //       icon: 'icon-star'
-  //     },
-  //     {
-  //       name: 'Error 500',
-  //       url: '/500',
-  //       icon: 'icon-star'
-  //     }
-  //   ]
-  // },
 ];
+
