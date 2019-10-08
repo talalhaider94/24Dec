@@ -190,11 +190,11 @@ export class FreeFormReportsWidgetComponent implements OnInit {
 
   openModal() {
     this.freeFormReportParent.emit({
-      type: 'openKpiStatusSummaryModal',
+      type: 'openFreeFormReportModal',
       data: {
         freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
         setWidgetFormValues: this.setWidgetFormValues,
-        isKpiStatusSummaryComponent: true
+        isFreeFormReportComponent: true
       }
     });
   }
