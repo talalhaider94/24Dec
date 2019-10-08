@@ -48,7 +48,7 @@ export class PersonalReportComponent implements OnInit {
       }
     }
   };
-
+  loading: boolean = true;
   dtTrigger: Subject<any> = new Subject();
   PersonalReportData: any = [];
 
@@ -80,6 +80,7 @@ export class PersonalReportComponent implements OnInit {
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
+      this.loading = false;
     });
   }
 
@@ -90,6 +91,7 @@ export class PersonalReportComponent implements OnInit {
   }
 
   getPersonalReports() {
+    this.loading = true;
     this.apiService.getPersonalReports().subscribe((data) =>{
       this.PersonalReportData = data;
       console.log('PersonalReportData -> ', data);

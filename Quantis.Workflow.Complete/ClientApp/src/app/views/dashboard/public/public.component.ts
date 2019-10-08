@@ -82,6 +82,7 @@ export class PublicComponent implements OnInit {
 	isKpiCountOrgComponent: boolean = false;
 	isDistributionByUserComponent: boolean = false;
 	isKpiStatusSummaryComponent: boolean = false;
+	isFreeFormReportComponent: boolean = false;
 	dashboardName: string = 'Loading...!';
 	allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
 	filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
@@ -195,6 +196,15 @@ export class PublicComponent implements OnInit {
 				this.barChartWidgetParameters = childData.data.kpiStatusSummaryWidgetParameters;
 				this.isKpiStatusSummaryComponent = childData.data.isKpiStatusSummaryComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'KPIStatusSummary');
+			}
+		},
+		freeFormReportParent: childData => {
+			console.log('freeFormReportParent childData', childData);
+			debugger
+			if (childData.type === 'openFreeFormReportModal') {
+				this.barChartWidgetParameters = childData.data.freeFormReportWidgetParameters;
+				this.isFreeFormReportComponent = childData.data.isFreeFormReportComponent;
+				this.showWidgetsModalAndSetFormValues(childData.data, 'FreeFormReport');
 			}
 		},
 	};

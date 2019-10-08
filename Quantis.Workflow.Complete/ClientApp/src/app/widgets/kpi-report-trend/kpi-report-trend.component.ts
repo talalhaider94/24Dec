@@ -32,6 +32,14 @@ export class KpiReportTrendComponent implements OnInit {
 
   highcharts = Highcharts;
   chartOptions = {
+    lang: {
+      downloadJPEG: 'Download JPEG image',
+      downloadPDF: 'Download PDF document',
+      downloadPNG: 'Download PNG image',
+      downloadSVG: 'Download SVG vector image',
+      viewFullscreen: 'View Full Screen',
+      printChart: 'Print Chart'
+    },
     credits: false,
     title: {
       text: 'KPI Report Trend'
@@ -108,8 +116,6 @@ export class KpiReportTrendComponent implements OnInit {
       this.subscriptionForDataChangesFromParent();
     }
     window.dispatchEvent(new Event('resize'));
-  }
-  ngAfterViewInit() {
   }
 
   subscriptionForDataChangesFromParent() {
