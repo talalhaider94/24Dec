@@ -1,6 +1,7 @@
 import { Component, OnDestroy, Inject, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { navItems } from '../../_nav';
+import { pageVersion } from '../../_page-versions';
 import { AuthService } from '../../_services';
 import { Router, NavigationEnd } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -59,17 +60,17 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
       filter((event: any) => event instanceof NavigationEnd)
     ).subscribe(x => {
       this.currentUrl = x.url;
-      this.findUrlDataByName(this.navItems, this.currentUrl);
+      //this.findUrlDataByName(this.navItems, this.currentUrl);
       this.currentVerion = '0.0.1';
-      if(this.returnedNode){ 
-        this.currentVerion = this.returnedNode.version || '0.0.1';
+      if(pageVersion[this.currentUrl]){
+        this.currentVerion = pageVersion[this.currentUrl];
       }else{
         this.currentVerion = '0.0.1';
       }
     });
     this.loadingSpinnerSubscription();
     this.getAllDashboards();
-    
+
     this.dashboardService.getLandingPageInfo().subscribe(data => {
       this.showLandingPage = data.showlandingpage;
       //console.log("Landing Page Info -> ",data.showlandingpage);
@@ -190,7 +191,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         console.error('dashboardSwitch', error);
         this.toastr.error('Error', 'Unable to set default dashboard.');
       })
-    } 
+    }
   }
 
   saveLandingPage(){
