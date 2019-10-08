@@ -10,8 +10,8 @@ namespace Quantis.WorkFlow.Services.DTOs.BSI
         public string Name { get; set; }
         public string ReportType { get; set; }
         public string ReportTitle { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
         public string ContractParty { get; set; }
         public string Contract { get; set; }
         public string Rule { get; set; }
@@ -28,7 +28,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BSI
         public List<string> Messages { get; set; }
         public string CalculationStatusText { get; set; }
         public string CalculationStatusBookletText { get; set; }
-        public DateTime CalculationStatusLastDate { get; set; }
+        public string CalculationStatusLastDate { get; set; }
         public string XLabel { get; set; }
         public string YLabel { get; set; }
         public List<XYZDTO> Data { get; set; }
