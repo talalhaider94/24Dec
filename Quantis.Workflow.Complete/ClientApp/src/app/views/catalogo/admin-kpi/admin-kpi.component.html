@@ -97,8 +97,11 @@
             </thead>
             <tbody>
               <tr style="text-align:center"><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>
-              <tr><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_rm" /></td><td align="center"><input type="checkbox" [(ngModel)]="modalData.enable_wf" /></td></tr>
-
+              <tr>
+                <td align="center"><input type="checkbox" [(ngModel)]="modalData.enable" /></td>
+              <td align="center"><input [disabled]="modalData.enable == false" type="checkbox" [(ngModel)]="modalData.enable_rm" /></td>
+              <td align="center"><input [disabled]="modalData.enable == false" type="checkbox" [(ngModel)]="modalData.enable_wf" /></td></tr>
+              
             </tbody>
           </table>
         </div>

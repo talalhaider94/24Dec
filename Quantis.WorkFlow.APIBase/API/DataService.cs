@@ -1247,8 +1247,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 UserEmail = usr.mail,
                                 UserName = usr.ca_bsi_account,
                                 Permissions = permissions,
-                                DefaultDashboardId = dash == null ? -1 : dash.Id
-                            };
+                                DefaultDashboardId = dash == null ? -1 : dash.Id,
+                                UIVersion = _configuration["UIVersion"],
+                        };
                             
                         }
                     }

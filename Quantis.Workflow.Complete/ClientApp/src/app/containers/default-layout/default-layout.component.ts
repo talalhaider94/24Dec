@@ -91,7 +91,10 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
   filterMenuByPermission(navItems, permissions, permittedMenu) {
     if (navItems) {
-      navItems.forEach((item: any) => {
+      navItems.forEach((item: any, index) => {
+        if (item.UIVersion) {
+          item.name = this.currentUser.uiversion; //UI Version taken on login
+        }
         let isExist: boolean = item.title || item.divider || item.key == 'alwaysShow' || this.checkArrays(item.key === undefined ? ['$#%^&'] : typeof (item.key) === 'string' ? [item.key] : item.key, permissions);
         let cloneItem = { ...{}, ...item };
         if (isExist) { // || item.title || item.divider || item.key == 'alwaysShow'
@@ -103,6 +106,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         } else {
           delete cloneItem.children;
         }
+
       });
     }
   }

@@ -80,8 +80,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 result.YLabel = reportInfo.Element("ByY")?.Value;
                 result.ReportType = reportInfo.Element("Report_Type")?.Value;
                 result.ReportTitle = reportInfo.Element("Report_Title")?.Value;
-                result.FromDate = DateTime.Parse(reportInfo.Element("DateFromOrg")?.Value);
-                result.ToDate = DateTime.Parse(reportInfo.Element("DateToOrg")?.Value);
+                result.FromDate = reportInfo.Element("DateFromOrg")?.Value;
+                result.ToDate = reportInfo.Element("DateToOrg")?.Value;
 
                 var reportInfoTitle = reportInfo.Element("TITLE");
                 result.ContractParty = reportInfoTitle.Element("Customer")?.Value;
@@ -108,7 +108,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var reportInfoCal = reportInfo.Element("CALC_STATUS");
                 result.CalculationStatusText = reportInfoCal.Element("TEXT")?.Value;
                 result.CalculationStatusBookletText = reportInfoCal.Element("BOOKLET_TEXT")?.Value;
-                result.CalculationStatusLastDate = reportInfoCal.Element("LAST_CALC_DATE") == null?DateTime.MinValue: DateTime.Parse(reportInfoCal.Element("LAST_CALC_DATE").Value);
+                result.CalculationStatusLastDate = reportInfoCal.Element("LAST_CALC_DATE").Value;
                 result.Data = new List<Services.DTOs.Widgets.XYZDTO>();
                 var reportGrid = reportInfo.Element("GRID").Elements();
                 foreach (var series in reportGrid)
