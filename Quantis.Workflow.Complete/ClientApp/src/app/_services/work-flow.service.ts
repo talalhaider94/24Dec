@@ -27,24 +27,24 @@ export class WorkFlowService {
   }
 
   getAttachmentsByTicket(ticketId): Observable<any>{
-    // const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetAttachmentsByTicket`;
-    // const  params = new  HttpParams().set('ticketId', ticketId.toString());
-    return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
-    // return this.http.get(ticketAttachmentEndPoint, { params });
+     const ticketAttachmentEndPoint = `${environment.API_URL}/sdm/GetAttachmentsByTicket`;
+     const  params = new  HttpParams().set('ticketId', ticketId.toString());
+    //return this.http.get('assets/tempData/GetAttachmentsByTicket.json');
+     return this.http.get(ticketAttachmentEndPoint, { params });
   }
 
   getTicketHistory(ticketId): Observable<any>{
-    // const ticketHistoryEndPoint = `${environment.API_URL}/sdm/GetTicketHistory`;
-    // const  params = new  HttpParams().set('ticketId', ticketId.toString());
-    return this.http.get('assets/tempData/GetTicketHistory.json');
-    // return this.http.get(ticketHistoryEndPoint, { params });
+     const ticketHistoryEndPoint = `${environment.API_URL}/sdm/GetTicketHistory`;
+     const  params = new  HttpParams().set('ticketId', ticketId.toString());
+    //return this.http.get('assets/tempData/GetTicketHistory.json');
+     return this.http.get(ticketHistoryEndPoint, { params });
   }
 
   downloadAttachment(attachmentHandler): Observable<any>{
-    // const downloadAttachmentEndPoint = `${environment.API_URL}/sdm/DownloadAttachment`;
-    // const  params = new  HttpParams().set('attachmentHandle', attachmentHandler);
-    // return this.http.get(downloadAttachmentEndPoint, { params });
-     return this.http.get('assets/tempData/DownloadAttachment.json');
+     const downloadAttachmentEndPoint = `${environment.API_URL}/sdm/DownloadAttachment`;
+     const  params = new  HttpParams().set('attachmentHandle', attachmentHandler);
+     return this.http.get(downloadAttachmentEndPoint, { params });
+    // return this.http.get('assets/tempData/DownloadAttachment.json');
   }
 
   getTicketDescriptionByUser(username): Observable<any>{
@@ -66,17 +66,17 @@ export class WorkFlowService {
   }
 
   getTicketsVerificationByUserVerifica (period: string): Observable<any>{
-    //const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
-     return this.http.get('https://api.myjson.com/bins/ps68l');
-    //const  params = new  HttpParams().set('period', period);
-    //return this.http.get(ticketVerificationEndPoint,{ params });
+    const ticketVerificationEndPoint = `${environment.API_URL}/sdm/GetTicketsVerificationByUser`;
+    // return this.http.get('https://api.myjson.com/bins/ps68l');
+    const  params = new  HttpParams().set('period', period);
+    return this.http.get(ticketVerificationEndPoint,{ params });
   }
 
   getTicketsSearchByUserRecerca (period: string): Observable<any>{
-    //const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser`;
-     return this.http.get('https://api.myjson.com/bins/ps68l');
-    //const  params = new  HttpParams().set('period', period);
-    //return this.http.get(ticketSearchEndPoint, { params });
+    const ticketSearchEndPoint = `${environment.API_URL}/sdm/GetTicketsSearchByUser`;
+    // return this.http.get('https://api.myjson.com/bins/ps68l');
+    const  params = new  HttpParams().set('period', period);
+    return this.http.get(ticketSearchEndPoint, { params });
   }
 
   uploadAttachmentToTicket(ticketId, docName, docContent): Observable<any> {
