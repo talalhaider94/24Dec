@@ -44,6 +44,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
+      if (_document.body.classList.contains('brand-minimized')) {
+        $('body').removeClass('brand-minimized'); //to not minimize the brand
+      }
     });
     this.element = _document.body;
     this.changes.observe(<Element>this.element, {
