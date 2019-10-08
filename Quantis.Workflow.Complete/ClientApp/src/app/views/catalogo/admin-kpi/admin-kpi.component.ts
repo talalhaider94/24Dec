@@ -207,9 +207,9 @@ export class AdminKpiComponent implements OnInit {
     this.modalData.day = '1'; // forse non è usato
     this.modalData.daytrigger = '5'; // forse non è usato
     this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
-    this.modalData.enable = data.enable;
-    this.modalData.enable_wf = data.enable_wf;
-    this.modalData.enable_rm = data.enable_rm;
+    this.modalData.enable = false;
+    this.modalData.enable_wf = false;
+    this.modalData.enable_rm = false;
     this.modalData.contract = data.sla_name;
     this.modalData.wf_last_sent = data.wf_last_sent;
     this.modalData.rm_last_sent = data.rm_last_sent;
@@ -251,6 +251,10 @@ export class AdminKpiComponent implements OnInit {
         this.modalData.month = '1,2,3,4,5,6,7,8,9,10,11,12';
         this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
         break;
+    }
+    if (this.modalData.enable == 'false') {
+      this.modalData.enable_rm = 'false';
+      this.modalData.enable_wf = 'false';
     }
     console.log(this.modalData);
     this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
