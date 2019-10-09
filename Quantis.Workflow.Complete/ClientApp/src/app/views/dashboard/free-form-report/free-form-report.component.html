@@ -245,12 +245,12 @@ aria-hidden="true">
                 <!-- <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br> -->
                 <div class="form-group" style="width:50%">
                     <h6>Query Name</h6>
-                    <input [readonly]="isReadonly==1" type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" value="{{addEditQueryForm.QueryName}}">
+                    <input [readonly]="isReadonly==1" type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('QueryName').errors !== null }" value="{{addEditQueryForm.QueryName}}">
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                 <div class="form-group">
                     <h6>Query Text</h6>
-                    <textarea [readonly]="isReadonly==1" type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }"  value="{{addEditQueryForm.QueryName}}"></textarea>
+                    <textarea [readonly]="isReadonly==1" type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.get('QueryText').errors !== null }"  value="{{addEditQueryForm.QueryName}}"></textarea>
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                 <!-- <span *ngIf="parameterCount>0"> -->
