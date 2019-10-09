@@ -1418,7 +1418,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<FormsFromCatalogDTO> GetFormsFromCatalog(int UserID, bool isSecurityMember, int fakeUserID)
+        public List<FormsFromCatalogDTO> GetFormsFromCatalog(int UserID, bool isSecurityMember, int fakeUserID, string type)
         {
             try
             {
@@ -1435,7 +1435,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 string query = "";
                 if (isSecurityMember)
                 {
-                    query = "select distinct " +
+                    /*query = "select distinct " +
                         "temp.form_id, form_name, form_owner_id, form_description, " +
                         "attachments_count,latest_modified_date from(" +
                         "select ck.*, f.*, fa.attachments_count, fl.latest_modified_date " +
@@ -1443,7 +1443,13 @@ namespace Quantis.WorkFlow.APIBase.API
                         "left join t_form_users f on ck.id_form = f.form_id " +
                         "left join (select form_id, count(form_id) as attachments_count from t_form_attachments group by form_id) fa on f.form_id = fa.form_id " +
                         "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form " +
-                        "where f.form_id is not null ) temp";
+                        "where f.form_id is not null ) temp";*/
+
+                    query = "select f.form_id, f.form_name, f.form_owner_id, f.form_description, attachments_count, " +
+                        "latest_modified_date from t_forms f " +
+                        "left join(select form_id, count(form_id) as attachments_count from t_form_attachments group by form_id) fa on f.form_id = fa.form_id " +
+                        "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form ";
+
                 }
                 else
                 {
@@ -1499,11 +1505,23 @@ namespace Quantis.WorkFlow.APIBase.API
                             }
                             else
                             {
-                                string[] arraySplit = reader.GetString(reader.GetOrdinal("monthtrigger")).Split(",");
-                                if (arraySplit.Contains(thisMonth))
+                                if(type != null && type == "nottracking")
                                 {
-                                    resultList.Add(form);
+                                    string[] arraySplit = reader.GetString(reader.GetOrdinal("monthtrigger")).Split(",");
+                                    if (!arraySplit.Contains(thisMonth))
+                                    {
+                                        resultList.Add(form);
+                                    }
                                 }
+                                else
+                                {
+                                    string[] arraySplit = reader.GetString(reader.GetOrdinal("monthtrigger")).Split(",");
+                                    if (arraySplit.Contains(thisMonth))
+                                    {
+                                        resultList.Add(form);
+                                    }
+                                }
+                                
                             }
                         }
                         return resultList;
