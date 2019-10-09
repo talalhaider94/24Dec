@@ -44,7 +44,8 @@ export class BSIReportComponent implements OnInit {
     loading: boolean = true;
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
-    ReportDetailsData: any = [];
+  ReportDetailsData: any = [];
+  barChartWidgetParameters = false;
 
     constructor(
         private apiService: ApiService,
