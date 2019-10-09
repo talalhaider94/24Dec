@@ -1,5 +1,5 @@
 <app-header [fixed]="true" [navbarBrandFull]="{src: 'assets/img/brand/logo.jpg',  alt: 'KPI Management'}"
-  [navbarBrandMinimized]="{src: 'assets/img/brand/logo.jpg', alt: 'KPI Management'}" [sidebarToggler]="'lg'"
+  [navbarBrandMinimized]="" [sidebarToggler]="'lg'"
   [asideMenuToggler]="'lg'">
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
@@ -41,10 +41,10 @@
     </li>
   </ul>
 </app-header>
-<div class="app-body">
-  <app-sidebar [fixed]="true" [display]="'lg'">
+<div class="app-body" >
+  <app-sidebar [fixed]="true" [display]="'lg'" [minimized]="true" >
     <!-- Danial: navItems are coming from _nav.ts  -->
-    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized" ></app-sidebar-nav>
     <!-- <span style="padding-left: 15px; color:#bbb"> v{{currentVerion}} </span> -->
     <app-sidebar-minimizer></app-sidebar-minimizer>
   </app-sidebar>
@@ -52,8 +52,8 @@
   <main class="main">
     <!-- Breadcrumb -->
     <!-- breaking change 'cui-breadcrumb' -->
-    <cui-breadcrumb>
-      <li class="breadcrumb-menu d-md-down-none">
+    <cui-breadcrumb id="disableBreadcrumb">
+      <li class="breadcrumb-menu d-md-down-none" >
         <span class="text-gray"><i class="icon-graph"></i> v{{currentVerion}}</span>
       </li>
     </cui-breadcrumb>
