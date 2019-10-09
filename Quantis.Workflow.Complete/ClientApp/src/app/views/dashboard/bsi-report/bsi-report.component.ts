@@ -4,6 +4,9 @@ import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
 
 declare var $;
 var $this;
@@ -45,6 +48,51 @@ export class BSIReportComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
     ReportDetailsData: any = [];
+    chartUpdateFlag: boolean = true;
+    highcharts = Highcharts;
+    chartOptions = {
+        lang: {
+            downloadJPEG: 'Download JPEG image',
+            downloadPDF: 'Download PDF document',
+            downloadPNG: 'Download PNG image',
+            downloadSVG: 'Download SVG vector image',
+            viewFullscreen: 'View Full Screen',
+            printChart: 'Print Chart'
+        },
+        credits: false,
+        title: {
+            text: 'BSI Report'
+        },
+        xAxis: {
+            type: 'date',
+            categories: []
+            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+        },
+        yAxis: {
+            title: {
+                text: 'Percent'
+            }
+        },
+        series: [
+            // {
+            //     type: 'column',
+            //     name: 'Values',
+            //     data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+            //     color: 'black'
+            // },
+            // {
+            //     type: 'scatter',
+            //     name: 'Target',
+            //     data: [2, 2, 2, 2, 2],
+            //     marker: {
+            //         fillColor: 'orange'
+            //     }
+            // }
+        ],
+        exporting: {
+            enabled: true
+        },
+    };
 
     constructor(
         private apiService: ApiService,
@@ -91,10 +139,57 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
             this.bsiChartModal.show();
-            this.ReportDetailsData = data;
-            debugger
+            this.ReportDetailsData = data.reports[0];
+            this.showHighChartsData(data);
             console.log('ReportDetailsData -> ', data);
+        }, error => {
+            console.error('getReportDetails', error);
+            this.loading = false;
+            this.$toastr.error('Error while fetching report data');
         });
     }
+
+    showHighChartsData(data) {
+        debugger
+        const chartArray = data.reports[0].data;
+        // Danial TODO: improve code later by modifying all data in a single loop 
+        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
+        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
+        let targetData = chartArray.filter(data => data.zvalue === 'Target');
+
+        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allViolationData = violationData.map(data => data.yvalue);
+        let allCompliantData = compliantData.map(data => data.yvalue);
+        let allTargetData = targetData.map(data => data.yvalue);
+        this.chartOptions.xAxis = {
+            type: 'date',
+            categories: allChartLabels,
+        }
+        this.chartOptions.yAxis.title = {
+            text: data.reports[0].units
+        }
+        this.chartOptions.series[0] = {
+            type: 'column',
+            name: 'Violation',
+            data: allViolationData,
+            color: '#f86c6b'
+        };
+        this.chartOptions.series[1] = {
+            type: 'column',
+            name: 'Compliant',
+            color: '#379457',
+            data: allCompliantData,
+        };
+        this.chartOptions.series[2] = {
+            type: 'scatter',
+            name: 'Target',
+            data: allTargetData,
+            marker: {
+                fillColor: '#ffc107'
+            }
+        };
+        this.chartUpdateFlag = true;
+    }
+
 
 }

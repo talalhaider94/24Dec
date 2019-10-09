@@ -24,7 +24,7 @@
         <td>{{row.reporttype}}</td>
         <td>{{row.modifieddate}}</td>
         <td>
-          <a class="btn btn-primary btn-sm " (click)="getReportDetails(row.itemid)">
+          <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
             <i class="fa fa-eye"></i>
           </a>
         </td>
@@ -33,12 +33,42 @@
   </table>
 </div>
 <!-- modal start -->
-<div bsModal #bsiChartModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div bsModal #bsiChartModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-body" *ngIf="barChartWidgetParameters">
-        <h2>MODAL</h2>
+      <div class="modal-header">
+        <h5 class="modal-title">{{ReportDetailsData.name}}</h5>
+        <button type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive" *ngIf="ReportDetailsData">
+          <table class="table table-bordered freeFormReportTable font-12">
+            <thead>
+              <tr>
+                <th>Contract Party</th>
+                <th>Contract</th>
+                <th>Rule</th>
+                <th>Data Granularity</th>
+                <th>Calculation Status Last Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ ReportDetailsData.contractparty }} </td>
+                <td>{{ ReportDetailsData.contract }} </td>
+                <td>{{ ReportDetailsData.rule }} </td>
+                <td>{{ ReportDetailsData.datagranularity }} </td>
+                <td>{{ ReportDetailsData.calculationstatuslastdate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
+          [oneToOne]="true" style="width: 100%; display: block;">
+        </highcharts-chart>
       </div>
     </div>
   </div>
