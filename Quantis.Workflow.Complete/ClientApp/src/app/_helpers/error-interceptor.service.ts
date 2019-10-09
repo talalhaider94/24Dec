@@ -20,12 +20,12 @@ export class ErrorInterceptorService implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       console.log('Error Interceptor', err);
-      if (err.status === 401) {
-        // auto logout if 401 response returned from api
-        this.authService.logout();
-        this.router.navigate(['/login']);
-        this.toastr.error('Sessione Scaduta', 'Effettuare nuovamente il login');
-      }
+      // if (err.status === 401) {
+      //   // auto logout if 401 response returned from api
+      //   this.authService.logout();
+      //   this.router.navigate(['/login']);
+      //   this.toastr.error('Sessione Scaduta', 'Effettuare nuovamente il login');
+      // }
       if (err.status === 403) {
         return throwError(err.error);
       }
