@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Spi;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +22,7 @@ namespace Quantis.WorkFlow.Jobs
             _jobSchedules = jobSchedules;
             _jobFactory = jobFactory;
         }
+
         public IScheduler Scheduler { get; set; }
 
         public async Task StartAsync(CancellationToken cancellationToken)

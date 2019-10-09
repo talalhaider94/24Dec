@@ -1,9 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.DTOs.API;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
@@ -32,7 +29,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             if (e.id == 0)
             {
                 e.ca_bsi_user_id = o.ca_bsi_user_id;
-            }            
+            }
             e.name = o.name;
             e.surname = o.surname;
             e.organization = o.organization;

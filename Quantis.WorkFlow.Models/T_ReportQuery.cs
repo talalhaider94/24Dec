@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -14,10 +13,13 @@ namespace Quantis.WorkFlow.Models
         public string query_text { get; set; }
         public int owner_id { get; set; }
         public DateTime created_on { get; set; }
+
         [ForeignKey("owner_id")]
         public virtual T_User Owner { get; set; }
+
         public virtual List<T_ReportQueryParameter> Parameters { get; set; }
     }
+
     public class T_ReportQuery_Configuration : IEntityTypeConfiguration<T_ReportQuery>
     {
         public void Configure(EntityTypeBuilder<T_ReportQuery> builder)

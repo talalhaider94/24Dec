@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.Dashboard
+﻿namespace Quantis.WorkFlow.Services.DTOs.Dashboard
 {
-    public class DashboardWidgetDTO: DashboardWidgetBaseDTO
+    public class DashboardWidgetDTO : DashboardWidgetBaseDTO
     {
         public int WidgetId { get; set; }
         public int DashboardId { get; set; }

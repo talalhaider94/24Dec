@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Quantis.WorkFlow.APIBase.Framework
@@ -44,7 +43,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
-
                         config = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ReadAsStringAsync().Result);
                     }
                     else
@@ -52,7 +50,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
                         var e = new Exception(string.Format("Connection to retrieve Orcle credentials cannot be created: basePath: {0} apipath: {1}", basePath, apiPath));
                         throw e;
                     }
-
                 }
                 string finalconfig = string.Format(oracleconf.value, config["datasource"], config["username"], config["password"]);
                 //string finalconfig = string.Format(oracleconf.value, "oblicore", "oblicore", "oblicore");
@@ -62,9 +59,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
             {
                 throw e;
             }
-
-
-
         }
 
         public static string GetOracleGlobalRuleInQuery(string variable, List<int> kpis)
@@ -75,12 +69,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
             int currentindex = kpis.Count;
             while (currentindex > 0)
             {
-                var currentkpis=kpis.Skip(counter * range).Take(range);
+                var currentkpis = kpis.Skip(counter * range).Take(range);
                 queries.Add(string.Format(" {0} in ({1})", variable, string.Join(',', currentkpis)));
                 currentindex = currentindex - range;
                 counter++;
             }
-            var result= string.Format("( {0} )", string.Join(" OR ", queries));
+            var result = string.Format("( {0} )", string.Join(" OR ", queries));
             return result;
         }
     }

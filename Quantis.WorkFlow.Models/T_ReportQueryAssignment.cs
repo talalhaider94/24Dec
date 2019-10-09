@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -12,11 +9,14 @@ namespace Quantis.WorkFlow.Models
         public int id { get; set; }
         public int query_id { get; set; }
         public int user_id { get; set; }
+
         [ForeignKey("query_id")]
         public virtual T_ReportQuery Query { get; set; }
+
         [ForeignKey("user_id")]
         public virtual T_User User { get; set; }
     }
+
     public class T_ReportQueryAssignment_Configuration : IEntityTypeConfiguration<T_ReportQueryAssignment>
     {
         public void Configure(EntityTypeBuilder<T_ReportQueryAssignment> builder)

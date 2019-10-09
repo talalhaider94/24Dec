@@ -1,35 +1,32 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Npgsql;
+using Oracle.ManagedDataAccess.Client;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
+using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Xml.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using System.Net;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using System.Web;
-using Quantis.WorkFlow.Services.DTOs.Information;
-using Oracle.ManagedDataAccess.Client;
+using System.Xml.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    public class DataService:IDataService
+    public class DataService : IDataService
     {
-
         private readonly IMappingService<GroupDTO, T_Group> _groupMapper;
         private readonly IMappingService<PageDTO, T_Page> _pageMapper;
         private readonly IMappingService<WidgetDTO, T_Widget> _widgetMapper;
@@ -37,7 +34,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<FormRuleDTO, T_FormRule> _formRuleMapper;
         private readonly IMappingService<FormUsersDTO, T_FormUsers> _formUsersMapper;
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
-        private readonly IMappingService<ApiDetailsDTO,T_APIDetail> _apiMapper;
+        private readonly IMappingService<ApiDetailsDTO, T_APIDetail> _apiMapper;
         private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;
         private readonly IOracleDataService _oracleAPI;
         private readonly IConfiguration _configuration;
@@ -48,7 +45,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private IMemoryCache _cache;
 
         public DataService(WorkFlowPostgreSqlContext context,
-            IMappingService<GroupDTO, T_Group> groupMapper, 
+            IMappingService<GroupDTO, T_Group> groupMapper,
             IMappingService<PageDTO, T_Page> pageMapper,
             IMappingService<FormUsersDTO, T_FormUsers> formUsersMapper,
             IMappingService<WidgetDTO, T_Widget> widgetMapper,
@@ -83,22 +80,24 @@ namespace Quantis.WorkFlow.APIBase.API
                 _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
             }
         }
+
         public bool CronJobsScheduler()
         {
             return true;
-
         }
-        public List<KeyValuePair<int,string>> GetAllCustomersKP()
+
+        public List<KeyValuePair<int, string>> GetAllCustomersKP()
         {
             try
             {
-                return _dbcontext.Customers.Where(o=>o.customer_id>=1000).OrderBy(p=>p.customer_name).Select(o => new KeyValuePair<int, string>(o.customer_id, o.customer_name)).ToList();
+                return _dbcontext.Customers.Where(o => o.customer_id >= 1000).OrderBy(p => p.customer_name).Select(o => new KeyValuePair<int, string>(o.customer_id, o.customer_name)).ToList();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public bool AddUpdateFormRule(FormRuleDTO dto)
         {
             try
@@ -109,7 +108,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     entity = new T_FormRule();
                     entity = _formRuleMapper.GetEntity(dto, entity);
                     _dbcontext.FormRules.Add(entity);
-
                 }
                 else
                 {
@@ -124,56 +122,56 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<FormDetialsDTO> GetFormDetials(List<int> formids)
         {
             try
             {
-                return _dbcontext.Forms.Include(p => p.Attachments).Include(q=>q.FormLogs).Where(o => formids.Contains(o.form_id)).Select(o => new FormDetialsDTO() {form_id=o.form_id,attachment_count=o.Attachments.Count,latest_modified_date=o.FormLogs.Any()?o.FormLogs.Max(r=>r.time_stamp):new DateTime(0) }).ToList();
+                return _dbcontext.Forms.Include(p => p.Attachments).Include(q => q.FormLogs).Where(o => formids.Contains(o.form_id)).Select(o => new FormDetialsDTO() { form_id = o.form_id, attachment_count = o.Attachments.Count, latest_modified_date = o.FormLogs.Any() ? o.FormLogs.Max(r => r.time_stamp) : new DateTime(0) }).ToList();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
- /*       public List<int> GetRawIdsFromRulePeriod(int ruleId,string period)
-        {
 
-            try
-            {
-                var config = new List<KPIRegistrationDTO>();
-                using (var client = new HttpClient())
-                {
-                    var con = GetBSIServerURL();
-                    var apiPath = "api/KPIRegistration/GetKPIRegistrations?ruleId="+ ruleId;
-                    var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
-                    client.BaseAddress = new Uri(output.Item1);
-                    var response = client.GetAsync(output.Item2).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
+        /*       public List<int> GetRawIdsFromRulePeriod(int ruleId,string period)
+               {
+                   try
+                   {
+                       var config = new List<KPIRegistrationDTO>();
+                       using (var client = new HttpClient())
+                       {
+                           var con = GetBSIServerURL();
+                           var apiPath = "api/KPIRegistration/GetKPIRegistrations?ruleId="+ ruleId;
+                           var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
+                           client.BaseAddress = new Uri(output.Item1);
+                           var response = client.GetAsync(output.Item2).Result;
+                           if (response.IsSuccessStatusCode)
+                           {
+                               config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
+                               var eventResource = config.Select(o => new EventResourceDTO()
+                               {
+                                   EventId = o.EventTypeId,
+                                   ResourceId = o.ResourceId
+                               }).ToList();
 
-                        config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
-                        var eventResource = config.Select(o => new EventResourceDTO()
-                        {
-                            EventId = o.EventTypeId,
-                            ResourceId = o.ResourceId
-                        }).ToList();
-                        
-                        var rawIds = GetRawIdsFromResource(eventResource, period);
-                        return rawIds;
-                    }
-                    else
-                    {
-                        var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
-                        throw e;
-                    }
+                               var rawIds = GetRawIdsFromResource(eventResource, period);
+                               return rawIds;
+                           }
+                           else
+                           {
+                               var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
+                               throw e;
+                           }
+                       }
+                   }
+                   catch(Exception e)
+                   {
+                       throw e;
+                   }
+               }*/
 
-                }
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-        }*/
         public List<EventResourceDTO> GetEventResourceFromRule(int ruleId)
         {
             try
@@ -188,7 +186,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
-
                         config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
                         var eventResource = config.Select(o => new EventResourceDTO()
                         {
@@ -205,7 +202,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
                         throw e;
                     }
-
                 }
             }
             catch (Exception e)
@@ -213,19 +209,21 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<NotifierLogDTO> GetEmailHistory()
         {
             try
             {
                 var entity = _dbcontext.NotifierLogs.ToList();
-                return entity.Select(o => new NotifierLogDTO() {
-                    email_body=o.email_body,
-                    id_form=o.id_form,
-                    is_ack=o.is_ack,
-                    notify_timestamp=o.notify_timestamp,
-                    period=o.period,
-                    remind_timestamp=o.remind_timestamp,
-                    year=o.year
+                return entity.Select(o => new NotifierLogDTO()
+                {
+                    email_body = o.email_body,
+                    id_form = o.id_form,
+                    is_ack = o.is_ack,
+                    notify_timestamp = o.notify_timestamp,
+                    period = o.period,
+                    remind_timestamp = o.remind_timestamp,
+                    year = o.year
                 }).ToList();
             }
             catch (Exception e)
@@ -233,6 +231,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public FormRuleDTO GetFormRuleByKPIID(string kpiId)
         {
             try
@@ -244,6 +243,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public bool AddUpdateGroup(GroupDTO dto)
         {
             try
@@ -258,14 +258,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     _dbcontext.Groups.Add(entity);
                 }
-                
+
                 _dbcontext.SaveChanges();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
-            }            
+            }
         }
 
         public bool AddUpdatePage(PageDTO dto)
@@ -282,7 +282,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     _dbcontext.Pages.Add(entity);
                 }
-                
+
                 _dbcontext.SaveChanges();
                 return true;
             }
@@ -296,19 +296,19 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr=_dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account == name);
+                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account == name);
                 if (usr != null)
                 {
                     return usr.userid;
                 }
                 return null;
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public bool AddUpdateUser(UserDTO dto)
         {
             using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
@@ -343,7 +343,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw e;
                 }
             }
-            
         }
 
         public bool AddUpdateWidget(WidgetDTO dto)
@@ -357,7 +356,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 entity = _widgetMapper.GetEntity(dto, entity);
                 if (dto.widget_id == 0)
-                {               
+                {
                     _dbcontext.Widgets.Add(entity);
                 }
                 _dbcontext.SaveChanges();
@@ -403,8 +402,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw e;
                 }
             }
-
         }
+
         public List<GroupDTO> GetAllGroups()
         {
             try
@@ -412,11 +411,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 var groups = _dbcontext.Groups.Where(o => o.delete_date != null);
                 return _groupMapper.GetDTOs(groups.ToList());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
-            
         }
 
         public List<ApiDetailsDTO> GetAllAPIs()
@@ -430,21 +428,21 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<CatalogKpiDTO> GetAllKpis()
         {
             try
             {
-                var kpis = _dbcontext.CatalogKpi.Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).Include(o => o.GlobalRule).Include(o => o.Sla).ToList();
+                var kpis = _dbcontext.CatalogKpi.Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).Include(o => o.GlobalRule).Include(o => o.Sla).ToList();
                 return _catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
+
         public List<CatalogKpiDTO> GetAllKpisByUserId(List<int> globalruleIds)
         {
             try
@@ -460,8 +458,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<PageDTO> GetAllPages()
         {
             try
@@ -473,8 +471,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
+
         public PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter)
         {
             try
@@ -489,52 +487,52 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<UserDTO> GetAllUsers()
         {
             try
             {
-                var users = _dbcontext.CatalogUsers.Where(o=>o.ca_bsi_user_id != null).ToList();
-                return _userMapper.GetDTOs(users.ToList());                
+                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null).ToList();
+                return _userMapper.GetDTOs(users.ToList());
             }
             catch (Exception e)
             {
                 throw e;
             }
-            
         }
+
         public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
         {
             try
             {
                 var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null).ToList();
-                var userDtos= _userMapper.GetDTOs(users.ToList());
-                var landingpages=_dbcontext.UserLandingPages.ToList();
+                var userDtos = _userMapper.GetDTOs(users.ToList());
+                var landingpages = _dbcontext.UserLandingPages.ToList();
                 return (from usrs in userDtos
-                join landpages in landingpages on usrs.ca_bsi_user_id equals landpages.user_id
-                into gj
-                from subset in gj.DefaultIfEmpty()
-                select new UserLandingPageLVDTO()
-                {
-                    ca_bsi_account = usrs.ca_bsi_account,
-                    ca_bsi_user_id = usrs.ca_bsi_user_id,
-                    id = usrs.id,
-                    mail = usrs.mail,
-                    manager = usrs.manager,
-                    name = usrs.name,
-                    organization = usrs.organization,
-                    surname = usrs.surname,
-                    userid = usrs.userid,
-                    show_landingpage = subset == null ? false : subset.show_landingpage
-                }).ToList();
-
+                        join landpages in landingpages on usrs.ca_bsi_user_id equals landpages.user_id
+                        into gj
+                        from subset in gj.DefaultIfEmpty()
+                        select new UserLandingPageLVDTO()
+                        {
+                            ca_bsi_account = usrs.ca_bsi_account,
+                            ca_bsi_user_id = usrs.ca_bsi_user_id,
+                            id = usrs.id,
+                            mail = usrs.mail,
+                            manager = usrs.manager,
+                            name = usrs.name,
+                            organization = usrs.organization,
+                            surname = usrs.surname,
+                            userid = usrs.userid,
+                            show_landingpage = subset == null ? false : subset.show_landingpage
+                        }).ToList();
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
-        public void SetLandingPageByUser(int userId,bool set)
+
+        public void SetLandingPageByUser(int userId, bool set)
         {
             try
             {
@@ -565,6 +563,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public UserLandingPageDTO GetLandingPageInformation(int userId)
         {
             try
@@ -587,22 +586,23 @@ namespace Quantis.WorkFlow.APIBase.API
                         ShowLandingPage = lp.show_landingpage,
                         SelectedLandingPage = lp.selected_landingpage
                     };
-                }                
+                }
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void SelectLandingPage(int userId)
         {
             try
             {
-                var lp=_dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                var lp = _dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
                 lp.selected_landingpage = true;
                 _dbcontext.SaveChanges();
-                var dashboards=_dbcontext.DB_Dashboards.Where(o => o.UserId == userId);
-                foreach(var db in dashboards)
+                var dashboards = _dbcontext.DB_Dashboards.Where(o => o.UserId == userId);
+                foreach (var db in dashboards)
                 {
                     db.IsDefault = false;
                 }
@@ -613,11 +613,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<UserDTO> GetUsersByRoleId(int roleId)
         {
             try
             {
-                var usersids = _dbcontext.UserRoles.Where(o=>o.role_id==roleId).Select(p=>p.user_id).ToList();
+                var usersids = _dbcontext.UserRoles.Where(o => o.role_id == roleId).Select(p => p.user_id).ToList();
                 var users = _dbcontext.CatalogUsers.Where(o => usersids.Contains(o.ca_bsi_user_id ?? 0));
                 return _userMapper.GetDTOs(users.ToList());
             }
@@ -632,6 +633,7 @@ namespace Quantis.WorkFlow.APIBase.API
             bool isSecurityMember = _dbcontext.SecurityMembers.Any(o => o.user_group_id == UserId);
             return isSecurityMember;
         }
+
         public KpisAssociated GetKpiAssociatedByFormId(int Id)
         {
             try
@@ -655,14 +657,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     Kpis_Associated = result
                 };
-
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<FormUsersDTO> GetAllFormUsers(int formId, int UserId)
         {
             try
@@ -671,7 +672,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 int todayDay = Int32.Parse(DateTime.Now.ToString("dd"));
                 int day_cutoff = Int32.Parse(day_cutoffValue.value);
                 bool cutoff_result;
-                if (day_cutoff == 0){ cutoff_result = false; }else{ if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }}
+                if (day_cutoff == 0) { cutoff_result = false; } else { if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; } }
 
                 var formUsers = new List<T_FormUsers>();
                 var formUser = new T_FormUsers();
@@ -714,7 +715,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         latest_input_date = isSecurityMember ? new DateTime(0) : _dbcontext.FormLogs.Any(p => p.id_form == o.form_id) ? _dbcontext.FormLogs.Where(q => q.id_form == o.form_id).Max(r => r.time_stamp) : new DateTime(0)
                     }).ToList();
                 }
-                if(formId > 0)
+                if (formId > 0)
                 {
                     formUser = _dbcontext.FormUsers.FirstOrDefault(o => o.form_id == formId);
                     var resultSingle = new FormUsersDTO()
@@ -741,8 +742,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
+
         public List<FormConfigurationDTO> GetFormConfiguration(string schema)
         {
             //var dto = new APIToWorkflowDTO() { input = schema };
@@ -753,7 +754,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     var bsiconf = _infomationAPI.GetConfiguration("be_bsi", "bsi_api_url");
                     var output = QuantisUtilities.FixHttpURLForCall(bsiconf.Value, "/home/APIToWorkflow");
                     client.BaseAddress = new Uri(output.Item1);
-                    var dataAsString = JsonConvert.SerializeObject(new { input = schema});
+                    var dataAsString = JsonConvert.SerializeObject(new { input = schema });
                     var content = new StringContent(dataAsString);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     var response = client.PostAsync(output.Item2, content).Result;
@@ -765,7 +766,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         XDocument xdoc = XDocument.Parse(xmlDecoded);
                         var lists = from uoslist in xdoc.Element("DataLoadingForms").Element("ControlsXml").Element("Xml").Element("Controls").Elements("Control") select uoslist;
                         //var labelList = new List<FormConfigurationDTO>();
-                        var labelList = lists.Where(o => o.Attribute("type").Value == "DLFLabel").Select(l => new {
+                        var labelList = lists.Where(o => o.Attribute("type").Value == "DLFLabel").Select(l => new
+                        {
                             a_id = l.Attribute("id").Value,
                             a_top = l.Attribute("top").Value,
                             a_left = l.Attribute("left").Value,
@@ -818,7 +820,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 name = f.name,
                                 a_type = f.a_type,
                                 defaultValue = f.defaultValue,
-
                             };
                             if (fields.a_type == "DLFCheckBox")
                             {
@@ -833,7 +834,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             ));
                             if (label != null)
                             {
-
                                 fields.text = label.text;
                                 labelList.Remove(label);
                             }
@@ -855,6 +855,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         private ReaderConfiguration GetFormAdapterConfiguration(string xml, List<FormConfigurationDTO> conf)
         {
             XDocument xdoc = XDocument.Parse(xml);
@@ -868,9 +869,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     name = l.Attribute("Name").Value,
                     type = l.Attribute("Type").Value,
                     source = l.Attribute("Source").Value,
-
                 });
-
             }
             foreach (var s in conf)
             {
@@ -881,7 +880,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         name = "Label",
                         type = "Label",
                         source = s.text
-
                     });
                 }
             }
@@ -904,31 +902,6 @@ namespace Quantis.WorkFlow.APIBase.API
             };
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public List<WidgetDTO> GetAllWidgets()
         {
             try
@@ -940,7 +913,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public bool RemoveAttachment(int id)
@@ -975,7 +947,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public CatalogKpiDTO GetKpiById(int Id)
@@ -989,7 +960,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public GroupDTO GetGroupById(int Id)
@@ -1003,7 +973,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
 
         public PageDTO GetPageById(int Id)
@@ -1017,7 +986,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
 
         public UserDTO GetUserById(string UserId)
@@ -1031,7 +999,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
 
         public List<KPIOnlyContractDTO> GetKpiByFormId(int Id)
@@ -1039,7 +1006,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var kpi = _dbcontext.Forms.Include(o => o.CatalogKPIs).FirstOrDefault(o => o.form_id == Id);
-                if (kpi== null && kpi.CatalogKPIs.Any())
+                if (kpi == null && kpi.CatalogKPIs.Any())
                 {
                     return null;
                 }
@@ -1051,8 +1018,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     kpi_name_bsi = o.kpi_name_bsi,
                     target = o.target
                 }).ToList();
-                
-
             }
             catch (Exception e)
             {
@@ -1071,26 +1036,26 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-            
         }
+
         public List<FormLVDTO> GetAllForms()
         {
             try
             {
-                var forms = _dbcontext.Forms.Include(o=>o.FormLogs).Include(o=>o.Rules).OrderBy(o => o.form_name).ToList();
-                var daycutoff= _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
+                var forms = _dbcontext.Forms.Include(o => o.FormLogs).Include(o => o.Rules).OrderBy(o => o.form_name).ToList();
+                var daycutoff = _infomationAPI.GetConfiguration("be_restserver", "day_cutoff");
                 return forms.Select(o => new FormLVDTO()
                 {
-                    create_date=o.create_date,
-                    form_description=o.form_description,
-                    form_id=o.form_id,
-                    form_name=o.form_name,
-                    form_owner_id=o.form_owner_id,
-                    modify_date=o.modify_date,
-                    reader_id=o.reader_id,
-                    rules_count=o.Rules.Count,
-                    latest_input_date=o.FormLogs.Any()?o.FormLogs.Max(p=>p.time_stamp):new DateTime(0),
-                    day_cuttoff= (daycutoff==null)?null:daycutoff.Value
+                    create_date = o.create_date,
+                    form_description = o.form_description,
+                    form_id = o.form_id,
+                    form_name = o.form_name,
+                    form_owner_id = o.form_owner_id,
+                    modify_date = o.modify_date,
+                    reader_id = o.reader_id,
+                    rules_count = o.Rules.Count,
+                    latest_input_date = o.FormLogs.Any() ? o.FormLogs.Max(p => p.time_stamp) : new DateTime(0),
+                    day_cuttoff = (daycutoff == null) ? null : daycutoff.Value
                 }).ToList();
             }
             catch (Exception e)
@@ -1115,7 +1080,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         user_id = dto.user_id,
                         year = dto.year
                     };
-                    var form=_dbcontext.Forms.FirstOrDefault(o => o.form_id == dto.form_id);
+                    var form = _dbcontext.Forms.FirstOrDefault(o => o.form_id == dto.form_id);
                     if (form != null)
                     {
                         form.modify_date = DateTime.Now;
@@ -1142,7 +1107,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.NotifierLogs.Add(notifier_log);
                         _dbcontext.SaveChanges(false);
                     }
-                    if(CallFormAdapter(new FormAdapterDTO() { formID = dto.form_id, localID = dto.locale_id, forms = dto.inputs }))
+                    if (CallFormAdapter(new FormAdapterDTO() { formID = dto.form_id, localID = dto.locale_id, forms = dto.inputs }))
                     {
                         dbContextTransaction.Commit();
                         return true;
@@ -1160,22 +1125,23 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             };
         }
+
         public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
         {
             try
             {
-                var ents=_dbcontext.FormAttachments.Where(o => o.form_id == formId);
+                var ents = _dbcontext.FormAttachments.Where(o => o.form_id == formId);
                 var dtos = _fromAttachmentMapper.GetDTOs(ents.ToList());
-                return dtos.OrderByDescending(o=>o.create_date).ToList();
+                return dtos.OrderByDescending(o => o.create_date).ToList();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public bool SubmitAttachment(List<FormAttachmentDTO> dto)
         {
-
             try
             {
                 List<T_FormAttachment> attachments = new List<T_FormAttachment>();
@@ -1204,24 +1170,23 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
-        
-        public LoginResultDTO Login(string username,string password)
+
+        public LoginResultDTO Login(string username, string password)
         {
             try
             {
-                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account.ToLower()==username.ToLower());
+                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account.ToLower() == username.ToLower());
                 if (usr != null)
                 {
-                    var secret_key = _infomationAPI.GetConfiguration("be_restserver","secret_key");
-                    
+                    var secret_key = _infomationAPI.GetConfiguration("be_restserver", "secret_key");
+
                     var db_password = sha256_hash(secret_key.Value + usr.password);
                     if (password == db_password)
                     {
                         var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
                         //var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
-                        var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id && u.user_status == "ACTIVE" );
+                        var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id && u.user_status == "ACTIVE");
                         if (res != null)
                         {
                             _dbcontext.Sessions.Add(new T_Session()
@@ -1234,11 +1199,11 @@ namespace Quantis.WorkFlow.APIBase.API
                                 expire_time = DateTime.Now.AddMinutes(getSessionTimeOut())
                             });
                             _dbcontext.SaveChanges();
-                            _cache.Remove("Permission_"+res.user_id);
-                            var permissions=_infomationAPI.GetPermissionsByUserId(res.user_id).Select(o => o.Code).ToList();
-                            _cache.GetOrCreate("Permission_"+res.user_id, entry => permissions);
+                            _cache.Remove("Permission_" + res.user_id);
+                            var permissions = _infomationAPI.GetPermissionsByUserId(res.user_id).Select(o => o.Code).ToList();
+                            _cache.GetOrCreate("Permission_" + res.user_id, entry => permissions);
                             var dash = _dbcontext.DB_Dashboards.FirstOrDefault(o => o.UserId == res.user_id && o.IsDefault);
-                  
+
                             return new LoginResultDTO()
                             {
                                 Token = token,
@@ -1247,9 +1212,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 UserEmail = usr.mail,
                                 UserName = usr.ca_bsi_account,
                                 Permissions = permissions,
-                                DefaultDashboardId = dash == null ? -1 : dash.Id
+                                DefaultDashboardId = dash == null ? -1 : dash.Id,
+                                UIVersion = _configuration["UIVersion"],
                             };
-                            
                         }
                     }
                 }
@@ -1265,7 +1230,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var sesison=_dbcontext.Sessions.Single(o => o.session_token == token);
+                var sesison = _dbcontext.Sessions.Single(o => o.session_token == token);
                 sesison.login_time = DateTime.Now;
                 _dbcontext.SaveChanges();
             }
@@ -1324,7 +1289,7 @@ namespace Quantis.WorkFlow.APIBase.API
             catch (Exception e)
             {
                 throw e;
-            }     
+            }
         }
 
         public bool AddArchiveRawData(int global_rule_id, string period, string tracking_period)
@@ -1345,7 +1310,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             rule_id = (reader.IsDBNull(reader.GetOrdinal("rule_id")) ? 0 : reader.GetInt32(reader.GetOrdinal("rule_id")));
                         }
-                        if(rule_id == 0) { return false;  } // EXIT IF NO RULE_ID
+                        if (rule_id == 0) { return false; } // EXIT IF NO RULE_ID
 
                         List<EventResourceDTO> eventResource = GetEventResourceFromRule(rule_id);
                         string completewhereStatement = "";
@@ -1364,36 +1329,41 @@ namespace Quantis.WorkFlow.APIBase.API
                         if (eventResource.Any())
                         {
                             completewhereStatement = string.Format(" AND ({0})", string.Join(" OR ", whereStatements));
-                        }else{ return false; } //EXIT IF NO eventResource
+                        }
+                        else { return false; } //EXIT IF NO eventResource
                         List<string> periods = new List<string>();
                         string month = period.Split('/').First();
-                        string year = "20"+period.Split('/').Last();
+                        string year = "20" + period.Split('/').Last();
                         switch (tracking_period)
                         {
                             case "TRIMESTRALE":
-                                if (month == "03"){ periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); }
-                                if (month == "06"){ periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
-                                if (month == "09"){ periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); }
-                                if (month == "12"){ periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
+                                if (month == "03") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); }
+                                if (month == "06") { periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
+                                if (month == "09") { periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); }
+                                if (month == "12") { periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "QUADRIMESTRALE":
                                 if (month == "04") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); }
                                 if (month == "08") { periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); }
                                 if (month == "12") { periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "SEMESTRALE":
                                 if (month == "06") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
                                 if (month == "12") { periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "ANNUALE":
                                 if (month == "12") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             default:
                                 periods.Add(year + "_" + month);
                                 break;
                         }
 
-                        foreach(var tmp_period in periods)
+                        foreach (var tmp_period in periods)
                         {
                             using (var conOrig = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                             {
@@ -1414,6 +1384,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AddArchiveKPI(ARulesDTO dto)
         {
             try
@@ -1451,7 +1422,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                if(fakeUserID > 0) { UserID = fakeUserID; isSecurityMember = false; }
+                if (fakeUserID > 0) { UserID = fakeUserID; isSecurityMember = false; }
 
                 var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
                 int todayDay = Int32.Parse(DateTime.Now.ToString("dd"));
@@ -1502,26 +1473,25 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         while (reader.Read())
                         {
-                            
-                                FormsFromCatalogDTO form = new FormsFromCatalogDTO();
-                                form.id = 0;
-                                form.form_id = reader.GetInt32(reader.GetOrdinal("form_id"));
-                                form.form_name = reader.GetString(reader.GetOrdinal("form_name"));
-                                form.form_owner_id = reader.GetInt32(reader.GetOrdinal("form_owner_id"));
-                                form.form_description = reader.IsDBNull(reader.GetOrdinal("form_description")) ? null : reader.GetString(reader.GetOrdinal("form_description"));
-                                form.AttachmentsCount = reader.IsDBNull(reader.GetOrdinal("attachments_count")) ? 0 : reader.GetInt32(reader.GetOrdinal("attachments_count"));
-                                form.latest_input_date = reader.IsDBNull(reader.GetOrdinal("latest_modified_date")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("latest_modified_date"));
+                            FormsFromCatalogDTO form = new FormsFromCatalogDTO();
+                            form.id = 0;
+                            form.form_id = reader.GetInt32(reader.GetOrdinal("form_id"));
+                            form.form_name = reader.GetString(reader.GetOrdinal("form_name"));
+                            form.form_owner_id = reader.GetInt32(reader.GetOrdinal("form_owner_id"));
+                            form.form_description = reader.IsDBNull(reader.GetOrdinal("form_description")) ? null : reader.GetString(reader.GetOrdinal("form_description"));
+                            form.AttachmentsCount = reader.IsDBNull(reader.GetOrdinal("attachments_count")) ? 0 : reader.GetInt32(reader.GetOrdinal("attachments_count"));
+                            form.latest_input_date = reader.IsDBNull(reader.GetOrdinal("latest_modified_date")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("latest_modified_date"));
 
-                                form.user_group_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
-                                form.user_group_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
-                                form.day_cutoff = day_cutoff;
-                                form.cutoff = cutoff_result;
-                                form.global_rule_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("global_rule_name"));
-                                form.referent = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("referent")) ? null : reader.GetString(reader.GetOrdinal("referent"));
-                                form.monthtrigger = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("monthtrigger")) ? null : reader.GetString(reader.GetOrdinal("monthtrigger"));
-                                form.sla_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("sla_name"));
-                                form.global_rule_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("global_rule_id"));
-                                form.tracking_period = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("tracking_period")) ? null : reader.GetString(reader.GetOrdinal("tracking_period"));
+                            form.user_group_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
+                            form.user_group_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
+                            form.day_cutoff = day_cutoff;
+                            form.cutoff = cutoff_result;
+                            form.global_rule_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("global_rule_name"));
+                            form.referent = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("referent")) ? null : reader.GetString(reader.GetOrdinal("referent"));
+                            form.monthtrigger = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("monthtrigger")) ? null : reader.GetString(reader.GetOrdinal("monthtrigger"));
+                            form.sla_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("sla_name"));
+                            form.global_rule_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("global_rule_id"));
+                            form.tracking_period = isSecurityMember ? null : reader.IsDBNull(reader.GetOrdinal("tracking_period")) ? null : reader.GetString(reader.GetOrdinal("tracking_period"));
 
                             if (isSecurityMember)
                             {
@@ -1545,6 +1515,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
         {
             try
@@ -1618,11 +1589,11 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi,List<int> globalruleIds)
+        public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi, List<int> globalruleIds)
         {
             try
             {
-                if (!globalruleIds.Any() || globalruleIds == null )
+                if (!globalruleIds.Any() || globalruleIds == null)
                 {
                     return new List<ARulesDTO>();
                 }
@@ -1634,19 +1605,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     var whereYear = " and (interval_kpi >=:interval_kpi and interval_kpi < (  :interval_kpi + interval '1 year') )";
                     var filterByKpiId = " and global_rule_id = :global_rule_id";
                     var sp = @"select * from a_rules where 1=1";
-                    if ( (month != null && month != "00") && (year != null))
+                    if ((month != null && month != "00") && (year != null))
                     {
                         sp += whereclause;
                     }
-                    if( (month == "00" || month == null) && (year != null))
+                    if ((month == "00" || month == null) && (year != null))
                     {
                         sp += whereYear;
                     }
-                    if (id_kpi != null )
+                    if (id_kpi != null)
                     {
                         sp += filterByKpiId;
                     }
-                    sp += " and global_rule_id in (" +string.Join(',',globalruleIds) + ")";
+                    sp += " and global_rule_id in (" + string.Join(',', globalruleIds) + ")";
                     sp += " order by close_timestamp_ticket desc";
                     var command = new NpgsqlCommand(sp, con);
 
@@ -1693,43 +1664,43 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public CreateTicketDTO GetKPICredentialToCreateTicket(int Id)
         {
             try
             {
-                var kpi = _dbcontext.CatalogKpi.Include(o=>o.GlobalRule).Include(o=>o.PrimaryCustomer).Include(o=>o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
+                var kpi = _dbcontext.CatalogKpi.Include(o => o.GlobalRule).Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
                 return new CreateTicketDTO()
                 {
-                    Description = GenerateDiscriptionFromKPI(kpi, (psl != null && psl.Any())?psl.FirstOrDefault().result.Contains("[Non Calcolato]")?"[Non Calcolato]":psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result:"[Non Calcolato]"),
+                    Description = GenerateDiscriptionFromKPI(kpi, (psl != null && psl.Any()) ? psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]" : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result : "[Non Calcolato]"),
                     ID_KPI = kpi.id_kpi,
-                    GroupCategoryId=kpi.primary_contract_party,
+                    GroupCategoryId = kpi.primary_contract_party,
                     Period = DateTime.Now.AddMonths(-1).ToString("MM/yy"),
                     Reference1 = kpi.referent_1,
                     Reference2 = kpi.referent_2,
                     Reference3 = kpi.referent_3,
-                    SecondaryContractParty=kpi.secondary_contract_party,
-                    Summary=kpi.id_kpi+"|"+kpi.GlobalRule.global_rule_name+"|"+kpi.contract+"|"+ contractPartyName,
+                    SecondaryContractParty = kpi.secondary_contract_party,
+                    Summary = kpi.id_kpi + "|" + kpi.GlobalRule.global_rule_name + "|" + kpi.contract + "|" + contractPartyName,
                     zz1_contractParties = kpi.primary_contract_party + "|" + (kpi.secondary_contract_party == null ? "" : kpi.secondary_contract_party.ToString()),
-                    zz2_calcValue= 
-                        (psl != null && psl.Any()) ? 
+                    zz2_calcValue =
+                        (psl != null && psl.Any()) ?
                         psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]"
                         : psl.FirstOrDefault().result.Contains("[Nessun Evento]") ? "[Nessun Evento]"
-                        : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result 
+                        : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result
                         :
                         "[Non Calcolato]",
-                    zz3_KpiIds=kpi.id+"|"+kpi.global_rule_id_bsi
+                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi
                 };
-
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
-        private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi,string calc)
+
+        private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi, string calc)
         {
             string skeleton = "INDICATORE: {0}\n" +
                 "DESCRIZIONE: {1}\n" +
@@ -1814,9 +1785,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         else { return list; } //EXIT IF NO eventResource
 
-
-
-                        
                         using (var con2 = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                         {
                             con2.Open();
@@ -1858,6 +1826,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
@@ -1869,34 +1838,34 @@ namespace Quantis.WorkFlow.APIBase.API
                     var tablename = "a_dt_de_" + year + "_" + month;
                     if (TableExists(tablename))
                     {
-                    var sp = @"select * from " + tablename + " WHERE global_rule_id = :global_rule_id order by modify_date desc";
-                    var command = new NpgsqlCommand(sp, con);
-                    command.Parameters.AddWithValue(":global_rule_id", Int32.Parse(id_kpi));
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
+                        var sp = @"select * from " + tablename + " WHERE global_rule_id = :global_rule_id order by modify_date desc";
+                        var command = new NpgsqlCommand(sp, con);
+                        command.Parameters.AddWithValue(":global_rule_id", Int32.Parse(id_kpi));
+                        using (var reader = command.ExecuteReader())
                         {
-                            ATDtDeDTO atdtde = new ATDtDeDTO();
-                            atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
-                            atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
-                            atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")));
-                            atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
-                            atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")));
-                            atdtde.data_source_id = (reader.IsDBNull(reader.GetOrdinal("data_source_id")) ? null : reader.GetString(reader.GetOrdinal("data_source_id")));
-                            atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
-                            atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")));
-                            atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
-                            atdtde.data = reader.GetString(reader.GetOrdinal("data"));
-                            atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
-                            atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                            atdtde.event_source_type_id = (reader.IsDBNull(reader.GetOrdinal("event_source_type_id")) ? null : reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString());
-                            atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
-                            atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
-                            atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
-                            atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
-                            list.Add(atdtde);
+                            while (reader.Read())
+                            {
+                                ATDtDeDTO atdtde = new ATDtDeDTO();
+                                atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
+                                atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
+                                atdtde.reader_time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("reader_time_stamp")));
+                                atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
+                                atdtde.time_stamp = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("time_stamp")));
+                                atdtde.data_source_id = (reader.IsDBNull(reader.GetOrdinal("data_source_id")) ? null : reader.GetString(reader.GetOrdinal("data_source_id")));
+                                atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
+                                atdtde.create_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("create_date")));
+                                atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                                atdtde.data = reader.GetString(reader.GetOrdinal("data"));
+                                atdtde.modify_date = Convert.ToDateTime(reader.GetDateTime(reader.GetOrdinal("modify_date")));
+                                atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                                atdtde.event_source_type_id = (reader.IsDBNull(reader.GetOrdinal("event_source_type_id")) ? null : reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString());
+                                atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
+                                atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
+                                atdtde.hash_data_key = (reader.IsDBNull(reader.GetOrdinal("hash_data_key")) ? null : reader.GetString(reader.GetOrdinal("hash_data_key")));
+                                atdtde.id_kpi = id_kpi;//reader.GetInt32(reader.GetOrdinal("id_kpi"));
+                                list.Add(atdtde);
+                            }
                         }
-                    }
                     }
                     return list;
                 }
@@ -1906,67 +1875,68 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
- /*       public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year) // NON USATA
-        {
-            try
-            {
-                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
-                {
-                    con.Open();
-                    List<ATDtDeDTO> list = new List<ATDtDeDTO>();
-                    var tablename = "a_t_dt_de_" + idkpi + "_" + year + "_" + month ;
 
-                    if( TableExists(tablename))
-                    {
-                        var sp = @"select * from " + tablename;
+        /*       public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year) // NON USATA
+               {
+                   try
+                   {
+                       using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
+                       {
+                           con.Open();
+                           List<ATDtDeDTO> list = new List<ATDtDeDTO>();
+                           var tablename = "a_t_dt_de_" + idkpi + "_" + year + "_" + month ;
 
-                        var command = new NpgsqlCommand(sp, con);
+                           if( TableExists(tablename))
+                           {
+                               var sp = @"select * from " + tablename;
 
-                        using (var reader = command.ExecuteReader())
-                        {
-                            
-                            while (reader.Read())
-                            {
-                                //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
-                                ATDtDeDTO atdtde = new ATDtDeDTO();
-                                atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
-                                atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
-                                atdtde.reader_time_stamp = reader.GetDateTime(reader.GetOrdinal("reader_time_stamp"));
-                                atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
-                                atdtde.time_stamp = reader.GetDateTime(reader.GetOrdinal("time_stamp"));
-                                atdtde.data_source_id = reader.GetString(reader.GetOrdinal("data_source_id"));
-                                atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
-                                atdtde.create_date = reader.GetDateTime(reader.GetOrdinal("create_date"));
-                                atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
-                                atdtde.data = reader.GetString(reader.GetOrdinal("data"));
-                                atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
-                                atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
-                                atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString();
-                                atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
-                                atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
-                                atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
-                                atdtde.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
+                               var command = new NpgsqlCommand(sp, con);
 
-                                list.Add(atdtde);
-                            }                     
-                        }
-                    }
+                               using (var reader = command.ExecuteReader())
+                               {
+                                   while (reader.Read())
+                                   {
+                                       //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
+                                       ATDtDeDTO atdtde = new ATDtDeDTO();
+                                       atdtde.created_by = reader.GetInt32(reader.GetOrdinal("created_by"));
+                                       atdtde.event_type_id = reader.GetInt32(reader.GetOrdinal("event_type_id"));
+                                       atdtde.reader_time_stamp = reader.GetDateTime(reader.GetOrdinal("reader_time_stamp"));
+                                       atdtde.resource_id = reader.GetInt32(reader.GetOrdinal("resource_id"));
+                                       atdtde.time_stamp = reader.GetDateTime(reader.GetOrdinal("time_stamp"));
+                                       atdtde.data_source_id = reader.GetString(reader.GetOrdinal("data_source_id"));
+                                       atdtde.raw_data_id = reader.GetInt32(reader.GetOrdinal("raw_data_id"));
+                                       atdtde.create_date = reader.GetDateTime(reader.GetOrdinal("create_date"));
+                                       atdtde.corrected_by = reader.GetInt32(reader.GetOrdinal("corrected_by"));
+                                       atdtde.data = reader.GetString(reader.GetOrdinal("data"));
+                                       atdtde.modify_date = reader.GetDateTime(reader.GetOrdinal("modify_date"));
+                                       atdtde.reader_id = reader.GetInt32(reader.GetOrdinal("reader_id"));
+                                       atdtde.event_source_type_id = reader.GetInt32(reader.GetOrdinal("event_source_type_id")).ToString();
+                                       atdtde.event_state_id = reader.GetInt32(reader.GetOrdinal("event_state_id"));
+                                       atdtde.partner_raw_data_id = reader.GetInt32(reader.GetOrdinal("partner_raw_data_id"));
+                                       atdtde.hash_data_key = reader.GetString(reader.GetOrdinal("hash_data_key"));
+                                       atdtde.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
 
-                    return list;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        } */
+                                       list.Add(atdtde);
+                                   }
+                               }
+                           }
+
+                           return list;
+                       }
+                   }
+                   catch (Exception e)
+                   {
+                       throw e;
+                   }
+               } */
+
         public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
         {
             try
             {
                 var kpi = _dbcontext.CatalogKpi.Single(o => o.id == kpiId);
-                var form= kpi.id_form;
-                if (form==null || form == 0)
+                var form = kpi.id_form;
+                if (form == null || form == 0)
                 {
                     return new List<FormAttachmentDTO>();
                 }
@@ -1975,44 +1945,44 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     if (kpi.month.Split(',').Count() == 12)
                     {
-                        attachments = attachments.Where(o =>o.create_date.Year==DateTime.Now.AddMonths(-1).Year && o.create_date.Month == DateTime.Now.AddMonths(-1).Month).ToList();
+                        attachments = attachments.Where(o => o.create_date.Year == DateTime.Now.AddMonths(-1).Year && o.create_date.Month == DateTime.Now.AddMonths(-1).Month).ToList();
                     }
                     else if (kpi.month.Split(',').Count() == 4)
                     {
                         attachments = attachments.Where(o => o.create_date.Year == DateTime.Now.AddMonths(-1).Year && o.create_date.Month <= DateTime.Now.AddMonths(-1).Month && o.create_date.Month >= DateTime.Now.AddMonths(-4).Month).ToList();
                     }
-                    else if(kpi.month.Split(',').Count() == 2)
+                    else if (kpi.month.Split(',').Count() == 2)
                     {
                         attachments = attachments.Where(o => o.create_date.Year == DateTime.Now.AddMonths(-1).Year && o.create_date.Month <= DateTime.Now.AddMonths(-1).Month && o.create_date.Month >= DateTime.Now.AddMonths(-7).Month).ToList();
                     }
                 }
-                return _fromAttachmentMapper.GetDTOs(attachments.ToList()).OrderByDescending(o=>o.create_date).ToList();
-
+                return _fromAttachmentMapper.GetDTOs(attachments.ToList()).OrderByDescending(o => o.create_date).ToList();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<KPISDMExtraDTO> GetKPISDMExtraInformation(List<int> ids)
         {
             try
             {
-                var form = _dbcontext.CatalogKpi.Where(o=>ids.Contains(o.id));
-                return form.Select(o => new KPISDMExtraDTO(){
-                    id=o.id,
-                    titolo=o.short_name,
-                    referent=o.referent,
-                    tipologia=o.kpi_type
+                var form = _dbcontext.CatalogKpi.Where(o => ids.Contains(o.id));
+                return form.Select(o => new KPISDMExtraDTO()
+                {
+                    id = o.id,
+                    titolo = o.short_name,
+                    referent = o.referent,
+                    tipologia = o.kpi_type
                 }).ToList();
-              
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {
             try
@@ -2022,9 +1992,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 var year = split[1];
                 var notifiers = month.Length > 0 ?
                         _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("MM/yy") == period).ToList()
-                    :   _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("yy") == year).ToList();
+                    : _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("yy") == year).ToList();
 
-                
                 return notifiers.Select(o => new EmailNotifierDTO()
                 {
                     email_body = o.email_body,
@@ -2036,18 +2005,18 @@ namespace Quantis.WorkFlow.APIBase.API
                     type = o.type,
                     user_domain = o.user_domain
                 }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<TUserDTO> GetAllTUsers()
         {
             try
             {
-                var usr = _dbcontext.TUsers.Where(o => o.in_catalog==false && (o.user_status == "ACTIVE" || o.user_status == "INACTIVE") && o.user_organization_name != "INTERNAL").OrderByDescending(o => o.user_create_date);
+                var usr = _dbcontext.TUsers.Where(o => o.in_catalog == false && (o.user_status == "ACTIVE" || o.user_status == "INACTIVE") && o.user_organization_name != "INTERNAL").OrderByDescending(o => o.user_create_date);
                 var dtos = usr.Select(o => new TUserDTO()
                 {
                     user_email = o.user_email,
@@ -2058,13 +2027,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     user_organization_name = o.user_organization_name
                 }).ToList();
                 return dtos;
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<TRuleDTO> GetAllTRules()
         {
             try
@@ -2086,7 +2055,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
-                        { 
+                        {
                             TRuleDTO tRule = new TRuleDTO();
                             tRule.rule_id = reader.GetInt32(reader.GetOrdinal("rule_id"));
                             tRule.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
@@ -2117,22 +2086,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetOwnedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueries.Include(o=>o.Parameters).Where(o => o.owner_id == userId);
-            var dtos=entities.Select(e => new ReportQueryLVDTO()
-            {
-                Id = e.id,
-                CreatedOn = e.created_on,
-                OwnerId = e.owner_id,
-                OwnerName = e.Owner.user_name,
-                QueryName = e.query_name,
-                ParameterCount = e.Parameters.Count
-
-            });
-            return dtos.ToList();
-        }
-        public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
-        {
-            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o=>o.Query).ToList();
+            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId);
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2141,31 +2095,47 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
-
             });
             return dtos.ToList();
         }
 
-        public ReportQueryDetailDTO GetReportQueryDetailByID(int id,int userId)
+        public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
         {
-            if(_dbcontext.ReportQueries.Any(o=>o.id==id && o.owner_id==userId) || _dbcontext.ReportQueryAssignments.Any(o=>o.query_id==id && o.user_id == userId))
+            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).ToList();
+            var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
-                var entity=_dbcontext.ReportQueries.Include(o=>o.Parameters).FirstOrDefault(o => o.id == id);
+                Id = e.id,
+                CreatedOn = e.created_on,
+                OwnerId = e.owner_id,
+                OwnerName = e.Owner.user_name,
+                QueryName = e.query_name,
+                ParameterCount = e.Parameters.Count
+            });
+            return dtos.ToList();
+        }
+
+        public ReportQueryDetailDTO GetReportQueryDetailByID(int id, int userId)
+        {
+            if (_dbcontext.ReportQueries.Any(o => o.id == id && o.owner_id == userId) || _dbcontext.ReportQueryAssignments.Any(o => o.query_id == id && o.user_id == userId))
+            {
+                var entity = _dbcontext.ReportQueries.Include(o => o.Parameters).FirstOrDefault(o => o.id == id);
                 var dto = new ReportQueryDetailDTO()
                 {
                     Id = entity.id,
                     QueryName = entity.query_name,
                     QueryText = entity.query_text,
-                    Parameters = entity.Parameters.Select(p => new KeyValuePairDTO() {
-                        Key= p.parameter_key,
-                        Value=p.parameter_value
+                    Parameters = entity.Parameters.Select(p => new KeyValuePairDTO()
+                    {
+                        Key = p.parameter_key,
+                        Value = p.parameter_value
                     }).ToList()
                 };
                 return dto;
             }
             return null;
         }
-        public void AddEditReportQuery(ReportQueryDetailDTO dto,int userId)
+
+        public void AddEditReportQuery(ReportQueryDetailDTO dto, int userId)
         {
             if (dto.Id == 0)
             {
@@ -2176,13 +2146,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 entity.owner_id = userId;
                 entity.Parameters = dto.Parameters.Select(o => new T_ReportQueryParameter()
                 {
-                    parameter_value=o.Value,
-                    parameter_key=o.Key,
-                    
+                    parameter_value = o.Value,
+                    parameter_key = o.Key,
                 }).ToList();
                 _dbcontext.ReportQueries.Add(entity);
                 _dbcontext.SaveChanges();
-                
             }
             else
             {
@@ -2190,24 +2158,22 @@ namespace Quantis.WorkFlow.APIBase.API
                 entity.query_name = dto.QueryName;
                 entity.query_text = dto.QueryText;
                 _dbcontext.SaveChanges();
-                var parameters=_dbcontext.ReportQueryParameters.Where(o => o.query_id == dto.Id);
+                var parameters = _dbcontext.ReportQueryParameters.Where(o => o.query_id == dto.Id);
                 _dbcontext.RemoveRange(parameters.ToArray());
                 var param = dto.Parameters.Select(o => new T_ReportQueryParameter()
                 {
-                    parameter_value=o.Value,
-                    parameter_key=o.Key,
-                    query_id=dto.Id
-                    
+                    parameter_value = o.Value,
+                    parameter_key = o.Key,
+                    query_id = dto.Id
                 }).ToList();
                 _dbcontext.ReportQueryParameters.AddRange(param.ToArray());
                 _dbcontext.SaveChanges();
-
             }
         }
 
-        public void DeleteReportQuery(int id,int userId)
+        public void DeleteReportQuery(int id, int userId)
         {
-            var entity=_dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
+            var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
             if (entity.owner_id == userId)
             {
                 var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
@@ -2219,10 +2185,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-        public void AssignReportQuery(MultipleRecordsDTO records,int ownerId)
+
+        public void AssignReportQuery(MultipleRecordsDTO records, int ownerId)
         {
-            if(_dbcontext.ReportQueries.Any(o=>o.id==records.Id && o.owner_id == ownerId)){
-                var assigns=_dbcontext.ReportQueryAssignments.Where(o => o.query_id == records.Id);
+            if (_dbcontext.ReportQueries.Any(o => o.id == records.Id && o.owner_id == ownerId))
+            {
+                var assigns = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == records.Id);
                 _dbcontext.ReportQueryAssignments.RemoveRange(assigns.ToArray());
                 _dbcontext.SaveChanges();
                 var assignments = records.Ids.Select(o => new T_ReportQueryAssignment()
@@ -2234,12 +2202,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+
         public object ExecuteReportQuery(ReportQueryDetailDTO dto)
         {
             string query = dto.QueryText;
-            foreach(var p in dto.Parameters)
+            foreach (var p in dto.Parameters)
             {
-                query=query.Replace(p.Key, p.Value);
+                query = query.Replace(p.Key, p.Value);
             }
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
@@ -2255,20 +2224,21 @@ namespace Quantis.WorkFlow.APIBase.API
                         myTable.Load(reader);
                         return myTable;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         return e.Message;
-                    }                   
+                    }
                 }
             }
         }
-        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid,int userId)
+
+        public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid, int userId)
         {
             try
             {
-                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null && o.ca_bsi_user_id!=userId).ToList();
+                var users = _dbcontext.CatalogUsers.Where(o => o.ca_bsi_user_id != null && o.ca_bsi_user_id != userId).ToList();
                 var userDtos = _userMapper.GetDTOs(users.ToList());
-                var landingpages = _dbcontext.ReportQueryAssignments.Where(o=>o.query_id== queryid).ToList();
+                var landingpages = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == queryid).ToList();
                 return (from usrs in userDtos
                         join landpages in landingpages on usrs.ca_bsi_user_id equals landpages.user_id
                         into gj
@@ -2286,15 +2256,12 @@ namespace Quantis.WorkFlow.APIBase.API
                             userid = usrs.userid,
                             isAssigned = subset == null ? false : true
                         }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
-
 
         #region privateFunctions
 
@@ -2302,7 +2269,6 @@ namespace Quantis.WorkFlow.APIBase.API
                {
                    try
                    {
-
                        using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                        {
                            con.Open();
@@ -2321,7 +2287,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                {
                                    whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
                                }
-
                            }
                            if (dto.Any())
                            {
@@ -2357,30 +2322,29 @@ namespace Quantis.WorkFlow.APIBase.API
                 var dataAsString = JsonConvert.SerializeObject(dto);
                 var content = new StringContent(dataAsString);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var response =client.PostAsync(output.Item2, content).Result;
+                var response = client.PostAsync(output.Item2, content).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var res = response.Content.ReadAsStringAsync().Result;
-                    if ( res== "2" || res=="1" || res=="3")
+                    if (res == "2" || res == "1" || res == "3")
                     {
                         return true;
                     }
                     else
                     {
-                        throw new Exception("The return from Form Adapter is not valid value is:" +res);
-
+                        throw new Exception("The return from Form Adapter is not valid value is:" + res);
                     }
                 }
                 else
                 {
-                    throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}",output.Item1,output.Item2,dataAsString));
+                    throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                 }
-
             }
         }
+
         private int getSessionTimeOut()
         {
-            var session = _infomationAPI.GetConfiguration("be_restserver","session_timeout");            
+            var session = _infomationAPI.GetConfiguration("be_restserver", "session_timeout");
             if (session != null)
             {
                 int value = Int32.Parse(session.Value);
@@ -2388,6 +2352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return 15;
         }
+
         private string MD5Hash(string input)
         {
             StringBuilder hash = new StringBuilder();
@@ -2400,6 +2365,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return hash.ToString();
         }
+
         private string RandomString(int size)
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -2414,6 +2380,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var finalString = new String(stringChars);
             return finalString;
         }
+
         private string sha256_hash(string value)
         {
             StringBuilder Sb = new StringBuilder();
@@ -2427,7 +2394,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return Sb.ToString();
         }
-
 
         private bool TableExists(string tableName)
         {
@@ -2460,13 +2426,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+
         private IQueryable<T_CatalogUser> CreateGetUserQuery(UserFilterDTO filter)
         {
             var users = _dbcontext.CatalogUsers as IQueryable<T_CatalogUser>;
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 users = users.Where(o => o.name.Contains(filter.SearchText) ||
-                o.surname.Contains(filter.SearchText)||
+                o.surname.Contains(filter.SearchText) ||
                 o.ca_bsi_account.Contains(filter.SearchText) ||
                 o.organization.Contains(filter.SearchText) ||
                 o.mail.Contains(filter.SearchText) ||
@@ -2483,6 +2450,6 @@ namespace Quantis.WorkFlow.APIBase.API
             return users;
         }
 
-        #endregion
+        #endregion privateFunctions
     }
 }

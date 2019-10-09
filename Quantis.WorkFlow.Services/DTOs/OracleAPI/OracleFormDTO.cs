@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
@@ -21,14 +20,17 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public DateTime latest_input_date { get; set; }
         public KpisAssociated kpis_associated { get; set; }
     }
+
     public class KpisAssociated
     {
         public List<KPIContractDTO> Kpis_Associated { get; set; }
     }
+
     public class ReaderConfiguration
     {
         public List<FormField> inputformatfield { get; set; }
     }
+
     public class FormField
     {
         public string name { get; set; }
@@ -39,6 +41,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public string mandatory { get; set; }
         public string defaultValue { get; set; }
     }
+
     public class KPIContractDTO
     {
         public string id_kpi { get; set; }

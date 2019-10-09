@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
+﻿namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
     public class APIToWorkflowDTO
     {

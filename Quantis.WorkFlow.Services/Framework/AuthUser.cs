@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.Framework
 {
-    public class AuthUser:System.Security.Claims.ClaimsPrincipal
+    public class AuthUser : System.Security.Claims.ClaimsPrincipal
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

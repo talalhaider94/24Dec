@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -18,6 +15,7 @@ namespace Quantis.WorkFlow.Models
         public string db_source { get; set; }
         public string table_used { get; set; }
     }
+
     public class T_APIDetail_Configuration : IEntityTypeConfiguration<T_APIDetail>
     {
         public void Configure(EntityTypeBuilder<T_APIDetail> builder)

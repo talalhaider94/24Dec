@@ -8,14 +8,14 @@ import { CommingsoonComponent } from './commingsoon.component';
 import { ComingSoonRoutingModule } from './comingsoon-routing.module';
 
 @NgModule({
-  imports: [
-    FormsModule,
-    ComingSoonRoutingModule,
-    ChartsModule,
-    BsDropdownModule,
-    CommonModule,
-    ButtonsModule.forRoot()
-  ],
-  declarations: [ CommingsoonComponent ]
+    imports: [
+        FormsModule,
+        ComingSoonRoutingModule,
+        ChartsModule,
+        BsDropdownModule,
+        CommonModule,
+        ButtonsModule.forRoot()
+    ],
+    declarations: [CommingsoonComponent]
 })
 export class ComingSoonModule { }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.API
+﻿namespace Quantis.WorkFlow.Services.DTOs.API
 {
     public class BSIKPIUploadDTO
     {
@@ -13,6 +9,5 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string id_ticket { get; set; }
         public string period { get; set; }
         public string ticket_status { get; set; }
-
     }
 }

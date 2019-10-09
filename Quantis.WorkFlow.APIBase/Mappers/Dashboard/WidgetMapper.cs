@@ -2,8 +2,6 @@
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
 {
@@ -21,7 +19,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 URL = e.URL,
                 WidgetCategoryName = e.WidgetCategory.Name,
                 WigetCategoryId = e.WidgetCategoryId,
-                UIIdentifier=e.UIIdentifier
+                UIIdentifier = e.UIIdentifier
             };
         }
 

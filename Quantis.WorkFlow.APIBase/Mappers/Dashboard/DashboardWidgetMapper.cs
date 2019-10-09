@@ -1,14 +1,10 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
 {
-
     public class DashboardWidgetMapper : MappingService<DashboardWidgetDTO, DB_DashboardWidget>
     {
         public override DashboardWidgetDTO GetDTO(DB_DashboardWidget e)
@@ -23,13 +19,12 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 SizeY = e.SizeY,
                 WidgetId = e.WidgetId,
                 WidgetName = e.WidgetName ?? e.Widget.Name,
-                UIIdentifier=e.Widget.UIIdentifier,
-                Note=e.Note
-                
+                UIIdentifier = e.Widget.UIIdentifier,
+                Note = e.Note
             };
             dto.Properties = new Dictionary<string, string>();
-            dto.Filters= new Dictionary<string, string>();
-            foreach(var val in e.DashboardWidgetSettings)
+            dto.Filters = new Dictionary<string, string>();
+            foreach (var val in e.DashboardWidgetSettings)
             {
                 if (val.SettingType == 0)
                 {
@@ -39,13 +34,12 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 {
                     dto.Filters.Add(val.SettingKey, val.SettingValue);
                 }
-            }           
+            }
             return dto;
-            
         }
 
         public override DB_DashboardWidget GetEntity(DashboardWidgetDTO o, DB_DashboardWidget e)
-        {            
+        {
             e.LocationX = o.LocationX;
             e.LocationY = o.LocationY;
             e.SizeX = o.SizeX;
@@ -56,7 +50,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
             {
                 e.WidgetId = o.WidgetId;
                 e.DashboardId = e.DashboardId;
-            }            
+            }
             return e;
         }
     }

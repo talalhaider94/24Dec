@@ -1,7 +1,6 @@
-#DataTables_Table_0>thead>tr>th:first-child.sorting_asc {
+#DataTables_Table_0 > thead > tr > th:first-child.sorting_asc {
     background-image: none !important;
 }
-
 
 /* Customize the label (the checkbox-container) */
 
@@ -18,7 +17,6 @@
     user-select: none;
 }
 
-
 /* Hide the browser's default checkbox */
 
 .checkbox-container input {
@@ -28,7 +26,6 @@
     height: 0;
     width: 0;
 }
-
 
 /* Create a custom checkbox */
 
@@ -41,29 +38,27 @@
     background-color: #eee;
 }
 
-
 /* On mouse-over, add a grey background color */
 
-.checkbox-container:hover input~.checkbox-checkmark {
+.checkbox-container:hover input ~ .checkbox-checkmark {
     background-color: #ccc;
 }
 
-
 /* When the checkbox is checked, add a blue background */
 
-.checkbox-container-default input:checked~.checkbox-checkmark {
+.checkbox-container-default input:checked ~ .checkbox-checkmark {
     background-color: #6c757d;
 }
 
-.checkbox-container-success input~.checkbox-checkmark {
+.checkbox-container-success input ~ .checkbox-checkmark {
     background-color: #28a745;
 }
 
-.checkbox-container-danger input~.checkbox-checkmark {
+.checkbox-container-danger input ~ .checkbox-checkmark {
     background-color: #f86c6b;
 }
 
-.checkbox-container-primary input~.checkbox-checkmark {
+.checkbox-container-primary input ~ .checkbox-checkmark {
     background-color: #20a8d8;
 }
 
@@ -75,13 +70,11 @@
     display: none;
 }
 
-
 /* Show the checkbox-checkmark when checked */
 
-.checkbox-container input:checked~.checkbox-checkmark:after {
+.checkbox-container input:checked ~ .checkbox-checkmark:after {
     display: block;
 }
-
 
 /* Style the checkbox-checkmark/indicator */
 

@@ -68,5 +68,4 @@ export class DateTimeService {
     let stringDateRange = `${formatStartDate}-${formatEndDate}`;
     return stringDateRange;
   }
-
 }

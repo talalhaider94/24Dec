@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Quantis.WorkFlow.APIBase.Framework
@@ -12,7 +9,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
     {
         private readonly AuthorizationOptions _options;
         private readonly IConfiguration _config;
-
 
         public AuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, IConfiguration config) : base(options)
         {

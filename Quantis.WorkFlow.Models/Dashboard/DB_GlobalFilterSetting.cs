@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.Dashboard
 {
@@ -14,6 +11,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public int GlobalFilterId { get; set; }
         public virtual DB_GlobalFilter GlobalFilter { get; set; }
     }
+
     public class DB_GlobalFilterSetting_Configuration : IEntityTypeConfiguration<DB_GlobalFilterSetting>
     {
         public void Configure(EntityTypeBuilder<DB_GlobalFilterSetting> builder)

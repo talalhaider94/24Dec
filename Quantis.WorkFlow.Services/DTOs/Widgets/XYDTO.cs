@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.Widgets
+﻿namespace Quantis.WorkFlow.Services.DTOs.Widgets
 {
     public class XYDTO
     {

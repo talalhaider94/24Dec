@@ -1,27 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using Quantis.WorkFlow.APIBase.API;
 using Quantis.WorkFlow.APIBase.Framework;
-using Quantis.WorkFlow.Services;
-using Quantis.WorkFlow.Services.API;
+using System;
 
 namespace Quantis.WorkFlow.Complete
 {
@@ -34,6 +23,7 @@ namespace Quantis.WorkFlow.Complete
                 return name.ToLowerInvariant();
             }
         }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -55,7 +45,7 @@ namespace Quantis.WorkFlow.Complete
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
-            });            
+            });
 
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessPostgreSqlProvider");
             services.AddDbContext<WorkFlowPostgreSqlContext>(options =>
@@ -82,8 +72,8 @@ namespace Quantis.WorkFlow.Complete
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, QuantisPermissionHandler>();
             RegisterServices(services);
-
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 
 export default class Headers {
-    static setHeaders(type) { 
+    static setHeaders(type) {
         let headerObject = new HttpHeaders().set('Content-Type', 'application/json');
         headerObject = headerObject.append('Content-Type', 'application/json');
         headerObject = headerObject.append("Authorization", "Basic " + btoa("Quantis:WorkflowAPI"));
@@ -11,8 +11,8 @@ export default class Headers {
         headerObject = headerObject.append('Access-Control-Allow-Origin', '*');
         return { headers: headerObject };
     }
-    
-    static setTokenHeaders(type) { 
+
+    static setTokenHeaders(type) {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         let headerObject = new HttpHeaders();
         headerObject = headerObject.append('Content-Type', 'application/json');

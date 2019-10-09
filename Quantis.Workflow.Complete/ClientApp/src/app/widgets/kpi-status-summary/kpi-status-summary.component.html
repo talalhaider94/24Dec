@@ -3,7 +3,7 @@
     <span *ngIf="!isDashboardModeEdit"> {{ widgetname }}</span>
 </p>
 <button type="button" [disabled]="loading" *ngIf="!isDashboardModeEdit" class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
-  <i class="fa fa-cog"></i>
+    <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
 <div class="spinner-grow text-primary text-center" *ngIf="loading" role="status">

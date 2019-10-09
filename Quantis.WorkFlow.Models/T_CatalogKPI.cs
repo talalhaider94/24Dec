@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -55,23 +52,27 @@ namespace Quantis.WorkFlow.Models
         public int global_rule_id_bsi { get; set; }
         public int sla_id_bsi { get; set; }
         public virtual T_Form Form { get; set; }
+
         [ForeignKey("sla_id_bsi")]
         public virtual T_Sla Sla { get; set; }
+
         [ForeignKey("primary_contract_party")]
         public virtual T_Customer PrimaryCustomer { get; set; }
+
         [ForeignKey("secondary_contract_party")]
         public virtual T_Customer SecondaryCustomer { get; set; }
+
         [ForeignKey("global_rule_id_bsi")]
         public virtual T_GlobalRule GlobalRule { get; set; }
-
     }
+
     public class T_CatalogKPI_Configuration : IEntityTypeConfiguration<T_CatalogKPI>
     {
         public void Configure(EntityTypeBuilder<T_CatalogKPI> builder)
         {
             builder.ToTable("t_catalog_kpis");
-            builder.HasKey(o => o.id );
-            builder.HasOne(o => o.Form).WithMany(p => p.CatalogKPIs).HasForeignKey(r=>r.id_form);
+            builder.HasKey(o => o.id);
+            builder.HasOne(o => o.Form).WithMany(p => p.CatalogKPIs).HasForeignKey(r => r.id_form);
             builder.HasOne(o => o.PrimaryCustomer);
             builder.HasOne(o => o.SecondaryCustomer);
             builder.HasOne(o => o.GlobalRule);

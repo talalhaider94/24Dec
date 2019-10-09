@@ -1,9 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
 {
@@ -16,9 +13,9 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 CreatedOn = e.CreatedOn,
                 Id = e.Id,
                 Name = e.Name,
-                Owner=e.User.user_name,
-                IsActive=e.IsActive,
-                IsDefault=e.IsDefault
+                Owner = e.User.user_name,
+                IsActive = e.IsActive,
+                IsDefault = e.IsDefault
             };
         }
 

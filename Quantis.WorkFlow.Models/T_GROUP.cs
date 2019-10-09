@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -14,6 +12,7 @@ namespace Quantis.WorkFlow.Models
         public DateTime? modify_date { get; set; }
         public DateTime? delete_date { get; set; }
     }
+
     public class T_Group_Configuration : IEntityTypeConfiguration<T_Group>
     {
         public void Configure(EntityTypeBuilder<T_Group> builder)

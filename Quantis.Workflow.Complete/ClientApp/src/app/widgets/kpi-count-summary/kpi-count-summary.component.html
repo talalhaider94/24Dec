@@ -1,18 +1,18 @@
 <p class="float-left no-drag">
-  <input type="text" *ngIf="editWidgetName" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
-  <span *ngIf="!editWidgetName"> {{ widgetname }}</span>
+    <input type="text" *ngIf="editWidgetName" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
+    <span *ngIf="!editWidgetName"> {{ widgetname }}</span>
 </p>
 <button type="button" [disabled]="loading" *ngIf="!editWidgetName"
-  class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
-  <i class="fa fa-cog"></i>
+        class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
+    <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
-  <span class="sr-only">Loading...</span>
+    <span class="sr-only">Loading...</span>
 </div>
 <div class="card text-white bg-success mt-3">
-  <div class="card-body p-3 text-center">
-    <div class="h1">{{ sumKPICount }}</div>
-    <b>{{ widgetTitle }}</b>
-  </div>
+    <div class="card-body p-3 text-center">
+        <div class="h1">{{ sumKPICount }}</div>
+        <b>{{ widgetTitle }}</b>
+    </div>
 </div>

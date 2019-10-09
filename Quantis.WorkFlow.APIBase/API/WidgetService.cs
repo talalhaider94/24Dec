@@ -6,7 +6,6 @@ using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -15,6 +14,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private IDataService _dataService;
         private static string _connectionstring = null;
+
         public WidgetService(WorkFlowPostgreSqlContext dbcontext, IDataService dataService)
         {
             _dataService = dataService;
@@ -24,10 +24,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
             }
         }
+
         public List<XYDTO> GetKPICountTrend(WidgetwithAggOptionDTO dto)
         {
             var result = new List<XYDTO>();
-            var facts= _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
+            var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
             if (dto.KPIs.Any())
             {
                 facts = facts.Where(o => dto.KPIs.Contains(o.global_rule_id));
@@ -39,14 +40,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
                     {
                         XValue = p.Key + "",
-                        YValue = p.Count(r=>(p.Key == r.period_year ? true : false))  //was p.Count() @SHAHZAD pls check this, it was not working "exception near AS"
+                        YValue = p.Count(r => (p.Key == r.period_year ? true : false))  //was p.Count() @SHAHZAD pls check this, it was not working "exception near AS"
                     }).OrderBy(o => o.XValue).ToList();
                 }
                 else
                 {
-                    result = facts.GroupBy(o => new { o.period_year,o.period_month }).Select(p => new XYDTO()
+                    result = facts.GroupBy(o => new { o.period_year, o.period_month }).Select(p => new XYDTO()
                     {
-                        XValue = p.Key.period_month + "/"+p.Key.period_year,
+                        XValue = p.Key.period_month + "/" + p.Key.period_year,
                         YValue = p.Count()
                     }).ToList();
                 }
@@ -58,7 +59,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
                     {
                         XValue = p.Key + "",
-                        YValue = p.Count(r=>r.complaint)
+                        YValue = p.Count(r => r.complaint)
                     }).OrderBy(o => o.XValue).ToList();
                 }
                 else
@@ -108,59 +109,59 @@ namespace Quantis.WorkFlow.APIBase.API
                     }).ToList();
                 }
             }
-            else if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant || dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+            else if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant || dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
             {
                 string signcomplaint = "<";
-                if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+                if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
                 {
                     signcomplaint = ">";
                 }
-                string query = @"select 
+                string query = @"select
                                 psl.end_period,
                                 count(1)
-                                from 
+                                from
                                 (
-                                  select  
-                                  temp.global_rule_id, 
-                                  temp.time_stamp as timestamp, 
-                                  temp.time_stamp_utc as end_period, 
-                                  temp.begin_time_stamp_utc as start_period, 
-                                  temp.sla_id, 
-                                  temp.rule_id, 
+                                  select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
                                   temp.time_unit,
-                                  temp.interval_length, 
-                                  temp.is_period, 
-                                  temp.service_level_target, 
-                                  temp.service_level_target_ce, 
-                                  temp.provided_ce, 
-                                  temp.deviation_ce, 
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
                                   temp.complete_record,
-                                  temp.sla_version_id, 
-                                  temp.metric_type_id, 
-                                  temp.domain_category_id, 
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
                                   temp.service_domain_id,
-                                  case 
+                                  case
                                     when deviation_ce > 0 then 'non compliant'
                                     when deviation_ce < 0 then 'compliant'
                                     else 'nc'
                                   end as resultPsl
-                                  from 
+                                  from
                                   (
-                                    select * 
+                                    select *
                                     from t_psl_0_month pm
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_quarter pq
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_year py
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_1_all pa
                                   ) temp
-                                  where provided is not null 
+                                  where provided is not null
                                   and service_level_target is not null
-                                ) psl 
+                                ) psl
                                 left join t_rules r on  psl.rule_id = r.rule_id
                                 left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                                 left join t_slas s on sv.sla_id = s.sla_id
@@ -172,7 +173,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and {0}
                                 and psl.deviation_ce {1} 0
                                 group by psl.end_period";
-                var rules=QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+                var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
                 query = string.Format(query, rules, signcomplaint);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
@@ -198,16 +199,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
-                    result=result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
+                    result = result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
                 }
             }
             return result;
-
-
         }
+
         public XYDTO GetCatalogPendingCount(BaseWidgetDTO dto)
         {
-            if(dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
+            if (dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
             {
                 return new XYDTO() { XValue = "", YValue = _dataService.GetAllTRules().Count() };
             }
@@ -217,9 +217,9 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return null;
         }
+
         public List<XYDTO> GetDistributionByVerifica(BaseWidgetDTO dto)
         {
-            
             var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
             if (dto.KPIs.Any())
             {
@@ -227,12 +227,13 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
             var res = new List<XYDTO>();
-            
-            res.Add(new XYDTO() { XValue = "Compliant", YValue = facts.Where(o => o.complaint).Count()});
+
+            res.Add(new XYDTO() { XValue = "Compliant", YValue = facts.Where(o => o.complaint).Count() });
             res.Add(new XYDTO() { XValue = "Non Compliant", YValue = facts.Where(o => o.notcomplaint).Count() });
             res.Add(new XYDTO() { XValue = "Non Calculato", YValue = facts.Where(o => o.notcalculated).Count() });
             return res;
         }
+
         public List<XYZDTO> GetKPICountByOrganization(WidgetwithAggOptionDTO dto)
         {
             try
@@ -243,60 +244,60 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     return null;
                 }
-                string query = @"select 
-                                c.customer_id, 
-                                c.customer_name, 
-                                s.sla_id, 
-                                s.sla_name, 
-                                gr.global_rule_name, 
-                                gr.global_rule_id, 
+                string query = @"select
+                                c.customer_id,
+                                c.customer_name,
+                                s.sla_id,
+                                s.sla_name,
+                                gr.global_rule_name,
+                                gr.global_rule_id,
                                 psl.service_level_target_ce,
                                 psl.provided_ce,
                                 psl.resultpsl,
                                 psl.deviation_ce
-                                from 
+                                from
                                 (
-                                  select  
-                                  temp.global_rule_id, 
-                                  temp.time_stamp as timestamp, 
-                                  temp.time_stamp_utc as end_period, 
-                                  temp.begin_time_stamp_utc as start_period, 
-                                  temp.sla_id, 
-                                  temp.rule_id, 
+                                  select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
                                   temp.time_unit,
-                                  temp.interval_length, 
-                                  temp.is_period, 
-                                  temp.service_level_target, 
-                                  temp.service_level_target_ce, 
-                                  temp.provided_ce, 
-                                  temp.deviation_ce, 
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
                                   temp.complete_record,
-                                  temp.sla_version_id, 
-                                  temp.metric_type_id, 
-                                  temp.domain_category_id, 
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
                                   temp.service_domain_id,
-                                  case 
+                                  case
                                     when deviation_ce > 0 then 'non compliant'
                                     when deviation_ce < 0 then 'compliant'
                                     else 'nc'
                                   end as resultPsl
-                                  from 
+                                  from
                                   (
-                                    select * 
+                                    select *
                                     from t_psl_0_month pm
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_quarter pq
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_year py
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_1_all pa
                                   ) temp
-                                  where provided is not null 
+                                  where provided is not null
                                   and service_level_target is not null
-                                ) psl 
+                                ) psl
                                 left join t_rules r on  psl.rule_id = r.rule_id
                                 left join T_GLOBAL_RULES gr on psl.global_rule_id = gr.global_rule_id
                                 left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
@@ -332,18 +333,15 @@ namespace Quantis.WorkFlow.APIBase.API
                                 ContractName = (string)reader[3],
                                 GlobalRuleName = (string)reader[4],
                                 GlobalRuleId = Decimal.ToInt32((Decimal)reader[5]),
-                                Target = (reader[6]==DBNull.Value)?0:(double)reader[6],
+                                Target = (reader[6] == DBNull.Value) ? 0 : (double)reader[6],
                                 Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                                 Result = (string)reader[8],
                                 Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
-
                             });
                         }
-                        
-
                     }
                 }
-                if(dto.AggregationOption == AggregationOption.KPI.Key)
+                if (dto.AggregationOption == AggregationOption.KPI.Key)
                 {
                     result.AddRange(basedtos.Where(o => o.Result == "compliant").GroupBy(o => new { o.GlobalRuleId, o.GlobalRuleName }).Select(o => new XYZDTO()
                     {
@@ -389,20 +387,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     }));
                 }
                 return result;
-
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public XYDTO GetKPICountSummary(BaseWidgetDTO dto)
         {
             var result = new XYDTO();
 
             string signcomplaint = "";
-            if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant)
+            if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant)
             {
                 signcomplaint = "and psl.deviation_ce < 0";
             }
@@ -414,52 +411,52 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 signcomplaint = "and psl.deviation_ce = 0";
             }
-            string query = @"select 
+            string query = @"select
                                 psl.end_period,
                                 count(1)
-                                from 
+                                from
                                 (
-                                  select  
-                                  temp.global_rule_id, 
-                                  temp.time_stamp as timestamp, 
-                                  temp.time_stamp_utc as end_period, 
-                                  temp.begin_time_stamp_utc as start_period, 
-                                  temp.sla_id, 
-                                  temp.rule_id, 
+                                  select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
                                   temp.time_unit,
-                                  temp.interval_length, 
-                                  temp.is_period, 
-                                  temp.service_level_target, 
-                                  temp.service_level_target_ce, 
-                                  temp.provided_ce, 
-                                  temp.deviation_ce, 
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
                                   temp.complete_record,
-                                  temp.sla_version_id, 
-                                  temp.metric_type_id, 
-                                  temp.domain_category_id, 
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
                                   temp.service_domain_id,
-                                  case 
+                                  case
                                     when deviation_ce > 0 then 'non compliant'
                                     when deviation_ce < 0 then 'compliant'
                                     else 'nc'
                                   end as resultPsl
-                                  from 
+                                  from
                                   (
-                                    select * 
+                                    select *
                                     from t_psl_0_month pm
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_quarter pq
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_year py
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_1_all pa
                                   ) temp
-                                  where provided is not null 
+                                  where provided is not null
                                   and service_level_target is not null
-                                ) psl 
+                                ) psl
                                 left join t_rules r on  psl.rule_id = r.rule_id
                                 left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                                 left join t_slas s on sv.sla_id = s.sla_id
@@ -487,7 +484,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     OracleDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        result=new XYDTO()
+                        result = new XYDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = Decimal.ToDouble((Decimal)reader[1])
@@ -496,8 +493,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     return result;
                 }
             }
-
         }
+
         public List<XYDTO> GetNotificationTrend(WidgetwithAggOptionDTO dto)
         {
             var res = new List<XYDTO>();
@@ -507,6 +504,7 @@ namespace Quantis.WorkFlow.APIBase.API
             res.Add(new XYDTO() { XValue = "07/2019", YValue = 22 });
             return res;
         }
+
         public List<XYZDTO> GetKPIReportTrend(BaseWidgetDTO dto)
         {
             var result = new List<XYZDTO>();
@@ -516,49 +514,49 @@ namespace Quantis.WorkFlow.APIBase.API
                             psl.provided_ce,
                             psl.resultpsl,
                             u.unit_symbol
-                            from 
+                            from
                             (
-                              select  
-                              temp.global_rule_id, 
-                              temp.time_stamp as timestamp, 
-                              temp.time_stamp_utc as end_period, 
-                              temp.begin_time_stamp_utc as start_period, 
-                              temp.sla_id, 
-                              temp.rule_id, 
+                              select
+                              temp.global_rule_id,
+                              temp.time_stamp as timestamp,
+                              temp.time_stamp_utc as end_period,
+                              temp.begin_time_stamp_utc as start_period,
+                              temp.sla_id,
+                              temp.rule_id,
                               temp.time_unit,
-                              temp.interval_length, 
-                              temp.is_period, 
-                              temp.service_level_target, 
-                              temp.service_level_target_ce, 
-                              temp.provided_ce, 
-                              temp.deviation_ce, 
+                              temp.interval_length,
+                              temp.is_period,
+                              temp.service_level_target,
+                              temp.service_level_target_ce,
+                              temp.provided_ce,
+                              temp.deviation_ce,
                               temp.complete_record,
-                              temp.sla_version_id, 
-                              temp.metric_type_id, 
-                              temp.domain_category_id, 
+                              temp.sla_version_id,
+                              temp.metric_type_id,
+                              temp.domain_category_id,
                               temp.service_domain_id,
-                              case 
+                              case
                                 when deviation_ce > 0 then 'non compliant'
                                 when deviation_ce < 0 then 'compliant'
                                 else 'nc'
                               end as resultPsl
-                              from 
+                              from
                               (
-                                select * 
+                                select *
                                 from t_psl_0_month pm
                                 union all
-                                select * 
+                                select *
                                 from t_psl_0_quarter pq
                                 union all
-                                select * 
+                                select *
                                 from t_psl_0_year py
                                 union all
-                                select * 
+                                select *
                                 from t_psl_1_all pa
                               ) temp
-                              where provided is not null 
+                              where provided is not null
                               and service_level_target is not null
-                            ) psl 
+                            ) psl
                             left join t_rules r on  psl.rule_id = r.rule_id
                             left join t_domain_categories d on r.domain_category_id = d.domain_category_id
                             left join t_units u on d.unit_id = u.unit_id
@@ -591,8 +589,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[1],
-                            Description= (string)reader[3] + "|" + (string)reader[4],
-                            ZValue="Target"
+                            Description = (string)reader[3] + "|" + (string)reader[4],
+                            ZValue = "Target"
                         });
                         result.Add(new XYZDTO()
                         {
@@ -606,6 +604,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return result;
         }
+
         public List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto)
         {
             if (!dto.KPIs.Any())
@@ -621,84 +620,84 @@ namespace Quantis.WorkFlow.APIBase.API
                             CASE WHEN Gen = 'ND' THEN '<font color=""red"">'
                             WHEN Gen = 'NA' THEN '<font color=""black"">'
                             WHEN Gen = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Gen<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Gen > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Gen,1,1) = '.' THEN '0' ELSE '' END || Gen || '</font>' as Gen,
                             CASE WHEN Feb = 'ND' THEN '<font color=""red"">'
                             WHEN Feb = 'NA' THEN '<font color=""black"">'
                             WHEN Feb = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Feb<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Feb > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Feb,1,1) = '.' THEN '0' ELSE '' END || Feb || '</font>' as Feb,
                             CASE WHEN Mar = 'ND' THEN '<font color=""red"">'
                             WHEN Mar = 'NA' THEN '<font color=""black"">'
                             WHEN Mar = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Mar<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Mar > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Mar,1,1) = '.' THEN '0' ELSE '' END || Mar || '</font>' as Mar,
                             CASE WHEN Apr = 'ND' THEN '<font color=""red"">'
                             WHEN Apr = 'NA' THEN '<font color=""black"">'
                             WHEN Apr = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Apr<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Apr > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Apr,1,1) = '.' THEN '0' ELSE '' END || Apr || '</font>' as Apr,
                             CASE WHEN Mag = 'ND' THEN '<font color=""red"">'
                             WHEN Mag = 'NA' THEN '<font color=""black"">'
                             WHEN Mag = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Mag<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Mag > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Mag,1,1) = '.' THEN '0' ELSE '' END || Mag || '</font>' as Mag,
                             CASE WHEN Giu = 'ND' THEN '<font color=""red"">'
                             WHEN Giu = 'NA' THEN '<font color=""black"">'
                             WHEN Giu = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Giu<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Giu > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Giu,1,1) = '.' THEN '0' ELSE '' END || Giu || '</font>' as Giu,
                             CASE WHEN Lug = 'ND' THEN '<font color=""red"">'
                             WHEN Lug = 'NA' THEN '<font color=""black"">'
                             WHEN Lug = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Lug<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Lug > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Lug,1,1) = '.' THEN '0' ELSE '' END || Lug || '</font>' as Lug,
                             CASE WHEN Ago = 'ND' THEN '<font color=""red"">'
                             WHEN Ago = 'NA' THEN '<font color=""black"">'
                             WHEN Ago = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Ago<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Ago > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Ago,1,1) = '.' THEN '0' ELSE '' END || Ago || '</font>' as Ago,
                             CASE WHEN Sep = 'ND' THEN '<font color=""red"">'
                             WHEN Sep = 'NA' THEN '<font color=""black"">'
                             WHEN Sep = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Sep<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Sep > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Sep,1,1) = '.' THEN '0' ELSE '' END || Sep || '</font>' as Sep,
                             CASE WHEN Ott = 'ND' THEN '<font color=""red"">'
                             WHEN Ott = 'NA' THEN '<font color=""black"">'
                             WHEN Ott = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Ott<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Ott > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Ott,1,1) = '.' THEN '0' ELSE '' END || Ott || '</font>' as Ott,
                             CASE WHEN Nov = 'ND' THEN '<font color=""red"">'
                             WHEN Nov = 'NA' THEN '<font color=""black"">'
                             WHEN Nov = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Nov<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Nov > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Nov,1,1) = '.' THEN '0' ELSE '' END || Nov || '</font>' as Nov,
                             CASE WHEN Dic = 'ND' THEN '<font color=""red"">'
                             WHEN Dic = 'NA' THEN '<font color=""black"">'
                             WHEN Dic = 'NE' THEN '<font color=""black"">'
-                            else (case 
+                            else (case
                             WHEN relation = 'NLT' and Dic<target THEN '<font color=""red"">'
                                  WHEN relation = 'NMT' and Dic > target THEN '<font color=""red"">'
                                  ELSE '<font color=""green"">' END)END || CASE WHEN SUBSTR(Dic,1,1) = '.' THEN '0' ELSE '' END || Dic || '</font>' as Dic
@@ -728,7 +727,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             when frequenza not in '1M' then 'NA'
                             when frequenza = '1M' and Gen is null then 'ND'
                             else TO_CHAR(Gen) end Gen,
-                            case 
+                            case
                             when Feb = -999 then 'NE'
                             when(frequenza = '1M' and Feb is null
                             ) then 'ND'
@@ -838,8 +837,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             r.global_rule_id,
                             r.rule_description,
                             replace(replace(CAST(n.note AS VARCHAR(255)), '<font size=3 face=Calibri><font size=3 face=Calibri>', ''), '<p>', ''),
-                            r.rule_id,r.rule_name , 
-                            d.domain_category_relation, 
+                            r.rule_id,r.rule_name ,
+                            d.domain_category_relation,
                             r.service_level_target,
                             case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
                             CAST(to_char(p3.time_stamp_utc, 'MM') AS int)
@@ -850,13 +849,13 @@ namespace Quantis.WorkFlow.APIBase.API
                             when  MONTH_TU_CALC_STATUS = 'ON' then p.provided_ce end,
                             case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then '12M'
                             when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then '3M'
-                            when MONTH_TU_CALC_STATUS = 'ON' then '1M' end, 
+                            when MONTH_TU_CALC_STATUS = 'ON' then '1M' end,
                             case when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'OFF' then
                             CAST(to_char(p3.time_stamp_utc, 'YYYY') AS int)
                             when MONTH_TU_CALC_STATUS = 'OFF' and QUARTER_TU_CALC_STATUS = 'ON' then CAST(to_char(p2.time_stamp_utc, 'YYYY') AS int)
                             else CAST(to_char(p.time_stamp_utc, 'YYYY') AS int) end
-                            ) 
-                            PIVOT(max(ROUND(provided_ce, 2)) for time_stamp_utc 
+                            )
+                            PIVOT(max(ROUND(provided_ce, 2)) for time_stamp_utc
                             in (1 as Gen, 2 as Feb, 3 as Mar, 4 as Apr, 5 as Mag, 6 as Giu, 7 as Lug, 8 as Ago, 9 as Sep, 10 as Ott, 11 as Nov, 12 as Dic
                              ))
                                             where
@@ -894,7 +893,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             ContractParty = (reader[0] == DBNull.Value) ? "" : (string)reader[0],
                             Contract = (reader[1] == DBNull.Value) ? "" : (string)reader[1],
-                            GlobalRuleId= (reader[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)reader[2]),
+                            GlobalRuleId = (reader[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)reader[2]),
                             IdKPI = (reader[3] == DBNull.Value) ? "" : (string)reader[3],
                             DescrizioneKPI = (reader[4] == DBNull.Value) ? "" : (string)reader[4],
                             Tipologia = (reader[5] == DBNull.Value) ? "" : (string)reader[5],
@@ -919,7 +918,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         });
                     }
                 }
-            }           
+            }
             return result;
         }
     }

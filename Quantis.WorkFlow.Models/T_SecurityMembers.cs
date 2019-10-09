@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -11,6 +8,7 @@ namespace Quantis.WorkFlow.Models
         public int user_group_id { get; set; }
         public int security_group_id { get; set; }
     }
+
     public class T_SecurityMembers_Configuration : IEntityTypeConfiguration<T_SecurityMembers>
     {
         public void Configure(EntityTypeBuilder<T_SecurityMembers> builder)

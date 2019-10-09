@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -18,6 +16,7 @@ namespace Quantis.WorkFlow.Models
         public string recipient { get; set; }
         public virtual T_Form Form { get; set; }
     }
+
     public class T_EmailNotifiers_Configuration : IEntityTypeConfiguration<T_EmailNotifiers>
     {
         public void Configure(EntityTypeBuilder<T_EmailNotifiers> builder)
@@ -25,7 +24,6 @@ namespace Quantis.WorkFlow.Models
             builder.ToTable("t_email_notifiers");
             builder.HasKey(o => o.id);
             builder.HasOne(o => o.Form).WithMany(o => o.EmailNotifiers).IsRequired();
-
         }
     }
 }

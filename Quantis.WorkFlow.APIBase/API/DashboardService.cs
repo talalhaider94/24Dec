@@ -7,7 +7,6 @@ using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -17,6 +16,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<DashboardDTO, DB_Dashboard> _dashboardMapper;
         private readonly IMappingService<Services.DTOs.Dashboard.WidgetDTO, DB_Widget> _widgetMapper;
         private readonly IMappingService<DashboardWidgetDTO, DB_DashboardWidget> _dashboardWidgetMapper;
+
         public DashboardService(WorkFlowPostgreSqlContext dbcontext,
             IMappingService<DashboardDTO, DB_Dashboard> dashboardMapper,
             IMappingService<Services.DTOs.Dashboard.WidgetDTO, DB_Widget> widgetMapper,
@@ -33,14 +33,15 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entities=_dbcontext.DB_Dashboards.Where(o=>o.UserId==userId).Include(o=>o.User).OrderBy(o=>o.Name).ToList();
+                var entities = _dbcontext.DB_Dashboards.Where(o => o.UserId == userId).Include(o => o.User).OrderBy(o => o.Name).ToList();
                 return _dashboardMapper.GetDTOs(entities);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void ActivateDashboard(int id)
         {
             try
@@ -54,6 +55,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public int GetDefaultDashboardId(int userId)
         {
             try
@@ -73,7 +75,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public void SetDefaultDashboard(int id,int userId)
+
+        public void SetDefaultDashboard(int id, int userId)
         {
             try
             {
@@ -89,19 +92,19 @@ namespace Quantis.WorkFlow.APIBase.API
                     dashnew.IsDefault = true;
                     _dbcontext.SaveChanges();
                 }
-                var lp=_dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
+                var lp = _dbcontext.UserLandingPages.FirstOrDefault(o => o.user_id == userId);
                 if (lp != null)
                 {
                     lp.selected_landingpage = false;
                     _dbcontext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void DeactivateDashboard(int id)
         {
             try
@@ -115,17 +118,18 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public int AddUpdateDasboard(DashboardDetailDTO dto,int userId)
+
+        public int AddUpdateDasboard(DashboardDetailDTO dto, int userId)
         {
             try
             {
                 if (dto.Id == 0)
                 {
                     List<DB_DashboardWidget> dbwidgets = new List<DB_DashboardWidget>();
-                    foreach(var dbw in dto.DashboardWidgets)
+                    foreach (var dbw in dto.DashboardWidgets)
                     {
                         var ent = new DB_DashboardWidget();
-                        ent=_dashboardWidgetMapper.GetEntity(dbw, ent);
+                        ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
                         dbwidgets.Add(ent);
                     }
                     DB_Dashboard entdb = new DB_Dashboard();
@@ -141,10 +145,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 else
                 {
                     var dashboardWidgetIds = dto.DashboardWidgets.Where(o => o.Id != 0).Select(o => o.Id).ToList();
-                    var deletewidgets = _dbcontext.DB_DashboardWidgets.Include(o=>o.DashboardWidgetSettings).Where(o => o.DashboardId == dto.Id && !dashboardWidgetIds.Contains(o.Id)).ToArray();
+                    var deletewidgets = _dbcontext.DB_DashboardWidgets.Include(o => o.DashboardWidgetSettings).Where(o => o.DashboardId == dto.Id && !dashboardWidgetIds.Contains(o.Id)).ToArray();
                     if (deletewidgets.Any())
                     {
-                        foreach(var w in deletewidgets)
+                        foreach (var w in deletewidgets)
                         {
                             _dbcontext.DB_DashboardWidgetSettings.RemoveRange(w.DashboardWidgetSettings.ToArray());
                         }
@@ -169,7 +173,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         var ent = _dbcontext.DB_DashboardWidgets.Single(o => o.Id == dbw.Id);
                         ent = _dashboardWidgetMapper.GetEntity(dbw, ent);
                     }
-                    var dashboard=_dbcontext.DB_Dashboards.Single(o => o.Id == dto.Id);
+                    var dashboard = _dbcontext.DB_Dashboards.Single(o => o.Id == dto.Id);
                     dashboard.GlobalFilterId = dto.GlobalFilterId;
                     _dbcontext.SaveChanges();
                     return dto.Id;
@@ -185,7 +189,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var entities = _dbcontext.DB_Widgets.Where(o=>o.IsActive==true).ToList();
+                var entities = _dbcontext.DB_Widgets.Where(o => o.IsActive == true).ToList();
                 return _widgetMapper.GetDTOs(entities);
             }
             catch (Exception e)
@@ -193,13 +197,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public DashboardDetailDTO GetDashboardWigetsByDashboardId(int id)
         {
             try
             {
                 var db = _dbcontext.DB_Dashboards.Single(o => o.Id == id);
-                var entities = _dbcontext.DB_DashboardWidgets.Include(o => o.Widget).Include(o=>o.DashboardWidgetSettings).Where(o => o.DashboardId == id);
-                var widgets= _dashboardWidgetMapper.GetDTOs(entities.ToList());
+                var entities = _dbcontext.DB_DashboardWidgets.Include(o => o.Widget).Include(o => o.DashboardWidgetSettings).Where(o => o.DashboardId == id);
+                var widgets = _dashboardWidgetMapper.GetDTOs(entities.ToList());
                 return new DashboardDetailDTO()
                 {
                     Id = db.Id,
@@ -207,7 +212,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     GlobalFilterId = db.GlobalFilterId,
                     DashboardWidgets = widgets
                 };
-
             }
             catch (Exception e)
             {
@@ -217,23 +221,23 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public void SaveDashboardState(List<DashboardWidgetBaseDTO> dtos)
         {
-            foreach(var dto in dtos)
+            foreach (var dto in dtos)
             {
                 foreach (var p in dto.Properties)
                 {
-                    var prop = _dbcontext.DB_DashboardWidgetSettings.FirstOrDefault(r=>r.DashboardWidgetId==dto.Id && r.SettingType == 0 && r.SettingKey == p.Key);
+                    var prop = _dbcontext.DB_DashboardWidgetSettings.FirstOrDefault(r => r.DashboardWidgetId == dto.Id && r.SettingType == 0 && r.SettingKey == p.Key);
                     if (prop != null)
                     {
                         prop.SettingValue = p.Value;
                     }
                     else
                     {
-                        var setting=new DB_DashboardWidgetSetting()
+                        var setting = new DB_DashboardWidgetSetting()
                         {
                             SettingKey = p.Key,
                             SettingType = 0,
                             SettingValue = p.Value,
-                            DashboardWidgetId=dto.Id
+                            DashboardWidgetId = dto.Id
                         };
                         _dbcontext.DB_DashboardWidgetSettings.Add(setting);
                     }
@@ -247,7 +251,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     else
                     {
-                        var setting=new DB_DashboardWidgetSetting()
+                        var setting = new DB_DashboardWidgetSetting()
                         {
                             SettingKey = p.Key,
                             SettingType = 1,
@@ -260,8 +264,5 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-
-
-
     }
 }

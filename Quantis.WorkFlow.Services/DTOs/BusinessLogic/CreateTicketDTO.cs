@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
+﻿namespace Quantis.WorkFlow.Services.DTOs.BusinessLogic
 {
     public class CreateTicketDTO
     {
         public string Summary { get; set; }
         public string Description { get; set; }
         public int? SecondaryContractParty { get; set; }
-        
+
         public string Status { get; set; }
         public int GroupCategoryId { get; set; }
         public string Group { get; set; }

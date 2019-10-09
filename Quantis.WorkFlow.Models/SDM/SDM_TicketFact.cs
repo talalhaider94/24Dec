@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.SDM
 {
@@ -24,9 +23,8 @@ namespace Quantis.WorkFlow.Models.SDM
         public string result_value { get; set; }
         public DateTime created_on { get; set; }
         public virtual List<SDM_TicketLog> TicketLogs { get; set; }
-
-
     }
+
     public class SDM_TicketFact_Configuration : IEntityTypeConfiguration<SDM_TicketFact>
     {
         public void Configure(EntityTypeBuilder<SDM_TicketFact> builder)

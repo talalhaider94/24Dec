@@ -9,11 +9,10 @@ export class FilterUsersPipe implements PipeTransform {
     searchText = searchText.toLowerCase();
     return items.filter(it => {
       return JSON.stringify(it).toLowerCase().includes(searchText);
-          /*return (it.userid ? it.userid.toLowerCase() : '' 
+          /*return (it.userid ? it.userid.toLowerCase() : ''
                 + ' ' + it.name ? it.name.toLowerCase() : ''
                 + ' ' + it.surname ? it.surname.toLowerCase() : ''
                 + ' ' + it.ca_bsi_account ? it.ca_bsi_account.toLowerCase() : '').includes(searchText);*/
         });
-   } 
+   }
 }
-

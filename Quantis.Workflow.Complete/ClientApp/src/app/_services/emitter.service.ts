@@ -2,27 +2,26 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class EmitterService {
-  private subjectEvent = new Subject();
+    private subjectEvent = new Subject();
 
-  constructor() { }
-  
-  sendNext(data: any) {
-    this.subjectEvent.next(data);
-  }
+    constructor() { }
 
-  clear() {
-    this.subjectEvent.next();
-  }
+    sendNext(data: any) {
+        this.subjectEvent.next(data);
+    }
 
-  getData(): Observable<any> {
-    return this.subjectEvent.asObservable();
-  }
+    clear() {
+        this.subjectEvent.next();
+    }
 
-  loadingStatus(loading) {
-    this.sendNext({ type: 'loading', loading });
-  }
+    getData(): Observable<any> {
+        return this.subjectEvent.asObservable();
+    }
 
+    loadingStatus(loading) {
+        this.sendNext({ type: 'loading', loading });
+    }
 }

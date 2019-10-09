@@ -12,7 +12,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import {DataTablesModule} from 'angular-datatables';
+import { DataTablesModule } from 'angular-datatables';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 
@@ -42,61 +42,61 @@ import { PersonalReportComponent } from './personal-report/personal-report.compo
 import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 
 @NgModule({
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    DashboardRoutingModule,
-    ChartsModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ButtonsModule.forRoot(),
-    CollapseModule.forRoot(),
-    CommonModule,
-    TreeViewModule,
-    PerfectScrollbarModule,
-    GridsterModule,
-    DataTablesModule,
-    SweetAlert2Module,
-    DynamicModule.withComponents([
-      DoughnutChartComponent,
-      BarchartComponent,
-      KpiCountSummaryComponent,
-      DistributionByUserComponent,
-      CatalogPendingCountTrendsComponent,
-      KpiReportTrendComponent,
-      NotificationTrendComponent,
-      KpiCountByOrganizationComponent,
-      KpiStatusSummaryComponent,
-      FreeFormReportsWidgetComponent
-    ]),
-    HighchartsChartModule,
-    ModalModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-  ],
-  declarations: [ 
-    DashboardComponent,
-    DoughnutChartComponent,
-    MenuComponent,
-    BarchartComponent,
-    PublicComponent,
-    DashboardListsComponent,
-    KpiCountSummaryComponent,
-    DistributionByUserComponent,
-    CatalogPendingCountTrendsComponent,
-    KpiReportTrendComponent,
-    NotificationTrendComponent,
-    KpiCountByOrganizationComponent,
-    ChartDataComponent,
-    KpiStatusSummaryComponent,
-    LandingPageComponent,
-    LandingPageDetailsComponent,
-    FreeFormReportComponent,
-    FormReportQueryComponent,
-    ImportFormReportComponent,
-    BSIReportComponent,
-    PersonalReportComponent,
-    FreeFormReportsWidgetComponent,
-    FilterUsersFFRPipe
-  ]
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        DashboardRoutingModule,
+        ChartsModule,
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
+        ButtonsModule.forRoot(),
+        CollapseModule.forRoot(),
+        CommonModule,
+        TreeViewModule,
+        PerfectScrollbarModule,
+        GridsterModule,
+        DataTablesModule,
+        SweetAlert2Module,
+        DynamicModule.withComponents([
+            DoughnutChartComponent,
+            BarchartComponent,
+            KpiCountSummaryComponent,
+            DistributionByUserComponent,
+            CatalogPendingCountTrendsComponent,
+            KpiReportTrendComponent,
+            NotificationTrendComponent,
+            KpiCountByOrganizationComponent,
+            KpiStatusSummaryComponent,
+            FreeFormReportsWidgetComponent
+        ]),
+        HighchartsChartModule,
+        ModalModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+    ],
+    declarations: [
+        DashboardComponent,
+        DoughnutChartComponent,
+        MenuComponent,
+        BarchartComponent,
+        PublicComponent,
+        DashboardListsComponent,
+        KpiCountSummaryComponent,
+        DistributionByUserComponent,
+        CatalogPendingCountTrendsComponent,
+        KpiReportTrendComponent,
+        NotificationTrendComponent,
+        KpiCountByOrganizationComponent,
+        ChartDataComponent,
+        KpiStatusSummaryComponent,
+        LandingPageComponent,
+        LandingPageDetailsComponent,
+        FreeFormReportComponent,
+        FormReportQueryComponent,
+        ImportFormReportComponent,
+        BSIReportComponent,
+        PersonalReportComponent,
+        FreeFormReportsWidgetComponent,
+        FilterUsersFFRPipe
+    ]
 })
 export class DashboardModule { }

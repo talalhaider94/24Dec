@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.Framework
 {
@@ -17,6 +15,7 @@ namespace Quantis.WorkFlow.Services.Framework
         {
             get { return (PageIndex > 1 && TotalPages > 0); }
         }
+
         public bool HasNextPage
         {
             get { return (PageIndex < TotalPages); }

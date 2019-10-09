@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.Framework
+﻿namespace Quantis.WorkFlow.Services.Framework
 {
     public class PagingInfo
     {
@@ -11,6 +7,7 @@ namespace Quantis.WorkFlow.Services.Framework
         public string OrderBy { get; set; }
         public OrderDirection OrderDirection { get; set; }
     }
+
     public enum OrderDirection
     {
         Asc = 0,

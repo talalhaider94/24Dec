@@ -8,127 +8,125 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 declare var $;
 var $this;
 
-
 @Component({
-  templateUrl: './import-form-report.component.html'
+    templateUrl: './import-form-report.component.html'
 })
 
 export class ImportFormReportComponent implements OnInit {
-  @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
-  @ViewChild('configModal') public configModal: ModalDirective;
-  @ViewChild('ConfigurationTable') block: ElementRef;
-  // @ViewChild('searchCol1') searchCol1: ElementRef;
-  @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-  category_id : number = 0;
-  // handle: any = '';
-  // name: any =  '';
-  // step: any = '';
+    @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
+    @ViewChild('configModal') public configModal: ModalDirective;
+    @ViewChild('ConfigurationTable') block: ElementRef;
+    // @ViewChild('searchCol1') searchCol1: ElementRef;
+    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    category_id: number = 0;
+    // handle: any = '';
+    // name: any =  '';
+    // step: any = '';
 
-  dtOptions: DataTables.Settings = {
-    language: {
-      processing: "Elaborazione...",
-      search: "Cerca:",
-      lengthMenu: "Visualizza _MENU_ elementi",
-      info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-      infoEmpty: "Vista da 0 a 0 di 0 elementi",
-      infoFiltered: "(filtrati da _MAX_ elementi totali)",
-      infoPostFix: "",
-      loadingRecords: "Caricamento...",
-      zeroRecords: "La ricerca non ha portato alcun risultato.",
-      emptyTable: "Nessun dato presente nella tabella.",
-      paginate: {
-        first: "Primo",
-        previous: "Precedente",
-        next: "Seguente",
-        last: "Ultimo"
-      },
-      aria: {
-        sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-        sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-      }
+    dtOptions: DataTables.Settings = {
+        language: {
+            processing: "Elaborazione...",
+            search: "Cerca:",
+            lengthMenu: "Visualizza _MENU_ elementi",
+            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+            infoEmpty: "Vista da 0 a 0 di 0 elementi",
+            infoFiltered: "(filtrati da _MAX_ elementi totali)",
+            infoPostFix: "",
+            loadingRecords: "Caricamento...",
+            zeroRecords: "La ricerca non ha portato alcun risultato.",
+            emptyTable: "Nessun dato presente nella tabella.",
+            paginate: {
+                first: "Primo",
+                previous: "Precedente",
+                next: "Seguente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+            }
+        }
+    };
+
+    modalData = {
+        // id: '',
+        // handle: '',
+        // name: '',
+        // step: '',
+        // category_id: 0
+    };
+
+    dtTrigger: Subject<any> = new Subject();
+    ConfigTableBodyData: any = [];
+
+    constructor(
+        private _freeFormReport: FreeFormReportService,
+        private toastr: ToastrService,
+    ) {
+        $this = this;
     }
-  };
 
-  modalData = {
-    // id: '',
-    // handle: '',
-    // name: '',
-    // step: '',
-    // category_id: 0
-  };
+    ngOnInit() {
+    }
 
-  dtTrigger: Subject<any> = new Subject();
-  ConfigTableBodyData: any = [];
+    populateModalData(data) {
+        // this.modalData.id = data.id;
+        // this.modalData.handle = data.handle;
+        // this.modalData.name = data.name;
+        // this.modalData.step = data.step;
+        // this.modalData.category_id = data.category_id;
+        // this.showConfigModal();
+    }
 
-  constructor(
-    private _freeFormReport: FreeFormReportService,
-    private toastr: ToastrService,
-  ) {
-    $this = this;
-  }
+    // tslint:disable-next-line:use-life-cycle-interface
+    ngAfterViewInit() {
+        this.dtTrigger.next();
 
-  ngOnInit() {
-  }
+        this.setUpDataTableDependencies();
+        this.getCOnfigurations();
+    }
 
-  populateModalData(data) {
-    // this.modalData.id = data.id;
-    // this.modalData.handle = data.handle;
-    // this.modalData.name = data.name;
-    // this.modalData.step = data.step;
-    // this.modalData.category_id = data.category_id;
-    // this.showConfigModal();
-  }
+    ngOnDestroy(): void {
+        // Do not forget to unsubscribe the event
+        this.dtTrigger.unsubscribe();
+    }
 
-  // tslint:disable-next-line:use-life-cycle-interface
-  ngAfterViewInit() {
-    this.dtTrigger.next();
+    rerender(): void {
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destroy the table first
+            dtInstance.destroy();
+            // Call the dtTrigger to rerender again
+            this.dtTrigger.next();
+            this.setUpDataTableDependencies();
+        });
+    }
 
-    this.setUpDataTableDependencies();
-    this.getCOnfigurations();
-  }
+    setUpDataTableDependencies() {
+    }
 
-  ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
-  }
+    strip_tags(html) {
+        var tmp = document.createElement("div");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText;
+    }
 
-  rerender(): void {
-    this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-      this.setUpDataTableDependencies();
-    });
-  }
+    getCOnfigurations() {
+        // this.apiService.getSDMGroupConfigurations().subscribe((data) =>{
+        //   this.ConfigTableBodyData = data;
+        //   console.log('Configs ', data);
+        //   this.rerender();
+        // });
+    }
 
-  setUpDataTableDependencies(){
-  }
+    onCancel(dismissMethod: string): void {
+        console.log('Cancel ', dismissMethod);
+    }
 
-  strip_tags(html) {
-    var tmp = document.createElement("div");
-    tmp.innerHTML = html;
-    return tmp.textContent||tmp.innerText;
-  }
+    showConfigModal() {
+        this.configModal.show();
+    }
 
-  getCOnfigurations() {
-    // this.apiService.getSDMGroupConfigurations().subscribe((data) =>{
-    //   this.ConfigTableBodyData = data;
-    //   console.log('Configs ', data);
-    //   this.rerender();
-    // });
-  }
-
-  onCancel(dismissMethod: string): void {
-    console.log('Cancel ', dismissMethod);
-  }
-  
-  showConfigModal() {
-    this.configModal.show();
-  }
-
-  hideConfigModal() {
-    this.configModal.hide();
-  }
-  
+    hideConfigModal() {
+        this.configModal.hide();
+    }
 }

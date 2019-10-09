@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services
+﻿namespace Quantis.WorkFlow.Services
 {
     public static class WorkFlowConstants
     {
         public static string Configuration_SessionTimeOutKey = "";
     }
+
     public static class WorkFlowPermissions
     {
         public const string BASIC_LOGIN = "BASIC_LOGIN";
@@ -16,7 +13,7 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_CATALOG_UTENTI = "VIEW_CATALOG_UTENTI";
         public const string VIEW_CATALOG_KPI = "VIEW_CATALOG_KPI";
         public const string EDIT_CATALOG_KPI = "EDIT_CATALOG_KPI";
-        public const string VIEW_UTENTI_DA_CONSOLIDARE= "VIEW_UTENTI_DA_CONSOLIDARE";
+        public const string VIEW_UTENTI_DA_CONSOLIDARE = "VIEW_UTENTI_DA_CONSOLIDARE";
         public const string VIEW_KPI_DA_CONSOLIDARE = "VIEW_KPI_DA_CONSOLIDARE";
         public const string VIEW_KPI_CERTICATI = "VIEW_KPI_CERTICATI";
         public const string VIEW_ADMIN_LOADING_FORM = "VIEW_ADMIN_LOADING_FORM";
@@ -40,5 +37,4 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
         public const string VIEW_CHART_REPORT = "VIEW_CHART_REPORT";
     }
-
 }

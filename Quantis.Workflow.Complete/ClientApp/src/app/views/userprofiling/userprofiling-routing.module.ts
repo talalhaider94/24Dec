@@ -4,24 +4,24 @@ import { UserProfilingComponent } from './userprofiling.component';
 import { UserRolePermissionsComponent } from './UserRolePermissions/userRolePermissions.component';
 
 const routes: Routes = [
-  {
-    path: 'userpermissions',
-    component: UserProfilingComponent,
-    data: {
-      title: 'Profilazione Utente'
+    {
+        path: 'userpermissions',
+        component: UserProfilingComponent,
+        data: {
+            title: 'Profilazione Utente'
+        }
+    },
+    {
+        path: 'rolepermissions',
+        component: UserRolePermissionsComponent,
+        data: {
+            title: 'User Role Permissions'
+        }
     }
-  },
-  {
-    path: 'rolepermissions',
-    component: UserRolePermissionsComponent,
-    data: {
-      title: 'User Role Permissions'
-    }
-  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class UserProfilingRoutingModule {}
+export class UserProfilingRoutingModule { }

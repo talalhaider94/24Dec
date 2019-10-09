@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.API
 {
@@ -10,8 +9,10 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int form_id { get; set; }
         public string form_name { get; set; }
         public string form_description { get; set; }
+
         // public string reader_configuration { get; set; }
         public int? AttachmentsCount { get; set; }
+
         public string form_schema { get; set; }
         public int? reader_id { get; set; }
         public int? form_owner_id { get; set; }
@@ -23,14 +24,17 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public DateTime latest_input_date { get; set; }
         public KpisAssociated kpis_associated { get; set; }
     }
+
     public class KpisAssociated
     {
         public List<KPIContractDTO> Kpis_Associated { get; set; }
     }
+
     public class ReaderConfiguration
     {
         public List<FormField> inputformatfield { get; set; }
     }
+
     public class FormField
     {
         public string name { get; set; }
@@ -41,6 +45,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string mandatory { get; set; }
         public string defaultValue { get; set; }
     }
+
     public class KPIContractDTO
     {
         public string id_kpi { get; set; }

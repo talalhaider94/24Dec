@@ -3,7 +3,7 @@
     margin-bottom: 10px;
 }
 //.role-permissions-lists input[type="text"]::after {
-.role-permissions-lists .txt-filter-user::after{
+.role-permissions-lists .txt-filter-user::after {
     content: "o";
     width: 40px;
     color: transparent;
@@ -22,10 +22,12 @@
     // overflow: auto;
     padding-left: 5px;
 }
+
 perfect-scrollbar {
     border: 1px solid #ccc;
     border-radius: 10px;
 }
+
 .role-permissions-lists ul.users-list li {
     list-style: none;
     padding: 8px 10px;
@@ -33,16 +35,19 @@ perfect-scrollbar {
     margin-right: 15px;
     margin-left: 10px;
     // background-color: #6c757d14;
-    border-bottom: 1px solid #ccc;// #63c2deb8;
+    border-bottom: 1px solid #ccc; // #63c2deb8;
     //box-shadow: -3px 1px 7px -4px #aaa;
 }
+
 .role-permissions-lists ul.users-list li:hover {
     background-color: #eee;
     cursor: pointer;
 }
+
 .role-permissions-lists ul.users-list li.active:hover {
     background-color: #d9edf7;
 }
+
 .highlited-user {
     background-color: #d9edf7;
 }

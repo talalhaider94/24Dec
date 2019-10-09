@@ -4,17 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { EmailComponent } from './email.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: EmailComponent,
-    data: {
-      title: 'Notifiche e-mail'
+    {
+        path: '',
+        component: EmailComponent,
+        data: {
+            title: 'Notifiche e-mail'
+        }
     }
-  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class EmailRoutingModule {}
+export class EmailRoutingModule { }

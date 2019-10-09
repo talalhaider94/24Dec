@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.Information
 {
@@ -16,6 +15,7 @@ namespace Quantis.WorkFlow.Models.Information
         public DateTime created_on { get; set; }
         public virtual IList<T_RolePermission> RolePermissions { get; set; }
     }
+
     public class T_Permission_Configuration : IEntityTypeConfiguration<T_Permission>
     {
         public void Configure(EntityTypeBuilder<T_Permission> builder)

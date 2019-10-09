@@ -1,9 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.SDM;
 using Quantis.WorkFlow.Services.DTOs.Information;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Information
 {
@@ -17,8 +14,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
                 handle = e.handle,
                 id = e.id,
                 step = e.step,
-                category_id=e.category_id,
-                category_name=e.category.customer_name
+                category_id = e.category_id,
+                category_name = e.category.customer_name
             };
         }
 
@@ -29,7 +26,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
             e.step = o.step;
             e.category_id = o.category_id;
             return e;
-
         }
     }
 }

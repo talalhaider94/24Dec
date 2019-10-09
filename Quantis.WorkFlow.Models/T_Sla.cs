@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -10,7 +8,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int sla_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
-        public string prev_status{ get; set; }
+        public string prev_status { get; set; }
         public int? customer_id { get; set; }
         public string sla_name { get; set; }
         public string sla_status { get; set; }
@@ -39,8 +37,8 @@ namespace Quantis.WorkFlow.Models
         public int? customer_category_id { get; set; }
         public DateTime? calculation_freeze_date { get; set; }
         public int? committed_version_seq_num { get; set; }
-
     }
+
     public class T_Sla_Configuration : IEntityTypeConfiguration<T_Sla>
     {
         public void Configure(EntityTypeBuilder<T_Sla> builder)

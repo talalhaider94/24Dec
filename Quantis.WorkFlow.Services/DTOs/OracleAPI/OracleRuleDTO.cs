@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
     public class OracleRuleDTO
@@ -19,8 +15,8 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public int domain_category_id { get; set; }
         public string domain_category_name { get; set; }
         public OracleRuleGranularityDTO granularity { get; set; }
-        
     }
+
     public class OracleRuleGranularityDTO
     {
         public string hour_tu_calc_status { get; set; }

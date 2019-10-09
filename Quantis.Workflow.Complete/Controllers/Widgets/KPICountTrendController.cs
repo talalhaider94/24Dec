@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Quantis.WorkFlow.APIBase.Framework;
+﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
@@ -13,11 +9,13 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
     {
         private IGlobalFilterService _globalfilterService;
         private IWidgetService _widgetService;
+
         public KPICountTrendController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
             _globalfilterService = globalfilterService;
             _widgetService = widgetService;
         }
+
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
             vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();
@@ -40,8 +38,8 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override object GetData(WidgetParametersDTO props)
         {
-            var dto=_globalfilterService.MapAggOptionWidget(props);
-            var result=_widgetService.GetKPICountTrend(dto);
+            var dto = _globalfilterService.MapAggOptionWidget(props);
+            var result = _widgetService.GetKPICountTrend(dto);
             return result;
         }
     }

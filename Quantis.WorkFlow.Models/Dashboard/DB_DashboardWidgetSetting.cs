@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.Dashboard
 {
@@ -14,8 +11,8 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public string SettingValue { get; set; }
         public int DashboardWidgetId { get; set; }
         public virtual DB_DashboardWidget DashboardWidget { get; set; }
-
     }
+
     public class DB_DashboardWidgetSetting_Configuration : IEntityTypeConfiguration<DB_DashboardWidgetSetting>
     {
         public void Configure(EntityTypeBuilder<DB_DashboardWidgetSetting> builder)

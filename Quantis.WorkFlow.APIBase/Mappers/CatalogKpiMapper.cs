@@ -1,20 +1,19 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.DTOs.API;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
     public class CatalogKpiMapper : MappingService<CatalogKpiDTO, T_CatalogKPI>
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+
         public CatalogKpiMapper(WorkFlowPostgreSqlContext dbcontext)
         {
             _dbcontext = dbcontext;
         }
+
         public override CatalogKpiDTO GetDTO(T_CatalogKPI e)
         {
             return new CatalogKpiDTO()
@@ -59,15 +58,14 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 rm_last_sent = e.rm_last_sent,
                 supply = e.supply,
                 day_cutoff = e.day_cutoff,
-                primary_contract_party=e.primary_contract_party,
-                secondary_contract_party=e.secondary_contract_party,
-                kpi_name_bsi =  e.GlobalRule?.global_rule_name,
+                primary_contract_party = e.primary_contract_party,
+                secondary_contract_party = e.secondary_contract_party,
+                kpi_name_bsi = e.GlobalRule?.global_rule_name,
                 global_rule_id_bsi = e.global_rule_id_bsi,
                 sla_id_bsi = e.sla_id_bsi,
-                primary_contract_party_name=e.PrimaryCustomer?.customer_name,
-                secondary_contract_party_name=e.SecondaryCustomer?.customer_name,
-                contract_name=e.Sla?.sla_name
-                
+                primary_contract_party_name = e.PrimaryCustomer?.customer_name,
+                secondary_contract_party_name = e.SecondaryCustomer?.customer_name,
+                contract_name = e.Sla?.sla_name
             };
         }
 
@@ -116,7 +114,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.sla_id_bsi = o.sla_id_bsi;
             if (e.id == 0)
             {
-                var rule = _dbcontext.Rules.Where(p => p.global_rule_id == o.global_rule_id_bsi).OrderBy(p=>p.sla_version_id).LastOrDefault();
+                var rule = _dbcontext.Rules.Where(p => p.global_rule_id == o.global_rule_id_bsi).OrderBy(p => p.sla_version_id).LastOrDefault();
 
                 if (rule != null)
                 {

@@ -16,4 +16,4 @@ export function removeNullKeysFromObject(obj) {
       }
     });
     return newObj;
-} 
+}

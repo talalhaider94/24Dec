@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
@@ -16,7 +14,5 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public int NonComplaintKPIs { get; set; }
         public List<LandingPageContractDTO> BestContracts { get; set; }
         public List<LandingPageContractDTO> WorstContracts { get; set; }
-
-
     }
 }

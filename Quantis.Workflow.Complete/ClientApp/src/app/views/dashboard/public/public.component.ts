@@ -23,9 +23,9 @@ import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-repor
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 @Component({
-	selector: 'app-public',
-	templateUrl: './public.component.html',
-	styleUrls: ['./public.component.scss']
+    selector: 'app-public',
+    templateUrl: './public.component.html',
+    styleUrls: ['./public.component.scss']
 })
 export class PublicComponent implements OnInit {
 	widgetCollection: WidgetModel[];

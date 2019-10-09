@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quantis.WorkFlow.Models.SDM;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -11,7 +10,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int customer_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
-        public string prev_status{ get; set; }
+        public string prev_status { get; set; }
         public string customer_name { get; set; }
         public string customer_type_name { get; set; }
         public string customer_description { get; set; }
@@ -31,8 +30,8 @@ namespace Quantis.WorkFlow.Models
         public DateTime customer_create_date { get; set; }
         public DateTime customer_modify_date { get; set; }
         public virtual List<SDM_TicketGroup> sdm_groups { get; set; }
-
     }
+
     public class T_Customer_Configuration : IEntityTypeConfiguration<T_Customer>
     {
         public void Configure(EntityTypeBuilder<T_Customer> builder)

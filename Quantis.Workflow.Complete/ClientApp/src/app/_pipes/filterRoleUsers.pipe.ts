@@ -10,6 +10,5 @@ export class FilterUsersPipe implements PipeTransform {
     return items.filter(it => {
       return JSON.stringify(it).toLowerCase().includes(searchText);
         });
-   } 
+   }
 }
-

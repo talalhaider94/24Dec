@@ -33,7 +33,7 @@ export interface DashboardModel {
     name: string;
     owner: string;
     createdon: Date;
-    globalfilterid: number, 
+    globalfilterid: number,
     dashboardwidgets: Array<DashboardContentModel>;
     isactive: boolean;
 }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.SDM
 {
@@ -15,6 +12,7 @@ namespace Quantis.WorkFlow.Models.SDM
         public virtual T_Customer category { get; set; }
         public int step { get; set; }
     }
+
     public class SDM_TicketGroup_Configuration : IEntityTypeConfiguration<SDM_TicketGroup>
     {
         public void Configure(EntityTypeBuilder<SDM_TicketGroup> builder)

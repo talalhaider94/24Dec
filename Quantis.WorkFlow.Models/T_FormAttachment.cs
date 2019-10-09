@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -18,6 +16,7 @@ namespace Quantis.WorkFlow.Models
         public DateTime create_date { get; set; }
         public virtual T_Form Form { get; set; }
     }
+
     public class T_FormAttachment_Configuration : IEntityTypeConfiguration<T_FormAttachment>
     {
         public void Configure(EntityTypeBuilder<T_FormAttachment> builder)
@@ -26,7 +25,6 @@ namespace Quantis.WorkFlow.Models
             builder.HasKey(o => o.t_form_attachments_id);
             builder.HasOne(o => o.Form).WithMany(o => o.Attachments).IsRequired();
             builder.Property(o => o.create_date).HasColumnName("create_timestamp");
-
         }
     }
 }

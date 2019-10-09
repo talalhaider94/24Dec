@@ -1,7 +1,4 @@
-﻿using Quantis.WorkFlow.Services.DTOs.Information;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.API
 {
@@ -16,5 +13,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string UserName { get; set; }
         public List<string> Permissions { get; set; }
         public int? DefaultDashboardId { get; set; }
+        public string UIVersion { get; set; }
     }
 }
