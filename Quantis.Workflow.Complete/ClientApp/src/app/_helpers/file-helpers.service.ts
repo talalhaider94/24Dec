@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class FileHelpersService {
-
   constructor(
     private httpClient: HttpClient,
     private fileSaver: FileSaverService,

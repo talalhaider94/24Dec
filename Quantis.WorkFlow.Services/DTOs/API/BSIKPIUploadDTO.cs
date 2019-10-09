@@ -9,6 +9,5 @@
         public string id_ticket { get; set; }
         public string period { get; set; }
         public string ticket_status { get; set; }
-
     }
 }

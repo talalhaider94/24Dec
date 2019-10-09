@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<DashboardDTO, DB_Dashboard> _dashboardMapper;
         private readonly IMappingService<Services.DTOs.Dashboard.WidgetDTO, DB_Widget> _widgetMapper;
         private readonly IMappingService<DashboardWidgetDTO, DB_DashboardWidget> _dashboardWidgetMapper;
+
         public DashboardService(WorkFlowPostgreSqlContext dbcontext,
             IMappingService<DashboardDTO, DB_Dashboard> dashboardMapper,
             IMappingService<Services.DTOs.Dashboard.WidgetDTO, DB_Widget> widgetMapper,
@@ -40,6 +41,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void ActivateDashboard(int id)
         {
             try
@@ -53,6 +55,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public int GetDefaultDashboardId(int userId)
         {
             try
@@ -72,6 +75,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void SetDefaultDashboard(int id, int userId)
         {
             try
@@ -94,13 +98,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     lp.selected_landingpage = false;
                     _dbcontext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void DeactivateDashboard(int id)
         {
             try
@@ -114,6 +118,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public int AddUpdateDasboard(DashboardDetailDTO dto, int userId)
         {
             try
@@ -192,6 +197,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public DashboardDetailDTO GetDashboardWigetsByDashboardId(int id)
         {
             try
@@ -206,7 +212,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     GlobalFilterId = db.GlobalFilterId,
                     DashboardWidgets = widgets
                 };
-
             }
             catch (Exception e)
             {
@@ -259,8 +264,5 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-
-
-
     }
 }

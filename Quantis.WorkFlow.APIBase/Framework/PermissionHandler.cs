@@ -15,13 +15,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
             Permission = permission;
         }
     }
+
     public class QuantisPermissionHandler : AuthorizationHandler<QuantisPermissions>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                        QuantisPermissions requirement)
         {
-
-
             var user = context.User as Quantis.WorkFlow.Services.Framework.AuthUser;
             var filterContext = context.Resource as AuthorizationFilterContext;
             var response = filterContext.HttpContext.Response;

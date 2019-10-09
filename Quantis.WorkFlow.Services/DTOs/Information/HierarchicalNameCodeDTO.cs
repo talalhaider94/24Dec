@@ -8,6 +8,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Information
         {
             Children = null;
         }
+
         public IList<HierarchicalNameCodeDTO> Children { get; set; }
     }
 }

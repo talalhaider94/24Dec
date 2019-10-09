@@ -6,6 +6,7 @@
         public bool IsBSIStatusChanged { get; set; }
         public bool IsArchived { get; set; }
         public bool ShowArchivedMsg { get; set; }
+
         public ChangeStatusDTO()
         {
             IsSDMStatusChanged = false;

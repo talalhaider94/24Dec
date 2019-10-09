@@ -30,8 +30,8 @@ namespace Quantis.WorkFlow.Models
         public DateTime customer_create_date { get; set; }
         public DateTime customer_modify_date { get; set; }
         public virtual List<SDM_TicketGroup> sdm_groups { get; set; }
-
     }
+
     public class T_Customer_Configuration : IEntityTypeConfiguration<T_Customer>
     {
         public void Configure(EntityTypeBuilder<T_Customer> builder)

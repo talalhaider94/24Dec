@@ -42,36 +42,35 @@ import { ProgressComponent } from './progress.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TooltipsComponent } from './tooltips.component';
 
-
 // Components Routing
 import { BaseRoutingModule } from './base-routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    BaseRoutingModule,
-    BsDropdownModule.forRoot(),
-    TabsModule,
-    CarouselModule.forRoot(),
-    CollapseModule.forRoot(),
-    PaginationModule.forRoot(),
-    PopoverModule.forRoot(),
-    ProgressbarModule.forRoot(),
-    TooltipModule.forRoot()
-  ],
-  declarations: [
-    CardsComponent,
-    FormsComponent,
-    SwitchesComponent,
-    TablesComponent,
-    TabsComponent,
-    CarouselsComponent,
-    CollapsesComponent,
-    PaginationsComponent,
-    PopoversComponent,
-    ProgressComponent,
-    TooltipsComponent
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        BaseRoutingModule,
+        BsDropdownModule.forRoot(),
+        TabsModule,
+        CarouselModule.forRoot(),
+        CollapseModule.forRoot(),
+        PaginationModule.forRoot(),
+        PopoverModule.forRoot(),
+        ProgressbarModule.forRoot(),
+        TooltipModule.forRoot()
+    ],
+    declarations: [
+        CardsComponent,
+        FormsComponent,
+        SwitchesComponent,
+        TablesComponent,
+        TabsComponent,
+        CarouselsComponent,
+        CollapsesComponent,
+        PaginationsComponent,
+        PopoversComponent,
+        ProgressComponent,
+        TooltipsComponent
+    ]
 })
 export class BaseModule { }

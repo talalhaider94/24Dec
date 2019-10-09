@@ -8,6 +8,7 @@
             FieldValue = fv;
             FieldType = ft;
         }
+
         public string FieldName { get; set; }
         public string FieldValue { get; set; }
         public string FieldType { get; set; }

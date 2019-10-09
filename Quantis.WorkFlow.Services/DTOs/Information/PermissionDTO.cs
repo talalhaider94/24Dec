@@ -7,6 +7,7 @@
             this.category = category;
             permission_type = type;
         }
+
         public string category { get; set; }
         public string permission_type { get; set; }
     }

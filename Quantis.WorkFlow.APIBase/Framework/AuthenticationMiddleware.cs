@@ -16,15 +16,14 @@ namespace Quantis.WorkFlow.APIBase.Framework
     {
         private readonly RequestDelegate _next;
         private static List<Tuple<string, string>> _authentications = null;
+
         public AuthenticationMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-
         public async Task Invoke(HttpContext context, WorkFlowPostgreSqlContext _context, ILogger<AuthenticationMiddleware> _logger, IInformationService info, IMemoryCache memoryCache)
         {
-
             if (_authentications == null)
             {
                 _authentications = _context.Authentication.Select(o => new Tuple<string, string>(o.Username, o.Password)).ToList();
@@ -56,8 +55,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     _context.SaveChanges();
                     context.User = usr;
                 }
-
-
             }
             string authHeader = context.Request.Headers["Authorization"];
             if (authHeader != null && authHeader.StartsWith("Basic"))
@@ -71,7 +68,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
                 var username = usernamePassword.Substring(0, seperatorIndex);
                 var password = usernamePassword.Substring(seperatorIndex + 1);
-
 
                 if (_authentications.FirstOrDefault(o => o.Item1 == username && o.Item2 == password) != null)
                 {

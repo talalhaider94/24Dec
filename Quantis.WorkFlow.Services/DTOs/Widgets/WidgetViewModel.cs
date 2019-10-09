@@ -43,8 +43,8 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public void AddMeasure(Measures m)
         {
             Measures.Add((int)m, GetDescription(m));
-
         }
+
         private static string GetDescription(Enum value)
         {
             return

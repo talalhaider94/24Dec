@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Models
         public DateTime time_stamp { get; set; }
         public virtual T_Form Form { get; set; }
     }
+
     public class T_FormLog_Configuration : IEntityTypeConfiguration<T_FormLog>
     {
         public void Configure(EntityTypeBuilder<T_FormLog> builder)

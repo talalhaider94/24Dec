@@ -11,7 +11,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class ErrorInterceptorService implements HttpInterceptor {
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -34,7 +33,6 @@ export class ErrorInterceptorService implements HttpInterceptor {
         this.toastr.error('Errore durante la comunicazione con il server');
       }
       return throwError(err);
-
     }))
   }
 }

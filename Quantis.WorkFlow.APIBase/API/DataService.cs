@@ -27,7 +27,6 @@ namespace Quantis.WorkFlow.APIBase.API
 {
     public class DataService : IDataService
     {
-
         private readonly IMappingService<GroupDTO, T_Group> _groupMapper;
         private readonly IMappingService<PageDTO, T_Page> _pageMapper;
         private readonly IMappingService<WidgetDTO, T_Widget> _widgetMapper;
@@ -81,11 +80,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
             }
         }
+
         public bool CronJobsScheduler()
         {
             return true;
-
         }
+
         public List<KeyValuePair<int, string>> GetAllCustomersKP()
         {
             try
@@ -97,6 +97,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public bool AddUpdateFormRule(FormRuleDTO dto)
         {
             try
@@ -107,7 +108,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     entity = new T_FormRule();
                     entity = _formRuleMapper.GetEntity(dto, entity);
                     _dbcontext.FormRules.Add(entity);
-
                 }
                 else
                 {
@@ -122,6 +122,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<FormDetialsDTO> GetFormDetials(List<int> formids)
         {
             try
@@ -133,9 +134,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         /*       public List<int> GetRawIdsFromRulePeriod(int ruleId,string period)
                {
-
                    try
                    {
                        var config = new List<KPIRegistrationDTO>();
@@ -148,7 +149,6 @@ namespace Quantis.WorkFlow.APIBase.API
                            var response = client.GetAsync(output.Item2).Result;
                            if (response.IsSuccessStatusCode)
                            {
-
                                config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
                                var eventResource = config.Select(o => new EventResourceDTO()
                                {
@@ -164,7 +164,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
                                throw e;
                            }
-
                        }
                    }
                    catch(Exception e)
@@ -172,6 +171,7 @@ namespace Quantis.WorkFlow.APIBase.API
                        throw e;
                    }
                }*/
+
         public List<EventResourceDTO> GetEventResourceFromRule(int ruleId)
         {
             try
@@ -186,7 +186,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     var response = client.GetAsync(output.Item2).Result;
                     if (response.IsSuccessStatusCode)
                     {
-
                         config = JsonConvert.DeserializeObject<List<KPIRegistrationDTO>>(response.Content.ReadAsStringAsync().Result);
                         var eventResource = config.Select(o => new EventResourceDTO()
                         {
@@ -203,7 +202,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         var e = new Exception(string.Format("KPI registration API not working: basePath: {0} apipath: {1}", client.BaseAddress, apiPath));
                         throw e;
                     }
-
                 }
             }
             catch (Exception e)
@@ -211,6 +209,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<NotifierLogDTO> GetEmailHistory()
         {
             try
@@ -232,6 +231,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public FormRuleDTO GetFormRuleByKPIID(string kpiId)
         {
             try
@@ -243,6 +243,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public bool AddUpdateGroup(GroupDTO dto)
         {
             try
@@ -301,13 +302,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     return usr.userid;
                 }
                 return null;
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public bool AddUpdateUser(UserDTO dto)
         {
             using (var dbContextTransaction = _dbcontext.Database.BeginTransaction())
@@ -342,7 +343,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw e;
                 }
             }
-
         }
 
         public bool AddUpdateWidget(WidgetDTO dto)
@@ -402,8 +402,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw e;
                 }
             }
-
         }
+
         public List<GroupDTO> GetAllGroups()
         {
             try
@@ -415,7 +415,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public List<ApiDetailsDTO> GetAllAPIs()
@@ -429,8 +428,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<CatalogKpiDTO> GetAllKpis()
         {
             try
@@ -442,8 +441,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<CatalogKpiDTO> GetAllKpisByUserId(List<int> globalruleIds)
         {
             try
@@ -459,8 +458,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<PageDTO> GetAllPages()
         {
             try
@@ -472,8 +471,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter)
         {
             try
@@ -488,6 +487,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<UserDTO> GetAllUsers()
         {
             try
@@ -499,8 +499,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
         {
             try
@@ -525,14 +525,13 @@ namespace Quantis.WorkFlow.APIBase.API
                             userid = usrs.userid,
                             show_landingpage = subset == null ? false : subset.show_landingpage
                         }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
+
         public void SetLandingPageByUser(int userId, bool set)
         {
             try
@@ -564,6 +563,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public UserLandingPageDTO GetLandingPageInformation(int userId)
         {
             try
@@ -593,6 +593,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void SelectLandingPage(int userId)
         {
             try
@@ -612,6 +613,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<UserDTO> GetUsersByRoleId(int roleId)
         {
             try
@@ -631,6 +633,7 @@ namespace Quantis.WorkFlow.APIBase.API
             bool isSecurityMember = _dbcontext.SecurityMembers.Any(o => o.user_group_id == UserId);
             return isSecurityMember;
         }
+
         public KpisAssociated GetKpiAssociatedByFormId(int Id)
         {
             try
@@ -654,14 +657,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     Kpis_Associated = result
                 };
-
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<FormUsersDTO> GetAllFormUsers(int formId, int UserId)
         {
             try
@@ -740,8 +742,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<FormConfigurationDTO> GetFormConfiguration(string schema)
         {
             //var dto = new APIToWorkflowDTO() { input = schema };
@@ -818,7 +820,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 name = f.name,
                                 a_type = f.a_type,
                                 defaultValue = f.defaultValue,
-
                             };
                             if (fields.a_type == "DLFCheckBox")
                             {
@@ -833,7 +834,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             ));
                             if (label != null)
                             {
-
                                 fields.text = label.text;
                                 labelList.Remove(label);
                             }
@@ -855,6 +855,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         private ReaderConfiguration GetFormAdapterConfiguration(string xml, List<FormConfigurationDTO> conf)
         {
             XDocument xdoc = XDocument.Parse(xml);
@@ -868,9 +869,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     name = l.Attribute("Name").Value,
                     type = l.Attribute("Type").Value,
                     source = l.Attribute("Source").Value,
-
                 });
-
             }
             foreach (var s in conf)
             {
@@ -881,7 +880,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         name = "Label",
                         type = "Label",
                         source = s.text
-
                     });
                 }
             }
@@ -904,31 +902,6 @@ namespace Quantis.WorkFlow.APIBase.API
             };
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public List<WidgetDTO> GetAllWidgets()
         {
             try
@@ -940,7 +913,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public bool RemoveAttachment(int id)
@@ -975,7 +947,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public CatalogKpiDTO GetKpiById(int Id)
@@ -989,7 +960,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public GroupDTO GetGroupById(int Id)
@@ -1003,7 +973,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public PageDTO GetPageById(int Id)
@@ -1017,7 +986,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public UserDTO GetUserById(string UserId)
@@ -1031,7 +999,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public List<KPIOnlyContractDTO> GetKpiByFormId(int Id)
@@ -1051,8 +1018,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     kpi_name_bsi = o.kpi_name_bsi,
                     target = o.target
                 }).ToList();
-
-
             }
             catch (Exception e)
             {
@@ -1071,8 +1036,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         public List<FormLVDTO> GetAllForms()
         {
             try
@@ -1160,6 +1125,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             };
         }
+
         public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
         {
             try
@@ -1173,9 +1139,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public bool SubmitAttachment(List<FormAttachmentDTO> dto)
         {
-
             try
             {
                 List<T_FormAttachment> attachments = new List<T_FormAttachment>();
@@ -1204,7 +1170,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
 
         public LoginResultDTO Login(string username, string password)
@@ -1250,7 +1215,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 DefaultDashboardId = dash == null ? -1 : dash.Id,
                                 UIVersion = _configuration["UIVersion"],
                             };
-
                         }
                     }
                 }
@@ -1378,18 +1342,22 @@ namespace Quantis.WorkFlow.APIBase.API
                                 if (month == "09") { periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); }
                                 if (month == "12") { periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "QUADRIMESTRALE":
                                 if (month == "04") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); }
                                 if (month == "08") { periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); }
                                 if (month == "12") { periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "SEMESTRALE":
                                 if (month == "06") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); }
                                 if (month == "12") { periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             case "ANNUALE":
                                 if (month == "12") { periods.Add(year + "_01"); periods.Add(year + "_02"); periods.Add(year + "_03"); periods.Add(year + "_04"); periods.Add(year + "_05"); periods.Add(year + "_06"); periods.Add(year + "_07"); periods.Add(year + "_08"); periods.Add(year + "_09"); periods.Add(year + "_10"); periods.Add(year + "_11"); periods.Add(year + "_12"); }
                                 break;
+
                             default:
                                 periods.Add(year + "_" + month);
                                 break;
@@ -1416,6 +1384,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AddArchiveKPI(ARulesDTO dto)
         {
             try
@@ -1504,7 +1473,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         while (reader.Read())
                         {
-
                             FormsFromCatalogDTO form = new FormsFromCatalogDTO();
                             form.id = 0;
                             form.form_id = reader.GetInt32(reader.GetOrdinal("form_id"));
@@ -1547,6 +1515,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
         {
             try
@@ -1695,6 +1664,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public CreateTicketDTO GetKPICredentialToCreateTicket(int Id)
         {
             try
@@ -1723,14 +1693,13 @@ namespace Quantis.WorkFlow.APIBase.API
                         "[Non Calcolato]",
                     zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi
                 };
-
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
+
         private string GenerateDiscriptionFromKPI(T_CatalogKPI kpi, string calc)
         {
             string skeleton = "INDICATORE: {0}\n" +
@@ -1816,9 +1785,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                         else { return list; } //EXIT IF NO eventResource
 
-
-
-
                         using (var con2 = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                         {
                             con2.Open();
@@ -1860,6 +1826,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
@@ -1908,6 +1875,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         /*       public List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year) // NON USATA
                {
                    try
@@ -1926,7 +1894,6 @@ namespace Quantis.WorkFlow.APIBase.API
 
                                using (var reader = command.ExecuteReader())
                                {
-
                                    while (reader.Read())
                                    {
                                        //created_by | event_type_id | reader_time_stamp | resource_id | time_stamp | data_source_id | raw_data_id | create_date | corrected_by | data | modify_date | reader_id | event_source_type_id | event_state_id | partner_raw_data_id | hash_data_key | id_kpi
@@ -1950,7 +1917,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                        atdtde.id_kpi = reader.GetString(reader.GetOrdinal("id_kpi"));
 
                                        list.Add(atdtde);
-                                   }                     
+                                   }
                                }
                            }
 
@@ -1962,6 +1929,7 @@ namespace Quantis.WorkFlow.APIBase.API
                        throw e;
                    }
                } */
+
         public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
         {
             try
@@ -1989,13 +1957,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                 }
                 return _fromAttachmentMapper.GetDTOs(attachments.ToList()).OrderByDescending(o => o.create_date).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<KPISDMExtraDTO> GetKPISDMExtraInformation(List<int> ids)
         {
             try
@@ -2008,14 +1976,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     referent = o.referent,
                     tipologia = o.kpi_type
                 }).ToList();
-
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {
             try
@@ -2026,7 +1993,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 var notifiers = month.Length > 0 ?
                         _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("MM/yy") == period).ToList()
                     : _dbcontext.EmailNotifiers.Include(o => o.Form).Where(p => p.notify_date.ToString("yy") == year).ToList();
-
 
                 return notifiers.Select(o => new EmailNotifierDTO()
                 {
@@ -2039,13 +2005,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     type = o.type,
                     user_domain = o.user_domain
                 }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<TUserDTO> GetAllTUsers()
         {
             try
@@ -2061,13 +2027,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     user_organization_name = o.user_organization_name
                 }).ToList();
                 return dtos;
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<TRuleDTO> GetAllTRules()
         {
             try
@@ -2129,10 +2095,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
-
             });
             return dtos.ToList();
         }
+
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
         {
             var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).ToList();
@@ -2144,7 +2110,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
-
             });
             return dtos.ToList();
         }
@@ -2169,6 +2134,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return null;
         }
+
         public void AddEditReportQuery(ReportQueryDetailDTO dto, int userId)
         {
             if (dto.Id == 0)
@@ -2182,11 +2148,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     parameter_value = o.Value,
                     parameter_key = o.Key,
-
                 }).ToList();
                 _dbcontext.ReportQueries.Add(entity);
                 _dbcontext.SaveChanges();
-
             }
             else
             {
@@ -2201,11 +2165,9 @@ namespace Quantis.WorkFlow.APIBase.API
                     parameter_value = o.Value,
                     parameter_key = o.Key,
                     query_id = dto.Id
-
                 }).ToList();
                 _dbcontext.ReportQueryParameters.AddRange(param.ToArray());
                 _dbcontext.SaveChanges();
-
             }
         }
 
@@ -2223,6 +2185,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+
         public void AssignReportQuery(MultipleRecordsDTO records, int ownerId)
         {
             if (_dbcontext.ReportQueries.Any(o => o.id == records.Id && o.owner_id == ownerId))
@@ -2239,6 +2202,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+
         public object ExecuteReportQuery(ReportQueryDetailDTO dto)
         {
             string query = dto.QueryText;
@@ -2267,6 +2231,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+
         public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid, int userId)
         {
             try
@@ -2291,15 +2256,12 @@ namespace Quantis.WorkFlow.APIBase.API
                             userid = usrs.userid,
                             isAssigned = subset == null ? false : true
                         }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
-
 
         #region privateFunctions
 
@@ -2307,7 +2269,6 @@ namespace Quantis.WorkFlow.APIBase.API
                {
                    try
                    {
-
                        using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                        {
                            con.Open();
@@ -2326,7 +2287,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                {
                                    whereStatements.Add(string.Format("(resource_id={0} AND event_type_id={1})", d.ResourceId, d.EventId));
                                }
-
                            }
                            if (dto.Any())
                            {
@@ -2373,16 +2333,15 @@ namespace Quantis.WorkFlow.APIBase.API
                     else
                     {
                         throw new Exception("The return from Form Adapter is not valid value is:" + res);
-
                     }
                 }
                 else
                 {
                     throw new Exception(string.Format("Call to form adapter has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                 }
-
             }
         }
+
         private int getSessionTimeOut()
         {
             var session = _infomationAPI.GetConfiguration("be_restserver", "session_timeout");
@@ -2393,6 +2352,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return 15;
         }
+
         private string MD5Hash(string input)
         {
             StringBuilder hash = new StringBuilder();
@@ -2405,6 +2365,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return hash.ToString();
         }
+
         private string RandomString(int size)
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -2419,6 +2380,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var finalString = new String(stringChars);
             return finalString;
         }
+
         private string sha256_hash(string value)
         {
             StringBuilder Sb = new StringBuilder();
@@ -2432,7 +2394,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return Sb.ToString();
         }
-
 
         private bool TableExists(string tableName)
         {
@@ -2465,6 +2426,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+
         private IQueryable<T_CatalogUser> CreateGetUserQuery(UserFilterDTO filter)
         {
             var users = _dbcontext.CatalogUsers as IQueryable<T_CatalogUser>;
@@ -2488,6 +2450,6 @@ namespace Quantis.WorkFlow.APIBase.API
             return users;
         }
 
-        #endregion
+        #endregion privateFunctions
     }
 }

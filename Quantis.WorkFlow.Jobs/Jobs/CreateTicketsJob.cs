@@ -12,10 +12,12 @@ namespace Quantis.WorkFlow.Jobs.Jobs
     public class CreateTicketsJob : IJob
     {
         private readonly IServiceProvider _provider;
+
         public CreateTicketsJob(IServiceProvider provider)
         {
             _provider = provider;
         }
+
         public Task Execute(IJobExecutionContext context)
         {
             using (var scope = _provider.CreateScope())
@@ -52,20 +54,14 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                                     var tic = sdmservice.CreateTicketByKPIID(k.id);
                                     dbcontext.LogInformation("Create Ticket Job(YES): Ticket created with kpiId: " + k.id + " ticket ref: " + tic.ref_num);
                                 }
-
-
                             }
                             catch (Exception e)
                             {
                                 dbcontext.LogInformation("Create Ticket Job(NO): Ticket creation failed with kpiId: " + k.id + " with msg: " + e.Message);
                             }
-
                         }
-
-
                     }
                 }
-
             }
 
             return Task.CompletedTask;

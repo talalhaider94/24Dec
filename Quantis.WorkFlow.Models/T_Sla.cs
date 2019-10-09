@@ -37,8 +37,8 @@ namespace Quantis.WorkFlow.Models
         public int? customer_category_id { get; set; }
         public DateTime? calculation_freeze_date { get; set; }
         public int? committed_version_seq_num { get; set; }
-
     }
+
     public class T_Sla_Configuration : IEntityTypeConfiguration<T_Sla>
     {
         public void Configure(EntityTypeBuilder<T_Sla> builder)

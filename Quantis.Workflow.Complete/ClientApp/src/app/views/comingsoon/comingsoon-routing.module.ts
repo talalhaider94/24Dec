@@ -3,17 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { CommingsoonComponent } from './commingsoon.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: CommingsoonComponent,
-    data: {
-      title: 'Welcome'
+    {
+        path: '',
+        component: CommingsoonComponent,
+        data: {
+            title: 'Welcome'
+        }
     }
-  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class ComingSoonRoutingModule {}
+export class ComingSoonRoutingModule { }

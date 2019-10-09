@@ -8,14 +8,14 @@ import { GobackComponent } from './goback.component';
 import { GobackRoutingModule } from './goback-routing.module';
 
 @NgModule({
-  imports: [
-    FormsModule,
-    GobackRoutingModule,
-    ChartsModule,
-    BsDropdownModule,
-    CommonModule,
-    ButtonsModule.forRoot()
-  ],
-  declarations: [ GobackComponent ]
+    imports: [
+        FormsModule,
+        GobackRoutingModule,
+        ChartsModule,
+        BsDropdownModule,
+        CommonModule,
+        ButtonsModule.forRoot()
+    ],
+    declarations: [GobackComponent]
 })
 export class GobackModule { }

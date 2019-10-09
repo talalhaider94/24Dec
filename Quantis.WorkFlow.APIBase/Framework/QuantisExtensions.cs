@@ -31,18 +31,17 @@ namespace Quantis.WorkFlow.APIBase.Framework
 
             var results = query.Skip(skip).Take(pagingInfo.Size).ToList();
             return new PagedList<T>(results, CurrentPage, PageSize, RowCount);
-
         }
 
         public static void Add(this Dictionary<string, string> dic, KeyValuePair<string, string> kp)
         {
             dic.Add(kp.Key, kp.Value);
         }
+
         public static void LogInformation(this WorkFlowPostgreSqlContext dbcontext, string logMessage)
         {
             try
             {
-
                 var exception = new T_Exception()
                 {
                     message = logMessage.Substring(0, Math.Min(999, logMessage.Length)),
@@ -59,6 +58,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
                 throw e;
             }
         }
+
         public static string Bash(this string cmd)
         {
             var escapedArgs = cmd.Replace("\"", "\\\"");
@@ -79,6 +79,5 @@ namespace Quantis.WorkFlow.APIBase.Framework
             process.WaitForExit();
             return result;
         }
-
     }
 }

@@ -14,6 +14,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private BSIAuth.OblicoreAuthSoapClient _authService = null;
         private BSIReports.ReportsSoapClient _reportService = null;
         private readonly IConfiguration _configuration;
+
         public BSIService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -25,12 +26,10 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 _reportService = new BSIReports.ReportsSoapClient(BSIReports.ReportsSoapClient.EndpointConfiguration.ReportsSoap, _configuration["BSIReportsWebServices"]);
             }
-
         }
 
         public List<BSIReportLVDTO> GetMyNormalReports(string userName)
         {
-
             var session = Login(userName);
             var myreports = _reportService.GetMyReportsAsync(session).Result;
             if (myreports.Nodes[1].Element("Result") == null)
@@ -41,12 +40,10 @@ namespace Quantis.WorkFlow.APIBase.API
             Logout(session);
             var reports = parseReports(list);
             return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
-
         }
 
         public List<BSIReportLVDTO> GetAllNormalReports(string userName)
         {
-
             var session = Login(userName);
             var myreports = _reportService.GetAllReportsAsync(session).Result;
             if (myreports.Nodes[1].Element("Result") == null)
@@ -57,7 +54,6 @@ namespace Quantis.WorkFlow.APIBase.API
             Logout(session);
             var reports = parseReports(list);
             return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
-
         }
 
         public BSIReportMainDTO GetReportDetail(string userName, int reportId)
@@ -135,6 +131,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
             return results;
         }
+
         private List<BSIReportLVDTO> parseReports(IEnumerable<XElement> elements)
         {
             var results = new List<BSIReportLVDTO>();
@@ -152,20 +149,21 @@ namespace Quantis.WorkFlow.APIBase.API
                 result.ModifiedDate = DateTime.Parse(element.Element("MODIFY_DATE").Value);
 
                 results.Add(result);
-
             }
             return results;
         }
+
         private string Login(string userName)
         {
-
             var sessionId = _authService.CreateSessionContextAsync(userName, "Poste Italiane").Result;
             return sessionId;
         }
+
         private void Logout(string sessionID)
         {
             _authService.ClearSessionContextAsync(sessionID);
         }
+
         ~BSIService()
         {
             int x = 1;

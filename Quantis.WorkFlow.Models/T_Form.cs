@@ -24,7 +24,6 @@ namespace Quantis.WorkFlow.Models
         public virtual IList<T_FormRule> Rules { get; set; }
         public virtual IList<T_NotifierLog> NotifierLogs { get; set; }
         public virtual IList<T_EmailNotifiers> EmailNotifiers { get; set; }
-
     }
 
     public class T_Form_Configuration : IEntityTypeConfiguration<T_Form>

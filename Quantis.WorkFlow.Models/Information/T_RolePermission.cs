@@ -11,6 +11,7 @@ namespace Quantis.WorkFlow.Models.Information
         public virtual T_Role Role { get; set; }
         public virtual T_Permission Permission { get; set; }
     }
+
     public class T_RolePermission_Configuration : IEntityTypeConfiguration<T_RolePermission>
     {
         public void Configure(EntityTypeBuilder<T_RolePermission> builder)

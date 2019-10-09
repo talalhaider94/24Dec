@@ -11,10 +11,12 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
     public class FreeFormReportController : BaseWidgetController
     {
         private IDataService _dataService { get; set; }
+
         public FreeFormReportController(IDataService dataService)
         {
             _dataService = dataService;
         }
+
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
             vm.ShowMeasure = true;
@@ -31,7 +33,6 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
                 {
                     vm.Measures.Add(q.Id, q.QueryName);
                 }
-
             }
         }
 

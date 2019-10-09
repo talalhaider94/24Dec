@@ -12,8 +12,8 @@ namespace Quantis.WorkFlow.Models
         public string stacktrace { get; set; }
         public string loglevel { get; set; }
         public DateTime timestamp { get; set; }
-
     }
+
     public class T_Exception_Configuration : IEntityTypeConfiguration<T_Exception>
     {
         public void Configure(EntityTypeBuilder<T_Exception> builder)

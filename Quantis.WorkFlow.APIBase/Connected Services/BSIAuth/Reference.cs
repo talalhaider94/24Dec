@@ -9,13 +9,10 @@
 
 namespace BSIAuth
 {
-
-
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     [System.ServiceModel.ServiceContractAttribute(Namespace = "http://www.oblicore.com", ConfigurationName = "BSIAuth.OblicoreAuthSoap")]
     public interface OblicoreAuthSoap
     {
-
         [System.ServiceModel.OperationContractAttribute(Action = "http://www.oblicore.com/AuthenticateUser", ReplyAction = "*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
         System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string organizationName);
@@ -38,7 +35,6 @@ namespace BSIAuth
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     public partial class OblicoreAuthSoapClient : System.ServiceModel.ClientBase<BSIAuth.OblicoreAuthSoap>, BSIAuth.OblicoreAuthSoap
     {
-
         /// <summary>
         /// Implementare questo metodo parziale per configurare l'endpoint servizio.
         /// </summary>
@@ -139,7 +135,6 @@ namespace BSIAuth
 
         public enum EndpointConfiguration
         {
-
             OblicoreAuthSoap,
 
             OblicoreAuthSoap12,

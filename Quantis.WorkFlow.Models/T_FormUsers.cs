@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Models
         public int? user_group_id { get; set; }
         public string user_group_name { get; set; }
     }
+
     public class T_FormUsers_Configuration : IEntityTypeConfiguration<T_FormUsers>
     {
         public void Configure(EntityTypeBuilder<T_FormUsers> builder)
@@ -25,4 +26,3 @@ namespace Quantis.WorkFlow.Models
         }
     }
 }
-

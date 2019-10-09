@@ -25,30 +25,35 @@ namespace Quantis.WorkFlow.Controllers
             _oracleAPI = oracleAPI;
             _dataAPI = dataAPI;
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetCustomerById/{id}")]
         public List<OracleCustomerDTO> GetCustomerById(int id)
         {
             return _oracleAPI.GetCustomer(id, "");
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetBooklets")]
         public List<OracleBookletDTO> GetBooklets()
         {
             return _oracleAPI.GetBooklets();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetCustomers")]
         public List<OracleCustomerDTO> GetCustomers(string name)
         {
             return _oracleAPI.GetCustomer(0, name);
         }
+
         /*[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormById/{id}")]
         public List<OracleFormDTO> GetFormById(int id)
         {
             return _oracleAPI.GetForm(id, 0);
         }*/
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetLandingPageByUser")]
         public List<LandingPageDTO> GetLandingPageByUser(string period)
@@ -56,11 +61,13 @@ namespace Quantis.WorkFlow.Controllers
             var usr = HttpContext.User as AuthUser;
             return _oracleAPI.GetLandingPageByUser(usr.UserId, period);
         }
+
         [HttpGet("GetBSIFreeFormReports")]
         public List<BSIFreeFormReportDTO> GetBSIFreeFormReports()
         {
             return _oracleAPI.GetBSIFreeFormReports();
         }
+
         /*[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormsByUser")]
         public List<OrcaleFormWithAttachmentCountDTO> GetFormsByUser()
@@ -88,8 +95,6 @@ namespace Quantis.WorkFlow.Controllers
                         user_group_name=d.user_group_name,
                         latest_input_date=a.latest_modified_date
                     }).ToList();
-
-
             }
             return null;
         }
@@ -99,54 +104,63 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _oracleAPI.GetForm(0, 0);
         }*/
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetGroupById/{id}")]
         public List<OracleGroupDTO> GetGroupById(int id)
         {
             return _oracleAPI.GetGroup(id, "");
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetGroups")]
         public List<OracleGroupDTO> GetGroups(string name)
         {
             return _oracleAPI.GetGroup(0, name);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetSlaById/{id}")]
         public List<OracleSlaDTO> GetSlaById(int id)
         {
             return _oracleAPI.GetSla(id, "");
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetSlas")]
         public List<OracleSlaDTO> GetSlas(string name)
         {
             return _oracleAPI.GetSla(0, name);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetRuleById/{id}")]
         public List<OracleRuleDTO> GetRuleById(int id)
         {
             return _oracleAPI.GetRule(id, "");
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetRules")]
         public List<OracleRuleDTO> GetRules(string name)
         {
             return _oracleAPI.GetRule(0, name);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetUserById/{id}")]
         public List<OracleUserDTO> GetUserById(int id)
         {
             return _oracleAPI.GetUser(id, "");
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetUsers")]
         public List<OracleUserDTO> GetUsers(string name)
         {
             return _oracleAPI.GetUser(0, name);
         }
+
         //[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetPsl")]
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)

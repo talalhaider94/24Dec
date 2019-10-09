@@ -14,6 +14,7 @@ namespace Quantis.WorkFlow.Models
         public DateTime login_time { get; set; }
         public DateTime? logout_time { get; set; }
     }
+
     public class T_Session_Configuration : IEntityTypeConfiguration<T_Session>
     {
         public void Configure(EntityTypeBuilder<T_Session> builder)

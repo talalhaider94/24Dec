@@ -18,14 +18,14 @@ namespace Quantis.WorkFlow.Jobs
                 services.AddSingleton<CallingJavaJob>();
                 services.AddSingleton(new JobSchedule(
                     jobType: typeof(CallingJavaJob),
-                    cronExpression: conf["CronJobJavaCallingExpression"])); // run every 5 seconds               
+                    cronExpression: conf["CronJobJavaCallingExpression"])); // run every 5 seconds
             }
             if (!string.IsNullOrEmpty(conf["CronJobCreatingTicketsExpression"]))
             {
                 services.AddSingleton<CreateTicketsJob>();
                 services.AddSingleton(new JobSchedule(
                     jobType: typeof(CreateTicketsJob),
-                    cronExpression: conf["CronJobCreatingTicketsExpression"])); // run every 5 seconds               
+                    cronExpression: conf["CronJobCreatingTicketsExpression"])); // run every 5 seconds
             }
             services.AddHostedService<QuartzHostedService>();
         }

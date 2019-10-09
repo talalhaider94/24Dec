@@ -21,6 +21,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
         private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
         private readonly IConfiguration _configuration;
+
         public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
              IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
              IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper,
@@ -32,6 +33,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _sdmStatusMapper = sdmStatusMapper;
             _configuration = configuration;
         }
+
         public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
         {
             try
@@ -59,13 +61,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     conf = _configurationMapper.GetEntity(dto, conf);
                 }
                 _dbcontext.SaveChanges();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void AddUpdateAdvancedConfiguration(ConfigurationDTO dto)
         {
             try
@@ -93,7 +95,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     conf = _configurationMapper.GetEntity(dto, conf);
                 }
                 _dbcontext.SaveChanges();
-
             }
             catch (Exception e)
             {
@@ -111,13 +112,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     _dbcontext.Configurations.Remove(conf);
                     _dbcontext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public ConfigurationDTO GetConfiguration(string owner, string key)
         {
             try
@@ -149,6 +150,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<ConfigurationDTO> GetAllAdvancedConfigurations()
         {
             try
@@ -175,6 +177,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AddUpdateRole(BaseNameCodeDTO dto)
         {
             try
@@ -200,6 +203,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void DeleteRole(int roleId)
         {
             try
@@ -217,6 +221,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<PermissionDTO> GetAllPermissions()
         {
             try
@@ -236,7 +241,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var roles = _dbcontext.UserRoles.Include(o => o.Role).Where(q => q.user_id == userid).Select(r => r.Role).ToList();
                 return roles.Select(o => new BaseNameCodeDTO(o.id, o.name, o.code)).ToList();
-
             }
             catch (Exception e)
             {
@@ -271,7 +275,6 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-
         public int GetContractIdByGlobalRuleId(int globalruleid)
         {
             try
@@ -292,7 +295,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             res = Decimal.ToInt32((Decimal)result[1]);
                         }
                     }
-
                 }
                 return res;
             }
@@ -301,6 +303,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<BaseNameCodeDTO> GetAllContractPariesByUserId(int userId)
         {
             try
@@ -349,7 +352,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         dtos.Add(dto);
                     }
                     return dtos.OrderBy(o => o.Name).ToList();
-
                 }
             }
             catch (Exception e)
@@ -357,6 +359,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
         {
             try
@@ -408,7 +411,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         dtos.Add(dto);
                     }
                     return dtos.OrderBy(o => o.Name).ToList();
-
                 }
             }
             catch (Exception e)
@@ -416,6 +418,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId)
         {
             try
@@ -443,7 +446,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             into gj
                             from subset in gj.DefaultIfEmpty()
                             select new BaseNameCodeDTO(d.Id, d.Name, subset == null ? "0" : "1")).OrderBy(o => o.Name).ToList();
-
                 }
             }
             catch (Exception e)
@@ -451,6 +453,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AssignKpisToUserByContractParty(int userId, int contractpartyId, bool assign)
         {
             try
@@ -484,8 +487,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.UserKPIs.AddRange(entities.ToArray());
                         _dbcontext.SaveChanges();
                     }
-
-
                 }
             }
             catch (Exception e)
@@ -493,17 +494,18 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<UserProfilingDTO> GetUserProfilingCSV()
         {
             var res = new List<UserProfilingDTO>();
             string query = @"select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id,u.user_name,u.user_id
-                            from t_rules r 
-                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
-                            left join t_slas m on m.sla_id = s.sla_id 
+                            from t_rules r
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id
+                            left join t_slas m on m.sla_id = s.sla_id
                             left join t_customers c on m.customer_id = c.customer_id
                             left join t_user_kpis uk on uk.global_rule_id=r.global_rule_id
                             left join t_users u on uk.user_id=u.user_id
-                            WHERE s.sla_status = 'EFFECTIVE' 
+                            WHERE s.sla_status = 'EFFECTIVE'
                             AND m.sla_status = 'EFFECTIVE'
                             AND u.user_name is not null";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
@@ -526,14 +528,13 @@ namespace Quantis.WorkFlow.APIBase.API
                             ContractPartyId = (int)result[5],
                             UserName = (string)result[6],
                             UserId = (int)result[7]
-
                         });
                     }
                 }
                 return res;
-
             }
         }
+
         public void AssignKpisToUserByContract(int userId, int contractId, bool assign)
         {
             try
@@ -567,7 +568,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.UserKPIs.AddRange(entities.ToArray());
                         _dbcontext.SaveChanges();
                     }
-
                 }
             }
             catch (Exception e)
@@ -575,6 +575,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AssignKpisToUserByKpis(int userId, int contractId, List<int> kpiIds)
         {
             try
@@ -606,7 +607,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     }).ToList();
                     _dbcontext.UserKPIs.AddRange(entities.ToArray());
                     _dbcontext.SaveChanges();
-
                 }
             }
             catch (Exception e)
@@ -614,7 +614,6 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
 
         public void AssignRolesToUser(MultipleRecordsDTO dto)
         {
@@ -655,6 +654,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<SDMStatusDTO> GetAllSDMStatusConfigurations()
         {
             try
@@ -668,6 +668,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<SDMGroupDTO> GetAllSDMGroupConfigurations()
         {
             try
@@ -681,6 +682,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void DeleteSDMGroupConfiguration(int id)
         {
             try
@@ -694,6 +696,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void DeleteSDMStatusConfiguration(int id)
         {
             try
@@ -707,6 +710,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto)
         {
             try
@@ -724,13 +728,13 @@ namespace Quantis.WorkFlow.APIBase.API
                     ent = _sdmStatusMapper.GetEntity(dto, ent);
                     _dbcontext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto)
         {
             try
@@ -748,7 +752,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     ent = _sdmGroupMapper.GetEntity(dto, ent);
                     _dbcontext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
@@ -768,6 +771,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public void AssignGlobalRulesToUserId(MultipleRecordsDTO dto)
         {
             try
@@ -782,13 +786,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 });
                 _dbcontext.UserKPIs.AddRange(newent.ToArray());
                 _dbcontext.SaveChanges();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<ContractPartyDetailDTO> GetContractPartyByUser(int userId)
         {
             try
@@ -801,13 +805,11 @@ namespace Quantis.WorkFlow.APIBase.API
                     KPIId = p.id,
                     GlobalRuleId = p.global_rule_id_bsi
                 }).ToList();
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-
     }
 }

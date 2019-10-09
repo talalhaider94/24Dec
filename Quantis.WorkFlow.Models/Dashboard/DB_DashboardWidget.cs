@@ -19,6 +19,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public virtual DB_Dashboard Dashboard { get; set; }
         public virtual List<DB_DashboardWidgetSetting> DashboardWidgetSettings { get; set; }
     }
+
     public class DB_DashboardWidget_Configuration : IEntityTypeConfiguration<DB_DashboardWidget>
     {
         public void Configure(EntityTypeBuilder<DB_DashboardWidget> builder)

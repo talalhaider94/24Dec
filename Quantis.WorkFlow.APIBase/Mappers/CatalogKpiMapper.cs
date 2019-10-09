@@ -8,10 +8,12 @@ namespace Quantis.WorkFlow.APIBase.Mappers
     public class CatalogKpiMapper : MappingService<CatalogKpiDTO, T_CatalogKPI>
     {
         private readonly WorkFlowPostgreSqlContext _dbcontext;
+
         public CatalogKpiMapper(WorkFlowPostgreSqlContext dbcontext)
         {
             _dbcontext = dbcontext;
         }
+
         public override CatalogKpiDTO GetDTO(T_CatalogKPI e)
         {
             return new CatalogKpiDTO()
@@ -64,7 +66,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 primary_contract_party_name = e.PrimaryCustomer?.customer_name,
                 secondary_contract_party_name = e.SecondaryCustomer?.customer_name,
                 contract_name = e.Sla?.sla_name
-
             };
         }
 

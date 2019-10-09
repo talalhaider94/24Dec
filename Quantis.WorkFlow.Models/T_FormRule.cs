@@ -13,6 +13,7 @@ namespace Quantis.WorkFlow.Models
         public DateTime end_date { get; set; }
         public virtual T_Form Form { get; set; }
     }
+
     public class T_FormRule_Configuration : IEntityTypeConfiguration<T_FormRule>
     {
         public void Configure(EntityTypeBuilder<T_FormRule> builder)

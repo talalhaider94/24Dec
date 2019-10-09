@@ -9,11 +9,13 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
     {
         private IGlobalFilterService _globalfilterService;
         private IWidgetService _widgetService;
+
         public KPICountTrendController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
             _globalfilterService = globalfilterService;
             _widgetService = widgetService;
         }
+
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
             vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();

@@ -22,6 +22,7 @@ namespace Quantis.WorkFlow.Jobs
             _jobSchedules = jobSchedules;
             _jobFactory = jobFactory;
         }
+
         public IScheduler Scheduler { get; set; }
 
         public async Task StartAsync(CancellationToken cancellationToken)

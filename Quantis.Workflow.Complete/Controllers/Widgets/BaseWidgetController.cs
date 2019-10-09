@@ -19,6 +19,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             props.UserId = GetUserId();
             return GetData(props);
         }
+
         [HttpGet("GetWidgetParameters")]
         public WidgetViewModel GetWidgetParameSters()
         {
@@ -29,7 +30,9 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         }
 
         internal abstract void FillWidgetParameters(WidgetViewModel vm);
+
         internal abstract object GetData(WidgetParametersDTO props);
+
         private void FillDateTypes(WidgetViewModel vm)
         {
             vm.DateTypes.Add(0, "Intervallo");
@@ -48,6 +51,5 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             }
             return usr.UserId;
         }
-
     }
 }

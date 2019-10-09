@@ -19,148 +19,173 @@ namespace Quantis.WorkFlow.Controllers
     {
         private IDataService _dataAPI { get; set; }
         private IInformationService _informationAPI { get; set; }
+
         public DataController(IDataService dataAPI, IInformationService informationAPI)
         {
             _dataAPI = dataAPI;
             _informationAPI = informationAPI;
         }
+
         [HttpGet("CronJobsScheduler")]
         public bool CronJobsScheduler()
         {
             return _dataAPI.CronJobsScheduler();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllWidgets")]
         public List<WidgetDTO> GetAllWidgets()
         {
             return _dataAPI.GetAllWidgets();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("RemoveAttachment/{id}")]
         public bool RemoveAttachment(int id)
         {
             return _dataAPI.RemoveAttachment(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetEmailHistory")]
         public List<NotifierLogDTO> GetEmailHistory()
         {
             return _dataAPI.GetEmailHistory();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetWidgetById/{id}")]
         public WidgetDTO GetWidgetById(int id)
         {
             return _dataAPI.GetWidgetById(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdateWidget")]
         public bool AddUpdateWidget([FromBody]WidgetDTO dto)
         {
             return _dataAPI.AddUpdateWidget(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("GetAllPagedUsers")]
         public PagedList<UserDTO> GetAllPagedUsers([FromBody]UserFilterDTO filter)
         {
             return _dataAPI.GetAllPagedUsers(filter);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllUsers")]
         public List<UserDTO> GetAllUsers()
         {
             return _dataAPI.GetAllUsers();
         }
+
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_ROLES)]
         [HttpGet("GetUsersByRoleId")]
         public List<UserDTO> GetUsersByRoleId(int roleId)
         {
             return _dataAPI.GetUsersByRoleId(roleId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetUserById")]
         public UserDTO GetUserById(string UserId)
         {
             return _dataAPI.GetUserById(UserId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdateUser")]
         public bool AddUpdateUser([FromBody]UserDTO dto)
         {
             return _dataAPI.AddUpdateUser(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllPages")]
         public List<PageDTO> GetAllPages()
         {
             return _dataAPI.GetAllPages();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetPageById/{id}")]
         public PageDTO GetPageById(int id)
         {
             return _dataAPI.GetPageById(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdatePage")]
         public bool AddUpdatePage([FromBody]PageDTO dto)
         {
             return _dataAPI.AddUpdatePage(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllGroups")]
         public List<GroupDTO> GetAllGroups()
         {
             return _dataAPI.GetAllGroups();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetGroupById/{id}")]
         public GroupDTO GetGroupById(int id)
         {
             return _dataAPI.GetGroupById(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdateGroup")]
         public bool AddUpdateGroup([FromBody]GroupDTO dto)
         {
             return _dataAPI.AddUpdateGroup(dto);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_CATALOG_KPI)]
         [HttpGet("GetAllKpis")]
         public List<CatalogKpiDTO> GetAllKpis()
         {
             return _dataAPI.GetAllKpis();
         }
+
         [Authorize(WorkFlowPermissions.VIEW_CATALOG_KPI)]
         [HttpGet("GetKpiById/{id}")]
         public CatalogKpiDTO GetKpiById(int id)
         {
             return _dataAPI.GetKpiById(id);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_CATALOG_KPI)]
         [HttpPost("AddUpdateKpi")]
         public bool AddUpdateKpi([FromBody]CatalogKpiDTO dto)
         {
             return _dataAPI.AddUpdateKpi(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetKpiByFormId/{id}")]
         public List<KPIOnlyContractDTO> GetKpiByFormId(int id)
         {
             return _dataAPI.GetKpiByFormId(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormRuleByFormId/{id}")]
         public FormRuleDTO GetFormRuleByFormId(int id)
         {
             return _dataAPI.GetFormRuleByFormId(id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdateFormRule")]
         public bool AddUpdateFormRule([FromBody]FormRuleDTO dto)
         {
             return _dataAPI.AddUpdateFormRule(dto);
         }
+
         [HttpGet("Login")]
         public IActionResult Login(string username, string password)
         {
@@ -172,6 +197,7 @@ namespace Quantis.WorkFlow.Controllers
             var json = new { error = "Errore durente il Login", description = "Username o Password errati." };
             return StatusCode(StatusCodes.Status403Forbidden, json);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("Logout")]
         public void Logout()
@@ -182,11 +208,13 @@ namespace Quantis.WorkFlow.Controllers
                 _dataAPI.Logout(usr.SessionToken);
             }
         }
+
         [HttpGet("ResetPassword")]
         public bool ResetPassword(string username, string email)
         {
             return _dataAPI.ResetPassword(username, email);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("SubmitForm")]
         [DisableRequestSizeLimit]
@@ -194,6 +222,7 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.SumbitForm(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("SubmitAttachment")]
         [DisableRequestSizeLimit]
@@ -201,36 +230,42 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.SubmitAttachment(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAttachmentsByFormId")]
         public List<FormAttachmentDTO> GetAttachmentsByFormId(int formId)
         {
             return _dataAPI.GetAttachmentsByFormId(formId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_CATALOG_UTENTI)]
         [HttpGet("GetAllTUsers")]
         public List<TUserDTO> GetAllTUsers()
         {
             return _dataAPI.GetAllTUsers();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("ArchiveKPIs")]
         public int ArchiveKPIs([FromBody]ArchiveKPIDTO dto)
         {
             return _dataAPI.ArchiveKPIs(dto);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllForms")]
         public List<FormLVDTO> GetAllForms()
         {
             return _dataAPI.GetAllForms();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllAPIs")]
         public List<ApiDetailsDTO> GetAllAPIs()
         {
             return _dataAPI.GetAllAPIs();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllArchivedKPIs")]
         public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi)
@@ -239,6 +274,7 @@ namespace Quantis.WorkFlow.Controllers
             var globalrules = _informationAPI.GetGlobalRulesByUserId(user.UserId);
             return _dataAPI.GetAllArchivedKPIs(month, year, id_kpi, globalrules);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllKpisByUserId")]
         public List<CatalogKpiDTO> GetAllKpisByUserId()
@@ -247,18 +283,21 @@ namespace Quantis.WorkFlow.Controllers
             var globalrules = _informationAPI.GetGlobalRulesByUserId(user.UserId);
             return _dataAPI.GetAllKpisByUserId(globalrules);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetRawDataByKpiID")]
         public List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year)
         {
             return _dataAPI.GetRawDataByKpiID(id_kpi, month, year);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetArchivedRawDataByKpiID")]
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             return _dataAPI.GetArchivedRawDataByKpiID(id_kpi, month, year);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         /*      [HttpGet("GetDetailsArchivedKPI")]
                 public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
@@ -271,18 +310,21 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetAllCustomersKP();
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllTRules")]
         public List<TRuleDTO> GetAllTRules()
         {
             return _dataAPI.GetAllTRules();
         }
+
         [Authorize(WorkFlowPermissions.VIEW_NOTIFIER_EMAILS)]
         [HttpGet("GetEmailNotifiers")]
         public List<EmailNotifierDTO> GetEmailNotifiers(string period)
         {
             return _dataAPI.GetEmailNotifiers(period);
         }
+
         /*       [HttpGet("GetRawIdsFromRulePeriod")]
                public List<int> GetRawIdsFromRulePeriod(int ruleId, string period)
                {
@@ -294,28 +336,33 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.AddArchiveRawData(global_rule_id, period, tracking_period);
         }
+
         [HttpGet("GetEventResourceNames")]
         public List<EventResourceName> GetEventResourceNames()
         {
             return _dataAPI.GetEventResourceNames();
         }
+
         [HttpGet("GetDistributionByContract")]
         public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
         {
             return _dataAPI.GetDistributionByContract(period, sla_id);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
         [HttpGet("GetAllUsersLandingPage")]
         public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
         {
             return _dataAPI.GetAllUsersLandingPage();
         }
+
         [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
         [HttpGet("SetLandingPageByUser")]
         public void SetLandingPageByUser(int userId, bool set)
         {
             _dataAPI.SetLandingPageByUser(userId, set);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetLandingPageInformation")]
         public UserLandingPageDTO GetLandingPageInformation()
@@ -323,6 +370,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetLandingPageInformation(usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("SelectLandingPage")]
         public void SelectLandingPage()
@@ -330,6 +378,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.SelectLandingPage(usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("GetOwnedReportQueries")]
         public List<ReportQueryLVDTO> GetOwnedReportQueries()
@@ -337,6 +386,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetOwnedReportQueries(usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("GetAssignedReportQueries")]
         public List<ReportQueryLVDTO> GetAssignedReportQueries()
@@ -344,6 +394,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetAssignedReportQueries(usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("GetReportQueryDetailByID")]
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id)
@@ -351,6 +402,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetReportQueryDetailByID(id, usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpPost("AddEditReportQuery")]
         public void AddEditReportQuery([FromBody]ReportQueryDetailDTO dto)
@@ -358,6 +410,7 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.AddEditReportQuery(dto, usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("DeleteReportQuery")]
         public void DeleteReportQuery(int id)
@@ -365,14 +418,15 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.DeleteReportQuery(id, usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpPost("AssignReportQuery")]
         public void AssignReportQuery([FromBody]MultipleRecordsDTO records)
         {
             var usr = (HttpContext.User) as AuthUser;
             _dataAPI.AssignReportQuery(records, usr.UserId);
-
         }
+
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpGet("GetAllUsersAssignedQueries")]
         public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
@@ -380,12 +434,14 @@ namespace Quantis.WorkFlow.Controllers
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetAllUsersAssignedQueries(queryid, usr.UserId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("ExecuteReportQuery")]
         public object ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)
         {
             return _dataAPI.ExecuteReportQuery(dto);
         }
+
         ////////////////////////////
         /*[HttpGet("GetFormsByUser")]
         public List<FormUsersDTO> GetFormsByUser()
@@ -420,18 +476,21 @@ namespace Quantis.WorkFlow.Controllers
             }
             return null;
         }*/
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetForms")]
         public List<FormUsersDTO> GetForms(int id)
         {
             return _dataAPI.GetAllFormUsers(0, id);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormById/{id}")]
         public List<FormUsersDTO> GetFormById(int id)
         {
             return _dataAPI.GetAllFormUsers(id, 0);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetFormsByUser/{fakeUserID}")]
         public List<FormsFromCatalogDTO> GetFormsFromCatalog(int fakeUserID)

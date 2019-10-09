@@ -10,7 +10,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
         private readonly AuthorizationOptions _options;
         private readonly IConfiguration _config;
 
-
         public AuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, IConfiguration config) : base(options)
         {
             _options = options.Value;

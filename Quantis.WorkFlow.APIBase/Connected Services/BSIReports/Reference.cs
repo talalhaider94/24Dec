@@ -9,13 +9,10 @@
 
 namespace BSIReports
 {
-
-
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     [System.ServiceModel.ServiceContractAttribute(Namespace = "http://www.oblicore.com", ConfigurationName = "BSIReports.ReportsSoap")]
     public interface ReportsSoap
     {
-
         [System.ServiceModel.OperationContractAttribute(Action = "http://www.oblicore.com/GetFolderList", ReplyAction = "*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
         System.Threading.Tasks.Task<BSIReports.ArrayOfXElement> GetFolderListAsync(string sessionID);
@@ -75,7 +72,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetMyReportsAdvanced", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetMyReportsAdvanced
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public string sessionID;
 
@@ -99,7 +95,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetMyReportsAdvancedResponse", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetMyReportsAdvanced1
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public BSIReports.ArrayOfXElement GetMyReportsAdvancedResult;
 
@@ -119,7 +114,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportsByFolderIDAdvanced", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportsByFolderIDAdvanced
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public string sessionID;
 
@@ -147,7 +141,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportsByFolderIDAdvancedResponse", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportsByFolderIDAdvanced1
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public BSIReports.ArrayOfXElement GetReportsByFolderIDAdvancedResult;
 
@@ -167,7 +160,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportsByFolderNameAdvanced", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportsByFolderNameAdvanced
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public string sessionID;
 
@@ -195,7 +187,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportsByFolderNameAdvancedResponse", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportsByFolderNameAdvanced1
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public BSIReports.ArrayOfXElement GetReportsByFolderNameAdvancedResult;
 
@@ -215,7 +206,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetAllReportsAdvanced", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetAllReportsAdvanced
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public string sessionID;
 
@@ -239,7 +229,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetAllReportsAdvancedResponse", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetAllReportsAdvanced1
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public BSIReports.ArrayOfXElement GetAllReportsAdvancedResult;
 
@@ -259,7 +248,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportDataAdvanced", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportDataAdvanced
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public string sessionID;
 
@@ -287,7 +275,6 @@ namespace BSIReports
     [System.ServiceModel.MessageContractAttribute(WrapperName = "GetReportDataAdvancedResponse", WrapperNamespace = "http://www.oblicore.com", IsWrapped = true)]
     public partial class GetReportDataAdvanced1
     {
-
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace = "http://www.oblicore.com", Order = 0)]
         public System.Xml.Linq.XElement GetReportDataAdvancedResult;
 
@@ -310,7 +297,6 @@ namespace BSIReports
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     public partial class ReportsSoapClient : System.ServiceModel.ClientBase<BSIReports.ReportsSoap>, BSIReports.ReportsSoap
     {
-
         /// <summary>
         /// Implementare questo metodo parziale per configurare l'endpoint servizio.
         /// </summary>
@@ -509,7 +495,6 @@ namespace BSIReports
 
         public enum EndpointConfiguration
         {
-
             ReportsSoap,
 
             ReportsSoap12,
@@ -520,7 +505,6 @@ namespace BSIReports
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     public partial class ArrayOfXElement : object, System.Xml.Serialization.IXmlSerializable
     {
-
         private System.Collections.Generic.List<System.Xml.Linq.XElement> nodesList = new System.Collections.Generic.List<System.Xml.Linq.XElement>();
 
         public ArrayOfXElement()

@@ -56,8 +56,8 @@ namespace Quantis.WorkFlow.Models
         public string is_parameters_dirty { get; set; }
         public bool in_catalog { get; set; }
         //public virtual T_GlobalRule GlobalRule { get; set; }
-
     }
+
     public class T_Rule_Configuration : IEntityTypeConfiguration<T_Rule>
     {
         public void Configure(EntityTypeBuilder<T_Rule> builder)

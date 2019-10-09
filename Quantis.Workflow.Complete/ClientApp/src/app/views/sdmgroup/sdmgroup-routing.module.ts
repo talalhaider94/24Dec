@@ -4,17 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { SdmGroupComponent } from './sdmgroup.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: SdmGroupComponent,
-    data: {
-      title: 'Gruppi SDM'
+    {
+        path: '',
+        component: SdmGroupComponent,
+        data: {
+            title: 'Gruppi SDM'
+        }
     }
-  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class SdmGroupRoutingModule {}
+export class SdmGroupRoutingModule { }

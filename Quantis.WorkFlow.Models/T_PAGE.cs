@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Models
         public int page_sequence { get; set; }
         public int user_id { get; set; }
     }
+
     public class T_Page_Configuration : IEntityTypeConfiguration<T_Page>
     {
         public void Configure(EntityTypeBuilder<T_Page> builder)

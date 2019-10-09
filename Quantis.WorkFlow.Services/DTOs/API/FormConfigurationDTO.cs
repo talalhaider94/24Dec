@@ -8,6 +8,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         {
             Extras = new Dictionary<string, string>();
         }
+
         public string a_type { get; set; }
         public string a_dataType { get; set; }
 
@@ -35,7 +36,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
 
         //if (a_type == "DLFLabel")
         //{
-
         //public string a_isMandatoryLabel { get; set; }
         ////}
         ////if (a_type == "DLFTextBox")

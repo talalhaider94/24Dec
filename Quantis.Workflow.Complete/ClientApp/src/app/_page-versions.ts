@@ -1,6 +1,6 @@
 export const pageVersion = {
     '/dashboard/list': '1.0.0',
-    '/workflow/verifica' : '0.1.5',
+    '/workflow/verifica': '0.1.5',
     '/workflow/ricerca': '0.1.5',
     '/workflow/amministrazione': '0.0.2',
     '/catalogo/admin-kpi': '0.0.1',
@@ -22,9 +22,9 @@ export const pageVersion = {
     '/tconfiguration/advanced': '0.0.2',
     '/sdmgroup': '0.0.1',
     '/sdmstatus': '0.0.1',
-    '/adminroles':'0.0.1',
+    '/adminroles': '0.0.1',
     '/userprofiling/rolepermissions': '0.0.1',
     '/userprofiling/userpermissions': '0.0.6',
     '/standarddashboard': '0.0.1',
     '/dashboard/import-form-report': '0.0.1'
-    }
+}

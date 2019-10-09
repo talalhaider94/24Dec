@@ -7,6 +7,7 @@
         public string OrderBy { get; set; }
         public OrderDirection OrderDirection { get; set; }
     }
+
     public enum OrderDirection
     {
         Asc = 0,

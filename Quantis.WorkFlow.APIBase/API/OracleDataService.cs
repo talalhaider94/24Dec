@@ -17,12 +17,12 @@ using System.Xml.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-
     public class OracleDataService : IOracleDataService
     {
         private static string _connectionstring = null;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IInformationService _informationService;
+
         public OracleDataService(WorkFlowPostgreSqlContext context, IInformationService informationService)
         {
             _dbcontext = context;
@@ -32,6 +32,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 _connectionstring = QuantisUtilities.GetOracleConnectionString(_dbcontext);
             }
         }
+
         public List<OracleBookletDTO> GetBooklets()
         {
             try
@@ -63,6 +64,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<LandingPageDTO> GetLandingPageByUser(int userId, string period)
         {
             try
@@ -75,7 +77,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 string query = @"select temp.customer_id, temp.customer_name, temp.sla_id, temp.sla_name, temp.global_rule_name, temp.global_rule_id,
 psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce from (
-select 
+select
 c.customer_id,
 c.customer_name,
 r.rule_id,
@@ -109,53 +111,53 @@ r.rule_name,
                                 and {0}
                                ) temp
 
-                                left join 
-                                 ( select  
-                                  temp.global_rule_id, 
-                                  temp.time_stamp as timestamp, 
-                                  temp.time_stamp_utc as end_period, 
-                                  temp.begin_time_stamp_utc as start_period, 
-                                  temp.sla_id, 
-                                  temp.rule_id, 
+                                left join
+                                 ( select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
                                   temp.time_unit,
-                                  temp.interval_length, 
-                                  temp.is_period, 
-                                  temp.service_level_target, 
-                                  temp.service_level_target_ce, 
-                                  temp.provided_ce, 
-                                  temp.deviation_ce, 
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
                                   temp.complete_record,
-                                  temp.sla_version_id, 
-                                  temp.metric_type_id, 
-                                  temp.domain_category_id, 
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
                                   temp.service_domain_id,
-                                  case 
+                                  case
                                     when deviation_ce > 0 then 'non compliant'
                                     when deviation_ce < 0 then 'compliant'
                                     else 'nc'
                                   end as resultPsl
-                                  from 
+                                  from
                                   (
-                                    select * 
+                                    select *
                                     from t_psl_0_month pm
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_quarter pq
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_year py
                                    union all
-                                    select * 
+                                    select *
                                     from t_psl_1_all pa
                                   ) temp
-                                  where provided is not null 
+                                  where provided is not null
                                   and service_level_target is not null
                                   and time_unit='MONTH'
                                     and complete_record=1
                                     and TRUNC(time_stamp_utc) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                     and TRUNC(begin_time_stamp_utc) <= TO_DATE(:end_period,'yyyy-mm-dd')
                                     and {1}
-                                ) psl  
+                                ) psl
                                 on psl.global_rule_id = temp.global_rule_id";
                 string filter1 = QuantisUtilities.GetOracleGlobalRuleInQuery("gr.global_rule_id", kpis);
                 string filter2 = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", kpis);
@@ -188,7 +190,6 @@ r.rule_name,
                                 Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                                 Result = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
                                 Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
-
                             }); ; ;
                         }
                         var result = basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
@@ -223,16 +224,15 @@ r.rule_name,
                             }).OrderBy(u => u.ComplaintPercentage).ToList()
                         }).ToList();
                         return result;
-
                     }
                 }
-
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
+
         public List<LandingPageLevel1DTO> GetLandingPageLevel1(int userId, int contractPartyId, string period)
         {
             var basedtos = new List<LandingPageBaseDTO>();
@@ -243,7 +243,7 @@ r.rule_name,
             }
             string query = @"select temp.customer_id, temp.customer_name, temp.sla_id, temp.sla_name, temp.global_rule_name, temp.global_rule_id,
 psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce from (
-select 
+select
 c.customer_id,
 c.customer_name,
 r.rule_id,
@@ -278,53 +278,53 @@ r.rule_name,
                                 and {0}
                                ) temp
 
-                                left join 
-                                 ( select  
-                                  temp.global_rule_id, 
-                                  temp.time_stamp as timestamp, 
-                                  temp.time_stamp_utc as end_period, 
-                                  temp.begin_time_stamp_utc as start_period, 
-                                  temp.sla_id, 
-                                  temp.rule_id, 
+                                left join
+                                 ( select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
                                   temp.time_unit,
-                                  temp.interval_length, 
-                                  temp.is_period, 
-                                  temp.service_level_target, 
-                                  temp.service_level_target_ce, 
-                                  temp.provided_ce, 
-                                  temp.deviation_ce, 
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
                                   temp.complete_record,
-                                  temp.sla_version_id, 
-                                  temp.metric_type_id, 
-                                  temp.domain_category_id, 
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
                                   temp.service_domain_id,
-                                  case 
+                                  case
                                     when deviation_ce > 0 then 'non compliant'
                                     when deviation_ce < 0 then 'compliant'
                                     else 'nc'
                                   end as resultPsl
-                                  from 
+                                  from
                                   (
-                                    select * 
+                                    select *
                                     from t_psl_0_month pm
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_quarter pq
                                     union all
-                                    select * 
+                                    select *
                                     from t_psl_0_year py
                                    union all
-                                    select * 
+                                    select *
                                     from t_psl_1_all pa
                                   ) temp
-                                  where provided is not null 
+                                  where provided is not null
                                   and service_level_target is not null
                                   and time_unit='MONTH'
                                     and complete_record=1
                                     and TRUNC(time_stamp_utc) >= TO_DATE(:start_period,'yyyy-mm-dd')
                                     and TRUNC(begin_time_stamp_utc) <= TO_DATE(:end_period,'yyyy-mm-dd')
                                     and {1}
-                                ) psl  
+                                ) psl
                                 on psl.global_rule_id = temp.global_rule_id";
             string filter1 = QuantisUtilities.GetOracleGlobalRuleInQuery("gr.global_rule_id", kpis);
             string filter2 = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", kpis);
@@ -359,7 +359,6 @@ r.rule_name,
                             Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                             Result = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
                             Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
-
                         });
                     }
                     var result = basedtos.GroupBy(o => new { o.ContractId, o.ContractName }).Select(p => new LandingPageLevel1DTO()
@@ -385,13 +384,12 @@ r.rule_name,
                             Target = o.Target,
                             Value = o.Actual
                         }).ToList(),
-
                     }).ToList();
                     return result;
-
                 }
             }
         }
+
         public List<OracleCustomerDTO> GetCustomer(int id, string name)
         {
             try
@@ -430,7 +428,6 @@ r.rule_name,
                                 sla_id = Decimal.ToInt32((Decimal)q[2]),
                                 sla_name = (string)q[3]
                             }).ToList()
-
                         });
                         return values.ToList();
                     }
@@ -440,7 +437,6 @@ r.rule_name,
             {
                 throw e;
             }
-
         }
 
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)
@@ -454,15 +450,19 @@ r.rule_name,
                     case "MENSILE":
                         period_table = "t_psl_0_month";
                         break;
+
                     case "TRIMESTRALE":
                         period_table = "t_psl_0_quarter";
                         break;
+
                     case "QUADRIMESTRALE":
                         period_table = "t_psl_0_month";
                         break;
+
                     case "SEMESTRALE":
                         period_table = "t_psl_0_month";
                         break;
+
                     case "ANNUALE":
                         period_table = "t_psl_0_year";
                         break;
@@ -491,7 +491,6 @@ r.rule_name,
                         List<DataRow> list = dt.AsEnumerable().ToList();
                         var values = list.Select(o => new PslDTO()
                         {
-
                             sla_id = Decimal.ToInt32((Decimal)o[0]),
                             rule_id = Decimal.ToInt32((Decimal)o[1]),
                             provided = (o[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[2]),
@@ -520,8 +519,6 @@ r.rule_name,
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
         /*
                 public List<OracleFormDTO> GetForm(int id, int userid)
@@ -585,7 +582,6 @@ r.rule_name,
                             if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
                         }
 
-
                         using (OracleConnection con = new OracleConnection(_connectionstring))
                         {
                             using (OracleCommand cmd = con.CreateCommand())
@@ -636,7 +632,7 @@ r.rule_name,
                                         reader_configuration = null,
                                         user_group_id = securityMember ? 0 :
                                             (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
-                                        user_group_name = securityMember ? string.Empty : 
+                                        user_group_name = securityMember ? string.Empty :
                                             (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
                                         day_cutoff = day_cutoff,
                                         cutoff = (bool)cutoff_result,
@@ -645,8 +641,6 @@ r.rule_name,
                                     });
                                     return result.ToList();
                                 }
-
-
                             }
                         }
                     }
@@ -668,9 +662,7 @@ r.rule_name,
                             name = l.Attribute("Name").Value,
                             type = l.Attribute("Type").Value,
                             source = l.Attribute("Source").Value,
-
                         });
-
                     }
                     foreach (var s in conf)
                     {
@@ -681,7 +673,6 @@ r.rule_name,
                                 name = "Label",
                                 type = "Label",
                                 source = s.text
-
                             });
                         }
                     }
@@ -703,6 +694,7 @@ r.rule_name,
                     };
                 }
                 */
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public List<OracleGroupDTO> GetGroup(int id, string name)
         {
@@ -742,9 +734,7 @@ r.rule_name,
                                 user_id = Decimal.ToInt32((Decimal)q[2]),
                                 user_name = (string)q[3],
                                 user_email = (q[4] == DBNull.Value) ? string.Empty : (string)q[4]
-
                             }).ToList()
-
                         });
                         return values.ToList();
                     }
@@ -754,7 +744,6 @@ r.rule_name,
             {
                 throw e;
             }
-
         }
 
         public List<OracleSlaDTO> GetSla(int id, string name)
@@ -798,7 +787,6 @@ r.rule_name,
                             sla_valid_to = (DateTime)o[6],
                             customer_id = Decimal.ToInt32((Decimal)o[7]),
                             customer_name = (String)o[8],
-
                         });
                         return values.ToList();
                     }
@@ -808,7 +796,6 @@ r.rule_name,
             {
                 throw e;
             }
-
         }
 
         public List<OracleRuleDTO> GetRule(int id, string name)
@@ -885,9 +872,7 @@ r.rule_name,
                                 month_tu_calc_status = (string)p[15],
                                 quarter_tu_calc_status = (string)p[16],
                                 year_tu_calc_status = (string)p[17]
-
                             }
-
                         });
                         return values.ToList();
                     }
@@ -897,8 +882,8 @@ r.rule_name,
             {
                 throw e;
             }
-
         }
+
         public List<BSIFreeFormReportDTO> GetBSIFreeFormReports()
         {
             var results = new List<BSIFreeFormReportDTO>();
@@ -951,8 +936,8 @@ r.rule_name,
                 }
             }
             return results;
-
         }
+
         public List<OracleUserDTO> GetUser(int id, string name)
         {
             try
@@ -1004,9 +989,7 @@ r.rule_name,
                                 user_group_id = (q[3] == DBNull.Value) ? (int?)null : Decimal.ToInt32((Decimal)q[3]),
                                 user_group_name = (q[4] == DBNull.Value) ? string.Empty : (string)q[4]
                             }).ToList()
-
                         });
-
 
                         return values.ToList();
                     }
@@ -1016,7 +999,6 @@ r.rule_name,
             {
                 throw e;
             }
-
         }
 
         public Tuple<int, int> GetUserIdLocaleIdByUserName(string username)
@@ -1049,7 +1031,6 @@ r.rule_name,
                 throw e;
             }
         }
-
 
         public List<FormConfigurationDTO> GetFormConfiguration(string schema)
         {
@@ -1183,8 +1164,6 @@ r.rule_name,
                         //            a_checkedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("checkedValue").Value : null,
                         //            a_unCheckedValue = (l.Attribute("type").Value == "DLFCheckBox") ? l.Attribute("unCheckedValue").Value : null,
 
-
-
                         //            /*if (a_type == "DLFLabel"){
                         //                  a_text = l.Attribute("text").Value,
                         //                  a_isMandatoryLabel = l.Attribute("isMandatoryLabel").Value,
@@ -1210,10 +1189,8 @@ r.rule_name,
                         //                  a_unCheckedValue = l.Attribute("unCheckedValue").Value,
                         //                } */
 
-
                         //        });
                         //    }
-
 
                         //}
 
@@ -1232,7 +1209,6 @@ r.rule_name,
                                 name = f.name,
                                 a_type = f.a_type,
                                 defaultValue = f.defaultValue,
-
                             };
                             if (fields.a_type == "DLFCheckBox")
                             {
@@ -1247,12 +1223,10 @@ r.rule_name,
                             ));
                             if (label != null)
                             {
-
                                 fields.text = label.text;
                                 labelList.Remove(label);
                             }
                             outputs.Add(fields);
-
                         }
 
                         outputs.AddRange(labelList.Select(o => new FormConfigurationDTO()
@@ -1265,14 +1239,12 @@ r.rule_name,
 
                     _dbcontext.LogInformation(string.Format("Call to API has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                     return new List<FormConfigurationDTO>();
-
                 }
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
     }
 }

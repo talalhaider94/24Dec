@@ -4,7 +4,7 @@ export class WidgetsHelper {
         // making it {} gives error temp giving it any type
         try {
             let buildParams: any = {};
-            // dirty way 
+            // dirty way
             buildParams.Properties = {};
             buildParams.Filters = {};
 

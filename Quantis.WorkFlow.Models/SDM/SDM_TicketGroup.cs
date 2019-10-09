@@ -12,6 +12,7 @@ namespace Quantis.WorkFlow.Models.SDM
         public virtual T_Customer category { get; set; }
         public int step { get; set; }
     }
+
     public class SDM_TicketGroup_Configuration : IEntityTypeConfiguration<SDM_TicketGroup>
     {
         public void Configure(EntityTypeBuilder<SDM_TicketGroup> builder)

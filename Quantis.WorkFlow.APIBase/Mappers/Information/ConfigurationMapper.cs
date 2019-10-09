@@ -16,7 +16,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
                 IsEnable = e.enable,
                 IsEditable = e.iseditable,
                 Value = e.value
-
             };
         }
 
@@ -30,7 +29,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
             e.isvisible = true;
             e.iseditable = true;
             return e;
-
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Quantis.WorkFlow.Models
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
     public class T_APIAuthentication_Configuration : IEntityTypeConfiguration<T_APIAuthentication>
     {
         public void Configure(EntityTypeBuilder<T_APIAuthentication> builder)

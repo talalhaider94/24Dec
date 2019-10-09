@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public string Name { get; set; }
         public DateTime CreatedOn { get; set; }
     }
+
     public class DB_WidgetCategory_Configuration : IEntityTypeConfiguration<DB_WidgetCategory>
     {
         public void Configure(EntityTypeBuilder<DB_WidgetCategory> builder)

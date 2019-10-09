@@ -9,8 +9,8 @@ namespace Quantis.WorkFlow.Models.Information
         public int user_id { get; set; }
         public int role_id { get; set; }
         public virtual T_Role Role { get; set; }
-
     }
+
     public class T_UserRole_Configuration : IEntityTypeConfiguration<T_UserRole>
     {
         public void Configure(EntityTypeBuilder<T_UserRole> builder)

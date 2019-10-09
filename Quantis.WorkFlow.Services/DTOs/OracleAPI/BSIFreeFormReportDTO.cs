@@ -9,6 +9,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         {
             Parameters = new List<KeyValuePairDTO>();
         }
+
         public int ReportId { get; set; }
         public string ReportName { get; set; }
         public string ReportDescription { get; set; }
@@ -16,6 +17,5 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public List<KeyValuePairDTO> Parameters { get; set; }
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
-
     }
 }

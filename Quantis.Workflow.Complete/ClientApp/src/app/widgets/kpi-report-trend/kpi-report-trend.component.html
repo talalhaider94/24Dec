@@ -8,10 +8,9 @@
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
 </div>
-<highcharts-chart
-   [Highcharts] = "highcharts" 
-   [options] = "chartOptions" 
-   [(update)]="chartUpdateFlag"
-   [oneToOne]="true"
-   style = "width: 100%; display: block;">
+<highcharts-chart [Highcharts]="highcharts"
+                  [options]="chartOptions"
+                  [(update)]="chartUpdateFlag"
+                  [oneToOne]="true"
+                  style="width: 100%; display: block;">
 </highcharts-chart>

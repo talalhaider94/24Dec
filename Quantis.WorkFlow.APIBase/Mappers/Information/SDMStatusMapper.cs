@@ -25,7 +25,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
             e.step = o.step;
             e.code = o.code;
             return e;
-
         }
     }
 }

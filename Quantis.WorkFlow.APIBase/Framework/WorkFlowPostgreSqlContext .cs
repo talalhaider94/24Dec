@@ -59,9 +59,9 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_ReportQuery> ReportQueries { get; set; }
         public DbSet<T_ReportQueryParameter> ReportQueryParameters { get; set; }
         public DbSet<T_ReportQueryAssignment> ReportQueryAssignments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             builder.ApplyConfiguration(new T_Group_Configuration());
             builder.ApplyConfiguration(new T_SecurityMembers_Configuration());
             builder.ApplyConfiguration(new T_Page_Configuration());

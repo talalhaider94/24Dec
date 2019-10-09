@@ -19,7 +19,7 @@ namespace Quantis.WorkFlow.APIBase.API
 {
     public class ServiceDeskManagerService : IServiceDeskManagerService
     {
-        static readonly object _object = new object();
+        private static readonly object _object = new object();
         private readonly SDM.USD_WebServiceSoapClient _sdmClient = null;
         private readonly SDMExt.USD_R11_ExtSoapClient _sdmExtClient = null;
         private int _sid { get; set; }
@@ -31,6 +31,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IInformationService _infomationAPI;
         private readonly IConfiguration _configuration;
+
         private void LogIn()
         {
             try
@@ -46,8 +47,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
-
         }
+
         private void LogOut()
         {
             try
@@ -70,6 +71,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public ServiceDeskManagerService(WorkFlowPostgreSqlContext context, IDataService dataService, IInformationService infomationAPI, IConfiguration configuration)
         {
             _dbcontext = context;
@@ -101,6 +103,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 _password = passObj.Value;
             }
         }
+
         public List<SDMTicketLVDTO> GetAllTickets()
         {
             List<SDMTicketLVDTO> ret = null;
@@ -122,6 +125,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
+
         public List<SDMAttachmentDTO> GetAttachmentsByTicket(int ticketId)
         {
             List<SDMAttachmentDTO> ret = null;
@@ -143,6 +147,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret.OrderByDescending(o => o.LastModifiedDate).ToList();
         }
+
         public byte[] DownloadAttachment(string attachmentHandle)
         {
             byte[] ret = null;
@@ -165,6 +170,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
+
         public SDMTicketLVDTO GetTicketByID(int Id)
         {
             LogIn();
@@ -184,6 +190,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
+
         public SDMTicketLVDTO CreateTicket(CreateTicketDTO dto)
         {
             SDMTicketLVDTO ret = null;
@@ -323,7 +330,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     ticket_id = int.Parse(ret.Id),
                     ticket_refnum = int.Parse(ret.ref_num),
                     customer_id = _infomationAPI.GetContractIdByGlobalRuleId(int.Parse(dto.zz3_KpiIds.Split('|')[1]))
-
                 };
                 _dbcontext.SDMTicketFact.Add(sdm_fact);
                 _dbcontext.SaveChanges();
@@ -339,7 +345,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     SendSOAPRequest(_sdmClient.InnerChannel.RemoteAddress.ToString(), "createAttachment", param, att.content);
                 }
                 _dbcontext.SaveChanges();
-
             }
             catch (Exception e)
             {
@@ -351,6 +356,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
+
         public string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto, string userName)
         {
             string ret = null;
@@ -367,6 +373,7 @@ namespace Quantis.WorkFlow.APIBase.API
             LogOut();
             return ret;
         }
+
         public List<SDMTicketLVDTO> GetTicketsVerificationByUser(HttpContext context, string period)
         {
             List<SDMTicketLVDTO> ret = null;
@@ -428,7 +435,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 reference_input = subset?.referent ?? string.Empty,
                                 tipologia = subset?.tipologia ?? string.Empty
                             }).ToList();
-
                 }
             }
             catch (Exception e)
@@ -440,8 +446,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
             return ret;
-
         }
+
         public List<SDMTicketLVDTO> GetTicketsAdministratorByPeriod(string period)
         {
             List<SDMTicketLVDTO> ret = null;
@@ -493,7 +499,6 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 LogOut();
             }
-
         }
 
         public List<SDMTicketLVDTO> GetTicketsRicercaByUser(HttpContext context, string period)
@@ -538,7 +543,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             filterstring = string.Format("({0}) AND zz_cned_string4='{1}'", filterstring, period);
                         }
-
                     }
                     LogIn();
                     var select_a = _sdmClient.doSelectAsync(_sid, "cr", filterstring, 99999, new string[] { "ref_num", "description", "group", "summary", "status", "zz_mgnote", "zz_cned_string1", "zz_cned_string2", "zz_cned_string3", "zz_cned_string4", "zz_string1", "zz_string2", "zz_string3", "last_mod_dt" });
@@ -574,8 +578,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                 reference_input = subset?.referent ?? string.Empty,
                                 tipologia = subset?.tipologia ?? string.Empty
                             }).ToList();
-
-
                 }
             }
             catch (Exception e)
@@ -587,8 +589,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
             return ret;
-
         }
+
         public ChangeStatusDTO TransferTicketByID(int id, string status, string description, HttpContext context)
         {
             var user = context.User as AuthUser;
@@ -679,7 +681,6 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public void UpdateTicketValue(HttpContext context, TicketValueDTO dto)
         {
-
             try
             {
                 var user = context.User as AuthUser;
@@ -712,6 +713,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 LogOut();
             }
         }
+
         public ChangeStatusDTO EscalateTicketbyID(int id, string status, string description, HttpContext context)
         {
             var user = context.User as AuthUser;
@@ -812,7 +814,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         _dbcontext.LogInformation("Error: " + e.Message);
                     }
-
                 }
                 if (_dbcontext.SDMTicketFact.Any(o => o.ticket_id == id))
                 {
@@ -829,7 +830,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     _dbcontext.SaveChanges();
                 }
                 return dto;
-
             }
             catch (Exception e)
             {
@@ -862,6 +862,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return ret;
         }
+
         private bool CallUploadKPI(BSIKPIUploadDTO dto)
         {
             try
@@ -894,15 +895,14 @@ namespace Quantis.WorkFlow.APIBase.API
                         _dbcontext.LogInformation(string.Format("Call to Upload KPI has failed. BaseURL: {0} APIPath: {1} Data:{2}", output.Item1, output.Item2, dataAsString));
                         return false;
                     }
-
                 }
             }
             catch (Exception e)
             {
                 throw e;
             }
-
         }
+
         private SDMTicketLVDTO parseNewTicket(string ticket)
         {
             var dtos = new List<SDMTicketLVDTO>();
@@ -928,8 +928,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.Group = _groupMapping.FirstOrDefault(o => o.handle.Substring(4) == dto.Group).name;
             }
             return dto;
-
         }
+
         private List<SDMTicketLVDTO> parseTickets(string tickets)
         {
             var dtos = new List<SDMTicketLVDTO>();
@@ -1007,7 +1007,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         dto.Group = groupscene.name;
                     }
-
                 }
                 else
                 {
@@ -1037,6 +1036,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return dtos;
         }
+
         private List<SDMTicketLogDTO> parseLogs(string logs)
         {
             var dtos = new List<SDMTicketLogDTO>();
@@ -1058,6 +1058,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return dtos;
         }
+
         private List<SDMAttachmentDTO> parseAttachments(string logs)
         {
             var dtos = new List<SDMAttachmentDTO>();
@@ -1117,8 +1118,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                 }
             }
-
         }
+
         ~ServiceDeskManagerService()
         {
             LogOut();

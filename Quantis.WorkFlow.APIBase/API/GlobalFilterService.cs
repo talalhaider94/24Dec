@@ -19,6 +19,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IConfiguration _configuration;
         private string defaultDateRange = "06/2019-08/2019";
+
         public GlobalFilterService(IInformationService infoService, WorkFlowPostgreSqlContext dbcontext, IConfiguration configuration)
         {
             _infoService = infoService;
@@ -30,10 +31,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 defaultDateRange = val.Value;
             }
         }
+
         public string GetDefualtDateRange()
         {
             return defaultDateRange;
         }
+
         public BaseWidgetDTO MapBaseWidget(WidgetParametersDTO props)
         {
             var dto = new BaseWidgetDTO();
@@ -85,6 +88,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
             return dto;
         }
+
         public WidgetwithAggOptionDTO MapAggOptionWidget(WidgetParametersDTO props)
         {
             var map = MapBaseWidget(props);
@@ -104,13 +108,14 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return dto;
         }
+
         private List<int> GetGlobalRuleIds(int userId, string customerIds)
         {
             var res = new List<int>();
             string query = @"select r.global_rule_id
-                            from t_rules r 
-                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
-                            left join t_slas m on m.sla_id = s.sla_id 
+                            from t_rules r
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id
+                            left join t_slas m on m.sla_id = s.sla_id
                             left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
                             where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
                             and uk.user_id =  :user_id
@@ -139,7 +144,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var res = new List<UserKPIDTO>();
-                string query = @"select m.sla_id,m.sla_name,c.customer_name,c.customer_id 
+                string query = @"select m.sla_id,m.sla_name,c.customer_name,c.customer_id
                                 from t_sla_versions s
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join t_customers c on m.customer_id = c.customer_id
@@ -174,7 +179,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         Children = p.Select(q => new HierarchicalNameCodeDTO(q.Sla_Id, q.Sla_Name, q.Sla_Name)).ToList()
                     }).ToList();
                     return ret;
-
                 }
             }
             catch (Exception e)
@@ -189,8 +193,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var res = new List<KeyValuePair<int, string>>();
                 string query = @"select c.customer_name,c.customer_id
-                                from t_rules r 
-                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                                from t_rules r
+                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join t_customers c on m.customer_id = c.customer_id
                                 left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
@@ -212,7 +216,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                     }
                     return res;
-
                 }
             }
             catch (Exception e)
@@ -227,8 +230,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var res = new List<KeyValuePair<int, string>>();
                 string query = @"select m.sla_id,m.sla_name
-                                from t_rules r 
-                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                                from t_rules r
+                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join t_customers c on m.customer_id = c.customer_id
                                 left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
@@ -252,7 +255,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                     }
                     return res;
-
                 }
             }
             catch (Exception e)
@@ -267,8 +269,8 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 var res = new List<KeyValuePair<int, string>>();
                 string query = @"select r.global_rule_id,r.rule_name
-                                from t_rules r 
-                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                                from t_rules r
+                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join t_customers c on m.customer_id = c.customer_id
                                 left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
@@ -292,7 +294,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         }
                     }
                     return res;
-
                 }
             }
             catch (Exception e)

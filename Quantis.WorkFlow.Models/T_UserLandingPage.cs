@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.Models
         public bool show_landingpage { get; set; }
         public bool selected_landingpage { get; set; }
     }
+
     public class T_UserLandingPage_Configuration : IEntityTypeConfiguration<T_UserLandingPage>
     {
         public void Configure(EntityTypeBuilder<T_UserLandingPage> builder)

@@ -12,6 +12,7 @@ namespace Quantis.WorkFlow.Jobs.Jobs
     public class CallingJavaJob : IJob
     {
         private readonly IServiceProvider _provider;
+
         public CallingJavaJob(IServiceProvider provider)
         {
             _provider = provider;
@@ -32,7 +33,6 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                     var res = f.Bash();
                     dbcontext.LogInformation("Job Executed: The command is: " + f + " and result is: " + res);
                 }
-
             }
 
             return Task.CompletedTask;

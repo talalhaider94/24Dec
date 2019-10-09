@@ -4,18 +4,18 @@ import { Routes, RouterModule } from '@angular/router';
 import { DatiGrezziComponent } from './datigrezzi.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: DatiGrezziComponent,
-    data: {
-      title: 'Dati Grezzi'
+    {
+        path: '',
+        component: DatiGrezziComponent,
+        data: {
+            title: 'Dati Grezzi'
+        }
     }
-  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 
-export class DatiRoutingModule {}
+export class DatiRoutingModule { }

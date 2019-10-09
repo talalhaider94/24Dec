@@ -10,6 +10,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
+
         public ErrorHandlingMiddleware(RequestDelegate next)
         {
             this.next = next;
@@ -31,7 +32,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
         {
             try
             {
-
                 var exception = new T_Exception()
                 {
                     message = ex.Message.Substring(0, Math.Min(999, ex.Message.Length)),
@@ -51,7 +51,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
             }
             catch (Exception e)
             {
-
             }
             if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
             {
@@ -70,7 +69,6 @@ namespace Quantis.WorkFlow.APIBase.Framework
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
-
         }
     }
 }

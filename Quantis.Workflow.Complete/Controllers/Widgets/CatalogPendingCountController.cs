@@ -8,6 +8,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
     {
         private IGlobalFilterService _globalfilterService;
         private IWidgetService _widgetService;
+
         public CatalogPendingCountController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
             _globalfilterService = globalfilterService;
@@ -20,7 +21,6 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowOrganization = false;
             vm.AddMeasure(Measures.Pending_KPIs);
             vm.AddMeasure(Measures.Pending_Users);
-
         }
 
         internal override object GetData(WidgetParametersDTO props)

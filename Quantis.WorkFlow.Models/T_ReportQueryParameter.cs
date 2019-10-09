@@ -10,9 +10,11 @@ namespace Quantis.WorkFlow.Models
         public int query_id { get; set; }
         public string parameter_key { get; set; }
         public string parameter_value { get; set; }
+
         [ForeignKey("query_id")]
         public virtual T_ReportQuery Query { get; set; }
     }
+
     public class T_ReportQueryParameter_Configuration : IEntityTypeConfiguration<T_ReportQueryParameter>
     {
         public void Configure(EntityTypeBuilder<T_ReportQueryParameter> builder)

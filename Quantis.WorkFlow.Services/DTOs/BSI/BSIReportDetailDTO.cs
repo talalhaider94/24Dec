@@ -30,6 +30,5 @@ namespace Quantis.WorkFlow.Services.DTOs.BSI
         public string XLabel { get; set; }
         public string YLabel { get; set; }
         public List<XYZDTO> Data { get; set; }
-
     }
 }

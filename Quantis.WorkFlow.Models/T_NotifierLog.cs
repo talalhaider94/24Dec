@@ -15,8 +15,8 @@ namespace Quantis.WorkFlow.Models
         public int year { get; set; }
         public string email_body { get; set; }
         public virtual T_Form Form { get; set; }
-
     }
+
     public class T_NotifierLog_Configuration : IEntityTypeConfiguration<T_NotifierLog>
     {
         public void Configure(EntityTypeBuilder<T_NotifierLog> builder)

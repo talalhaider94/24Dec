@@ -24,6 +24,7 @@ namespace Quantis.Workflow.Complete.Controllers
             _dashboardAPI = dashboardAPI;
             _dataAPI = dataAPI;
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDashboards")]
         public List<DashboardDTO> GetDashboards()
@@ -31,6 +32,7 @@ namespace Quantis.Workflow.Complete.Controllers
             var user = HttpContext.User as AuthUser;
             return _dashboardAPI.GetDashboards(user.UserId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDashboardsHomePage")]
         public List<DashboardDTO> GetDashboardsHomePage()
@@ -50,6 +52,7 @@ namespace Quantis.Workflow.Complete.Controllers
             }
             return dashboards;
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("SetDefaultDashboard")]
         public void SetDefaultDashboard(int id)
@@ -57,6 +60,7 @@ namespace Quantis.Workflow.Complete.Controllers
             var user = HttpContext.User as AuthUser;
             _dashboardAPI.SetDefaultDashboard(id, user.UserId);
         }
+
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetDefaultDashboardId")]
         public int GetDefaultDashboardId()
@@ -64,40 +68,43 @@ namespace Quantis.Workflow.Complete.Controllers
             var user = HttpContext.User as AuthUser;
             return _dashboardAPI.GetDefaultDashboardId(user.UserId);
         }
+
         [HttpPost("AddUpdateDasboard")]
         public DashboardDetailDTO AddUpdateDasboard([FromBody]DashboardDetailDTO dto)
         {
             var user = HttpContext.User as AuthUser;
             var id = _dashboardAPI.AddUpdateDasboard(dto, user.UserId);
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
-
         }
+
         [HttpGet("GetAllWidgets")]
         public List<WidgetDTO> GetAllWidgets()
         {
             return _dashboardAPI.GetAllWidgets();
         }
+
         [HttpGet("GetDashboardWigetsByDashboardId")]
         public DashboardDetailDTO GetDashboardWigetsByDashboardId(int id)
         {
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
         }
+
         [HttpPost("SaveDashboardState")]
         public void SaveDashboardState([FromBody]List<DashboardWidgetBaseDTO> dtos)
         {
             _dashboardAPI.SaveDashboardState(dtos);
         }
+
         [HttpGet("ActivateDashboard")]
         public void ActivateDashboard(int id)
         {
             _dashboardAPI.ActivateDashboard(id);
         }
+
         [HttpGet("DeactivateDashboard")]
         public void DeactivateDashboard(int id)
         {
             _dashboardAPI.DeactivateDashboard(id);
         }
-
-
     }
 }

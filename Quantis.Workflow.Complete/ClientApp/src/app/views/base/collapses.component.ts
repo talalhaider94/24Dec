@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: 'collapses.component.html'
+    templateUrl: 'collapses.component.html'
 })
 export class CollapsesComponent {
+    constructor() { }
 
-  constructor() { }
+    isCollapsed: boolean = false;
 
-  isCollapsed: boolean = false;
+    collapsed(event: any): void {
+        // console.log(event);
+    }
 
-  collapsed(event: any): void {
-    // console.log(event);
-  }
-
-  expanded(event: any): void {
-    // console.log(event);
-  }
-
+    expanded(event: any): void {
+        // console.log(event);
+    }
 }

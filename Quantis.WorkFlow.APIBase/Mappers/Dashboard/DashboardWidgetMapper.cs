@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
 {
-
     public class DashboardWidgetMapper : MappingService<DashboardWidgetDTO, DB_DashboardWidget>
     {
         public override DashboardWidgetDTO GetDTO(DB_DashboardWidget e)
@@ -22,7 +21,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 WidgetName = e.WidgetName ?? e.Widget.Name,
                 UIIdentifier = e.Widget.UIIdentifier,
                 Note = e.Note
-
             };
             dto.Properties = new Dictionary<string, string>();
             dto.Filters = new Dictionary<string, string>();
@@ -38,7 +36,6 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 }
             }
             return dto;
-
         }
 
         public override DB_DashboardWidget GetEntity(DashboardWidgetDTO o, DB_DashboardWidget e)

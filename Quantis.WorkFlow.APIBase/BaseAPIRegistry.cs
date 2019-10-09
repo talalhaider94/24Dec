@@ -38,6 +38,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IGlobalFilterService, GlobalFilterService>();
             services.AddScoped<IBSIService, BSIService>();
         }
+
         public static void RegisterMappers(IServiceCollection services)
         {
             services.AddTransient<IMappingService<GroupDTO, T_Group>, GroupMapper>();

@@ -18,8 +18,8 @@ namespace Quantis.WorkFlow.Models
         public DateTime create_date { get; set; }
         public DateTime? modify_date { get; set; }
         public DateTime? delete_date { get; set; }
-
     }
+
     public class T_Widget_Configuration : IEntityTypeConfiguration<T_Widget>
     {
         public void Configure(EntityTypeBuilder<T_Widget> builder)

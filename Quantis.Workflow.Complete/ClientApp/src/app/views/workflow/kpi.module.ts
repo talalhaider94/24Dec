@@ -17,22 +17,22 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { AmministrazioneComponent } from './amministrazione/amministrazione.component';
 
 @NgModule({
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    KPIRoutingModule,
-    ChartsModule,
-    BsDropdownModule,
-    ButtonsModule.forRoot(),
-    DataTablesModule,
-    CommonModule,
-    ModalModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    TooltipModule.forRoot(),
-    PopoverModule.forRoot(),
-    FileUploadModule,
-    CollapseModule.forRoot(),
-  ],
-  declarations: [ KPIComponent, RicercaComponent, AmministrazioneComponent ]
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        KPIRoutingModule,
+        ChartsModule,
+        BsDropdownModule,
+        ButtonsModule.forRoot(),
+        DataTablesModule,
+        CommonModule,
+        ModalModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        TooltipModule.forRoot(),
+        PopoverModule.forRoot(),
+        FileUploadModule,
+        CollapseModule.forRoot(),
+    ],
+    declarations: [KPIComponent, RicercaComponent, AmministrazioneComponent]
 })
 export class KPIModule { }

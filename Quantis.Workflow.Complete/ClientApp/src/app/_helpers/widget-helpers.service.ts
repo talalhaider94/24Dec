@@ -5,7 +5,6 @@ import { DateTimeService } from './date-time.service';
   providedIn: 'root'
 })
 export class WidgetHelpersService {
-
   constructor(
     private dateTimeService: DateTimeService
   ) { }
@@ -14,7 +13,7 @@ export class WidgetHelpersService {
     // making it {} gives error temp giving it any type
     try {
       let buildParams: any = {};
-      // dirty way 
+      // dirty way
       buildParams.Properties = {};
       buildParams.Filters = {};
 
@@ -67,7 +66,7 @@ export class WidgetHelpersService {
     // making it {} gives error temp giving it any type
     try {
       let buildParams: any = {};
-      // dirty way 
+      // dirty way
       buildParams.Properties = {};
       buildParams.Filters = {};
 
@@ -114,7 +113,6 @@ export class WidgetHelpersService {
         buildParams.Filters.kpi = filters.kpi;
       }
       if(apiParams.getReportQueryDetailByID) {
-
       }
       return buildParams;
     } catch (error) {

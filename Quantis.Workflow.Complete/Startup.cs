@@ -23,6 +23,7 @@ namespace Quantis.WorkFlow.Complete
                 return name.ToLowerInvariant();
             }
         }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -71,8 +72,8 @@ namespace Quantis.WorkFlow.Complete
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, QuantisPermissionHandler>();
             RegisterServices(services);
-
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {

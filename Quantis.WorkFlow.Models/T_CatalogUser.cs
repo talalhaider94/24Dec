@@ -16,6 +16,7 @@ namespace Quantis.WorkFlow.Models
         public string manager { get; set; }
         public string password { get; set; }
     }
+
     public class T_CatalogUser_Configuration : IEntityTypeConfiguration<T_CatalogUser>
     {
         public void Configure(EntityTypeBuilder<T_CatalogUser> builder)
@@ -25,4 +26,3 @@ namespace Quantis.WorkFlow.Models
         }
     }
 }
-

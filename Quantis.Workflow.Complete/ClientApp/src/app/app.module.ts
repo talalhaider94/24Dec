@@ -15,7 +15,7 @@ import { itLocale } from 'ngx-bootstrap/locale';
 defineLocale('it', itLocale);
 //import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
+    suppressScrollX: true
 };
 
 import { AppComponent } from './app.component';
@@ -30,15 +30,15 @@ import { RegisterComponent } from './views/register/register.component';
 import { ForgetComponent } from './views/forget/forget.component';
 
 const APP_CONTAINERS = [
-  DefaultLayoutComponent
+    DefaultLayoutComponent
 ];
 
 import {
-  AppAsideModule,
-  AppBreadcrumbModule,
-  AppHeaderModule,
-  AppFooterModule,
-  AppSidebarModule,
+    AppAsideModule,
+    AppBreadcrumbModule,
+    AppHeaderModule,
+    AppFooterModule,
+    AppSidebarModule,
 } from '@coreui/angular';
 
 // Import routing module
@@ -56,47 +56,47 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // import { CommingsoonComponent } from './components/commingsoon/commingsoon.component';
 
 @NgModule({
-  imports: [
-    //BrowserModule,
-    AppRoutingModule,
-    AppAsideModule,
-    AppBreadcrumbModule.forRoot(),
-    AppFooterModule,
-    AppHeaderModule,
-    AppSidebarModule,
-    PerfectScrollbarModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot(), // ToastrModule added
-    FileSaverModule,
-    SweetAlert2Module.forRoot(),
-    TreeviewModule.forRoot() 
-  ],
-  declarations: [
-    AppComponent,
-    ...APP_CONTAINERS,
-    P404Component,
-    P500Component,
-    LoginComponent,
-    RegisterComponent,
-    ForgetComponent,
-    SafePipe,
-   // FilterUsersPipe
-    // LoadingFormComponent,
-    // CommingsoonComponent
-  ],
-  exports: [/*FilterUsersPipe*/],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
-    {
-    provide: LocationStrategy, 
-    useClass: HashLocationStrategy // commenting this and location strategry hides the # from url. need to see sideeffect.
-  }],
-  bootstrap: [ AppComponent ]
+    imports: [
+        //BrowserModule,
+        AppRoutingModule,
+        AppAsideModule,
+        AppBreadcrumbModule.forRoot(),
+        AppFooterModule,
+        AppHeaderModule,
+        AppSidebarModule,
+        PerfectScrollbarModule,
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
+        ChartsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule, // required animations module
+        ToastrModule.forRoot(), // ToastrModule added
+        FileSaverModule,
+        SweetAlert2Module.forRoot(),
+        TreeviewModule.forRoot()
+    ],
+    declarations: [
+        AppComponent,
+        ...APP_CONTAINERS,
+        P404Component,
+        P500Component,
+        LoginComponent,
+        RegisterComponent,
+        ForgetComponent,
+        SafePipe,
+        // FilterUsersPipe
+        // LoadingFormComponent,
+        // CommingsoonComponent
+    ],
+    exports: [/*FilterUsersPipe*/],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true },
+        {
+            provide: LocationStrategy,
+            useClass: HashLocationStrategy // commenting this and location strategry hides the # from url. need to see sideeffect.
+        }],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

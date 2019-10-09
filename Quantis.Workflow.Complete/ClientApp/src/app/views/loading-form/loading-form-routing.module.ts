@@ -33,11 +33,11 @@ const routes: Routes = [
                 }
             },
             {
-              path: 'securityuser',
-              component: LoadingFormSecurityUserComponent,
-              data: {
-                title: 'S-Utente'
-              }
+                path: 'securityuser',
+                component: LoadingFormSecurityUserComponent,
+                data: {
+                    title: 'S-Utente'
+                }
             },
             {
                 path: 'admin/:formId/:formName',
@@ -58,7 +58,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class LoadingFormRoutingModule {}
+export class LoadingFormRoutingModule { }

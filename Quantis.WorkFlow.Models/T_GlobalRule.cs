@@ -26,8 +26,8 @@ namespace Quantis.WorkFlow.Models
         public string global_rule_name_key { get; set; }
         public bool in_catalog { get; set; }
         // public virtual List<T_Rule> Rules { get; set; }
-
     }
+
     public class T_GlobalRule_Configuration : IEntityTypeConfiguration<T_GlobalRule>
     {
         public void Configure(EntityTypeBuilder<T_GlobalRule> builder)

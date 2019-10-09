@@ -15,6 +15,7 @@ namespace Quantis.WorkFlow.Models.Information
         public string description { get; set; }
         public string category { get; set; }
     }
+
     public class T_Configuration_Configuration : IEntityTypeConfiguration<T_Configuration>
     {
         public void Configure(EntityTypeBuilder<T_Configuration> builder)

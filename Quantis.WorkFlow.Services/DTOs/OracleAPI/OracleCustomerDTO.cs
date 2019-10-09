@@ -8,8 +8,8 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public string customer_name { get; set; }
 
         public List<CustomerSLA> slas { get; set; }
-
     }
+
     public class CustomerSLA
     {
         public int sla_id { get; set; }
