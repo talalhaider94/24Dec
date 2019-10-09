@@ -39,44 +39,27 @@
     <section class="content">
         <!-- Main row -->
         <div class="row">
-            <!-- Left col class= "box box-danger box-solid"
-            [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
+            <!-- Left col class= "box box-danger box-solid" 
+            [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div class="box box-danger box-solid" style="border:2px solid #dd4b39">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{{row.contractpartyname}}</h3>
+                        <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
                     </div>
                     <div class="box-body">
                         <div class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
-                                <h3 class="box-title" style="font-size: 18px">Contratti</h3>
+                                <h3 class="box-title" style="font-size: 18px">KPI</h3>
                                 <!-- /.box-tools -->
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body">
-                                <!--The body of the box-->
-                                <div class="row">
-                                    <div class="col-sm-6 border-right">
-                                        <div class="description-block">
-                                            <h5 class="description-header">{{row.totalcontracts}}</h5>
-                                            <p class="description-text">Contratti</p>
-                                        </div>
-                                        <!-- /.description-block -->
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-6">
-                                        <div class="description-block">
-                                            <h5 class="description-header">{{row.totalkpis}}</h5>
-                                            <p class="description-text">KPI</p>
-                                        </div>
-                                        <!-- /.description-block -->
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                            </div>
+                            
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
+                                    <li>
+                                        <a>Numero KPI <span class="pull-right bold">{{row.totalkpis}}</span></a>
+                                    </li>
                                     <li class="top-border">
                                         <a href="#">
                                             Severity Contratti
@@ -87,8 +70,8 @@
                                         </a>
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
-                                    <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal()">{{row.noncomplaintkpis}}</button></a></li>
-                                    <li><a>KPI Compliant <button [disabled]="row.complaintkpis==0" class="btn btn-success pull-right badge bg-green" (click)="showCompliantModal()">{{row.complaintkpis}}</button></a></li>
+                                    <!-- <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal()">{{row.noncomplaintkpis}}</button></a></li>
+                                    <li><a>KPI Compliant <button [disabled]="row.complaintkpis==0" class="btn btn-success pull-right badge bg-green" (click)="showCompliantModal()">{{row.complaintkpis}}</button></a></li> -->
                                 </ul>
                             </div>
                             <!-- /.box-body -->
@@ -117,18 +100,19 @@
                             <!-- /.box-header -->
                             <div class="box-body no-padding table-responsive" style="height:600px">
                                 <table class="table table-striped">
-                                    <!-- <tr>
-                                      <th>#</th>
-                                      <th>Contratto</th>
-                                      <th></th>
-                                      <th>Compliant</th>
-                                    </tr> -->
-                                    <tr *ngFor="let b of row.bestcontracts; index as j">
+                                    <tr>
+                                      <th style="width: 10px; padding-left:10px">#</th>
+                                      <th style="padding-left:10px">KPI</th>
+                                      <th style="padding-left:10px">Result</th>
+                                      <th style="width: 40px; padding-left:50px">Valore</th>
+                                      <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.bestkpis; index as j">
                                         <td>{{j+1}}.</td>
-                                        <td>{{b.contractname}}</td>
-                                        <td></td>
-                                        <td class="center-td"><span class="badge bg-green">{{b.complaintkpis}}</span></td>
-                                        <!-- <td class="center-td"><span class="badge bg-red">3</span></td> -->
+                                        <td>{{b.kpiname}}</td>
+                                        <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -142,18 +126,19 @@
                             <!-- /.box-header -->
                             <div class="box-body no-padding table-responsive" style="height:600px">
                                 <table class="table table-striped">
-                                    <!-- <tr>
-                                        <th>#</th>
-                                        <th>Contratto</th>
-                                        <th></th>
-                                        <th>Non Compliant</th>
-                                    </tr> -->
-                                    <tr *ngFor="let w of row.worstcontracts; index as k">
-                                        <td>{{k+1}}.</td>
-                                        <td>{{w.contractname}}</td>
-                                        <td></td>
-                                        <td class="center-td"><span class="badge bg-red">{{w.noncomplaintkpis}}</span></td>
-                                        <!-- <td class="center-td"><span class="badge bg-red">3</span></td> -->
+                                    <tr>
+                                        <th style="width: 10px; padding-left:10px">#</th>
+                                        <th style="padding-left:10px">KPI</th>
+                                        <th style="padding-left:10px">Result</th>
+                                        <th style="width: 40px; padding-left:50px">Valore</th>
+                                        <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.worstkpis; index as j">
+                                        <td>{{j+1}}.</td>
+                                        <td>{{b.kpiname}}</td>
+                                        <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
