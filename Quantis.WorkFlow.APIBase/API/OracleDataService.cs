@@ -901,7 +901,60 @@ r.rule_name,
             }
 
         }
+        public List<BSIFreeFormReportDTO> GetBSIFreeFormReports()
+        {
+            var results = new List<BSIFreeFormReportDTO>();
+            string query = @"select rg.report_id, rg.report_name, rg.report_description, rg.report_xml, rg.report_owner, us.user_name
+                              from t_report_galleries rg , t_users us
+                              where rg.report_type ='FREEFORM'
+                              and rg.is_executable=1
+                              and rg.report_owner=us.user_id
+                              order by rg.report_name
+                              ";
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var result = new BSIFreeFormReportDTO();
+                        result.ReportId = Decimal.ToInt32((Decimal)reader[0]);
+                        result.ReportName = (string)reader[1];
+                        result.ReportDescription = (reader[2]==DBNull.Value)?null:(string)reader[2];
+                        result.OwnerId = Decimal.ToInt32((Decimal)reader[4]);
+                        result.OwnerName = (string)reader[5];
+                        var xml = (string)reader[3];
+                        XDocument xdoc = XDocument.Parse(xml);
+                        var queryString = xdoc.Element("REPORT_GROUP").Element("REPORT_ITEM").Element("REPORT").Element("query_string").Value;
+                        queryString = queryString.Replace("&gt;", ">");
+                        queryString = queryString.Replace("&lt;", "<");
+                        result.Query = queryString;
+                        var custom = xdoc.Element("REPORT_GROUP").Element("REPORT_ITEM").Element("REPORT").Element("custom");
+                        if (custom != null && custom.Element("query") != null)
+                        {                            
+                            var elements = custom.Element("query").Element("params").Elements();
+                            foreach (var elem in elements)
+                            {
+                                var paramName = elem.Attribute("name").Value;
+                                result.Parameters.Add(new KeyValuePairDTO()
+                                {
+                                    Key = paramName,
+                                    Value = ""
+                                });
+                            }
+                        }
+                        
+                        results.Add(result);
+                    }                    
+                }
+            }
+            return results;
 
+        }
         public List<OracleUserDTO> GetUser(int id, string name)
         {
             try
