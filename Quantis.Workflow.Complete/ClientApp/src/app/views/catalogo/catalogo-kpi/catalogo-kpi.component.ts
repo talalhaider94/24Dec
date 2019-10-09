@@ -149,9 +149,9 @@ export class CatalogoKpiComponent implements OnInit {
         day: '',
         daytrigger: '',
         monthtrigger: '',
-        enable: '',
-        enable_wf: '',
-        enable_rm: '',
+        enable: false,
+        enable_wf: false,
+        enable_rm: false,
         contract: '',
         contract_name: '',
         wf_last_sent: '',
@@ -416,9 +416,9 @@ export class CatalogoKpiComponent implements OnInit {
                 this.modalData.monthtrigger = '1,2,3,4,5,6,7,8,9,10,11,12';
                 break;
         }
-        if (this.modalData.enable == 'false') {
-            this.modalData.enable_rm = 'false';
-            this.modalData.enable_wf = 'false';
+        if (this.modalData.enable == false) {
+            this.modalData.enable_rm = false;
+            this.modalData.enable_wf = false;
         }
         this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
             //this.getKpis(); // this should refresh the main table on page
