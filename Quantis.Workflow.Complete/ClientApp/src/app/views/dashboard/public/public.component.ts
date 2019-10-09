@@ -457,6 +457,7 @@ export class PublicComponent implements OnInit {
 		this.loadingModalForm = true;
 		this.emitter.loadingStatus(true);
 		let formValues = this.widgetParametersForm.value;
+		debugger
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
@@ -499,7 +500,7 @@ export class PublicComponent implements OnInit {
 			}
 		}
 		// Danial: TODO There may be issues in copyFormValues while patching with form
-		if(formValues.Properties.hasOwnProperty('parameters') && this.isFreeFormReportComponent) {
+		if(formValues.Properties.hasOwnProperty('parameters')) {
 			if(formValues.Properties.parameters.length > 0) {
 				formValues.Properties.measure = this.barChartWidgetParameters.getReportQueryDetailByID.id
 				formValues.Properties.parameters = JSON.stringify(formValues.Properties.parameters);
