@@ -6,7 +6,7 @@ import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection
 import { forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent, NodeSelectEventArgs } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
@@ -89,6 +89,7 @@ export class PublicComponent implements OnInit {
 	filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
+	parametersArray: FormArray;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -97,7 +98,7 @@ export class PublicComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService,
 		private _$localeService: BsLocaleService
-	) { 
+	) {
 		this._$localeService.use('it');
 	}
 
@@ -105,6 +106,12 @@ export class PublicComponent implements OnInit {
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
+			}
+			if (this.barChartWidgetParameters.getReportQueryDetailByID) {
+				const params = this.barChartWidgetParameters.getReportQueryDetailByID.parameters;
+				//Danial: TODO: empty the formControl parameters array then add in
+				params.map(p => this.addParameters(p)); // pushing in formGroup Controls array 
+				// childData.setWidgetFormValues.parameters = params;
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
@@ -200,7 +207,6 @@ export class PublicComponent implements OnInit {
 		},
 		freeFormReportParent: childData => {
 			console.log('freeFormReportParent childData', childData);
-			debugger
 			if (childData.type === 'openFreeFormReportModal') {
 				this.barChartWidgetParameters = childData.data.freeFormReportWidgetParameters;
 				this.isFreeFormReportComponent = childData.data.isFreeFormReportComponent;
@@ -218,7 +224,8 @@ export class PublicComponent implements OnInit {
 			Properties: this.formBuilder.group({
 				charttype: [null],
 				aggregationoption: [null],
-				measure: [null]
+				measure: [null],
+				parameters: this.formBuilder.array([]),
 			}),
 			Filters: this.formBuilder.group({
 				daterange: [null],
@@ -291,6 +298,14 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		this.closeModalSubscription();
+	}
+	
+	addParameters(item): void {
+		this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+		this.parametersArray.push(this.formBuilder.group({
+			key: item.key,
+			value: item.value
+		}));
 	}
 
 	getData(dashboardId: number) {
@@ -481,6 +496,15 @@ export class PublicComponent implements OnInit {
 				formValues.Filters.kpi = formValues.Filters.kpi.toString();
 			} else {
 				delete formValues.Filters.kpi;
+			}
+		}
+		// Danial: TODO There may be issues in copyFormValues while patching with form
+		if(formValues.Properties.hasOwnProperty('parameters') && this.isFreeFormReportComponent) {
+			if(formValues.Properties.parameters.length > 0) {
+				formValues.Properties.measure = this.barChartWidgetParameters.getReportQueryDetailByID.id
+				formValues.Properties.parameters = JSON.stringify(formValues.Properties.parameters);
+			} else {
+				delete formValues.Properties.parameters;
 			}
 		}
 		let submitFormValues = removeNullKeysFromObject(formValues);

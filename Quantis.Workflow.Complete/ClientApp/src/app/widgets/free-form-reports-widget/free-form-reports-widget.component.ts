@@ -207,7 +207,6 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     console.log('freeFormReport chartIndexData', chartIndexData);
     this.freeFormReportData = chartIndexData;
-    debugger
     this.dtTrigger.next();
   }
 

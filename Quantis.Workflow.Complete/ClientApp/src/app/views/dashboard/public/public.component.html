@@ -68,6 +68,23 @@
                     </option>
                   </select>
                 </div>
+                <div formArrayName="parameters"
+                  *ngFor="let item of widgetParametersForm.get('Properties').get('parameters').controls; let i = index;">
+                  <div [formGroupName]="i" class="form-row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="key">Key</label>
+                        <input class="form-control" formControlName="key" placeholder="key" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="value">Value</label>
+                        <input class="form-control" formControlName="value" placeholder="value" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </tab>
             <!-- FILTERS -->
