@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
+import { ApiService } from '../../../_services/api.service';
 import { FreeFormReportService } from '../../../_services';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -19,9 +20,16 @@ export class ImportFormReportComponent implements OnInit {
     // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     category_id: number = 0;
-    // handle: any = '';
-    // name: any =  '';
-    // step: any = '';
+    queryData = {
+        id: 0,
+        QueryName: '',
+        QueryText: '',
+        Parameters: []
+    }
+    withParameters: [{
+        key: '',
+        value: ''
+      }]
 
     dtOptions: DataTables.Settings = {
         language: {
@@ -48,18 +56,12 @@ export class ImportFormReportComponent implements OnInit {
         }
     };
 
-    modalData = {
-        // id: '',
-        // handle: '',
-        // name: '',
-        // step: '',
-        // category_id: 0
-    };
-
+    loading: boolean = true;
     dtTrigger: Subject<any> = new Subject();
     ConfigTableBodyData: any = [];
 
     constructor(
+        private apiService: ApiService,
         private _freeFormReport: FreeFormReportService,
         private toastr: ToastrService,
     ) {
@@ -69,20 +71,9 @@ export class ImportFormReportComponent implements OnInit {
     ngOnInit() {
     }
 
-    populateModalData(data) {
-        // this.modalData.id = data.id;
-        // this.modalData.handle = data.handle;
-        // this.modalData.name = data.name;
-        // this.modalData.step = data.step;
-        // this.modalData.category_id = data.category_id;
-        // this.showConfigModal();
-    }
-
     // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
         this.dtTrigger.next();
-
-        this.setUpDataTableDependencies();
         this.getCOnfigurations();
     }
 
@@ -97,11 +88,8 @@ export class ImportFormReportComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
-            this.setUpDataTableDependencies();
+            this.loading = false;
         });
-    }
-
-    setUpDataTableDependencies() {
     }
 
     strip_tags(html) {
@@ -111,11 +99,29 @@ export class ImportFormReportComponent implements OnInit {
     }
 
     getCOnfigurations() {
-        // this.apiService.getSDMGroupConfigurations().subscribe((data) =>{
-        //   this.ConfigTableBodyData = data;
-        //   console.log('Configs ', data);
-        //   this.rerender();
-        // });
+        this.loading = true;
+        this.apiService.getFreeFormReports().subscribe((data) =>{
+          this.ConfigTableBodyData = data;
+          console.log('import form data -> ', data);
+          this.rerender();
+        });
+    }
+
+    populateData(row){
+        this.queryData.id = 0;
+        this.queryData.QueryName = row.reportname;
+        this.queryData.QueryText = row.query;
+        console.log('parameters length -> ',row.parameters.length);
+        if(row.parameters.length==0){ 
+        }else{
+            this.queryData.Parameters = row.parameters;
+        }
+        console.log('queryData -> ', this.queryData)
+        this._freeFormReport.addEditReportQuery(this.queryData).subscribe(data => {
+            this.toastr.success('Query created successfully');
+        }, error => {
+            this.toastr.error('Errore esecuzione report');
+        });
     }
 
     onCancel(dismissMethod: string): void {

@@ -201,6 +201,10 @@ export class ApiService {
         const reportIdEndPoint = `${environment.API_URL}/bsi/GetReportDetail?ReportId=${reportId}`;
         return this.http.get(reportIdEndPoint);
     }
+    getFreeFormReports(): Observable<any> {
+        const getFFrREndPoint = `${environment.API_URL}/oracle/GetBSIFreeFormReports`;
+        return this.http.get(getFFrREndPoint);
+    }
 
     updateConfig(config) {
         return this.http.post(`${environment.API_URL}/information/AddUpdateBasicConfiguration`, config)

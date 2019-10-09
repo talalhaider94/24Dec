@@ -75,11 +75,11 @@
                                     <td>
                                         <div>
                                             <button class="btn btn-primary btn-sm" data-toggle="modal"
-                                                    data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
+                                                data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 Assign
                                             </button>
                                             <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Query?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
-                                                    (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
+                                            (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
                                                 <span class="fa fa-trash"></span>
                                             </button>
                                             <button class="btn btn-success btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
@@ -90,37 +90,36 @@
                         </table>
                     </div>
 
-                    <div [hidden]="hideData==1">
-                        <br><br><h5 class="float-left">{{editQueryData.QueryName}}  Query Result</h5><br>
-                        <div class="table-responsive">
-                            <div [hidden]="isDebug==0" class="txt-filter-user-div col-md-3 float-right mb-2">
-                                <input type="text" class="form-control" placeholder="Cerca"
-                                       [(ngModel)]="filters.searchUsersText" />
-                            </div><br>
-                            <table class="table stripe">
-                                <thead class="text-center" style="background: #20a8d8">
-                                    <tr style="font-size:12px;color:white">
-                                        <th *ngFor="let key of debugQueryData">{{key}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr>
-                                        <td *ngFor="let value of debugQueryValue | filter : filters.searchUsersText"><div [innerHTML]="value"></div></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                  <div [hidden]="hideData==1">
+                    <br><br><h5 class="float-left">{{editQueryData.QueryName}}</h5><br>
+                    <div class="table-responsive">
+                        <div [hidden]="isDebug==0" class="txt-filter-user-div col-md-3 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                            [(ngModel)]="filters.searchUsersText" /></div><br>
+                        <table class="table stripe">
+                            <thead class="text-center" style="background: #20a8d8">
+                                <tr style="font-size:12px;color:white">
+                                    <th *ngFor="let key of debugQueryData">{{key}}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                <tr>
+                                    <td *ngFor="let value of debugQueryValue | filter : filters.searchUsersText"><div [innerHTML]="value"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>    
                     </div>
+                  </div>
                 </div>
             </div>
         </div>
         <!--/.col-->
     </div>
     <!--/.row-->
+
 </div>
 
 <div bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-     aria-hidden="true">
+aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -130,10 +129,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="txt-filter-user-div col-md-4 float-right mb-2">
-                    <input type="text" class="form-control" placeholder="Cerca"
-                           [(ngModel)]="filters.searchUsersText" />
-                </div><br>
+                <div class="txt-filter-user-div col-md-4 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                    [(ngModel)]="filters.searchUsersText" /></div><br>
                 <perfect-scrollbar style="max-height: 400px;">
                     <table class="table stripe" #assignedQueriesTable>
                         <thead style="background: #20a8d8">
@@ -145,9 +142,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let row of assignedQueriesBodyData | filter : filters.searchUsersText; index as i">
-                                <td style="text-align:center">{{row.name}} {{row.surname}}</td>
-                                <td style="text-align:center">{{row.ca_bsi_account}}</td>
-                                <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
+                            <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
+                            <td style="text-align:center">{{row.ca_bsi_account}}</td>
+                            <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
                             </tr>
                         </tbody>
                     </table>
@@ -164,7 +161,7 @@
 </div>
 
 <div bsModal #executeModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-     aria-hidden="true">
+aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -174,10 +171,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="txt-filter-user-div col-md-4 float-right mb-2">
-                    <input type="text" class="form-control" placeholder="Cerca"
-                           [(ngModel)]="filters.searchUsersText" />
-                </div><br>
+                <div class="txt-filter-user-div col-md-4 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
+                    [(ngModel)]="filters.searchUsersText" /></div><br>
                 <perfect-scrollbar style="max-height: 400px;">
                     <table class="table stripe" #assignedQueriesTable>
                         <thead style="background: #20a8d8">
@@ -187,7 +182,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let row of debugQueryData | filter : filters.searchUsersText; index as i">
-                                <td style="text-align:center">{{row[i]}}</td>
+                                <td style="text-align:center">{{row[i]}}</td>    
                             </tr>
                         </tbody>
                     </table>
@@ -204,81 +199,80 @@
 </div>
 
 <div id="viewAssignedModal" bsModal #viewAssignedModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approveModalLabel">View Free Form Report Assegnati</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideViewModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table id="classTable" class="table table-bordered">
-                    <thead style="background: #E6E6E6">
-                    </thead>
-                    <tbody>
-                        <tr><th>Nome Query</th><td colspan="2">{{viewAssignedData.queryname}}</td></tr>
-                        <tr><th>Text Query</th><td colspan="2">{{viewAssignedData.querytext}}</td></tr>
-                        <tr><th>Report Owner</th><td colspan="2">{{ownername}}</td></tr>
-                        <tr><th>Parameter Key</th><th>Parameter Value</th></tr>
-                        <tr *ngFor="let par of viewAssignedData.parameters">
-                            <td>{{par.key}}</td>
-                            <td>{{par.value}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideViewModal()">Chiudi</button>
-            </div>
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">View Free Form Report Assegnati</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideViewModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <table id="classTable" class="table table-bordered">
+            <thead style="background: #E6E6E6">
+            </thead>
+            <tbody>
+              <tr><th>Nome Query</th><td colspan="2">{{viewAssignedData.queryname}}</td></tr>
+              <tr><th>Text Query</th><td colspan="2">{{viewAssignedData.querytext}}</td></tr>
+              <tr><th>Report Owner</th><td colspan="2">{{ownername}}</td></tr>
+              <tr><th>Parameter Key</th><th>Parameter Value</th></tr>
+              <tr *ngFor="let par of viewAssignedData.parameters">
+                <td>{{par.key}}</td><td>{{par.value}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideViewModal()">Chiudi</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<div id="parametersModal" bsModal #parametersModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-     aria-hidden="true">
+  <div id="parametersModal" bsModal #parametersModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approveModalLabel">{{executeModalTitle}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideParametersModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
-                    <!-- <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br> -->
-                    <div class="form-group" style="width:50%">
-                        <h6>Query Name</h6>
-                        <input [readonly]="isReadonly==1" type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" value="{{addEditQueryForm.controls['QueryName'].value}}">
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
-                    <div class="form-group">
-                        <h6>Query Text</h6>
-                        <textarea [readonly]="isReadonly==1" type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" value="{{addEditQueryForm.controls['QueryText'].value}}"></textarea>
-                    </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
-                    <!-- <span *ngIf="parameterCount>0"> -->
-                    <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.controls['Parameters']; let i = index;">
-                        <div class="row" [formGroupName]="i">
-                            <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control" readonly></div>
-                            <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
-                        </div><br>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <button [disabled]="formLoading" type="submit" class="btn btn-success">
-                                <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
-                            </button>
-                            <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Esegui</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideParametersModal()">Chiudi</button>
-            </div>
+      <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="approveModalLabel">{{executeModalTitle}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideParametersModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+            <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
+                <!-- <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br> -->
+                <div class="form-group" style="width:50%">
+                    <h6>Query Name</h6>
+                    <input [readonly]="isReadonly==1" type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" value="{{addEditQueryForm.QueryName}}">
+                </div>
+                <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
+                <div class="form-group">
+                    <h6>Query Text</h6>
+                    <textarea [readonly]="isReadonly==1" type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }"  value="{{addEditQueryForm.QueryName}}"></textarea>
+                </div>
+                <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
+                <!-- <span *ngIf="parameterCount>0"> -->
+                <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters').controls; let i = index;">
+                    <div class="row" [formGroupName]="i">
+                        <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control" readonly></div>
+                        <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
+                    </div><br>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button [disabled]="formLoading" type="submit" class="btn btn-success">
+                            <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
+                        </button>
+                        <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Esegui</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideParametersModal()">Chiudi</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
