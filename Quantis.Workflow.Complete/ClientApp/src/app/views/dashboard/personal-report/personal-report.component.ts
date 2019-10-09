@@ -19,10 +19,6 @@ export class PersonalReportComponent implements OnInit {
     // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     category_id: number = 0;
-    // handle: any = '';
-    // name: any =  '';
-    // step: any = '';
-
     dtOptions: DataTables.Settings = {
         language: {
             processing: "Elaborazione...",
@@ -59,10 +55,8 @@ export class PersonalReportComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getPersonalReports();
     }
 
-    // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
         this.dtTrigger.next();
         this.getPersonalReports();
@@ -83,30 +77,14 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 
-    strip_tags(html) {
-        var tmp = document.createElement("div");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText;
-    }
-
     getPersonalReports() {
         this.loading = true;
-        this.apiService.getPersonalReports().subscribe((data) => {
+        // this.apiService.getPersonalReports()
+        this.apiService.getAllNormalReports().subscribe((data) => {
             this.PersonalReportData = data;
+            debugger
             console.log('PersonalReportData -> ', data);
             this.rerender();
         });
-    }
-
-    onCancel(dismissMethod: string): void {
-        console.log('Cancel ', dismissMethod);
-    }
-
-    showConfigModal() {
-        this.configModal.show();
-    }
-
-    hideConfigModal() {
-        this.configModal.hide();
     }
 }
