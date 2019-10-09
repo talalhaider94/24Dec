@@ -13,16 +13,10 @@ var $this;
 })
 
 export class BSIReportComponent implements OnInit {
-    @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
-    @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
-    // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     category_id: number = 0;
-    // handle: any = '';
-    // name: any =  '';
-    // step: any = '';
-
     dtOptions: DataTables.Settings = {
         language: {
             processing: "Elaborazione...",
@@ -54,13 +48,12 @@ export class BSIReportComponent implements OnInit {
 
     constructor(
         private apiService: ApiService,
-        private toastr: ToastrService,
+        private $toastr: ToastrService,
     ) {
         $this = this;
     }
 
     ngOnInit() {
-        //this.getAllNormalReports();
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -84,12 +77,6 @@ export class BSIReportComponent implements OnInit {
         });
     }
 
-    strip_tags(html) {
-        var tmp = document.createElement("div");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText;
-    }
-
     getAllNormalReports() {
         this.loading = true;
         this.apiService.getAllNormalReports().subscribe((data) => {
@@ -100,22 +87,14 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
+            this.loading = false;
+            this.bsiChartModal.show();
             this.ReportDetailsData = data;
+            debugger
             console.log('ReportDetailsData -> ', data);
-            this.rerender();
         });
     }
 
-    onCancel(dismissMethod: string): void {
-        console.log('Cancel ', dismissMethod);
-    }
-
-    showConfigModal() {
-        this.configModal.show();
-    }
-
-    hideConfigModal() {
-        this.configModal.hide();
-    }
 }

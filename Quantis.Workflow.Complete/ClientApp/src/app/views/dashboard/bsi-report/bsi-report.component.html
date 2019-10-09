@@ -1,75 +1,46 @@
-<div style="margin-top: -20px;">
-    <div class="table-responsive" style="background: #ffffff; padding: 10px">
-        <br />
-        <h2 style="color:#565656">Report da BSI</h2><br>
-        <!-- <button class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal" (click)="showAddConfigModal()">
-          Nuovo Gruppo
-        </button><br /><br /> -->
-        <h5 *ngIf="loading" class="text-center text-primary">
-            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
-        </h5>
-        <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background: #20a8d8">
-                <tr style="font-size:12px;color:white">
-                    <th style="text-align:center">Folder Name</th>
-                    <th style="text-align:center">Executable</th>
-                    <th style="text-align:center">Parameterized</th>
-                    <th style="text-align:center">Report Name</th>
-                    <th style="text-align:center">Report Type</th>
-                    <th style="text-align:center">Modified Date</th>
-                    <th style="text-align:center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let row of AllNormalReportsData; index as i">
-                    <td style="text-align:center">{{row.foldername}}</td>
-                    <td style="text-align:center">{{row.isexecutable}}</td>
-                    <td style="text-align:center">{{row.isparameterized}}</td>
-                    <td style="text-align:center">{{row.itemname}}</td>
-                    <td style="text-align:center">{{row.reporttype}}</td>
-                    <td style="text-align:center">{{row.modifieddate}}</td>
-                    <td style="text-align:center">
-                        <button class="btn btn-primary btn-small" (click)="getReportDetails(row.itemid)" style="font-size:10px">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="table-responsive bg-white p-3">
+  <h2>Report da BSI</h2>
+  <h5 *ngIf="loading" class="text-center text-primary">
+    <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+  </h5>
+  <table class="table stripe text-center" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead class="bg-primary">
+      <tr class="text-white">
+        <th>Folder Name</th>
+        <th>Executable</th>
+        <th>Parameterized</th>
+        <th>Report Name</th>
+        <th>Report Type</th>
+        <th>Modified Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of AllNormalReportsData; index as i">
+        <td>{{row.foldername}}</td>
+        <td>{{row.isexecutable}}</td>
+        <td>{{row.isparameterized}}</td>
+        <td>{{row.itemname}}</td>
+        <td>{{row.reporttype}}</td>
+        <td>{{row.modifieddate}}</td>
+        <td>
+          <a class="btn btn-primary btn-sm " (click)="getReportDetails(row.itemid)">
+            <i class="fa fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
-<!-- <div id="configModal" bsModal #configModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<!-- modal start -->
+<div bsModal #bsiChartModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="approveModalLabel">Modifica Gruppo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideConfigModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table id="classTable" class="table table-bordered">
-          <thead style="background: #E6E6E6">
-          </thead>
-          <tbody>
-            <tr><th>HANDLE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.handle"></td></tr>
-            <tr><th>NOME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
-            <tr><th>STEP</th><td colspan="2"><input type="number" class="form-control" [(ngModel)]="modalData.step"></td></tr>
-            <tr><th>CONTRAENTE</th><td colspan="2">
-              <select [(ngModel)]="modalData.category_id" class="form-control">
-                <option *ngFor="let obj of customersKP; index as i" [value]="obj.key">{{obj.value}}</option>
-              </select>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
+      <div class="modal-body" *ngIf="barChartWidgetParameters">
+        <h2>MODAL</h2>
       </div>
     </div>
   </div>
-</div> -->
+</div>
+<!-- modal end -->
