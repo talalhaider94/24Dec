@@ -1,7 +1,4 @@
-﻿using Quantis.WorkFlow.Services.DTOs.Information;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.API
 {

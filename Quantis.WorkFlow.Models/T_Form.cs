@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -34,11 +33,11 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_forms");
             builder.HasKey(o => o.form_id);
-            builder.HasMany(o => o.CatalogKPIs).WithOne(p => p.Form).HasForeignKey(e=>e.id_form);
-            builder.HasMany(o => o.Attachments).WithOne(p=>p.Form).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(o => o.CatalogKPIs).WithOne(p => p.Form).HasForeignKey(e => e.id_form);
+            builder.HasMany(o => o.Attachments).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(o => o.FormLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
             builder.HasMany(o => o.Rules).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(o => o.NotifierLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q=>q.id_form);
+            builder.HasMany(o => o.NotifierLogs).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
             builder.HasMany(o => o.EmailNotifiers).WithOne(p => p.Form).OnDelete(DeleteBehavior.Cascade).HasForeignKey(q => q.id_form);
         }
     }

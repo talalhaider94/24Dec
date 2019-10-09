@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.Widgets
 {
     //Always add new enum at the end never in the middle
-    public enum Measures :int
+    public enum Measures : int
     {
         [Description("Numero di ticket in KPI in Verifica")]
         Number_of_ticket_in_KPI_in_Verifica,
@@ -50,7 +48,7 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
     }
     public static class ChartType
     {
-        public static KeyValuePair<string,string> LINE = new KeyValuePair<string, string>("line","Line");
+        public static KeyValuePair<string, string> LINE = new KeyValuePair<string, string>("line", "Line");
         public static KeyValuePair<string, string> BAR = new KeyValuePair<string, string>("bar", "Bar");
         public static KeyValuePair<string, string> TABLE = new KeyValuePair<string, string>("table", "Table");
     }

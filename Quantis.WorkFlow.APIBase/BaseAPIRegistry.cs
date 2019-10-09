@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Quantis.WorkFlow.APIBase.API;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.APIBase.Mappers;
@@ -14,9 +13,6 @@ using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WidgetMapper = Quantis.WorkFlow.APIBase.Mappers.Dashboard.WidgetMapper;
 
 namespace Quantis.WorkFlow.APIBase
@@ -51,7 +47,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IMappingService<FormRuleDTO, T_FormRule>, FormRuleMapper>();
             services.AddTransient<IMappingService<FormUsersDTO, T_FormUsers>, FormUsersMapper>();
             services.AddTransient<IMappingService<FormAttachmentDTO, T_FormAttachment>, FormAttachmentMapper>();
-            services.AddTransient<IMappingService<CatalogKpiDTO, T_CatalogKPI>, CatalogKpiMapper>();            
+            services.AddTransient<IMappingService<CatalogKpiDTO, T_CatalogKPI>, CatalogKpiMapper>();
             services.AddTransient<IMappingService<ApiDetailsDTO, T_APIDetail>, ApiMapper>();
             services.AddTransient<IMappingService<ConfigurationDTO, T_Configuration>, ConfigurationMapper>();
             services.AddTransient<IMappingService<SDMStatusDTO, SDM_TicketStatus>, SDMStatusMapper>();

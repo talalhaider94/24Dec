@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.Information
 {
-    public class HierarchicalNameCodeDTO :BaseNameCodeDTO
+    public class HierarchicalNameCodeDTO : BaseNameCodeDTO
     {
         public HierarchicalNameCodeDTO(int id, string name, string code) : base(id, name, code)
         {

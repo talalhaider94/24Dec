@@ -1,28 +1,26 @@
 using Microsoft.Extensions.Configuration;
-using Oracle.ManagedDataAccess.Client;
-using Quantis.WorkFlow.Services.API;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using Quantis.WorkFlow.Services.DTOs.OracleAPI;
-using System.Xml.Linq;
-using Quantis.WorkFlow.APIBase.Framework;
 using Microsoft.Extensions.Logging;
-using Quantis.WorkFlow.Services.DTOs.API;
-using System.Net.Http;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
-using System.Web;
+using Oracle.ManagedDataAccess.Client;
+using Quantis.WorkFlow.APIBase.Framework;
+using Quantis.WorkFlow.Services.API;
+using Quantis.WorkFlow.Services.DTOs.API;
+using Quantis.WorkFlow.Services.DTOs.OracleAPI;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
+using System.Xml.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    
-    public class OracleDataService:IOracleDataService
+
+    public class OracleDataService : IOracleDataService
     {
-        private static string _connectionstring=null;
+        private static string _connectionstring = null;
         private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IInformationService _informationService;
         public OracleDataService(WorkFlowPostgreSqlContext context, IInformationService informationService)
@@ -38,7 +36,7 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                string query = @"select document_name, document_id from T_DOCUMENT_REPOSITORY where document_file_type='docx' and document_type_id='2' order by document_name asc";                
+                string query = @"select document_name, document_id from T_DOCUMENT_REPOSITORY where document_file_type='docx' and document_type_id='2' order by document_name asc";
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -65,12 +63,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<LandingPageDTO> GetLandingPageByUser(int userId,string period)
+        public List<LandingPageDTO> GetLandingPageByUser(int userId, string period)
         {
             try
             {
                 var basedtos = new List<LandingPageBaseDTO>();
-                var kpis=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o=>o.global_rule_id).ToList();
+                var kpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
                 if (!kpis.Any())
                 {
                     return null;
@@ -159,10 +157,10 @@ r.rule_name,
                                     and {1}
                                 ) psl  
                                 on psl.global_rule_id = temp.global_rule_id";
-                string filter1=QuantisUtilities.GetOracleGlobalRuleInQuery("gr.global_rule_id", kpis);
+                string filter1 = QuantisUtilities.GetOracleGlobalRuleInQuery("gr.global_rule_id", kpis);
                 string filter2 = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", kpis);
 
-                query = string.Format(query, filter1,filter2);
+                query = string.Format(query, filter1, filter2);
                 var startDate = new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
@@ -193,7 +191,7 @@ r.rule_name,
 
                             }); ; ;
                         }
-                        var result=basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
+                        var result = basedtos.GroupBy(o => new { o.ContractPartyId, o.ContractPartyName }).Select(p => new LandingPageDTO()
                         {
                             ContractPartyId = p.Key.ContractPartyId,
                             ContractPartyName = p.Key.ContractPartyName,
@@ -203,16 +201,16 @@ r.rule_name,
                             NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.Any(s => s.Result != "compliant")).Count(),
                             ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
                             NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
-                            BestContracts=p.GroupBy(q=>new {q.ContractName,q.ContractId }).OrderByDescending(r=>r.Count(s=>s.Result== "compliant") /r.Count()).Take(5).Select(t=>new LandingPageContractDTO()
+                            BestContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderByDescending(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
                             {
-                                ContractId =t.Key.ContractId,
-                                ContractName =t.Key.ContractName,
-                                TotalKPIs =t.Count(),
-                                ComplaintKPIs =t.Count(u=>u.Result== "compliant"),
+                                ContractId = t.Key.ContractId,
+                                ContractName = t.Key.ContractName,
+                                TotalKPIs = t.Count(),
+                                ComplaintKPIs = t.Count(u => u.Result == "compliant"),
                                 NonComplaintKPIs = t.Count(u => u.Result == "non compliant"),
-                                ComplaintPercentage= (t.Count(u => u.Result == "compliant") *100)/t.Count(),
-                                AverageDeviation=t.Average(u=>u.Deviation)
-                            }).OrderByDescending(u=>u.ComplaintPercentage).ToList(),
+                                ComplaintPercentage = (t.Count(u => u.Result == "compliant") * 100) / t.Count(),
+                                AverageDeviation = t.Average(u => u.Deviation)
+                            }).OrderByDescending(u => u.ComplaintPercentage).ToList(),
                             WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderBy(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
                             {
                                 ContractId = t.Key.ContractId,
@@ -235,7 +233,7 @@ r.rule_name,
                 throw e;
             }
         }
-        public List<LandingPageLevel1DTO> GetLandingPageLevel1(int userId,int contractPartyId,string period)
+        public List<LandingPageLevel1DTO> GetLandingPageLevel1(int userId, int contractPartyId, string period)
         {
             var basedtos = new List<LandingPageBaseDTO>();
             var kpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
@@ -366,19 +364,19 @@ r.rule_name,
                     }
                     var result = basedtos.GroupBy(o => new { o.ContractId, o.ContractName }).Select(p => new LandingPageLevel1DTO()
                     {
-                        ContractId=p.Key.ContractId,
-                        ContractName=p.Key.ContractName,
-                        AverageDeviation=p.Average(o=>o.Deviation),
-                        ComplaintPercentage=(p.Count(o=>o.Result== "compliant")*100)/p.Count(),
-                        TotalKPIs = p.Count(),                        
+                        ContractId = p.Key.ContractId,
+                        ContractName = p.Key.ContractName,
+                        AverageDeviation = p.Average(o => o.Deviation),
+                        ComplaintPercentage = (p.Count(o => o.Result == "compliant") * 100) / p.Count(),
+                        TotalKPIs = p.Count(),
                         ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
                         NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
-                        BestKPIs=p.OrderByDescending(o=>o.Deviation).Take(5).Select(o=>new LandingPageKPIDTO()
+                        BestKPIs = p.OrderByDescending(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
-                            KPIID=o.GlobalRuleId,
-                            KPIName=o.GlobalRuleName,
-                            Target=o.Target,
-                            Value=o.Actual
+                            KPIID = o.GlobalRuleId,
+                            KPIName = o.GlobalRuleName,
+                            Target = o.Target,
+                            Value = o.Actual
                         }).ToList(),
                         WorstKPIs = p.OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
@@ -394,7 +392,7 @@ r.rule_name,
                 }
             }
         }
-        public List<OracleCustomerDTO> GetCustomer(int id,string name)
+        public List<OracleCustomerDTO> GetCustomer(int id, string name)
         {
             try
             {
@@ -438,11 +436,11 @@ r.rule_name,
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
-            
+
         }
 
         //public List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period)
@@ -469,7 +467,7 @@ r.rule_name,
                         period_table = "t_psl_0_year";
                         break;
                 }
-                
+
                 string query = @"select s.sla_id, r.rule_id, ROUND(p.provided, 2), ROUND(p.provided_c, 2), ROUND(p.provided_e, 2), ROUND(p.provided_ce, 2), time_stamp_utc, d.domain_category_relation, r.service_level_target, u.unit_symbol from t_rules r left join t_sla_versions v on r.SLA_VERSION_ID = v.SLA_VERSION_ID left join t_global_rules gr on gr.global_rule_id = :global_rule_id left join t_slas s on v.sla_id = s.SLA_ID left join t_domain_categories d on r.domain_category_id = d.domain_category_id left join t_units u on d.unit_id = u.unit_id left join ";
                 query += period_table;
                 query += " p on p.rule_id = r.rule_id and r.is_effective = 'Y' and CONCAT(CONCAT(to_char(time_stamp_utc, 'MM'), '/'), to_char(time_stamp_utc, 'YY')) = :period where r.rule_name = gr.global_rule_name and p.time_stamp_utc is not null";
@@ -503,7 +501,7 @@ r.rule_name,
                             time_stamp_utc = (DateTime)o[6],
                             result = (o[5] == DBNull.Value) ? "[Non Calcolato]" :
                                 (Decimal)o[5] == -999 ? "[Nessun Evento]" :
-                                (o[7].ToString() == "NLT") ? 
+                                (o[7].ToString() == "NLT") ?
                                 (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Non Compliant]" : "[Compliant]")
                                 :
                                 (Decimal.ToInt32((Decimal)o[5]) < (Decimal)o[8] ? "[Compliant]" : "[Non Compliant]"),
@@ -521,192 +519,192 @@ r.rule_name,
             }
         }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-/*
-        public List<OracleFormDTO> GetForm(int id, int userid)
-        {
-            try
-            {
-                bool securityMember = false;
-                if (userid != 0)
+        /*
+                public List<OracleFormDTO> GetForm(int id, int userid)
                 {
-                    using (OracleConnection con1 = new OracleConnection(_connectionstring))
+                    try
                     {
-                        using (OracleCommand cmd = con1.CreateCommand())
+                        bool securityMember = false;
+                        if (userid != 0)
                         {
-                            string query1 = "select user_group_id, security_group_id from t_security_group_members where security_group_id in (select security_group_id from t_security_groups sg where sg.security_group_name = 'Insight Super Administrators') and user_group_id = :userid";
-                            con1.Open();
-                            cmd.BindByName = true;
-                            cmd.CommandText = query1;
-                            OracleParameter param1 = new OracleParameter("userid", userid);
-                            cmd.Parameters.Add(param1);
-                            OracleDataReader reader = cmd.ExecuteReader();
-                            DataTable dt = new DataTable();
-                            dt.Load(reader);
-                            List<DataRow> userSecurity = dt.AsEnumerable().ToList();
-                            if(userSecurity.Count() >= 1)
+                            using (OracleConnection con1 = new OracleConnection(_connectionstring))
                             {
-                                securityMember = true;
+                                using (OracleCommand cmd = con1.CreateCommand())
+                                {
+                                    string query1 = "select user_group_id, security_group_id from t_security_group_members where security_group_id in (select security_group_id from t_security_groups sg where sg.security_group_name = 'Insight Super Administrators') and user_group_id = :userid";
+                                    con1.Open();
+                                    cmd.BindByName = true;
+                                    cmd.CommandText = query1;
+                                    OracleParameter param1 = new OracleParameter("userid", userid);
+                                    cmd.Parameters.Add(param1);
+                                    OracleDataReader reader = cmd.ExecuteReader();
+                                    DataTable dt = new DataTable();
+                                    dt.Load(reader);
+                                    List<DataRow> userSecurity = dt.AsEnumerable().ToList();
+                                    if(userSecurity.Count() >= 1)
+                                    {
+                                        securityMember = true;
+                                    }
+                                }
+                            }
+                        }
+                        string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date,	ug.user_group_id,ug.user_group_name from t_forms f left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
+                        bool getConfigurations = false;
+                        if (userid != 0)
+                        {
+                            if (!securityMember)
+                            {
+                                query += " and ug.user_group_id = :userid";
+                            }
+                            else
+                            {
+                                query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date from t_forms f where 1 = 1 ";
+                            }
+                        }
+                        if (id != 0)
+                        {
+                            //query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
+                            query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration, f.form_schema from t_forms f left join t_readers r on f.reader_id = r.reader_id where 1 = 1 ";
+
+                            query += " and f.form_id = :form_id";
+                            getConfigurations = true;
+                        }
+                        var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
+                        //per comodit prendo il cutoff dalla t_configurations e non dalla t_catalog_kpi
+                        string todayDayValue = DateTime.Now.ToString("dd");
+                        int todayDay = Int32.Parse(todayDayValue);
+                        int day_cutoff = Int32.Parse(day_cutoffValue.value);
+                        bool cutoff_result;
+                        if(day_cutoff == 0) {
+                            cutoff_result = false;
+                        } else {
+                            if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
+                        }
+
+
+                        using (OracleConnection con = new OracleConnection(_connectionstring))
+                        {
+                            using (OracleCommand cmd = con.CreateCommand())
+                            {
+                                con.Open();
+                                cmd.BindByName = true;
+                                cmd.CommandText = query;
+                                OracleParameter param1 = new OracleParameter("form_id", id);
+                                OracleParameter param2 = new OracleParameter("userid", userid);
+                                cmd.Parameters.Add(param1);
+                                cmd.Parameters.Add(param2);
+                                OracleDataReader reader = cmd.ExecuteReader();
+                                DataTable dt = new DataTable();
+                                dt.Load(reader);
+                                List<DataRow> list = dt.AsEnumerable().ToList();
+
+                                if (getConfigurations)
+                                {
+                                    var result = list.Select(o => new OracleFormDTO()
+                                    {
+                                        form_id = Decimal.ToInt32((Decimal)o[0]),
+                                        form_name = (string)o[1],
+                                        form_description = (o[2] == DBNull.Value) ? string.Empty : (string)o[2],
+                                        reader_id = Decimal.ToInt32((Decimal)o[3]),
+                                        form_owner_id = Decimal.ToInt32((Decimal)o[4]),
+                                        create_date = (DateTime)o[5],
+                                        modify_date = (DateTime)o[6],
+                                        reader_configuration = GetFormAdapterConfiguration((string)o[7], GetFormConfiguration((string)o[8])),
+                                        user_group_id = 0,//(o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
+                                        user_group_name = string.Empty, //(o[9] == DBNull.Value) ? string.Empty : (string)o[9],
+                                        day_cutoff = day_cutoff,
+                                        cutoff = (bool)cutoff_result,
+                                        latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
+                                    });
+                                    return result.ToList();
+                                }
+                                else
+                                {
+                                    var result = list.Select(o => new OracleFormDTO()
+                                    {
+                                        form_id = Decimal.ToInt32((Decimal)o[0]),
+                                        form_name = (string)o[1],
+                                        form_description = (o[2] == DBNull.Value) ? string.Empty : (string)o[2],
+                                        reader_id = Decimal.ToInt32((Decimal)o[3]),
+                                        form_owner_id = Decimal.ToInt32((Decimal)o[4]),
+                                        create_date = (DateTime)o[5],
+                                        modify_date = (DateTime)o[6],
+                                        reader_configuration = null,
+                                        user_group_id = securityMember ? 0 :
+                                            (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
+                                        user_group_name = securityMember ? string.Empty : 
+                                            (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
+                                        day_cutoff = day_cutoff,
+                                        cutoff = (bool)cutoff_result,
+                                        latest_input_date = securityMember ? new DateTime(0) :
+                                            _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
+                                    });
+                                    return result.ToList();
+                                }
+
+
                             }
                         }
                     }
-                }
-                string query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date,	ug.user_group_id,ug.user_group_name from t_forms f left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
-                bool getConfigurations = false;
-                if (userid != 0)
-                {
-                    if (!securityMember)
+                    catch (Exception e)
                     {
-                        query += " and ug.user_group_id = :userid";
-                    }
-                    else
-                    {
-                        query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date from t_forms f where 1 = 1 ";
+                        throw e;
                     }
                 }
-                if (id != 0)
+                private ReaderConfiguration GetFormAdapterConfiguration(string xml, List<FormConfigurationDTO> conf)
                 {
-                    //query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration,	ug.user_group_id,ug.user_group_name from t_forms f left join t_readers r on f.reader_id = r.reader_id left join t_forms_permitted_users fpu on fpu.form_id = f.form_id left join t_user_groups ug on fpu.user_group_id = ug.user_group_id where 1 = 1 ";
-                    query = "select f.form_id, f.form_name,f.form_description, f.reader_id,f.form_owner_id,f.create_date, f.modify_date, r.reader_configuration, f.form_schema from t_forms f left join t_readers r on f.reader_id = r.reader_id where 1 = 1 ";
+                    XDocument xdoc = XDocument.Parse(xml);
+                    var lists = from uoslist in xdoc.Element("AdapterConfiguration").Element("InputFormatCollection").Element("InputFormat").Element("InputFormatFields").Elements("InputFormatField") select uoslist;
+                    var formfields = new List<FormField>();
 
-                    query += " and f.form_id = :form_id";
-                    getConfigurations = true;
-                }
-                var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
-                //per comodit prendo il cutoff dalla t_configurations e non dalla t_catalog_kpi
-                string todayDayValue = DateTime.Now.ToString("dd");
-                int todayDay = Int32.Parse(todayDayValue);
-                int day_cutoff = Int32.Parse(day_cutoffValue.value);
-                bool cutoff_result;
-                if(day_cutoff == 0) {
-                    cutoff_result = false;
-                } else {
-                    if (todayDay < day_cutoff) { cutoff_result = false; } else { cutoff_result = true; }
-                }
-                
-
-                using (OracleConnection con = new OracleConnection(_connectionstring))
-                {
-                    using (OracleCommand cmd = con.CreateCommand())
+                    foreach (var l in lists)
                     {
-                        con.Open();
-                        cmd.BindByName = true;
-                        cmd.CommandText = query;
-                        OracleParameter param1 = new OracleParameter("form_id", id);
-                        OracleParameter param2 = new OracleParameter("userid", userid);
-                        cmd.Parameters.Add(param1);
-                        cmd.Parameters.Add(param2);
-                        OracleDataReader reader = cmd.ExecuteReader();
-                        DataTable dt = new DataTable();
-                        dt.Load(reader);
-                        List<DataRow> list = dt.AsEnumerable().ToList();
-                        
-                        if (getConfigurations)
+                        formfields.Add(new FormField()
                         {
-                            var result = list.Select(o => new OracleFormDTO()
-                            {
-                                form_id = Decimal.ToInt32((Decimal)o[0]),
-                                form_name = (string)o[1],
-                                form_description = (o[2] == DBNull.Value) ? string.Empty : (string)o[2],
-                                reader_id = Decimal.ToInt32((Decimal)o[3]),
-                                form_owner_id = Decimal.ToInt32((Decimal)o[4]),
-                                create_date = (DateTime)o[5],
-                                modify_date = (DateTime)o[6],
-                                reader_configuration = GetFormAdapterConfiguration((string)o[7], GetFormConfiguration((string)o[8])),
-                                user_group_id = 0,//(o[8] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[8]),
-                                user_group_name = string.Empty, //(o[9] == DBNull.Value) ? string.Empty : (string)o[9],
-                                day_cutoff = day_cutoff,
-                                cutoff = (bool)cutoff_result,
-                                latest_input_date = _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
-                            });
-                            return result.ToList();
-                        }
-                        else
-                        {
-                            var result = list.Select(o => new OracleFormDTO()
-                            {
-                                form_id = Decimal.ToInt32((Decimal)o[0]),
-                                form_name = (string)o[1],
-                                form_description = (o[2] == DBNull.Value) ? string.Empty : (string)o[2],
-                                reader_id = Decimal.ToInt32((Decimal)o[3]),
-                                form_owner_id = Decimal.ToInt32((Decimal)o[4]),
-                                create_date = (DateTime)o[5],
-                                modify_date = (DateTime)o[6],
-                                reader_configuration = null,
-                                user_group_id = securityMember ? 0 :
-                                    (o[7] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)o[7]),
-                                user_group_name = securityMember ? string.Empty : 
-                                    (o[8] == DBNull.Value) ? string.Empty : (string)o[8],
-                                day_cutoff = day_cutoff,
-                                cutoff = (bool)cutoff_result,
-                                latest_input_date = securityMember ? new DateTime(0) :
-                                    _dbcontext.FormLogs.Any(p => p.id_form == id) ? _dbcontext.FormLogs.Where(q => q.id_form == id).Max(r => r.time_stamp) : new DateTime(0)
-                            });
-                            return result.ToList();
-                        }
+                            name = l.Attribute("Name").Value,
+                            type = l.Attribute("Type").Value,
+                            source = l.Attribute("Source").Value,
 
+                        });
 
                     }
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        private ReaderConfiguration GetFormAdapterConfiguration(string xml, List<FormConfigurationDTO> conf)
-        {
-            XDocument xdoc = XDocument.Parse(xml);
-            var lists = from uoslist in xdoc.Element("AdapterConfiguration").Element("InputFormatCollection").Element("InputFormat").Element("InputFormatFields").Elements("InputFormatField") select uoslist;
-            var formfields = new List<FormField>();
-            
-            foreach (var l in lists)
-            {
-                formfields.Add(new FormField()
-                {
-                    name = l.Attribute("Name").Value,
-                    type = l.Attribute("Type").Value,
-                    source = l.Attribute("Source").Value,
-
-                });
-
-            }
-            foreach (var s in conf)
-            {
-                if (s.a_type == "DLFLabel" && s.text != "Label" && s.text != null && s.text.Length > 0)
-                {
-                    formfields.Add(new FormField()
+                    foreach (var s in conf)
                     {
-                        name = "Label",
-                        type = "Label",
-                        source = s.text
+                        if (s.a_type == "DLFLabel" && s.text != "Label" && s.text != null && s.text.Length > 0)
+                        {
+                            formfields.Add(new FormField()
+                            {
+                                name = "Label",
+                                type = "Label",
+                                source = s.text
 
-                    });
+                            });
+                        }
+                    }
+                    return new ReaderConfiguration()
+                    {
+                        inputformatfield = (from f in formfields
+                                            join c in conf on f.name equals c.name
+                                            into gj from subset in gj.DefaultIfEmpty()
+                                            select new FormField()
+                                            {
+                                                name = f.name,
+                                                label = subset?.text??String.Empty,
+                                                mandatory = subset?.a_isMandatory??String.Empty,
+                                                defaultValue = subset?.defaultValue??String.Empty,
+                                                source = f.source,
+                                                type = f.type,
+                                                a_type = subset?.a_type??String.Empty,
+                                            }).ToList()
+                    };
                 }
-            }
-            return new ReaderConfiguration()
-            {
-                inputformatfield = (from f in formfields
-                                    join c in conf on f.name equals c.name
-                                    into gj from subset in gj.DefaultIfEmpty()
-                                    select new FormField()
-                                    {
-                                        name = f.name,
-                                        label = subset?.text??String.Empty,
-                                        mandatory = subset?.a_isMandatory??String.Empty,
-                                        defaultValue = subset?.defaultValue??String.Empty,
-                                        source = f.source,
-                                        type = f.type,
-                                        a_type = subset?.a_type??String.Empty,
-                                    }).ToList()
-            };
-        }
-        */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        public List<OracleGroupDTO> GetGroup(int id,string name)
+                */
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        public List<OracleGroupDTO> GetGroup(int id, string name)
         {
             try
             {
@@ -719,7 +717,7 @@ r.rule_name,
                 {
                     query += "and ug.user_group_id = :user_group_id";
                 }
-                
+
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -756,7 +754,7 @@ r.rule_name,
             {
                 throw e;
             }
-            
+
         }
 
         public List<OracleSlaDTO> GetSla(int id, string name)
@@ -773,7 +771,7 @@ r.rule_name,
                     query += " and f.sla_id = :sla_id";
                 }
                 query += " group by f.sla_name,f.sla_id, f.sla_status, f.sla_valid_from, f.sla_valid_to, s.customer_name, s.customer_id, r.sla_version_id order by f.sla_id ASC";
-                
+
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -849,7 +847,7 @@ r.rule_name,
                 {
                     query += "and r.rule_id = :rule_id";
                 }
-                
+
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -924,7 +922,7 @@ r.rule_name,
                         var result = new BSIFreeFormReportDTO();
                         result.ReportId = Decimal.ToInt32((Decimal)reader[0]);
                         result.ReportName = (string)reader[1];
-                        result.ReportDescription = (reader[2]==DBNull.Value)?null:(string)reader[2];
+                        result.ReportDescription = (reader[2] == DBNull.Value) ? null : (string)reader[2];
                         result.OwnerId = Decimal.ToInt32((Decimal)reader[4]);
                         result.OwnerName = (string)reader[5];
                         var xml = (string)reader[3];
@@ -935,7 +933,7 @@ r.rule_name,
                         result.Query = queryString;
                         var custom = xdoc.Element("REPORT_GROUP").Element("REPORT_ITEM").Element("REPORT").Element("custom");
                         if (custom != null && custom.Element("query") != null)
-                        {                            
+                        {
                             var elements = custom.Element("query").Element("params").Elements();
                             foreach (var elem in elements)
                             {
@@ -947,9 +945,9 @@ r.rule_name,
                                 });
                             }
                         }
-                        
+
                         results.Add(result);
-                    }                    
+                    }
                 }
             }
             return results;
@@ -978,7 +976,7 @@ r.rule_name,
                 {
                     query += " and user_id = :user_id";
                 }
-                
+
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -1000,15 +998,15 @@ r.rule_name,
                             user_name = (string)p.Key.user_name,
                             user_email = (p.Key.user_email == DBNull.Value) ? string.Empty : (string)p.Key.user_email,
                             groups = p.Select(q =>
-                            (q[3] == DBNull.Value)? null :
+                            (q[3] == DBNull.Value) ? null :
                             new OracleUserGroupsDTO()
                             {
                                 user_group_id = (q[3] == DBNull.Value) ? (int?)null : Decimal.ToInt32((Decimal)q[3]),
                                 user_group_name = (q[4] == DBNull.Value) ? string.Empty : (string)q[4]
                             }).ToList()
-                            
-                    });
-                        
+
+                        });
+
 
                         return values.ToList();
                     }
@@ -1021,12 +1019,12 @@ r.rule_name,
 
         }
 
-        public Tuple<int,int> GetUserIdLocaleIdByUserName(string username)
+        public Tuple<int, int> GetUserIdLocaleIdByUserName(string username)
         {
             try
             {
                 string query = @"SELECT USER_ID, USER_LOCALE_ID FROM T_Users Where USER_NAME = :user_name AND USER_STATUS = 'ACTIVE'";
-                
+
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
                     using (OracleCommand cmd = con.CreateCommand())
@@ -1037,10 +1035,10 @@ r.rule_name,
                         OracleParameter param2 = new OracleParameter("user_name", username);
                         cmd.Parameters.Add(param2);
                         OracleDataReader reader = cmd.ExecuteReader();
-                        Tuple<int, int> res=new Tuple<int, int>(0,0);
+                        Tuple<int, int> res = new Tuple<int, int>(0, 0);
                         if (reader.Read())
                         {
-                            res= new Tuple<int, int>(Decimal.ToInt32((Decimal)reader["USER_ID"]), Decimal.ToInt32((Decimal)reader["USER_LOCALE_ID"]));
+                            res = new Tuple<int, int>(Decimal.ToInt32((Decimal)reader["USER_ID"]), Decimal.ToInt32((Decimal)reader["USER_LOCALE_ID"]));
                         }
                         return res;
                     }
@@ -1079,7 +1077,8 @@ r.rule_name,
                         XDocument xdoc = XDocument.Parse(xmlDecoded);
                         var lists = from uoslist in xdoc.Element("DataLoadingForms").Element("ControlsXml").Element("Xml").Element("Controls").Elements("Control") select uoslist;
                         //var labelList = new List<FormConfigurationDTO>();
-                        var labelList = lists.Where(o => o.Attribute("type").Value == "DLFLabel").Select(l => new {
+                        var labelList = lists.Where(o => o.Attribute("type").Value == "DLFLabel").Select(l => new
+                        {
                             a_id = l.Attribute("id").Value,
                             a_top = l.Attribute("top").Value,
                             a_left = l.Attribute("left").Value,
@@ -1243,7 +1242,7 @@ r.rule_name,
 
                             var label = labelList.FirstOrDefault(o => o.a_id == f.a_labelId ||
                             (
-                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top)-10 &&
+                            (Int32.Parse(o.a_top) + Int32.Parse(o.a_height)) >= Int32.Parse(f.a_top) - 10 &&
                             Int32.Parse(o.a_top) <= (Int32.Parse(f.a_top) + Int32.Parse(f.a_height))
                             ));
                             if (label != null)

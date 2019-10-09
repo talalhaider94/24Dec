@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.Widgets
 {
@@ -20,10 +19,10 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public bool ShowIncompletePeriodCheck { get; set; }
         public string DefaultDateRange { get; set; }
 
-        public Dictionary<int,string> Measures { get; set; }
-        public Dictionary<string,string> ChartTypes { get; set; }
-        public Dictionary<string,string> AggregationOptions { get; set; }
-        public Dictionary<int,string> DateTypes { get; set; }
+        public Dictionary<int, string> Measures { get; set; }
+        public Dictionary<string, string> ChartTypes { get; set; }
+        public Dictionary<string, string> AggregationOptions { get; set; }
+        public Dictionary<int, string> DateTypes { get; set; }
 
         public WidgetViewModel()
         {

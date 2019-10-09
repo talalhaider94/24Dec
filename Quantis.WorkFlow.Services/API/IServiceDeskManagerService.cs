@@ -1,8 +1,6 @@
-﻿using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
-using System;
+﻿using Microsoft.AspNetCore.Http;
+using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Http;
 namespace Quantis.WorkFlow.Services.API
 {
     public interface IServiceDeskManagerService
@@ -14,8 +12,8 @@ namespace Quantis.WorkFlow.Services.API
         SDMTicketLVDTO CreateTicket(CreateTicketDTO dto);
         SDMTicketLVDTO CreateTicketByKPIID(int Id);
         SDMTicketLVDTO GetTicketByID(int Id);
-        ChangeStatusDTO TransferTicketByID(int id,string status, string description, HttpContext context);
-        ChangeStatusDTO EscalateTicketbyID(int id, string status,string description, HttpContext context);
+        ChangeStatusDTO TransferTicketByID(int id, string status, string description, HttpContext context);
+        ChangeStatusDTO EscalateTicketbyID(int id, string status, string description, HttpContext context);
         string UploadAttachmentToTicket(SDMUploadAttachmentDTO dto, string userName);
         void UpdateTicketValue(HttpContext context, TicketValueDTO dto);
         byte[] DownloadAttachment(string attachmentHandle);

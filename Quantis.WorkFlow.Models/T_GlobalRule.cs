@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -10,7 +8,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int global_rule_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
-        public string prev_status{ get; set; }
+        public string prev_status { get; set; }
         public string global_rule_name { get; set; }
         public int sla_id { get; set; }
         public string is_preliminary { get; set; }
@@ -27,7 +25,7 @@ namespace Quantis.WorkFlow.Models
         public int? calc_policy_change_seq { get; set; }
         public string global_rule_name_key { get; set; }
         public bool in_catalog { get; set; }
-       // public virtual List<T_Rule> Rules { get; set; }
+        // public virtual List<T_Rule> Rules { get; set; }
 
     }
     public class T_GlobalRule_Configuration : IEntityTypeConfiguration<T_GlobalRule>

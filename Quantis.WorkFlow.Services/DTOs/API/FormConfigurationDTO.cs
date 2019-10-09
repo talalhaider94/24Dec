@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.API
 {
@@ -12,8 +10,8 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         }
         public string a_type { get; set; }
         public string a_dataType { get; set; }
-        
-        public Dictionary<string,string> Extras { get; set; }
+
+        public Dictionary<string, string> Extras { get; set; }
         public string defaultValue { get; set; }
         public string a_isMandatory { get; set; }
         public string name { get; set; }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
@@ -9,7 +7,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public int customer_id { get; set; }
         public string customer_name { get; set; }
 
-        public List<CustomerSLA> slas { get; set; } 
+        public List<CustomerSLA> slas { get; set; }
 
     }
     public class CustomerSLA

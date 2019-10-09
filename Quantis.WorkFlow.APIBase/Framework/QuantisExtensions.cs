@@ -1,11 +1,10 @@
-﻿using Quantis.WorkFlow.Services.Framework;
+﻿using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Linq.Dynamic.Core;
-using Quantis.WorkFlow.Models;
 using System.Diagnostics;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 
 namespace Quantis.WorkFlow.APIBase.Framework
 {
@@ -29,17 +28,17 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     query = query.OrderBy(pagingInfo.OrderBy);
                 }
             }
-            
+
             var results = query.Skip(skip).Take(pagingInfo.Size).ToList();
             return new PagedList<T>(results, CurrentPage, PageSize, RowCount);
 
         }
 
-        public static void Add(this Dictionary<string, string>  dic,KeyValuePair<string,string> kp)
+        public static void Add(this Dictionary<string, string> dic, KeyValuePair<string, string> kp)
         {
             dic.Add(kp.Key, kp.Value);
         }
-        public static void LogInformation(this WorkFlowPostgreSqlContext dbcontext,string logMessage)
+        public static void LogInformation(this WorkFlowPostgreSqlContext dbcontext, string logMessage)
         {
             try
             {
@@ -50,8 +49,8 @@ namespace Quantis.WorkFlow.APIBase.Framework
                     stacktrace = null,
                     loglevel = "Information",
                     timestamp = DateTime.Now,
-                    innerexceptions=null
-                };                
+                    innerexceptions = null
+                };
                 dbcontext.Exceptions.Add(exception);
                 dbcontext.SaveChanges();
             }

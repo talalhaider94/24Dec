@@ -4,8 +4,6 @@ using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quartz;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Quantis.WorkFlow.Jobs.Jobs
@@ -25,7 +23,7 @@ namespace Quantis.WorkFlow.Jobs.Jobs
             {
                 // Resolve the Scoped service
                 var service = scope.ServiceProvider.GetService<IInformationService>();
-                var dbcontext= scope.ServiceProvider.GetService<WorkFlowPostgreSqlContext>();
+                var dbcontext = scope.ServiceProvider.GetService<WorkFlowPostgreSqlContext>();
                 var val = service.GetConfiguration("be_scheduler", "slave_1");
                 if (val != null)
                 {
@@ -34,7 +32,7 @@ namespace Quantis.WorkFlow.Jobs.Jobs
                     var res = f.Bash();
                     dbcontext.LogInformation("Job Executed: The command is: " + f + " and result is: " + res);
                 }
-                
+
             }
 
             return Task.CompletedTask;

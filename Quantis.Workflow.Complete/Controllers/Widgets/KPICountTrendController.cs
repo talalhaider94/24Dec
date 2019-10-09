@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Quantis.WorkFlow.APIBase.Framework;
+﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
@@ -40,8 +36,8 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override object GetData(WidgetParametersDTO props)
         {
-            var dto=_globalfilterService.MapAggOptionWidget(props);
-            var result=_widgetService.GetKPICountTrend(dto);
+            var dto = _globalfilterService.MapAggOptionWidget(props);
+            var result = _widgetService.GetKPICountTrend(dto);
             return result;
         }
     }

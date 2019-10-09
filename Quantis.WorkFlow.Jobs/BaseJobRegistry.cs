@@ -4,9 +4,6 @@ using Quantis.WorkFlow.Jobs.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Jobs
 {
@@ -17,7 +14,7 @@ namespace Quantis.WorkFlow.Jobs
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             if (!string.IsNullOrEmpty(conf["CronJobJavaCallingExpression"]))
-            {               
+            {
                 services.AddSingleton<CallingJavaJob>();
                 services.AddSingleton(new JobSchedule(
                     jobType: typeof(CallingJavaJob),

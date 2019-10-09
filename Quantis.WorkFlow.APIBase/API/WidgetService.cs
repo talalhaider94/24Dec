@@ -6,7 +6,6 @@ using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -27,7 +26,7 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<XYDTO> GetKPICountTrend(WidgetwithAggOptionDTO dto)
         {
             var result = new List<XYDTO>();
-            var facts= _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
+            var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
             if (dto.KPIs.Any())
             {
                 facts = facts.Where(o => dto.KPIs.Contains(o.global_rule_id));
@@ -39,14 +38,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
                     {
                         XValue = p.Key + "",
-                        YValue = p.Count(r=>(p.Key == r.period_year ? true : false))  //was p.Count() @SHAHZAD pls check this, it was not working "exception near AS"
+                        YValue = p.Count(r => (p.Key == r.period_year ? true : false))  //was p.Count() @SHAHZAD pls check this, it was not working "exception near AS"
                     }).OrderBy(o => o.XValue).ToList();
                 }
                 else
                 {
-                    result = facts.GroupBy(o => new { o.period_year,o.period_month }).Select(p => new XYDTO()
+                    result = facts.GroupBy(o => new { o.period_year, o.period_month }).Select(p => new XYDTO()
                     {
-                        XValue = p.Key.period_month + "/"+p.Key.period_year,
+                        XValue = p.Key.period_month + "/" + p.Key.period_year,
                         YValue = p.Count()
                     }).ToList();
                 }
@@ -58,7 +57,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
                     {
                         XValue = p.Key + "",
-                        YValue = p.Count(r=>r.complaint)
+                        YValue = p.Count(r => r.complaint)
                     }).OrderBy(o => o.XValue).ToList();
                 }
                 else
@@ -108,10 +107,10 @@ namespace Quantis.WorkFlow.APIBase.API
                     }).ToList();
                 }
             }
-            else if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant || dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+            else if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant || dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
             {
                 string signcomplaint = "<";
-                if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
+                if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_not_compliant)
                 {
                     signcomplaint = ">";
                 }
@@ -172,7 +171,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 and {0}
                                 and psl.deviation_ce {1} 0
                                 group by psl.end_period";
-                var rules=QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
+                var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("psl.global_rule_id", dto.KPIs);
                 query = string.Format(query, rules, signcomplaint);
                 using (OracleConnection con = new OracleConnection(_connectionstring))
                 {
@@ -198,7 +197,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
-                    result=result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
+                    result = result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
                 }
             }
             return result;
@@ -207,7 +206,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public XYDTO GetCatalogPendingCount(BaseWidgetDTO dto)
         {
-            if(dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
+            if (dto.Measures.FirstOrDefault() == Measures.Pending_KPIs)
             {
                 return new XYDTO() { XValue = "", YValue = _dataService.GetAllTRules().Count() };
             }
@@ -219,7 +218,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public List<XYDTO> GetDistributionByVerifica(BaseWidgetDTO dto)
         {
-            
+
             var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
             if (dto.KPIs.Any())
             {
@@ -227,8 +226,8 @@ namespace Quantis.WorkFlow.APIBase.API
             }
 
             var res = new List<XYDTO>();
-            
-            res.Add(new XYDTO() { XValue = "Compliant", YValue = facts.Where(o => o.complaint).Count()});
+
+            res.Add(new XYDTO() { XValue = "Compliant", YValue = facts.Where(o => o.complaint).Count() });
             res.Add(new XYDTO() { XValue = "Non Compliant", YValue = facts.Where(o => o.notcomplaint).Count() });
             res.Add(new XYDTO() { XValue = "Non Calculato", YValue = facts.Where(o => o.notcalculated).Count() });
             return res;
@@ -332,18 +331,18 @@ namespace Quantis.WorkFlow.APIBase.API
                                 ContractName = (string)reader[3],
                                 GlobalRuleName = (string)reader[4],
                                 GlobalRuleId = Decimal.ToInt32((Decimal)reader[5]),
-                                Target = (reader[6]==DBNull.Value)?0:(double)reader[6],
+                                Target = (reader[6] == DBNull.Value) ? 0 : (double)reader[6],
                                 Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                                 Result = (string)reader[8],
                                 Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
 
                             });
                         }
-                        
+
 
                     }
                 }
-                if(dto.AggregationOption == AggregationOption.KPI.Key)
+                if (dto.AggregationOption == AggregationOption.KPI.Key)
                 {
                     result.AddRange(basedtos.Where(o => o.Result == "compliant").GroupBy(o => new { o.GlobalRuleId, o.GlobalRuleName }).Select(o => new XYZDTO()
                     {
@@ -402,7 +401,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var result = new XYDTO();
 
             string signcomplaint = "";
-            if(dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant)
+            if (dto.Measures.FirstOrDefault() == Measures.Number_of_Total_KPI_compliant)
             {
                 signcomplaint = "and psl.deviation_ce < 0";
             }
@@ -487,7 +486,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     OracleDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        result=new XYDTO()
+                        result = new XYDTO()
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = Decimal.ToDouble((Decimal)reader[1])
@@ -591,8 +590,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             XValue = ((DateTime)reader[0]).ToString("MM/yy"),
                             YValue = (double)reader[1],
-                            Description= (string)reader[3] + "|" + (string)reader[4],
-                            ZValue="Target"
+                            Description = (string)reader[3] + "|" + (string)reader[4],
+                            ZValue = "Target"
                         });
                         result.Add(new XYZDTO()
                         {
@@ -894,7 +893,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             ContractParty = (reader[0] == DBNull.Value) ? "" : (string)reader[0],
                             Contract = (reader[1] == DBNull.Value) ? "" : (string)reader[1],
-                            GlobalRuleId= (reader[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)reader[2]),
+                            GlobalRuleId = (reader[2] == DBNull.Value) ? 0 : Decimal.ToInt32((Decimal)reader[2]),
                             IdKPI = (reader[3] == DBNull.Value) ? "" : (string)reader[3],
                             DescrizioneKPI = (reader[4] == DBNull.Value) ? "" : (string)reader[4],
                             Tipologia = (reader[5] == DBNull.Value) ? "" : (string)reader[5],
@@ -919,7 +918,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         });
                     }
                 }
-            }           
+            }
             return result;
         }
     }

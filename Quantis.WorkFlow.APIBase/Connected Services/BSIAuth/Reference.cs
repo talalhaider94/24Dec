@@ -9,94 +9,94 @@
 
 namespace BSIAuth
 {
-    
-    
+
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.oblicore.com", ConfigurationName="BSIAuth.OblicoreAuthSoap")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace = "http://www.oblicore.com", ConfigurationName = "BSIAuth.OblicoreAuthSoap")]
     public interface OblicoreAuthSoap
     {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://www.oblicore.com/AuthenticateUser", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://www.oblicore.com/AuthenticateUser", ReplyAction = "*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
         System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string organizationName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://www.oblicore.com/CreateSessionContext", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://www.oblicore.com/CreateSessionContext", ReplyAction = "*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
         System.Threading.Tasks.Task<string> CreateSessionContextAsync(string userName, string organizationName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://www.oblicore.com/ClearSessionContext", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://www.oblicore.com/ClearSessionContext", ReplyAction = "*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults = true)]
         System.Threading.Tasks.Task ClearSessionContextAsync(string sessionContextID);
     }
-    
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     public interface OblicoreAuthSoapChannel : BSIAuth.OblicoreAuthSoap, System.ServiceModel.IClientChannel
     {
     }
-    
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "1.0.0.1")]
     public partial class OblicoreAuthSoapClient : System.ServiceModel.ClientBase<BSIAuth.OblicoreAuthSoap>, BSIAuth.OblicoreAuthSoap
     {
-        
-    /// <summary>
-    /// Implementare questo metodo parziale per configurare l'endpoint servizio.
-    /// </summary>
-    /// <param name="serviceEndpoint">Endpoint da configurare</param>
-    /// <param name="clientCredentials">Credenziali del client</param>
-    static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
-        
-        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration) : 
+
+        /// <summary>
+        /// Implementare questo metodo parziale per configurare l'endpoint servizio.
+        /// </summary>
+        /// <param name="serviceEndpoint">Endpoint da configurare</param>
+        /// <param name="clientCredentials">Credenziali del client</param>
+        static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
+
+        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration) :
                 base(OblicoreAuthSoapClient.GetBindingForEndpoint(endpointConfiguration), OblicoreAuthSoapClient.GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
-        
-        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+
+        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration, string remoteAddress) :
                 base(OblicoreAuthSoapClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
-        
-        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+
+        public OblicoreAuthSoapClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) :
                 base(OblicoreAuthSoapClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
-        
-        public OblicoreAuthSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+
+        public OblicoreAuthSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
                 base(binding, remoteAddress)
         {
         }
-        
+
         public System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string organizationName)
         {
             return base.Channel.AuthenticateUserAsync(userName, organizationName);
         }
-        
+
         public System.Threading.Tasks.Task<string> CreateSessionContextAsync(string userName, string organizationName)
         {
             return base.Channel.CreateSessionContextAsync(userName, organizationName);
         }
-        
+
         public System.Threading.Tasks.Task ClearSessionContextAsync(string sessionContextID)
         {
             return base.Channel.ClearSessionContextAsync(sessionContextID);
         }
-        
+
         public virtual System.Threading.Tasks.Task OpenAsync()
         {
             return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginOpen(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndOpen));
         }
-        
+
         public virtual System.Threading.Tasks.Task CloseAsync()
         {
             return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginClose(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndClose));
         }
-        
+
         private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.OblicoreAuthSoap))
@@ -123,7 +123,7 @@ namespace BSIAuth
             }
             throw new System.InvalidOperationException(string.Format("L\'endpoint denominato \'{0}\' non è stato trovato.", endpointConfiguration));
         }
-        
+
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.OblicoreAuthSoap))
@@ -136,12 +136,12 @@ namespace BSIAuth
             }
             throw new System.InvalidOperationException(string.Format("L\'endpoint denominato \'{0}\' non è stato trovato.", endpointConfiguration));
         }
-        
+
         public enum EndpointConfiguration
         {
-            
+
             OblicoreAuthSoap,
-            
+
             OblicoreAuthSoap12,
         }
     }

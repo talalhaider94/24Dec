@@ -1,9 +1,7 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.API
 {

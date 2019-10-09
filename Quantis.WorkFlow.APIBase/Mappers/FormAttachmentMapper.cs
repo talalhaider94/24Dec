@@ -2,8 +2,6 @@
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.DTOs.API;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
@@ -20,7 +18,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 period = e.period,
                 year = e.year,
                 form_attachment_id = e.t_form_attachments_id,
-                create_date=e.create_date
+                create_date = e.create_date
             };
         }
 

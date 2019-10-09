@@ -1,8 +1,5 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.Information;
-using Quantis.WorkFlow.Services.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.API
 {
@@ -16,7 +13,7 @@ namespace Quantis.WorkFlow.Services.API
         ConfigurationDTO GetConfiguration(string owner, string key);
         void AddUpdateRole(BaseNameCodeDTO dto);
         void DeleteRole(int roleId);
-        List<BaseNameCodeDTO> GetAllRoles(); 
+        List<BaseNameCodeDTO> GetAllRoles();
         List<PermissionDTO> GetAllPermissions();
         List<BaseNameCodeDTO> GetRolesByUserId(int userid);
         List<PermissionDTO> GetPermissionsByUserId(int userid);
@@ -28,7 +25,7 @@ namespace Quantis.WorkFlow.Services.API
         void DeleteSDMGroupConfiguration(int id);
         void DeleteSDMStatusConfiguration(int id);
         void AddUpdateSDMStatusConfiguration(SDMStatusDTO dto);
-        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);        
+        void AddUpdateSDMGroupConfiguration(SDMGroupDTO dto);
         List<int> GetGlobalRulesByUserId(int userId);
         void AssignGlobalRulesToUserId(MultipleRecordsDTO dto);
         List<ContractPartyDetailDTO> GetContractPartyByUser(int userId);

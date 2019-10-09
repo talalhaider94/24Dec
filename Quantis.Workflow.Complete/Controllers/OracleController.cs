@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +7,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.OracleAPI;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -57,7 +54,7 @@ namespace Quantis.WorkFlow.Controllers
         public List<LandingPageDTO> GetLandingPageByUser(string period)
         {
             var usr = HttpContext.User as AuthUser;
-            return _oracleAPI.GetLandingPageByUser(usr.UserId,period);
+            return _oracleAPI.GetLandingPageByUser(usr.UserId, period);
         }
         [HttpGet("GetBSIFreeFormReports")]
         public List<BSIFreeFormReportDTO> GetBSIFreeFormReports()

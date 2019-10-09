@@ -1,7 +1,4 @@
 ﻿using Quantis.WorkFlow.Services.API;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.API
 {

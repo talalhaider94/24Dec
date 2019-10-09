@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
+using System;
+using System.Collections.Generic;
 
 namespace Quantis.Workflow.Complete.Controllers.Widgets
 {
@@ -21,9 +19,9 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         {
             vm.ShowMeasure = true;
             vm.ShowOrganization = false;
-            var selfqueries=_dataService.GetOwnedReportQueries(GetUserId());
+            var selfqueries = _dataService.GetOwnedReportQueries(GetUserId());
             var assignedQueries = _dataService.GetAssignedReportQueries(GetUserId());
-            foreach(var q in selfqueries)
+            foreach (var q in selfqueries)
             {
                 vm.Measures.Add(q.Id, q.QueryName);
             }
@@ -33,17 +31,17 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
                 {
                     vm.Measures.Add(q.Id, q.QueryName);
                 }
-                
+
             }
         }
 
         internal override object GetData(WidgetParametersDTO props)
         {
             var queryId = Int32.Parse(props.Properties["measure"]);
-            var queryDetail=_dataService.GetReportQueryDetailByID(queryId,GetUserId());
-            var parameters=props.Properties["parameters"];
-            queryDetail.Parameters = JsonConvert.DeserializeObject<List<KeyValuePairDTO>>(parameters);            
-            var result=_dataService.ExecuteReportQuery(queryDetail);
+            var queryDetail = _dataService.GetReportQueryDetailByID(queryId, GetUserId());
+            var parameters = props.Properties["parameters"];
+            queryDetail.Parameters = JsonConvert.DeserializeObject<List<KeyValuePairDTO>>(parameters);
+            var result = _dataService.ExecuteReportQuery(queryDetail);
             return result;
         }
     }

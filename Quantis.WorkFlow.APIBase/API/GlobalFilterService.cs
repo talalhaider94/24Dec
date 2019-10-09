@@ -43,7 +43,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             else
             {
-                dto.KPIs = new List<int>() { -1};
+                dto.KPIs = new List<int>() { -1 };
             }
             if (props.Filters.ContainsKey("kpi"))
             {
@@ -82,7 +82,7 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 dto.Measures = new List<Measures>();
             }
-            
+
             return dto;
         }
         public WidgetwithAggOptionDTO MapAggOptionWidget(WidgetParametersDTO props)

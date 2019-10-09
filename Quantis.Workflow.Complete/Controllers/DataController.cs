@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +7,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -23,7 +19,7 @@ namespace Quantis.WorkFlow.Controllers
     {
         private IDataService _dataAPI { get; set; }
         private IInformationService _informationAPI { get; set; }
-        public DataController(IDataService dataAPI,IInformationService informationAPI)
+        public DataController(IDataService dataAPI, IInformationService informationAPI)
         {
             _dataAPI = dataAPI;
             _informationAPI = informationAPI;
@@ -169,7 +165,8 @@ namespace Quantis.WorkFlow.Controllers
         public IActionResult Login(string username, string password)
         {
             var data = _dataAPI.Login(username, password);
-            if (data != null) {
+            if (data != null)
+            {
                 return Ok(data);
             }
             var json = new { error = "Errore durente il Login", description = "Username o Password errati." };
@@ -183,7 +180,7 @@ namespace Quantis.WorkFlow.Controllers
             if (usr != null)
             {
                 _dataAPI.Logout(usr.SessionToken);
-            }            
+            }
         }
         [HttpGet("ResetPassword")]
         public bool ResetPassword(string username, string email)
@@ -239,7 +236,7 @@ namespace Quantis.WorkFlow.Controllers
         public List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi)
         {
             var user = HttpContext.User as AuthUser;
-            var globalrules=_informationAPI.GetGlobalRulesByUserId(user.UserId);
+            var globalrules = _informationAPI.GetGlobalRulesByUserId(user.UserId);
             return _dataAPI.GetAllArchivedKPIs(month, year, id_kpi, globalrules);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
@@ -263,11 +260,11 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetArchivedRawDataByKpiID(id_kpi, month, year);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
-/*      [HttpGet("GetDetailsArchivedKPI")]
-        public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
-        {
-            return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
-        }*/
+        /*      [HttpGet("GetDetailsArchivedKPI")]
+                public List<ATDtDeDTO> GetDetailsArchivedKPIs(int idkpi, string month, string year)
+                {
+                    return _dataAPI.GetDetailsArchiveKPI(idkpi, month, year);
+                }*/
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetAllCustomersKP")]
         public List<KeyValuePair<int, string>> GetAllCustomersKP()
@@ -286,11 +283,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetEmailNotifiers(period);
         }
- /*       [HttpGet("GetRawIdsFromRulePeriod")]
-        public List<int> GetRawIdsFromRulePeriod(int ruleId, string period)
-        {
-            return _dataAPI.GetRawIdsFromRulePeriod(ruleId, period);
-        }*/
+        /*       [HttpGet("GetRawIdsFromRulePeriod")]
+               public List<int> GetRawIdsFromRulePeriod(int ruleId, string period)
+               {
+                   return _dataAPI.GetRawIdsFromRulePeriod(ruleId, period);
+               }*/
 
         [HttpGet("AddArchiveRawData")]
         public bool AddArchiveRawData(int global_rule_id, string period, string tracking_period)
@@ -310,12 +307,12 @@ namespace Quantis.WorkFlow.Controllers
         [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
         [HttpGet("GetAllUsersLandingPage")]
         public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
-        {            
+        {
             return _dataAPI.GetAllUsersLandingPage();
         }
         [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
         [HttpGet("SetLandingPageByUser")]
-        public void SetLandingPageByUser(int userId,bool set)
+        public void SetLandingPageByUser(int userId, bool set)
         {
             _dataAPI.SetLandingPageByUser(userId, set);
         }
@@ -352,7 +349,7 @@ namespace Quantis.WorkFlow.Controllers
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id)
         {
             var usr = (HttpContext.User) as AuthUser;
-            return _dataAPI.GetReportQueryDetailByID(id,usr.UserId);
+            return _dataAPI.GetReportQueryDetailByID(id, usr.UserId);
         }
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
         [HttpPost("AddEditReportQuery")]
@@ -373,7 +370,7 @@ namespace Quantis.WorkFlow.Controllers
         public void AssignReportQuery([FromBody]MultipleRecordsDTO records)
         {
             var usr = (HttpContext.User) as AuthUser;
-            _dataAPI.AssignReportQuery(records,usr.UserId);
+            _dataAPI.AssignReportQuery(records, usr.UserId);
 
         }
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]

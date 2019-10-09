@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.Framework
+﻿namespace Quantis.WorkFlow.Services.Framework
 {
     public class PagingInfo
     {

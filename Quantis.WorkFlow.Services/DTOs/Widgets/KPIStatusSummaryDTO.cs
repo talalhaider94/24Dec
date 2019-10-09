@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.Widgets
+﻿namespace Quantis.WorkFlow.Services.DTOs.Widgets
 {
     public class KPIStatusSummaryDTO
     {
         public string ContractParty { get; set; }
         public string Contract { get; set; }
         public int GlobalRuleId { get; set; }
-        public string IdKPI { get; set; }        
+        public string IdKPI { get; set; }
         public string DescrizioneKPI { get; set; }
         public string Tipologia { get; set; }
         public string Frequenza { get; set; }

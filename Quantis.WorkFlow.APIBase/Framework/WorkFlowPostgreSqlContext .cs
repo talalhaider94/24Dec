@@ -3,10 +3,7 @@ using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Models.Information;
 using Quantis.WorkFlow.Models.SDM;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Framework
 {
@@ -41,7 +38,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_Rule> Rules { get; set; }
         public DbSet<T_RolePermission> RolePermissions { get; set; }
         public DbSet<T_Permission> Permissions { get; set; }
-        public DbSet<T_User> TUsers { get; set; } 
+        public DbSet<T_User> TUsers { get; set; }
         public DbSet<SDM_TicketStatus> SDMTicketStatus { get; set; }
         public DbSet<SDM_TicketGroup> SDMTicketGroup { get; set; }
         public DbSet<SDM_TicketLog> SDMTicketLogs { get; set; }
@@ -64,7 +61,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_ReportQueryAssignment> ReportQueryAssignments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            
+
             builder.ApplyConfiguration(new T_Group_Configuration());
             builder.ApplyConfiguration(new T_SecurityMembers_Configuration());
             builder.ApplyConfiguration(new T_Page_Configuration());

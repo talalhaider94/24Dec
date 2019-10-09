@@ -19,7 +19,7 @@ namespace Quantis.Workflow.Complete.Controllers
         private IDashboardService _dashboardAPI { get; set; }
         private IDataService _dataAPI { get; set; }
 
-        public DashboardController(IDashboardService dashboardAPI,IDataService dataAPI)
+        public DashboardController(IDashboardService dashboardAPI, IDataService dataAPI)
         {
             _dashboardAPI = dashboardAPI;
             _dataAPI = dataAPI;
@@ -36,8 +36,8 @@ namespace Quantis.Workflow.Complete.Controllers
         public List<DashboardDTO> GetDashboardsHomePage()
         {
             var user = HttpContext.User as AuthUser;
-            var landingPage= _dataAPI.GetLandingPageInformation(user.UserId);
-            var dashboards= _dashboardAPI.GetDashboards(user.UserId);
+            var landingPage = _dataAPI.GetLandingPageInformation(user.UserId);
+            var dashboards = _dashboardAPI.GetDashboards(user.UserId);
             if (landingPage.ShowLandingPage)
             {
                 dashboards.Insert(0, new DashboardDTO()
@@ -68,7 +68,7 @@ namespace Quantis.Workflow.Complete.Controllers
         public DashboardDetailDTO AddUpdateDasboard([FromBody]DashboardDetailDTO dto)
         {
             var user = HttpContext.User as AuthUser;
-            var id = _dashboardAPI.AddUpdateDasboard(dto,user.UserId);
+            var id = _dashboardAPI.AddUpdateDasboard(dto, user.UserId);
             return _dashboardAPI.GetDashboardWigetsByDashboardId(id);
 
         }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -11,7 +9,7 @@ namespace Quantis.WorkFlow.Models
         public int id { get; set; }
         public int form_id { get; set; }
         public string form_body { get; set; }
-        public DateTime start_date {get;set;}
+        public DateTime start_date { get; set; }
         public DateTime end_date { get; set; }
         public virtual T_Form Form { get; set; }
     }

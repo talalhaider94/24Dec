@@ -2,10 +2,7 @@
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.API
 {
@@ -22,7 +19,7 @@ namespace Quantis.WorkFlow.Services.API
         bool SecurityMembers(int userId);
         List<KeyValuePair<int, string>> GetAllCustomersKP();
         List<UserDTO> GetAllUsers();
-//        List<int> GetRawIdsFromRulePeriod(int ruleId, string period);
+        //        List<int> GetRawIdsFromRulePeriod(int ruleId, string period);
         UserDTO GetUserById(string UserId);
         bool AddUpdateUser(UserDTO dto);
         PagedList<UserDTO> GetAllPagedUsers(UserFilterDTO filter);
@@ -61,8 +58,8 @@ namespace Quantis.WorkFlow.Services.API
         bool ResetPassword(string username, string email);
         List<UserDTO> GetUsersByRoleId(int roleId);
         List<ARulesDTO> GetAllArchivedKPIs(string month, string year, string id_kpi, List<int> globalruleIds);
-//        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
-        
+        //        List<ATDtDeDTO> GetDetailsArchiveKPI(int idkpi, string month, string year);
+
         List<ATDtDeDTO> GetRawDataByKpiID(string id_kpi, string month, string year);
         List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year);
 

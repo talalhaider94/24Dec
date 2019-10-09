@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +6,7 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.Workflow.Complete.Controllers
 {
@@ -40,17 +37,17 @@ namespace Quantis.Workflow.Complete.Controllers
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetContracts")]
-        public List<KeyValuePair<int, string>> GetContracts(int globalFilterId,int contractpartyId)
+        public List<KeyValuePair<int, string>> GetContracts(int globalFilterId, int contractpartyId)
         {
             var usr = HttpContext.User as AuthUser;
-            return _globalfilterService.GetContracts(globalFilterId, usr.UserId,contractpartyId);
+            return _globalfilterService.GetContracts(globalFilterId, usr.UserId, contractpartyId);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetKPIs")]
         public List<KeyValuePair<int, string>> GetKPIs(int globalFilterId, int contractId)
         {
             var usr = HttpContext.User as AuthUser;
-            return _globalfilterService.GetKPIs(globalFilterId, usr.UserId,contractId);
+            return _globalfilterService.GetKPIs(globalFilterId, usr.UserId, contractId);
         }
     }
 }

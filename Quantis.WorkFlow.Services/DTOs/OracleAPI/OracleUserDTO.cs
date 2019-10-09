@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
 {
@@ -10,7 +8,7 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public string user_name { get; set; }
         public string user_email { get; set; }
         public List<OracleUserGroupsDTO> groups { get; set; }
-        
+
     }
     public class OracleUserGroupsDTO
     {

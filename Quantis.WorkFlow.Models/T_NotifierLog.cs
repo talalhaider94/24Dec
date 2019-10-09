@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -10,7 +8,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int id { get; set; }
         public int id_form { get; set; }
-        public DateTime notify_timestamp  { get; set; }
+        public DateTime notify_timestamp { get; set; }
         public DateTime? remind_timestamp { get; set; }
         public bool is_ack { get; set; }
         public string period { get; set; }
@@ -25,7 +23,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_notifier_logs");
             builder.HasKey(o => o.id);
-            builder.HasOne(o => o.Form).WithMany(o => o.NotifierLogs).IsRequired().HasForeignKey(p=>p.id_form);
+            builder.HasOne(o => o.Form).WithMany(o => o.NotifierLogs).IsRequired().HasForeignKey(p => p.id_form);
         }
     }
 }

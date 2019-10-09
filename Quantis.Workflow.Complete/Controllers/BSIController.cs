@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +6,7 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BSI;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.Workflow.Complete.Controllers
 {
@@ -20,7 +17,7 @@ namespace Quantis.Workflow.Complete.Controllers
     public class BSIController : ControllerBase
     {
         private IBSIService _bsiAPI { get; set; }
-        public BSIController (IBSIService bsiAPI)
+        public BSIController(IBSIService bsiAPI)
         {
             _bsiAPI = bsiAPI;
         }
@@ -28,7 +25,7 @@ namespace Quantis.Workflow.Complete.Controllers
         [HttpGet("GetMyNormalReports")]
         public List<BSIReportLVDTO> GetMyNormalReports()
         {
-            var user=HttpContext.User as AuthUser;
+            var user = HttpContext.User as AuthUser;
             return _bsiAPI.GetMyNormalReports(user.UserName);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
@@ -40,7 +37,7 @@ namespace Quantis.Workflow.Complete.Controllers
         }
         //[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetReportDetail")]
-        public BSIReportMainDTO GetReportDetail( int reportId)
+        public BSIReportMainDTO GetReportDetail(int reportId)
         {
             //var user = HttpContext.User as AuthUser;
             return _bsiAPI.GetReportDetail("sadmin", reportId);

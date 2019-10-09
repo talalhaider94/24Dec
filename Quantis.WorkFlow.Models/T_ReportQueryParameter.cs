@@ -1,15 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
     public class T_ReportQueryParameter
     {
-        public  int id { get; set; }
+        public int id { get; set; }
         public int query_id { get; set; }
         public string parameter_key { get; set; }
         public string parameter_value { get; set; }

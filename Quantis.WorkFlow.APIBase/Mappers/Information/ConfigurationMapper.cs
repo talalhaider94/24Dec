@@ -1,10 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
-using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Models.Information;
 using Quantis.WorkFlow.Services.DTOs.Information;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Information
 {
@@ -20,7 +16,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
                 IsEnable = e.enable,
                 IsEditable = e.iseditable,
                 Value = e.value
-                
+
             };
         }
 

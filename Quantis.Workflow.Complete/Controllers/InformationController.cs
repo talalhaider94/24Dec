@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
-using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Complete.Controllers
 {
@@ -166,19 +162,19 @@ namespace Quantis.WorkFlow.Complete.Controllers
         [HttpGet("GetAllKpisByUserId")]
         public List<BaseNameCodeDTO> GetAllKpisByUserId(int userId, int contractId)
         {
-            return _infomationAPI.GetAllKpisByUserId(userId,contractId);
+            return _infomationAPI.GetAllKpisByUserId(userId, contractId);
         }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_PROFILING)]
         [HttpGet("AssignKpisToUserByContractParty")]
         public void AssignKpisToUserByContractParty(int userId, int contractpartyId, bool assign)
         {
-            _infomationAPI.AssignKpisToUserByContractParty(userId,contractpartyId,assign);
+            _infomationAPI.AssignKpisToUserByContractParty(userId, contractpartyId, assign);
         }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_PROFILING)]
         [HttpGet("AssignKpisToUserByContract")]
         public void AssignKpisToUserByContract(int userId, int contractId, bool assign)
         {
-            _infomationAPI.AssignKpisToUserByContract(userId,contractId,assign);
+            _infomationAPI.AssignKpisToUserByContract(userId, contractId, assign);
         }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_PROFILING)]
         [HttpPost("AssignKpisToUserByKpis")]
@@ -215,8 +211,8 @@ namespace Quantis.WorkFlow.Complete.Controllers
         [HttpGet("GetBSILink")]
         public string GetBSILink()
         {
-            var conf=_infomationAPI.GetConfiguration("bsi_server", "bsi_webserver");
-            return (conf==null)?null:conf.Value;
+            var conf = _infomationAPI.GetConfiguration("bsi_server", "bsi_webserver");
+            return (conf == null) ? null : conf.Value;
         }
         [HttpGet("GetDashboardTickInterval")]
         public string GetDashboardTickInterval()

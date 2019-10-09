@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services
+﻿namespace Quantis.WorkFlow.Services
 {
     public static class WorkFlowConstants
     {
@@ -16,7 +12,7 @@ namespace Quantis.WorkFlow.Services
         public const string VIEW_CATALOG_UTENTI = "VIEW_CATALOG_UTENTI";
         public const string VIEW_CATALOG_KPI = "VIEW_CATALOG_KPI";
         public const string EDIT_CATALOG_KPI = "EDIT_CATALOG_KPI";
-        public const string VIEW_UTENTI_DA_CONSOLIDARE= "VIEW_UTENTI_DA_CONSOLIDARE";
+        public const string VIEW_UTENTI_DA_CONSOLIDARE = "VIEW_UTENTI_DA_CONSOLIDARE";
         public const string VIEW_KPI_DA_CONSOLIDARE = "VIEW_KPI_DA_CONSOLIDARE";
         public const string VIEW_KPI_CERTICATI = "VIEW_KPI_CERTICATI";
         public const string VIEW_ADMIN_LOADING_FORM = "VIEW_ADMIN_LOADING_FORM";

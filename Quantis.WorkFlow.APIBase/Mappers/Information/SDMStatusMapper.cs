@@ -1,10 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
-using Quantis.WorkFlow.Models.Information;
 using Quantis.WorkFlow.Models.SDM;
 using Quantis.WorkFlow.Services.DTOs.Information;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers.Information
 {
@@ -14,11 +10,11 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Information
         {
             return new SDMStatusDTO()
             {
-                name=e.name,
-                handle=e.handle,
-                id=e.id,
-                step=e.step,
-                code=e.code
+                name = e.name,
+                handle = e.handle,
+                id = e.id,
+                step = e.step,
+                code = e.code
             };
         }
 

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Quantis.WorkFlow.APIBase.Framework
@@ -75,12 +74,12 @@ namespace Quantis.WorkFlow.APIBase.Framework
             int currentindex = kpis.Count;
             while (currentindex > 0)
             {
-                var currentkpis=kpis.Skip(counter * range).Take(range);
+                var currentkpis = kpis.Skip(counter * range).Take(range);
                 queries.Add(string.Format(" {0} in ({1})", variable, string.Join(',', currentkpis)));
                 currentindex = currentindex - range;
                 counter++;
             }
-            var result= string.Format("( {0} )", string.Join(" OR ", queries));
+            var result = string.Format("( {0} )", string.Join(" OR ", queries));
             return result;
         }
     }

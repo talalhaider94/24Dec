@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
     public class T_FormLog
     {
         public int id { get; set; }
-        public int id_form { get; set; }        
+        public int id_form { get; set; }
         public int id_locale { get; set; }
         public int user_id { get; set; }
         public bool empty_form { get; set; }
@@ -24,7 +22,7 @@ namespace Quantis.WorkFlow.Models
         {
             builder.ToTable("t_form_logs");
             builder.HasKey(o => o.id);
-            builder.HasOne(o => o.Form).WithMany(o => o.FormLogs).IsRequired().HasForeignKey(p=>p.id_form);
+            builder.HasOne(o => o.Form).WithMany(o => o.FormLogs).IsRequired().HasForeignKey(p => p.id_form);
         }
     }
 }

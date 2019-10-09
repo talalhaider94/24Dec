@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models.Dashboard
 {
@@ -20,7 +19,7 @@ namespace Quantis.WorkFlow.Models.Dashboard
         public int? GlobalFilterId { get; set; }
         [ForeignKey("GlobalFilterId")]
         public virtual DB_GlobalFilter GlobalFilter { get; set; }
-        public virtual List<DB_DashboardWidget> DashboardWidgets {get;set;}
+        public virtual List<DB_DashboardWidget> DashboardWidgets { get; set; }
     }
     public class DB_Dashboard_Configuration : IEntityTypeConfiguration<DB_Dashboard>
     {

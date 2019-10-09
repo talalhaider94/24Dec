@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.Models
 {
@@ -10,7 +8,7 @@ namespace Quantis.WorkFlow.Models
     {
         public int sla_id { get; set; }
         public string status { get; set; } //('N','U','D') -- New, Updated, Deleted
-        public string prev_status{ get; set; }
+        public string prev_status { get; set; }
         public int? customer_id { get; set; }
         public string sla_name { get; set; }
         public string sla_status { get; set; }

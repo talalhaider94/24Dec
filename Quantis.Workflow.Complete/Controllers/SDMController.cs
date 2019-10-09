@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +6,8 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -28,7 +26,7 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("GetTicketsVerificationByUser")]
         public List<SDMTicketLVDTO> GetTicketsVerificationByUser(string period)
         {
-            return _sdmAPI.GetTicketsVerificationByUser(HttpContext,period);
+            return _sdmAPI.GetTicketsVerificationByUser(HttpContext, period);
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_RICERCA)]
         [HttpGet("GetTicketsSearchByUser")]
@@ -40,7 +38,7 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("GetTicketsSearchForViloreByUser")]
         public List<SDMTicketLVDTO> GetTicketsSearchForViloreByUser(string period)
         {
-            var tickets= _sdmAPI.GetTicketsAdministratorByPeriod(period);
+            var tickets = _sdmAPI.GetTicketsAdministratorByPeriod(period);
             return tickets.Where(o => o.Description.IndexOf("VALORE: [Non Calcolato]") != -1).ToList();
         }
         [HttpGet("GetAllTickets")]
@@ -52,13 +50,13 @@ namespace Quantis.WorkFlow.Controllers
         [HttpGet("TransferTicketByID")]
         public ChangeStatusDTO TransferTicketByID(int id, string status, string description)
         {
-            return _sdmAPI.TransferTicketByID(id,status, description, HttpContext);
+            return _sdmAPI.TransferTicketByID(id, status, description, HttpContext);
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_KPI_VERIFICA)]
         [HttpGet("EscalateTicketbyID")]
         public ChangeStatusDTO EscalateTicketbyID(int id, string status, string description)
         {
-            return _sdmAPI.EscalateTicketbyID(id,status, description, HttpContext);
+            return _sdmAPI.EscalateTicketbyID(id, status, description, HttpContext);
         }
 
         [HttpGet("CreateTicketByKPIID")]
@@ -90,13 +88,13 @@ namespace Quantis.WorkFlow.Controllers
         public string UploadAttachmentToTicket([FromBody]SDMUploadAttachmentDTO dto)
         {
             var user = HttpContext.User as AuthUser;
-            return _sdmAPI.UploadAttachmentToTicket(dto,user.UserName);
+            return _sdmAPI.UploadAttachmentToTicket(dto, user.UserName);
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_ADMIN)]
         [HttpPost("UpdateTicketValue")]
         public void UpdateTicketValue([FromBody]TicketValueDTO dto)
         {
-            _sdmAPI.UpdateTicketValue(HttpContext,dto);
+            _sdmAPI.UpdateTicketValue(HttpContext, dto);
         }
     }
 }

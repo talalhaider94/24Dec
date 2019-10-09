@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quantis.WorkFlow.Services.DTOs.Dashboard
+﻿namespace Quantis.WorkFlow.Services.DTOs.Dashboard
 {
-    public class WidgetDTO: BaseIdNameDTO
+    public class WidgetDTO : BaseIdNameDTO
     {
         public string URL { get; set; }
         public string Help { get; set; }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Quantis.WorkFlow.Services.Framework;
+using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Controllers
 {
@@ -19,7 +15,7 @@ namespace Quantis.WorkFlow.Controllers
             this.iSMTPService = iSMTPService;
         }
 
-        [HttpGet("testemail")] 
+        [HttpGet("testemail")]
         public bool testEmail()
         {
             List<string> listRecipients = new List<string>();

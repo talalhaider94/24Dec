@@ -1,9 +1,6 @@
 ﻿using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
 using Quantis.WorkFlow.Services.DTOs.API;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Quantis.WorkFlow.APIBase.Mappers
 {
@@ -13,11 +10,11 @@ namespace Quantis.WorkFlow.APIBase.Mappers
         {
             return new FormRuleDTO()
             {
-                id=e.id,
+                id = e.id,
                 form_id = e.form_id,
                 form_body = e.form_body,
-                end_date=e.end_date,
-                start_date=e.start_date
+                end_date = e.end_date,
+                start_date = e.start_date
             };
         }
 
@@ -25,7 +22,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
         {
             e.form_id = o.form_id;
             e.form_body = o.form_body;
-            e.end_date =o.end_date;
+            e.end_date = o.end_date;
             e.start_date = o.start_date;
             return e;
         }

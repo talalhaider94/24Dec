@@ -5,12 +5,11 @@ using Quantis.WorkFlow.Services.DTOs.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
-    public class BSIService: IBSIService
+    public class BSIService : IBSIService
     {
         private BSIAuth.OblicoreAuthSoapClient _authService = null;
         private BSIReports.ReportsSoapClient _reportService = null;
@@ -31,16 +30,16 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<BSIReportLVDTO> GetMyNormalReports(string userName)
         {
-            
-            var session= Login(userName);
-            var myreports=_reportService.GetMyReportsAsync(session).Result;
+
+            var session = Login(userName);
+            var myreports = _reportService.GetMyReportsAsync(session).Result;
             if (myreports.Nodes[1].Element("Result") == null)
             {
                 return new List<BSIReportLVDTO>();
             }
             var list = myreports.Nodes[1].Element("Result").Elements();
             Logout(session);
-            var reports =parseReports(list);
+            var reports = parseReports(list);
             return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
 
         }
@@ -61,17 +60,17 @@ namespace Quantis.WorkFlow.APIBase.API
 
         }
 
-        public BSIReportMainDTO GetReportDetail(string userName,int reportId)
+        public BSIReportMainDTO GetReportDetail(string userName, int reportId)
         {
             var results = new BSIReportMainDTO();
             results.Reports = new List<BSIReportDetailDTO>();
             var session = Login(userName);
-            var report = _reportService.GetReportDataAsync(session,reportId,0,100,100).Result;
+            var report = _reportService.GetReportDataAsync(session, reportId, 0, 100, 100).Result;
             results.Name = report.Elements().FirstOrDefault().Element("NAME").Value;
             results.ResultType = report.Attribute("TYPE").Value;
             Logout(session);
             var baseElements = report.Elements().FirstOrDefault().Elements("ITEM");
-            foreach(var baseElement in baseElements)
+            foreach (var baseElement in baseElements)
             {
                 var result = new BSIReportDetailDTO();
                 var reportInfo = baseElement.Element("REPORT_INFO");
@@ -133,7 +132,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 results.Reports.Add(result);
             }
-                  
+
             return results;
         }
         private List<BSIReportLVDTO> parseReports(IEnumerable<XElement> elements)
@@ -142,9 +141,9 @@ namespace Quantis.WorkFlow.APIBase.API
             foreach (var element in elements)
             {
                 var result = new BSIReportLVDTO();
-                result.ItemId=int.Parse(element.Element("ITEM_ID").Value);
+                result.ItemId = int.Parse(element.Element("ITEM_ID").Value);
                 result.ItemName = element.Element("ITEM_NAME").Value;
-                result.UserId= int.Parse(element.Element("USER_ID").Value);
+                result.UserId = int.Parse(element.Element("USER_ID").Value);
                 result.FolderId = int.Parse(element.Element("FOLDER_ID").Value);
                 result.FolderName = element.Element("FOLDER_NAME").Value;
                 result.IsParameterized = (element.Element("IS_PARAMETERIZED").Value == "1");
