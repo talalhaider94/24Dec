@@ -20,7 +20,22 @@ export class BSIReportComponent implements OnInit {
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     category_id: number = 0;
-    dtOptions: DataTables.Settings = {
+    dtOptions: any = {
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="fa fa-file"></i> Esporta CSV',
+                titleAttr: 'Esporta CSV',
+                className: 'btn btn-primary mb-3'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fa fa-file"></i> Esporta PDF',
+                titleAttr: 'Esporta PDF',
+                className: 'btn btn-primary mb-3',
+                orientation: 'landscape',
+            },
+        ],
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
