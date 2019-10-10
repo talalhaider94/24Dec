@@ -33,13 +33,13 @@
   </table>
 </div>
 <!-- modal start -->
-<div bsModal #bsiChartModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div bsModal #bsiChartModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-lg" style="width:90% !important;" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ReportDetailsData.name}}</h5>
-        <button type="button" class="close" aria-label="Close">
+        <button type="button" class="close" aria-label="Close" (click)="hideModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
