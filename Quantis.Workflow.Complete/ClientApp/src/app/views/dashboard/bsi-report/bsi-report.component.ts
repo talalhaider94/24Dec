@@ -19,6 +19,7 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('ConfigurationTable') block: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
+    @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
     dtOptions: DataTables.Settings = {
         language: {
@@ -42,14 +43,19 @@ export class BSIReportComponent implements OnInit {
                 sortAscending: ": attiva per ordinare la colonna in ordine crescente",
                 sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
             }
+        },
+        search: {
+            caseInsensitive: false
         }
     };
     loading: boolean = true;
+    cartellaSelectOption : any;
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
     ReportDetailsData: any = [];
     chartUpdateFlag: boolean = true;
     highcharts = Highcharts;
+    cartellaList : any = [];
     chartOptions = {
         lang: {
             downloadJPEG: 'Download JPEG image',
@@ -102,12 +108,14 @@ export class BSIReportComponent implements OnInit {
     }
 
     ngOnInit() {
+      this.cartellaSelectOption = '';
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
         this.dtTrigger.next();
         this.getAllNormalReports();
+        this.setUpDataTableDependencies();
     }
 
     ngOnDestroy(): void {
@@ -121,6 +129,7 @@ export class BSIReportComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
+            this.setUpDataTableDependencies();
             this.loading = false;
         });
     }
@@ -130,6 +139,13 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.AllNormalReportsData = data;
             console.log('AllNormalReportsData -> ', data);
+            // pushing foldername to dropdown
+            data.forEach( (element) => {
+                if(this.cartellaList.indexOf(element.foldername) == -1){
+                  this.cartellaList.push(element.foldername);
+                }
+            });
+
             this.rerender();
         });
     }
@@ -149,10 +165,32 @@ export class BSIReportComponent implements OnInit {
         });
     }
 
+    // search start
+
+    setUpDataTableDependencies() {
+        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+            datatable_Ref.columns(0).every(function () {
+                const that = this;
+              
+
+                $($this.cartellaSelect.nativeElement)
+                    .on('change', function () {
+                      let searchTerm = $(this).val().toLowerCase(),
+                          regex = '\\b' + searchTerm + '\\b';
+
+                        that
+                            .search(regex, true, false)
+                            .draw();
+                    });
+            });
+        });
+    }
+    //search end
+
     showHighChartsData(data) {
         debugger
         const chartArray = data.reports[0].data;
-        // Danial TODO: improve code later by modifying all data in a single loop 
+        // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => data.zvalue === 'Violation');
         let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
         let targetData = chartArray.filter(data => data.zvalue === 'Target');
