@@ -1,3 +1,7 @@
+section{
+    min-width: 45%;
+}
+
 .content-header > h2 {
     margin: 0;
     font-size: 24px;
@@ -14,6 +18,10 @@
 .right-text {
     color: #777;
     font-weight: 400;
+}
+
+.box-header{
+    cursor: pointer;
 }
 
 .box.box-danger{
