@@ -7,7 +7,7 @@
         </h2>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-3" style="margin-top:-30px">
+        <div class="row pull-right col-md-4" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
@@ -26,10 +26,11 @@
               <option value="11">Novembre</option>
               <option value="12">Dicembre</option>
             </select>
-            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:30%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:25%;" (change)="populateDateFilter()">
               <option value="">Anno</option>
               <option *ngFor="let year of anni" >{{year}}</option>
             </select>
+            <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
             <!-- <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div> -->
         </div>
     </section>
@@ -63,8 +64,8 @@
                                         <a href="#">
                                             Severity Contratti
                                             <div class="progress" style="height: 20px">
-                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': row.complaintkpis + '%' }" style="height:100%">{{row.complaintkpis}}</div>
-                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': row.noncomplaintkpis + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
                                         </a>
                                     </li>

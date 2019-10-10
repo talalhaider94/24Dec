@@ -73,11 +73,13 @@ export class LandingPageComponent implements OnInit {
         this.monthVar = moment().format('MM');
         this.yearVar = moment().format('YYYY');
         this.getAnno();
-        //this.period = this.monthVar/this.yearVar
-        // this.apiService.getLandingPage(2,2019).subscribe((data: any) => {
-        // 	this.gridsData = data;
-        // 	console.log("Landing Page Data: ", this.gridsData);
-        // });
+        
+        this.loading = true;
+        this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
+            this.gridsData = data;
+            console.log("gridsData -> ", this.gridsData);
+            this.loading = false;
+        });
     }
 
     ngAfterViewInit() {
@@ -122,7 +124,7 @@ export class LandingPageComponent implements OnInit {
 
     details(contractpartyid) {
         let params = { contractpartyid: contractpartyid, month:this.monthVar, year:this.yearVar };
-        window.open(`/#/dashboard/landing-page-details/?contractpartyid=${params.contractpartyid}&month=${params.month}&year=${params.year}`, '_blank');
+        window.open(`/#/dashboard/landing-page-details/?contractpartyid=${params.contractpartyid}&month=${params.month}&year=${params.year}`,"_self");
     }
 
     setThreshold() {
