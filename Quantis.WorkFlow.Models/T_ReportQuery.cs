@@ -13,6 +13,7 @@ namespace Quantis.WorkFlow.Models
         public string query_text { get; set; }
         public int owner_id { get; set; }
         public DateTime created_on { get; set; }
+        public bool is_enable { get; set; }
 
         [ForeignKey("owner_id")]
         public virtual T_User Owner { get; set; }

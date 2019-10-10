@@ -1703,6 +1703,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var kpi = _dbcontext.CatalogKpi.Include(o => o.GlobalRule).Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
+                string customer = _infomationAPI.GetConfiguration("be_sdm", "customer")?.Value;
                 return new CreateTicketDTO()
                 {
                     Description = GenerateDiscriptionFromKPI(kpi, (psl != null && psl.Any()) ? psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]" : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result : "[Non Calcolato]"),
@@ -1722,7 +1723,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result
                         :
                         "[Non Calcolato]",
-                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi
+                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi,
+                    Customer = customer
                 };
             }
             catch (Exception e)
@@ -2117,7 +2119,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetOwnedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId);
+            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId && o.is_enable);
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2132,7 +2134,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).ToList();
+            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).Where(o=>o.is_enable).ToList();
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2175,6 +2177,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 entity.query_text = dto.QueryText;
                 entity.created_on = DateTime.Now;
                 entity.owner_id = userId;
+                entity.is_enable = true;
                 entity.Parameters = dto.Parameters.Select(o => new T_ReportQueryParameter()
                 {
                     parameter_value = o.Value,
@@ -2201,21 +2204,29 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-
-        public void DeleteReportQuery(int id, int userId)
+        public void EnableDisableReportQuery(int id,bool isenable, int userId)
         {
             var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
             if (entity.owner_id == userId)
             {
-                var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
-                _dbcontext.ReportQueryParameters.RemoveRange(param.ToArray());
-                var assign = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == id);
-                _dbcontext.ReportQueryAssignments.RemoveRange(assign.ToArray());
-                _dbcontext.SaveChanges();
-                _dbcontext.ReportQueries.Remove(entity);
+                entity.is_enable = isenable;
                 _dbcontext.SaveChanges();
             }
         }
+        //public void DeleteReportQuery(int id, int userId)
+        //{
+        //    var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
+        //    if (entity.owner_id == userId)
+        //    {
+        //        var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
+        //        _dbcontext.ReportQueryParameters.RemoveRange(param.ToArray());
+        //        var assign = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == id);
+        //        _dbcontext.ReportQueryAssignments.RemoveRange(assign.ToArray());
+        //        _dbcontext.SaveChanges();
+        //        _dbcontext.ReportQueries.Remove(entity);
+        //        _dbcontext.SaveChanges();
+        //    }
+        //}
 
         public void AssignReportQuery(MultipleRecordsDTO records, int ownerId)
         {
