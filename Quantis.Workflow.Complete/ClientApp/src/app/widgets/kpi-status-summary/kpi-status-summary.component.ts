@@ -94,8 +94,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
                 this.emitter.loadingStatus(true);
                 this.getChartParametersAndData(this.url);
             }
-            // coming from dashboard or public parent components
-            this.subscriptionForDataChangesFromParent();
         }
     }
 
@@ -110,24 +108,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
         this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTrigger.next();
-        });
-    }
-
-    subscriptionForDataChangesFromParent() {
-        this.emitter.getData().subscribe(result => {
-            const { type, data } = result;
-            if (type === 'kpiStatusSummaryTable') {
-                let currentWidgetId = data.kpiStatusSummaryWidgetParameters.id;
-                if (currentWidgetId === this.id) {
-                    // updating parameter form widget setValues
-                    let kpiStatusSummaryTableFormValues = data.kpiStatusSummaryWidgetParameterValues;
-                    if (kpiStatusSummaryTableFormValues.Filters.daterange) {
-                        kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
-                    }
-                    this.setWidgetFormValues = kpiStatusSummaryTableFormValues;
-                    this.updateChart(data.result.body, data, null);
-                }
-            }
         });
     }
     // invokes on component initialization
@@ -179,21 +159,6 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.emitter.loadingStatus(false);
         });
-    }
-
-    openModal() {
-        this.kpiStatusSummaryParent.emit({
-            type: 'openKpiStatusSummaryModal',
-            data: {
-                kpiStatusSummaryWidgetParameters: this.kpiStatusSummaryWidgetParameters,
-                setWidgetFormValues: this.setWidgetFormValues,
-                isKpiStatusSummaryComponent: true
-            }
-        });
-    }
-
-    closeModal() {
-        this.emitter.sendNext({ type: 'closeModal' });
     }
 
     // dashboardComponentData is result of data coming from
