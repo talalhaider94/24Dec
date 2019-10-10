@@ -25,6 +25,7 @@ export class FreeFormReportComponent implements OnInit {
   ownedReportQueries: any = [];
   reportQueryDetail: any = [];
   ownername;
+  emptyMessage=null;
   
   loading: boolean = true;
   formLoading: boolean = false;
@@ -35,6 +36,8 @@ export class FreeFormReportComponent implements OnInit {
   isReadonly=0;
   isDebug=0;
   debugResult;
+  debugResultArray = [];
+  debugCount=0;
   hideData=0;
   assignedUsers = [];
   params = {
@@ -244,6 +247,9 @@ export class FreeFormReportComponent implements OnInit {
     console.log('submit form -> ',this.addEditQueryForm.value);
     if(event=='debug'){
       this.debug();
+    }
+    else if(event=='test'){
+      this.test();
     }else{
       this.submitted = true;
       if (this.addEditQueryForm.invalid) {
@@ -449,21 +455,60 @@ export class FreeFormReportComponent implements OnInit {
     
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
-    console.log('Debug -> ',this.executeQueryData);
+    //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
       this.debugResult = data;
       console.log('Debug Result -> ',this.debugResult);
       if(this.debugResult.length==0){
-        this.toastr.error('Errore in query execution', 'Error');
+        //this.toastr.error('Errore in query execution', 'Error');
+        this.debugResult = [{Error: 'No data found'}]
+        this.debugQueryData = Object.keys(this.debugResult[0]);
       }else{
         ////////////// Setting Key ///////////////
         this.debugQueryData = Object.keys(data[0]);
         ////////////// Setting Value ///////////////
-        Object.keys(data[0]).forEach(key => {
-          this.debugQueryValue[this.valueCount] = data[0][key];  
-          this.valueCount++; 
-        });
-        //console.log('debugQueryValue -> ',this.debugQueryValue); 
+        /*
+        for (let i = 0; i < this.debugResult.length; i++) {
+          //this.valueCount = 0;
+          Object.keys(data[i]).forEach(key => {
+            this.debugQueryValue[this.valueCount] = data[i];//[key];  
+            this.valueCount++; 
+          });
+        }
+        console.log('debugQueryValue -> ',this.debugQueryValue); 
+        */
+        this.isDebug=1;
+        if(data[0]=='O'){
+          this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+          this.hideData=1;
+        }
+      }
+    },error => {
+      this.toastr.error('Errore in query execution', 'Error');
+    });
+    this.hideParametersModal();
+  }
+
+  test(){
+    this.hideData=0;
+    this.valueCount = 0;
+    this.clearData();
+    
+    this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
+    this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
+    this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      this.debugResult = data;
+
+      if(this.debugResult.length > 10){
+        this.debugResult = this.debugResult.splice(0,10);
+      }
+      if(this.debugResult.length==0){
+        this.debugResult = [{Error: 'No data found'}]
+        this.debugQueryData = Object.keys(this.debugResult[0]);
+      }else{
+        ////////////// Setting Key ///////////////
+        this.debugQueryData = Object.keys(data[0]);
+        
         this.isDebug=1;
         if(data[0]=='O'){
           this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');

@@ -23,7 +23,7 @@ export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-    contractPartyId;
+    queryParams;
 
     dtOptions: DataTables.Settings = {
         language: {
@@ -60,17 +60,12 @@ export class LandingPageDetailsComponent implements OnInit {
     count = 0;
     thresholdvalue = 0;
     constructor(
-        private dashboardService: DashboardService,
         private apiService: ApiService,
-        private route: ActivatedRoute,
-        private emitter: EmitterService,
-        private toastr: ToastrService,
-        private formBuilder: FormBuilder,
-        private dateTime: DateTimeService
+        private route: ActivatedRoute
     ) { }
     ngOnInit(): void {
-        this.contractPartyId = this.route.snapshot.queryParamMap['params'];
-        console.log('contractPartyId -> ', this.contractPartyId.contractpartyid);
+        this.queryParams = this.route.snapshot.queryParamMap['params'];
+        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.month, this.queryParams.year);
 
         this.thresholdvalue = 0;
         this.month = moment().format('MMMM');
@@ -78,9 +73,9 @@ export class LandingPageDetailsComponent implements OnInit {
         this.yearVar = moment().format('YYYY');
         this.getAnno();
 
-        this.apiService.getLandingPage(2, 2019).subscribe((data: any) => {
+        this.apiService.getLandingPageLevel1(1075,2,2019).subscribe((data: any) => {
             this.gridsData = data;
-            console.log("gridsData -> ", this.gridsData);
+            console.log("Level1 Data -> ", this.gridsData);
         });
     }
 

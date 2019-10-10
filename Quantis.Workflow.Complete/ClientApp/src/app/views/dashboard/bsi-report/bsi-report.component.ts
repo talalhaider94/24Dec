@@ -164,6 +164,10 @@ export class BSIReportComponent implements OnInit {
         });
     }
 
+    hideModal(){
+        this.bsiChartModal.hide();
+    }
+
     showHighChartsData(data) {
         debugger
         const chartArray = data.reports[0].data;

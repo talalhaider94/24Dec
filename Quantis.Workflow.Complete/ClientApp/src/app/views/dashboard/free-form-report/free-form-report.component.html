@@ -102,8 +102,8 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                <tr>
-                                    <td *ngFor="let value of debugQueryValue | filter : filters.searchUsersText"><div [innerHTML]="value"></div></td>
+                                <tr *ngFor="let value of debugResult | filter : filters.searchUsersText">
+                                    <td *ngFor="let key of debugQueryData; index as i"><div [innerHTML]="value[key]"></div></td>
                                 </tr>
                             </tbody>
                         </table>    
@@ -264,6 +264,7 @@ aria-hidden="true">
                             <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                         </button>
                         <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Esegui</button>
+                        <button [disabled]="" type="button" name="test" (click)="onQueryReportFormSubmit('test')" class="btn btn-warning">Test</button>
                     </div>
                 </div>
             </form>
