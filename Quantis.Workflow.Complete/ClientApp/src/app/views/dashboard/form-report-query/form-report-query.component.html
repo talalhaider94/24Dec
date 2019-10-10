@@ -33,7 +33,9 @@
                                 <button [disabled]="formLoading" type="submit" class="btn btn-success float-right ml-1">
                                     <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                                 </button>
-                                <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-warning float-right">Test</button>
+                                <button [disabled]="loading" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" 
+                                    class="btn btn-warning float-right">
+                                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Test</button>
                             </div>
                         </div>
                     </form>
