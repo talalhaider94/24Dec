@@ -1454,26 +1454,39 @@ namespace Quantis.WorkFlow.APIBase.API
                 else
                 {
                     query = "select global_rule_name, global_rule_id, temp.form_id, form_name, form_owner_id, form_description, referent, monthtrigger, sla_name," +
-                        "user_group_id, user_group_name, attachments_count,latest_modified_date, tracking_period " +
+                        "attachments_count,latest_modified_date, tracking_period, u.userid, u.ca_bsi_account, u.ca_bsi_user_id " +
                         "from(" +
-                        "select ck.*, gr.global_rule_name, gr.global_rule_id, f.*, c.customer_name, c2.customer_name, s.sla_name, " +
+                        " select ck.*, gr.global_rule_name, gr.global_rule_id, f.*, c.customer_name, c2.customer_name, s.sla_name," +
                         "fa.attachments_count, fl.latest_modified_date " +
                         "from t_catalog_kpis ck " +
                         "left join t_global_rules gr on ck.global_rule_id_bsi = gr.global_rule_id " +
-                        "left join t_form_users f on ck.id_form = f.form_id " +
+                        "left join t_forms f on ck.id_form = f.form_id " +
                         "left join t_customers c on c.customer_id = ck.primary_contract_party " +
                         "left join t_customers c2 on c2.customer_id = ck.secondary_contract_party " +
                         "left join t_slas s on s.sla_id = ck.sla_id_bsi " +
                         "left join (select form_id, count(form_id) as attachments_count from t_form_attachments group by form_id) fa on f.form_id = fa.form_id " +
                         "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form " +
-                        "where f.form_id is not null ) temp where user_group_id = :user_group_id and monthtrigger is not null";
+                        "where f.form_id is not null ) temp " +
+                        "left join t_catalog_users u on " +
+                        "(u.userid LIKE ('%\\' || split_part(temp.referent, '$', 1))  " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 1)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 2) = '' then 'a' else split_part(temp.referent, '$', 2)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 2)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 3) = '' then 'a' else split_part(temp.referent, '$', 3)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 3)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 4) = '' then 'a' else split_part(temp.referent, '$', 4)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 4)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 5) = '' then 'a' else split_part(temp.referent, '$', 5)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 5)) " +
+                        ") where monthtrigger is not null and ca_bsi_user_id is not null " +
+                        "and u.ca_bsi_user_id = :ca_bsi_user_id ";
                 }
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                 {
                     con.Open();
                     var command = new NpgsqlCommand(query, con);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.AddWithValue(":user_group_id", UserID);
+                    command.Parameters.AddWithValue(":ca_bsi_user_id", UserID);
                     _dbcontext.Database.OpenConnection();
                     using (var reader = command.ExecuteReader())
                     {
@@ -1488,8 +1501,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             form.AttachmentsCount = reader.IsDBNull(reader.GetOrdinal("attachments_count")) ? 0 : reader.GetInt32(reader.GetOrdinal("attachments_count"));
                             form.latest_input_date = reader.IsDBNull(reader.GetOrdinal("latest_modified_date")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("latest_modified_date"));
 
-                            form.user_group_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
-                            form.user_group_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
+                            form.user_group_id = 0;// isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
+                            form.user_group_name = null; // isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
                             form.day_cutoff = day_cutoff;
                             form.cutoff = cutoff_result;
                             form.global_rule_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("global_rule_name"));
