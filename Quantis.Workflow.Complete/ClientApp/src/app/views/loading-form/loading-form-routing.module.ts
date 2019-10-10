@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoadingFormComponent } from './loading-form.component';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
+import { LoadingFormUserNotTrackingComponent } from './loading-form-user-nottracking/loading-form-user-nottracking.component';
 import { LoadingFormSecurityUserComponent } from './loading-form-securityuser/loading-form-securityuser.component';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
@@ -31,6 +32,13 @@ const routes: Routes = [
                 data: {
                     title: 'Utente'
                 }
+            },
+            {
+              path: 'utente-notracking',
+              component: LoadingFormUserNotTrackingComponent,
+              data: {
+                title: 'LF diverso periodo'
+              }
             },
             {
                 path: 'securityuser',

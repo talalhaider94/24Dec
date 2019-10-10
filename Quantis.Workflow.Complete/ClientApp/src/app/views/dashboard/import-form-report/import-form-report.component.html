@@ -2,25 +2,27 @@
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
         <h2 style="color:#565656">Import Free Form Report</h2><br>
-        <!-- <button class="btn btn-success" data-toggle="modal"
-                data-target="#addConfigModal" (click)="showAddConfigModal()">
-          Nuovo Gruppo
-        </button><br /><br /> -->
+        <h5 *ngIf="loading" class="text-center text-primary">
+          <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+        </h5>
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
-                    <th style="text-align:center">ID</th>
-                    <th style="text-align:center">Nome</th>
-                    <th style="text-align:center">Descrizione</th>
-                    <th style="text-align:center">Utente</th>
+                    <th style="text-align:center">FFR Name</th>
+                    <th style="text-align:center">Owner</th>
+                    <th style="text-align:center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ConfigTableBodyData; index as i">
-                    <td style="text-align:center"></td>
-                    <td style="text-align:center"></td>
-                    <td style="text-align:center"></td>
-                    <td style="text-align:center"></td>
+                    <td style="text-align:center">{{row.reportname}}</td>
+                    <td style="text-align:center">{{row.ownername}}</td>
+                    <td style="text-align:center">
+                      <button class="btn btn-success" data-toggle="modal" (click)="populateData(row)"
+                      data-target="#configModal" style="font-size:10px">
+                      Import
+                      </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

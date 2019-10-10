@@ -202,13 +202,12 @@ export class FreeFormReportsWidgetComponent implements OnInit {
         this.emitter.sendNext({ type: 'closeModal' });
     }
 
-    // dashboardComponentData is result of data coming from
-    updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-        console.log('freeFormReport chartIndexData', chartIndexData);
-        this.freeFormReportData = chartIndexData;
-        debugger
-        this.dtTrigger.next();
-    }
+  // dashboardComponentData is result of data coming from 
+  updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
+    console.log('freeFormReport chartIndexData', chartIndexData);
+    this.freeFormReportData = chartIndexData;
+    this.dtTrigger.next();
+  }
 
     widgetnameChange(event) {
         this.emitter.sendNext({

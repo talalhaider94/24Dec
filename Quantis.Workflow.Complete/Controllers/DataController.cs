@@ -492,14 +492,14 @@ namespace Quantis.WorkFlow.Controllers
         }
 
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
-        [HttpGet("GetFormsByUser/{fakeUserID}")]
-        public List<FormsFromCatalogDTO> GetFormsFromCatalog(int fakeUserID)
+        [HttpGet("GetFormsByUser/{fakeUserID}/{type}")]
+        public List<FormsFromCatalogDTO> GetFormsFromCatalog(int fakeUserID, string type)
         {
             var usr = HttpContext.User as AuthUser;
             if (usr != null)
             {
                 bool isSecurityMember = _dataAPI.SecurityMembers(usr.UserId);
-                return _dataAPI.GetFormsFromCatalog(usr.UserId, isSecurityMember, fakeUserID);
+                return _dataAPI.GetFormsFromCatalog(usr.UserId, isSecurityMember, fakeUserID, type);
             }
             return null;
         }

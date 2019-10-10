@@ -83,7 +83,7 @@
                                     <th>Stato</th>
                                     <th>Periodo</th>
                                     <th>Target</th>
-                                    <th>Value</th>
+                                    <th>Valore</th>
                                     <th>Rif Input</th>
                                     <th>Ref. Op. </th>
                                     <th>Ref. Ser.</th>
@@ -177,8 +177,21 @@
                                     </td>
                                     <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>{{ ticket.period || 'N/A' }}</td>
-                                    <td>{{ ticket.target || 'N/A' }}</td>
-                                    <td>{{ ticket.value || 'N/A' }}</td>
+                                    <td>
+                                      <div *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                          <span *ngIf="obj.key == 'TARGET:'">
+                                            {{obj.value || 'N/A'}}
+                                          </span>
+                                      </div>
+
+                                    </td>
+                                    <td>
+                                      <div *ngFor="let obj of formatDescriptionColumn(ticket.description)">
+                                          <span *ngIf="obj.key == 'VALORE:'">
+                                            {{obj.value || 'N/A'}}
+                                          </span>
+                                      </div>
+                                    </td>
                                     <td>{{ ticket.reference_input || 'N/A' }}</td>
                                     <td>
                                         <div *ngIf="ticket.reference1; else reference1">

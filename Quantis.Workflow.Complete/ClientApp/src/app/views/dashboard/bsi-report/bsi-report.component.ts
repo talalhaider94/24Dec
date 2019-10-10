@@ -4,6 +4,9 @@ import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
 
 declare var $;
 var $this;
@@ -13,17 +16,27 @@ var $this;
 })
 
 export class BSIReportComponent implements OnInit {
-    @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
-    @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
-    // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
+    @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
-    // handle: any = '';
-    // name: any =  '';
-    // step: any = '';
-
-    dtOptions: DataTables.Settings = {
+    dtOptions: any = {
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="fa fa-file"></i> Esporta CSV',
+                titleAttr: 'Esporta CSV',
+                className: 'btn btn-primary mb-3'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fa fa-file"></i> Esporta PDF',
+                titleAttr: 'Esporta PDF',
+                className: 'btn btn-primary mb-3',
+                orientation: 'landscape',
+            },
+        ],
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
@@ -45,28 +58,79 @@ export class BSIReportComponent implements OnInit {
                 sortAscending: ": attiva per ordinare la colonna in ordine crescente",
                 sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
             }
+        },
+        search: {
+            caseInsensitive: false
         }
     };
     loading: boolean = true;
+    cartellaSelectOption : any;
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
     ReportDetailsData: any = [];
+    chartUpdateFlag: boolean = true;
+    highcharts = Highcharts;
+    cartellaList : any = [];
+    chartOptions = {
+        lang: {
+            downloadJPEG: 'Download JPEG image',
+            downloadPDF: 'Download PDF document',
+            downloadPNG: 'Download PNG image',
+            downloadSVG: 'Download SVG vector image',
+            viewFullscreen: 'View Full Screen',
+            printChart: 'Print Chart'
+        },
+        credits: false,
+        title: {
+            text: 'BSI Report'
+        },
+        xAxis: {
+            type: 'date',
+            categories: []
+            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+        },
+        yAxis: {
+            title: {
+                text: 'Percent'
+            }
+        },
+        series: [
+            // {
+            //     type: 'column',
+            //     name: 'Values',
+            //     data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+            //     color: 'black'
+            // },
+            // {
+            //     type: 'scatter',
+            //     name: 'Target',
+            //     data: [2, 2, 2, 2, 2],
+            //     marker: {
+            //         fillColor: 'orange'
+            //     }
+            // }
+        ],
+        exporting: {
+            enabled: true
+        },
+    };
 
     constructor(
         private apiService: ApiService,
-        private toastr: ToastrService,
+        private $toastr: ToastrService,
     ) {
         $this = this;
     }
 
     ngOnInit() {
-        //this.getAllNormalReports();
+      this.cartellaSelectOption = '';
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
         this.dtTrigger.next();
         this.getAllNormalReports();
+        this.setUpDataTableDependencies();
     }
 
     ngOnDestroy(): void {
@@ -80,14 +144,9 @@ export class BSIReportComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
+            this.setUpDataTableDependencies();
             this.loading = false;
         });
-    }
-
-    strip_tags(html) {
-        var tmp = document.createElement("div");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText;
     }
 
     getAllNormalReports() {
@@ -95,27 +154,97 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.AllNormalReportsData = data;
             console.log('AllNormalReportsData -> ', data);
+            // pushing foldername to dropdown
+            data.forEach( (element) => {
+                if(this.cartellaList.indexOf(element.foldername) == -1){
+                  this.cartellaList.push(element.foldername);
+                }
+            });
+
             this.rerender();
         });
     }
 
     getReportDetails(reportId) {
+        this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
-            this.ReportDetailsData = data;
+            this.loading = false;
+            this.bsiChartModal.show();
+            this.ReportDetailsData = data.reports[0];
+            this.showHighChartsData(data);
             console.log('ReportDetailsData -> ', data);
-            this.rerender();
+        }, error => {
+            console.error('getReportDetails', error);
+            this.loading = false;
+            this.$toastr.error('Error while fetching report data');
         });
     }
 
-    onCancel(dismissMethod: string): void {
-        console.log('Cancel ', dismissMethod);
+    // search start
+
+    setUpDataTableDependencies() {
+        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+            datatable_Ref.columns(0).every(function () {
+                const that = this;
+
+
+                $($this.cartellaSelect.nativeElement)
+                    .on('change', function () {
+                      let searchTerm = $(this).val().toLowerCase(),
+                          regex = '\\b' + searchTerm + '\\b';
+
+                        that
+                            .search(regex, true, false)
+                            .draw();
+                    });
+            });
+        });
+    }
+    //search end
+    hideModal(){
+        this.bsiChartModal.hide();
+    }
+    showHighChartsData(data) {
+        debugger
+        const chartArray = data.reports[0].data;
+        // Danial TODO: improve code later by modifying all data in a single loop
+        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
+        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
+        let targetData = chartArray.filter(data => data.zvalue === 'Target');
+
+        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allViolationData = violationData.map(data => data.yvalue);
+        let allCompliantData = compliantData.map(data => data.yvalue);
+        let allTargetData = targetData.map(data => data.yvalue);
+        this.chartOptions.xAxis = {
+            type: 'date',
+            categories: allChartLabels,
+        }
+        this.chartOptions.yAxis.title = {
+            text: data.reports[0].units
+        }
+        this.chartOptions.series[0] = {
+            type: 'column',
+            name: 'Violation',
+            data: allViolationData,
+            color: '#f86c6b'
+        };
+        this.chartOptions.series[1] = {
+            type: 'column',
+            name: 'Compliant',
+            color: '#379457',
+            data: allCompliantData,
+        };
+        this.chartOptions.series[2] = {
+            type: 'scatter',
+            name: 'Target',
+            data: allTargetData,
+            marker: {
+                fillColor: '#ffc107'
+            }
+        };
+        this.chartUpdateFlag = true;
     }
 
-    showConfigModal() {
-        this.configModal.show();
-    }
 
-    hideConfigModal() {
-        this.configModal.hide();
-    }
 }

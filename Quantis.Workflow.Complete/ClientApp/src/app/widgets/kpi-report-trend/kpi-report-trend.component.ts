@@ -259,7 +259,7 @@ export class KpiReportTrendComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: 'orange'
+                fillColor: '#ffc107'
             }
         };
 

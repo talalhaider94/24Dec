@@ -42,7 +42,7 @@ export const navItems: NavData[] = [
         name: 'Dashboard',
         url: '/dashboard/list',
         icon: 'fa fa-laptop',
-        key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
+        key: 'alwaysShow',
         version: '1.0.0',
     },
     {
@@ -138,8 +138,15 @@ export const navItems: NavData[] = [
                 key: 'VIEW_ADMIN_LOADING_FORM'
             },
             {
-                name: 'Utente',
+                name: 'LF da Compilare',
                 url: '/loading-form/utente',
+                icon: 'fa fa-user-circle-o',
+                version: '0.0.12',
+                key: 'VIEW_LOADING_FORM_UTENTI'
+            },
+            {
+                name: 'LF Fuori Periodo',
+                url: '/loading-form/utente-notracking',
                 icon: 'fa fa-user-circle-o',
                 version: '0.0.12',
                 key: 'VIEW_LOADING_FORM_UTENTI'

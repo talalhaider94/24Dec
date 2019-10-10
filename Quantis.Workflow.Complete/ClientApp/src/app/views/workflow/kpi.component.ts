@@ -391,7 +391,8 @@ export class KPIComponent implements OnInit, OnDestroy {
     //search end
 
     formatDescriptionColumn(description) {
-        return WorkFlowHelper.formatDescription(description);
+        let formatDesc =  WorkFlowHelper.formatDescription(description);
+        return formatDesc;
     }
 
     formatSummaryColumn(summary) {

@@ -74,8 +74,7 @@ export class WidgetHelpersService {
       // buildParams.Note = '';
       // PROPERTIES
       if (apiParams.showmeasure) {
-        let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : '0';
-        // let value = Object.keys(apiParams.measures)[index];
+        let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : Object.keys(apiParams.measures)[0];
         buildParams.Properties.measure = index;
       }
       if (apiParams.showcharttype) {

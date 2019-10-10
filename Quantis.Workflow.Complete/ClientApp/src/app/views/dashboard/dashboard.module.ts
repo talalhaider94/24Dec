@@ -15,6 +15,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DataTablesModule } from 'angular-datatables';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
+import {MatProgressBarModule} from '@angular/material';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -57,6 +58,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         GridsterModule,
         DataTablesModule,
         SweetAlert2Module,
+        MatProgressBarModule,
         DynamicModule.withComponents([
             DoughnutChartComponent,
             BarchartComponent,

@@ -36,8 +36,8 @@ export class LoadingFormService {
         return this.http.get(getFormByIdEndPoint);
     }
 
-    getFormsByUserId(user_id: number): Observable<any> {
-        const formsByUserIdEndPoint = `${environment.API_URL}/Data/GetFormsByUser/${user_id}`;
+    getFormsByUserId(user_id: number, type: string): Observable<any> {
+        const formsByUserIdEndPoint = `${environment.API_URL}/Data/GetFormsByUser/${user_id}/${type}`;
         return this.http.get(formsByUserIdEndPoint);
     }
     // form submitted by Admin from Loading form
