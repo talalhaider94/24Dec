@@ -39,6 +39,7 @@ export class FreeFormReportComponent implements OnInit {
   debugResultArray = [];
   debugCount=0;
   hideData=0;
+  parameterCount=0;
   assignedUsers = [];
   params = {
     id: 0,
@@ -204,6 +205,16 @@ export class FreeFormReportComponent implements OnInit {
       key: '',
       value: ''
     });
+  }
+
+  addParameters(): void {
+    this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
+    this.Parameters.push(this.createParameters());
+    this.parameterCount=1;
+  }
+
+  deleteParameters(id: number) {
+    this.Parameters.removeAt(id);   
   }
 
   ngAfterViewInit() {
@@ -517,10 +528,10 @@ export class FreeFormReportComponent implements OnInit {
           this.debugQueryData = Object.keys(this.debugResult[0]);
           this.hideData=1;
         }else{ 
-          ////////////// Setting Key ///////////////
           if(this.debugResult.length > 10){
             this.debugResult = this.debugResult.splice(0,10);
           }
+          ////////////// Setting Key ///////////////
           this.debugQueryData = Object.keys(data[0]);
         }
       }

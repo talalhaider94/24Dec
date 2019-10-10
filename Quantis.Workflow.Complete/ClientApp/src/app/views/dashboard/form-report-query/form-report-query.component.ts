@@ -173,18 +173,30 @@ export class FormReportQueryComponent implements OnInit {
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
       this.debugResult = data;
-      console.log('Debug Result -> ',data[0]);
-      ////////////// Setting Key ///////////////
-      this.debugQueryData = Object.keys(data[0]);
-      ////////////// Setting Value ///////////////
-      Object.keys(data[0]).forEach(key => {
-        this.debugQueryValue[this.valueCount] = data[0][key];  
-        this.valueCount++; 
-      });
-      //console.log('debugQueryValue -> ',this.debugQueryValue); 
-      if(data[0]=='O'){
-        this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
-        this.hideData=1;
+      console.log('Debug Result -> ',data);
+      if(this.debugResult.length==0){
+        //this.toastr.error('Errore in query execution', 'Error');
+        this.debugResult = [{Error: 'No data found'}]
+        this.debugQueryData = Object.keys(this.debugResult[0]);
+      }else{
+        ////////////// Setting Key ///////////////
+        //this.debugQueryData = Object.keys(data[0]);
+        ////////////// Setting Value ///////////////
+        // Object.keys(data[0]).forEach(key => {
+        //   this.debugQueryValue[this.valueCount] = data[0][key];  
+        //   this.valueCount++; 
+        // });
+        //console.log('debugQueryValue -> ',this.debugQueryValue); 
+        if(data[0]=='O'){
+          this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+          this.hideData=1;
+        }else{ 
+          if(this.debugResult.length > 10){
+            this.debugResult = this.debugResult.splice(0,10);
+          }
+          ////////////// Setting Key ///////////////
+          this.debugQueryData = Object.keys(data[0]);
+        }
       }
     });
   }
