@@ -464,8 +464,7 @@ export class FreeFormReportComponent implements OnInit {
         this.debugResult = [{Error: 'No data found'}]
         this.debugQueryData = Object.keys(this.debugResult[0]);
       }else{
-        ////////////// Setting Key ///////////////
-        this.debugQueryData = Object.keys(data[0]);
+        
         ////////////// Setting Value ///////////////
         /*
         for (let i = 0; i < this.debugResult.length; i++) {
@@ -478,9 +477,14 @@ export class FreeFormReportComponent implements OnInit {
         console.log('debugQueryValue -> ',this.debugQueryValue); 
         */
         this.isDebug=1;
-        if(data[0]=='O'){
+        if(data[0]=='O'){  
           this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+          this.debugResult = [{Error: 'No data found'}]
+          this.debugQueryData = Object.keys(this.debugResult[0]);
           this.hideData=1;
+        }else{ 
+          ////////////// Setting Key ///////////////
+          this.debugQueryData = Object.keys(data[0]);
         }
       }
     },error => {
@@ -499,20 +503,25 @@ export class FreeFormReportComponent implements OnInit {
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
       this.debugResult = data;
 
-      if(this.debugResult.length > 10){
-        this.debugResult = this.debugResult.splice(0,10);
-      }
       if(this.debugResult.length==0){
         this.debugResult = [{Error: 'No data found'}]
         this.debugQueryData = Object.keys(this.debugResult[0]);
       }else{
         ////////////// Setting Key ///////////////
-        this.debugQueryData = Object.keys(data[0]);
+        //this.debugQueryData = Object.keys(data[0]);
         
         this.isDebug=1;
-        if(data[0]=='O'){
+        if(data[0]=='O'){  
           this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
+          this.debugResult = [{Error: 'No data found'}]
+          this.debugQueryData = Object.keys(this.debugResult[0]);
           this.hideData=1;
+        }else{ 
+          ////////////// Setting Key ///////////////
+          if(this.debugResult.length > 10){
+            this.debugResult = this.debugResult.splice(0,10);
+          }
+          this.debugQueryData = Object.keys(data[0]);
         }
       }
     },error => {

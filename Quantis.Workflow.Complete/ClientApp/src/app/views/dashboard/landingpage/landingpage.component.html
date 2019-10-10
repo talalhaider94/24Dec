@@ -2,17 +2,16 @@
     <section class="content-header">
 
         <h2>
-            Home
             <small>Contraenti</small>
             <!-- <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small> -->
         </h2>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-5" style="margin-top:-30px">
-            <h2>
+        <div class="row pull-right col-md-3" style="margin-top:-30px">
+            <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
-            </h2>
-            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:28%;" (change)="populateDateFilter()">
+            </h2> -->
+            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:40%;" (change)="populateDateFilter()">
                 <option value="00">Tutti i mesi</option>
                 <option value="01">Gennaio</option>
                 <option value="02">Febbraio</option>
@@ -27,7 +26,7 @@
                 <option value="11">Novembre</option>
                 <option value="12">Dicembre</option>
             </select>
-            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:20%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:30%;" (change)="populateDateFilter()">
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>
@@ -82,7 +81,7 @@
                                 <ul class="nav nav-stacked">
                                     <li class="top-border">
                                         <a href="#">
-                                            Severity Contratti
+                                            Severity Contraenti
                                             <div class="progress" style="height: 20px">
                                                 <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': row.complaintkpis + '%' }" style="height:100%">{{row.complaintkpis}}</div>
                                                 <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': row.noncomplaintkpis + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>

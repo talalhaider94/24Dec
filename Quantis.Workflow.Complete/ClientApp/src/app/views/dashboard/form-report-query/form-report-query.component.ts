@@ -134,6 +134,11 @@ export class FormReportQueryComponent implements OnInit {
     this.parameterCount=1;
   }
 
+  deleteParameters(id: number) {
+    this.Parameters.removeAt(id);
+    
+  }
+
   onQueryReportFormSubmit(event) {
     // const creds = this.form.controls.credentials as FormArray;
     console.log('submit form -> ',this.addEditQueryForm.value);
