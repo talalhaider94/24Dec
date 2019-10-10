@@ -133,7 +133,7 @@ namespace Quantis.WorkFlow.Services.API
 
         void AddEditReportQuery(ReportQueryDetailDTO dto, int userId);
 
-        void DeleteReportQuery(int id, int userId);
+        void EnableDisableReportQuery(int id, bool isenable, int userId);
 
         void AssignReportQuery(MultipleRecordsDTO records, int ownerId);
 
