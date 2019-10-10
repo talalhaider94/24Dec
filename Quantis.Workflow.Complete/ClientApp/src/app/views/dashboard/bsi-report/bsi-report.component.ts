@@ -21,7 +21,22 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
-    dtOptions: DataTables.Settings = {
+    dtOptions: any = {
+        buttons: [
+            {
+                extend: 'csv',
+                text: '<i class="fa fa-file"></i> Esporta CSV',
+                titleAttr: 'Esporta CSV',
+                className: 'btn btn-primary mb-3'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fa fa-file"></i> Esporta PDF',
+                titleAttr: 'Esporta PDF',
+                className: 'btn btn-primary mb-3',
+                orientation: 'landscape',
+            },
+        ],
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
@@ -171,7 +186,7 @@ export class BSIReportComponent implements OnInit {
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
-              
+
 
                 $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
@@ -186,7 +201,9 @@ export class BSIReportComponent implements OnInit {
         });
     }
     //search end
-
+    hideModal(){
+        this.bsiChartModal.hide();
+    }
     showHighChartsData(data) {
         debugger
         const chartArray = data.reports[0].data;

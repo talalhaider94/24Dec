@@ -121,6 +121,10 @@ export class ApiService {
         const getLandingPageEndPoint = `${environment.API_URL}/oracle/GetLandingPageByUser?period=${month}/${year}`;
         return this.http.get(getLandingPageEndPoint);
     }
+    getLandingPageLevel1(contractpartyid,month,year): Observable<any> {
+        const getLandingPageLevel1EndPoint = `${environment.API_URL}/oracle/getLandingPageLevel1?contractPartyId=${contractpartyid}&period=${month}/${year}`;
+        return this.http.get(getLandingPageLevel1EndPoint);
+    }
     getTestLandingPage(): Observable<any> {
         const getLandingPageEndPoint = `${environment.API_URL}/data/GetAllUsersLandingPage`;
         return this.http.get(getLandingPageEndPoint);
@@ -200,6 +204,10 @@ export class ApiService {
     getReportDetails(reportId): Observable<any> {
         const reportIdEndPoint = `${environment.API_URL}/bsi/GetReportDetail?ReportId=${reportId}`;
         return this.http.get(reportIdEndPoint);
+    }
+    getFreeFormReports(): Observable<any> {
+        const getFFrREndPoint = `${environment.API_URL}/oracle/GetBSIFreeFormReports`;
+        return this.http.get(getFFrREndPoint);
     }
 
     updateConfig(config) {
