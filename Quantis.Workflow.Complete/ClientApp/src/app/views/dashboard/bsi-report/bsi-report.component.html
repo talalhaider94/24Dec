@@ -3,26 +3,34 @@
   <h5 *ngIf="loading" class="text-center text-primary">
     <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
   </h5>
+  <div class="row">
+      <div class="form-group col-sm-4">
+          <label><strong>Cartella</strong></label>
+          <select #cartellaSelect class="form-control" name="cartellaSelectOption"
+                  [(ngModel)]="cartellaSelectOption">
+              <option value="" selected>Tutti</option>
+              <option *ngFor="let p of cartellaList" [value]="p">{{p}}</option>
+          </select>
+
+          <!-- <select class="form-control" style="width:15%;" #searchCol4 [(ngModel)]="viewModel.filters.tuttiContratti" name="tuttiContratti"><option value="">Tutti i Contratti</option></select> -->
+      </div>
+  </div>
   <table class="table stripe text-center" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
     <thead class="bg-primary">
       <tr class="text-white">
-        <th>Folder Name</th>
-        <th>Executable</th>
-        <th>Parameterized</th>
-        <th>Report Name</th>
-        <th>Report Type</th>
-        <th>Modified Date</th>
-        <th>Action</th>
+        <th>Cartella</th>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Data Modifica</th>
+        <th>Azioni</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of AllNormalReportsData; index as i">
-        <td>{{row.foldername}}</td>
-        <td>{{row.isexecutable}}</td>
-        <td>{{row.isparameterized}}</td>
+        <td><span [hidden]="true">{{i}}</span> {{row.foldername}}</td>
         <td>{{row.itemname}}</td>
         <td>{{row.reporttype}}</td>
-        <td>{{row.modifieddate}}</td>
+        <td>{{row.modifieddate | date:'MM/dd/yyyy, hh:mm a'}}</td>
         <td>
           <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
             <i class="fa fa-eye"></i>

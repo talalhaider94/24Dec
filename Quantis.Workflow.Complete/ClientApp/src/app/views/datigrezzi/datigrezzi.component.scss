@@ -5,3 +5,20 @@
 .leftAlign {
     text-align: left;
 }
+
+.event-type-wrapper{
+  margin:6px 0px 0px 6px;
+  display: block;
+  width: 50%;
+
+  label{
+    float: right;
+  }
+  input{
+    float: right;
+    top: 4px;
+    position: relative;
+    left: -3px;
+    cursor: pointer;
+  }
+}

@@ -35,6 +35,7 @@ export class DatiGrezziComponent implements OnInit {
     public comparator: any;
     public p: any;
     public periodFilter: number;
+    showEventCol : boolean = false;
 
     @ViewChild('kpiTable') block: ElementRef;
     @ViewChild('searchCol1') searchCol1: ElementRef;

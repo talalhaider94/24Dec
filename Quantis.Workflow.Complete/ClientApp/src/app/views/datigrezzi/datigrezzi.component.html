@@ -190,7 +190,12 @@
                 <br><br>
                 <div class="row">
                     <input class="form-control" style="width: 18%;margin-left:22px" type="text" name="search" [(ngModel)]="filter" placeholder="Cerca">
+
                     <button (click)="fireEvent()" style="margin-left:20%">Esporta CSV</button>
+                    <span class="event-type-wrapper">
+                      <label>Show event type</label>
+                      <input type="checkbox" name="showevent" [checked]="showEventCol" (change)="showEventCol = !showEventCol"/>
+                    </span>
                 </div>
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table table-bordered" #table>
@@ -200,7 +205,7 @@
                                 <th style="text-align:center">create date</th>
                                 <th style="text-align:center">modify date</th>
                                 <th style="text-align:center">raw data id</th>
-                                <th style="text-align:center">event type</th>
+                                <th style="text-align:center" [hidden]="!showEventCol">event type</th>
                                 <th style="text-align:center">resource</th>
                                 <th style="text-align:center">time stamp</th>
                                 <th style="text-align:center">reader id</th>
@@ -221,7 +226,7 @@
                                 <td style="text-align:center">{{rec.create_date }}</td>
                                 <td style="text-align:center">{{rec.modify_date }}</td>
                                 <td style="text-align:center">{{rec.raw_data_id}}</td>
-                                <td style="text-align:center">{{rec.event_type_id}}</td>
+                                <td style="text-align:center" [hidden]="!showEventCol">{{rec.event_type_id}}</td>
                                 <td style="text-align:center">{{rec.resource_id}}</td>
                                 <td style="text-align:center">{{rec.time_stamp }}</td>
                                 <td style="text-align:center">{{rec.reader_id}}</td>
