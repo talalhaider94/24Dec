@@ -274,7 +274,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     {"type",
                       "crt:180",
                       "customer",
-                      "cnt:9FF6A914066D09479BACC3736FBFFD21",
+                      dto.Customer,
                       "zz_svc",
                       "zsvc:401021",
                       "category",

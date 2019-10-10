@@ -6,6 +6,7 @@
         public string Description { get; set; }
         public int? SecondaryContractParty { get; set; }
 
+        public string Customer { get; set; }
         public string Status { get; set; }
         public int GroupCategoryId { get; set; }
         public string Group { get; set; }

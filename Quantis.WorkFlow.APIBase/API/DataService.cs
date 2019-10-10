@@ -1690,6 +1690,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var kpi = _dbcontext.CatalogKpi.Include(o => o.GlobalRule).Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
+                string customer = _infomationAPI.GetConfiguration("be_sdm", "customer")?.Value;
                 return new CreateTicketDTO()
                 {
                     Description = GenerateDiscriptionFromKPI(kpi, (psl != null && psl.Any()) ? psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]" : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result : "[Non Calcolato]"),
@@ -1709,7 +1710,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result
                         :
                         "[Non Calcolato]",
-                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi
+                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi,
+                    Customer = customer
                 };
             }
             catch (Exception e)
