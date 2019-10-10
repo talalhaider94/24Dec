@@ -29,6 +29,7 @@ export class FormReportQueryComponent implements OnInit {
   valueCount = 0;
   debugResult;
   hideData=0;
+  isloaded=0;
   executeQueryData = {
     QueryText: '',
     Parameters: [{
@@ -45,7 +46,7 @@ export class FormReportQueryComponent implements OnInit {
   };
   form: FormGroup;
   
-  loading: boolean = true;
+  loading: boolean = false;
   formLoading: boolean = false;
   submitted: boolean = false;
   isSubmit=0;
@@ -143,6 +144,7 @@ export class FormReportQueryComponent implements OnInit {
     // const creds = this.form.controls.credentials as FormArray;
     console.log('submit form -> ',this.addEditQueryForm.value);
     if(event=='debug'){
+      this.loading=true;
       this.debug();
     }else{
       this.submitted = true;
@@ -156,6 +158,7 @@ export class FormReportQueryComponent implements OnInit {
           this.addEditQueryForm.reset();
           this.toastr.success('Query created successfully');
         }, error => {
+          this.loading = false;
           this.formLoading = false;
           this.toastr.error('Errore esecuzione report');
         });
@@ -172,6 +175,7 @@ export class FormReportQueryComponent implements OnInit {
     this.executeQueryData.Parameters = this.addEditQueryForm.value.Parameters;
     //console.log('Debug -> ',this.executeQueryData);
     this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+      this.loading = false;
       this.debugResult = data;
       console.log('Debug Result -> ',data);
       if(this.debugResult.length==0){
@@ -197,6 +201,7 @@ export class FormReportQueryComponent implements OnInit {
           ////////////// Setting Key ///////////////
           this.debugQueryData = Object.keys(data[0]);
         }
+        this.isloaded=1;
       }
     });
   }
