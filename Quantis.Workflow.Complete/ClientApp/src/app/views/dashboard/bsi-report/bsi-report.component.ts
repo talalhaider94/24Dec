@@ -190,11 +190,11 @@ export class BSIReportComponent implements OnInit {
 
                 $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
-                      let searchTerm = $(this).val().toLowerCase(),
-                          regex = '\\b' + searchTerm + '\\b';
+                      let searchTerm = $(this).val(),
+                          regex = '"'+searchTerm+'"';
 
                         that
-                            .search(regex, true, false)
+                            .search(regex, false, true, false)
                             .draw();
                     });
             });
