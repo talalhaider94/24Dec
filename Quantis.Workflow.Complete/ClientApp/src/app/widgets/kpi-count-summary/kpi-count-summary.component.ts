@@ -54,10 +54,10 @@ export class KpiCountSummaryComponent implements OnInit {
     @Input() widgetid: number;
     @Input() dashboardid: number;
     @Input() id: number;
-    loading: boolean = true;
+    loading: boolean = false;
     kpiCountSummaryWidgetParameters: any;
     setWidgetFormValues: any;
-    editWidgetName: boolean = true;
+    isDashboardModeEdit: boolean = true;
     sumKPICount: number = 0;
     widgetTitle: string = 'Count Summary';
     @Output() kpiCountSummaryParent = new EventEmitter<any>();
@@ -71,16 +71,16 @@ export class KpiCountSummaryComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        console.log('KpiCountSummary ==>', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         if (this.router.url.includes('dashboard/public')) {
-            this.editWidgetName = false;
+            this.isDashboardModeEdit = false;
+            if (this.url) {
+                this.emitter.loadingStatus(true);
+                this.getChartParametersAndData(this.url);
+            }
+            // coming from dashboard component
+            this.subscriptionForDataChangesFromParent();
         }
-        console.log('KpiCountSummaryComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
-        if (this.url) {
-            this.emitter.loadingStatus(true);
-            this.getChartParametersAndData(this.url);
-        }
-        // coming from dashboard component
-        this.subscriptionForDataChangesFromParent();
     }
 
     subscriptionForDataChangesFromParent() {
@@ -105,6 +105,7 @@ export class KpiCountSummaryComponent implements OnInit {
     getChartParametersAndData(url) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
+        this.loading = true;
         let myWidgetParameters = null;
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
