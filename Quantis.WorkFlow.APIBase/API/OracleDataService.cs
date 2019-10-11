@@ -892,6 +892,7 @@ r.rule_name,
                               where rg.report_type ='FREEFORM'
                               and rg.is_executable=1
                               and rg.report_owner=us.user_id
+                              and rg.report_name not like 'Admin%'
                               order by rg.report_name
                               ";
             using (OracleConnection con = new OracleConnection(_connectionstring))

@@ -33,7 +33,9 @@
                                 <button [disabled]="formLoading" type="submit" class="btn btn-success float-right ml-1">
                                     <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                                 </button>
-                                <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary float-right">Esegui</button>
+                                <button [disabled]="loading" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" 
+                                    class="btn btn-warning float-right">
+                                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Test</button>
                             </div>
                         </div>
                     </form>
@@ -52,9 +54,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td *ngFor="let value of debugQueryValue"><div [innerHTML]="value"></div></td>
-                </tr>
+                    <tr *ngFor="let value of debugResult">
+                        <td *ngFor="let key of debugQueryData; index as i"><div [innerHTML]="value[key]"></div></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

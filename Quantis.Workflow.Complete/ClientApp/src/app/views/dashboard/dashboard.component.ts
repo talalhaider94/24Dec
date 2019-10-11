@@ -369,10 +369,10 @@ export class DashboardComponent implements OnInit {
             case "kpi_count_summary": {
                 let summaryWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'kpi_count_summary');
                 this.dashboardWidgetsArray.push({
-                    cols: 4,
-                    rows: 4,
-                    minItemCols: 2,
-                    minItemRows: 4,
+                    cols: 3,
+                    rows: 3,
+                    minItemCols: 3,
+                    minItemRows: 3,
                     x: 0,
                     y: 0,
                     component: KpiCountSummaryComponent,

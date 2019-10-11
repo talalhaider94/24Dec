@@ -412,11 +412,11 @@ namespace Quantis.WorkFlow.Controllers
         }
 
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
-        [HttpGet("DeleteReportQuery")]
-        public void DeleteReportQuery(int id)
+        [HttpGet("EnableDisableReportQuery")]
+        public void EnableDisableReportQuery(int id, bool isenable)
         {
             var usr = (HttpContext.User) as AuthUser;
-            _dataAPI.DeleteReportQuery(id, usr.UserId);
+            _dataAPI.EnableDisableReportQuery(id, isenable, usr.UserId);
         }
 
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
@@ -502,6 +502,11 @@ namespace Quantis.WorkFlow.Controllers
                 return _dataAPI.GetFormsFromCatalog(usr.UserId, isSecurityMember, fakeUserID, type);
             }
             return null;
+        }
+        [HttpGet("GetLogs/{limit}")]
+        public List<LogDTO> GetLogs(int limit)
+        {
+            return _dataAPI.GetLogs(limit);
         }
     }
 }

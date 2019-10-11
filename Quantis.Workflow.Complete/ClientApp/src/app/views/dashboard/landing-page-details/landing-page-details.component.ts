@@ -57,23 +57,29 @@ export class LandingPageDetailsComponent implements OnInit {
     monthVar: any;
     month: any;
     yearVar: any;
+    contractpartyname: any;
     count = 0;
     thresholdvalue = 0;
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute
     ) { }
+
     ngOnInit(): void {
         this.queryParams = this.route.snapshot.queryParamMap['params'];
-        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.month, this.queryParams.year);
+        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
+        this.queryParams.month, this.queryParams.year);
 
         this.thresholdvalue = 0;
+        this.contractpartyname = this.queryParams.contractpartyname;
         this.month = moment().format('MMMM');
-        this.monthVar = moment().format('MM');
-        this.yearVar = moment().format('YYYY');
+        //this.monthVar = moment().format('MM');
+        //this.yearVar = moment().format('YYYY');
+        this.monthVar = this.queryParams.month;
+        this.yearVar = this.queryParams.year;
         this.getAnno();
 
-        this.apiService.getLandingPageLevel1(1075,2,2019).subscribe((data: any) => {
+        this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
             console.log("Level1 Data -> ", this.gridsData);
         });
@@ -100,9 +106,9 @@ export class LandingPageDetailsComponent implements OnInit {
     populateDateFilter() {
         if (this.monthVar == null || this.yearVar == null) {
         } else {
-            this.apiService.getLandingPage(2, 2019).subscribe((data: any) => {
+            this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                console.log("gridsData -> ", this.gridsData);
+                console.log("Level1 Data -> ", this.gridsData);
             });
         }
     }

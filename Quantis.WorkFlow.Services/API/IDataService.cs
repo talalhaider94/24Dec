@@ -23,6 +23,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormUsersDTO> GetAllFormUsers(int formId, int userId);
 
         List<FormsFromCatalogDTO> GetFormsFromCatalog(int userid, bool isSecurityMember, int fakeUserID, string type);
+        List<LogDTO> GetLogs(int limit);
 
         bool SecurityMembers(int userId);
 
@@ -133,7 +134,7 @@ namespace Quantis.WorkFlow.Services.API
 
         void AddEditReportQuery(ReportQueryDetailDTO dto, int userId);
 
-        void DeleteReportQuery(int id, int userId);
+        void EnableDisableReportQuery(int id, bool isenable, int userId);
 
         void AssignReportQuery(MultipleRecordsDTO records, int ownerId);
 

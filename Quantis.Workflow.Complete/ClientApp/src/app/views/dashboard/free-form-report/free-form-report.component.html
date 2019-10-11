@@ -78,11 +78,13 @@
                                                 data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 Assegna
                                             </button>
-                                            <!-- <button class="btn btn-danger btn-sm" [swal]="{title: 'Conferma', text: 'Eliminare il Query?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
-                                            (confirm)="deleteQuery(ownedQuery)" (cancel)="onCancel($event)">
-                                                <span class="fa fa-trash"></span>
+                                            <button class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
+                                            <button class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
+                                                Disable
+                                            </button>
+                                            <!-- <button class="btn btn-success btn-sm" (click)="enable(ownedQuery)">
+                                                Enable
                                             </button> -->
-                                            <button class="btn btn-success btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -242,7 +244,7 @@ aria-hidden="true">
         </div>
         <div class="modal-body">
             <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
-                <!-- <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br> -->
+                <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
                 <div class="form-group" style="width:50%">
                     <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                 </div>
@@ -254,8 +256,11 @@ aria-hidden="true">
                 <!-- <span *ngIf="parameterCount>0"> -->
                 <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters')['controls']; let i = index;">
                     <div class="row" [formGroupName]="i">
-                        <div class="col-md-6"><input placeholder="Key" formControlName="key" class="form-control" readonly></div>
-                        <div class="col-md-6"><input placeholder="Value" formControlName="value" class="form-control"></div>
+                        <div class="col-md-4"><input placeholder="Key" formControlName="key" class="form-control"></div>
+                        <div class="col-md-5"><input placeholder="Value" formControlName="value" class="form-control"></div>
+                        <div class="col-md-2 ml-1">
+                            <button type="button" class="btn btn-danger" (click)="deleteParameters(i)"><span class="fa fa-times"></span></button>
+                        </div>
                     </div><br>
                 </div>
                 <div class="row">

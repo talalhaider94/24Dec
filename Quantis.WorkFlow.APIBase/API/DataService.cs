@@ -1454,26 +1454,39 @@ namespace Quantis.WorkFlow.APIBase.API
                 else
                 {
                     query = "select global_rule_name, global_rule_id, temp.form_id, form_name, form_owner_id, form_description, referent, monthtrigger, sla_name," +
-                        "user_group_id, user_group_name, attachments_count,latest_modified_date, tracking_period " +
+                        "attachments_count,latest_modified_date, tracking_period, u.userid, u.ca_bsi_account, u.ca_bsi_user_id " +
                         "from(" +
-                        "select ck.*, gr.global_rule_name, gr.global_rule_id, f.*, c.customer_name, c2.customer_name, s.sla_name, " +
+                        " select ck.*, gr.global_rule_name, gr.global_rule_id, f.*, c.customer_name, c2.customer_name, s.sla_name," +
                         "fa.attachments_count, fl.latest_modified_date " +
                         "from t_catalog_kpis ck " +
                         "left join t_global_rules gr on ck.global_rule_id_bsi = gr.global_rule_id " +
-                        "left join t_form_users f on ck.id_form = f.form_id " +
+                        "left join t_forms f on ck.id_form = f.form_id " +
                         "left join t_customers c on c.customer_id = ck.primary_contract_party " +
                         "left join t_customers c2 on c2.customer_id = ck.secondary_contract_party " +
                         "left join t_slas s on s.sla_id = ck.sla_id_bsi " +
                         "left join (select form_id, count(form_id) as attachments_count from t_form_attachments group by form_id) fa on f.form_id = fa.form_id " +
                         "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form " +
-                        "where f.form_id is not null ) temp where user_group_id = :user_group_id and monthtrigger is not null";
+                        "where f.form_id is not null ) temp " +
+                        "left join t_catalog_users u on " +
+                        "(u.userid LIKE ('%\\' || split_part(temp.referent, '$', 1))  " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 1)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 2) = '' then 'a' else split_part(temp.referent, '$', 2)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 2)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 3) = '' then 'a' else split_part(temp.referent, '$', 3)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 3)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 4) = '' then 'a' else split_part(temp.referent, '$', 4)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 4)) " +
+                        "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 5) = '' then 'a' else split_part(temp.referent, '$', 5)end) " +
+                        "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 5)) " +
+                        ") where monthtrigger is not null and ca_bsi_user_id is not null " +
+                        "and u.ca_bsi_user_id = :ca_bsi_user_id ";
                 }
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                 {
                     con.Open();
                     var command = new NpgsqlCommand(query, con);
                     command.CommandType = CommandType.Text;
-                    command.Parameters.AddWithValue(":user_group_id", UserID);
+                    command.Parameters.AddWithValue(":ca_bsi_user_id", UserID);
                     _dbcontext.Database.OpenConnection();
                     using (var reader = command.ExecuteReader())
                     {
@@ -1488,8 +1501,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             form.AttachmentsCount = reader.IsDBNull(reader.GetOrdinal("attachments_count")) ? 0 : reader.GetInt32(reader.GetOrdinal("attachments_count"));
                             form.latest_input_date = reader.IsDBNull(reader.GetOrdinal("latest_modified_date")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("latest_modified_date"));
 
-                            form.user_group_id = isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
-                            form.user_group_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
+                            form.user_group_id = 0;// isSecurityMember ? 0 : reader.GetInt32(reader.GetOrdinal("user_group_id"));
+                            form.user_group_name = null; // isSecurityMember ? null : reader.GetString(reader.GetOrdinal("user_group_name"));
                             form.day_cutoff = day_cutoff;
                             form.cutoff = cutoff_result;
                             form.global_rule_name = isSecurityMember ? null : reader.GetString(reader.GetOrdinal("global_rule_name"));
@@ -1527,6 +1540,47 @@ namespace Quantis.WorkFlow.APIBase.API
                         return resultList;
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<LogDTO> GetLogs(int limit)
+        {
+            try
+            {
+                if (limit <= 0) { limit = 10; }
+                var resultList = new List<LogDTO>();
+                string query = "select * from t_exceptions order by 1 desc LIMIT :limit";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":limit", limit);
+                    _dbcontext.Database.OpenConnection();
+                    var currentPeriod = DateTime.Now.AddMonths(-8).ToString("MM/yy");
+                    var previousPeriod = DateTime.Now.AddMonths(-9).ToString("MM/yy");
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            LogDTO log = new LogDTO();
+                            log.id = reader.IsDBNull(reader.GetOrdinal("id")) ? 0 : reader.GetInt32(reader.GetOrdinal("id"));
+                            log.message = reader.IsDBNull(reader.GetOrdinal("message")) ? null : reader.GetString(reader.GetOrdinal("message"));
+                            log.innerexceptions = reader.IsDBNull(reader.GetOrdinal("innerexceptions")) ? null : reader.GetString(reader.GetOrdinal("innerexceptions"));
+                            log.stacktrace = reader.IsDBNull(reader.GetOrdinal("stacktrace")) ? null : reader.GetString(reader.GetOrdinal("stacktrace"));
+                            log.loglevel = reader.IsDBNull(reader.GetOrdinal("loglevel")) ? null : reader.GetString(reader.GetOrdinal("loglevel"));
+                            log.ex_timestamp = reader.IsDBNull(reader.GetOrdinal("ex_timestamp")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("ex_timestamp"));
+
+                            resultList.Add(log);
+                        }
+                    }
+                    return resultList;
+                }
+                
             }
             catch (Exception e)
             {
@@ -1690,6 +1744,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var kpi = _dbcontext.CatalogKpi.Include(o => o.GlobalRule).Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).FirstOrDefault(o => o.id == Id);
                 var psl = _oracleAPI.GetPsl(DateTime.Now.AddMonths(-1).ToString("MM/yy"), kpi.global_rule_id_bsi, kpi.tracking_period);
                 string contractPartyName = (kpi.SecondaryCustomer == null) ? kpi.PrimaryCustomer.customer_name : kpi.PrimaryCustomer.customer_name + string.Format(" ({0})", kpi.SecondaryCustomer.customer_name);
+                string customer = _infomationAPI.GetConfiguration("be_sdm", "customer")?.Value;
                 return new CreateTicketDTO()
                 {
                     Description = GenerateDiscriptionFromKPI(kpi, (psl != null && psl.Any()) ? psl.FirstOrDefault().result.Contains("[Non Calcolato]") ? "[Non Calcolato]" : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result : "[Non Calcolato]"),
@@ -1709,7 +1764,8 @@ namespace Quantis.WorkFlow.APIBase.API
                         : psl.FirstOrDefault().provided_ce + " " + psl.FirstOrDefault().symbol + " " + psl.FirstOrDefault().result
                         :
                         "[Non Calcolato]",
-                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi
+                    zz3_KpiIds = kpi.id + "|" + kpi.global_rule_id_bsi,
+                    Customer = customer
                 };
             }
             catch (Exception e)
@@ -2104,7 +2160,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetOwnedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId);
+            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId && o.is_enable);
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2119,7 +2175,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).ToList();
+            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).Where(o=>o.is_enable).ToList();
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2162,6 +2218,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 entity.query_text = dto.QueryText;
                 entity.created_on = DateTime.Now;
                 entity.owner_id = userId;
+                entity.is_enable = true;
                 entity.Parameters = dto.Parameters.Select(o => new T_ReportQueryParameter()
                 {
                     parameter_value = o.Value,
@@ -2188,21 +2245,29 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-
-        public void DeleteReportQuery(int id, int userId)
+        public void EnableDisableReportQuery(int id,bool isenable, int userId)
         {
             var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
             if (entity.owner_id == userId)
             {
-                var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
-                _dbcontext.ReportQueryParameters.RemoveRange(param.ToArray());
-                var assign = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == id);
-                _dbcontext.ReportQueryAssignments.RemoveRange(assign.ToArray());
-                _dbcontext.SaveChanges();
-                _dbcontext.ReportQueries.Remove(entity);
+                entity.is_enable = isenable;
                 _dbcontext.SaveChanges();
             }
         }
+        //public void DeleteReportQuery(int id, int userId)
+        //{
+        //    var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
+        //    if (entity.owner_id == userId)
+        //    {
+        //        var param = _dbcontext.ReportQueryParameters.Where(o => o.query_id == id);
+        //        _dbcontext.ReportQueryParameters.RemoveRange(param.ToArray());
+        //        var assign = _dbcontext.ReportQueryAssignments.Where(o => o.query_id == id);
+        //        _dbcontext.ReportQueryAssignments.RemoveRange(assign.ToArray());
+        //        _dbcontext.SaveChanges();
+        //        _dbcontext.ReportQueries.Remove(entity);
+        //        _dbcontext.SaveChanges();
+        //    }
+        //}
 
         public void AssignReportQuery(MultipleRecordsDTO records, int ownerId)
         {

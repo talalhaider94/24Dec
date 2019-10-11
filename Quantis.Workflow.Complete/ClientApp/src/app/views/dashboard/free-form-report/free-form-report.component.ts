@@ -39,6 +39,8 @@ export class FreeFormReportComponent implements OnInit {
   debugResultArray = [];
   debugCount=0;
   hideData=0;
+  parameterCount=0;
+  disableId=0;
   assignedUsers = [];
   params = {
     id: 0,
@@ -206,6 +208,16 @@ export class FreeFormReportComponent implements OnInit {
     });
   }
 
+  addParameters(): void {
+    this.Parameters = this.addEditQueryForm.get('Parameters') as FormArray;
+    this.Parameters.push(this.createParameters());
+    this.parameterCount=1;
+  }
+
+  deleteParameters(id: number) {
+    this.Parameters.removeAt(id);   
+  }
+
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTrigger2.next();
@@ -324,6 +336,7 @@ export class FreeFormReportComponent implements OnInit {
   getOwnedQueries(){
     this._freeFormReport.getOwnedReportQueries().subscribe(data => {
       this.ownedReportQueries = data;
+      this.rerender();
     });
   }
   
@@ -517,10 +530,10 @@ export class FreeFormReportComponent implements OnInit {
           this.debugQueryData = Object.keys(this.debugResult[0]);
           this.hideData=1;
         }else{ 
-          ////////////// Setting Key ///////////////
           if(this.debugResult.length > 10){
             this.debugResult = this.debugResult.splice(0,10);
           }
+          ////////////// Setting Key ///////////////
           this.debugQueryData = Object.keys(data[0]);
         }
       }
@@ -528,6 +541,18 @@ export class FreeFormReportComponent implements OnInit {
       this.toastr.error('Errore in query execution', 'Error');
     });
     this.hideParametersModal();
+  }
+
+  disable(row){
+    this._freeFormReport.disable(row.id).subscribe(data => { 
+      this.getOwnedQueries();
+    });
+  }
+
+  enable(row){
+    this._freeFormReport.enable(row.id).subscribe(data => { 
+      this.getOwnedQueries();
+    });
   }
   
 
