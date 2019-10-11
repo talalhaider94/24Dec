@@ -122,9 +122,9 @@ export class LandingPageComponent implements OnInit {
         return this.anni;
     }
 
-    details(contractpartyid) {
-        let params = { contractpartyid: contractpartyid, month:this.monthVar, year:this.yearVar };
-        window.open(`/#/dashboard/landing-page-details/?contractpartyid=${params.contractpartyid}&month=${params.month}&year=${params.year}`,"_self");
+    details(contractpartyid,contractpartyname) {
+        let params = { contractpartyid: contractpartyid, contractpartyname: contractpartyname, month:this.monthVar, year:this.yearVar };
+        window.open(`/#/dashboard/landing-page-details/?contractpartyid=${params.contractpartyid}&contractpartyname=${params.contractpartyname}&month=${params.month}&year=${params.year}`,"_self");
     }
 
     setThreshold() {

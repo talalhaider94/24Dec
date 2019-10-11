@@ -54,4 +54,12 @@ export class FreeFormReportService {
         const params = `${environment.API_URL}/data/DeleteReportQuery?id=${id}`;
         return this.http.get(params);
     }
+    disable(id): Observable<any> {
+        const disableEndPoint = `${environment.API_URL}/data/EnableDisableReportQuery?id=${id}&isenable=false`;
+        return this.http.get(disableEndPoint);
+    }
+    enable(id): Observable<any> {
+        const enableEndPoint = `${environment.API_URL}/data/EnableDisableReportQuery?id=${id}&isenable=true`;
+        return this.http.get(enableEndPoint);
+    }
 }
