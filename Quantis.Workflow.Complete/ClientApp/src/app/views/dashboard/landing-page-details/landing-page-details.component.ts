@@ -57,6 +57,7 @@ export class LandingPageDetailsComponent implements OnInit {
     monthVar: any;
     month: any;
     yearVar: any;
+    contractpartyname: any;
     count = 0;
     thresholdvalue = 0;
     constructor(
@@ -66,9 +67,11 @@ export class LandingPageDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.queryParams = this.route.snapshot.queryParamMap['params'];
-        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.month, this.queryParams.year);
+        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
+        this.queryParams.month, this.queryParams.year);
 
         this.thresholdvalue = 0;
+        this.contractpartyname = this.queryParams.contractpartyname;
         this.month = moment().format('MMMM');
         //this.monthVar = moment().format('MM');
         //this.yearVar = moment().format('YYYY');

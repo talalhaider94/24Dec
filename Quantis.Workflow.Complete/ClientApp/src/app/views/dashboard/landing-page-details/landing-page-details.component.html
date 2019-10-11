@@ -1,10 +1,10 @@
 <div class="content-wrapper">
     <section class="content-header">
 
-        <h2>
-            <small>Contratti</small>
+        <h4>
+            <small>{{contractpartyname}}</small>
             <!-- <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small> -->
-        </h2>
+        </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
         <div class="row pull-right col-md-4" style="margin-top:-30px">
@@ -42,7 +42,7 @@
             <!-- Left col class= "box box-danger box-solid" 
             [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
-                <div [ngClass]="(row.complaintkpis >= row.noncomplaintkpis)?'box box-success box-solid':'box box-danger box-solid'">
+                <div [ngClass]="(row.noncomplaintkpis == 0)?'box box-success box-solid':'box box-danger box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
@@ -93,7 +93,7 @@
                             </ul>
                           </div>
                         </div> -->
-                        <div [hidden]="row.complaintkpis < row.noncomplaintkpis" class="box box-default box-solid" style="border: 1px solid #999">
+                        <div [hidden]="row.noncomplaintkpis > 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
@@ -103,14 +103,14 @@
                                     <tr>
                                       <th style="width: 10px; padding-left:10px">#</th>
                                       <th style="padding-left:10px">KPI</th>
-                                      <th style="padding-left:10px">Result</th>
+                                      <!-- <th style="padding-left:10px">Result</th> -->
                                       <th style="width: 40px; padding-left:50px">Valore</th>
                                       <th style="width: 40px">Target</th>
                                     </tr>
                                     <tr *ngFor="let b of row.bestkpis; index as j">
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
-                                        <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
@@ -119,7 +119,7 @@
                             <!-- /.box-body -->
                         </div>
 
-                        <div [hidden]="row.complaintkpis >= row.noncomplaintkpis" class="box box-default box-solid" style="border: 1px solid #999">
+                        <div [hidden]="row.noncomplaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>
@@ -129,14 +129,14 @@
                                     <tr>
                                         <th style="width: 10px; padding-left:10px">#</th>
                                         <th style="padding-left:10px">KPI</th>
-                                        <th style="padding-left:10px">Result</th>
+                                        <!-- <th style="padding-left:10px">Result</th> -->
                                         <th style="width: 40px; padding-left:50px">Valore</th>
                                         <th style="width: 40px">Target</th>
                                     </tr>
                                     <tr *ngFor="let b of row.worstkpis; index as j">
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
-                                        <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
