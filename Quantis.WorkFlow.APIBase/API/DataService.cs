@@ -1547,6 +1547,47 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public List<LogDTO> GetLogs(int limit)
+        {
+            try
+            {
+                if (limit <= 0) { limit = 10; }
+                var resultList = new List<LogDTO>();
+                string query = "select * from t_exceptions order by 1 desc LIMIT :limit";
+                using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con.Open();
+                    var command = new NpgsqlCommand(query, con);
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(":limit", limit);
+                    _dbcontext.Database.OpenConnection();
+                    var currentPeriod = DateTime.Now.AddMonths(-8).ToString("MM/yy");
+                    var previousPeriod = DateTime.Now.AddMonths(-9).ToString("MM/yy");
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            LogDTO log = new LogDTO();
+                            log.id = reader.IsDBNull(reader.GetOrdinal("id")) ? 0 : reader.GetInt32(reader.GetOrdinal("id"));
+                            log.message = reader.IsDBNull(reader.GetOrdinal("message")) ? null : reader.GetString(reader.GetOrdinal("message"));
+                            log.innerexceptions = reader.IsDBNull(reader.GetOrdinal("innerexceptions")) ? null : reader.GetString(reader.GetOrdinal("innerexceptions"));
+                            log.stacktrace = reader.IsDBNull(reader.GetOrdinal("stacktrace")) ? null : reader.GetString(reader.GetOrdinal("stacktrace"));
+                            log.loglevel = reader.IsDBNull(reader.GetOrdinal("loglevel")) ? null : reader.GetString(reader.GetOrdinal("loglevel"));
+                            log.ex_timestamp = reader.IsDBNull(reader.GetOrdinal("ex_timestamp")) ? new DateTime(0) : reader.GetDateTime(reader.GetOrdinal("ex_timestamp"));
+
+                            resultList.Add(log);
+                        }
+                    }
+                    return resultList;
+                }
+                
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
         public DistributionPslDTO GetDistributionByContract(string period, int sla_id)
         {
             try

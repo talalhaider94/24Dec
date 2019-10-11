@@ -23,6 +23,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormUsersDTO> GetAllFormUsers(int formId, int userId);
 
         List<FormsFromCatalogDTO> GetFormsFromCatalog(int userid, bool isSecurityMember, int fakeUserID, string type);
+        List<LogDTO> GetLogs(int limit);
 
         bool SecurityMembers(int userId);
 
