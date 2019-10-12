@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { ApiService } from '../../../_services/api.service';
+import { ApiService } from '../../../_services';
+import { chartExportTranslations } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -72,14 +73,7 @@ export class BSIReportComponent implements OnInit {
     highcharts = Highcharts;
     cartellaList : any = [];
     chartOptions = {
-        lang: {
-            downloadJPEG: 'Download JPEG image',
-            downloadPDF: 'Download PDF document',
-            downloadPNG: 'Download PNG image',
-            downloadSVG: 'Download SVG vector image',
-            viewFullscreen: 'View Full Screen',
-            printChart: 'Print Chart'
-        },
+        lang: chartExportTranslations,
         credits: false,
         title: {
             text: 'BSI Report'

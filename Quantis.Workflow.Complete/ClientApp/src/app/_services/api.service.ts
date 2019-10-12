@@ -4,7 +4,6 @@ import { tap } from 'rxjs/operators';
 import Headers from '../_helpers/headers';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root'

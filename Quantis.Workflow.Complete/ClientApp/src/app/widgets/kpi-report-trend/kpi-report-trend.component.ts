@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
@@ -32,14 +32,7 @@ export class KpiReportTrendComponent implements OnInit {
 
     highcharts = Highcharts;
     chartOptions = {
-        lang: {
-            downloadJPEG: 'Download JPEG',
-            downloadPDF: 'Download PDF',
-            downloadPNG: 'Download PNG',
-            downloadSVG: 'Download SVG',
-            viewFullscreen: 'Vedi in full screen',
-            printChart: 'Stampa'
-        },
+        lang: chartExportTranslations,
         credits: false,
         title: {
             text: 'KPI Report Trend'
