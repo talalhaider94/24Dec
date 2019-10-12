@@ -1,10 +1,10 @@
 <div class="content-wrapper">
     <section class="content-header">
 
-        <h2>
+        <h4>
             <small>Contraenti</small>
             <!-- <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small> -->
-        </h2>
+        </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
         <div class="row pull-right col-md-3" style="margin-top:-30px">
@@ -46,7 +46,7 @@
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
                 <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><a (click)="details(row.contractpartyid)">{{row.contractpartyname}}</a></h3>
+                        <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
                     </div>
                     <div class="box-body">
@@ -83,8 +83,8 @@
                                         <a href="#">
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
-                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': row.complaintkpis + '%' }" style="height:100%">{{row.complaintkpis}}</div>
-                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': row.noncomplaintkpis + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
                                         </a>
                                     </li>

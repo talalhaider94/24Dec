@@ -1,8 +1,8 @@
 <p class="float-left no-drag">
-    <input type="text" *ngIf="editWidgetName" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
-    <span *ngIf="!editWidgetName"> {{ widgetname }}</span>
+    <input type="text" *ngIf="isDashboardModeEdit" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
+    <span *ngIf="!isDashboardModeEdit"> {{ widgetname }}</span>
 </p>
-<button type="button" [disabled]="loading" *ngIf="!editWidgetName"
+<button type="button" [disabled]="loading" *ngIf="!isDashboardModeEdit"
         class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
     <i class="fa fa-cog"></i>
 </button>
@@ -13,6 +13,7 @@
 <div class="card text-white bg-success mt-3">
     <div class="card-body p-3 text-center">
         <div class="h1">{{ sumKPICount }}</div>
-        <b>{{ widgetTitle }}</b>
+        <p class="font-12 mb-1"><b>Measure: </b>{{ measure }}</p>
+        <p class="font-12 mb-1"><b>Period: </b>{{ period }}</p>
     </div>
 </div>

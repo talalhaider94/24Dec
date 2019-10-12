@@ -159,7 +159,7 @@
                     </select>
                   </div>
                 </span>
-                <span *ngIf="barChartWidgetParameters.showdaterangefilter">
+                <!-- <span *ngIf="barChartWidgetParameters.showdaterangefilter"> -->
                   <div class="form-group form-check">
                     <input type="checkbox" formControlName="includeCurrentMonth" class="form-check-input"
                       id="exampleCheck1">
@@ -175,7 +175,7 @@
                       </option>
                     </select>
                   </div>
-                </span>
+                <!-- </span> -->
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">
                     <!-- Date Range = Start Date - End Date -->
@@ -196,13 +196,11 @@
                     </div>
                   </div>
                 </span>
-                <!-- <span *ngIf="showDateInFilters"> -->
                 <div class="form-group" *ngIf="barChartWidgetParameters.showdatefilter">
                   <label for="date">Seleziona la data</label><!-- Select Date -->
                   <input type="text" formControlName="date" placeholder="Pick Date" class="form-control" bsDatepicker
                     [bsConfig]="{ dateInputFormat: 'MM/YYYY', minMode: 'month' }">
                 </div>
-                <!-- </span> -->
               </div>
             </tab>
             <!-- HELP -->

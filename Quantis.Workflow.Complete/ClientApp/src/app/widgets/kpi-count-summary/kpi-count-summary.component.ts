@@ -11,41 +11,6 @@ import { DashboardService, EmitterService } from '../../_services';
     styleUrls: ['./kpi-count-summary.component.scss']
 })
 export class KpiCountSummaryComponent implements OnInit {
-    // barChart1
-    public barChart1Data: Array<any> = [
-        {
-            data: [78, 81, 80, 45, 34, 12, 40, 78, 81, 80, 45, 34, 12, 40, 12, 40],
-            label: 'Series A'
-        }
-    ];
-    public barChart1Labels: Array<any> = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
-    public barChart1Options: any = {
-        tooltips: {
-            enabled: false,
-            custom: CustomTooltips
-        },
-        maintainAspectRatio: false,
-        scales: {
-            xAxes: [{
-                display: false,
-                barPercentage: 0.6,
-            }],
-            yAxes: [{
-                display: false
-            }]
-        },
-        legend: {
-            display: false
-        }
-    };
-    public barChart1Colours: Array<any> = [
-        {
-            backgroundColor: 'rgba(255,255,255,.3)',
-            borderWidth: 0
-        }
-    ];
-    public barChart1Legend = false;
-    public barChart1Type = 'bar';
     // INPUT,OUTPUT PARAMS START
     @Input() widgetname: string;
     @Input() url: string;
@@ -54,12 +19,14 @@ export class KpiCountSummaryComponent implements OnInit {
     @Input() widgetid: number;
     @Input() dashboardid: number;
     @Input() id: number;
-    loading: boolean = true;
+    loading: boolean = false;
     kpiCountSummaryWidgetParameters: any;
     setWidgetFormValues: any;
-    editWidgetName: boolean = true;
+    isDashboardModeEdit: boolean = true;
     sumKPICount: number = 0;
-    widgetTitle: string = 'Count Summary';
+    measure: string = 'Count Summary';
+    allMeasuresObj: {number:string};
+    period: string;
     @Output() kpiCountSummaryParent = new EventEmitter<any>();
     // INPUT, OUTPUT PARAMS END
     constructor(
@@ -71,16 +38,16 @@ export class KpiCountSummaryComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        console.log('KpiCountSummary ==>', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         if (this.router.url.includes('dashboard/public')) {
-            this.editWidgetName = false;
+            this.isDashboardModeEdit = false;
+            if (this.url) {
+                this.emitter.loadingStatus(true);
+                this.getChartParametersAndData(this.url);
+            }
+            // coming from dashboard component
+            this.subscriptionForDataChangesFromParent();
         }
-        console.log('KpiCountSummaryComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
-        if (this.url) {
-            this.emitter.loadingStatus(true);
-            this.getChartParametersAndData(this.url);
-        }
-        // coming from dashboard component
-        this.subscriptionForDataChangesFromParent();
     }
 
     subscriptionForDataChangesFromParent() {
@@ -91,6 +58,8 @@ export class KpiCountSummaryComponent implements OnInit {
                 if (currentWidgetId === this.id) {
                     // updating parameter form widget setValues
                     let kpiCountSummaryFormValues = data.kpiCountSummaryWidgetParameterValues;
+                    this.measure = this.allMeasuresObj[data.kpiCountSummaryWidgetParameterValues.Properties.measure];
+                    this.period = data.kpiCountSummaryWidgetParameterValues.Filters.date;
                     if (kpiCountSummaryFormValues.Filters.daterange) {
                         kpiCountSummaryFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountSummaryFormValues.Filters.daterange);
                     }
@@ -105,12 +74,16 @@ export class KpiCountSummaryComponent implements OnInit {
     getChartParametersAndData(url) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
+        this.loading = true;
         let myWidgetParameters = null;
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
+                this.allMeasuresObj = myWidgetParameters.measures;
                 // Map Params for widget index when widgets initializes for first time
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                this.measure = this.allMeasuresObj[newParams.Properties.measure];
+                this.period = newParams.Filters.date;
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
@@ -150,7 +123,7 @@ export class KpiCountSummaryComponent implements OnInit {
     }
 
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-        this.sumKPICount = chartIndexData.yvalue;
+        this.sumKPICount = chartIndexData.yvalue || 0;
         this.closeModal();
     }
 
@@ -167,8 +140,6 @@ export class KpiCountSummaryComponent implements OnInit {
     }
 
     openModal() {
-        console.log('OPEN MODAL KPI SUMMARY COUNT PARAMS', this.kpiCountSummaryWidgetParameters);
-        console.log('OPEN MODAL KPI SUMMARY COUNT VALUES', this.setWidgetFormValues);
         this.kpiCountSummaryParent.emit({
             type: 'openKpiSummaryCountModal',
             data: {
