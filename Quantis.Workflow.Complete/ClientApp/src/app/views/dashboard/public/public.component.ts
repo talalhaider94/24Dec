@@ -457,7 +457,6 @@ export class PublicComponent implements OnInit {
 		this.loadingModalForm = true;
 		this.emitter.loadingStatus(true);
 		let formValues = this.widgetParametersForm.value;
-		debugger
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
@@ -475,7 +474,10 @@ export class PublicComponent implements OnInit {
 			formValues.Filters.daterange = null;
 		}
 		if (formValues.Filters.date) {
-			formValues.Filters.date = this.dateTime.moment(formValues.Filters.date).format('MM/YYYY');
+			if(typeof formValues.Filters.date !== 'string') {
+				formValues.Filters.date = this.dateTime.moment(formValues.Filters.date).format('MM/YYYY');
+			}
+			delete formValues.Filters.daterange;	
 		}
 
 		delete formValues.Filters.includeCurrentMonth;

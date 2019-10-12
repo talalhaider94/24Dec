@@ -33,12 +33,12 @@ export class KpiReportTrendComponent implements OnInit {
     highcharts = Highcharts;
     chartOptions = {
         lang: {
-            downloadJPEG: 'Download JPEG image',
-            downloadPDF: 'Download PDF document',
-            downloadPNG: 'Download PNG image',
-            downloadSVG: 'Download SVG vector image',
-            viewFullscreen: 'View Full Screen',
-            printChart: 'Print Chart'
+            downloadJPEG: 'Download JPEG',
+            downloadPDF: 'Download PDF',
+            downloadPNG: 'Download PNG',
+            downloadSVG: 'Download SVG',
+            viewFullscreen: 'Vedi in full screen',
+            printChart: 'Stampa'
         },
         credits: false,
         title: {

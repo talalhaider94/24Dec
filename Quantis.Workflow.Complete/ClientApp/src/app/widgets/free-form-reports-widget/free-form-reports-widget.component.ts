@@ -137,6 +137,8 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
                 // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                console.log('getReportQueryDetailByID', getReportQueryDetailByID)
+                debugger
                 const buildIndexParams = {
                     Properties: {
                         measure: getReportQueryDetailByID.id,
@@ -175,7 +177,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 const chartIndexData = getWidgetIndex.body;
                 // third params is current widgets settings current only used when
                 // widgets loads first time. may update later for more use cases
-                this.updateChart(chartIndexData, null, freeFormReportParams.data);
+                // this.updateChart(chartIndexData, null, freeFormReportParams.data);
             }
             this.loading = false;
             this.emitter.loadingStatus(false);
