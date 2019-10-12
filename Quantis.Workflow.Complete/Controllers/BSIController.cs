@@ -46,5 +46,10 @@ namespace Quantis.Workflow.Complete.Controllers
             //var user = HttpContext.User as AuthUser;
             return _bsiAPI.GetReportDetail("sadmin", reportId);
         }
+        [HttpGet("GetAllUserReports")]
+        public List<BSIUserFolderDTO> GetAllUserReports()
+        {
+            return _bsiAPI.GetAllUserReports();
+        }
     }
 }

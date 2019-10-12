@@ -5,6 +5,7 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.Framework;
 using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Complete.Controllers
@@ -260,6 +261,27 @@ namespace Quantis.WorkFlow.Complete.Controllers
         public List<UserProfilingDTO> GetUserProfilingCSV()
         {
             return _infomationAPI.GetUserProfilingCSV();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("AddUpdateUserSettings")]
+        public void AddUpdateUserSettings(string key, string value)
+        {
+            var user = HttpContext.User as AuthUser;
+            _infomationAPI.AddUpdateUserSettings(user.UserId, key, value);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetUserSetting")]
+        public string GetUserSetting(string key)
+        {
+            var user = HttpContext.User as AuthUser;
+            return _infomationAPI.GetUserSetting(user.UserId, key);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllUserSettings")]
+        public List<KeyValuePair<string, string>> GetAllUserSettings()
+        {
+            var user = HttpContext.User as AuthUser;
+            return _infomationAPI.GetAllUserSettings(user.UserId);
         }
     }
 }

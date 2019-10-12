@@ -102,6 +102,41 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public void AddUpdateUserSettings(int userId,string key,string value)
+        {
+            var settings = _dbcontext.UserSettings.FirstOrDefault(o => o.user_id == userId && o.key == key);
+            if (settings == null)
+            {
+                var setting = new T_UserSetting()
+                {
+                    key = key,
+                    value = value,
+                    user_id = userId
+                };
+                _dbcontext.UserSettings.Add(setting);
+                _dbcontext.SaveChanges();
+            }
+            else
+            {
+                settings.value = value;
+                _dbcontext.SaveChanges();
+            }
+        }
+        public string GetUserSetting(int userId,string key)
+        {
+            var setting= _dbcontext.UserSettings.FirstOrDefault(o => o.user_id == userId && o.key == key);
+            if (setting != null)
+            {
+                return setting.value;
+            }
+            return null;
+        }
+        public List<KeyValuePair<string,string>> GetAllUserSettings(int userId)
+        {
+            var settings = _dbcontext.UserSettings.Where(o => o.user_id == userId);
+            return settings.Select(o => new KeyValuePair<string, string>(o.key, o.value)).ToList();
+        }
+
         public void DeleteConfiguration(string owner, string key)
         {
             try
