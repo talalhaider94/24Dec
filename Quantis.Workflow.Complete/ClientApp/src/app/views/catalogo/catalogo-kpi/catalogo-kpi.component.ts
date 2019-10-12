@@ -581,7 +581,7 @@ export class CatalogoKpiComponent implements OnInit {
             // headers.push(header); // original code
             if (text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
         });
-        csv += headers.join(',') + "\n";
+        csv += headers.join('|') + "\r\n";
 
         // get table data
         if (exportmode == "full") { // total data
@@ -591,10 +591,10 @@ export class CatalogoKpiComponent implements OnInit {
                 $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i, e) => {
                     var $td = $(e);
                     var text = $td.text();
-                    var cell = '' + text + '';
+                    var cell = '"' + text + '"';
                     row.push(cell);
                 })
-                rows.push(row);
+                rows.push(row.join('|'));
                 // SOL:1
                 // let row = oTable.row(i).data();
                 // row = $this.strip_tags(row);
@@ -614,7 +614,8 @@ export class CatalogoKpiComponent implements OnInit {
                 rows.push(row);
             })
         }
-        csv += rows.join("\n");
+        debugger;
+        csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "ExportKPITable.csv");
     }

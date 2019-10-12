@@ -27,7 +27,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of AllNormalReportsData; index as i">
-        <td><span [hidden]="true">{{i}}</span> {{row.foldername}}</td>
+        <td><span [hidden]="true">{{i}}</span>{{row.foldername}}</td>
         <td>{{row.itemname}}</td>
         <td>{{row.reporttype}}</td>
         <td>{{row.modifieddate | date:'MM/dd/yyyy, hh:mm a'}}</td>

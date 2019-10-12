@@ -40,6 +40,7 @@ export class FreeFormReportComponent implements OnInit {
   debugCount=0;
   hideData=0;
   parameterCount=0;
+  disableId=0;
   assignedUsers = [];
   params = {
     id: 0,
@@ -335,6 +336,7 @@ export class FreeFormReportComponent implements OnInit {
   getOwnedQueries(){
     this._freeFormReport.getOwnedReportQueries().subscribe(data => {
       this.ownedReportQueries = data;
+      this.rerender();
     });
   }
   
@@ -539,6 +541,18 @@ export class FreeFormReportComponent implements OnInit {
       this.toastr.error('Errore in query execution', 'Error');
     });
     this.hideParametersModal();
+  }
+
+  disable(row){
+    this._freeFormReport.disable(row.id).subscribe(data => { 
+      this.getOwnedQueries();
+    });
+  }
+
+  enable(row){
+    this._freeFormReport.enable(row.id).subscribe(data => { 
+      this.getOwnedQueries();
+    });
   }
   
 
