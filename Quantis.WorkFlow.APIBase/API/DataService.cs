@@ -2160,7 +2160,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public List<ReportQueryLVDTO> GetOwnedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId && o.is_enable);
+            var entities = _dbcontext.ReportQueries.Include(o => o.Parameters).Where(o => o.owner_id == userId);
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
