@@ -1,4 +1,5 @@
-import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChild, HostListener, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
@@ -96,11 +97,22 @@ export class PublicComponent implements OnInit {
 		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService,
-		private _$localeService: BsLocaleService
+		private _$localeService: BsLocaleService,
+		@Inject(DOCUMENT) private document: Document
 	) {
 		this._$localeService.use('it');
 	}
-
+	
+	@HostListener('window:scroll', [])
+    onWindowScroll() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+			document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+			document.getElementById('widgetsList').classList.add('w-95p');
+        } else {
+			document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+			document.getElementById('widgetsList').classList.remove('w-95p');
+        }
+    }
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
