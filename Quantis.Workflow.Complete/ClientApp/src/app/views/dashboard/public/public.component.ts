@@ -106,11 +106,11 @@ export class PublicComponent implements OnInit {
 	@HostListener('window:scroll', [])
     onWindowScroll() {
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-			document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
-			document.getElementById('widgetsList').classList.add('w-95p');
+			this.document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+			this.document.getElementById('widgetsList').classList.add('w-95p');
         } else {
-			document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
-			document.getElementById('widgetsList').classList.remove('w-95p');
+			this.document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+			this.document.getElementById('widgetsList').classList.remove('w-95p');
         }
     }
 	showWidgetsModalAndSetFormValues(childData, identifier) {

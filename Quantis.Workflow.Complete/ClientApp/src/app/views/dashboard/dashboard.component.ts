@@ -69,9 +69,9 @@ export class DashboardComponent implements OnInit {
     @HostListener('window:scroll', [])
     onWindowScroll() {
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-            document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+            this.document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
         } else {
-            document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+            this.document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
         }
     }
 
