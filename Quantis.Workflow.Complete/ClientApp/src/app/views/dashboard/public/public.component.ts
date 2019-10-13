@@ -70,7 +70,6 @@ export class PublicComponent implements OnInit {
 	];
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
-	showDateInFilters: boolean = false;
 	showCustomDate: boolean = false;
 
 	isBarChartComponent: boolean = false;
@@ -233,10 +232,14 @@ export class PublicComponent implements OnInit {
 				endDate: [null],
 				dateTypes: [null],
 				date: [null],
-				includeCurrentMonth: [false],
 				contractParties: [null],
 				contracts: [{ value: null }],
-				kpi: [{ value: null }]
+				kpi: [{ value: null }],
+				incompletePeriod: [false],
+				groupReportCheck: [false],
+				contractParties1: [null],
+				contracts1: [{ value: null }],
+				kpi1: [{ value: null }],
 			}),
 			// Note: [null],
 		});
@@ -291,11 +294,12 @@ export class PublicComponent implements OnInit {
 			console.log('Date Type Filter', value);
 			if (value === '0') {
 				this.showDateRangeInFilters = true;
-				this.showDateInFilters = true;
 			} else {
 				this.showDateRangeInFilters = false;
-				this.showDateInFilters = false;
 			}
+		});
+		this.widgetParametersForm.get('Filters').get('groupReportCheck').valueChanges.subscribe((value) => {
+			debugger
 		});
 		this.closeModalSubscription();
 	}
@@ -456,14 +460,14 @@ export class PublicComponent implements OnInit {
 	onWidgetParametersFormSubmit() {
 		this.loadingModalForm = true;
 		this.emitter.loadingStatus(true);
-		let formValues = this.widgetParametersForm.value;
+		const formValues = this.widgetParametersForm.value;
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
 			startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY');
 		} else {
-			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes, formValues.Filters.includeCurrentMonth);
+			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
@@ -480,7 +484,6 @@ export class PublicComponent implements OnInit {
 			delete formValues.Filters.daterange;	
 		}
 
-		delete formValues.Filters.includeCurrentMonth;
 		delete formValues.Filters.startDate;
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
@@ -493,8 +496,6 @@ export class PublicComponent implements OnInit {
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		if (formValues.Filters.hasOwnProperty('contractParties')) {
-			delete formValues.Filters.contractParties;
-			delete formValues.Filters.contracts;
 			if (formValues.Filters.hasOwnProperty('kpi')) {
 				formValues.Filters.kpi = formValues.Filters.kpi.toString();
 			} else {
@@ -513,6 +514,7 @@ export class PublicComponent implements OnInit {
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, submitFormValues);
 		const { url } = this.barChartWidgetParameters;
+		debugger
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
