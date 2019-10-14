@@ -42,7 +42,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var list = myreports.Nodes[1].Element("Result").Elements();
             Logout(session);
             var reports = parseReports(list);
-            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
+            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "GROUP").ToList();
         }
 
         public List<BSIUserFolderDTO> GetAllUserReports()
@@ -92,7 +92,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var list = myreports.Nodes[1].Element("Result").Elements();
             Logout(session);
             var reports = parseReports(list);
-            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
+            return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "GROUP").ToList();
         }
 
         public BSIReportMainDTO GetReportDetail(string userName, int reportId)
@@ -101,10 +101,21 @@ namespace Quantis.WorkFlow.APIBase.API
             results.Reports = new List<BSIReportDetailDTO>();
             var session = Login(userName);
             var report = _reportService.GetReportDataAsync(session, reportId, 0, 100, 100).Result;
-            results.Name = report.Elements().FirstOrDefault().Element("NAME").Value;
-            results.ResultType = report.Attribute("TYPE").Value;
+            results.ResultType = report.Attribute("TYPE").Value;                                
             Logout(session);
+            if (results.ResultType == "GROUP")
+            {
+                results.Name = report.Elements().FirstOrDefault().Value;
+            }
+            else
+            {
+                results.Name = report.Elements().FirstOrDefault().Element("NAME").Value;
+            }
             var baseElements = report.Elements().FirstOrDefault().Elements("ITEM");
+            if (results.ResultType == "GROUP")
+            {
+                baseElements = report.Elements("ITEM").SelectMany(o=>o.Elements("ITEM"));
+            }
             foreach (var baseElement in baseElements)
             {
                 var result = new BSIReportDetailDTO();

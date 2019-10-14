@@ -39,12 +39,12 @@ namespace Quantis.Workflow.Complete.Controllers
             return _bsiAPI.GetAllNormalReports(user.UserName);
         }
 
-        //[Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetReportDetail")]
         public BSIReportMainDTO GetReportDetail(int reportId)
         {
-            //var user = HttpContext.User as AuthUser;
-            return _bsiAPI.GetReportDetail("sadmin", reportId);
+            var user = HttpContext.User as AuthUser;
+            return _bsiAPI.GetReportDetail(user.UserName, reportId);
         }
         [HttpGet("GetAllUserReports")]
         public List<BSIUserFolderDTO> GetAllUserReports()

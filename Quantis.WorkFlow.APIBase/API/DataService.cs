@@ -2198,6 +2198,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Id = entity.id,
                     QueryName = entity.query_name,
                     QueryText = entity.query_text,
+                    OwnerId=entity.owner_id,
                     Parameters = entity.Parameters.Select(p => new KeyValuePairDTO()
                     {
                         Key = p.parameter_key,
