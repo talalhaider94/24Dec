@@ -387,7 +387,13 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<ContractPartyContractDTO> GetAllContractPartiesContracts()
         {
             var res = new List<ContractPartyContractDTO>();
-            string query = "select m.sla_id,m.sla_name,c.customer_name,c.customer_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'";
+            string query = @"select m.sla_id,m.sla_name,c.customer_name,c.customer_id, round( avg(ck.day_cutoff)),round(avg(ck.day_workflow),0)
+                            from t_rules r 
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id 
+                            inner join t_catalog_kpis ck on r.global_rule_id=ck.global_rule_id_bsi
+                            left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            group by m.sla_id,m.sla_name,c.customer_name,c.customer_id";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
@@ -403,7 +409,9 @@ namespace Quantis.WorkFlow.APIBase.API
                             ContractName = (string)result[1],
                             ContractId = Decimal.ToInt32((Decimal)result[0]),
                             ContractPartyId = (int)result[3],
-                            ContractPartyName = (string)result[2]
+                            ContractPartyName = (string)result[2],
+                            DayCuttOff= Decimal.ToInt32((Decimal)result[4]),
+                            DayWorkflow= Decimal.ToInt32((Decimal)result[5])
                         });
                     }
                 }
