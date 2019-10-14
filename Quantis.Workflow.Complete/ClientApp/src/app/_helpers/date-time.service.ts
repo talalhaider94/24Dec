@@ -41,15 +41,10 @@ export class DateTimeService {
     return dateRangeArray;
   }
 
-  timePeriodRange(rangeType, includeCurrentMonth) {
-    // includeCurrentMonth if true include current month in date range
+  timePeriodRange(rangeType) {
     let startDate;
     let endDate;
-    if(includeCurrentMonth) {
-      startDate = moment().format('MM/YYYY');
-    } else {
-      startDate = moment().subtract(1, 'months').format('MM/YYYY');
-    }
+    startDate = moment().format('MM/YYYY');
     if(rangeType === '2') {
       endDate = moment().subtract(2, 'months').format('MM/YYYY');
     } else if(rangeType === '3') {
