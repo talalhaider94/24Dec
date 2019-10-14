@@ -116,7 +116,7 @@ export class LandingPageComponent implements OnInit {
     anni = [];
     //+(moment().add('months', 6).format('YYYY'))
     getAnno() {
-        for (var i = 2016; i <= +(moment().add('months', 7).format('YYYY')); i++) {
+        for (var i = 2016; i <= +(moment().add(7,'months').format('YYYY')); i++) {
             this.anni.push(i);
         }
         return this.anni;

@@ -60,12 +60,14 @@ export class LandingPageDetailsComponent implements OnInit {
     contractpartyname: any;
     count = 0;
     thresholdvalue = 0;
+    setThresholdValue = 0;
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
+        this.setThresholdValue=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
         console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
         this.queryParams.month, this.queryParams.year);
@@ -124,6 +126,7 @@ export class LandingPageDetailsComponent implements OnInit {
 
     setThreshold() {
         console.log(this.thresholdvalue);
+        this.setThresholdValue=1;
         this.hideThresholdModal();
     }
 
