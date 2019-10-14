@@ -561,8 +561,6 @@ export class FreeFormReportComponent implements OnInit {
   disable(row){
     this._freeFormReport.disable(row.id).subscribe(data => { 
       this.getOwnedQueries();
-      this.isDisabled=row.id;
-      this.isEnabled=0;
       this.toastr.success('Query disabled');
     }, error => {
         this.toastr.error('Error in disabling query');
@@ -572,8 +570,6 @@ export class FreeFormReportComponent implements OnInit {
   enable(row){
     this._freeFormReport.enable(row.id).subscribe(data => { 
       this.getOwnedQueries();
-      this.isEnabled=row.id;
-      this.isDisabled=0;
       this.toastr.success('Query enabled');
     }, error => {
         this.toastr.error('Error in enabling query');
