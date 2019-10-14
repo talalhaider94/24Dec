@@ -2168,7 +2168,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerId = e.owner_id,
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
-                ParameterCount = e.Parameters.Count
+                ParameterCount = e.Parameters.Count,
+                IsEnabled=e.is_enable
             });
             return dtos.ToList();
         }
