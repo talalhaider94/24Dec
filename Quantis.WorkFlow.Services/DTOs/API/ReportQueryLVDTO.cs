@@ -9,6 +9,7 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
         public int ParameterCount { get; set; }
+        public bool IsEnabled { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 }

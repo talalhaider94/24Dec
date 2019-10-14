@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoadingFormComponent } from './loading-form.component';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.component';
+import { LoadingFormCsvComponent } from './loading-form-csv/loading-form-csv.component';
 import { LoadingFormUserNotTrackingComponent } from './loading-form-user-nottracking/loading-form-user-nottracking.component';
 import { LoadingFormSecurityUserComponent } from './loading-form-securityuser/loading-form-securityuser.component';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
@@ -38,6 +39,13 @@ const routes: Routes = [
               component: LoadingFormUserNotTrackingComponent,
               data: {
                 title: 'LF diverso periodo'
+              }
+            },
+            {
+              path: 'utente-csv',
+              component: LoadingFormCsvComponent,
+              data: {
+                title: 'LF CSV'
               }
             },
             {

@@ -49,6 +49,7 @@ import { LoadingFormUserComponent } from './loading-form-user/loading-form-user.
 import { LoadingFormUserNotTrackingComponent } from './loading-form-user-nottracking/loading-form-user-nottracking.component';
 import { LoadingFormSecurityUserComponent } from './loading-form-securityuser/loading-form-securityuser.component';
 import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
+import { LoadingFormCsvComponent } from './loading-form-csv/loading-form-csv.component';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-adm
         LoadingFormUserComponent,
         LoadingFormSecurityUserComponent,
         LoadingFormUserNotTrackingComponent,
+        LoadingFormCsvComponent,
         LoadingFormAdminComponent],
     imports: [
         CommonModule,

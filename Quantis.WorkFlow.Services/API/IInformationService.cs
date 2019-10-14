@@ -72,5 +72,7 @@ namespace Quantis.WorkFlow.Services.API
         void AddUpdateUserSettings(int userId, string key, string value);
         string GetUserSetting(int userId, string key);
         List<KeyValuePair<string, string>> GetAllUserSettings(int userId);
+        List<ContractPartyContractDTO> GetAllContractPartiesContracts();
+        void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday);
     }
 }

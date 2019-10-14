@@ -408,7 +408,8 @@ namespace Quantis.WorkFlow.Controllers
         public void AddEditReportQuery([FromBody]ReportQueryDetailDTO dto)
         {
             var usr = (HttpContext.User) as AuthUser;
-            _dataAPI.AddEditReportQuery(dto, usr.UserId);
+
+            _dataAPI.AddEditReportQuery(dto, (dto.OwnerId>0)?dto.OwnerId: usr.UserId);
         }
 
         [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
