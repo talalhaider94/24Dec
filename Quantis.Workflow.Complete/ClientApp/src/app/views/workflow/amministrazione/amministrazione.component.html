@@ -101,11 +101,10 @@
 
 <div bsModal #editTicketModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog modal-success modal-md" role="document">
+    <div class="modal-dialog modal-success modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Ref. Number {{editTicketId}}</h4>
-                <p>{{ editTicketTarget }}</p>
+              <h4 class="modal-title">Edit ID: {{editTicketId}} - Ref: {{editTicketRef}} - {{ editTicketTarget }}</h4>
                 <button type="button" class="close" (click)="editTicketModal.hide()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -118,14 +117,14 @@
                                placeholder="Valore"
                                [ngClass]="{ 'is-invalid': submitted && editTicketValues.Value.errors }" />
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Value.errors && editTicketValues.Value.errors.required">Valore is required</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Value.errors && editTicketValues.Value.errors.required">Valore obbligatorio</span>
 
                     <div class="input-group mb-3">
                         <input type="text" formControlName="Sign" class="form-control"
                                placeholder="Unità di misura"
                                [ngClass]="{ 'is-invalid': submitted && editTicketValues.Sign.errors }" />
                     </div>
-                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Sign.errors && editTicketValues.Sign.errors.required">Unità di misura is required</span>
+                    <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Sign.errors && editTicketValues.Sign.errors.required">Unità di misura obbligatoria</span>
 
                     <div class="input-group mb-3">
                         <select class="form-control" formControlName="Type" [ngClass]="{ 'is-invalid': submitted && editTicketValues.Type.errors }">
@@ -135,7 +134,7 @@
                         </select>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Type.errors && editTicketValues.Type.errors.required">
-                        Type is required
+                        Tipo obbligatorio
                     </span>
 
                     <div class="input-group mb-3">
@@ -144,7 +143,7 @@
                                   placeholder="Nota" rows="3"></textarea>
                     </div>
                     <span class="text-danger mb-3" *ngIf="submitted && editTicketValues.Note.errors && editTicketValues.Note.errors.required">
-                        Note is required.
+                        Nota obbligatoria.
                     </span>
                     <div class="row">
                         <div class="col-6">

@@ -218,6 +218,18 @@ export class FreeFormReportComponent implements OnInit {
     this.Parameters.removeAt(id);   
   }
 
+  onKeydown(event) {
+    if (event.keyCode === 32 ) {
+      return false;
+    }
+  }
+
+  omit_special_char(event){   
+    var k;  
+    k = event.charCode;  //         k = event.keyCode;  (Both can be used)
+    return((k > 63 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57)); 
+  }
+
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTrigger2.next();

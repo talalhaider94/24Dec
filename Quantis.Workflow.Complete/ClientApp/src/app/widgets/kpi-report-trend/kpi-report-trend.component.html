@@ -1,16 +1,19 @@
 <p class="float-left no-drag" *ngIf="editWidgetName">
   <input type="text" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
 </p>
-<button type="button" [disabled]="loading" *ngIf="!editWidgetName" class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
+<button type="button" [disabled]="loading" *ngIf="!editWidgetName"
+  class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
   <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
 </div>
-<highcharts-chart [Highcharts]="highcharts"
-                  [options]="chartOptions"
-                  [(update)]="chartUpdateFlag"
-                  [oneToOne]="true"
-                  style="width: 100%; display: block;">
+
+<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
+  style="width: 50%; display: block; float: left;">
 </highcharts-chart>
+<!-- <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
+  style="width: 50%; display: block; float: right;">
+</highcharts-chart>
+<div class="clearfix"></div> -->

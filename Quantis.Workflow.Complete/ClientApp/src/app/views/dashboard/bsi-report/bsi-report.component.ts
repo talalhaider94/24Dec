@@ -68,6 +68,7 @@ export class BSIReportComponent implements OnInit {
     cartellaSelectOption : any;
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
+    OrignalNormalReportData:any = [];
     ReportDetailsData: any = [];
     chartUpdateFlag: boolean = true;
     highcharts = Highcharts;
@@ -147,6 +148,7 @@ export class BSIReportComponent implements OnInit {
         this.loading = true;
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.AllNormalReportsData = data;
+            this.OrignalNormalReportData = data;
             console.log('AllNormalReportsData -> ', data);
             // pushing foldername to dropdown
             data.forEach( (element) => {
@@ -177,19 +179,26 @@ export class BSIReportComponent implements OnInit {
     // search start
 
     setUpDataTableDependencies() {
+        let vm = this;
+
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
-
-
                 $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
-                      let searchTerm = $(this).val(),
-                          regex = '"'+searchTerm+'"';
 
-                        that
-                            .search(regex, false, true, false)
-                            .draw();
+                        /*let searchTerm = $(this).val(),
+                            regex = '"'+searchTerm+'"';
+
+                          that
+                              .search(regex, false, true, false)
+                              .draw();*/
+                        vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
+                        if($(this).val()){
+                          const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
+                          vm.AllNormalReportsData = filterFolder;
+                          // vm.rerender();
+                        }
                     });
             });
         });

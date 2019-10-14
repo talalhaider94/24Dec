@@ -64,6 +64,9 @@ export class WidgetHelpersService {
       if(filters.kpi) {
         buildParams.Filters.kpi = filters.kpi;
       }
+      if(!apiParams.showincompleteperiodcheck) {
+        buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
+      }
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);
@@ -71,6 +74,7 @@ export class WidgetHelpersService {
   }
 
   setWidgetParameters(apiParams, filters, properties) {
+    debugger
     // making it {} gives error temp giving it any type
     try {
       let buildParams: any = {};
@@ -129,6 +133,9 @@ export class WidgetHelpersService {
         buildParams.Filters.kpi = filters.kpi;
       }
       if(apiParams.getReportQueryDetailByID) {
+      }
+      if(!apiParams.showincompleteperiodcheck) {
+        buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
       }
       return buildParams;
     } catch (error) {
