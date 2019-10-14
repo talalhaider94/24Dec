@@ -402,7 +402,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         {
                             ContractName = (string)result[1],
                             ContractId = Decimal.ToInt32((Decimal)result[0]),
-                            ContractPartyId = Decimal.ToInt32((Decimal)result[3]),
+                            ContractPartyId = (int)result[3],
                             ContractPartyName = (string)result[2]
                         });
                     }
@@ -414,6 +414,25 @@ namespace Quantis.WorkFlow.APIBase.API
         public void AssignCuttoffWorkflowDayByContractId(int contractId,int daycuttoff,int workflowday)
         {
             string query = "select r.global_rule_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and m.sla_id=:sla_id";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":sla_id", contractId);
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        int globalRuleId=Decimal.ToInt32((Decimal)result[0]);
+                        var catalogKPI=_dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == globalRuleId);
+                        catalogKPI.day_cutoff = daycuttoff;
+                        catalogKPI.day_workflow = workflowday;
+                        _dbcontext.SaveChanges();
+                    }
+                }                
+            }
         }
         public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
         {
