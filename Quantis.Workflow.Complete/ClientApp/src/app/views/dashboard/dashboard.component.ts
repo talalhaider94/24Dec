@@ -69,9 +69,9 @@ export class DashboardComponent implements OnInit {
     @HostListener('window:scroll', [])
     onWindowScroll() {
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-            document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
+            this.document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
         } else {
-            document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
+            this.document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
         }
     }
 
@@ -413,10 +413,10 @@ export class DashboardComponent implements OnInit {
             case "catalog_pending_count_trends": {
                 let catalogWidget = this.widgetCollection.find(widget => widget.uiidentifier === 'catalog_pending_count_trends');
                 this.dashboardWidgetsArray.push({
-                    cols: 4,
-                    rows: 4,
-                    minItemCols: 2,
-                    minItemRows: 4,
+                    cols: 3,
+                    rows: 3,
+                    minItemCols: 3,
+                    minItemRows: 3,
                     x: 0,
                     y: 0,
                     component: CatalogPendingCountTrendsComponent,

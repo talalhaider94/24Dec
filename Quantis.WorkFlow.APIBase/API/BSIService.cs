@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BSI;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
@@ -13,10 +14,12 @@ namespace Quantis.WorkFlow.APIBase.API
     {
         private BSIAuth.OblicoreAuthSoapClient _authService = null;
         private BSIReports.ReportsSoapClient _reportService = null;
+        private readonly WorkFlowPostgreSqlContext _dbcontext;
         private readonly IConfiguration _configuration;
 
-        public BSIService(IConfiguration configuration)
+        public BSIService(IConfiguration configuration, WorkFlowPostgreSqlContext dbcontext)
         {
+            _dbcontext = dbcontext;
             _configuration = configuration;
             if (_authService == null)
             {
@@ -40,6 +43,42 @@ namespace Quantis.WorkFlow.APIBase.API
             Logout(session);
             var reports = parseReports(list);
             return reports.Where(o => o.ReportType == "NORMAL" || o.ReportType == "COMPOUND").ToList();
+        }
+
+        public List<BSIUserFolderDTO> GetAllUserReports()
+        {
+            var results = new List<BSIUserFolderDTO>();
+            var users = _dbcontext.TUsers.ToList();
+            foreach (var user in users)
+            {
+                try
+                {
+                    var username = user.user_name;
+                    var userContext = Login(username);
+                    var xmlResult = _reportService.GetFolderListAsync(userContext).Result;
+                    if (xmlResult.Nodes.Any())
+                    {
+                        var elems = xmlResult.Nodes[1].Element("Result").Elements();
+                        foreach (var elem in elems)
+                        {
+                            var result = new BSIUserFolderDTO();
+                            result.UserName = username;
+                            result.ReportID = int.Parse(elem.Element("ITEM_ID").Value);
+                            result.ReportName = elem.Element("ITEM_NAME").Value;
+                            result.UserId = int.Parse(elem.Element("USER_ID").Value);
+                            result.IsMyFolder = elem.Element("IS_MY_FOLDER").Value;
+                            results.Add(result);
+                        }
+                    }
+                    Logout(userContext);
+                }
+                catch (Exception e)
+                {
+
+                }                
+            }
+            return results;
+
         }
 
         public List<BSIReportLVDTO> GetAllNormalReports(string userName)

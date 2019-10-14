@@ -21,7 +21,7 @@ export class WidgetHelpersService {
       // buildParams.Note = '';
       // PROPERTIES
       if (apiParams.showmeasure) {
-        let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : '0';
+        let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : Object.keys(apiParams.measures)[0];
         // let value = Object.keys(apiParams.measures)[index];
         buildParams.Properties.measure = index;
       }
@@ -34,12 +34,21 @@ export class WidgetHelpersService {
         buildParams.Properties.aggregationoption = index;
       }
       // FILTERS
-      if (apiParams.showdaterangefilter) {
-        if (apiParams.showdatetype) {
-          // need to change it base on key error might be in filters.dateTypes
-          let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
-          buildParams.Filters.dateTypes = dateType;
+      if (apiParams.showdatetype) {
+        // need to change it base on key error might be in filters.dateTypes
+        let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
+        buildParams.Filters.dateTypes = dateType;
+      }
+      if (apiParams.showdatefilter) {
+        let date;
+        if (!!filters.date) {
+          date = filters.date;
+         } else {
+          date = '01/2019';
         }
+        buildParams.Filters.date = date;
+      }
+      if (apiParams.showdaterangefilter) {
         // dateTypes custom condition may be needed
         // if defaultdaterange is null need to write custom method for it.
         let dateRangeValue;
@@ -50,11 +59,13 @@ export class WidgetHelpersService {
         } else {
           dateRangeValue = '01/2019-12/2019';
         }
-        //  (!!filters.daterange) ? filters.daterange : (!!apiParams.defaultdaterange) ? apiParams.defaultdaterange : '01/2019-12/2019';
         buildParams.Filters.daterange = dateRangeValue;
       }
       if(filters.kpi) {
         buildParams.Filters.kpi = filters.kpi;
+      }
+      if(!apiParams.showincompleteperiodcheck) {
+        buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
       }
       return buildParams;
     } catch (error) {
@@ -63,6 +74,7 @@ export class WidgetHelpersService {
   }
 
   setWidgetParameters(apiParams, filters, properties) {
+    debugger
     // making it {} gives error temp giving it any type
     try {
       let buildParams: any = {};
@@ -86,12 +98,21 @@ export class WidgetHelpersService {
         buildParams.Properties.aggregationoption = index;
       }
       // FILTERS
-      if (apiParams.showdaterangefilter) {
-        if (apiParams.showdatetype) {
-          // need to change it base on key error might be in filters.dateTypes
-          let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
-          buildParams.Filters.dateTypes = dateType;
+      if (apiParams.showdatetype) {
+        // need to change it base on key error might be in filters.dateTypes
+        let dateType = (Object.keys(filters).length > 0 && !!filters.showdatetype) ? filters.dateTypes : '0';
+        buildParams.Filters.dateTypes = dateType;
+      }
+      if (apiParams.showdatefilter) {
+        let date;
+        if (!!filters.date) {
+          date = filters.date;
+         } else {
+          date = '01/2019';
         }
+        buildParams.Filters.date = date;
+      }
+      if (apiParams.showdaterangefilter) {
         // dateTypes custom condition may be needed
         // if defaultdaterange is null need to write custom method for it.
         let dateRangeValue;
@@ -113,9 +134,12 @@ export class WidgetHelpersService {
       }
       if(apiParams.getReportQueryDetailByID) {
       }
+      if(!apiParams.showincompleteperiodcheck) {
+        buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
+      }
       return buildParams;
     } catch (error) {
-      console.error('initWidgetParameters', error);
+      console.error('setWidgetParameters', error);
     }
   }
 }

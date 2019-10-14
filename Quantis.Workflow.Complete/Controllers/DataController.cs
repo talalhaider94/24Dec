@@ -503,5 +503,10 @@ namespace Quantis.WorkFlow.Controllers
             }
             return null;
         }
+        [HttpGet("GetLogs/{limit}")]
+        public List<LogDTO> GetLogs(int limit)
+        {
+            return _dataAPI.GetLogs(limit);
+        }
     }
 }

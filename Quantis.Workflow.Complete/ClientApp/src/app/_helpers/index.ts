@@ -17,3 +17,12 @@ export function removeNullKeysFromObject(obj) {
     });
     return newObj;
 }
+
+export const chartExportTranslations = {
+  downloadJPEG: 'Download JPEG',
+  downloadPDF: 'Download PDF',
+  downloadPNG: 'Download PNG',
+  downloadSVG: 'Download SVG',
+  viewFullscreen: 'Vedi in full screen',
+  printChart: 'Stampa'
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { ApiService } from '../../../_services/api.service';
+import { ApiService } from '../../../_services';
+import { chartExportTranslations } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -67,19 +68,13 @@ export class BSIReportComponent implements OnInit {
     cartellaSelectOption : any;
     dtTrigger: Subject<any> = new Subject();
     AllNormalReportsData: any = [];
+    OrignalNormalReportData:any = [];
     ReportDetailsData: any = [];
     chartUpdateFlag: boolean = true;
     highcharts = Highcharts;
     cartellaList : any = [];
     chartOptions = {
-        lang: {
-            downloadJPEG: 'Download JPEG image',
-            downloadPDF: 'Download PDF document',
-            downloadPNG: 'Download PNG image',
-            downloadSVG: 'Download SVG vector image',
-            viewFullscreen: 'View Full Screen',
-            printChart: 'Print Chart'
-        },
+        lang: chartExportTranslations,
         credits: false,
         title: {
             text: 'BSI Report'
@@ -153,6 +148,7 @@ export class BSIReportComponent implements OnInit {
         this.loading = true;
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.AllNormalReportsData = data;
+            this.OrignalNormalReportData = data;
             console.log('AllNormalReportsData -> ', data);
             // pushing foldername to dropdown
             data.forEach( (element) => {
@@ -183,19 +179,26 @@ export class BSIReportComponent implements OnInit {
     // search start
 
     setUpDataTableDependencies() {
+        let vm = this;
+
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
-
-
                 $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
-                      let searchTerm = $(this).val().toLowerCase(),
-                          regex = '\\b' + searchTerm + '\\b';
 
-                        that
-                            .search(regex, true, false)
-                            .draw();
+                        /*let searchTerm = $(this).val(),
+                            regex = '"'+searchTerm+'"';
+
+                          that
+                              .search(regex, false, true, false)
+                              .draw();*/
+                        vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
+                        if($(this).val()){
+                          const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
+                          vm.AllNormalReportsData = filterFolder;
+                          // vm.rerender();
+                        }
                     });
             });
         });

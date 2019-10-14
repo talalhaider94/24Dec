@@ -68,5 +68,9 @@ namespace Quantis.WorkFlow.Services.API
         int GetContractIdByGlobalRuleId(int globalruleid);
 
         List<UserProfilingDTO> GetUserProfilingCSV();
+
+        void AddUpdateUserSettings(int userId, string key, string value);
+        string GetUserSetting(int userId, string key);
+        List<KeyValuePair<string, string>> GetAllUserSettings(int userId);
     }
 }

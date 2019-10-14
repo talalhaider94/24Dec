@@ -202,7 +202,7 @@ r.rule_name,
                             NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.Any(s => s.Result != "compliant")).Count(),
                             ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
                             NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
-                            BestContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderByDescending(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
+                            BestContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).Where(o=>o.Any(t=>t.Result== "compliant")).OrderByDescending(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
                             {
                                 ContractId = t.Key.ContractId,
                                 ContractName = t.Key.ContractName,
@@ -211,8 +211,8 @@ r.rule_name,
                                 NonComplaintKPIs = t.Count(u => u.Result == "non compliant"),
                                 ComplaintPercentage = (t.Count(u => u.Result == "compliant") * 100) / t.Count(),
                                 AverageDeviation = t.Average(u => u.Deviation)
-                            }).OrderByDescending(u => u.ComplaintPercentage).ToList(),
-                            WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderBy(r => r.Count(s => s.Result == "compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
+                            }).ToList(),
+                            WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).Where(o => o.Any(t => t.Result == "non compliant")).OrderByDescending(r => r.Count(s => s.Result == "non compliant") / r.Count()).Take(5).Select(t => new LandingPageContractDTO()
                             {
                                 ContractId = t.Key.ContractId,
                                 ContractName = t.Key.ContractName,
@@ -221,7 +221,7 @@ r.rule_name,
                                 NonComplaintKPIs = t.Count(u => u.Result == "non compliant"),
                                 ComplaintPercentage = (t.Count(u => u.Result == "compliant") * 100) / t.Count(),
                                 AverageDeviation = t.Average(u => u.Deviation)
-                            }).OrderBy(u => u.ComplaintPercentage).ToList()
+                            }).ToList()
                         }).ToList();
                         return result;
                     }
