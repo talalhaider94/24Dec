@@ -95,9 +95,11 @@
                   <div [hidden]="hideData==1">
                     <br><br><h5 class="float-left">{{editQueryData.QueryName}}</h5><br>
                     <div class="table-responsive">
+                      <button [hidden]="hideExport" class="ml-2" #btnExporta>Esporta CSV</button>
+                      <!-- <button [hidden]="hideExport" class="ml-2" >Esporta PDF</button> -->
                         <div [hidden]="isDebug==0" class="txt-filter-user-div col-md-3 float-right mb-2"><input type="text" class="form-control" placeholder="Cerca"
                             [(ngModel)]="filters.searchUsersText" /></div><br>
-                        <table class="table stripe">
+                        <table class="table stripe executedQueryResult">
                             <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
                                     <th *ngFor="let key of debugQueryData">{{key}}</th>
@@ -108,7 +110,7 @@
                                     <td *ngFor="let key of debugQueryData; index as i"><div [innerHTML]="value[key]"></div></td>
                                 </tr>
                             </tbody>
-                        </table>    
+                        </table>
                     </div>
                   </div>
                 </div>
@@ -144,7 +146,7 @@ aria-hidden="true">
                         </thead>
                         <tbody>
                             <tr *ngFor="let row of assignedQueriesBodyData | filter : filters.searchUsersText; index as i">
-                            <td style="text-align:center">{{row.name}} {{row.surname}}</td>    
+                            <td style="text-align:center">{{row.name}} {{row.surname}}</td>
                             <td style="text-align:center">{{row.ca_bsi_account}}</td>
                             <td style="text-align:center"><input type="checkbox" [checked]="row.isassigned" (change)="populateAssignedUsers(row,$event)" /></td>
                             </tr>
@@ -184,7 +186,7 @@ aria-hidden="true">
                         </thead>
                         <tbody>
                             <tr *ngFor="let row of debugQueryData | filter : filters.searchUsersText; index as i">
-                                <td style="text-align:center">{{row[i]}}</td>    
+                                <td style="text-align:center">{{row[i]}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -203,7 +205,7 @@ aria-hidden="true">
 <div id="viewAssignedModal" bsModal #viewAssignedModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content"> 
+      <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="approveModalLabel">View Free Form Report Assegnati</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideViewModal()">
@@ -235,7 +237,7 @@ aria-hidden="true">
   <div id="parametersModal" bsModal #parametersModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content"> 
+      <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="approveModalLabel">{{executeModalTitle}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideParametersModal()">

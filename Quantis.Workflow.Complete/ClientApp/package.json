@@ -85,6 +85,7 @@
     "ngx-toastr": "^10.0.4",
     "ngx-treeview": "^6.0.2",
     "pdfmake": "^0.1.60",
+    "pdfmake-wrapper": "^2.0.0",
     "rxjs": "^6.4.0",
     "sha256": "^0.2.0",
     "simple-line-icons": "^2.4.1",
