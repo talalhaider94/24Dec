@@ -79,12 +79,12 @@
                                                 Assegna
                                             </button>
                                             <button class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
-                                            <button class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
+                                            <button [disabled]="isDisabled==ownedQuery.id" class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
                                                 Disable
                                             </button>
-                                            <!-- <button class="btn btn-success btn-sm" (click)="enable(ownedQuery)">
+                                            <button [disabled]="isEnabled==ownedQuery.id" class="btn btn-success btn-sm" (click)="enable(ownedQuery)">
                                                 Enable
-                                            </button> -->
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

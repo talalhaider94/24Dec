@@ -24,6 +24,7 @@ export class ImportFormReportComponent implements OnInit {
         id: 0,
         QueryName: '',
         QueryText: '',
+        OwnerId: '',
         Parameters: []
     }
     withParameters: [{
@@ -111,6 +112,7 @@ export class ImportFormReportComponent implements OnInit {
         this.queryData.id = 0;
         this.queryData.QueryName = row.reportname;
         this.queryData.QueryText = row.query;
+        this.queryData.OwnerId = row.ownerid;
         console.log('parameters length -> ',row.parameters.length);
         if(row.parameters.length==0){ 
         }else{

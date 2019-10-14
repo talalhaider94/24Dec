@@ -57,6 +57,7 @@ export class LandingPageComponent implements OnInit {
     month: any;
     yearVar: any;
     count = 0;
+    thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
     constructor(
         private dashboardService: DashboardService,
@@ -68,6 +69,11 @@ export class LandingPageComponent implements OnInit {
         private dateTime: DateTimeService
     ) { }
     ngOnInit(): void {
+
+        this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
+            this.thresholdvalue = data;
+        });
+
         this.thresholdvalue = 0;
         this.month = moment().format('MMMM');
         this.monthVar = moment().format('MM');
@@ -128,7 +134,11 @@ export class LandingPageComponent implements OnInit {
     }
 
     setThreshold() {
-        console.log(this.thresholdvalue);
+        this.apiService.AddUpdateUserSettings(this.thresholdkey, this.thresholdvalue).subscribe((data: any) => {
+            this.toastr.success('Threshold value updated');
+        }, error => {
+          this.toastr.error('Error while updating threshold value');
+        });
         this.hideThresholdModal();
     }
 
