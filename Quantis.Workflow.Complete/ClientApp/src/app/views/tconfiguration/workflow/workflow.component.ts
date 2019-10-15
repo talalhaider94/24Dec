@@ -59,6 +59,7 @@ export class WorkflowComponent implements OnInit {
     }
 
     modalData = {
+        contractId: 0,
         contractparty: '',
         contract: '',
         cutoff: '',
@@ -89,6 +90,7 @@ export class WorkflowComponent implements OnInit {
     }
 
     populateModalData(data) {
+        this.modalData.contractId = data.contractid;
         this.modalData.contractparty = data.contractpartyname;
         this.modalData.contract = data.contractname;
         this.modalData.cutoff = data.daycuttoff;
@@ -108,11 +110,12 @@ export class WorkflowComponent implements OnInit {
     }
 
     updateConfig(row) {
-        if ((row.daycuttoff < 0 || row.daycuttoff > 28) && (row.dayworkflow < 0 || row.dayworkflow > 28)) {
+        if ((row.cutoff < 0 || row.cutoff > 28) || (row.workflowday < 0 || row.workflowday > 28)) {
             this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Error');
         } else {
+            console.log(row.contractId,row.cutoff,row.workflowday);
             this.toastr.info('Valore in aggiornamento..', 'Info');
-            this.apiService.AssignCuttoffWorkflowDayByContractId(row.contractid,row.daycuttoff,row.dayworkflow).subscribe(data => {
+            this.apiService.AssignCuttoffWorkflowDayByContractId(row.contractId,row.cutoff,row.workflowday).subscribe(data => {
                 this.getCOnfigurations(); 
                 this.toastr.success('Valore Aggiornato', 'Success');
                 this.hideConfigModal();
