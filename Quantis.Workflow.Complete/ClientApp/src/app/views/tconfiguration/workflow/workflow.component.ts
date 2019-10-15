@@ -105,6 +105,10 @@ export class WorkflowComponent implements OnInit {
                 this.getCOnfigurations();
             }, seconds);
         });
+
+        this.apiService.GetAllContractPartiesContracts().subscribe((data: any) => {
+            console.log("GetAllContractPartiesContracts -> ", data);
+        });
     }
 
     populateModalData(data) {

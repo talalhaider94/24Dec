@@ -11,9 +11,9 @@
 </div>
 
 <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
-  style="width: 50%; display: block; float: left;">
+[ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
 </highcharts-chart>
-<!-- <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
-  style="width: 50%; display: block; float: right;">
+<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"
+ [ngClass]="groupReportCheck ? 'd-block float-right w-50p' : 'd-none'">
 </highcharts-chart>
-<div class="clearfix"></div> -->
+<div class="clearfix"></div>
