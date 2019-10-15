@@ -132,6 +132,12 @@ export class ApiService {
         const getThresholdEndPoint = `${environment.API_URL}/information/GetUserSetting?key=${key}`;
         return this.http.get(getThresholdEndPoint);
     }
+    GetAllContractPartiesContracts(): Observable<any> {
+        const getcpcEndPoint = `${environment.API_URL}/information/GetAllContractPartiesContracts`;
+        return this.http.get(getcpcEndPoint);
+    }
+
+
     AddUpdateUserSettings(key,value): Observable<any> {
         const setThresholdEndPoint = `${environment.API_URL}/information/AddUpdateUserSettings?key=${key}&value=${value}`;
         return this.http.get(setThresholdEndPoint);
