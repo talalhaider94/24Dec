@@ -1438,7 +1438,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     if(isCsv)
                     {
-                        query = "select global_rule_name, global_rule_id, referent, monthtrigger, sla_name," +
+                        query = "select global_rule_name, global_rule_id, referent, monthtrigger, sla_name, file_name," +
                         " tracking_period, source_type, u.userid, u.ca_bsi_account, u.ca_bsi_user_id " +
                         "from(" +
                         " select ck.*, gr.global_rule_name, gr.global_rule_id, c.customer_name, c2.customer_name, s.sla_name " +
@@ -1474,7 +1474,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     if (isCsv)
                     {
-                        query = "select global_rule_name, global_rule_id, referent, monthtrigger, sla_name," +
+                        query = "select global_rule_name, global_rule_id, referent, monthtrigger, sla_name, file_name," +
                         " tracking_period, source_type, u.userid, u.ca_bsi_account, u.ca_bsi_user_id " +
                         "from(" +
                         " select ck.*, gr.global_rule_name, gr.global_rule_id, c.customer_name, c2.customer_name, s.sla_name " +
@@ -1542,7 +1542,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             FormsFromCatalogDTO form = new FormsFromCatalogDTO();
                             form.id = 0;
                             form.form_id = isCsv ? 0 : reader.GetInt32(reader.GetOrdinal("form_id"));
-                            form.form_name = isCsv ? null : reader.GetString(reader.GetOrdinal("form_name"));
+                            form.form_name = isCsv ? (reader.IsDBNull(reader.GetOrdinal("file_name")) ? null : reader.GetString(reader.GetOrdinal("file_name"))) : reader.GetString(reader.GetOrdinal("form_name")); //file_name when csv
                             form.form_owner_id = isCsv ? 0 : reader.GetInt32(reader.GetOrdinal("form_owner_id"));
                             form.form_description = isCsv ? null : reader.IsDBNull(reader.GetOrdinal("form_description")) ? null : reader.GetString(reader.GetOrdinal("form_description"));
                             form.AttachmentsCount = isCsv ? 0 : reader.IsDBNull(reader.GetOrdinal("attachments_count")) ? 0 : reader.GetInt32(reader.GetOrdinal("attachments_count"));
