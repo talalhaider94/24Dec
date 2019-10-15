@@ -59,34 +59,15 @@ export class WorkflowComponent implements OnInit {
     }
 
     modalData = {
-        key: '',
-        value: '',
-        owner: '',
-        isenable: true,
-        iseditable: true,
-        description: '',
-    };
-
-    addData = {
-        key: '',
-        value: '',
-        owner: '',
-        isenable: false,
-        iseditable: true,
-        description: ''
+        contractparty: '',
+        contract: '',
+        cutoff: '',
+        workflowday: '',
+        value: ''
     };
 
     dtTrigger: Subject<any> = new Subject();
-    ConfigTableBodyData: any = [
-        {
-            key: 'key',
-            value: 'value',
-            owner: 'owner',
-            isenable: true,
-            iseditable: true,
-            description: 'description',
-        }
-    ]
+    ConfigTableBodyData: any = [];
 
     constructor(
         private apiService: ApiService,
@@ -108,13 +89,10 @@ export class WorkflowComponent implements OnInit {
     }
 
     populateModalData(data) {
-        this.modalData.key = data.key;
-        this.modalData.owner = data.owner;
-        this.modalData.value = data.value;
-        this.modalData.isenable = data.isenable;
-        this.modalData.iseditable = data.iseditable;
-        this.modalData.description = data.description;
-        this.valuesCheck.tempModal = data.key;
+        this.modalData.contractparty = data.contractpartyname;
+        this.modalData.contract = data.contractname;
+        this.modalData.cutoff = data.daycuttoff;
+        this.modalData.workflowday = data.dayworkflow;
         this.showConfigModal();
     }
     timer = null;
@@ -123,56 +101,24 @@ export class WorkflowComponent implements OnInit {
         this.modalData.value = value;
         clearTimeout(this.timer);
         this.timer = setTimeout(() => {
-            console.log(value, this.valuesCheck.tempModal, this.valuesCheck.day_cutoff_value);
-            if (this.valuesCheck.tempModal == "day_workflow") {
-                if (parseInt(value) < parseInt(this.valuesCheck.day_cutoff_value)) { this.toastr.warning('La data del Workflow è minore del Cutoff', 'Attenzione'); }
-                let today = parseInt(moment().format('DD'));
-                console.log(today)
-                if (value > today && parseInt(this.valuesCheck.day_workflow_value) < today) { this.toastr.error('Il Workflow ripartirà nel mese corrente per eventuali ticket non aperti', 'Attenzione'); }
-            }
-            if (this.valuesCheck.tempModal == "day_cutoff") {
-                if (parseInt(value) > parseInt(this.valuesCheck.day_workflow_value)) { this.toastr.warning('La data del Cutoff è maggiore del Workflow', 'Attenzione'); }
+            if (value < 0 || value > 31) {
+                this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
             }
         }, 500) //time to wait in ms before do the check
     }
 
-    addConfig() {
-        this.addData.key = this.key;
-        this.addData.owner = this.owner;
-        this.addData.value = this.value;
-        this.addData.isenable = this.isenable;
-        this.addData.iseditable = this.iseditable;
-        this.addData.description = this.description;
-
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.addConfig(this.addData).subscribe(data => {
-            this.getCOnfigurations(); // this should refresh the main table on page
-            this.toastr.success('Valore Aggiornato', 'Success');
-            this.hideAddConfigModal();
-            //$('#addConfigModal').modal('toggle').hide();
-        }, error => {
-            this.toastr.error('Errore durante add.', 'Error');
-            this.hideAddConfigModal();
-            //$('#addConfigModal').modal('toggle').hide();
-        });
-    }
-
-    updateConfig() {
-        var value = +this.modalData.value;
-        console.log("value ->", value);
-        if ((this.modalData.key == 'day_cutoff' || this.modalData.key == 'day_workflow') && (value < 0 || value > 31)) {
+    updateConfig(row) {
+        if ((row.daycuttoff < 0 || row.daycuttoff > 31) && (row.dayworkflow < 0 || row.dayworkflow > 31)) {
             this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
         } else {
             this.toastr.info('Valore in aggiornamento..', 'Info');
-            this.apiService.updateConfig(this.modalData).subscribe(data => {
-                this.getCOnfigurations(); // this should refresh the main table on page
+            this.apiService.AssignCuttoffWorkflowDayByContractId(row.contractid,row.daycuttoff,row.dayworkflow).subscribe(data => {
+                this.getCOnfigurations(); 
                 this.toastr.success('Valore Aggiornato', 'Success');
                 this.hideConfigModal();
-                //$('#configModal').modal('toggle').hide();
             }, error => {
                 this.toastr.error('Errore durante update.', 'Error');
                 this.hideConfigModal();
-                //$('#configModal').modal('toggle').hide();
             });
         }
     }
@@ -183,11 +129,6 @@ export class WorkflowComponent implements OnInit {
 
         this.setUpDataTableDependencies();
         this.getCOnfigurations();
-
-        /*this.apiService.getConfigurations().subscribe((data:any)=>{
-          this.ConfigTableBodyData = data;
-          this.rerender();
-        });*/
     }
 
     ngOnDestroy(): void {
@@ -213,14 +154,6 @@ export class WorkflowComponent implements OnInit {
     // }
 
     setUpDataTableDependencies() {
-        // $(this.searchCol1.nativeElement).on( 'keyup', function () {
-        //   $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        //   datatable_Ref
-        //     .columns( 0 )
-        //     .search( this.value )
-        //     .draw();
-        // });
-        // });
     }
 
     strip_tags(html) {
