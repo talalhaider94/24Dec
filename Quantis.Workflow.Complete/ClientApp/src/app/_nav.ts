@@ -287,6 +287,13 @@ export const navItems: NavData[] = [
                 icon: 'fa fa-file-text-o',
                 version: '0.0.1',
                 key: 'IMPORT_FREE_FORM_REPORT'
+            },
+            {
+                name: 'Workflow',
+                url: '/tconfiguration/workflow',
+                icon: 'fa fa-file-text-o',
+                version: '0.0.1',
+                key: 'VIEW_CONFIGURATION_GENERAL'
             }
         ]
     },

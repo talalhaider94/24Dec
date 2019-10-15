@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DateTimeService } from './date-time.service';
+import { DateTimeService} from './date-time.service';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +64,9 @@ export class WidgetHelpersService {
       if(filters.kpi) {
         buildParams.Filters.kpi = filters.kpi;
       }
+      if(filters.kpi1) {
+        buildParams.Filters.kpi1 = filters.kpi1;
+      }
       if(!apiParams.showincompleteperiodcheck) {
         buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
       }
@@ -74,7 +77,6 @@ export class WidgetHelpersService {
   }
 
   setWidgetParameters(apiParams, filters, properties) {
-    debugger
     // making it {} gives error temp giving it any type
     try {
       let buildParams: any = {};
@@ -126,11 +128,14 @@ export class WidgetHelpersService {
         buildParams.Filters.startDate = dateRangeValue[0];
         buildParams.Filters.endDate = dateRangeValue[1];
       }
-      if(apiParams.contractParties) {
-        buildParams.Filters.contractParties = filters.contractParties || apiParams.contractParties[0].key
+      if(apiParams.allContractParties) {
+        buildParams.Filters.contractParties = filters.contractParties || apiParams.allContractParties[0].key;
       }
-      if(filters.kpi) {
-        buildParams.Filters.kpi = filters.kpi;
+      if(apiParams.allContracts) {
+        buildParams.Filters.contracts = filters.contracts || apiParams.allContracts[0].key;
+      }
+      if(apiParams.allKpis) {
+        buildParams.Filters.kpi = filters.kpi || apiParams.allKpis[0].key;
       }
       if(apiParams.getReportQueryDetailByID) {
       }

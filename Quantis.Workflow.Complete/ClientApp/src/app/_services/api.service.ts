@@ -128,6 +128,20 @@ export class ApiService {
         const getLandingPageEndPoint = `${environment.API_URL}/data/GetAllUsersLandingPage`;
         return this.http.get(getLandingPageEndPoint);
     }
+    getThresholdDetails(key): Observable<any> {
+        const getThresholdEndPoint = `${environment.API_URL}/information/GetUserSetting?key=${key}`;
+        return this.http.get(getThresholdEndPoint);
+    }
+    GetAllContractPartiesContracts(): Observable<any> {
+        const getcpcEndPoint = `${environment.API_URL}/information/GetAllContractPartiesContracts`;
+        return this.http.get(getcpcEndPoint);
+    }
+
+
+    AddUpdateUserSettings(key,value): Observable<any> {
+        const setThresholdEndPoint = `${environment.API_URL}/information/AddUpdateUserSettings?key=${key}&value=${value}`;
+        return this.http.get(setThresholdEndPoint);
+    }
 
     addRole(data): Observable<any> {
         const addrole = `${environment.API_URL}/information/AddUpdateRole`;
