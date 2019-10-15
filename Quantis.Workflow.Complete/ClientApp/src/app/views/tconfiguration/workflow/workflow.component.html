@@ -7,8 +7,8 @@
                     data-target="#addConfigModal" (click)="showAddConfigModal()">
                 Crea Nuovo
             </button>
-        </div><br /> -->
-        <br>
+        </div> -->
+        <br />
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
@@ -16,26 +16,21 @@
                     <th style="text-align:center">Contratti</th>
                     <th style="text-align:center">Cut Off Day</th>
                     <th style="text-align:center">Workflow Day</th>
-                    <th style="display:none; text-align:center">DESCRIZIONE</th>
                     <th style="text-align:center">AZIONE</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ConfigTableBodyData; index as i">
-                    <td>{{row.key}}</td>
-                    <td>{{row.owner}}</td>
-                    <td>{{row.value}}</td>
-                    <td>{{row.description}}</td>
-                    <td *ngIf="row.iseditable; then showEdit else hideEdit"></td>
-                    <ng-template #showEdit>
-                        <td style="text-align: center">
-                            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                    data-target="#configModal" style="font-size:10px">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                        </td>
-                    </ng-template>
-                    <ng-template #hideEdit><td></td></ng-template>
+                    <td>{{row.contractpartyname}}</td>
+                    <td>{{row.contractname}}</td>
+                    <td style="text-align: center">{{row.daycuttoff}}</td>
+                    <td style="text-align: center">{{row.dayworkflow}}</td>
+                    <td style="text-align: center">
+                        <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                                data-target="#configModal" style="font-size:10px">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

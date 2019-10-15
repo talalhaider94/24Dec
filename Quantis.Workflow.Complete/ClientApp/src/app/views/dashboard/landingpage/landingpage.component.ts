@@ -53,6 +53,7 @@ export class LandingPageComponent implements OnInit {
     public period = '02/2019';
     gridsData: any = [];
     bestContracts: any = [];
+    KpiCompliants: any = [];
     monthVar: any;
     month: any;
     yearVar: any;
@@ -150,7 +151,14 @@ export class LandingPageComponent implements OnInit {
         this.thresholdModal.hide();
     }
 
-    showCompliantModal() {
+    showCompliantModal(contractPartyId) {
+        this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
+            if(data.result=='compliant'){
+                this.KpiCompliants = data;
+                console.log("KpiCompliants -> ", data);
+                //this.rerender();
+            }
+        });
         this.compliantModal.show();
     }
 
