@@ -101,15 +101,15 @@ export class WorkflowComponent implements OnInit {
         this.modalData.value = value;
         clearTimeout(this.timer);
         this.timer = setTimeout(() => {
-            if (value < 0 || value > 31) {
+            if (value < 0 || value > 28) {
                 this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
             }
         }, 500) //time to wait in ms before do the check
     }
 
     updateConfig(row) {
-        if ((row.daycuttoff < 0 || row.daycuttoff > 31) && (row.dayworkflow < 0 || row.dayworkflow > 31)) {
-            this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
+        if ((row.daycuttoff < 0 || row.daycuttoff > 28) && (row.dayworkflow < 0 || row.dayworkflow > 28)) {
+            this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Error');
         } else {
             this.toastr.info('Valore in aggiornamento..', 'Info');
             this.apiService.AssignCuttoffWorkflowDayByContractId(row.contractid,row.daycuttoff,row.dayworkflow).subscribe(data => {
