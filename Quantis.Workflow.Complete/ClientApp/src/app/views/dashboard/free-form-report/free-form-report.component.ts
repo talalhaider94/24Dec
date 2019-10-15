@@ -42,6 +42,8 @@ export class FreeFormReportComponent implements OnInit {
   parameterCount=0;
   disableId=0;
   assignedUsers = [];
+  isDisabled=0;
+  isEnabled=0;
   params = {
     id: 0,
     ids: []
@@ -106,7 +108,8 @@ export class FreeFormReportComponent implements OnInit {
   ngOnInit() {
 
     this.getReportQueryDetailByID();
-
+    this.isDisabled=0;
+    this.isEnabled=0;
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -216,6 +219,18 @@ export class FreeFormReportComponent implements OnInit {
 
   deleteParameters(id: number) {
     this.Parameters.removeAt(id);   
+  }
+
+  onKeydown(event) {
+    if (event.keyCode === 32 ) {
+      return false;
+    }
+  }
+
+  omit_special_char(event){   
+    var k;  
+    k = event.charCode;  //         k = event.keyCode;  (Both can be used)
+    return((k > 63 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57)); 
   }
 
   ngAfterViewInit() {
@@ -546,12 +561,18 @@ export class FreeFormReportComponent implements OnInit {
   disable(row){
     this._freeFormReport.disable(row.id).subscribe(data => { 
       this.getOwnedQueries();
+      this.toastr.success('Query disabled');
+    }, error => {
+        this.toastr.error('Error in disabling query');
     });
   }
 
   enable(row){
     this._freeFormReport.enable(row.id).subscribe(data => { 
       this.getOwnedQueries();
+      this.toastr.success('Query enabled');
+    }, error => {
+        this.toastr.error('Error in enabling query');
     });
   }
   

@@ -182,8 +182,11 @@
                 <div class="col-md-3">
                     <h5>Threshold Red:</h5>
                 </div>
+                <div class="col-md-3" style="margin-top:-5px">
+                    <input type="text" class="form-control" [(ngModel)]="thresholdkey" placeholder="key" readonly>
+                </div>
                 <div class="col-md-2" style="margin-top:-5px">
-                    <input type="number" class="form-control" [(ngModel)]="thresholdvalue">
+                    <input type="number" class="form-control" [(ngModel)]="thresholdvalue" placeholder="value">
                 </div>
                 <div class="col-md-1">
                     <b> %</b>

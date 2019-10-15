@@ -73,16 +73,6 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 var conf = _dbcontext.Configurations.FirstOrDefault(o => o.owner == dto.Owner && o.key == dto.Key);
-                //TODO: Need to fix cutt of date.
-                if (dto.Owner == "be_restserver" && dto.Key == "day_cutoff")
-                {
-                    var ents = _dbcontext.CatalogKpi.ToList();
-                    foreach (var en in ents)
-                    {
-                        en.day_cutoff = int.Parse(dto.Value);
-                    }
-                    _dbcontext.SaveChanges();
-                }
                 if (conf == null)
                 {
                     conf = new T_Configuration();
@@ -394,7 +384,64 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public List<ContractPartyContractDTO> GetAllContractPartiesContracts()
+        {
+            var res = new List<ContractPartyContractDTO>();
+            string query = @"select m.sla_id,m.sla_name,c.customer_name,c.customer_id, round( avg(ck.day_cutoff)),round(avg(ck.day_workflow),0)
+                            from t_rules r 
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id 
+                            inner join t_catalog_kpis ck on r.global_rule_id=ck.global_rule_id_bsi
+                            left join t_customers c on m.customer_id = c.customer_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            group by m.sla_id,m.sla_name,c.customer_name,c.customer_id";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new ContractPartyContractDTO()
+                        {
+                            ContractName = (string)result[1],
+                            ContractId = Decimal.ToInt32((Decimal)result[0]),
+                            ContractPartyId = (int)result[3],
+                            ContractPartyName = (string)result[2],
+                            DayCuttOff= Decimal.ToInt32((Decimal)result[4]),
+                            DayWorkflow= Decimal.ToInt32((Decimal)result[5])
+                        });
+                    }
+                }
+                
+            }
+            return res.OrderBy(o => o.ContractPartyName).ThenBy(o => o.ContractName).ToList();
+        }
+        public void AssignCuttoffWorkflowDayByContractId(int contractId,int daycuttoff,int workflowday)
+        {
+            string query = "select r.global_rule_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and m.sla_id=:sla_id";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":sla_id", contractId);
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        int globalRuleId=Decimal.ToInt32((Decimal)result[0]);
+                        var catalogKPI=_dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == globalRuleId);
+                        catalogKPI.day_cutoff = daycuttoff;
+                        catalogKPI.day_workflow = workflowday;
+                        _dbcontext.SaveChanges();
+                    }
+                }                
+            }
+        }
         public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
         {
             try

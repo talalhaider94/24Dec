@@ -283,5 +283,17 @@ namespace Quantis.WorkFlow.Complete.Controllers
             var user = HttpContext.User as AuthUser;
             return _infomationAPI.GetAllUserSettings(user.UserId);
         }
+        [Authorize(WorkFlowPermissions.VIEW_CUTOFF_WORKFLOW_DAY)]
+        [HttpGet("GetAllContractPartiesContracts")]
+        public List<ContractPartyContractDTO> GetAllContractPartiesContracts()
+        {
+            return _infomationAPI.GetAllContractPartiesContracts();
+        }
+        [Authorize(WorkFlowPermissions.VIEW_CUTOFF_WORKFLOW_DAY)]
+        [HttpGet("AssignCuttoffWorkflowDayByContractId")]
+        public void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday)
+        {
+            _infomationAPI.AssignCuttoffWorkflowDayByContractId(contractId, daycuttoff, workflowday);
+        }
     }
 }
