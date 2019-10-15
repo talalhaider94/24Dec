@@ -131,6 +131,11 @@
                       </option>
                     </select>
                   </div>
+                  <div class="form-group form-check">
+                    <input type="checkbox" formControlName="groupReportCheck" class="form-check-input"
+                      id="groupReportCheck">
+                    <label class="form-check-label" for="groupReportCheck">Group Report</label>
+                  </div>
                   <span>
                     <div class="form-group">
                       <label for="contractParties1">Contract Parties</label>
@@ -153,7 +158,7 @@
                     </div>
                     <div class="form-group">
                       <label for="kpi1">KPI's</label><!-- Date Type -->
-                      <select class="form-control" formControlName="kpi1" [disabled]="!filterKpis.length">
+                      <select class="form-control" formControlName="kpi1">
                         <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index"
                           [value]="filterKpis[i].key">
                           {{ filterKpis[i].value }}

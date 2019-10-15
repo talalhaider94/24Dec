@@ -87,6 +87,11 @@ export class PublicComponent implements OnInit {
 	allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
 	filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
 	filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
+
+	allContractParties1: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
+	filterContracts1: Array<any> = [{ key: '', value: 'Select Contracts' }];
+	filterKpis1: Array<any> = [{ key: '', value: `Select KPI's` }];
+
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
 	parametersArray: FormArray;
@@ -117,6 +122,25 @@ export class PublicComponent implements OnInit {
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
+			}
+			if (this.barChartWidgetParameters.allContracts) {
+				this.filterContracts = [...this.filterContracts, ...this.barChartWidgetParameters.allContracts];
+			}
+			if (this.barChartWidgetParameters.allKpis) {
+				this.filterKpis = [...this.filterKpis, ...this.barChartWidgetParameters.allKpis];
+				this.widgetParametersForm.get('Filters.contracts').enable();
+				this.widgetParametersForm.get('Filters.kpi').enable();
+			}
+			if (this.barChartWidgetParameters.allContractParties1) {
+				this.allContractParties1 = [...this.allContractParties1, ...this.barChartWidgetParameters.allContractParties1];
+			}
+			if (this.barChartWidgetParameters.allContracts1) {
+				this.filterContracts1 = [...this.filterContracts1, ...this.barChartWidgetParameters.allContracts1];
+			}
+			if (this.barChartWidgetParameters.allKpis1) {
+				this.filterKpis1 = [...this.filterKpis1, ...this.barChartWidgetParameters.allKpis1];
+				this.widgetParametersForm.get('Filters.contracts1').enable();
+				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
 			if (this.barChartWidgetParameters.getReportQueryDetailByID) {
 				const params = this.barChartWidgetParameters.getReportQueryDetailByID.parameters;
@@ -188,6 +212,7 @@ export class PublicComponent implements OnInit {
 			console.log('kpiReportTrendParent childData', childData);
 			if (childData.type === 'openKpiReportTrendModal') {
 				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
+				debugger
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
 			}
@@ -245,18 +270,20 @@ export class PublicComponent implements OnInit {
 				dateTypes: [null],
 				date: [null],
 				contractParties: [null],
-				contracts: [{ value: null }],
-				kpi: [{ value: null }],
+				contracts: [null],
+				kpi: [null],
 				incompletePeriod: [false],
 				groupReportCheck: [false],
 				contractParties1: [null],
-				contracts1: [{ value: null }],
-				kpi1: [{ value: null }],
+				contracts1: [null],
+				kpi1: [null],
 			}),
 			// Note: [null],
 		});
 		this.widgetParametersForm.get('Filters.contracts').disable();
 		this.widgetParametersForm.get('Filters.kpi').disable();
+		this.widgetParametersForm.get('Filters.contracts1').disable();
+		this.widgetParametersForm.get('Filters.kpi1').disable();
 		// Grid options
 		this.options = {
 			gridType: GridType.Fit,
