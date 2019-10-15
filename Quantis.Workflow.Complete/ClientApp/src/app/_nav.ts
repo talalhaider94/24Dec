@@ -151,6 +151,13 @@ export const navItems: NavData[] = [
                 version: '0.0.12',
                 key: 'VIEW_LOADING_FORM_UTENTI'
             },
+            {
+              name: 'CSV da inviare',
+              url: '/loading-form/utente-csv',
+              icon: 'fa fa-user-circle-o',
+              version: '0.0.12',
+              key: 'VIEW_LOADING_FORM_UTENTI'
+            },
         ]
     },
     {

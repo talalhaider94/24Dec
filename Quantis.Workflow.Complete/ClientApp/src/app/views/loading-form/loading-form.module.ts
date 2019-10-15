@@ -8,6 +8,7 @@ import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { DataTablesModule } from 'angular-datatables';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import {
     MatSidenavModule,
@@ -103,6 +104,7 @@ import { LoadingFormCsvComponent } from './loading-form-csv/loading-form-csv.com
         DataTablesModule,
         Ng2SearchPipeModule,
         CollapseModule.forRoot(),
+        ModalModule.forRoot(),
     ],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'it-IT' },
