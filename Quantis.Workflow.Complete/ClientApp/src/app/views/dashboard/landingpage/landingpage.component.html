@@ -89,7 +89,7 @@
                                         </a>
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
-                                    <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal()">{{row.noncomplaintkpis}}</button></a></li>
+                                    <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal(row.contractpartyid)">{{row.noncomplaintkpis}}</button></a></li>
                                     <li><a>KPI Compliant <button [disabled]="row.complaintkpis==0" class="btn btn-success pull-right badge bg-green" (click)="showCompliantModal(row.contractpartyid)">{{row.complaintkpis}}</button></a></li>
                                 </ul>
                             </div>
@@ -211,22 +211,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stripe" #CompliantTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                    <thead style="background: #20a8d8">
-                        <tr style="font-size:12px;color:white">
-                            <th style="text-align:center">KPI</th>
-                            <th style="text-align:center">KEY</th>
-                            <th style="text-align:center">VALUE</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let rowcompliants of KpiCompliants; index as i">
-                            <td style="text-align:center">{rowcompliants.globalrulename}</td>
-                            <td style="text-align:center">{rowcompliants.target}</td>
-                            <td style="text-align:center">{rowcompliants.target}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table stripe" #CompliantTable>
+                        <thead style="background: #20a8d8">
+                            <tr style="font-size:12px;color:white">
+                                <th style="text-align:center">KPI</th>
+                                <th style="text-align:center">TARGET</th>
+                                <th style="text-align:center">VALUE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of KpiCompliants; index as i" [hidden]="row.result!='compliant'">
+                                <td style="text-align:center">{{row.globalrulename}}</td>
+                                <td style="text-align:center">{{row.target}}</td>
+                                <td style="text-align:center">{{row.actual}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideCompliantModal()">Chiudi</button>
@@ -246,7 +248,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stripe" #NonCompliantTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <table class="table stripe" #NonCompliantTable>
                     <thead style="background: #20a8d8">
                         <tr style="font-size:12px;color:white">
                             <th style="text-align:center">KPI</th>
@@ -255,10 +257,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let row of KpiNonCompliants; index as i">
-                            <td style="text-align:center">Non Compliant</td>
-                            <td style="text-align:center">key</td>
-                            <td style="text-align:center">value</td>
+                        <tr *ngFor="let row of KpiNonCompliants; index as i" [hidden]="row.result!='non compliant'">
+                            <td style="text-align:center">{{row.globalrulename}}</td>
+                            <td style="text-align:center">{{row.target}}</td>
+                            <td style="text-align:center">{{row.actual}}</td>
                         </tr>
                     </tbody>
                 </table>
