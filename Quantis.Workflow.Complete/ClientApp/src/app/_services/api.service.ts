@@ -136,6 +136,10 @@ export class ApiService {
         const getcpcEndPoint = `${environment.API_URL}/information/GetAllContractPartiesContracts`;
         return this.http.get(getcpcEndPoint);
     }
+    GetLandingPageKPIDetails(contractPartyId, month, year): Observable<any> {
+        const getkpidetailsEndPoint = `${environment.API_URL}/oracle/GetLandingPageKPIDetails?contractPartyId=${contractPartyId}&period=${month}/${year}`;
+        return this.http.get(getkpidetailsEndPoint);
+    }
 
 
     AddUpdateUserSettings(key,value): Observable<any> {

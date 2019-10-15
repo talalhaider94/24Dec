@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChild, ElementRef } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { DateTimeService } from '../../../_helpers';
@@ -23,6 +23,7 @@ export class LandingPageComponent implements OnInit {
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChild('CompliantTable') block: ElementRef;
 
     dtOptions: DataTables.Settings = {
         language: {
@@ -53,6 +54,8 @@ export class LandingPageComponent implements OnInit {
     public period = '02/2019';
     gridsData: any = [];
     bestContracts: any = [];
+    KpiCompliants: any = [];
+    KpiNonCompliants: any = [];
     monthVar: any;
     month: any;
     yearVar: any;
@@ -149,8 +152,11 @@ export class LandingPageComponent implements OnInit {
     hideThresholdModal() {
         this.thresholdModal.hide();
     }
-
-    showCompliantModal() {
+    
+    showCompliantModal(contractPartyId) {
+        this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
+            this.KpiCompliants = data;
+        });
         this.compliantModal.show();
     }
 
@@ -158,7 +164,11 @@ export class LandingPageComponent implements OnInit {
         this.compliantModal.hide();
     }
 
-    showNonCompliantModal() {
+    showNonCompliantModal(contractPartyId) {
+        this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
+            this.KpiNonCompliants = data;
+            console.log('KpiNonCompliants -> ',data);
+        });
         this.nonCompliantModal.show();
     }
 

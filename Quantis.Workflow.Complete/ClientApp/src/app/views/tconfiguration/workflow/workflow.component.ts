@@ -105,10 +105,6 @@ export class WorkflowComponent implements OnInit {
                 this.getCOnfigurations();
             }, seconds);
         });
-
-        this.apiService.GetAllContractPartiesContracts().subscribe((data: any) => {
-            console.log("GetAllContractPartiesContracts -> ", data);
-        });
     }
 
     populateModalData(data) {
@@ -234,25 +230,29 @@ export class WorkflowComponent implements OnInit {
     }
 
     getCOnfigurations() {
-        this.apiService.getConfigurations().subscribe((data) => {
+        this.apiService.GetAllContractPartiesContracts().subscribe((data: any) => {
             this.ConfigTableBodyData = data;
-            let valuesCheck = { day_cutoff_value: null, day_notify_value: null, day_workflow_value: null, tempModal: null };
-            data.forEach(function (config) {
-                if (config.key == "day_cutoff") {
-                    valuesCheck.day_cutoff_value = config.value;
-                }
-                if (config.key == "day_notify") {
-                    valuesCheck.day_notify_value = config.value;
-                }
-                if (config.key == "day_workflow") {
-                    valuesCheck.day_workflow_value = config.value;
-                }
-            }
-            );
-            this.valuesCheck = valuesCheck;
-            console.log('Configs ', data);
+            console.log("GetAllContractPartiesContracts -> ", data);
             this.rerender();
-        });
+        }); 
+        //     this.ConfigTableBodyData = data;
+        //     let valuesCheck = { day_cutoff_value: null, day_notify_value: null, day_workflow_value: null, tempModal: null };
+        //     data.forEach(function (config) {
+        //         if (config.key == "day_cutoff") {
+        //             valuesCheck.day_cutoff_value = config.value;
+        //         }
+        //         if (config.key == "day_notify") {
+        //             valuesCheck.day_notify_value = config.value;
+        //         }
+        //         if (config.key == "day_workflow") {
+        //             valuesCheck.day_workflow_value = config.value;
+        //         }
+        //     }
+        //     );
+        //     this.valuesCheck = valuesCheck;
+        //     console.log('GetAllContractPartiesContracts ', data);
+        //     this.rerender();
+        // });
     }
 
     showConfigModal() {
