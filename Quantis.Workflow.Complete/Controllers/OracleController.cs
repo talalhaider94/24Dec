@@ -184,5 +184,11 @@ namespace Quantis.WorkFlow.Controllers
             var usr = HttpContext.User as AuthUser;
             return _oracleAPI.GetLandingPageKPIDetails(usr.UserId, contractPartyId, period);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("GetPersonalReport")]
+        public List<ReportPersonalDTO> GetPersonalReport([FromBody]PersonalReportFilterDTO filter)
+        {
+            return _oracleAPI.GetPersonalReport(filter);
+        }
     }
 }
