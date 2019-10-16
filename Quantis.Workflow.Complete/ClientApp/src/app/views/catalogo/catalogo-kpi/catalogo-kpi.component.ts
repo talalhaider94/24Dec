@@ -614,7 +614,6 @@ export class CatalogoKpiComponent implements OnInit {
                 rows.push(row);
             })
         }
-        debugger;
         csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "ExportKPITable.csv");

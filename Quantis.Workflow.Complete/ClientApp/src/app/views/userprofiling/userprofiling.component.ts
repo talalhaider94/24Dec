@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { ITreeOptions, TreeComponent } from 'angular-tree-component';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { saveAs } from 'file-saver';
 
@@ -82,7 +82,7 @@ export class UserProfilingComponent implements OnInit {
     selectedUserObj = {};
     selectedContractsObj = {};
     selectedKpisObj = {};
-
+    hideExport: boolean = true;
     constructor(
         private apiService: ApiService,
         private toastr: ToastrService,
@@ -182,6 +182,8 @@ export class UserProfilingComponent implements OnInit {
         this.apiService.getUserProfilingCSV().subscribe((data) => {
             console.log('CSV Data => ', data);
             this.csvTableData = data;
+            this.hideExport = false;
+            this.rerender();
         });
 
         this.loading.roles = true;
@@ -477,11 +479,11 @@ export class UserProfilingComponent implements OnInit {
             // headers.push(header); // original code
             if (text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
         });
-        csv += headers.join(',') + "\n";
+        csv += headers.join('|') + "\r\n";
 
         // get table data
         if (exportmode == "full") { // total data
-            let totalRows = oTable.data().length;
+            let totalRows = $(tableElm).DataTable().data().length;
             for (let i = 0; i < totalRows; i++) {
                 var row = [];
                 $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i, e) => {
@@ -490,10 +492,10 @@ export class UserProfilingComponent implements OnInit {
                     var cell = '' + text + '';
                     row.push(cell);
                 })
-                rows.push(row);
+                rows.push(row.join('|'));
             }
         }
-        csv += rows.join("\n");
+        csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "ExportUserProfiling.csv");
     }
