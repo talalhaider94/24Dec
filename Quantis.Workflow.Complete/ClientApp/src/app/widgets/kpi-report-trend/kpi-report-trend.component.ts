@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
@@ -25,6 +26,7 @@ export class KpiReportTrendComponent implements OnInit {
     kpiReportTrendWidgetParameters: any;
     setWidgetFormValues: any;
     editWidgetName: boolean = true;
+    groupReportCheck: boolean = true;
     @Output()
     kpiReportTrendParent = new EventEmitter<any>();
 
@@ -77,6 +79,42 @@ export class KpiReportTrendComponent implements OnInit {
         },
     };
     chartUpdateFlag: boolean = true;
+    chartOptions1 = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: {
+            text: 'KPI Report Trend'
+        },
+        xAxis: {
+            type: 'date',
+            categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+        },
+        yAxis: {
+            title: {
+                text: 'Values #'
+            }
+        },
+        series: [
+            {
+                type: 'column',
+                name: 'Values',
+                data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+                color: 'black'
+            },
+            {
+                type: 'scatter',
+                name: 'Target',
+                data: [2, 2, 2, 2, 2],
+                marker: {
+                    fillColor: 'orange'
+                }
+            }
+        ],
+        exporting: {
+            enabled: true
+        },
+    };
+    chartUpdateFlag1: boolean = true;
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -97,12 +135,45 @@ export class KpiReportTrendComponent implements OnInit {
             if (this.url) {
                 this.emitter.loadingStatus(true);
                 this.loading = true;
-                this.dashboardService.getContractParties().subscribe(result => {
-                    this.getChartParametersAndData(this.url, result);
-                }, error => {
-                    console.error('getContractParties', error);
-                    this.toastr.error('Unable to get Contract Parties', this.widgetname);
-                })
+
+                if (this.filters.hasOwnProperty('contractParties') &&
+                    this.filters.hasOwnProperty('contracts') && this.filters.hasOwnProperty('kpi')) {
+                    this.getComboxBoxesSet(this.filters.contractParties, this.filters.contracts).subscribe(result => {
+                        const [contractParties, contracts, kpis] = result;
+                        debugger
+                        this.getChartParametersAndData(this.url, { contractParties, contracts, kpis });
+                    }, error => {
+                        console.error(this.widgetname, error);
+                        this.toastr.error('Unable to get KPIs', this.widgetname);
+                    });
+                } else {
+                    this.dashboardService.getContractParties().subscribe(contractParties => {
+                        this.getChartParametersAndData(this.url, {contractParties});
+                    }, error => {
+                        console.error('getContractParties', error);
+                        this.toastr.error('Unable to get Contract Parties', this.widgetname);
+                    });
+                }
+                // TODO: groupReportCheck
+                if (this.groupReportCheck) {
+                    if (this.filters.hasOwnProperty('contractParties1') &&
+                        this.filters.hasOwnProperty('contracts1') && this.filters.hasOwnProperty('kpi1')) {
+                            this.getComboxBoxesSet(this.filters.contractParties1, this.filters.contracts1).subscribe(result => {
+                                const [contractParties, contracts, kpis] = result;
+                                this.getChartParametersAndData1(this.url, { contractParties, contracts, kpis });
+                            }, error => {
+                                console.error(this.widgetname, error);
+                                this.toastr.error('Unable to get KPIs', this.widgetname);
+                            });
+                    } else {
+                        this.dashboardService.getContractParties().subscribe(contractParties => {
+                            this.getChartParametersAndData1(this.url, {contractParties});
+                        }, error => {
+                            console.error('getContractParties', error);
+                            this.toastr.error('Unable to get Contract Parties', this.widgetname);
+                        });
+                    }
+                }
             }
             // coming from dashboard or public parent components
             this.subscriptionForDataChangesFromParent();
@@ -129,7 +200,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     // invokes on component initialization
-    getChartParametersAndData(url, getContractParties) {
+    getChartParametersAndData(url, comboxBoxesResult) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         let myWidgetParameters = null;
@@ -144,13 +215,9 @@ export class KpiReportTrendComponent implements OnInit {
             // populate modal with widget parameters
             let kpiReportTrendParams;
             if (myWidgetParameters) {
-                // Danial: No idea why i put this condition headersToString.
-                // if (Object.keys(this.filters).length > 0) {
-                // } else {
-                // if (!this.editWidgetName) {
-                myWidgetParameters.contractParties = getContractParties;
-                // }
-                // }
+                myWidgetParameters.allContractParties = comboxBoxesResult.contractParties;
+                myWidgetParameters.allContracts = comboxBoxesResult.contracts;
+                myWidgetParameters.allKpis = comboxBoxesResult.kpis;
                 kpiReportTrendParams = {
                     type: 'kpiReportTrendParams',
                     data: {
@@ -161,8 +228,7 @@ export class KpiReportTrendComponent implements OnInit {
                         properties: this.properties,
                         widgetid: this.widgetid,
                         dashboardid: this.dashboardid,
-                        id: this.id,
-                        allContractParties: getContractParties
+                        id: this.id
                     }
                 }
                 this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
@@ -268,6 +334,123 @@ export class KpiReportTrendComponent implements OnInit {
                 id: this.id,
                 widgetid: this.widgetid
             }
+        });
+    }
+
+    getComboxBoxesSet(contractParties, contracts) {
+        const allContractParties = this.dashboardService.getContractParties();
+        const allContracts = this.dashboardService.getContract(0, contractParties);
+        const allKpis = this.dashboardService.getKPIs(0, contracts);
+        return forkJoin([allContractParties, allContracts, allKpis]);
+    }
+
+    updateChart1(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
+        if (dashboardComponentData) {
+            let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
+            setTimeout(() => {
+                this.kpiReportTrendChartType = charttype;
+            });
+        }
+        if (currentWidgetComponentData) {
+            this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
+        }
+        if (!chartIndexData.length) {
+            this.chartOptions.title = {
+                text: `No data in ${this.widgetname}.`,
+            };
+        } else {
+            this.chartOptions1.title = {
+                text: this.widgetname,
+            };
+        }
+        let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
+        let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
+        if (valueData.length > 0) {
+            this.chartOptions.yAxis.title = {
+                text: 'Values | ' + valueData[0].description.split('|')[1]
+            }
+        }
+        let allChartLabels = chartIndexData.map(label => label.xvalue);
+
+        let allTargetData = targetData.map(data => data.yvalue);
+        let allValuesData = valueData.map(data => ({
+            y: data.yvalue,
+            name: data.description,
+            color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
+        }));
+        this.chartOptions1.xAxis = {
+            type: 'date',
+            categories: allChartLabels,
+        }
+        this.chartOptions1.series[0] = {
+            type: 'column',
+            name: 'Values',
+            data: allValuesData,
+            color: 'black'
+        };
+        this.chartOptions1.series[1] = {
+            type: 'scatter',
+            name: 'Target',
+            data: allTargetData,
+            marker: {
+                fillColor: '#ffc107'
+            }
+        };
+
+        this.chartUpdateFlag1 = true;
+        this.closeModal();
+    }
+
+    getChartParametersAndData1(url, comboxBoxesResult) {
+        // these are default parameters need to update this logic
+        // might have to make both API calls in sequence instead of parallel
+        let myWidgetParameters = null;
+        this.dashboardService.getWidgetParameters(url).pipe(
+            mergeMap((getWidgetParameters: any) => {
+                myWidgetParameters = getWidgetParameters;
+                // Map Params for widget index when widgets initializes for first time
+                const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                debugger
+                return this.dashboardService.getWidgetIndex(url, newParams);
+            })
+        ).subscribe(getWidgetIndex => {
+            // populate modal with widget parameters
+            let kpiReportTrendParams;
+            if (myWidgetParameters) {
+                myWidgetParameters.allContractParties1 = comboxBoxesResult.contractParties;
+                myWidgetParameters.allContracts1 = comboxBoxesResult.contracts;
+                myWidgetParameters.allKpis1 = comboxBoxesResult.kpis;
+                kpiReportTrendParams = {
+                    type: 'kpiReportTrendParams',
+                    data: {
+                        ...myWidgetParameters,
+                        widgetname: this.widgetname,
+                        url: this.url,
+                        filters: this.filters, // this.filter/properties will come from individual widget settings
+                        properties: this.properties,
+                        widgetid: this.widgetid,
+                        dashboardid: this.dashboardid,
+                        id: this.id
+                    }
+                }
+                this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
+                // setting initial Paramter form widget values
+                this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
+            }
+            // popular chart data
+            if (getWidgetIndex) {
+                const chartIndexData = getWidgetIndex.body;
+                // third params is current widgets settings current only used when
+                // widgets loads first time. may update later for more use cases
+                this.updateChart1(chartIndexData, null, kpiReportTrendParams.data);
+            }
+            this.loading = false;
+            this.emitter.loadingStatus(false);
+        }, error => {
+            console.error('KPI Report Trend', error);
+            this.toastr.error('Unable to get widget data', this.widgetname);
+            this.loading = false;
+            this.emitter.loadingStatus(false);
         });
     }
 }

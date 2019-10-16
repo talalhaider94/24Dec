@@ -17,6 +17,7 @@ namespace Quantis.WorkFlow.Services.API
         List<OracleRuleDTO> GetRule(int id, string name);
 
         List<OracleUserDTO> GetUser(int id, string name);
+        List<ReportPersonalDTO> GetPersonalReport(PersonalReportFilterDTO filter);
 
         //List<PslDTO> GetPsl(string period, string sla_name, string rule_name, string tracking_period);
         List<PslDTO> GetPsl(string period, int global_rule_id, string tracking_period);

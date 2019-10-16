@@ -7,8 +7,8 @@
                     data-target="#addConfigModal" (click)="showAddConfigModal()">
                 Crea Nuovo
             </button>
-        </div><br /> -->
-        <br>
+        </div> -->
+        <br />
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
@@ -16,26 +16,21 @@
                     <th style="text-align:center">Contratti</th>
                     <th style="text-align:center">Cut Off Day</th>
                     <th style="text-align:center">Workflow Day</th>
-                    <th style="display:none; text-align:center">DESCRIZIONE</th>
                     <th style="text-align:center">AZIONE</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ConfigTableBodyData; index as i">
-                    <td>{{row.key}}</td>
-                    <td>{{row.owner}}</td>
-                    <td>{{row.value}}</td>
-                    <td>{{row.description}}</td>
-                    <td *ngIf="row.iseditable; then showEdit else hideEdit"></td>
-                    <ng-template #showEdit>
-                        <td style="text-align: center">
-                            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                    data-target="#configModal" style="font-size:10px">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                        </td>
-                    </ng-template>
-                    <ng-template #hideEdit><td></td></ng-template>
+                    <td>{{row.contractpartyname}}</td>
+                    <td>{{row.contractname}}</td>
+                    <td style="text-align: center">{{row.daycuttoff}}</td>
+                    <td style="text-align: center">{{row.dayworkflow}}</td>
+                    <td style="text-align: center">
+                        <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                                data-target="#configModal" style="font-size:10px">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -56,53 +51,27 @@
                 <table id="classTable" class="table table-bordered">
                     <thead style="background: #E6E6E6">
                         <tr>
-                            <th>Chiave</th>
-                            <th>Owner</th>
-                            <th>Valore</th>
-                            <th style="display:none">Abilitato</th>
-                            <th>Descrizione</th>
+                            <th>Contraenti</th>
+                            <th>Contratti</th>
+                            <th style="width:15%">Cut Off Day</th>
+                            <th style="width:15%">Workflow Day</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{modalData.key}}</td>
-                            <td>{{modalData.owner}}</td>
-                            <td><input type="text" class="form-control" [ngModel]="modalData.value" (ngModelChange)="changeModal($event)"></td>
-                            <td style="display:none"><input type="checkbox" class="form-control" [(ngModel)]="modalData.isenable" style="font-size:6px" /></td>
-                            <td>{{modalData.description}}</td>
+                            <td>{{modalData.contractparty}}</td>
+                            <td>{{modalData.contract}}</td>
+                            <td style="width:15%"><input type="number" class="form-control" [(ngModel)]="modalData.cutoff" (ngModelChange)="changeModal($event)"></td>
+                            <td style="width:16%"><input type="number" class="form-control" [(ngModel)]="modalData.workflowday" (ngModelChange)="changeModal($event)"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button (click)="updateConfig()" class="btn btn-success">Aggiorna</button>
+                <button (click)="updateConfig(modalData)" class="btn btn-success">Aggiorna</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideConfigModal()">Chiudi</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="addConfigModal" bsModal #addConfigModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <!--        <h5 class="modal-title" id="approveModalLabel">Modifica la Configurazione</h5>-->
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideAddConfigModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <label><b>Nome Chiave</b></label><input type="text" class="form-control" placeholder="Nome Chiave" [(ngModel)]="key" /><br>
-                <label><b>Nome Owner</b></label><input type="text" class="form-control" placeholder="Nome Owner" [(ngModel)]="owner" /><br>
-                <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="value" /><br>
-                <label><b>Abilitato</b></label><input style="text-align:left;width:3%" type="checkbox" class="form-control" [(ngModel)]="isenable" /><br>
-                <label><b>Descrizione</b></label><input type="text" class="form-control" placeholder="Descrizione" [(ngModel)]="description" />
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success" (click)="addConfig()">Aggiungi</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideAddConfigModal()">Chiudi</button>
-            </div>
-        </div>
-    </div>
-</div>

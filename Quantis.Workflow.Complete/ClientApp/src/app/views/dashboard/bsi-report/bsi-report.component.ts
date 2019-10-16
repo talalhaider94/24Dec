@@ -181,24 +181,33 @@ export class BSIReportComponent implements OnInit {
     setUpDataTableDependencies() {
         let vm = this;
 
+        // $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+        //     datatable_Ref.columns(0).every(function () {
+        //         const that = this;
+        //         $($this.cartellaSelect.nativeElement)
+        //             .on('change', function () {
+
+                        
+        //                 vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
+        //                 if($(this).val()){
+        //                   const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
+        //                   vm.AllNormalReportsData = filterFolder;
+                          
+        //                 }
+        //             });
+        //     });
+        // });
+
+
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
-                $($this.cartellaSelect.nativeElement)
+                // Create the select list and search operation
+                const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
-
-                        /*let searchTerm = $(this).val(),
-                            regex = '"'+searchTerm+'"';
-
-                          that
-                              .search(regex, false, true, false)
-                              .draw();*/
-                        vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
-                        if($(this).val()){
-                          const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
-                          vm.AllNormalReportsData = filterFolder;
-                          // vm.rerender();
-                        }
+                        that
+                            .search($(this).val())
+                            .draw();
                     });
             });
         });
