@@ -22,6 +22,7 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
+    testArray = [1,2];
     dtOptions: any = {
         buttons: [
             {
@@ -70,6 +71,7 @@ export class BSIReportComponent implements OnInit {
     AllNormalReportsData: any = [];
     OrignalNormalReportData:any = [];
     ReportDetailsData: any = [];
+    ReportData: any = [];
     chartUpdateFlag: boolean = true;
     highcharts = Highcharts;
     cartellaList : any = [];
@@ -166,9 +168,13 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
             this.bsiChartModal.show();
-            this.ReportDetailsData = data.reports[0];
-            this.showHighChartsData(data);
-            console.log('ReportDetailsData -> ', data);
+            for(let i=0; i<data.reports.length; i++){
+                this.ReportDetailsData = data.reports;
+                this.showHighChartsData(data,i); 
+                //console.log('ReportDetailsData[i] -> ',this.ReportDetailsData);
+            }
+            this.ReportData = data;
+            console.log('ReportDetailsData -> ', this.ReportDetailsData);
         }, error => {
             console.error('getReportDetails', error);
             this.loading = false;
@@ -216,9 +222,10 @@ export class BSIReportComponent implements OnInit {
     hideModal(){
         this.bsiChartModal.hide();
     }
-    showHighChartsData(data) {
-        debugger
-        const chartArray = data.reports[0].data;
+    showHighChartsData(data,i) {
+       // debugger
+        console.log(data.reports[i].data);
+        const chartArray = data.reports[i].data;
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => data.zvalue === 'Violation');
         let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
@@ -233,7 +240,7 @@ export class BSIReportComponent implements OnInit {
             categories: allChartLabels,
         }
         this.chartOptions.yAxis.title = {
-            text: data.reports[0].units
+            text: data.reports[i].units
         }
         this.chartOptions.series[0] = {
             type: 'column',

@@ -24,6 +24,7 @@ export class LandingPageComponent implements OnInit {
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     @ViewChild('CompliantTable') block: ElementRef;
+    @ViewChild('NonCompliantTable') block1: ElementRef;
 
     dtOptions: DataTables.Settings = {
         language: {
@@ -89,6 +90,32 @@ export class LandingPageComponent implements OnInit {
             console.log("gridsData -> ", this.gridsData);
             this.loading = false;
         });
+
+        this.dtOptions = {
+            language: {
+                processing: "Elaborazione...",
+                search: "Cerca:",
+                lengthMenu: "Visualizza _MENU_ elementi",
+                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+                infoEmpty: "Vista da 0 a 0 di 0 elementi",
+                infoFiltered: "(filtrati da _MAX_ elementi totali)",
+                infoPostFix: "",
+                loadingRecords: "Caricamento...",
+                zeroRecords: "La ricerca non ha portato alcun risultato.",
+                emptyTable: "Nessun dato presente nella tabella.",
+                paginate: {
+                    first: "Primo",
+                    previous: "Precedente",
+                    next: "Seguente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+                }
+            },
+            destroy:true
+        };
     }
 
     ngAfterViewInit() {
@@ -156,8 +183,10 @@ export class LandingPageComponent implements OnInit {
     showCompliantModal(contractPartyId) {
         this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
             this.KpiCompliants = data;
+            this.rerender();
         });
         this.compliantModal.show();
+        
     }
 
     hideCompliantModal() {
@@ -167,7 +196,7 @@ export class LandingPageComponent implements OnInit {
     showNonCompliantModal(contractPartyId) {
         this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
             this.KpiNonCompliants = data;
-            console.log('KpiNonCompliants -> ',data);
+            this.rerender();
         });
         this.nonCompliantModal.show();
     }
