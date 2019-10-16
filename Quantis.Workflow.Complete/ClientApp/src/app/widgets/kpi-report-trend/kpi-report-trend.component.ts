@@ -24,9 +24,11 @@ export class KpiReportTrendComponent implements OnInit {
     @Input() id: number;
     loading: boolean = false;
     kpiReportTrendWidgetParameters: any;
+    kpiReportTrendWidgetParameters1: any;
     setWidgetFormValues: any;
+    setWidgetFormValues1: any;
     editWidgetName: boolean = true;
-    groupReportCheck: boolean = true;
+    groupReportCheck: boolean = false;
     @Output()
     kpiReportTrendParent = new EventEmitter<any>();
 
@@ -140,7 +142,6 @@ export class KpiReportTrendComponent implements OnInit {
                     this.filters.hasOwnProperty('contracts') && this.filters.hasOwnProperty('kpi')) {
                     this.getComboxBoxesSet(this.filters.contractParties, this.filters.contracts).subscribe(result => {
                         const [contractParties, contracts, kpis] = result;
-                        debugger
                         this.getChartParametersAndData(this.url, { contractParties, contracts, kpis });
                     }, error => {
                         console.error(this.widgetname, error);
@@ -155,7 +156,7 @@ export class KpiReportTrendComponent implements OnInit {
                     });
                 }
                 // TODO: groupReportCheck
-                if (this.groupReportCheck) {
+                // if (this.groupReportCheck) {
                     if (this.filters.hasOwnProperty('contractParties1') &&
                         this.filters.hasOwnProperty('contracts1') && this.filters.hasOwnProperty('kpi1')) {
                             this.getComboxBoxesSet(this.filters.contractParties1, this.filters.contracts1).subscribe(result => {
@@ -173,10 +174,13 @@ export class KpiReportTrendComponent implements OnInit {
                             this.toastr.error('Unable to get Contract Parties', this.widgetname);
                         });
                     }
-                }
+                // } else {
+                //     debugger
+                // }
             }
             // coming from dashboard or public parent components
             this.subscriptionForDataChangesFromParent();
+            this.subscriptionForDataChangesFromParent1();
         }
         window.dispatchEvent(new Event('resize'));
     }
@@ -199,6 +203,24 @@ export class KpiReportTrendComponent implements OnInit {
         });
     }
 
+    subscriptionForDataChangesFromParent1() {
+        this.emitter.getData().subscribe(result => {
+            const { type, data } = result;
+            if (type === 'kpiReportTrendChart1') {
+                let currentWidgetId = data.kpiReportTrendWidgetParameters.id;
+                if (currentWidgetId === this.id) {
+                    // updating parameter form widget setValues
+                    let kpiReportTrendFormValues = data.kpiReportTrendWidgetParameterValues;
+                    if (kpiReportTrendFormValues.Filters.daterange) {
+                        kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
+                    }
+                    this.setWidgetFormValues1 = kpiReportTrendFormValues;
+                    this.updateChart1(data.result.body, data, null);
+                }
+            }
+        });
+    }
+
     // invokes on component initialization
     getChartParametersAndData(url, comboxBoxesResult) {
         // these are default parameters need to update this logic
@@ -209,6 +231,9 @@ export class KpiReportTrendComponent implements OnInit {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
                 const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                if(newParams.Filters.hasOwnProperty('kpi1')) {
+                    delete newParams.Filters.kpi1;
+                }
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
@@ -253,6 +278,33 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     openModal() {
+        const chart1Parameters =  this.kpiReportTrendWidgetParameters1;
+        const chart1SetFormValues = this.setWidgetFormValues1;
+        
+        if(chart1Parameters) {
+            if(chart1Parameters.hasOwnProperty('allContractParties1')) {
+                this.kpiReportTrendWidgetParameters.allContractParties1 = chart1Parameters.allContractParties1;
+            }
+            if(chart1Parameters.hasOwnProperty('allContracts1')) {
+                this.kpiReportTrendWidgetParameters.allContracts1 = chart1Parameters.allContracts1;
+            }
+            if(chart1Parameters.hasOwnProperty('allKpis1')) {
+                this.kpiReportTrendWidgetParameters.allKpis1 = chart1Parameters.allKpis1;
+            }
+        }
+        
+        if(chart1SetFormValues) {
+            if(chart1SetFormValues.Filters.hasOwnProperty('contractParties1')) {
+                this.setWidgetFormValues.Filters.contractParties1 = chart1SetFormValues.Filters.contractParties1;
+            }
+            if(chart1SetFormValues.Filters.hasOwnProperty('allContracts1')) {
+                this.setWidgetFormValues.Filters.contracts1 = chart1SetFormValues.Filters.contracts1;
+            }
+            if(chart1SetFormValues.Filters.hasOwnProperty('allKpis1')) {
+                this.setWidgetFormValues.Filters.kpi1 = chart1SetFormValues.Filters.kpi1;
+            }
+        }
+
         this.kpiReportTrendParent.emit({
             type: 'openKpiReportTrendModal',
             data: {
@@ -268,8 +320,6 @@ export class KpiReportTrendComponent implements OnInit {
     // dashboardComponentData is result of data coming from
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-        // updating high chart
-        // https://codesandbox.io/s/543l0p0qq4
         if (dashboardComponentData) {
             let charttype = dashboardComponentData.kpiReportTrendWidgetParameterValues.Properties.charttype;
             setTimeout(() => {
@@ -355,7 +405,7 @@ export class KpiReportTrendComponent implements OnInit {
             this.kpiReportTrendChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
         }
         if (!chartIndexData.length) {
-            this.chartOptions.title = {
+            this.chartOptions1.title = {
                 text: `No data in ${this.widgetname}.`,
             };
         } else {
@@ -366,7 +416,7 @@ export class KpiReportTrendComponent implements OnInit {
         let targetData = chartIndexData.filter(data => data.zvalue === 'Target');
         let valueData = chartIndexData.filter(data => data.zvalue === 'Value');
         if (valueData.length > 0) {
-            this.chartOptions.yAxis.title = {
+            this.chartOptions1.yAxis.title = {
                 text: 'Values | ' + valueData[0].description.split('|')[1]
             }
         }
@@ -410,7 +460,13 @@ export class KpiReportTrendComponent implements OnInit {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
                 const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-                debugger
+                if(newParams.Filters.hasOwnProperty('kpi')) {
+                    delete newParams.Filters.kpi;
+                }
+                if(newParams.Filters.hasOwnProperty('kpi1')) {
+                    newParams.Filters.kpi = newParams.Filters.kpi1;
+                    delete newParams.Filters.kpi1;
+                }
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
@@ -433,9 +489,9 @@ export class KpiReportTrendComponent implements OnInit {
                         id: this.id
                     }
                 }
-                this.kpiReportTrendWidgetParameters = kpiReportTrendParams.data;
+                this.kpiReportTrendWidgetParameters1 = kpiReportTrendParams.data;
                 // setting initial Paramter form widget values
-                this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                this.setWidgetFormValues1 = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
             }
             // popular chart data
             if (getWidgetIndex) {

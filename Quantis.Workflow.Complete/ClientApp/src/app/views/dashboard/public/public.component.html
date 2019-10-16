@@ -125,7 +125,7 @@
                   </div>
                   <div class="form-group">
                     <label for="kpi">KPI's</label><!-- Date Type -->
-                    <select class="form-control" formControlName="kpi" [disabled]="!filterKpis.length">
+                    <select class="form-control" formControlName="kpi">
                       <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index" [value]="filterKpis[i].key">
                         {{ filterKpis[i].value }}
                       </option>
@@ -136,32 +136,32 @@
                       id="groupReportCheck">
                     <label class="form-check-label" for="groupReportCheck">Group Report</label>
                   </div>
-                  <span>
+                  <span *ngIf="groupReportCheck">
                     <div class="form-group">
                       <label for="contractParties1">Contract Parties</label>
                       <select class="form-control" formControlName="contractParties1"
-                        (change)="contractPartiesDropDown($event)">
-                        <option [selected]="!i" *ngFor="let org of allContractParties; let i = index"
-                          [value]="allContractParties[i].key">
-                          {{ allContractParties[i].value }}
+                        (change)="contractPartiesDropDown1($event)">
+                        <option [selected]="!i" *ngFor="let org of allContractParties1; let i = index"
+                          [value]="allContractParties1[i].key">
+                          {{ allContractParties1[i].value }}
                         </option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="contracts1">Contracts</label><!-- Date Type -->
-                      <select class="form-control" formControlName="contracts1" (change)="contractsDropDown($event)">
-                        <option [selected]="!i" *ngFor="let contract of filterContracts; let i = index"
-                          [value]="filterContracts[i].key">
-                          {{ filterContracts[i].value }}
+                      <select class="form-control" formControlName="contracts1" (change)="contractsDropDown1($event)">
+                        <option [selected]="!i" *ngFor="let contract of filterContracts1; let i = index"
+                          [value]="filterContracts1[i].key">
+                          {{ filterContracts1[i].value }}
                         </option>
                       </select>
                     </div>
                     <div class="form-group">
                       <label for="kpi1">KPI's</label><!-- Date Type -->
                       <select class="form-control" formControlName="kpi1">
-                        <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index"
-                          [value]="filterKpis[i].key">
-                          {{ filterKpis[i].value }}
+                        <option [selected]="!i" *ngFor="let kpi of filterKpis1; let i = index"
+                          [value]="filterKpis1[i].key">
+                          {{ filterKpis1[i].value }}
                         </option>
                       </select>
                     </div>

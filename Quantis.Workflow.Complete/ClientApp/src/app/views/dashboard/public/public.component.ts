@@ -24,9 +24,9 @@ import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-repor
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 @Component({
-    selector: 'app-public',
-    templateUrl: './public.component.html',
-    styleUrls: ['./public.component.scss']
+	selector: 'app-public',
+	templateUrl: './public.component.html',
+	styleUrls: ['./public.component.scss']
 })
 export class PublicComponent implements OnInit {
 	widgetCollection: WidgetModel[];
@@ -95,6 +95,7 @@ export class PublicComponent implements OnInit {
 	loadingFiltersDropDown: boolean = false;
 	loadingModalForm: boolean = false;
 	parametersArray: FormArray;
+	groupReportCheck: boolean = false;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -107,19 +108,20 @@ export class PublicComponent implements OnInit {
 	) {
 		this._$localeService.use('it');
 	}
-	
+
 	@HostListener('window:scroll', [])
-    onWindowScroll() {
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+	onWindowScroll() {
+		if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
 			this.document.getElementById('widgetsList').classList.add('widgetsPositionFixed');
 			this.document.getElementById('widgetsList').classList.add('w-95p');
-        } else {
+		} else {
 			this.document.getElementById('widgetsList').classList.remove('widgetsPositionFixed');
 			this.document.getElementById('widgetsList').classList.remove('w-95p');
-        }
-    }
+		}
+	}
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
+			debugger
 			if (this.barChartWidgetParameters.allContractParties) {
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
 			}
@@ -147,6 +149,9 @@ export class PublicComponent implements OnInit {
 				//Danial: TODO: empty the formControl parameters array then add in
 				params.map(p => this.addParameters(p)); // pushing in formGroup Controls array 
 				// childData.setWidgetFormValues.parameters = params;
+			}
+			if(this.barChartWidgetParameters.filters && this.barChartWidgetParameters.filters.groupReportCheck) {
+				this.groupReportCheck = (this.barChartWidgetParameters.filters.groupReportCheck === 'true');
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
@@ -212,7 +217,6 @@ export class PublicComponent implements OnInit {
 			console.log('kpiReportTrendParent childData', childData);
 			if (childData.type === 'openKpiReportTrendModal') {
 				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
-				debugger
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
 			}
@@ -338,11 +342,11 @@ export class PublicComponent implements OnInit {
 			}
 		});
 		this.widgetParametersForm.get('Filters').get('groupReportCheck').valueChanges.subscribe((value) => {
-			debugger
+			this.groupReportCheck = value;
 		});
 		this.closeModalSubscription();
 	}
-	
+
 	addParameters(item): void {
 		this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
 		this.parametersArray.push(this.formBuilder.group({
@@ -517,10 +521,10 @@ export class PublicComponent implements OnInit {
 			formValues.Filters.daterange = null;
 		}
 		if (formValues.Filters.date) {
-			if(typeof formValues.Filters.date !== 'string') {
+			if (typeof formValues.Filters.date !== 'string') {
 				formValues.Filters.date = this.dateTime.moment(formValues.Filters.date).format('MM/YYYY');
 			}
-			delete formValues.Filters.daterange;	
+			delete formValues.Filters.daterange;
 		}
 
 		delete formValues.Filters.startDate;
@@ -542,8 +546,8 @@ export class PublicComponent implements OnInit {
 			}
 		}
 		// Danial: TODO There may be issues in copyFormValues while patching with form
-		if(formValues.Properties.hasOwnProperty('parameters')) {
-			if(formValues.Properties.parameters.length > 0) {
+		if (formValues.Properties.hasOwnProperty('parameters')) {
+			if (formValues.Properties.parameters.length > 0) {
 				formValues.Properties.measure = this.barChartWidgetParameters.getReportQueryDetailByID.id
 				formValues.Properties.parameters = JSON.stringify(formValues.Properties.parameters);
 			} else {
@@ -554,6 +558,32 @@ export class PublicComponent implements OnInit {
 		this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, submitFormValues);
 		const { url } = this.barChartWidgetParameters;
 		debugger
+		// if (this.isKpiReportTrendComponent) {
+		// 	let kpiSubmitFormValues = { 
+		// 		GlobalFilterId: 0,
+		// 		Properties: submitFormValues.Properties
+		// 	 };
+		// 	if(kpiSubmitFormValues && kpiSubmitFormValues.Filters.hasOwnProperty('contractParties1')) {
+				
+		// 	}
+			
+		// 	this.dashboardService.getWidgetIndex(url, kpiSubmitFormValues).subscribe(result => {
+		// 		this.emitter.sendNext({
+		// 			type: 'kpiReportTrendChart1',
+		// 			data: {
+		// 				result,
+		// 				kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+		// 				kpiReportTrendWidgetParameterValues: copyFormValues
+		// 			}
+		// 		});
+		// 	}, error => {
+		// 		this.toastr.error('Unable to fetch KPI Group Report data.', 'Error');
+		// 		console.log('onWidgetParametersFormSubmit', error);
+		// 		this.emitter.loadingStatus(false);
+		// 		this.loadingModalForm = false;
+		// 	})
+		// 	this.isKpiReportTrendComponent = false;
+		// }
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
@@ -694,6 +724,41 @@ export class PublicComponent implements OnInit {
 			this.widgetParametersForm.patchValue({
 				Filters: {
 					kpi: result[0].key
+				}
+			});
+			this.loadingFiltersDropDown = false;
+		}, error => {
+			this.loadingFiltersDropDown = false;
+			console.error('contractsDropDown', error);
+			this.toastr.error('Error', 'Unable to get KPIs');
+		});
+	}
+	contractPartiesDropDown1(event) {
+		this.loadingFiltersDropDown = true;
+		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
+			this.widgetParametersForm.get('Filters.contracts1').enable();
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					contracts1: result[0].key
+				}
+			});
+			this.loadingFiltersDropDown = false;
+			this.filterContracts1 = [...this.filterContracts1, ...result];
+		}, error => {
+			this.loadingFiltersDropDown = false;
+			console.error('contractPartiesDropDown1', error);
+			this.toastr.error('Error', 'Unable to get Contracts');
+		});
+	}
+
+	contractsDropDown1(event) {
+		this.loadingFiltersDropDown = true;
+		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
+			this.widgetParametersForm.get('Filters.kpi1').enable();
+			this.filterKpis1 = [...this.filterKpis1, ...result];
+			this.widgetParametersForm.patchValue({
+				Filters: {
+					kpi1: result[0].key
 				}
 			});
 			this.loadingFiltersDropDown = false;

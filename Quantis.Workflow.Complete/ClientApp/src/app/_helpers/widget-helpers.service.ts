@@ -68,7 +68,11 @@ export class WidgetHelpersService {
         buildParams.Filters.kpi1 = filters.kpi1;
       }
       if(!apiParams.showincompleteperiodcheck) {
-        buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
+        buildParams.Filters.incompletePeriod = (filters.incompletePeriod === "true");
+      }
+
+      if(filters.groupReportCheck) {
+        buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
       return buildParams;
     } catch (error) {
@@ -137,10 +141,24 @@ export class WidgetHelpersService {
       if(apiParams.allKpis) {
         buildParams.Filters.kpi = filters.kpi || apiParams.allKpis[0].key;
       }
+
+      if(apiParams.allContractParties1) {
+        buildParams.Filters.contractParties1 = filters.contractParties1 || apiParams.allContractParties1[0].key;
+      }
+      if(apiParams.allContracts1) {
+        buildParams.Filters.contracts1 = filters.contracts1 || apiParams.allContracts1[0].key;
+      }
+      if(apiParams.allKpis1) {
+        buildParams.Filters.kpi1 = filters.kpi1 || apiParams.allKpis1[0].key;
+      }
+
       if(apiParams.getReportQueryDetailByID) {
       }
       if(!apiParams.showincompleteperiodcheck) {
         buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
+      }
+      if(filters.groupReportCheck) {
+        buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
       return buildParams;
     } catch (error) {
