@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import * as jsPDF from 'jspdf';
 
 let $this;
 @Component({
@@ -242,18 +241,6 @@ export class FreeFormReportComponent implements OnInit {
     this.dtTrigger.next();
     this.dtTrigger2.next();
     this.dtTrigger3.next();
-  }
-
-  downloadPDF(){
-    const doc = new jsPDF();
-    doc.text('Some text here', 10,10);
-
-    /*doc.autoTable({
-      html: '#executedQueryResult',
-      minCellWidth:10
-    });*/
-
-    doc.save('Test.pdf');
   }
 
   getReportsData() {
