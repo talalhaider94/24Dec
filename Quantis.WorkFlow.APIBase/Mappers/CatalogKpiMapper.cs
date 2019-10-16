@@ -24,6 +24,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 id_kpi = e.id_kpi,
                 id_alm = e.id_alm,
                 id_form = e.id_form,
+                form_name=e.Form?.form_name,
                 kpi_description = e.kpi_description,
                 kpi_computing_description = e.kpi_computing_description,
                 source_type = e.source_type,
