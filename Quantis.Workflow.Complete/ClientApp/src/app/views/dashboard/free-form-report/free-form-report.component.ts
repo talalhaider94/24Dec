@@ -7,7 +7,6 @@ import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import * as jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
 let $this;
 @Component({
@@ -247,12 +246,12 @@ export class FreeFormReportComponent implements OnInit {
 
   downloadPDF(){
     const doc = new jsPDF();
-    //doc.text('Some text here', 10,10);
-    debugger;
-    doc.autoTable({
+    doc.text('Some text here', 10,10);
+
+    /*doc.autoTable({
       html: '#executedQueryResult',
-      tableWidth: 'auto'
-    });
+      minCellWidth:10
+    });*/
 
     doc.save('Test.pdf');
   }
