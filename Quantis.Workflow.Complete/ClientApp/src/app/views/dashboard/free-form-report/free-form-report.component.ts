@@ -6,6 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import * as jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 let $this;
 @Component({
@@ -231,16 +233,28 @@ export class FreeFormReportComponent implements OnInit {
     }
   }
 
-  omit_special_char(event){   
-    var k;  
+  omit_special_char(event){
+    var k;
     k = event.charCode;  //         k = event.keyCode;  (Both can be used)
-    return((k > 63 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57)); 
+    return((k > 63 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57));
   }
 
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTrigger2.next();
     this.dtTrigger3.next();
+  }
+
+  downloadPDF(){
+    const doc = new jsPDF();
+    //doc.text('Some text here', 10,10);
+    debugger;
+    doc.autoTable({
+      html: '#executedQueryResult',
+      tableWidth: 'auto'
+    });
+
+    doc.save('Test.pdf');
   }
 
   getReportsData() {
