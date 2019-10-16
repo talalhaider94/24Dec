@@ -132,9 +132,23 @@ export class ApiService {
         const getThresholdEndPoint = `${environment.API_URL}/information/GetUserSetting?key=${key}`;
         return this.http.get(getThresholdEndPoint);
     }
+    GetAllContractPartiesContracts(): Observable<any> {
+        const getcpcEndPoint = `${environment.API_URL}/information/GetAllContractPartiesContracts`;
+        return this.http.get(getcpcEndPoint);
+    }
+    GetLandingPageKPIDetails(contractPartyId, month, year): Observable<any> {
+        const getkpidetailsEndPoint = `${environment.API_URL}/oracle/GetLandingPageKPIDetails?contractPartyId=${contractPartyId}&period=${month}/${year}`;
+        return this.http.get(getkpidetailsEndPoint);
+    }
+
+
     AddUpdateUserSettings(key,value): Observable<any> {
         const setThresholdEndPoint = `${environment.API_URL}/information/AddUpdateUserSettings?key=${key}&value=${value}`;
         return this.http.get(setThresholdEndPoint);
+    }
+    AssignCuttoffWorkflowDayByContractId(contractId,daycuttoff,workflowday): Observable<any> {
+        const setCutoffEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractId?contractId=${contractId}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
+        return this.http.get(setCutoffEndPoint);
     }
 
     addRole(data): Observable<any> {

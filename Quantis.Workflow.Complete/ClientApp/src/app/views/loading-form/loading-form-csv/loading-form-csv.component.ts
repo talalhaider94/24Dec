@@ -2,9 +2,15 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingFormService, AuthService } from '../../../_services';
 import { first } from 'rxjs/operators';
+import { FileUploader } from 'ng2-file-upload';
+import { FileHelpersService } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, of, throwError } from 'rxjs';
+import { delay, mergeMap, retryWhen } from 'rxjs/operators';
 
 @Component({
     selector: 'app-loading-form-csv',
@@ -12,22 +18,39 @@ import * as moment from 'moment';
     styleUrls: ['./loading-form-csv.component.scss']
 })
 export class LoadingFormCsvComponent implements OnInit, OnDestroy {
+  formId: string = null;
     loadingForms: any = [];
     detailsForms: any = {};
     loading: boolean = true;
     @ViewChild(DataTableDirective)
     @ViewChild('showOnReady') showOnReady: ElementRef;
+    @ViewChild('uploadCSV') public uploadCSV: ModalDirective;
     datatableElement: DataTableDirective;
     dtOptions: DataTables.Settings = {};
-    dtTrigger = new Subject();
-
+  dtTrigger = new Subject();
+  fileUploadMonth: string[] = [];
+  fileUploadYear: string[] = [];
+  loadingAttachments: boolean = false;
+  fileUploading: boolean = false;
+  formAttachmentsArray: any = [];
+  formAttachmentsArrayFiltered: any = [];
+    public uploader: FileUploader = new FileUploader({ url: 'test' });
     constructor(
-        private router: Router,
+      private router: Router,
+      private toastr: ToastrService,
         private loadingFormService: LoadingFormService,
         private authService: AuthService
     ) { }
-
-    ngOnInit() {
+  monthOption;
+  yearOption;
+  ngOnInit() {
+    this.getAnno();
+    const currentUser = this.authService.getUser();
+    this.monthOption = moment().subtract(1, 'month').format('MM');
+    this.yearOption = moment().format('YYYY');
+    if (this.monthOption === '12') {
+      this.yearOption = moment().subtract(1, 'year').format('YYYY');
+    }
         $('#showOnReady').hide();
         // Danial TODO: Some role permission logic is needed here.
         // Admin and super admin can access this
@@ -78,9 +101,9 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
                 }
             }
         };
-        const currentUser = this.authService.getUser();
+        
         // getLoadingForms()
-        this.loadingFormService.getFormsByUserId(currentUser.userid, 'tracking').pipe(first()).subscribe(data => {
+        this.loadingFormService.getFormsByUserId(currentUser.userid, 'csvtracking').pipe(first()).subscribe(data => {
             console.log('getFormsByUserId', data);
             this.loadingForms = data;
             this.dtTrigger.next();
@@ -99,10 +122,6 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
             };
             this.detailsForms = groupBy(data, 'global_rule_id')
             console.log(this.detailsForms)
-            console.log(this.detailsForms['37077'])
-            //this.loadingForms = groupBy(data, 'global_rule_id')
-            //console.log(groubedByTeam);
-            //
         }, error => {
             console.error('getFormsByUserId', error);
             this.loading = false;
@@ -115,6 +134,15 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
     loadingCompleted() {
         this.loading = false;
     }
+  populateCSVModal(row) {
+    this.uploadCSV.show();
+    console.log(row)
+   // $('#uploadCSV').show();
+  }
+  hideuploadCSV() {
+    this.uploadCSV.hide();
+   // $('#uploadCSV').hide();
+  }
     cutOffRow(row) {
         if (row.cutoff) {
             let currentDate = moment().format();
@@ -139,4 +167,113 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
             return 'N/A';
         }
     }
+  onFileSelected(event) {
+    let period = moment().subtract(1, 'month').format('MM');
+    let year = moment().format('YYYY');
+    this.uploader.queue.forEach((file, index) => {
+      this.fileUploadMonth.push(period);
+      this.fileUploadYear.push(year);
+    });
+  }
+
+  fileUploadUI() {
+    if (this.uploader.queue.length > 0) {
+      this.uploader.queue.forEach((element, index) => {
+        let file = element._file;
+        this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
+      });
+    } else {
+      this.toastr.info('Nessun documento da caricare');
+    }
+  }
+
+  _getUploadedFile(file, month, year) {
+    this.fileUploading = true;
+    const reader: FileReader = new FileReader();
+    reader.onloadend = (function (theFile, self) {
+      let fileName = theFile.name;
+      return function (readerEvent) {
+        let formAttachments = {content:'', form_attachment_id: 0, form_id: 0, period: '', year: '', doc_name: '', checksum: ''};
+        let binaryString = readerEvent.target.result;
+        let base64Data = btoa(binaryString);
+        let dateObj = self._getPeriodYear();
+        formAttachments.content = base64Data;
+        formAttachments.form_attachment_id = 0;
+        formAttachments.period = month;
+        formAttachments.year = year;
+        formAttachments.doc_name = fileName;
+        formAttachments.checksum = 'checksum';
+        self.fileUploading = true;
+        self.loadingFormService.submitCSV(formAttachments).pipe(self.delayedRetries(10000, 3)).subscribe(data => {
+          console.log('submitAttachment ==>', data);
+          self.fileUploading = false;
+          self.removeFileFromQueue(fileName);
+          //self.uploader.queue.pop();
+          self.toastr.success(`${fileName} caricato correttamente.`);
+          /*if (data) {
+            self._getAttachmentsByFormIdEndPoint(+self.formId, false); per controllare il carimento corretto
+          }*/
+        }, error => {
+          console.error('submitAttachment ==>', error);
+          self.fileUploading = false;
+          self.toastr.error('Errore durante il caricamento dell\'allegato');
+        });
+      };
+    })(file, this);
+    // reader.readAsDataURL(file); // returns file with base64 type prefix
+    reader.readAsBinaryString(file); // return only base64 string
+  }
+  // move to helper later
+  _getPeriodYear() {
+    let currentDate = new Date();
+    let period = moment(currentDate).subtract(1, 'month').format('MM');
+    let year = Number(moment(currentDate).format('YYYY'));
+    if (period === '12') {
+      year = Number(moment(currentDate).subtract(1, 'year').format('YYYY'));
+    }
+    return { period, year };
+  }
+
+  onDataChange() {
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArray.filter(attachment => attachment.year == this.yearOption);
+    this.formAttachmentsArrayFiltered = this.formAttachmentsArrayFiltered.filter(attachment => attachment.period == this.monthOption);
+  }
+  removeFileFromQueue(fileName: string) {
+    for (let i = 0; i < this.uploader.queue.length; i++) {
+      if (this.uploader.queue[i].file.name === fileName) {
+        this.uploader.queue[i].remove();
+        return;
+      }
+    }
+  }
+  _getAttachmentsByFormIdEndPoint(formId: number, shouldTrigger: boolean) {
+    this.loadingAttachments = true;
+    this.loadingFormService.getAttachmentsByFormId(formId).pipe().subscribe(data => {
+      this.loadingAttachments = false;
+      console.log('_getAttachmentsByFormIdEndPoint ==>', data);
+      if (data) {
+        this.formAttachmentsArray = data;
+        this.onDataChange();
+      }
+    }, error => {
+      this.loadingAttachments = false;
+      console.error('_getAttachmentsByFormIdEndPoint ==>', error);
+      this.toastr.error('Errore durante la lettura degli allegati.');
+    })
+  }
+  anni = [];
+  getAnno() {
+    for (let i = 2016; i <= +(moment().add('months', 7).format('YYYY')); i++) {
+      this.anni.push(i);
+    }
+    return this.anni;
+  }
+  delayedRetries(delayMs: number, maxRetry: number) {
+    let retries = maxRetry;
+    return (src: Observable<any>) => src.pipe(retryWhen((errors: Observable<any>) => errors.pipe(
+      delay(delayMs),
+      mergeMap(error => retries-- > 0 ? of(error) : throwError(`Tried to upload ${maxRetry} times. without success.`))
+    )
+    ))
+  }
 }

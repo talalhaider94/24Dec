@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../_services/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { TreeViewComponent } from '@syncfusion/ej2-angular-navigations';
 import { ITreeOptions, TreeComponent } from 'angular-tree-component';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { saveAs } from 'file-saver';
 
@@ -182,6 +182,7 @@ export class UserProfilingComponent implements OnInit {
         this.apiService.getUserProfilingCSV().subscribe((data) => {
             console.log('CSV Data => ', data);
             this.csvTableData = data;
+            this.rerender();
         });
 
         this.loading.roles = true;
@@ -481,7 +482,7 @@ export class UserProfilingComponent implements OnInit {
 
         // get table data
         if (exportmode == "full") { // total data
-            let totalRows = oTable.data().length;
+            let totalRows = $(tableElm).DataTable().data().length;
             for (let i = 0; i < totalRows; i++) {
                 var row = [];
                 $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i, e) => {

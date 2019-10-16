@@ -99,7 +99,7 @@ export class LoadingFormUserComponent implements OnInit, OnDestroy {
             };
             this.detailsForms = groupBy(data, 'global_rule_id')
             console.log(this.detailsForms)
-            console.log(this.detailsForms['37077'])
+            //console.log(this.detailsForms['37077'])
             //this.loadingForms = groupBy(data, 'global_rule_id')
             //console.log(groubedByTeam);
             //

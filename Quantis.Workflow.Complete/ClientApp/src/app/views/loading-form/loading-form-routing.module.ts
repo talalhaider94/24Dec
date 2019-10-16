@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: '',
         data: {
-            title: 'Loading Form'
+            title: 'Caricamento Dati'
         },
         children: [
             {
@@ -45,7 +45,7 @@ const routes: Routes = [
               path: 'utente-csv',
               component: LoadingFormCsvComponent,
               data: {
-                title: 'LF CSV'
+                title: 'File CSV'
               }
             },
             {

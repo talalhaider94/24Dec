@@ -97,7 +97,7 @@ export class PersonalReportComponent implements OnInit {
         // this.apiService.getPersonalReports()
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.PersonalReportData = data;
-            debugger
+            
             console.log('PersonalReportData -> ', data);
             this.rerender();
         });
