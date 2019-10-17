@@ -209,9 +209,11 @@ export class KpiReportTrendComponent implements OnInit {
             if (type === 'kpiReportTrendChart1') {
                 let currentWidgetId = data.kpiReportTrendWidgetParameters.id;
                 if (currentWidgetId === this.id) {
+                    this.groupReportCheck = data.kpiReportTrendWidgetParameterValues.Filters.groupReportCheck;
                     // updating parameter form widget setValues
                     let kpiReportTrendFormValues = data.kpiReportTrendWidgetParameterValues;
                     if (kpiReportTrendFormValues.Filters.daterange) {
+                        console.log('kpiReportTrendFormValues.Filters.daterange 1', kpiReportTrendFormValues.Filters.daterange)
                         kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
                     }
                     this.setWidgetFormValues1 = kpiReportTrendFormValues;
@@ -280,7 +282,6 @@ export class KpiReportTrendComponent implements OnInit {
     openModal() {
         const chart1Parameters =  this.kpiReportTrendWidgetParameters1;
         const chart1SetFormValues = this.setWidgetFormValues1;
-        
         if(chart1Parameters) {
             if(chart1Parameters.hasOwnProperty('allContractParties1')) {
                 this.kpiReportTrendWidgetParameters.allContractParties1 = chart1Parameters.allContractParties1;
@@ -373,6 +374,7 @@ export class KpiReportTrendComponent implements OnInit {
         };
 
         this.chartUpdateFlag = true;
+        window.dispatchEvent(new Event('resize'));
         this.closeModal();
     }
 
@@ -448,6 +450,7 @@ export class KpiReportTrendComponent implements OnInit {
         };
 
         this.chartUpdateFlag1 = true;
+        window.dispatchEvent(new Event('resize'));
         this.closeModal();
     }
 
@@ -466,6 +469,9 @@ export class KpiReportTrendComponent implements OnInit {
                 if(newParams.Filters.hasOwnProperty('kpi1')) {
                     newParams.Filters.kpi = newParams.Filters.kpi1;
                     delete newParams.Filters.kpi1;
+                }
+                if(newParams.Filters.hasOwnProperty('groupReportCheck')) {
+                    this.groupReportCheck = newParams.Filters.groupReportCheck;
                 }
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })

@@ -121,7 +121,6 @@ export class PublicComponent implements OnInit {
 	}
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
-			debugger
 			if (this.barChartWidgetParameters.allContractParties) {
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
 			}
@@ -150,7 +149,7 @@ export class PublicComponent implements OnInit {
 				params.map(p => this.addParameters(p)); // pushing in formGroup Controls array 
 				// childData.setWidgetFormValues.parameters = params;
 			}
-			if(this.barChartWidgetParameters.filters && this.barChartWidgetParameters.filters.groupReportCheck) {
+			if (this.barChartWidgetParameters.filters && this.barChartWidgetParameters.filters.groupReportCheck) {
 				this.groupReportCheck = (this.barChartWidgetParameters.filters.groupReportCheck === 'true');
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
@@ -557,33 +556,11 @@ export class PublicComponent implements OnInit {
 		let submitFormValues = removeNullKeysFromObject(formValues);
 		this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, submitFormValues);
 		const { url } = this.barChartWidgetParameters;
-		debugger
-		// if (this.isKpiReportTrendComponent) {
-		// 	let kpiSubmitFormValues = { 
-		// 		GlobalFilterId: 0,
-		// 		Properties: submitFormValues.Properties
-		// 	 };
-		// 	if(kpiSubmitFormValues && kpiSubmitFormValues.Filters.hasOwnProperty('contractParties1')) {
-				
-		// 	}
-			
-		// 	this.dashboardService.getWidgetIndex(url, kpiSubmitFormValues).subscribe(result => {
-		// 		this.emitter.sendNext({
-		// 			type: 'kpiReportTrendChart1',
-		// 			data: {
-		// 				result,
-		// 				kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
-		// 				kpiReportTrendWidgetParameterValues: copyFormValues
-		// 			}
-		// 		});
-		// 	}, error => {
-		// 		this.toastr.error('Unable to fetch KPI Group Report data.', 'Error');
-		// 		console.log('onWidgetParametersFormSubmit', error);
-		// 		this.emitter.loadingStatus(false);
-		// 		this.loadingModalForm = false;
-		// 	})
-		// 	this.isKpiReportTrendComponent = false;
-		// }
+
+		if (this.isKpiReportTrendComponent) {
+			this.onKpiReportGroupFromSubmit(url, submitFormValues, copyFormValues);
+			return true;
+		}
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			if (this.isBarChartComponent) {
@@ -816,5 +793,59 @@ export class PublicComponent implements OnInit {
 				this.isKpiStatusSummaryComponent = false;
 			}
 		});
+	}
+
+	onKpiReportGroupFromSubmit(url, submitFormValues, copyFormValues) {
+		let chartParams = JSON.parse(JSON.stringify(submitFormValues));
+		delete chartParams.Filters.contractParties1;
+		delete chartParams.Filters.contracts1;
+		delete chartParams.Filters.kpi1;
+
+		this.dashboardService.getWidgetIndex(url, chartParams).subscribe(result => {
+			this.emitter.sendNext({
+				type: 'kpiReportTrendChart',
+				data: {
+					result,
+					kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+					kpiReportTrendWidgetParameterValues: copyFormValues
+				}
+			});
+			this.isKpiReportTrendComponent = false;
+			this.loadingModalForm = false;
+			this.emitter.loadingStatus(false);
+		}, error => {
+			this.toastr.error('Unable to fetch widget data.', 'Error');
+			console.log('onWidgetParametersFormSubmit', error);
+			this.emitter.loadingStatus(false);
+			this.loadingModalForm = false;
+		});
+
+		
+		if (submitFormValues.Filters.groupReportCheck) {
+			let chartParams1 = JSON.parse(JSON.stringify(submitFormValues));
+			delete chartParams1.Filters.contractParties;
+			delete chartParams1.Filters.contracts;
+			delete chartParams1.Filters.kpi;
+			this.dashboardService.getWidgetIndex(url, chartParams1).subscribe(result => {
+				this.emitter.sendNext({
+					type: 'kpiReportTrendChart1',
+					data: {
+						result,
+						kpiReportTrendWidgetParameters: this.barChartWidgetParameters,
+						kpiReportTrendWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isKpiReportTrendComponent = false;
+
+				this.loadingModalForm = false;
+				this.emitter.loadingStatus(false);
+			}, error => {
+				this.toastr.error('Unable to fetch widget data.', 'Error');
+				console.log('onWidgetParametersFormSubmit', error);
+				this.emitter.loadingStatus(false);
+				this.loadingModalForm = false;
+			});
+
+		}
 	}
 }
