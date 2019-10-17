@@ -251,8 +251,8 @@ r.rule_name,
                                   and service_level_target is not null
                                   and time_unit='MONTH'
                                     and complete_record=1
-                                    and TRUNC(time_stamp_utc) >= TO_DATE(:start_period,'yyyy-mm-dd')
-                                    and TRUNC(begin_time_stamp_utc) <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                    and TRUNC(begin_time_stamp_utc) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                    and TRUNC(time_stamp_utc) <= TO_DATE(:end_period,'yyyy-mm-dd')
                                     and {1}
                                 ) psl
                                 on psl.global_rule_id = temp.global_rule_id";
