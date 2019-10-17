@@ -59,6 +59,7 @@ namespace Quantis.WorkFlow.APIBase.Mappers
                 rm_last_sent = e.rm_last_sent,
                 supply = e.supply,
                 day_cutoff = e.day_cutoff,
+                day_workflow = e.day_workflow,
                 primary_contract_party = e.primary_contract_party,
                 secondary_contract_party = e.secondary_contract_party,
                 kpi_name_bsi = e.GlobalRule?.global_rule_name,
@@ -101,6 +102,8 @@ namespace Quantis.WorkFlow.APIBase.Mappers
             e.frequency = o.frequency;
             e.month = o.month;
             e.day = o.day;
+            e.day_cutoff = o.day_cutoff;
+            e.day_workflow = o.day_workflow;
             e.daytrigger = o.daytrigger;
             e.monthtrigger = o.monthtrigger;
             e.enable = o.enable;

@@ -43,6 +43,7 @@
         public string rm_last_sent { get; set; }
         public string supply { get; set; }
         public int day_cutoff { get; set; }
+        public int day_workflow { get; set; }
         public int primary_contract_party { get; set; }
         public int? secondary_contract_party { get; set; }
         public string primary_contract_party_name { get; set; }
