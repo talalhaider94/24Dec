@@ -388,6 +388,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         if (get_day_workflow != null)
                         {
                             dto.day_workflow = get_day_workflow.day_workflow;
+                            entity = _catalogKpiMapper.GetEntity(dto, entity);
                         }
                         var kpi = _dbcontext.TGlobalRules.FirstOrDefault(o => dto.global_rule_id_bsi == o.global_rule_id);
                         if (kpi != null)
