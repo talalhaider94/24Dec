@@ -74,11 +74,12 @@ export class LandingPageComponent implements OnInit {
     ) { }
     ngOnInit(): void {
 
+        this.thresholdvalue = 0;
+
         this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
             this.thresholdvalue = data;
         });
 
-        this.thresholdvalue = 0;
         this.month = moment().format('MMMM');
         this.monthVar = moment().format('MM');
         this.yearVar = moment().format('YYYY');

@@ -59,20 +59,27 @@ export class LandingPageDetailsComponent implements OnInit {
     yearVar: any;
     contractpartyname: any;
     count = 0;
+    thresholdkey = '@thresholdKey1';
     thresholdvalue = 0;
     setThresholdValue = 0;
     constructor(
         private apiService: ApiService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit(): void {
+
+        this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
+            this.thresholdvalue = data;
+        });
+
+        this.thresholdvalue = 0;
         this.setThresholdValue=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
         console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
         this.queryParams.month, this.queryParams.year);
 
-        this.thresholdvalue = 0;
         this.contractpartyname = this.queryParams.contractpartyname;
         this.month = moment().format('MMMM');
         //this.monthVar = moment().format('MM');
@@ -125,8 +132,12 @@ export class LandingPageDetailsComponent implements OnInit {
     }
 
     setThreshold() {
-        console.log(this.thresholdvalue);
         this.setThresholdValue=1;
+        this.apiService.AddUpdateUserSettings(this.thresholdkey, this.thresholdvalue).subscribe((data: any) => {
+            this.toastr.success('Threshold value updated');
+        }, error => {
+          this.toastr.error('Error while updating threshold value');
+        });
         this.hideThresholdModal();
     }
 

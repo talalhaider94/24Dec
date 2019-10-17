@@ -113,7 +113,8 @@
                             </ul>
                           </div>
                         </div> -->
-                        <div [hidden]="row.noncomplaintkpis >= thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+                        <!-- [hidden]="row.noncomplaintkpis >= thresholdvalue" -->
+                        <div class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
@@ -137,8 +138,8 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
-
-                        <div [hidden]="row.noncomplaintkpis < thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+                        <!-- [hidden]="row.noncomplaintkpis < thresholdvalue" -->
+                        <div class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>

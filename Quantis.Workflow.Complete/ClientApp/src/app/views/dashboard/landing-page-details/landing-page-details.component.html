@@ -75,6 +75,7 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
+                        <!-- -->
                         <div [hidden]="row.noncomplaintkpis > 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
@@ -93,14 +94,14 @@
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
-                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
-
+                        <!-- -->
                         <div [hidden]="row.noncomplaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
@@ -119,7 +120,7 @@
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
-                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table>
@@ -138,6 +139,7 @@
         <!-- Main row -->
         <div class="row">    
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
+                <br>
                 <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
@@ -187,7 +189,7 @@
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
-                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table>
@@ -213,7 +215,7 @@
                                         <td>{{j+1}}.</td>
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
-                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{b.value}}%</span></td>
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
                                     </tr>
                                 </table> 
@@ -242,8 +244,11 @@
                 <div class="col-md-3">
                     <h5>Threshold Red:</h5>
                 </div>
+                <div class="col-md-3" style="margin-top:-5px">
+                    <input type="text" class="form-control" [(ngModel)]="thresholdkey" placeholder="key" readonly>
+                </div>
                 <div class="col-md-2" style="margin-top:-5px">
-                    <input type="number" class="form-control" [(ngModel)]="thresholdvalue">
+                    <input type="number" class="form-control" [(ngModel)]="thresholdvalue" placeholder="value">
                 </div>
                 <div class="col-md-1">
                     <b> %</b>
