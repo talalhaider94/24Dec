@@ -6,10 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-<<<<<<< HEAD
-=======
 // import * as jsPDF from 'jspdf';
->>>>>>> 0a30f1de9e250911ec009aeec3766716b1f9ea05
 
 let $this;
 @Component({
