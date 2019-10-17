@@ -567,6 +567,18 @@ export class PublicComponent implements OnInit {
 		}
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
+			
+			if(this.isFreeFormReportComponent) {
+				this.emitter.sendNext({
+					type: 'freeFormReportWidgetTable',
+					data: {
+						result,
+						freeFormReportWidgetParameters: this.barChartWidgetParameters,
+						freeFormReportWidgetParameterValues: copyFormValues
+					}
+				});
+				this.isFreeFormReportComponent = false;
+			}
 			if (this.isBarChartComponent) {
 				this.emitter.sendNext({
 					type: 'barChart',

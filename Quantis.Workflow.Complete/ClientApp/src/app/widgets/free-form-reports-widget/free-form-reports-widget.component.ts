@@ -114,15 +114,15 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     subscriptionForDataChangesFromParent() {
         this.emitter.getData().subscribe(result => {
             const { type, data } = result;
-            if (type === 'kpiStatusSummaryTable') {
+            if (type === 'freeFormReportWidgetTable') {
                 let currentWidgetId = data.freeFormReportWidgetParameters.id;
                 if (currentWidgetId === this.id) {
                     // updating parameter form widget setValues
-                    let kpiStatusSummaryTableFormValues = data.kpiStatusSummaryWidgetParameterValues;
-                    if (kpiStatusSummaryTableFormValues.Filters.daterange) {
-                        kpiStatusSummaryTableFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiStatusSummaryTableFormValues.Filters.daterange);
+                    let freeFormReportFormValues = data.freeFormReportWidgetParameterValues;
+                    if (freeFormReportFormValues.Filters.daterange) {
+                        freeFormReportFormValues.Filters.daterange = this.dateTime.buildRangeDate(freeFormReportFormValues.Filters.daterange);
                     }
-                    this.setWidgetFormValues = kpiStatusSummaryTableFormValues;
+                    this.setWidgetFormValues = freeFormReportFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
             }
