@@ -138,7 +138,6 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 // Map Params for widget index when widgets initializes for first time
                 // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 console.log('getReportQueryDetailByID', getReportQueryDetailByID)
-                debugger
                 const buildIndexParams = {
                     Properties: {
                         measure: getReportQueryDetailByID.id,

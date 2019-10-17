@@ -1,7 +1,7 @@
 import { Component, OnInit, ComponentRef, ViewChild, HostListener, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
-import { DashboardService, EmitterService } from '../../../_services';
+import { DashboardService, EmitterService, FreeFormReportService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../../_models';
 import { forkJoin } from 'rxjs';
@@ -104,6 +104,7 @@ export class PublicComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService,
 		private _$localeService: BsLocaleService,
+		private _freeFormReportService: FreeFormReportService,
 		@Inject(DOCUMENT) private document: Document
 	) {
 		this._$localeService.use('it');
@@ -119,6 +120,7 @@ export class PublicComponent implements OnInit {
 			this.document.getElementById('widgetsList').classList.remove('w-95p');
 		}
 	}
+
 	showWidgetsModalAndSetFormValues(childData, identifier) {
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
@@ -145,7 +147,6 @@ export class PublicComponent implements OnInit {
 			}
 			if (this.barChartWidgetParameters.getReportQueryDetailByID) {
 				const params = this.barChartWidgetParameters.getReportQueryDetailByID.parameters;
-				//Danial: TODO: empty the formControl parameters array then add in
 				params.map(p => this.addParameters(p)); // pushing in formGroup Controls array 
 				// childData.setWidgetFormValues.parameters = params;
 			}
@@ -348,6 +349,9 @@ export class PublicComponent implements OnInit {
 
 	addParameters(item): void {
 		this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+		while (this.parametersArray.length !== 0) {
+			this.parametersArray.removeAt(0)
+		  }
 		this.parametersArray.push(this.formBuilder.group({
 			key: item.key,
 			value: item.value
@@ -847,5 +851,16 @@ export class PublicComponent implements OnInit {
 			});
 
 		}
+	}
+
+	reportParametersDropDown(event) {
+		this.loadingFiltersDropDown = true;
+		const reportId = event.target.value.split(':')[1].trim();
+		this._freeFormReportService.getReportQueryDetailByID(+reportId).subscribe(params => {
+			this.loadingFiltersDropDown = false;
+			params.parameters.map(p => this.addParameters(p));
+		}, error => {
+			this.loadingFiltersDropDown = false;
+		});
 	}
 }
