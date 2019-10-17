@@ -1,9 +1,10 @@
 <p class="float-left no-drag">
-    <input type="text" *ngIf="isDashboardModeEdit" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
+    <input type="text" *ngIf="isDashboardModeEdit" [(ngModel)]="widgetname"
+        (ngModelChange)="widgetnameChange($event)" />
     <span *ngIf="!isDashboardModeEdit"> {{ widgetname }}</span>
 </p>
 <button type="button" [disabled]="loading" *ngIf="!isDashboardModeEdit"
-        class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
+    class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
     <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
@@ -11,7 +12,8 @@
     <span class="sr-only">Loading...</span>
 </div>
 <div class="table-responsive">
-    <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger">
         <thead>
             <tr>
                 <th>Assigned Psl Instance Id</th>

@@ -489,7 +489,7 @@ export class UserProfilingComponent implements OnInit {
                 $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i, e) => {
                     var $td = $(e);
                     var text = $td.text();
-                    var cell = '' + text + '';
+                    var cell = '"' + text + '"';
                     row.push(cell);
                 })
                 rows.push(row.join('|'));

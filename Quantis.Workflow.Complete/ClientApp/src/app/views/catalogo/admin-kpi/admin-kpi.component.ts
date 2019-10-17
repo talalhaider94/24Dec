@@ -106,7 +106,8 @@ export class AdminKpiComponent implements OnInit {
         secondary_contract_party: '',
         kpi_name_bsi: '',
         global_rule_id_bsi: '',
-        sla_id_bsi: ''
+      sla_id_bsi: '',
+        day_workflow: 0
     };
 
     dtTrigger: Subject<any> = new Subject();
@@ -217,7 +218,7 @@ export class AdminKpiComponent implements OnInit {
         this.modalData.kpi_name_bsi = data.rule_name;
         this.modalData.global_rule_id_bsi = data.global_rule_id;
         this.modalData.sla_id_bsi = data.sla_id;
-
+        this.modalData.day_workflow = 0;
         this.showConfigModal();
     }
 
