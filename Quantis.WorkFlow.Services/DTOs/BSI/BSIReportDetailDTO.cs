@@ -21,6 +21,7 @@ namespace Quantis.WorkFlow.Services.DTOs.BSI
         public string DataGranularity { get; set; }
         public string DefAgg { get; set; }
         public int LocaleId { get; set; }
+        public int GlobalRuleId { get; set; }
         public string Units { get; set; }
         public string GridUnits { get; set; }
         public List<string> Messages { get; set; }
