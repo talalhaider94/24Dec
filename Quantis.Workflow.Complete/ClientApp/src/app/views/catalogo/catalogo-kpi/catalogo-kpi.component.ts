@@ -163,7 +163,8 @@ export class CatalogoKpiComponent implements OnInit {
         secondary_contract_party_name: '',
         kpi_name_bsi: '',
         global_rule_id_bsi: '',
-        sla_id_bsi: ''
+        sla_id_bsi: '',
+        day_workflow: 0
     };
 
     kpiTableHeadData = [
@@ -331,6 +332,7 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.kpi_name_bsi = data.kpi_name_bsi;
         this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
         this.modalData.sla_id_bsi = data.sla_id_bsi;
+        this.modalData.day_workflow = data.day_workflow;
 
         this.showReferentiModal();
     }
@@ -383,7 +385,7 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.kpi_name_bsi = data.kpi_name_bsi;
         this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
         this.modalData.sla_id_bsi = data.sla_id_bsi;
-
+        this.modalData.day_workflow = data.day_workflow;
         this.showKpiModal();
     }
 

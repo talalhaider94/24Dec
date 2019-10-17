@@ -435,9 +435,12 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         int globalRuleId=Decimal.ToInt32((Decimal)result[0]);
                         var catalogKPI=_dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == globalRuleId);
-                        catalogKPI.day_cutoff = daycuttoff;
-                        catalogKPI.day_workflow = workflowday;
-                        _dbcontext.SaveChanges();
+                        if (catalogKPI != null)
+                        {
+                            catalogKPI.day_cutoff = daycuttoff;
+                            catalogKPI.day_workflow = workflowday;
+                            _dbcontext.SaveChanges();
+                        }
                     }
                 }                
             }

@@ -40,6 +40,9 @@
           <tabset>
             <!-- PROPERTIES -->
             <tab heading="PROPRIETA" id="tab1">
+              <div *ngIf="loadingFiltersDropDown" class="text-center">
+                <span class="fa fa-spinner text-primary fa-2x fa-spin"></span>
+              </div>
               <div formGroupName="Properties">
                 <div class="form-group" *ngIf="barChartWidgetParameters.showcharttype">
                   <label for="charttype">Typo di Grafico</label><!-- Chart Type -->
@@ -61,7 +64,8 @@
                 </div>
                 <div class="form-group" *ngIf="barChartWidgetParameters.showmeasure">
                   <label for="measure">Le misure</label><!-- Measure -->
-                  <select class="form-control" id="measure" formControlName="measure">
+                  <select class="form-control" id="measure" formControlName="measure"
+                    (change)="reportParametersDropDown($event)">
                     <option *ngFor="let measure of barChartWidgetParameters.measures | keyvalue; let i = index"
                       [attr.selected]="!i" [ngValue]="measure.key">
                       {{ measure.value }}

@@ -22,6 +22,7 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
+    testArray = [1,2];
     dtOptions: any = {
         buttons: [
             {
@@ -70,8 +71,12 @@ export class BSIReportComponent implements OnInit {
     AllNormalReportsData: any = [];
     OrignalNormalReportData:any = [];
     ReportDetailsData: any = [];
+    ReportDetailsData1: any = [];
+    ReportData: any = [];
     chartUpdateFlag: boolean = true;
+    chartUpdateFlag2: boolean = true;
     highcharts = Highcharts;
+    reportsDataLength;
     cartellaList : any = [];
     chartOptions = {
         lang: chartExportTranslations,
@@ -105,6 +110,27 @@ export class BSIReportComponent implements OnInit {
             //     }
             // }
         ],
+        exporting: {
+            enabled: true
+        },
+    };
+
+    chartOptions2 = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: {
+            text: 'BSI Report'
+        },
+        xAxis: {
+            type: 'date',
+            categories: []
+        },
+        yAxis: {
+            title: {
+                text: 'Percent'
+            }
+        },
+        series: [],
         exporting: {
             enabled: true
         },
@@ -166,9 +192,23 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
             this.bsiChartModal.show();
-            this.ReportDetailsData = data.reports[0];
-            this.showHighChartsData(data);
-            console.log('ReportDetailsData -> ', data);
+            //for(let i=0; i<data.reports.length; i++){ 
+                this.reportsDataLength = data.reports.length;
+                this.ReportData = data;
+                //console.log('this.reportsDataLength -> ',this.reportsDataLength);
+                if(this.reportsDataLength==1){
+                    this.ReportDetailsData = data.reports[0];
+                    this.showHighChartsData(data);
+                }else if(this.reportsDataLength>1){
+                    this.ReportDetailsData = data.reports[0];
+                    this.ReportDetailsData1 = data.reports[1];
+                    this.showHighChartsData(data);
+                    this.showHighChartsData2(data);
+                }else{
+
+                }
+           // }
+            console.log('ReportDetailsData -> ', this.ReportDetailsData);
         }, error => {
             console.error('getReportDetails', error);
             this.loading = false;
@@ -216,9 +256,11 @@ export class BSIReportComponent implements OnInit {
     hideModal(){
         this.bsiChartModal.hide();
     }
+
     showHighChartsData(data) {
-        debugger
+        // debugger
         const chartArray = data.reports[0].data;
+        //const data1 = data.reports[0].data[2];
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => data.zvalue === 'Violation');
         let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
@@ -256,6 +298,48 @@ export class BSIReportComponent implements OnInit {
             }
         };
         this.chartUpdateFlag = true;
+    }
+
+    showHighChartsData2(data) {
+        // debugger
+        const chartArray = data.reports[1].data;
+        // Danial TODO: improve code later by modifying all data in a single loop
+        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
+        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
+        let targetData = chartArray.filter(data => data.zvalue === 'Target');
+
+        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allViolationData = violationData.map(data => data.yvalue);
+        let allCompliantData = compliantData.map(data => data.yvalue);
+        let allTargetData = targetData.map(data => data.yvalue);
+        this.chartOptions2.xAxis = {
+            type: 'date',
+            categories: allChartLabels,
+        }
+        this.chartOptions2.yAxis.title = {
+            text: data.reports[1].units
+        }
+        this.chartOptions2.series[0] = {
+            type: 'column',
+            name: 'Violation',
+            data: allViolationData,
+            color: '#f86c6b'
+        };
+        this.chartOptions2.series[1] = {
+            type: 'column',
+            name: 'Compliant',
+            color: '#379457',
+            data: allCompliantData,
+        };
+        this.chartOptions2.series[2] = {
+            type: 'scatter',
+            name: 'Target',
+            data: allTargetData,
+            marker: {
+                fillColor: '#ffc107'
+            }
+        };
+        this.chartUpdateFlag2 = true;
     }
 
 
