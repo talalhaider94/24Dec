@@ -6,10 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-<<<<<<< HEAD
-=======
-// import * as jsPDF from 'jspdf';
->>>>>>> 0a30f1de9e250911ec009aeec3766716b1f9ea05
 
 let $this;
 @Component({
@@ -94,7 +90,7 @@ export class FreeFormReportComponent implements OnInit {
   dtTrigger = new Subject();
   dtOptions2: DataTables.Settings = {};
   dtTrigger2 = new Subject();
-  dtOptions3: DataTables.Settings = {};
+  dtOptions3: any = {};
   dtTrigger3 = new Subject();
   filters: any = {
     searchUsersText: ''
@@ -175,6 +171,16 @@ export class FreeFormReportComponent implements OnInit {
     this.dtOptions3 = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      dom: 'lBfrtip',
+      buttons: [
+          {
+              extend: 'pdf',
+              text: '<i class="fa fa-file"></i> Esporta PDF',
+              titleAttr: 'Esporta PDF',
+              className: 'btn btn-primary mb-3',
+              orientation: 'landscape',
+          }
+      ],
       language: {
         processing: "Elaborazione...",
         search: "Cerca:",
@@ -630,6 +636,7 @@ export class FreeFormReportComponent implements OnInit {
         //this.debugQueryData = Object.keys(data[0]);
 
         this.isDebug=1;
+
         if(data[0]=='O'){
           this.toastr.error('Errore esecuzione Free Form Report. ' +this.debugResult, 'Error');
           this.debugResult = [{Error: 'No data found'}]
@@ -642,6 +649,7 @@ export class FreeFormReportComponent implements OnInit {
           ////////////// Setting Key ///////////////
           this.hideExport = false;
           this.debugQueryData = Object.keys(data[0]);
+          this.rerender();
         }
       }
     },error => {
