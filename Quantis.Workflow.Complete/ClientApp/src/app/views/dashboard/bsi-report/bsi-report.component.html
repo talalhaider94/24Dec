@@ -41,9 +41,9 @@
   </table>
 </div>
 <!-- modal start -->
-<div bsModal #bsiChartModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div bsModal #bsiChartModal="bs-modal" class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg" style="width:90% !important;" role="document">
+  <div class="modal-dialog modal-xl" style="width:90% !important;" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ReportData.name}}</h5>
@@ -52,7 +52,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div *ngFor="let row of ReportDetailsData; index as i">
+        <div *ngIf="reportsDataLength==1">
           <div class="table-responsive" *ngIf="ReportData">
             <table class="table table-bordered freeFormReportTable font-10">
               <thead>
@@ -66,11 +66,11 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{ row.contractparty }} </td>
-                  <td>{{ row.contract }} </td>
-                  <td>{{ row.rule }} </td>
-                  <td>{{ row.datagranularity }} </td>
-                  <td>{{ row.calculationstatuslastdate }}</td>
+                  <td>{{ ReportDetailsData.contractparty }} </td>
+                  <td>{{ ReportDetailsData.contract }} </td>
+                  <td>{{ ReportDetailsData.rule }} </td>
+                  <td>{{ ReportDetailsData.datagranularity }} </td>
+                  <td>{{ ReportDetailsData.calculationstatuslastdate }}</td>
                 </tr>
               </tbody>
             </table>
@@ -79,6 +79,66 @@
             [oneToOne]="true" style="width: 100%; display: block;">
           </highcharts-chart><br>
           </div>
+        </div>
+
+        <div *ngIf="reportsDataLength>1" class="row">
+          <div class="col-md-6">
+            <div class="table-responsive" *ngIf="ReportData">
+              <table class="table table-bordered freeFormReportTable font-10">
+                <thead>
+                  <tr>
+                    <th>Contraente</th>
+                    <th>Contratto</th>
+                    <th>KPI</th>
+                    <th>Granularità dei dati</th>
+                    <th>Ultima Data di Calcolo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ ReportDetailsData.contractparty }} </td>
+                    <td>{{ ReportDetailsData.contract }} </td>
+                    <td>{{ ReportDetailsData.rule }} </td>
+                    <td>{{ ReportDetailsData.datagranularity }} </td>
+                    <td>{{ ReportDetailsData.calculationstatuslastdate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
+              [oneToOne]="true" style="width: 100%; display: block;">
+              </highcharts-chart><br>
+            </div>
+          </div>
+          <!-- ///////////////// -->
+          <div class="col-md-6">
+            <div class="table-responsive" *ngIf="ReportData">
+              <table class="table table-bordered freeFormReportTable font-10">
+                <thead>
+                  <tr>
+                    <th>Contraente</th>
+                    <th>Contratto</th>
+                    <th>KPI</th>
+                    <th>Granularità dei dati</th>
+                    <th>Ultima Data di Calcolo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ ReportDetailsData1.contractparty }} </td>
+                    <td>{{ ReportDetailsData1.contract }} </td>
+                    <td>{{ ReportDetailsData1.rule }} </td>
+                    <td>{{ ReportDetailsData1.datagranularity }} </td>
+                    <td>{{ ReportDetailsData1.calculationstatuslastdate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions2" [(update)]="chartUpdateFlag2"
+              [oneToOne]="true" style="width: 100%; display: block;">
+              </highcharts-chart><br>
+            </div>
+          </div>  
         </div>
         <!-- <div *ngFor="let row of ReportDetailsData; index as i">
           <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
