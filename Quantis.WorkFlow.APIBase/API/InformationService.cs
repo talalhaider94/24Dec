@@ -7,9 +7,11 @@ using Quantis.WorkFlow.Models.SDM;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
+using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 
 namespace Quantis.WorkFlow.APIBase.API
@@ -33,7 +35,19 @@ namespace Quantis.WorkFlow.APIBase.API
             _sdmStatusMapper = sdmStatusMapper;
             _configuration = configuration;
         }
-
+        public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
+        {
+            using (var sftp = new SftpClient(_configuration["SFTPHost"], _configuration["SFTPUserName"], _configuration["SFTPPassword"]))
+            {
+                sftp.Connect();
+                //sftp.ChangeDirectory("/MyFolder");
+                MemoryStream mStream = new MemoryStream();
+                mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
+                mStream.Position = 0;
+                sftp.UploadFile(mStream, fileDTO.Name, true);
+                sftp.Disconnect();
+            }
+        }
         public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
         {
             try
