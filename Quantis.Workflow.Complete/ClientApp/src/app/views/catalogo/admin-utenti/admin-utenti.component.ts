@@ -95,25 +95,55 @@ export class AdminUtentiComponent implements OnInit {
         this.modalData.password = '9e9f3e692e0a7da4ed9bae3c77f084022dd4dd3f376d9cfd711603f6992e665e';
         this.modalData.organization = data.user_organization_name;
         this.modalData.mail = data.user_email;
-        this.modalData.userid = '';
+        this.modalData.userid = "RETE\\local";
         this.modalData.manager = '';
 
         this.showConfigModal();
     }
 
-    updateUtenti() {
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.updateCatalogUtenti(this.modalData).subscribe(data => {
-            this.saveAssignedRoles(this.modalData.ca_bsi_user_id);
-            this.getUsers(); // this should refresh the main table on page
-            this.toastr.success('Valore Aggiornato', 'Success');
-            this.hideConfigModal();
-            //$('#utentiModal').modal('toggle').hide();
-        }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
-            this.hideConfigModal();
-            //$('#utentiModal').modal('toggle').hide();
-        });
+  updateUtenti() {
+    let formCompleted = false;
+    let errore = '';
+    if (this.modalData.mail && this.modalData.mail.length > 0) {
+      let searchEmail = this.modalData.mail.search('@');
+      if (searchEmail >= 0) {
+        if (this.modalData.userid && this.modalData.userid.length > 0) {
+          console.log(this.modalData.userid)
+          this.modalData.userid = this.modalData.userid.replace(/\//g, "\\");
+          console.log(this.modalData.userid)
+          let search = this.modalData.userid.toLowerCase().search(/rete\\/);
+          if (search >= 0) {
+            this.modalData.userid = this.modalData.userid.toUpperCase();
+            formCompleted = true;
+            
+          } else {
+            errore = 'Formato Userid non valido. (es. RETE\\user)';
+          }
+        } else {
+          errore = 'Userid obbligatorio';
+        }
+      } else {
+        errore = 'Formato Mail non valido';
+      }
+    } else {
+      errore = 'Mail obbligatoria';
+    }
+    if (formCompleted) {
+      this.toastr.info('Valore in aggiornamento..', 'Info');
+      this.apiService.updateCatalogUtenti(this.modalData).subscribe(data => {
+        this.saveAssignedRoles(this.modalData.ca_bsi_user_id);
+        this.getUsers(); // this should refresh the main table on page
+        this.toastr.success('Valore Aggiornato', 'Successo');
+        this.hideConfigModal();
+        //$('#utentiModal').modal('toggle').hide();
+      }, error => {
+        this.toastr.error('Errore durante update.', 'Errore');
+        this.hideConfigModal();
+        //$('#utentiModal').modal('toggle').hide();
+      });
+    } else {
+      this.toastr.error(errore, 'Errore');
+    }
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
