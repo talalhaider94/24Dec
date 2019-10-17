@@ -223,8 +223,8 @@ export class BSIReportComponent implements OnInit {
         this.bsiChartModal.hide();
     }
     showHighChartsData(data,i) {
-       // debugger
-        console.log(data.reports[i].data);
+        // debugger
+        //console.log(data.reports[i].data);
         const chartArray = data.reports[i].data;
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => data.zvalue === 'Violation');
