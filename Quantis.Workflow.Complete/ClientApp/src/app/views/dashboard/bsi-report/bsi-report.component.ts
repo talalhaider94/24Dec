@@ -260,6 +260,7 @@ export class BSIReportComponent implements OnInit {
     showHighChartsData(data) {
         // debugger
         const chartArray = data.reports[0].data;
+        //const data1 = data.reports[0].data[2];
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => data.zvalue === 'Violation');
         let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');

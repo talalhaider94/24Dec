@@ -43,6 +43,7 @@
             <!-- Left col class= "box box-danger box-solid" 
             [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
+                <br>
                 <div [ngClass]="(row.noncomplaintkpis == 0)?'box box-success box-solid':'box box-danger box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
