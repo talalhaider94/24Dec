@@ -15,6 +15,7 @@ export class GobackComponent implements OnInit {
     }
 
     ngOnInit() {
+        //window.open('https://rapid.posteitaliane.it/','','width=1000,height=900');
     }
 
     goBack() {

@@ -300,6 +300,13 @@ export const navItems: NavData[] = [
         ]
     },
     {
+        name: 'Power BI',
+        url: '/goback',
+        icon: 'fa fa-archive',
+        version: '0.0.1',
+        key: 'VIEW_EXTERNAL_POWERBI',
+    },
+    {
         divider: true,
         key: 'alwaysShow'
     },
