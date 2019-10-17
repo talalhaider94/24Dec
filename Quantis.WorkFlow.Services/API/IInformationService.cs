@@ -73,6 +73,7 @@ namespace Quantis.WorkFlow.Services.API
         string GetUserSetting(int userId, string key);
         List<KeyValuePair<string, string>> GetAllUserSettings(int userId);
         List<ContractPartyContractDTO> GetAllContractPartiesContracts();
+        void UploadFileToSFTPServer(BaseFileDTO fileDTO);
         void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday);
     }
 }

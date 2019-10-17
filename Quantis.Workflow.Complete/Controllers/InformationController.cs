@@ -295,5 +295,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AssignCuttoffWorkflowDayByContractId(contractId, daycuttoff, workflowday);
         }
+        [HttpPost("UploadFileToSFTPServer")]
+        [DisableRequestSizeLimit]
+        public void UploadFileToSFTPServer([FromBody]BaseFileDTO fileDTO)
+        {
+            _infomationAPI.UploadFileToSFTPServer(fileDTO);
+        }
     }
 }

@@ -505,10 +505,15 @@ namespace Quantis.WorkFlow.APIBase.API
             return res;
         }
 
-        public List<XYZDTO> GetKPIReportTrend(BaseWidgetDTO dto)
+        public List<XYZDTO> GetKPIReportTrend(WidgetwithAggOptionDTO dto)
         {
             var result = new List<XYZDTO>();
-            string query = @"select
+            string periodstring = "(psl.time_unit='MONTH' and psl.complete_record=1)";
+            if (dto.AggregationOption == AggregationOption.TRACKINGPERIOD.Key)
+            {
+                periodstring = "((psl.time_unit='MONTH' and psl.complete_record=1) or (psl.time_unit='QUARTER' and psl.complete_record=1) or (psl.time_unit='YEAR' and psl.complete_record=1))";
+            }
+                string query = @"select
                             psl.end_period,
                             psl.service_level_target_ce,
                             psl.provided_ce,
@@ -564,11 +569,11 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join t_sla_versions sv on r.sla_version_id = sv.sla_version_id
                             left join t_slas s on sv.sla_id = s.sla_id
                             where r.is_effective = 'Y' AND s.sla_status = 'EFFECTIVE'
-                            and psl.time_unit='MONTH'
-                            and psl.complete_record=1
+                            and {0}
                             and TRUNC(psl.start_period) >= TO_DATE(:start_period,'yyyy-mm-dd')
                             and TRUNC(psl.end_period) <= TO_DATE(:end_period,'yyyy-mm-dd')
                             and psl.global_rule_id =:global_rule_id";
+            query = string.Format(query, periodstring);
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
                 using (OracleCommand cmd = con.CreateCommand())
