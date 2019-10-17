@@ -22,6 +22,10 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowChartType = true;
             vm.ShowDateType = true;
             vm.ShowDateRangeFilter = true;
+            vm.ShowAggregationOption = true;
+            vm.AggregationOptions.Add(AggregationOption.PERIOD);
+            vm.AggregationOptions.Add(AggregationOption.TRACKINGPERIOD);
+
             vm.ShowLevelWiseOrganization = true;
             vm.ShowOrganization = false;
             vm.ChartTypes.Add(ChartType.BAR);
@@ -30,7 +34,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override object GetData(WidgetParametersDTO props)
         {
-            var dto = _globalfilterService.MapBaseWidget(props);
+            var dto = _globalfilterService.MapAggOptionWidget(props);
             var result = _widgetService.GetKPIReportTrend(dto);
             return result;
         }
