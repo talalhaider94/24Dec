@@ -12,7 +12,7 @@ export function removeNullKeysFromObject(obj) {
       if (obj[key] !== 'date' && obj[key] && typeof obj[key] === "object") {
         newObj[key] = removeNullKeysFromObject(obj[key]); // recurse
       } else if (obj[key] !== null && obj[key] !== undefined) {
-        newObj[key] = obj[key]; // copy value
+        newObj[key] = obj[key].toString(); // copy value
       }
     });
     return newObj;

@@ -155,6 +155,7 @@ export class PublicComponent implements OnInit {
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
+				console.log('childData.setWidgetFormValues', childData.setWidgetFormValues);
 				this.widgetParametersForm.patchValue(childData.setWidgetFormValues)
 			});
 		}
@@ -313,14 +314,10 @@ export class PublicComponent implements OnInit {
 			useTransformPositioning: true,
 			mobileBreakpoint: 640,
 			enableEmptyCellDrop: true,
-			// emptyCellDropCallback: this.onDrop,
 			pushDirections: { north: true, east: true, south: true, west: true },
 			itemChangeCallback: this.itemChange.bind(this),
-			// itemResizeCallback: PublicComponent.itemResize,
 			minCols: 10,
 			maxCols: 100,
-			// maxItemCols: 4,
-			// maxItemRows: 7,
 			minRows: 10,
 			maxRows: 100,
 			scrollSensitivity: 10,
@@ -366,9 +363,6 @@ export class PublicComponent implements OnInit {
 		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
 			if (result) {
 				const [allWidgets, dashboardData, getOrgHierarcy] = result;
-				console.log('dashboardData', dashboardData);
-				console.log('getOrgHierarcy', getOrgHierarcy);
-
 				if (allWidgets && allWidgets.length > 0) {
 					this.widgetCollection = allWidgets;
 				}
@@ -571,6 +565,7 @@ export class PublicComponent implements OnInit {
 			this.onKpiReportGroupFromSubmit(url, submitFormValues, copyFormValues);
 			return true;
 		}
+		console.log('submitFormValues', JSON.stringify(submitFormValues));
 		this.dashboardService.getWidgetIndex(url, submitFormValues).subscribe(result => {
 			// sending data to bar chart component only.
 			
