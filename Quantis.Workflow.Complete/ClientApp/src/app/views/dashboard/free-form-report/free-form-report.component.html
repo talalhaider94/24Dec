@@ -74,16 +74,16 @@
                                     </td>
                                     <td>
                                         <div>
-                                            <button class="btn btn-primary btn-sm" data-toggle="modal"
+                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-primary btn-sm" data-toggle="modal"
                                                 data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 Assegna
                                             </button>
-                                            <button class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
+                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
                                             <button [disabled]="ownedQuery.isenabled==false" class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
-                                                Disable
+                                                Disabilita
                                             </button>
                                             <button [disabled]="ownedQuery.isenabled==true" class="btn btn-success btn-sm" (click)="enable(ownedQuery)">
-                                                Enable
+                                                Abilita
                                             </button>
                                         </div>
                                     </td>

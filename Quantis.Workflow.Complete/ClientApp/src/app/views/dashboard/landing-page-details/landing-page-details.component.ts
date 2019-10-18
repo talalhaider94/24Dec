@@ -53,26 +53,36 @@ export class LandingPageDetailsComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
+    limitedData: any = [];
     bestContracts: any = [];
     monthVar: any;
     month: any;
     yearVar: any;
     contractpartyname: any;
     count = 0;
+    setViewAll = 0;
+    thresholdkey = '@thresholdKey1';
     thresholdvalue = 0;
     setThresholdValue = 0;
     constructor(
         private apiService: ApiService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit(): void {
+
+        this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
+            this.thresholdvalue = data;
+        });
+
+        this.thresholdvalue = 0;
         this.setThresholdValue=0;
+        this.setViewAll=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
         console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
         this.queryParams.month, this.queryParams.year);
 
-        this.thresholdvalue = 0;
         this.contractpartyname = this.queryParams.contractpartyname;
         this.month = moment().format('MMMM');
         //this.monthVar = moment().format('MM');
@@ -83,7 +93,12 @@ export class LandingPageDetailsComponent implements OnInit {
 
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
-            console.log("Level1 Data -> ", this.gridsData);
+            if(this.gridsData.length>6){
+                this.limitedData = this.gridsData.splice(0,6); 
+            }else{
+                this.limitedData = this.gridsData;
+            }
+            console.log("Level1 Data -> ", this.gridsData, this.limitedData);
         });
     }
 
@@ -110,7 +125,12 @@ export class LandingPageDetailsComponent implements OnInit {
         } else {
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                console.log("Level1 Data -> ", this.gridsData);
+                if(this.gridsData.length>6){
+                    this.limitedData = this.gridsData.splice(0,6); 
+                }else{
+                    this.limitedData = this.gridsData;
+                }
+                console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             });
         }
     }
@@ -124,9 +144,17 @@ export class LandingPageDetailsComponent implements OnInit {
         return this.anni;
     }
 
+    viewAll(){
+        this.setViewAll=1;
+    }
+
     setThreshold() {
-        console.log(this.thresholdvalue);
         this.setThresholdValue=1;
+        this.apiService.AddUpdateUserSettings(this.thresholdkey, this.thresholdvalue).subscribe((data: any) => {
+            this.toastr.success('Threshold value updated');
+        }, error => {
+          this.toastr.error('Error while updating threshold value');
+        });
         this.hideThresholdModal();
     }
 

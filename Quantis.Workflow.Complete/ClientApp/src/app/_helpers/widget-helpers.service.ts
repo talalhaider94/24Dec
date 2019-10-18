@@ -93,7 +93,7 @@ export class WidgetHelpersService {
       // PROPERTIES
       if (apiParams.showmeasure) {
         let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : Object.keys(apiParams.measures)[0];
-        buildParams.Properties.measure = index;
+        buildParams.Properties.measure = index.toString();
       }
       if (apiParams.showcharttype) {
         let index = (!!properties.charttype) ? properties.charttype : Object.keys(apiParams.charttypes)[0];
