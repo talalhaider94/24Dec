@@ -467,14 +467,14 @@ r.rule_name,
                         TotalKPIs = p.Count(),
                         ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
                         NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
-                        BestKPIs = p.OrderByDescending(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        BestKPIs = p.Where(o=>o.Result!="").OrderByDescending(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
                             Target = o.Target,
                             Value = o.Actual
                         }).ToList(),
-                        WorstKPIs = p.OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        WorstKPIs = p.Where(o => o.Result != "").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
