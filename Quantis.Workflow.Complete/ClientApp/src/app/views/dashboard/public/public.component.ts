@@ -436,6 +436,12 @@ export class PublicComponent implements OnInit {
 					delete widget.filters.startDate;
 					delete widget.filters.endDate;
 				}
+				if (widget.filters.hasOwnProperty('groupReportCheck')) {
+					widget.filters.groupReportCheck = widget.filters.groupReportCheck.toString(); 
+				}
+				if (widget.filters.hasOwnProperty('incompletePeriod')) {
+					widget.filters.incompletePeriod = widget.filters.incompletePeriod.toString();
+				}
 			}
 			return {
 				id: widget.id,
@@ -866,13 +872,17 @@ export class PublicComponent implements OnInit {
 	}
 
 	reportParametersDropDown(event) {
-		this.loadingFiltersDropDown = true;
-		const reportId = event.target.value.split(':')[1].trim();
-		this._freeFormReportService.getReportQueryDetailByID(+reportId).subscribe(params => {
-			this.loadingFiltersDropDown = false;
-			params.parameters.map(p => this.addParameters(p));
-		}, error => {
-			this.loadingFiltersDropDown = false;
-		});
+		if(this.isFreeFormReportComponent) {
+			this.loadingFiltersDropDown = true;
+			const reportId = event.target.value.split(':')[1].trim();
+			this._freeFormReportService.getReportQueryDetailByID(+reportId).subscribe(params => {
+				this.loadingFiltersDropDown = false;
+				params.parameters.map(p => this.addParameters(p));
+			}, error => {
+				this.toastr.error('Unable to fetch report parameters', 'Error!')
+				console.error('reportParametersDropDown', error);
+				this.loadingFiltersDropDown = false;
+			});	
+		}
 	}
 }
