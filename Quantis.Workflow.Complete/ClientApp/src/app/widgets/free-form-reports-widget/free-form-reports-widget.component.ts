@@ -31,7 +31,8 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     datatableElement: DataTableDirective;
     dtOptions: {};
     dtTrigger = new Subject();
-
+    reportName: string;
+    allMeasuresObj: {number:string};
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -106,6 +107,17 @@ export class FreeFormReportsWidgetComponent implements OnInit {
             this.subscriptionForDataChangesFromParent();
         }
     }
+    
+    ngAfterViewInit() {
+        this.dtTrigger.next();
+    }
+
+    rerender(): void {
+        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+        });
+    }
 
     ngOnDestroy() {
         this.dtTrigger.unsubscribe();
@@ -119,6 +131,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 if (currentWidgetId === this.id) {
                     // updating parameter form widget setValues
                     let freeFormReportFormValues = data.freeFormReportWidgetParameterValues;
+                    this.reportName = this.allMeasuresObj[data.freeFormReportWidgetParameterValues.Properties.measure];
                     if (freeFormReportFormValues.Filters.daterange) {
                         freeFormReportFormValues.Filters.daterange = this.dateTime.buildRangeDate(freeFormReportFormValues.Filters.daterange);
                     }
@@ -135,6 +148,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
+                this.allMeasuresObj = myWidgetParameters.measures;
                 // Map Params for widget index when widgets initializes for first time
                 // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 console.log('getReportQueryDetailByID', getReportQueryDetailByID)
@@ -174,6 +188,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
             // popular chart data
             if (getWidgetIndex) {
                 const chartIndexData = getWidgetIndex.body;
+                console.log('FREE FORM REPORT chartIndexData', chartIndexData)
                 // third params is current widgets settings current only used when
                 // widgets loads first time. may update later for more use cases
                 // this.updateChart(chartIndexData, null, freeFormReportParams.data);
@@ -206,8 +221,15 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     console.log('freeFormReport chartIndexData', chartIndexData);
-    this.freeFormReportData = chartIndexData;
-    this.dtTrigger.next();
+    if(Array.isArray(chartIndexData)) {
+        this.freeFormReportData = chartIndexData;
+        this.rerender();
+    } else {
+        this.$toastr.error(chartIndexData, 'Error!');
+        this.freeFormReportData = [];
+        this.rerender();
+    }
+    this.closeModal();
   }
 
     widgetnameChange(event) {

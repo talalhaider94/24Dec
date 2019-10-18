@@ -11,7 +11,8 @@
 <div class="spinner-grow text-primary text-center" *ngIf="loading" role="status">
     <span class="sr-only">Loading...</span>
 </div>
-<div class="table-responsive">
+<div class="table-responsive text-center">
+    <h6>{{reportName}}</h6>
     <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions"
         [dtTrigger]="dtTrigger">
         <thead>
