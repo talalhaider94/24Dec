@@ -54,6 +54,7 @@ export class LandingPageComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
+    limitedData: any = [];
     bestContracts: any = [];
     KpiCompliants: any = [];
     KpiNonCompliants: any = [];
@@ -61,6 +62,7 @@ export class LandingPageComponent implements OnInit {
     month: any;
     yearVar: any;
     count = 0;
+    setViewAll = 0;
     thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
     constructor(
@@ -75,6 +77,7 @@ export class LandingPageComponent implements OnInit {
     ngOnInit(): void {
 
         this.thresholdvalue = 0;
+        this.setViewAll=0;
 
         this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
             this.thresholdvalue = data;
@@ -88,7 +91,12 @@ export class LandingPageComponent implements OnInit {
         this.loading = true;
         this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
             this.gridsData = data;
-            console.log("gridsData -> ", this.gridsData);
+            if(this.gridsData.length>6){
+                this.limitedData = this.gridsData.splice(0,6); 
+            }else{
+                this.limitedData = this.gridsData;
+            }
+            console.log("gridsData -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
 
@@ -144,7 +152,12 @@ export class LandingPageComponent implements OnInit {
             this.loading = true;
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                console.log("gridsData -> ", this.gridsData);
+                if(this.gridsData.length>6){
+                    this.limitedData = this.gridsData.splice(0,6); 
+                }else{
+                    this.limitedData = this.gridsData;
+                }
+                console.log("gridsData -> ", this.gridsData, this.limitedData);
                 this.loading = false;
             });
         }
@@ -157,6 +170,10 @@ export class LandingPageComponent implements OnInit {
             this.anni.push(i);
         }
         return this.anni;
+    }
+
+    viewAll(){
+        this.setViewAll=1;
     }
 
     details(contractpartyid,contractpartyname) {

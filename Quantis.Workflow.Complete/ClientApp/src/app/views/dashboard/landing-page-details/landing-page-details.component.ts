@@ -53,12 +53,14 @@ export class LandingPageDetailsComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
+    limitedData: any = [];
     bestContracts: any = [];
     monthVar: any;
     month: any;
     yearVar: any;
     contractpartyname: any;
     count = 0;
+    setViewAll = 0;
     thresholdkey = '@thresholdKey1';
     thresholdvalue = 0;
     setThresholdValue = 0;
@@ -76,6 +78,7 @@ export class LandingPageDetailsComponent implements OnInit {
 
         this.thresholdvalue = 0;
         this.setThresholdValue=0;
+        this.setViewAll=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
         console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
         this.queryParams.month, this.queryParams.year);
@@ -90,7 +93,12 @@ export class LandingPageDetailsComponent implements OnInit {
 
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
-            console.log("Level1 Data -> ", this.gridsData);
+            if(this.gridsData.length>6){
+                this.limitedData = this.gridsData.splice(0,6); 
+            }else{
+                this.limitedData = this.gridsData;
+            }
+            console.log("Level1 Data -> ", this.gridsData, this.limitedData);
         });
     }
 
@@ -117,7 +125,12 @@ export class LandingPageDetailsComponent implements OnInit {
         } else {
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                console.log("Level1 Data -> ", this.gridsData);
+                if(this.gridsData.length>6){
+                    this.limitedData = this.gridsData.splice(0,6); 
+                }else{
+                    this.limitedData = this.gridsData;
+                }
+                console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             });
         }
     }
@@ -129,6 +142,10 @@ export class LandingPageDetailsComponent implements OnInit {
             this.anni.push(i);
         }
         return this.anni;
+    }
+
+    viewAll(){
+        this.setViewAll=1;
     }
 
     setThreshold() {
