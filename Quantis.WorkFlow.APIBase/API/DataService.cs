@@ -2310,6 +2310,48 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+        public int CreateBooklet(CreateBookletDTO dto,int userId)
+        {
+            var sender = _cache.GetOrCreate("SMTP_from", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value);
+            var senderPassword = _cache.GetOrCreate("SMTP_senderPassword", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value);
+            var senderUsername = _cache.GetOrCreate("SMTP_senderUsername", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_username").value);
+            var serverHost = _cache.GetOrCreate("SMTP_serverHost", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value);
+            var mailingList = new List<string>() { serverHost, senderUsername, senderPassword, sender, dto.RecipientEmail };
+            string mainPath = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_booklet" && o.key == "booklet_main_path").value;
+            var bookletDTO = new CreateBookletWebServiceDTO()
+            {
+                BookletDocumentId = dto.BookletDocumentId,
+                ListContract = dto.ListContract,
+                MailSetup = mailingList,
+                MainPath = mainPath,
+                UserId = userId
+            };
+            using (var client = new HttpClient())
+            {
+                var con = GetBSIServerURL();
+                var apiPath = "/api/Booklet/CreateBooklet";
+                var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);
+                client.BaseAddress = new Uri(output.Item1);
+                var dataAsString = JsonConvert.SerializeObject(bookletDTO);
+                var content = new StringContent(dataAsString);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var response = client.PostAsync(output.Item2, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    int res = int.Parse(response.Content.ReadAsStringAsync().Result);
+                    return res;
+                }
+                else
+                {
+                    throw new Exception("The return from Create Booklet is not valid the input is:" + dataAsString);
+                }
+            }
+            
+
+
+
+                return 0;
+        }
         //public void DeleteReportQuery(int id, int userId)
         //{
         //    var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
