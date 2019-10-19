@@ -18,6 +18,7 @@ namespace Quantis.WorkFlow.Services.API
         WidgetDTO GetWidgetById(int Id);
 
         bool AddUpdateWidget(WidgetDTO dto);
+        string GetCatalogEmailByUser(int userId);
 
         List<FormLVDTO> GetAllForms();
 

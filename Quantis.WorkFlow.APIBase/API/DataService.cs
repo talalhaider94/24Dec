@@ -2310,6 +2310,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+        public string GetCatalogEmailByUser(int userId)
+        {
+            return _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_user_id == userId).mail;
+        }
         public int CreateBooklet(CreateBookletDTO dto,int userId)
         {
             var sender = _cache.GetOrCreate("SMTP_from", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value);
