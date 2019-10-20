@@ -318,10 +318,10 @@ export class KpiReportTrendComponent implements OnInit {
             if(chart1SetFormValues.Filters.hasOwnProperty('contractParties1')) {
                 this.setWidgetFormValues.Filters.contractParties1 = chart1SetFormValues.Filters.contractParties1;
             }
-            if(chart1SetFormValues.Filters.hasOwnProperty('allContracts1')) {
+            if(chart1SetFormValues.Filters.hasOwnProperty('contracts1')) {
                 this.setWidgetFormValues.Filters.contracts1 = chart1SetFormValues.Filters.contracts1;
             }
-            if(chart1SetFormValues.Filters.hasOwnProperty('allKpis1')) {
+            if(chart1SetFormValues.Filters.hasOwnProperty('kpi1')) {
                 this.setWidgetFormValues.Filters.kpi1 = chart1SetFormValues.Filters.kpi1;
             }
         }
