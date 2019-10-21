@@ -10,10 +10,21 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
-[ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
-</highcharts-chart>
-<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"
- [ngClass]="groupReportCheck ? 'd-block float-right w-50p' : 'd-none'">
-</highcharts-chart>
+<div [ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
+  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
+  <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
+  <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
+  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
+    class="w-100p d-block">
+  </highcharts-chart>
+</div>
+
+<div [ngClass]="groupReportCheck ? 'd-block float-right w-50p' : 'd-none'">
+  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"
+    class="w-100p d-block">
+  </highcharts-chart>
+</div>
 <div class="clearfix"></div>
