@@ -647,7 +647,6 @@ export class KpiReportTrendComponent implements OnInit {
 
     public chartClicked(e: any): void {
         console.log('Chart Clicked -> ',e.label);
-        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
     }
 
     getdati1() {
@@ -744,5 +743,9 @@ export class KpiReportTrendComponent implements OnInit {
         });
         $event.preventDefault();
         $event.stopPropagation();
-      }
+    }
+
+    openPage(){
+        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
+    }
 }

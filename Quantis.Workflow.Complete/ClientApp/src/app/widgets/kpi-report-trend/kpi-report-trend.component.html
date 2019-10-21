@@ -24,7 +24,8 @@
   <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
   <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
   <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
-  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"
+  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" 
+  (click)="openMenu($event, menu)" [oneToOne]="true"
     class="w-100p d-block">
   </highcharts-chart>
 </div>
@@ -132,10 +133,10 @@
 
 <context-menu #menu>
     <ng-template contextMenuItem (execute)="showMessage($event)">
-      Option A
+      <a role="button" (click)="openPage()">Option A</a>
     </ng-template>
     <ng-template contextMenuItem divider="true"></ng-template>
     <ng-template contextMenuItem let-item (execute)="showMessage($event)">
-      Option B
+        <a role="button" (click)="openPage()">Option B</a>
     </ng-template>
 </context-menu>
