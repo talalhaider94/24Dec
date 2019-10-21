@@ -8,14 +8,14 @@
 <div class="clearfix"></div>
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
-</div>
+</div> 
 
 <div [ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
   <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
   <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
   <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
   <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" 
-  (click)="chartClicked($event)" [oneToOne]="true"
+  (click)="chartClicked($event)" [contextMenu]="basicMenu" [oneToOne]="true"
     class="w-100p d-block">
   </highcharts-chart>
 </div>
@@ -128,3 +128,14 @@
         </div>
     </div>
 </div>
+
+
+<context-menu>
+    <ng-template contextMenuItem (execute)="showMessage($event)">
+      Option A
+    </ng-template>
+    <ng-template contextMenuItem divider="true"></ng-template>
+    <ng-template contextMenuItem let-item (execute)="showMessage($event)">
+      Option B
+    </ng-template>
+  </context-menu>

@@ -175,6 +175,11 @@ export class ApiService {
         const addConfig = `${environment.API_URL}/information/AddUpdateAdvancedConfiguration`;
         return this.http.post(addConfig, data);
     }
+    
+    CreateBooklet(id): Observable<any> {
+        const booklet = `${environment.API_URL}/data/CreateBooklet`;
+        return this.http.post(booklet, id);
+    }
 
     deleteRole(roleId): Observable<any> {
         const deleteroles = `${environment.API_URL}/information/DeleteRole/${roleId}`;

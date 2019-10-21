@@ -11,6 +11,7 @@ import { ContextMenuComponent } from 'ngx-contextmenu';
 import { ApiService } from '../../_services/api.service';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+
 HC_exporting(Highcharts);
 
 @Component({
@@ -28,6 +29,11 @@ export class KpiReportTrendComponent implements OnInit {
     @Input() widgetid: number;
     @Input() dashboardid: number;
     @Input() id: number;
+
+    showMessage(message: any) {
+        console.log(message);
+    }
+    
     loading: boolean = false;
     kpiReportTrendWidgetParameters: any;
     kpiReportTrendWidgetParameters1: any;
@@ -640,7 +646,7 @@ export class KpiReportTrendComponent implements OnInit {
 
     public chartClicked(e: any): void {
         console.log('Chart Clicked -> ',e.label);
-        //window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
+        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
     }
 
     getdati1() {

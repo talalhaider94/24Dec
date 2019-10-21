@@ -56,6 +56,8 @@ export class BookletComponent implements OnInit {
         }
     };
 
+    documentId=0;
+
     contrattiDef: any = [{
         checked: false,
         clienti: '',
@@ -164,7 +166,8 @@ export class BookletComponent implements OnInit {
     checkedList = [];
     consoleSelect(event) {
         console.log(event);
-        console.log(event.target.selectedOptions[0].value);
+        this.documentId = event.target.selectedOptions[0].value;
+        console.log('documentId -> ',this.documentId);
     }
 
     getCheckedItemList() {
@@ -174,5 +177,13 @@ export class BookletComponent implements OnInit {
                 this.checkedList.push(this.array[i]);
         }
         console.log('data ', this.checkedList);
+    }
+
+    addBooklet(){
+        //console.log('Add Booklet Data -> ',this.documentiDef.documentid);
+        //if(this.documentId!=0){
+            this.apiService.CreateBooklet(this.documentiDef.documentid).subscribe((data: any) => {
+            });
+        //}
     }
 }

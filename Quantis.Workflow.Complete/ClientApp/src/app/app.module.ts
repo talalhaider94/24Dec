@@ -12,7 +12,7 @@ import { TreeviewModule } from 'ngx-treeview';
 import { TokenInterceptorService, ErrorInterceptorService } from '../app/_helpers';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { itLocale } from 'ngx-bootstrap/locale';
-import { ContextMenuModule } from 'ngx-contextmenu';
+// import { ContextMenuModule } from 'ngx-contextmenu';
 
 defineLocale('it', itLocale);
 //import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
@@ -30,6 +30,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { ForgetComponent } from './views/forget/forget.component';
+// import { KpiReportTrendComponent } from './widgets/kpi-report-trend/kpi-report-trend.component';
 
 const APP_CONTAINERS = [
     DefaultLayoutComponent
@@ -76,7 +77,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         ToastrModule.forRoot(), // ToastrModule added
         FileSaverModule,
         SweetAlert2Module.forRoot(),
-        ContextMenuModule.forRoot(),
+        // ContextMenuModule.forRoot(),
         TreeviewModule.forRoot()
     ],
     declarations: [
@@ -88,6 +89,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         RegisterComponent,
         ForgetComponent,
         SafePipe,
+        // KpiReportTrendComponent
         // FilterUsersPipe
         // LoadingFormComponent,
         // CommingsoonComponent
