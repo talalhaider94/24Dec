@@ -578,18 +578,6 @@ export class KpiReportTrendComponent implements OnInit {
         });
     }
 
-    onrightClick(e){
-        this.contextmenuX = e.clientX
-        this.contextmenuY = e.clientY
-        this.contextmenu = true;
-
-        console.log('this.contextmenu -> ',this.contextmenu)
-    }
-
-    showMessage(message: any) {
-        console.log(message);
-    }
-
     getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties;
@@ -651,9 +639,8 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     public chartClicked(e: any): void {
-        this.getdati1();
-        console.log('Chart Clicked -> ',this.filters.daterange);
-        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
+        console.log('Chart Clicked -> ',e.label);
+        //window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
     }
 
     getdati1() {
