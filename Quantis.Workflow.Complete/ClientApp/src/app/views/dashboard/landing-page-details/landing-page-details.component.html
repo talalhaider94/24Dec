@@ -7,11 +7,11 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-4" style="margin-top:-30px">
+        <div class="row pull-right col-md-5" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
-            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:30%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
               <option value="00">Tutti i mesi</option>
               <option value="01">Gennaio</option>
               <option value="02">Febbraio</option>
@@ -26,18 +26,116 @@
               <option value="11">Novembre</option>
               <option value="12">Dicembre</option>
             </select>
-            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:20%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:18%;" (change)="populateDateFilter()">
               <option value="">Anno</option>
               <option *ngFor="let year of anni" >{{year}}</option>
             </select>
             
             <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
+            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">View All</button>
             <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
         </div>
     </section>
     <br>
     <!-- Main content -->
-    <section [hidden]="setThresholdValue==1" class="content">
+    <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==1" class="content">
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col class= "box box-danger box-solid" 
+            [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
+            <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable ml-5">
+                <br>
+                <div [ngClass]="(row.noncomplaintkpis == 0)?'box box-success box-solid':'box box-danger box-solid'">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{row.contractname}}</h3>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body">
+                        <div class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">KPI</h3>
+                                <!-- /.box-tools -->
+                            </div>
+                            <!-- /.box-header -->
+                            
+                            <div class="box-footer no-padding">
+                                <ul class="nav nav-stacked">
+                                    <li>
+                                        <a>Numero KPI <span class="pull-right bold">{{row.totalkpis}}</span></a>
+                                    </li>
+                                    <li class="top-border">
+                                        <a href="#">
+                                            Severity Contratti
+                                            <div class="progress" style="height: 20px">
+                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                 </ul>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- -->
+                        <div [hidden]="row.complaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding table-responsive" style="height:600px">
+                                <table class="table table-striped">
+                                    <tr>
+                                      <th style="width: 10px; padding-left:10px">#</th>
+                                      <th style="padding-left:10px">KPI</th>
+                                      <!-- <th style="padding-left:10px">Result</th> -->
+                                      <th style="width: 40px; padding-left:50px">Valore</th>
+                                      <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.bestkpis; index as j">
+                                        <td>{{j+1}}.</td>
+                                        <td>{{b.kpiname}}</td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- -->
+                        <div [hidden]="row.noncomplaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding table-responsive" style="height:600px">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th style="width: 10px; padding-left:10px">#</th>
+                                        <th style="padding-left:10px">KPI</th>
+                                        <!-- <th style="padding-left:10px">Result</th> -->
+                                        <th style="width: 40px; padding-left:50px">Valore</th>
+                                        <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.worstkpis; index as j">
+                                        <td>{{j+1}}.</td>
+                                        <td>{{b.kpiname}}</td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+
+    <section *ngIf="setViewAll==1" [hidden]="setThresholdValue==1" class="content">
         <!-- Main row -->
         <div class="row">
             <!-- Left col class= "box box-danger box-solid" 
@@ -76,7 +174,7 @@
                             <!-- /.box-body -->
                         </div>
                         <!-- -->
-                        <div [hidden]="row.noncomplaintkpis > 0" class="box box-default box-solid" style="border: 1px solid #999">
+                        <div [hidden]="row.complaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
@@ -135,7 +233,103 @@
     
     <!-- ///////////////////////// -->
 
-    <section [hidden]="setThresholdValue==0" class="content">
+    <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==0" class="content">
+        <!-- Main row -->
+        <div class="row">    
+            <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable ml-5">
+                <br>
+                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{row.contractname}}</h3>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body">
+                        <div class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">KPI</h3>
+                                <!-- /.box-tools -->
+                            </div>
+                            <!-- /.box-header -->
+                            
+                            <div class="box-footer no-padding">
+                                <ul class="nav nav-stacked">
+                                    <li>
+                                        <a>Numero KPI <span class="pull-right bold">{{row.totalkpis}}</span></a>
+                                    </li>
+                                    <li class="top-border">
+                                        <a href="#">
+                                            Severity Contratti
+                                            <div class="progress" style="height: 20px">
+                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                 </ul>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- [hidden]="row.noncomplaintkpis >= thresholdvalue" -->
+                        <div [hidden]="row.complaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding table-responsive" style="height:600px">
+                                <table class="table table-striped">
+                                    <tr>
+                                      <th style="width: 10px; padding-left:10px">#</th>
+                                      <th style="padding-left:10px">KPI</th>
+                                      <!-- <th style="padding-left:10px">Result</th> -->
+                                      <th style="width: 40px; padding-left:50px">Valore</th>
+                                      <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.bestkpis; index as j">
+                                        <td>{{j+1}}.</td>
+                                        <td>{{b.kpiname}}</td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- [hidden]="row.noncomplaintkpis < thresholdvalue"  -->
+                        <div [hidden]="row.noncomplaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
+                            <div class="box-header with-border" style="padding:5px;">
+                                <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding table-responsive" style="height:600px">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th style="width: 10px; padding-left:10px">#</th>
+                                        <th style="padding-left:10px">KPI</th>
+                                        <!-- <th style="padding-left:10px">Result</th> -->
+                                        <th style="width: 40px; padding-left:50px">Valore</th>
+                                        <th style="width: 40px">Target</th>
+                                    </tr>
+                                    <tr *ngFor="let b of row.worstkpis; index as j">
+                                        <td>{{j+1}}.</td>
+                                        <td>{{b.kpiname}}</td>
+                                        <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
+                                        <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                    </tr>
+                                </table> 
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+
+    <section *ngIf="setViewAll==1" [hidden]="setThresholdValue==0" class="content">
         <!-- Main row -->
         <div class="row">    
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
@@ -171,7 +365,8 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
-                        <div [hidden]="row.noncomplaintkpis >= thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+                        <!-- [hidden]="row.noncomplaintkpis >= thresholdvalue" -->
+                        <div [hidden]="row.complaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
@@ -196,8 +391,8 @@
                             </div>
                             <!-- /.box-body -->
                         </div>
-
-                        <div [hidden]="row.noncomplaintkpis < thresholdvalue" class="box box-default box-solid" style="border: 1px solid #999">
+                        <!-- [hidden]="row.noncomplaintkpis < thresholdvalue"  -->
+                        <div [hidden]="row.noncomplaintkpis == 0" class="box box-default box-solid" style="border: 1px solid #999">
                             <div class="box-header with-border" style="padding:5px;">
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>

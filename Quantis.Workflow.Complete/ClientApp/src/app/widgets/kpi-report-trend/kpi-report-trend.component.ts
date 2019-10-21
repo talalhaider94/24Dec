@@ -50,7 +50,12 @@ export class KpiReportTrendComponent implements OnInit {
                 text: 'Values #'
             }
         },
-        // plotOptions: {
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
         //   column: {
         //     zones: [{
         //       value: 10, // Values up to 10 (not including) ...
@@ -59,7 +64,11 @@ export class KpiReportTrendComponent implements OnInit {
         //       color: 'red' // Values from 10 (including) and up have the color red
         //     }]
         //   }
-        // },
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
         series: [
             {
                 type: 'column',
@@ -86,6 +95,17 @@ export class KpiReportTrendComponent implements OnInit {
         credits: false,
         title: {
             text: 'KPI Report Trend'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
         },
         xAxis: {
             type: 'date',
@@ -298,10 +318,10 @@ export class KpiReportTrendComponent implements OnInit {
             if(chart1SetFormValues.Filters.hasOwnProperty('contractParties1')) {
                 this.setWidgetFormValues.Filters.contractParties1 = chart1SetFormValues.Filters.contractParties1;
             }
-            if(chart1SetFormValues.Filters.hasOwnProperty('allContracts1')) {
+            if(chart1SetFormValues.Filters.hasOwnProperty('contracts1')) {
                 this.setWidgetFormValues.Filters.contracts1 = chart1SetFormValues.Filters.contracts1;
             }
-            if(chart1SetFormValues.Filters.hasOwnProperty('allKpis1')) {
+            if(chart1SetFormValues.Filters.hasOwnProperty('kpi1')) {
                 this.setWidgetFormValues.Filters.kpi1 = chart1SetFormValues.Filters.kpi1;
             }
         }

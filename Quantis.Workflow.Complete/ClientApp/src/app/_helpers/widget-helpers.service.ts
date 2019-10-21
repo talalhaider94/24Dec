@@ -74,6 +74,7 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+      console.log('initWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);
@@ -93,7 +94,7 @@ export class WidgetHelpersService {
       // PROPERTIES
       if (apiParams.showmeasure) {
         let index = (Object.keys(properties).length > 0 && !!properties.measure) ? properties.measure : Object.keys(apiParams.measures)[0];
-        buildParams.Properties.measure = index;
+        buildParams.Properties.measure = index.toString();
       }
       if (apiParams.showcharttype) {
         let index = (!!properties.charttype) ? properties.charttype : Object.keys(apiParams.charttypes)[0];
@@ -160,6 +161,7 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+      console.log('setWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
       console.error('setWidgetParameters', error);
