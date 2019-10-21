@@ -13,10 +13,12 @@ namespace Quantis.WorkFlow.Services.API
         string GetBSIServerURL();
 
         List<WidgetDTO> GetAllWidgets();
+        int CreateBooklet(CreateBookletDTO dto, int userId);
 
         WidgetDTO GetWidgetById(int Id);
 
         bool AddUpdateWidget(WidgetDTO dto);
+        string GetCatalogEmailByUser(int userId);
 
         List<FormLVDTO> GetAllForms();
 

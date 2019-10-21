@@ -74,6 +74,7 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+      console.log('initWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
       console.error('initWidgetParameters', error);
@@ -160,6 +161,7 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+      console.log('setWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
       console.error('setWidgetParameters', error);

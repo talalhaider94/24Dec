@@ -443,6 +443,21 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.ExecuteReportQuery(dto);
         }
 
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("CreateBooklet")]
+        public int CreateBooklet([FromBody]CreateBookletDTO dto)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.CreateBooklet(dto, usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("GetCatalogEmailByUser")]
+        public string GetCatalogEmailByUser()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetCatalogEmailByUser(usr.UserId);
+        }
+
         ////////////////////////////
         /*[HttpGet("GetFormsByUser")]
         public List<FormUsersDTO> GetFormsByUser()
