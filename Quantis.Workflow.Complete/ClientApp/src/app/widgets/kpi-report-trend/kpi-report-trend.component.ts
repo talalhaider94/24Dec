@@ -748,4 +748,11 @@ export class KpiReportTrendComponent implements OnInit {
     openPage(){
         window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
     }
+    
+  clear1() {// for build
+    // for build
+  }// for build
+  filter = null;// for build
+  showEventCol = false;// for build
+
 }
