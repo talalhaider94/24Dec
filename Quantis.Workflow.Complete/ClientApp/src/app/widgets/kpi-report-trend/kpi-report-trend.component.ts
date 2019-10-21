@@ -535,4 +535,64 @@ export class KpiReportTrendComponent implements OnInit {
             this.emitter.loadingStatus(false);
         });
     }
+
+    getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allContractParties;
+            const contractPartyKey = setWidgetFormValues.Filters.contractParties;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
+
+    getContractParties1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
+            const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
+
+    getContracts(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allContracts;
+            const contractPartyKey = setWidgetFormValues.Filters.contracts;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
+    
+    getContracts1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allContracts1;
+            const contractPartyKey = setWidgetFormValues.Filters.contracts1;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
+    
+    getKPI(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allKpis;
+            const contractPartyKey = setWidgetFormValues.Filters.kpi;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
+
+    getKPI1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
+        if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
+            const contractParties = kpiReportTrendWidgetParameters.allKpis1;
+            const contractPartyKey = setWidgetFormValues.Filters.kpi1;
+            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+        } else {
+            return 'N/A';
+        }
+    }
 }
