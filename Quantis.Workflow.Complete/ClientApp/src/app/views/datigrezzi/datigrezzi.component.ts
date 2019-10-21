@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 declare var $;
 let $this;
@@ -22,10 +24,19 @@ export class DatiGrezziComponent implements OnInit {
     @ViewChild('searchModal') public searchModal: ModalDirective;
     @ViewChild('daModal') public daModal: ModalDirective;
     @ViewChild('editModal') public editModal: ModalDirective;
+
+    parameters;
+    contractPartyId;
+    contractId;
+    kpiId;
+    dateRange;
+
     constructor(
         private apiService: ApiService,
         private toastr: ToastrService,
         private LoadingFormService: LoadingFormService,
+        private route: ActivatedRoute,
+        private location: Location
     ) {
         $this = this;
     }
@@ -132,6 +143,11 @@ export class DatiGrezziComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.parameters = this.route.snapshot.queryParamMap['params'];
+        this.location.replaceState('/datigrezzi'); // remove query params from url after getting its value
+        console.log('Parameters -> ', this.parameters);
+
         this.dtOptions = {
             deferRender: true,
             language: {

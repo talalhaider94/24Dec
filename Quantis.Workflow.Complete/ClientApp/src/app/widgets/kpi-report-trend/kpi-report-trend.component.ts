@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
 import HC_exporting from 'highcharts/modules/exporting';
+import { ContextMenuComponent } from 'ngx-contextmenu';
 HC_exporting(Highcharts);
 
 @Component({
@@ -15,6 +16,7 @@ HC_exporting(Highcharts);
     styleUrls: ['./kpi-report-trend.component.scss']
 })
 export class KpiReportTrendComponent implements OnInit {
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
     @Input() widgetname: string;
     @Input() url: string;
     @Input() filters: any;
@@ -33,6 +35,10 @@ export class KpiReportTrendComponent implements OnInit {
     kpiReportTrendParent = new EventEmitter<any>();
 
     public kpiReportTrendChartType: string = 'bar';
+
+    contextmenu = false;
+    contextmenuX = 0;
+    contextmenuY = 0;
 
     highcharts = Highcharts;
     chartOptions = {
@@ -515,4 +521,22 @@ export class KpiReportTrendComponent implements OnInit {
             this.emitter.loadingStatus(false);
         });
     }
+
+    public chartClicked(e: any): void {
+        console.log('Chart Clicked -> ',this.filters.daterange);
+        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
+    }
+
+    onrightClick(e){
+        this.contextmenuX = e.clientX
+        this.contextmenuY = e.clientY
+        this.contextmenu = true;
+
+        console.log('this.contextmenu -> ',this.contextmenu)
+    }
+
+    showMessage(message: any) {
+        console.log(message);
+    }
+
 }

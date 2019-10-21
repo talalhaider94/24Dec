@@ -4,6 +4,7 @@ import { ApiService } from '../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+// import { ContextMenuComponent } from 'ngx-contextmenu';
 
 declare var $;
 var $this;
@@ -18,6 +19,17 @@ export class SdmGroupComponent implements OnInit {
     @ViewChild('ConfigurationTable') block: ElementRef;
     // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
+    // public items = [
+    //     { name: 'John', otherProperty: 'Foo' },
+    //     { name: 'Joe', otherProperty: 'Bar' }
+    // ];
+    // @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+  
+    // showMessage(message: any) {
+    //   console.log(message);
+    // }
+
     category_id: number = 0;
     // handle: any = '';
     // name: any =  '';

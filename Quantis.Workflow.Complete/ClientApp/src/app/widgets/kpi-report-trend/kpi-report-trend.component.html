@@ -10,7 +10,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
+<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" 
+(click)="chartClicked($event)" [oneToOne]="true"
 [ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
 </highcharts-chart>
 <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"

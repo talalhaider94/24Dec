@@ -12,6 +12,8 @@ import { TreeviewModule } from 'ngx-treeview';
 import { TokenInterceptorService, ErrorInterceptorService } from '../app/_helpers';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { itLocale } from 'ngx-bootstrap/locale';
+import { ContextMenuModule } from 'ngx-contextmenu';
+
 defineLocale('it', itLocale);
 //import { FilterUsersPipe } from './_pipes/filterUsers.pipe';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -74,6 +76,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         ToastrModule.forRoot(), // ToastrModule added
         FileSaverModule,
         SweetAlert2Module.forRoot(),
+        ContextMenuModule.forRoot(),
         TreeviewModule.forRoot()
     ],
     declarations: [
