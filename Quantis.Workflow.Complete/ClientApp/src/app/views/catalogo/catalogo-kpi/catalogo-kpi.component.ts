@@ -210,7 +210,7 @@ export class CatalogoKpiComponent implements OnInit {
         this.dtOptions = {
             //dom: 'Bfrtip',
             "columnDefs": [{
-                "targets": [12],
+                "targets": [13],
                 "visible": false,
                 "searchable": true
             }],
@@ -590,7 +590,10 @@ export class CatalogoKpiComponent implements OnInit {
                 var row = [];
                 $($(tableElm).DataTable().row(i).nodes()).find('td:not(.notExportCsv)').each((i, e) => {
                     var $td = $(e);
-                    var text = $td.text();
+                  var text = $td.text();
+                  if (text == '&#10004;' || text == 'âœ”' || text == '✔') { text = 'true'; }
+                  if (text == '&#10006;' || text == 'âœ–' || text == '✖') { text = 'false'; }
+                 // console.log(text);
                     var cell = '"' + text + '"';
                     row.push(cell);
                 })
@@ -607,11 +610,14 @@ export class CatalogoKpiComponent implements OnInit {
                 var row = [];
                 $(this).find('td:not(.notExportCsv)').each(function () {
                     var $td = $(this);
-                    var text = $td.text();
-                    var cell = '"' + text + '"';
+                  var text = $td.text();
+                  if (text == '&#10004;' || text == 'âœ”' || text == '✔') { text = 'true'; }
+                  if (text == '&#10006;' || text == 'âœ–' || text == '✖') { text = 'false'; }
+                  var cell = '"' + text + '"';
+                  
                     row.push(cell);
                 });
-                rows.push(row);
+                rows.push(row.join('|'));
             })
         }
         csv += rows.join("\r\n");
