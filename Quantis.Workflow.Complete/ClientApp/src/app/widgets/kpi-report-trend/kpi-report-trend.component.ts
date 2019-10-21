@@ -8,6 +8,9 @@ import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
 import HC_exporting from 'highcharts/modules/exporting';
 import { ContextMenuComponent } from 'ngx-contextmenu';
+import { ApiService } from '../../_services/api.service';
+import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 HC_exporting(Highcharts);
 
 @Component({
@@ -17,6 +20,7 @@ HC_exporting(Highcharts);
 })
 export class KpiReportTrendComponent implements OnInit {
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+    @ViewChild('daModal') public daModal: ModalDirective;
     @Input() widgetname: string;
     @Input() url: string;
     @Input() filters: any;
@@ -35,6 +39,34 @@ export class KpiReportTrendComponent implements OnInit {
     kpiReportTrendParent = new EventEmitter<any>();
 
     public kpiReportTrendChartType: string = 'bar';
+
+    datiGrezzi = [];
+    monthVar: any;
+    yearVar: any;
+    idKpi: any;
+    countCampiData = [];
+    eventTypes: any = {};
+    resources: any = {};
+    id_kpi_temp = '';
+    loadingModalDati: boolean = false;
+    public periodFilter: number;
+    campoData: any = []
+    fitroDataById: any = [
+        {
+            event_type_id: '   ',
+            resource_id: '',
+            time_stamp: ' ',
+            raw_data_id: '',
+            create_date: ' ',
+            data: this.datiGrezzi,
+            modify_date: '',
+            reader_id: '',
+            event_source_type_id: ' ',
+            event_state_id: ' ',
+            partner_raw_data_id: ' ',
+        }
+    ]
+
 
     contextmenu = false;
     contextmenuX = 0;
@@ -145,6 +177,7 @@ export class KpiReportTrendComponent implements OnInit {
     chartUpdateFlag1: boolean = true;
     constructor(
         private dashboardService: DashboardService,
+        private apiService: ApiService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
@@ -153,6 +186,9 @@ export class KpiReportTrendComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+
+        this.periodFilter = 0;
+
         console.log('KPI REPORT TREND ==>', this.filters, this.properties);
         this.chartOptions.title = {
             text: this.widgetname,
@@ -542,11 +578,6 @@ export class KpiReportTrendComponent implements OnInit {
         });
     }
 
-    public chartClicked(e: any): void {
-        console.log('Chart Clicked -> ',this.filters.daterange);
-        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
-    }
-
     onrightClick(e){
         this.contextmenuX = e.clientX
         this.contextmenuY = e.clientY
@@ -617,5 +648,97 @@ export class KpiReportTrendComponent implements OnInit {
         } else {
             return 'N/A';
         }
+    }
+
+    public chartClicked(e: any): void {
+        this.getdati1();
+        console.log('Chart Clicked -> ',this.filters.daterange);
+        window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
+    }
+
+    getdati1() {
+        this.periodFilter = 1;
+        let month = '07';
+        let year = '2018';
+
+        this.loadingModalDati = true;
+
+        this.apiService.getKpiRawData(this.filters.kpi, month, year).subscribe((dati: any) => {
+            this.fitroDataById = dati;
+            console.log(dati);
+            Object.keys(this.fitroDataById).forEach(key => {
+                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+                switch (this.fitroDataById[key].event_state_id) {
+                    case 1:
+                        this.fitroDataById[key].event_state_id = "Originale";
+                        break;
+                    case 2:
+                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        break;
+                    case 3:
+                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        break;
+                    case 4:
+                        this.fitroDataById[key].event_state_id = "Correzione";
+                        break;
+                    case 5:
+                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        break;
+                    case 6:
+                        this.fitroDataById[key].event_state_id = "Business";
+                        break;
+                    default:
+                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        break;
+                }
+                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+            })
+            this.getCountCampiData();
+
+            let max = this.countCampiData.length;
+
+            Object.keys(this.fitroDataById).forEach(key => {
+                let temp = Object.keys(this.fitroDataById[key].data).length;
+                if (temp < max) {
+                    for (let i = 0; i < (max - temp); i++) {
+                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                    }
+                }
+            })
+            console.log('dati', dati);
+            this.loadingModalDati = false;
+            this.showDaModal();
+        },
+            error => {
+                this.loadingModalDati = false;
+            });
+
+        this.showDaModal();
+    }
+
+    getCountCampiData() {
+        let maxLength = 0;
+        this.fitroDataById.forEach(f => {
+            //let data = JSON.parse(f.data);
+            if (Object.keys(f.data).length > maxLength) {
+                maxLength = Object.keys(f.data).length;
+            }
+        });
+        this.countCampiData = [];
+        for (let i = 1; i <= maxLength; i++) {
+            this.countCampiData.push(i);
+        }
+    }
+
+    showDaModal() {
+        this.daModal.show();
+    }
+
+    hideDaModal() {
+        this.daModal.hide();
     }
 }

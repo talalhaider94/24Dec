@@ -180,6 +180,10 @@ export class DatiGrezziComponent implements OnInit {
         this.getAnno();
         this.getEventResourceNames()
         //this.setUpDataTableDependencies();
+
+        this.apiService.getKpiRawData(39027,'02','2018').subscribe((data: any) => {
+            console.log('KpiRawData -> ', data);
+        });
     }
 
     getEventResourceNames() {
