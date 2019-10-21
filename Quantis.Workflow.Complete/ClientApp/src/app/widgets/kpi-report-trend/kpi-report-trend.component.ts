@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
 import HC_exporting from 'highcharts/modules/exporting';
-import { ContextMenuComponent } from 'ngx-contextmenu';
+import { ContextMenuService,ContextMenuComponent } from 'ngx-contextmenu';
 import { ApiService } from '../../_services/api.service';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -188,7 +188,8 @@ export class KpiReportTrendComponent implements OnInit {
         private dateTime: DateTimeService,
         private router: Router,
         private widgetHelper: WidgetHelpersService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private contextMenuService: ContextMenuService
     ) { }
 
     ngOnInit() {
@@ -734,4 +735,14 @@ export class KpiReportTrendComponent implements OnInit {
     hideDaModal() {
         this.daModal.hide();
     }
+
+    openMenu($event, menu: ContextMenuComponent) {
+        this.contextMenuService.show.next({
+          contextMenu: menu,
+          event: <any>$event,
+          item: {},
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+      }
 }
