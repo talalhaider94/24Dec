@@ -153,6 +153,10 @@ export class PublicComponent implements OnInit {
 			if (this.barChartWidgetParameters.filters && this.barChartWidgetParameters.filters.groupReportCheck) {
 				this.groupReportCheck = (this.barChartWidgetParameters.filters.groupReportCheck === 'true');
 			}
+			
+			if(childData.setWidgetFormValues.Properties.hasOwnProperty('measure')) {
+				childData.setWidgetFormValues.Properties.measure = childData.setWidgetFormValues.Properties.measure.toString(); 
+			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
 				console.log('childData.setWidgetFormValues', childData.setWidgetFormValues);
