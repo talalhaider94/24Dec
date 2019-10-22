@@ -37,6 +37,9 @@
         </div>
     </section>
     <br>
+    <h5 *ngIf="loading" class="text-center text-primary">
+        <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+    </h5>
     <!-- Main content -->
     <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==1" class="content">
         <!-- Main row -->
