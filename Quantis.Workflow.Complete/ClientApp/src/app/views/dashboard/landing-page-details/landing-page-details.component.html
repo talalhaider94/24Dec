@@ -37,6 +37,9 @@
         </div>
     </section>
     <br>
+    <h5 *ngIf="loading" class="text-center text-primary">
+        <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+    </h5>
     <!-- Main content -->
     <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==1" class="content">
         <!-- Main row -->
@@ -82,7 +85,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                       <th style="width: 10px; padding-left:10px">#</th>
@@ -96,7 +99,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -108,7 +111,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                         <th style="width: 10px; padding-left:10px">#</th>
@@ -122,7 +125,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -179,7 +182,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                       <th style="width: 10px; padding-left:10px">#</th>
@@ -193,7 +196,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -205,7 +208,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                         <th style="width: 10px; padding-left:10px">#</th>
@@ -219,7 +222,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -275,7 +278,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                       <th style="width: 10px; padding-left:10px">#</th>
@@ -289,7 +292,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -301,7 +304,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                         <th style="width: 10px; padding-left:10px">#</th>
@@ -315,7 +318,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table> 
                             </div>
@@ -371,7 +374,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Better Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                       <th style="width: 10px; padding-left:10px">#</th>
@@ -385,7 +388,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-green">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -397,7 +400,7 @@
                                 <h3 class="box-title" style="font-size: 18px">Under Performing Contracts</h3>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body no-padding table-responsive" style="height:600px">
+                            <div class="box-body no-padding table-responsive" style="height:350px">
                                 <table class="table table-striped">
                                     <tr>
                                         <th style="width: 10px; padding-left:10px">#</th>
@@ -411,7 +414,7 @@
                                         <td>{{b.kpiname}}</td>
                                         <!-- <td><mat-progress-bar mode="determinate" [value]="b.value" style="width:200%; margin-top:10px"></mat-progress-bar></td> -->
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
-                                        <td class="center-td"><span class="badge bg-blue">{{b.target}}%</span></td>
+                                        <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
                                 </table> 
                             </div>

@@ -91,7 +91,10 @@ export class LandingPageComponent implements OnInit {
         this.loading = true;
         this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
             this.gridsData = data;
-            if(this.gridsData.length>6){
+            if(this.gridsData.length==0){
+                this.toastr.error("Nessun contraente assegnato all'utente");
+            }
+            else if(this.gridsData.length>6){
                 this.limitedData = this.gridsData.splice(0,6); 
             }else{
                 this.limitedData = this.gridsData;
@@ -152,7 +155,10 @@ export class LandingPageComponent implements OnInit {
             this.loading = true;
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                if(this.gridsData.length>6){
+                if(this.gridsData.length==0){
+                    this.toastr.error("Nessun contraente assegnato all'utente");
+                }
+                else if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6); 
                 }else{
                     this.limitedData = this.gridsData;

@@ -31,7 +31,10 @@ export class BSIReportComponent implements OnInit {
     eventTypes: any = {};
     resources: any = {};
     id_kpi_temp = '';
+    isLoadedDati=0;
+    isLoadedDati2=0;
     loadingModalDati: boolean = false;
+    loadingModalDati2: boolean = false;
     public periodFilter: number;
     campoData: any = []
     fitroDataById: any = [
@@ -215,6 +218,8 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        this.isLoadedDati=0;
+        this.isLoadedDati2=0;
         this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
@@ -375,12 +380,19 @@ export class BSIReportComponent implements OnInit {
         this.getdati1();
     }
 
+    public chartClicked2(e: any): void {
+        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid);
+        this.getdati2();
+    }
+
     getdati1() {
         this.periodFilter = 1;
-        let month = '07';
+        let month = '10';
         let year = '2018';
-        let kpiId = this.ReportDetailsData.globalruleid;
+        //let kpiId = this.ReportDetailsData.globalruleid;
+        let kpiId = 39412;
         this.loadingModalDati = true;
+        this.isLoadedDati=1;
 
         this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
             this.fitroDataById = dati;
@@ -432,6 +444,70 @@ export class BSIReportComponent implements OnInit {
             this.loadingModalDati = false;
         },
         error => {
+            this.loadingModalDati = false;
+        });
+    }
+
+    getdati2() {
+        this.periodFilter = 1;
+        let month = '10';
+        let year = '2018';
+        //let kpiId = this.ReportDetailsData.globalruleid;
+        let kpiId = 39412;
+        this.loadingModalDati2 = true;
+        this.isLoadedDati2=1;
+
+        this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+            this.fitroDataById = dati;
+            console.log(dati);
+            Object.keys(this.fitroDataById).forEach(key => {
+                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+                switch (this.fitroDataById[key].event_state_id) {
+                    case 1:
+                        this.fitroDataById[key].event_state_id = "Originale";
+                        break;
+                    case 2:
+                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        break;
+                    case 3:
+                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        break;
+                    case 4:
+                        this.fitroDataById[key].event_state_id = "Correzione";
+                        break;
+                    case 5:
+                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        break;
+                    case 6:
+                        this.fitroDataById[key].event_state_id = "Business";
+                        break;
+                    default:
+                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        break;
+                }
+                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+            })
+            this.getCountCampiData();
+
+            let max = this.countCampiData.length;
+
+            Object.keys(this.fitroDataById).forEach(key => {
+                let temp = Object.keys(this.fitroDataById[key].data).length;
+                if (temp < max) {
+                    for (let i = 0; i < (max - temp); i++) {
+                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                    }
+                }
+            })
+            console.log('dati', dati);
+            this.loadingModalDati2 = false;
+        },
+        error => {
+            this.loadingModalDati2 = false;
         });
     }
 

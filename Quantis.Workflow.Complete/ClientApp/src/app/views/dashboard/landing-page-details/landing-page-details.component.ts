@@ -49,7 +49,7 @@ export class LandingPageDetailsComponent implements OnInit {
             }
         }
     };
-
+    loading: boolean;
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
@@ -91,6 +91,7 @@ export class LandingPageDetailsComponent implements OnInit {
         this.yearVar = this.queryParams.year;
         this.getAnno();
 
+        this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
             if(this.gridsData.length>6){
@@ -99,6 +100,7 @@ export class LandingPageDetailsComponent implements OnInit {
                 this.limitedData = this.gridsData;
             }
             console.log("Level1 Data -> ", this.gridsData, this.limitedData);
+            this.loading = false;
         });
     }
 
@@ -117,12 +119,14 @@ export class LandingPageDetailsComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
+            this.loading = false;
         });
     }
 
     populateDateFilter() {
         if (this.monthVar == null || this.yearVar == null) {
         } else {
+            this.loading = true;
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
                 if(this.gridsData.length>6){
@@ -131,6 +135,7 @@ export class LandingPageDetailsComponent implements OnInit {
                     this.limitedData = this.gridsData;
                 }
                 console.log("Level1 Data -> ", this.gridsData, this.limitedData);
+                this.loading = false;
             });
         }
     }
