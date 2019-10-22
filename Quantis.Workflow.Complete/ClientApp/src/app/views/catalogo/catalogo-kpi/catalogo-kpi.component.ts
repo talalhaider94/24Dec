@@ -210,7 +210,7 @@ export class CatalogoKpiComponent implements OnInit {
         this.dtOptions = {
             //dom: 'Bfrtip',
             "columnDefs": [{
-                "targets": [13],
+                "targets": [16],
                 "visible": false,
                 "searchable": true
             }],
