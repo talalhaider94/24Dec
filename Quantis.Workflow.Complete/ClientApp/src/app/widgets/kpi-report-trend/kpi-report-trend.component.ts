@@ -589,7 +589,11 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
         } else {
             return 'N/A';
         }
@@ -599,7 +603,12 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
+            
         } else {
             return 'N/A';
         }
@@ -609,7 +618,11 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allContracts;
             const contractPartyKey = setWidgetFormValues.Filters.contracts;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
         } else {
             return 'N/A';
         }
@@ -619,7 +632,11 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allContracts1;
             const contractPartyKey = setWidgetFormValues.Filters.contracts1;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
         } else {
             return 'N/A';
         }
@@ -629,7 +646,11 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allKpis;
             const contractPartyKey = setWidgetFormValues.Filters.kpi;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
         } else {
             return 'N/A';
         }
@@ -639,7 +660,12 @@ export class KpiReportTrendComponent implements OnInit {
         if(kpiReportTrendWidgetParameters && setWidgetFormValues) {
             const contractParties = kpiReportTrendWidgetParameters.allKpis1;
             const contractPartyKey = setWidgetFormValues.Filters.kpi1;
-            return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            if(contractPartyKey) {
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+            } else {
+                return 'N/A';
+            }
+            
         } else {
             return 'N/A';
         }
@@ -748,4 +774,11 @@ export class KpiReportTrendComponent implements OnInit {
     openPage(){
         window.open(`/#/datigrezzi/?contractPartyId=${this.filters.contractParties}&contractId=${this.filters.contracts}&kpiId=${this.filters.kpi}&dateRange=${this.filters.daterange}`, '_blank');
     }
+    
+  clear1() {// for build
+    // for build
+  }// for build
+  filter = null;// for build
+  showEventCol = false;// for build
+
 }
