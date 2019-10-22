@@ -217,7 +217,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 }
             });
         } else {
-            this.$toastr.error(`Nessun report assegnato o di proprietà dell'utente`, 'Error!')
+            this.$toastr.info(`Nessun report assegnato o di proprietà dell'utente`, 'Error!')
         }
     }
 

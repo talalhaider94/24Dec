@@ -590,7 +590,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
@@ -604,7 +604,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
@@ -619,7 +619,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allContracts;
             const contractPartyKey = setWidgetFormValues.Filters.contracts;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
@@ -633,7 +633,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allContracts1;
             const contractPartyKey = setWidgetFormValues.Filters.contracts1;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
@@ -647,7 +647,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allKpis;
             const contractPartyKey = setWidgetFormValues.Filters.kpi;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
@@ -661,7 +661,7 @@ export class KpiReportTrendComponent implements OnInit {
             const contractParties = kpiReportTrendWidgetParameters.allKpis1;
             const contractPartyKey = setWidgetFormValues.Filters.kpi1;
             if(contractPartyKey) {
-                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey).value;
+                return contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString()).value;
             } else {
                 return 'N/A';
             }
