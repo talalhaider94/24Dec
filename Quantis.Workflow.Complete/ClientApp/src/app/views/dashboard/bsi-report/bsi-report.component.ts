@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as Highcharts from 'highcharts';
+import * as moment from 'moment';
 import HC_exporting from 'highcharts/modules/exporting';
 HC_exporting(Highcharts);
 
@@ -23,6 +24,35 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
     testArray = [1,2];
+    datiGrezzi = [];
+    monthVar: any;
+    yearVar: any;
+    countCampiData = [];
+    eventTypes: any = {};
+    resources: any = {};
+    id_kpi_temp = '';
+    isLoadedDati=0;
+    isLoadedDati2=0;
+    loadingModalDati: boolean = false;
+    loadingModalDati2: boolean = false;
+    public periodFilter: number;
+    campoData: any = []
+    fitroDataById: any = [
+        {
+            event_type_id: '   ',
+            resource_id: '',
+            time_stamp: ' ',
+            raw_data_id: '',
+            create_date: ' ',
+            data: this.datiGrezzi,
+            modify_date: '',
+            reader_id: '',
+            event_source_type_id: ' ',
+            event_state_id: ' ',
+            partner_raw_data_id: ' ',
+        }
+    ]
+
     dtOptions: any = {
         buttons: [
             {
@@ -188,6 +218,8 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        this.isLoadedDati=0;
+        this.isLoadedDati2=0;
         this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
@@ -258,14 +290,12 @@ export class BSIReportComponent implements OnInit {
     }
 
     showHighChartsData(data) {
-        // debugger
         const chartArray = data.reports[0].data;
         //const data1 = data.reports[0].data[2];
         // Danial TODO: improve code later by modifying all data in a single loop
-        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
-        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
-        let targetData = chartArray.filter(data => data.zvalue === 'Target');
-
+        let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
+        let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
+        let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
@@ -340,6 +370,158 @@ export class BSIReportComponent implements OnInit {
             }
         };
         this.chartUpdateFlag2 = true;
+    }
+
+    
+    public chartClicked(e: any): void {
+        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid);
+        this.getdati1();
+    }
+
+    public chartClicked2(e: any): void {
+        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid);
+        this.getdati2();
+    }
+
+    getdati1() {
+        this.periodFilter = 1;
+        let month = '10';
+        let year = '2018';
+        //let kpiId = this.ReportDetailsData.globalruleid;
+        let kpiId = 39412;
+        this.loadingModalDati = true;
+        this.isLoadedDati=1;
+
+        this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+            this.fitroDataById = dati;
+            console.log(dati);
+            Object.keys(this.fitroDataById).forEach(key => {
+                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+                switch (this.fitroDataById[key].event_state_id) {
+                    case 1:
+                        this.fitroDataById[key].event_state_id = "Originale";
+                        break;
+                    case 2:
+                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        break;
+                    case 3:
+                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        break;
+                    case 4:
+                        this.fitroDataById[key].event_state_id = "Correzione";
+                        break;
+                    case 5:
+                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        break;
+                    case 6:
+                        this.fitroDataById[key].event_state_id = "Business";
+                        break;
+                    default:
+                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        break;
+                }
+                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+            })
+            this.getCountCampiData();
+
+            let max = this.countCampiData.length;
+
+            Object.keys(this.fitroDataById).forEach(key => {
+                let temp = Object.keys(this.fitroDataById[key].data).length;
+                if (temp < max) {
+                    for (let i = 0; i < (max - temp); i++) {
+                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                    }
+                }
+            })
+            console.log('dati', dati);
+            this.loadingModalDati = false;
+        },
+        error => {
+            this.loadingModalDati = false;
+        });
+    }
+
+    getdati2() {
+        this.periodFilter = 1;
+        let month = '10';
+        let year = '2018';
+        //let kpiId = this.ReportDetailsData.globalruleid;
+        let kpiId = 39412;
+        this.loadingModalDati2 = true;
+        this.isLoadedDati2=1;
+
+        this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+            this.fitroDataById = dati;
+            console.log(dati);
+            Object.keys(this.fitroDataById).forEach(key => {
+                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+                switch (this.fitroDataById[key].event_state_id) {
+                    case 1:
+                        this.fitroDataById[key].event_state_id = "Originale";
+                        break;
+                    case 2:
+                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        break;
+                    case 3:
+                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        break;
+                    case 4:
+                        this.fitroDataById[key].event_state_id = "Correzione";
+                        break;
+                    case 5:
+                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        break;
+                    case 6:
+                        this.fitroDataById[key].event_state_id = "Business";
+                        break;
+                    default:
+                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        break;
+                }
+                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+            })
+            this.getCountCampiData();
+
+            let max = this.countCampiData.length;
+
+            Object.keys(this.fitroDataById).forEach(key => {
+                let temp = Object.keys(this.fitroDataById[key].data).length;
+                if (temp < max) {
+                    for (let i = 0; i < (max - temp); i++) {
+                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                    }
+                }
+            })
+            console.log('dati', dati);
+            this.loadingModalDati2 = false;
+        },
+        error => {
+            this.loadingModalDati2 = false;
+        });
+    }
+
+
+    getCountCampiData() {
+        let maxLength = 0;
+        this.fitroDataById.forEach(f => {
+            //let data = JSON.parse(f.data);
+            if (Object.keys(f.data).length > maxLength) {
+                maxLength = Object.keys(f.data).length;
+            }
+        });
+        this.countCampiData = [];
+        for (let i = 1; i <= maxLength; i++) {
+            this.countCampiData.push(i);
+        }
     }
 
 

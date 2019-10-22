@@ -4,7 +4,7 @@ import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { Subject, of, from } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-free-form-reports-widget',
@@ -135,6 +135,9 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                     if (freeFormReportFormValues.Filters.daterange) {
                         freeFormReportFormValues.Filters.daterange = this.dateTime.buildRangeDate(freeFormReportFormValues.Filters.daterange);
                     }
+                    if(freeFormReportFormValues.Properties.hasOwnProperty('parameters')) {
+                        freeFormReportFormValues.Properties.parameters = JSON.parse(freeFormReportFormValues.Properties.parameters);
+                    }
                     this.setWidgetFormValues = freeFormReportFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -143,33 +146,33 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     }
     // invokes on component initialization
     getChartParametersAndData(url, getReportQueryDetailByID) {
-        let myWidgetParameters = null;
+        // let myWidgetParameters = null;
         this.loading = true;
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
-                myWidgetParameters = getWidgetParameters;
-                this.allMeasuresObj = myWidgetParameters.measures;
+                // myWidgetParameters = getWidgetParameters;
+                this.allMeasuresObj = getWidgetParameters.measures;
                 // Map Params for widget index when widgets initializes for first time
                 // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 console.log('getReportQueryDetailByID', getReportQueryDetailByID)
-                const buildIndexParams = {
-                    Properties: {
-                        measure: getReportQueryDetailByID.id,
-                        parameters: JSON.stringify(getReportQueryDetailByID.parameters)
-                    }
-                };
-                return this.dashboardService.getWidgetIndex(url, buildIndexParams);
+                // const buildIndexParams = {
+                //     Properties: {
+                //         measure: getReportQueryDetailByID.id,
+                //         parameters: JSON.stringify(getReportQueryDetailByID.parameters)
+                //     }
+                // };
+                // return this.dashboardService.getWidgetIndex(url, buildIndexParams);
+                return of(getWidgetParameters);
             })
-        ).subscribe(getWidgetIndex => {
+        ).subscribe(getWidgetParameters => {
             // populate modal with widget parameters
-            myWidgetParameters;
             let freeFormReportParams;
-            if (myWidgetParameters) {
-                myWidgetParameters.getReportQueryDetailByID = getReportQueryDetailByID;
+            if (getWidgetParameters) {
+                getWidgetParameters.getReportQueryDetailByID = getReportQueryDetailByID;
                 freeFormReportParams = {
                     type: 'freeFormReportTableParams',
                     data: {
-                        ...myWidgetParameters,
+                        ...getWidgetParameters,
                         widgetname: this.widgetname,
                         url: this.url,
                         filters: this.filters,
@@ -182,17 +185,17 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 }
                 this.freeFormReportWidgetParameters = freeFormReportParams.data;
                 // setting initial Paramter form widget values
-                this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 console.log('freeFormReport Table this.setWidgetFormValues', this.setWidgetFormValues);
             }
             // popular chart data
-            if (getWidgetIndex) {
-                const chartIndexData = getWidgetIndex.body;
-                console.log('FREE FORM REPORT chartIndexData', chartIndexData)
+            // if (getWidgetIndex) {
+            //     const chartIndexData = getWidgetIndex.body;
+            //     console.log('FREE FORM REPORT chartIndexData', chartIndexData)
                 // third params is current widgets settings current only used when
                 // widgets loads first time. may update later for more use cases
                 // this.updateChart(chartIndexData, null, freeFormReportParams.data);
-            }
+            // }
             this.loading = false;
             this.emitter.loadingStatus(false);
         }, error => {
@@ -204,14 +207,18 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     }
 
     openModal() {
-        this.freeFormReportParent.emit({
-            type: 'openFreeFormReportModal',
-            data: {
-                freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
-                setWidgetFormValues: this.setWidgetFormValues,
-                isFreeFormReportComponent: true
-            }
-        });
+        if(this.freeFormReportWidgetParameters.getReportQueryDetailByID) {
+            this.freeFormReportParent.emit({
+                type: 'openFreeFormReportModal',
+                data: {
+                    freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
+                    setWidgetFormValues: this.setWidgetFormValues,
+                    isFreeFormReportComponent: true
+                }
+            });
+        } else {
+            this.$toastr.info(`Nessun report assegnato o di proprietà dell'utente`, 'Error!')
+        }
     }
 
     closeModal() {

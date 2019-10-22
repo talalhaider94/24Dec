@@ -37,10 +37,15 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
-            using (var sftp = new SftpClient(_configuration["SFTPHost"], _configuration["SFTPUserName"], _configuration["SFTPPassword"]))
+            AuthenticationMethod[] methods = new AuthenticationMethod[]
+            {
+                new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(@"/home/srv_addon/.ssh/id_rsa"))
+            };
+            ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
+            using (var sftp = new SftpClient(connectionInfo))
             {
                 sftp.Connect();
-                //sftp.ChangeDirectory("/MyFolder");
+                sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
                 MemoryStream mStream = new MemoryStream();
                 mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
                 mStream.Position = 0;

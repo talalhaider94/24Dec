@@ -102,4 +102,8 @@ export class PersonalReportComponent implements OnInit {
             this.rerender();
         });
     }
+
+    showConfigModal(){
+        this.configModal.show();
+    }
 }

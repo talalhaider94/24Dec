@@ -2,19 +2,25 @@
 
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <br><h2 style="color:#565656">GENERAZIONE BOOKLET</h2>
-
+        <!-- <div class="row">
+            <button style="margin-left:90%" class="btn btn-success" (click)="showAddConfigModal()">
+                Crea Booklet
+            </button>
+        </div><br /> -->
         <span style="margin-left: 75%; font-size: 20px"><b>PERIODO CORRENTE: {{datacorrente}}</b></span><br>
 
         <div class="row ml-3 mr-1">
             <label>TEMPLATE:</label>
-            <select class="form-control ml-3 mr-1" (change)="consoleSelect($event)" placeholder="seleziona" style="width:30%;" [(ngModel)]=" documentiDef.documentid">
-                <option value="">Documenti: </option>
-                <option *ngFor="let item of documentiDef " value="{{item.documentid}} - {{item.documentname}}">{{item.documentname}}</option>
+            <select class="form-control ml-3 mr-1 float-left" (change)="consoleSelect($event)" placeholder="seleziona" style="width:30%;" [(ngModel)]=" documentiDef.documentid">
+                <option value="">Documenti: </option> 
+                <!-- value="{{item.documentid}} - {{item.documentname}}" -->
+                <option *ngFor="let item of documentiDef " value="{{item.documentid}}">{{item.documentname}}</option>
             </select>
+            <button [disabled]="documentId==0" style="margin-left:90%" class="btn btn-success float-right" (click)="addBooklet()">
+                Crea Booklet
+            </button>
         </div>
-        <span>&nbsp;&nbsp;</span>
-
-        <br> <br>
+        <span>&nbsp;&nbsp;</span><br>
         <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
 
             <thead style="background: #20a8d8; color:white">
