@@ -27,6 +27,7 @@ export class BSIReportComponent implements OnInit {
     datiGrezzi = [];
     monthVar: any;
     yearVar: any;
+    isLoadedDati=0;
     countCampiData = [];
     eventTypes: any = {};
     resources: any = {};
@@ -215,6 +216,7 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        this.isLoadedDati=0;
         this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
@@ -377,10 +379,12 @@ export class BSIReportComponent implements OnInit {
 
     getdati1() {
         this.periodFilter = 1;
-        let month = '07';
+        let month = '10';
         let year = '2018';
-        let kpiId = this.ReportDetailsData.globalruleid;
+        //let kpiId = this.ReportDetailsData.globalruleid;
+        let kpiId = 39412;
         this.loadingModalDati = true;
+        this.isLoadedDati=1;
 
         this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
             this.fitroDataById = dati;
@@ -432,6 +436,7 @@ export class BSIReportComponent implements OnInit {
             this.loadingModalDati = false;
         },
         error => {
+            this.loadingModalDati = false;
         });
     }
 

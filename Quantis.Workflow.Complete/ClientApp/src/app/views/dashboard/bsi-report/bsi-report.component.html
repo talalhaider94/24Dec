@@ -80,7 +80,10 @@
           </highcharts-chart><br><br>
 
 
-          <div [hidden]="loadingModalDati==false" class="table-responsive" style="background: #ffffff; padding: 10px">
+          <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
+            <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+          </h5>
+          <div [hidden]="isLoadedDati==0" class="table-responsive" style="background: #ffffff; padding: 10px">
               <table id="classTable" class="table table-bordered" #table>
                   <thead style="background: #20a8d8; color:white">
                       <tr>
@@ -94,7 +97,7 @@
                           <th style="text-align:center">reader id</th>
                           <th style="text-align:center">event state id</th>
                           <th style="text-align:center">partner raw_data id</th>
-                          <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th>
+                          <!-- <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th> -->
                       </tr>
                   </thead>
                   <tbody>
@@ -115,7 +118,7 @@
                           <td style="text-align:center">{{rec.reader_id}}</td>
                           <td style="text-align:center">{{rec.event_state_id}}</td>
                           <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
-                          <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
+                          <!-- <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td> -->
                       </tr>
                   </tbody>
               </table>
@@ -150,7 +153,54 @@
               <br>
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
               [oneToOne]="true" style="width: 100%; display: block;" (click)="chartClicked($event)">
-              </highcharts-chart><br>
+              </highcharts-chart><br><br>
+
+              
+              <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
+                <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+              </h5>
+              <div [hidden]="isLoadedDati==0" class="table-responsive" style="background: #ffffff; padding: 10px">
+                  <table id="classTable" class="table table-bordered" #table>
+                      <thead style="background: #20a8d8; color:white">
+                          <tr>
+                              <!-- <th style="text-align:center"></th> -->
+                              <th style="text-align:center">create date</th>
+                              <th style="text-align:center">modify date</th>
+                              <th style="text-align:center">raw data id</th>
+                              <th style="text-align:center" [hidden]="!showEventCol">event type</th>
+                              <th style="text-align:center">resource</th>
+                              <th style="text-align:center">time stamp</th>
+                              <th style="text-align:center">reader id</th>
+                              <th style="text-align:center">event state id</th>
+                              <th style="text-align:center">partner raw_data id</th>
+                              <!-- <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th> -->
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngIf="fitroDataById.length==0">
+                              <td class="font-italic text-center" colspan="12">
+                                  Nessun dato per il periodo selezionato
+                              </td>
+                          </tr>
+                          <tr *ngFor="let rec of fitroDataById; index as i">
+
+                              <!-- <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td> -->
+                              <td style="text-align:center">{{rec.create_date }}</td>
+                              <td style="text-align:center">{{rec.modify_date }}</td>
+                              <td style="text-align:center">{{rec.raw_data_id}}</td>
+                              <td style="text-align:center" [hidden]="!showEventCol">{{rec.event_type_id}}</td>
+                              <td style="text-align:center">{{rec.resource_id}}</td>
+                              <td style="text-align:center">{{rec.time_stamp }}</td>
+                              <td style="text-align:center">{{rec.reader_id}}</td>
+                              <td style="text-align:center">{{rec.event_state_id}}</td>
+                              <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
+                              <!-- <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td> -->
+                          </tr>
+                      </tbody>
+                  </table>
+                  <!-- <pagination-controls previousLabel="precedente" nextLabel="successiva" (pageChange)="p = $event"></pagination-controls> -->
+              </div>
+
             </div>
           </div>
           <!-- ///////////////// -->
@@ -180,6 +230,51 @@
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions2" [(update)]="chartUpdateFlag2"
               [oneToOne]="true" style="width: 100%; display: block;" (click)="chartClicked($event)">
               </highcharts-chart><br><br>
+
+              <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
+                <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+              </h5>
+              <div [hidden]="isLoadedDati==0" class="table-responsive" style="background: #ffffff; padding: 10px">
+                  <table id="classTable" class="table table-bordered" #table>
+                      <thead style="background: #20a8d8; color:white">
+                          <tr>
+                              <!-- <th style="text-align:center"></th> -->
+                              <th style="text-align:center">create date</th>
+                              <th style="text-align:center">modify date</th>
+                              <th style="text-align:center">raw data id</th>
+                              <th style="text-align:center" [hidden]="!showEventCol">event type</th>
+                              <th style="text-align:center">resource</th>
+                              <th style="text-align:center">time stamp</th>
+                              <th style="text-align:center">reader id</th>
+                              <th style="text-align:center">event state id</th>
+                              <th style="text-align:center">partner raw_data id</th>
+                              <!-- <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th> -->
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngIf="fitroDataById.length==0">
+                              <td class="font-italic text-center" colspan="12">
+                                  Nessun dato per il periodo selezionato
+                              </td>
+                          </tr>
+                          <tr *ngFor="let rec of fitroDataById; index as i">
+
+                              <!-- <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td> -->
+                              <td style="text-align:center">{{rec.create_date }}</td>
+                              <td style="text-align:center">{{rec.modify_date }}</td>
+                              <td style="text-align:center">{{rec.raw_data_id}}</td>
+                              <td style="text-align:center" [hidden]="!showEventCol">{{rec.event_type_id}}</td>
+                              <td style="text-align:center">{{rec.resource_id}}</td>
+                              <td style="text-align:center">{{rec.time_stamp }}</td>
+                              <td style="text-align:center">{{rec.reader_id}}</td>
+                              <td style="text-align:center">{{rec.event_state_id}}</td>
+                              <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
+                              <!-- <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td> -->
+                          </tr>
+                      </tbody>
+                  </table>
+                  <!-- <pagination-controls previousLabel="precedente" nextLabel="successiva" (pageChange)="p = $event"></pagination-controls> -->
+              </div>              
             </div>
           </div>  
         </div>
