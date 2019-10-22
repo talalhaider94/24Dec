@@ -17,6 +17,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 import {MatProgressBarModule} from '@angular/material';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { KeysPipePipe } from './bsi-report/bsi-pipe.pipe';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -100,7 +101,8 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         BSIReportComponent,
         PersonalReportComponent,
         FreeFormReportsWidgetComponent,
-        FilterUsersFFRPipe
+        FilterUsersFFRPipe,
+        KeysPipePipe
     ]
 })
 export class DashboardModule { }

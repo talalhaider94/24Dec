@@ -97,7 +97,7 @@
                           <th style="text-align:center">reader id</th>
                           <th style="text-align:center">event state id</th>
                           <th style="text-align:center">partner raw_data id</th>
-                          <!-- <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th> -->
+                          <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -118,7 +118,7 @@
                           <td style="text-align:center">{{rec.reader_id}}</td>
                           <td style="text-align:center">{{rec.event_state_id}}</td>
                           <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
-                          <!-- <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td> -->
+                          <td style="text-align:center" *ngFor="let key of rec.data | keysPipe"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
                       </tr>
                   </tbody>
               </table>
