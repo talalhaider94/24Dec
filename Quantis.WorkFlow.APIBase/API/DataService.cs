@@ -2326,7 +2326,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var listContract = new Dictionary<string, string>();
             foreach(var sla in slas)
             {
-                listContract.Add(sla.latest_version_id+"", sla.sla_name);
+                listContract.Add(sla.current_version_id+"", sla.sla_name);
             }
             var bookletDTO = new CreateBookletWebServiceDTO()
             {
