@@ -606,7 +606,7 @@ export class CatalogoKpiComponent implements OnInit {
                 //rows.push(oTable.cells( oTable.row(i).nodes(), ':not(.notExportCsv)' ).data().join(','));
             }
         } else { // visible rows only
-            $(tableElm + ' tbody tr:visible').each(function (index) {
+            /*$(tableElm + ' tbody tr:visible').each(function (index) {
                 var row = [];
                 $(this).find('td:not(.notExportCsv)').each(function () {
                     var $td = $(this);
@@ -618,7 +618,23 @@ export class CatalogoKpiComponent implements OnInit {
                     row.push(cell);
                 });
                 rows.push(row.join('|'));
+            })*/
+          let totalRows = $(tableElm).DataTable().rows({ search: 'applied' }).data().length;
+          
+          let tableFiltered = $(tableElm).DataTable().rows({ search: 'applied' }).nodes();
+         for (let i = 0; i < totalRows; i++) {
+           var row = [];
+           $(tableFiltered[i]).find('td:not(.notExportCsv)').each((i, e) => {
+              var $td = $(e);
+              var text = $td.text();
+              if (text == '&#10004;' || text == 'âœ”' || text == '✔') { text = 'true'; }
+              if (text == '&#10006;' || text == 'âœ–' || text == '✖') { text = 'false'; }
+              var cell = '"' + text + '"';
+              row.push(cell);
             })
+            rows.push(row.join('|'));
+          }
+          console.log(rows)
         }
         csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
