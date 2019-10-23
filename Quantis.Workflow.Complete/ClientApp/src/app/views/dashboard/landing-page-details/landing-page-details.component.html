@@ -7,11 +7,11 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-5" style="margin-top:-30px">
+        <div class="row pull-right col-md-9" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
-            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:20%;" (change)="populateDateFilter()">
               <option value="00">Tutti i mesi</option>
               <option value="01">Gennaio</option>
               <option value="02">Febbraio</option>
@@ -26,11 +26,26 @@
               <option value="11">Novembre</option>
               <option value="12">Dicembre</option>
             </select>
-            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:18%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:20%;" (change)="populateDateFilter()">
               <option value="">Anno</option>
               <option *ngFor="let year of anni" >{{year}}</option>
             </select>
-            
+            <!-- <select [(ngModel)]="contractName" (change)='filter()' class="form-control ml-1" class="form-control ml-1" style="width:28%;">
+                <option>ALL</option>
+                <option *ngFor = "let row of contName">{{row.contractname}}</option>
+            </select> -->
+            <ng-multiselect-dropdown style="width:31% ;background: white;border-radius: 6px; margin-left:0.3vw"
+            [placeholder]= "'Contraenti'"
+            [data]="dropdownList"
+            [(ngModel)]="selectedItems"
+            [settings]="dropdownSettings"
+            (onSelect)="onItemSelect($event)"
+            (onSelectAll)="onSelectAll($event)"
+            (onDeSelect)="onItemDeSelect($event)"
+            (onFilterChange)="onFilterChange($event)"
+            (onDropDownClose)="onDropDownClose($event)"
+            >
+        </ng-multiselect-dropdown>
             <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
             <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">Tutti</button>
             <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
@@ -70,8 +85,8 @@
                                         <a href="#">
                                             Severity Contratti
                                             <div class="progress" style="height: 20px">
-                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
-                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                                <div *ngIf="row.complaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-success':row.complaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div *ngIf="row.noncomplaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-danger':row.noncomplaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
                                         </a>
                                     </li>

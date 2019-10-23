@@ -92,8 +92,9 @@ export class BSIReportComponent implements OnInit {
             }
         },
         search: {
-            caseInsensitive: false
-        }
+            caseInsensitive: true
+        },
+        destroy: true
     };
     loading: boolean = true;
     cartellaSelectOption : any;
@@ -224,7 +225,7 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
             this.bsiChartModal.show();
-            //for(let i=0; i<data.reports.length; i++){ 
+            //for(let i=0; i<data.reports.length; i++){
                 this.reportsDataLength = data.reports.length;
                 this.ReportData = data;
                 //console.log('this.reportsDataLength -> ',this.reportsDataLength);
@@ -253,22 +254,29 @@ export class BSIReportComponent implements OnInit {
     setUpDataTableDependencies() {
         let vm = this;
 
-        // $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        //     datatable_Ref.columns(0).every(function () {
-        //         const that = this;
-        //         $($this.cartellaSelect.nativeElement)
-        //             .on('change', function () {
+        /*$this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+            datatable_Ref.columns(0).every(function () {
+                const that = this;
+                $($this.cartellaSelect.nativeElement)
+                    .on('change', function (event) {
+                        event.stopPropagation();
+                        event.preventDefault();
 
-                        
-        //                 vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
-        //                 if($(this).val()){
-        //                   const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
-        //                   vm.AllNormalReportsData = filterFolder;
-                          
-        //                 }
-        //             });
-        //     });
-        // });
+                        vm.AllNormalReportsData = vm.OrignalNormalReportData; // assigning all data back
+                        if($(this).val()){
+                          const filterFolder = vm.AllNormalReportsData.filter(x => x.foldername == $(this).val())
+
+                          vm.AllNormalReportsData = filterFolder;
+
+
+                          //that.rows.add($(this).val());
+                          that.clear();
+                          that.draw();
+                          //$this.rerender();
+                        }
+                    });
+            });
+        });*/
 
 
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {

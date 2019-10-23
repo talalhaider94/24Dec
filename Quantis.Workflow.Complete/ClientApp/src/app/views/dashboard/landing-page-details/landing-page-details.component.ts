@@ -24,7 +24,9 @@ export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     queryParams;
-
+    dropdownList = [];
+    selectedItems = [];
+    dropdownSettings = {};
     dtOptions: DataTables.Settings = {
         language: {
             processing: "Elaborazione...",
@@ -53,9 +55,11 @@ export class LandingPageDetailsComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
+    contName: any = [];
     limitedData: any = [];
     bestContracts: any = [];
     monthVar: any;
+    contractName:any;
     month: any;
     yearVar: any;
     contractpartyname: any;
@@ -91,14 +95,27 @@ export class LandingPageDetailsComponent implements OnInit {
         this.yearVar = this.queryParams.year;
         this.getAnno();
 
+        this.dropdownSettings = {
+            singleSelection: false,
+            idField: 'item_id',
+            textField: 'item_text',
+            selectAllText: 'Select All',
+            unSelectAllText: 'UnSelect All',
+            itemsShowLimit: 3,
+            allowSearchFilter: true
+          };
+      
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
+	    //  this.contName = data;
             if(this.gridsData.length>6){
                 this.limitedData = this.gridsData.splice(0,6); 
             }else{
                 this.limitedData = this.gridsData;
             }
+            this.contName = this.limitedData;
+            this.dropdownList = this.limitedData.map(value => value.contractname);
             console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
@@ -139,6 +156,60 @@ export class LandingPageDetailsComponent implements OnInit {
             });
         }
     }
+    
+    onItemSelect(item: any) {
+        console.log(item);
+        this.customFilter();
+      }
+    onSelectAll(items: any) {
+        console.log(items);
+        this.limitedData = this.contName;
+
+      }
+    onItemDeSelect(items:any){
+        console.log(items,'onitemDeselect');
+        this.customFilter();
+
+    }
+    onFilterChange(items:any){
+        console.log(items,'onFilterChange');
+    }
+    onDropDownClose(items:any){
+        console.log(items,'onDropDownClose');
+    }
+
+    async customFilter(){
+        if (this.selectedItems === undefined || this.selectedItems.length == 0) {
+            this.limitedData = this.contName;
+
+        }else{
+            let value:any = this.selectedItems;
+            this.loading = true;
+            var temp:any = this.contName
+            var temp2:any = [];
+            await value.forEach(async element => {
+                await temp.forEach(ele =>  {
+                    if(ele.contractname == element.item_text){
+                    temp2.push(ele);
+                    }else{}});
+            });
+            await temp2.forEach((val, i) => temp2[i] =  {
+
+                bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+                complaintcontracts: temp2[i].complaintcontracts,
+                complaintkpis: temp2[i].complaintkpis,
+                contractpartyid: temp2[i].contractpartyid,
+                contractname: temp2[i].contractname,
+                noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+                noncomplaintkpis: temp2[i].noncomplaintkpis,
+                totalcontracts: temp2[i].totalcontracts,
+                totalkpis: temp2[i].totalkpis,
+                worstcontracts: temp2[i].worstcontracts
+            })
+              this.limitedData = temp2;
+            this.loading = false;
+        }
+     }
 
     anni = [];
     //+(moment().add('months', 6).format('YYYY'))
