@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+/*import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -179,13 +179,5 @@ export class PersonalReportComponent implements OnInit {
     onPersonalReportFormSubmit() {
 
     }
-  ///for build
-  f = {
-    name: {
-      errors: { required: false}
-    }
-  };
-  submitted = false;
-  formLoading = false;
-  ///
 }
+*/
