@@ -376,7 +376,7 @@ export class BSIReportComponent implements OnInit {
 
     
     public chartClicked(e: any): void {
-        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid);
+        console.log('Chart Clicked -> ',this.ReportDetailsData);
         this.getdati1();
     }
 

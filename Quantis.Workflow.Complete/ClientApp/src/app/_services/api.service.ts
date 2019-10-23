@@ -176,9 +176,9 @@ export class ApiService {
         return this.http.post(addConfig, data);
     }
     
-    CreateBooklet(id): Observable<any> {
+    CreateBooklet(createBooklet): Observable<any> {
         const booklet = `${environment.API_URL}/data/CreateBooklet`;
-        return this.http.post(booklet, id);
+        return this.http.post(booklet, createBooklet);
     }
 
     deleteRole(roleId): Observable<any> {
