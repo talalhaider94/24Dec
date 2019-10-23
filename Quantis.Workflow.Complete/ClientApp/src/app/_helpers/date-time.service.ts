@@ -33,12 +33,17 @@ export class DateTimeService {
   }
 
   buildRangeDate(dateRange) {
-    console.log('buildRangeDate', dateRange);
-    let [startDate, endDate] = dateRange.split('-');
-    let [startMonth, startYear] = startDate.split('/');
-    let [endMonth, endYear] = endDate.split('/');
-    let dateRangeArray = [new Date(`${startMonth}/01/${startYear}`), new Date(`${endMonth}/01/${endYear}`)];
-    return dateRangeArray;
+    if(Array.isArray(dateRange)) {
+      console.log('buildRangeDate if', dateRange);
+      return dateRange;
+    } else {
+      let [startDate, endDate] = dateRange.split('-');
+      let [startMonth, startYear] = startDate.split('/');
+      let [endMonth, endYear] = endDate.split('/');
+      let dateRangeArray = [new Date(`${startMonth}/01/${startYear}`), new Date(`${endMonth}/01/${endYear}`)];
+      console.log('buildRangeDate else', dateRangeArray);
+      return dateRangeArray;
+    }
   }
 
   timePeriodRange(rangeType) {
