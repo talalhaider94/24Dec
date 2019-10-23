@@ -11,9 +11,9 @@
 </div> 
 
 <div [ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
-  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
-  <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
-  <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI(kpiReportTrendWidgetParameters, setWidgetFormValues) }}</p>
+  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ contractParties }}</p>
+  <p class="mb-0 font-12"><b>Contracts:</b> {{ contracts }}</p>
+  <p class="mb-0 font-12"><b>KPI:</b> {{ kpi }}</p>
   <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" 
   (click)="openMenu($event, menu)" [oneToOne]="true"
     class="w-100p d-block">

@@ -207,14 +207,18 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     }
 
     openModal() {
-        this.freeFormReportParent.emit({
-            type: 'openFreeFormReportModal',
-            data: {
-                freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
-                setWidgetFormValues: this.setWidgetFormValues,
-                isFreeFormReportComponent: true
-            }
-        });
+        if(this.freeFormReportWidgetParameters.getReportQueryDetailByID) {
+            this.freeFormReportParent.emit({
+                type: 'openFreeFormReportModal',
+                data: {
+                    freeFormReportWidgetParameters: this.freeFormReportWidgetParameters,
+                    setWidgetFormValues: this.setWidgetFormValues,
+                    isFreeFormReportComponent: true
+                }
+            });
+        } else {
+            this.$toastr.info(`Nessun report assegnato o di proprietà dell'utente`, 'Error!')
+        }
     }
 
     closeModal() {

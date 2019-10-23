@@ -290,14 +290,12 @@ export class BSIReportComponent implements OnInit {
     }
 
     showHighChartsData(data) {
-        // debugger
         const chartArray = data.reports[0].data;
         //const data1 = data.reports[0].data[2];
         // Danial TODO: improve code later by modifying all data in a single loop
-        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
-        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
-        let targetData = chartArray.filter(data => data.zvalue === 'Target');
-
+        let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
+        let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
+        let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
