@@ -2322,10 +2322,16 @@ namespace Quantis.WorkFlow.APIBase.API
             var serverHost = _cache.GetOrCreate("SMTP_serverHost", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value);
             var mailingList = new List<string>() { serverHost, senderUsername, senderPassword, sender, dto.RecipientEmail };
             string mainPath = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_booklet" && o.key == "booklet_main_path").value;
+            var slas=_dbcontext.Slas.Where(o => dto.ContractIds.Contains(o.sla_id));
+            var listContract = new Dictionary<string, string>();
+            foreach(var sla in slas)
+            {
+                listContract.Add(sla.current_version_id+"", sla.sla_name);
+            }
             var bookletDTO = new CreateBookletWebServiceDTO()
             {
                 BookletDocumentId = dto.BookletDocumentId,
-                ListContract = dto.ListContract,
+                ListContract = listContract,
                 MailSetup = mailingList,
                 MainPath = mainPath,
                 UserId = userId

@@ -63,9 +63,9 @@ export class LoadingFormService {
         return this.http.post(submitAttachmentEndPoint, a);
     }
     submitCSV(attachment): Observable<any> {
-      const submitAttachmentEndPoint = `${environment.API_URL}/Data/SubmitCSV`;
+      const submitAttachmentEndPoint = `${environment.API_URL}/information/UploadFileToSFTPServer`;
       let a = [];
       a.push(attachment);
-      return this.http.post(submitAttachmentEndPoint, a);
+      return this.http.post(submitAttachmentEndPoint, attachment);
     }
 }

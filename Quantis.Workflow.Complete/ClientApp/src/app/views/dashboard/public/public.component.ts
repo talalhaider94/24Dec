@@ -153,6 +153,10 @@ export class PublicComponent implements OnInit {
 			if (this.barChartWidgetParameters.filters && this.barChartWidgetParameters.filters.groupReportCheck) {
 				this.groupReportCheck = (this.barChartWidgetParameters.filters.groupReportCheck === 'true');
 			}
+			
+			if(childData.setWidgetFormValues.Properties.hasOwnProperty('measure')) {
+				childData.setWidgetFormValues.Properties.measure = childData.setWidgetFormValues.Properties.measure.toString(); 
+			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
 			setTimeout(() => {
 				console.log('childData.setWidgetFormValues', childData.setWidgetFormValues);
@@ -551,7 +555,7 @@ export class PublicComponent implements OnInit {
 		// Danial: TODO There may be issues in copyFormValues while patching with form
 		if (formValues.Properties.hasOwnProperty('parameters')) {
 			if (formValues.Properties.parameters.length > 0) {
-				formValues.Properties.measure = this.barChartWidgetParameters.getReportQueryDetailByID.id
+				// formValues.Properties.measure = this.barChartWidgetParameters.getReportQueryDetailByID.id
 				formValues.Properties.parameters = JSON.stringify(formValues.Properties.parameters);
 			} else {
 				delete formValues.Properties.parameters;

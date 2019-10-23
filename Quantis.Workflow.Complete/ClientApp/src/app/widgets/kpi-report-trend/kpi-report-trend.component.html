@@ -8,12 +8,135 @@
 <div class="clearfix"></div>
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
   <span class="sr-only">Loading...</span>
+</div> 
+
+<div [ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
+  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ contractParties }}</p>
+  <p class="mb-0 font-12"><b>Contracts:</b> {{ contracts }}</p>
+  <p class="mb-0 font-12"><b>KPI:</b> {{ kpi }}</p>
+  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" 
+  (click)="openMenu($event, menu)" [oneToOne]="true"
+    class="w-100p d-block">
+  </highcharts-chart>
 </div>
 
-<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
-[ngClass]="groupReportCheck ? 'd-block float-left w-50p' : 'w-100p d-block'">
-</highcharts-chart>
-<highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" [oneToOne]="true"
- [ngClass]="groupReportCheck ? 'd-block float-right w-50p' : 'd-none'">
-</highcharts-chart>
+<div [ngClass]="groupReportCheck ? 'd-block float-right w-50p' : 'd-none'">
+  <p class="mb-0 font-12"><b>Contract Parties:</b> {{ getContractParties1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <p class="mb-0 font-12"><b>Contracts:</b> {{ getContracts1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <p class="mb-0 font-12"><b>KPI:</b> {{ getKPI1(kpiReportTrendWidgetParameters1, setWidgetFormValues1) }}</p>
+  <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1" 
+  (click)="openMenu($event, menu)" [oneToOne]="true"
+    class="w-100p d-block">
+  </highcharts-chart>
+</div>
 <div class="clearfix"></div>
+
+<!-- ////////////////////////////////////////////////// -->
+
+<div id="daModal" bsModal #daModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">DATI</h5><br><br>
+
+                <button type="button" class="close" (click)="clear1()" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <br>
+            <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
+                <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
+            </h5>
+
+            <div class="modal-body">
+                <!-- <h4 style="color:#565656;">Periodo:</h4>
+                <div class="row">
+
+                    <select [(ngModel)]="monthVar" class="form-control ml-3" style="width:15%;" (change)="getdati1(id_kpi_temp,monthVar,yearVar)">
+                        <option value="01">Gennaio</option>
+                        <option value="02">Febbraio</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Aprile</option>
+                        <option value="05">Maggio</option>
+                        <option value="06">Giugno</option>
+                        <option value="07">Luglio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Settembre</option>
+                        <option value="10">Ottobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Dicembre</option>
+                    </select>
+                    <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:15%;" (change)="getdati1(id_kpi_temp,monthVar,yearVar)">
+                        <option value="">Anno</option>
+                        <option *ngFor="let year of anni">{{year}}</option>
+                    </select>
+                </div> -->
+                <br><br>
+                <div class="row">
+                    <input class="form-control" style="width: 18%;margin-left:22px" type="text" name="search" [(ngModel)]="filter" placeholder="Cerca">
+                    <!-- 
+                    <button (click)="fireEvent()" style="margin-left:20%">Esporta CSV</button>
+                    <span class="event-type-wrapper">
+                      <label>Show event type</label>
+                      <input type="checkbox" name="showevent" [checked]="showEventCol" (change)="showEventCol = !showEventCol"/>
+                    </span> -->
+                </div>
+                <div class="table-responsive" style="background: #ffffff; padding: 10px">
+                    <table id="classTable" class="table table-bordered" #table>
+                        <thead style="background: #20a8d8; color:white">
+                            <tr>
+                                <!-- <th style="text-align:center"></th> -->
+                                <th style="text-align:center">create date</th>
+                                <th style="text-align:center">modify date</th>
+                                <th style="text-align:center">raw data id</th>
+                                <th style="text-align:center" [hidden]="!showEventCol">event type</th>
+                                <th style="text-align:center">resource</th>
+                                <th style="text-align:center">time stamp</th>
+                                <th style="text-align:center">reader id</th>
+                                <th style="text-align:center">event state id</th>
+                                <th style="text-align:center">partner raw_data id</th>
+                                <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="fitroDataById.length==0">
+                                <td class="font-italic text-center" colspan="12">
+                                    Nessun dato per il periodo selezionato
+                                </td>
+                            </tr>
+                            <tr *ngFor="let rec of fitroDataById; index as i">
+
+                                <!-- <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td> -->
+                                <td style="text-align:center">{{rec.create_date }}</td>
+                                <td style="text-align:center">{{rec.modify_date }}</td>
+                                <td style="text-align:center">{{rec.raw_data_id}}</td>
+                                <td style="text-align:center" [hidden]="!showEventCol">{{rec.event_type_id}}</td>
+                                <td style="text-align:center">{{rec.resource_id}}</td>
+                                <td style="text-align:center">{{rec.time_stamp }}</td>
+                                <td style="text-align:center">{{rec.reader_id}}</td>
+                                <td style="text-align:center">{{rec.event_state_id}}</td>
+                                <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
+                                <td style="text-align:center" *ngFor="let key of rec.data"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <pagination-controls previousLabel="precedente" nextLabel="successiva" (pageChange)="p = $event"></pagination-controls> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideDaModal()">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<context-menu #menu>
+    <ng-template contextMenuItem (execute)="showMessage($event)">
+      <a role="button" (click)="openPage()">Option A</a>
+    </ng-template>
+    <ng-template contextMenuItem divider="true"></ng-template>
+    <ng-template contextMenuItem let-item (execute)="showMessage($event)">
+        <a role="button" (click)="showDaModal()">Option B</a>
+    </ng-template>
+</context-menu>

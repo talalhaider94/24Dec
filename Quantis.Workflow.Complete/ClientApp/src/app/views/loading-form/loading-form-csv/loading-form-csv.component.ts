@@ -193,7 +193,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
     reader.onloadend = (function (theFile, self) {
       let fileName = theFile.name;
       return function (readerEvent) {
-        let formAttachments = {content:'', form_attachment_id: 0, form_id: 0, period: '', year: '', doc_name: '', checksum: ''};
+        let formAttachments = {content:'', form_attachment_id: 0, form_id: 0, period: '', year: '', name: '', checksum: ''};
         let binaryString = readerEvent.target.result;
         let base64Data = btoa(binaryString);
         let dateObj = self._getPeriodYear();
@@ -201,7 +201,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
         formAttachments.form_attachment_id = 0;
         formAttachments.period = month;
         formAttachments.year = year;
-        formAttachments.doc_name = fileName;
+        formAttachments.name = fileName;
         formAttachments.checksum = 'checksum';
         self.fileUploading = true;
         self.loadingFormService.submitCSV(formAttachments).pipe(self.delayedRetries(10000, 3)).subscribe(data => {
