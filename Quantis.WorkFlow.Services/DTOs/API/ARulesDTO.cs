@@ -18,5 +18,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public int global_rule_id { get; set; }
         public string tracking_period { get; set; }
         public string symbol { get; set; }
+        public bool progressive { get; set; }
     }
 }

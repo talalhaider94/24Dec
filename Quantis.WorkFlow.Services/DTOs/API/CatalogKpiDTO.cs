@@ -52,5 +52,6 @@
         public int global_rule_id_bsi { get; set; }
         public int sla_id_bsi { get; set; }
         public string contract_name { get; set; }
+        public bool progressive { get; set; }
     }
 }

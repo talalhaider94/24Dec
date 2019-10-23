@@ -28,8 +28,9 @@ const EXCEL_EXTENSION = '.csv';
 export class ArchivedKpiComponent implements OnInit {
     @ViewChild('archivedKpiModal') public archivedKpiModal: ModalDirective;
     @ViewChild('datiModal') public datiModal: ModalDirective;
-    @ViewChild('datiTempoModal') public datiTempoModal: ModalDirective;
-
+  @ViewChild('datiTempoModal') public datiTempoModal: ModalDirective;
+  @ViewChild('multiCollapseExample1') public multiCollapseExample1: ModalDirective;
+  @ViewChild('multiCollapseExample2') public multiCollapseExample2: ModalDirective;
     @ViewChild('ArchivedkpiTable') block: ElementRef;
     @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -118,6 +119,7 @@ export class ArchivedKpiComponent implements OnInit {
             close_timestamp_ticket: '',
             archived: '',
             global_rule_id: '',
+            progressive: false
         }
     ]
 
@@ -245,12 +247,12 @@ export class ArchivedKpiComponent implements OnInit {
 
     eventTypeArray = [];
 
-    getdati(id_kpi, tracking_period = '', interval_kpi = '', month = this.monthVar, year = this.yearVar) {
+    getdati(id_kpi, tracking_period = '', interval_kpi = '', progressive = false, month = this.monthVar, year = this.yearVar) {
         this.clear();
         this.meseSelezionato = month;
         this.id_kpi_temp = id_kpi;
         if (tracking_period.length > 0 && interval_kpi.length > 0) {
-            this.arrayTempo(tracking_period, interval_kpi);
+            this.arrayTempo(tracking_period, interval_kpi, progressive);
             month = moment(interval_kpi).format('MM');
             year = moment(interval_kpi).format('YYYY');
             this.meseSelezionato = month;
@@ -601,7 +603,7 @@ export class ArchivedKpiComponent implements OnInit {
         this.fitroDataById = [];
         this.p = 1;
 
-        this.hideDatiModal();
+        //this.hideDatiModal();
     }
 
     clear1() {
@@ -609,9 +611,21 @@ export class ArchivedKpiComponent implements OnInit {
         this.fitroDataById = [];
         this.p = 1;
 
-        this.hideDatiTempoModal();
+       // this.hideDatiTempoModal();
+    }
+    clearAndClose() {
+      this.filter = '';
+      this.fitroDataById = [];
+      this.p = 1;
+      this.hideDatiModal();
     }
 
+    clear1AndClose() {
+      this.filter = '';
+      this.fitroDataById = [];
+      this.p = 1;
+      this.hideDatiTempoModal();
+    }
     reset() {
         this.kpisData = [];
 
@@ -619,7 +633,7 @@ export class ArchivedKpiComponent implements OnInit {
     }
 
     arrayPeriodo = [];
-    arrayTempo(tracking_period, interval_kpi) {
+    arrayTempo(tracking_period, interval_kpi, progressive = true) {
         //debugger;
         console.log(tracking_period);
         this.arrayPeriodo = [];
@@ -663,7 +677,17 @@ export class ArchivedKpiComponent implements OnInit {
 
             this.arrayPeriodo.push(mese1, mese2, mese3, mese4, mese5, mese6, mese7, mese8, mese9, mese10, mese11, mese12);
             console.log("semestrale", this.arrayPeriodo);
+      }
+      if (progressive) {
+        let mese1 = moment(interval_kpi).format('MM');
+        //this.arrayPeriodo.push(mese1);
+        for (let i = 1; i < parseInt(mese1); i++) {
+          let mese = moment(interval_kpi).subtract(i, 'month').format('MM');
+          this.arrayPeriodo.push(mese);
         }
+        //this.arrayPeriodo.push(mese1, mese2, mese3, mese4, mese5, mese6, mese7, mese8, mese9, mese10, mese11, mese12);
+        
+      }
     }
 
     showArchivedKpiModal() {
@@ -689,4 +713,12 @@ export class ArchivedKpiComponent implements OnInit {
     hideDatiTempoModal() {
         this.datiTempoModal.hide();
     }
+
+  showCollapse() {
+    this.multiCollapseExample1.show();
+    this.multiCollapseExample2.show();
+  }
+  hideCollapse() {
+
+  }
 }

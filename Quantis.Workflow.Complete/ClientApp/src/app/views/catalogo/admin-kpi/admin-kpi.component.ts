@@ -106,8 +106,9 @@ export class AdminKpiComponent implements OnInit {
         secondary_contract_party: '',
         kpi_name_bsi: '',
         global_rule_id_bsi: '',
-      sla_id_bsi: '',
-        day_workflow: 0
+        sla_id_bsi: '',
+        day_workflow: 0,
+        progressive: false
     };
 
     dtTrigger: Subject<any> = new Subject();
@@ -219,6 +220,7 @@ export class AdminKpiComponent implements OnInit {
         this.modalData.global_rule_id_bsi = data.global_rule_id;
         this.modalData.sla_id_bsi = data.sla_id;
         this.modalData.day_workflow = 0;
+        this.modalData.progressive = data.progressive;
         this.showConfigModal();
     }
 
@@ -254,6 +256,9 @@ export class AdminKpiComponent implements OnInit {
         if (this.modalData.enable == false) {
             this.modalData.enable_rm = false;
             this.modalData.enable_wf = false;
+        }
+        if (this.modalData.source_type == 'MANUALE CSV') {
+          this.modalData.id_form = '';
         }
         console.log(this.modalData);
         this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {

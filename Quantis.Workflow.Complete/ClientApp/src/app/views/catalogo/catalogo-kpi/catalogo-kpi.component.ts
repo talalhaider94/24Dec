@@ -163,7 +163,8 @@ export class CatalogoKpiComponent implements OnInit {
         secondary_contract_party_name: '',
         kpi_name_bsi: '',
         global_rule_id_bsi: '',
-        sla_id_bsi: ''
+      sla_id_bsi: '',
+        progressive: false,
     };
 
     kpiTableHeadData = [
@@ -330,7 +331,8 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.secondary_contract_party_name = data.secondary_contract_party_name;
         this.modalData.kpi_name_bsi = data.kpi_name_bsi;
         this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
-        this.modalData.sla_id_bsi = data.sla_id_bsi;
+      this.modalData.sla_id_bsi = data.sla_id_bsi;
+      this.modalData.progressive = data.progressive;
 
         this.showReferentiModal();
     }
@@ -383,7 +385,7 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.kpi_name_bsi = data.kpi_name_bsi;
         this.modalData.global_rule_id_bsi = data.global_rule_id_bsi;
         this.modalData.sla_id_bsi = data.sla_id_bsi;
-
+        this.modalData.progressive = data.progressive;
         this.showKpiModal();
     }
 
@@ -419,6 +421,9 @@ export class CatalogoKpiComponent implements OnInit {
         if (this.modalData.enable == false) {
             this.modalData.enable_rm = false;
             this.modalData.enable_wf = false;
+        }
+        if (this.modalData.source_type == 'MANUALE CSV') {
+          this.modalData.id_form = '';
         }
         this.apiService.updateCatalogKpi(this.modalData).subscribe(data => {
             //this.getKpis(); // this should refresh the main table on page

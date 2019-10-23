@@ -33,6 +33,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     dtTrigger = new Subject();
     reportName: string;
     allMeasuresObj: {number:string};
+    tableHeader: Array<string> = [];
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -96,12 +97,13 @@ export class FreeFormReportsWidgetComponent implements OnInit {
             this.isDashboardModeEdit = false;
             if (this.url) {
                 this.emitter.loadingStatus(true);
-                this._freeFormReport.getReportQueryDetailByID().subscribe(result => {
-                    this.getChartParametersAndData(this.url, result);
-                }, error => {
-                    console.error('getReportQueryDetailByID', error);
-                    this.$toastr.error('Unable to get Report Query Detail.', this.widgetname);
-                });
+                // this._freeFormReport.getOwnedReportQueries();
+                // this._freeFormReport.getOwnedReportQueries().subscribe(result => {
+                    this.getChartParametersAndData(this.url);
+                // }, error => {
+                //     console.error('getOwnedReportQueries', error);
+                //     this.$toastr.error('Unable to get Report Query Detail.', this.widgetname);
+                // });
             }
             // coming from dashboard or public parent components
             this.subscriptionForDataChangesFromParent();
@@ -145,30 +147,13 @@ export class FreeFormReportsWidgetComponent implements OnInit {
         });
     }
     // invokes on component initialization
-    getChartParametersAndData(url, getReportQueryDetailByID) {
-        // let myWidgetParameters = null;
+    getChartParametersAndData(url) {
         this.loading = true;
-        this.dashboardService.getWidgetParameters(url).pipe(
-            mergeMap((getWidgetParameters: any) => {
-                // myWidgetParameters = getWidgetParameters;
-                this.allMeasuresObj = getWidgetParameters.measures;
-                // Map Params for widget index when widgets initializes for first time
-                // let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-                console.log('getReportQueryDetailByID', getReportQueryDetailByID)
-                // const buildIndexParams = {
-                //     Properties: {
-                //         measure: getReportQueryDetailByID.id,
-                //         parameters: JSON.stringify(getReportQueryDetailByID.parameters)
-                //     }
-                // };
-                // return this.dashboardService.getWidgetIndex(url, buildIndexParams);
-                return of(getWidgetParameters);
-            })
-        ).subscribe(getWidgetParameters => {
+        this.dashboardService.getWidgetParameters(url).subscribe(getWidgetParameters => {
             // populate modal with widget parameters
             let freeFormReportParams;
             if (getWidgetParameters) {
-                getWidgetParameters.getReportQueryDetailByID = getReportQueryDetailByID;
+                this.allMeasuresObj = getWidgetParameters.measures;
                 freeFormReportParams = {
                     type: 'freeFormReportTableParams',
                     data: {
@@ -180,7 +165,6 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                         widgetid: this.widgetid,
                         dashboardid: this.dashboardid,
                         id: this.id,
-                        getReportQueryDetailByID: getReportQueryDetailByID
                     }
                 }
                 this.freeFormReportWidgetParameters = freeFormReportParams.data;
@@ -188,14 +172,6 @@ export class FreeFormReportsWidgetComponent implements OnInit {
                 this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 console.log('freeFormReport Table this.setWidgetFormValues', this.setWidgetFormValues);
             }
-            // popular chart data
-            // if (getWidgetIndex) {
-            //     const chartIndexData = getWidgetIndex.body;
-            //     console.log('FREE FORM REPORT chartIndexData', chartIndexData)
-                // third params is current widgets settings current only used when
-                // widgets loads first time. may update later for more use cases
-                // this.updateChart(chartIndexData, null, freeFormReportParams.data);
-            // }
             this.loading = false;
             this.emitter.loadingStatus(false);
         }, error => {
@@ -207,7 +183,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     }
 
     openModal() {
-        if(this.freeFormReportWidgetParameters.getReportQueryDetailByID) {
+        if(this.freeFormReportWidgetParameters.hasOwnProperty('measures') && Object.keys(this.freeFormReportWidgetParameters.measures).length > 0) {
             this.freeFormReportParent.emit({
                 type: 'openFreeFormReportModal',
                 data: {
@@ -228,13 +204,16 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     console.log('freeFormReport chartIndexData', chartIndexData);
+    debugger
     if(Array.isArray(chartIndexData)) {
+        this.tableHeader = Object.keys(chartIndexData[0]);
+
         this.freeFormReportData = chartIndexData;
-        this.rerender();
+        // this.rerender();
     } else {
         this.$toastr.error(chartIndexData, 'Error!');
         this.freeFormReportData = [];
-        this.rerender();
+        // this.rerender();
     }
     this.closeModal();
   }
