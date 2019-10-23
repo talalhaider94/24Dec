@@ -20,7 +20,8 @@ import { delay, mergeMap, retryWhen } from 'rxjs/operators';
 export class LoadingFormCsvComponent implements OnInit, OnDestroy {
   formId: string = null;
     loadingForms: any = [];
-    detailsForms: any = {};
+  detailsForms: any = {};
+  loadingPattern:string = '';
     loading: boolean = true;
     @ViewChild(DataTableDirective)
     @ViewChild('showOnReady') showOnReady: ElementRef;
@@ -170,6 +171,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
   onFileSelected(event) {
     let period = moment().subtract(1, 'month').format('MM');
     let year = moment().format('YYYY');
+    console.log(event);
     this.uploader.queue.forEach((file, index) => {
       this.fileUploadMonth.push(period);
       this.fileUploadYear.push(year);
@@ -180,7 +182,31 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
     if (this.uploader.queue.length > 0) {
       this.uploader.queue.forEach((element, index) => {
         let file = element._file;
-        this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
+        let uploadName = file.name;
+        let patternArray = this.loadingPattern.split('_');
+        let patternExtArray = patternArray[2].split('.');
+        let patternExt = patternExtArray[1];
+
+        let uploadNameArray = uploadName.split('_');
+        let uploadExtArray = uploadNameArray[2] ? uploadNameArray[2].split('.') : null;
+        let uploadExt = uploadExtArray != null ? uploadExtArray[1] : null;
+
+        if (patternArray[0] == uploadNameArray[0]) {
+          if (uploadNameArray[1].length == 6) {
+            if (patternExt == uploadExt) {
+              this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
+            } else {
+              //errore
+              this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
+            }
+          } else {
+            //errore
+            this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
+          }
+        } else {
+          //errore
+          this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
+        }
       });
     } else {
       this.toastr.info('Nessun documento da caricare');

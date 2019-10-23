@@ -57,7 +57,7 @@
                 <td>
                   <div class="text-center">
                     <a style="font-size:10px" class="btn btn-primary" data-toggle="modal"
-                       data-target="#uploadCSV" (click)="uploadCSV.show()">
+                       data-target="#uploadCSV" (click)="uploadCSV.show(); this.loadingPattern = loadingForm.form_name">
                       <i class="fa fa-pencil"></i>
                     </a>
                   </div>
