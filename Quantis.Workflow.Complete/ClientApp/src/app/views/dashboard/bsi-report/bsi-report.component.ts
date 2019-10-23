@@ -373,13 +373,14 @@ export class BSIReportComponent implements OnInit {
     }
 
     
-    public chartClicked(e: any): void {
-        console.log('Chart Clicked -> ',this.ReportDetailsData);
+    public chartClicked(): void {
+        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid, this.ReportDetailsData.fromdate,
+        this.ReportDetailsData.todate, this.ReportDetailsData.datagranularity);
         this.getdati1();
     }
 
-    public chartClicked2(e: any): void {
-        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid);
+    public chartClicked2(): void {
+        console.log('Chart Clicked2 -> ',this.ReportDetailsData);
         this.getdati2();
     }
 
