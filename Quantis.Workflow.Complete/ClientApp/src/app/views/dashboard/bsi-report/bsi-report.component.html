@@ -62,6 +62,7 @@
                   <th>KPI</th>
                   <th>Granularità dei dati</th>
                   <th>Ultima Data di Calcolo</th>
+                  <th>Calculations Status Text</th>
                 </tr>
               </thead>
               <tbody>
@@ -71,12 +72,14 @@
                   <td>{{ ReportDetailsData.rule }} </td>
                   <td>{{ ReportDetailsData.datagranularity }} </td>
                   <td>{{ ReportDetailsData.calculationstatuslastdate }}</td>
+                  <td>{{ ReportDetailsData.calculationstatustext }}</td>
                 </tr>
               </tbody>
             </table>
             <br>
+            <button class="btn btn-primary btn-sm float-right" (click)="chartClicked()">Drill Down</button>
             <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
-            [oneToOne]="true" style="width: 100%; display: block;" (click)="chartClicked($event)">
+            [oneToOne]="true" style="width: 100%; display: block;">
           </highcharts-chart><br><br>
 
 
@@ -138,6 +141,7 @@
                     <th>KPI</th>
                     <th>Granularità dei dati</th>
                     <th>Ultima Data di Calcolo</th>
+                    <th>Calculations Status Text</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,12 +151,14 @@
                     <td>{{ ReportDetailsData.rule }} </td>
                     <td>{{ ReportDetailsData.datagranularity }} </td>
                     <td>{{ ReportDetailsData.calculationstatuslastdate }}</td>
+                    <td>{{ ReportDetailsData.calculationstatustext }}</td>
                   </tr>
                 </tbody>
               </table>
               <br>
+              <button class="btn btn-primary btn-sm float-right" (click)="chartClicked()">Drill Down</button>
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
-              [oneToOne]="true" style="width: 100%; display: block;" (click)="chartClicked($event)">
+              [oneToOne]="true" style="width: 100%; display: block;">
               </highcharts-chart><br><br>
 
               
@@ -214,6 +220,7 @@
                     <th>KPI</th>
                     <th>Granularità dei dati</th>
                     <th>Ultima Data di Calcolo</th>
+                    <th>Calculations Status Text</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -223,12 +230,14 @@
                     <td>{{ ReportDetailsData1.rule }} </td>
                     <td>{{ ReportDetailsData1.datagranularity }} </td>
                     <td>{{ ReportDetailsData1.calculationstatuslastdate }}</td>
+                    <td>{{ ReportDetailsData.calculationstatustext }}</td>
                   </tr>
                 </tbody>
               </table>
               <br>
+              <button class="btn btn-primary btn-sm float-right" (click)="chartClicked2()">Drill Down</button>
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions2" [(update)]="chartUpdateFlag2"
-              [oneToOne]="true" style="width: 100%; display: block;" (click)="chartClicked2($event)">
+              [oneToOne]="true" style="width: 100%; display: block;">
               </highcharts-chart><br><br>
 
               <h5 *ngIf='loadingModalDati2' id="loader" class="text-center">

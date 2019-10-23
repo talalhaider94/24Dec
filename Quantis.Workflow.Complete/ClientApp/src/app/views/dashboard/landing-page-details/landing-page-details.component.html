@@ -32,7 +32,7 @@
             </select>
             
             <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">View All</button>
+            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">Tutti</button>
             <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
         </div>
     </section>
@@ -241,7 +241,7 @@
         <div class="row">    
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
@@ -337,7 +337,7 @@
         <div class="row">    
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
