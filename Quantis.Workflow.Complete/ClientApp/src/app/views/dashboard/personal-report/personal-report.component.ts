@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 declare var $;
 var $this;
 
@@ -57,43 +57,56 @@ export class PersonalReportComponent implements OnInit {
             }
         }
     };
-    loading: boolean = true;
+    loading: boolean = false;
     dtTrigger: Subject<any> = new Subject();
     PersonalReportData: any = [];
     personalReportForm: FormGroup;
     allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
     filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
     filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
+    allAggregationOptions: Array<any> = [
+        { key: '', value: `Select Aggregation` },
+        { key: 0, value: 'Period' },
+        { key: 1, value: 'Tracking Period' },
+    ];
     modalLoading: boolean = false;
     constructor(
         private apiService: ApiService,
         private toastr: ToastrService,
         private formBuilder: FormBuilder,
-        private _dashboardService: DashboardService
+        private _dashboardService: DashboardService,
+        private _$localeService: BsLocaleService,
     ) {
         $this = this;
+        this._$localeService.use('it');
     }
 
     ngOnInit() {
         this.personalReportForm = this.formBuilder.group({
-            name: [null, Validators.required],
-            contractParties: [null, Validators.required],
-            contracts: [null, Validators.required],
-            kpi: [null, Validators.required],
+            GlobalFilterId: [0],
+            // name: [null, Validators.required],
+            // contractParties: [null, Validators.required],
+            // contracts: [null, Validators.required],
+            // kpi: [null, Validators.required],
+            aggregationoption: [null, Validators.required],
+            startDate: [null, Validators.required],
+			endDate: [null, Validators.required],
         });
-        this.personalReportForm.get('contracts').disable();
-        this.personalReportForm.get('kpi').disable();
-        this._dashboardService.getContractParties().subscribe(contractParties => {
-            this.loading = false;
-            contractParties.map(contractParty => this.allContractParties.push(contractParty));
-            // this.allContractParties = contractParties;
-            this.personalReportForm.patchValue({
-                contractParties: ''
-            });
-        }, error => {
-            this.loading = false;
-            this.toastr.error('unable to get contract parties', 'Error!')
-        })
+        // this.personalReportForm.get('contracts').disable();
+        // this.personalReportForm.get('kpi').disable();
+        // this._dashboardService.getContractParties().subscribe(contractParties => {
+        //     this.loading = false;
+        //     contractParties.map(contractParty => this.allContractParties.push(contractParty));
+        //     this.personalReportForm.patchValue({
+        //         contractParties: ''
+        //     });
+        // }, error => {
+        //     this.loading = false;
+        //     this.toastr.error('unable to get contract parties', 'Error!')
+        // });
+        this.personalReportForm.patchValue({
+            aggregationoption: ''
+        });
     }
 
     ngAfterViewInit() {
