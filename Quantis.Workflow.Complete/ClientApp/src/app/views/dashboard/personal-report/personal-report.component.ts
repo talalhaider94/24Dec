@@ -166,4 +166,13 @@ export class PersonalReportComponent implements OnInit {
     onPersonalReportFormSubmit() {
 
     }
+  ///for build
+  f = {
+    name: {
+      errors: { required: false}
+    }
+  };
+  submitted = false;
+  formLoading = false;
+  ///
 }
