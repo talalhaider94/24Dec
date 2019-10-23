@@ -59,52 +59,53 @@
                         <thead style="background: #20a8d8">
                         </thead>
                         <tbody>
-                            <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
-                            <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
-                            <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
-                            <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
-                            <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
-                            <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
-                            <tr>
-                                <th>LOADING FORM</th>
-                                <td colspan="2">
-                                    <select class="form-control" [(ngModel)]="modalData.id_form">
-                                        <option value="">Loading Form: </option>
-                                        <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
-                            <tr>
-                                <th>FREQUENZA</th>
-                                <td colspan="2">
-                                    <select class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
-                                        <option value="MENSILE">MENSILE</option>
-                                        <option value="TRIMESTRALE">TRIMESTRALE</option>
-                                        <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
-                                        <option value="SEMESTRALE">SEMESTRALE</option>
-                                        <option value="ANNUALE">ANNUALE</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>TIPOLOGIA</th>
-                                <td colspan="2">
-                                    <select class="form-control" [(ngModel)]="modalData.kpi_type" name="kpi_type">
-                                        <option value="P">PENALE</option>
-                                        <option value="M">MONITORAGGIO</option>
-                                        <option value="O">OBIETTIVO</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>FORNITURA</th>
-                                <td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_name"></td>
-                            </tr>
-                            <tr><th>REFERENTI INPUT</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent"></td></tr>
-                            <tr><th>REFERENTI 1</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_1"></td></tr>
-                            <tr><th>REFERENTI 2</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_2"></td></tr>
-                            <tr><th>REFERENTI 3</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_3"></td></tr>
+                          <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
+                          <tr><th>NOME KPI BSI</th><td colspan="2">{{modalData.kpi_name_bsi}}</td></tr>
+                          <tr><th>DESCRIZIONE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
+                          <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
+                          <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
+                          <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
+                          <tr>
+                            <th>LOADING FORM</th>
+                            <td colspan="2">
+                              <select class="form-control" [(ngModel)]="modalData.id_form">
+                                <option value="">Loading Form: </option>
+                                <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
+                          <tr>
+                            <th>FREQUENZA</th>
+                            <td colspan="2">
+                              <select class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
+                                <option value="MENSILE">MENSILE</option>
+                                <option value="TRIMESTRALE">TRIMESTRALE</option>
+                                <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+                                <option value="SEMESTRALE">SEMESTRALE</option>
+                                <option value="ANNUALE">ANNUALE</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>TIPOLOGIA</th>
+                            <td colspan="2">
+                              <select class="form-control" [(ngModel)]="modalData.kpi_type" name="kpi_type">
+                                <option value="P">PENALE</option>
+                                <option value="M">MONITORAGGIO</option>
+                                <option value="O">OBIETTIVO</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>FORNITURA</th>
+                            <td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_name"></td>
+                          </tr>
+                          <tr><th>REFERENTI INPUT</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent"></td></tr>
+                          <tr><th>REFERENTI 1</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_1"></td></tr>
+                          <tr><th>REFERENTI 2</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_2"></td></tr>
+                          <tr><th>REFERENTI 3</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.referent_3"></td></tr>
+                          <tr><th>KPI PROGRESSIVO</th><td colspan="2" style="text-align:center"><input type="checkbox" [(ngModel)]="modalData.progressive" /></td></tr>
                         </tbody>
                     </table>
                     <table id="classTable" class="table stripe">
@@ -117,6 +118,7 @@
                                 <td align="center"><input [disabled]="modalData.enable == false" type="checkbox" [(ngModel)]="modalData.enable_rm" /></td>
                                 <td align="center"><input [disabled]="modalData.enable == false" type="checkbox" [(ngModel)]="modalData.enable_wf" /></td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </div>
