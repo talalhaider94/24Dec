@@ -3,35 +3,103 @@
   <h5 *ngIf="loading" class="text-center text-primary">
     <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
   </h5>
-  <button class="btn btn-primary float-right" data-toggle="modal" data-target="#configModal" (click)="showConfigModal()">
-    <i class="icon-settings"></i>
-  </button><br /><br />
+  <button class="btn btn-primary btn-sm float-right mb-3" (click)="showConfigModal()">
+    <i class="fa fa-cog"></i> Generate Report
+  </button>
   <table class="table stripe text-center" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead class="bg-primary">
-        <tr class="text-white">
-          <th>Folder Name</th>
-          <th>Executable</th>
-          <th>Parameterized</th>
-          <th>Report Name</th>
-          <th>Report Type</th>
-          <th>Modified Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of PersonalReportData; index as i">
-          <td>{{row.foldername}}</td>
-          <td>{{row.isexecutable}}</td>
-          <td>{{row.isparameterized}}</td>
-          <td>{{row.itemname}}</td>
-          <td>{{row.reporttype}}</td>
-          <td>{{row.modifieddate}}</td>
-          <td>
-            <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
-              <i class="fa fa-eye"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <thead class="bg-primary">
+      <tr class="text-white">
+        <th>Folder Name</th>
+        <th>Executable</th>
+        <th>Parameterized</th>
+        <th>Report Name</th>
+        <th>Report Type</th>
+        <th>Modified Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of PersonalReportData; index as i">
+        <td>{{row.foldername}}</td>
+        <td>{{row.isexecutable}}</td>
+        <td>{{row.isparameterized}}</td>
+        <td>{{row.itemname}}</td>
+        <td>{{row.reporttype}}</td>
+        <td>{{row.modifieddate}}</td>
+        <td>
+          <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
+            <i class="fa fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div bsModal #configModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Create Report</h4>
+        <button type="button" class="close text-white" (click)="configModal.hide()" aria-label="Close">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- create dashboard model body start -->
+        <form [formGroup]="personalReportForm" (ngSubmit)="onPersonalReportFormSubmit()">
+          <div class="text-center" *ngIf="modalLoading">
+            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+          </div>
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" formControlName="name" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.name.errors }" placeholder="Nome" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="contractParties">Contract Parties</label>
+            <select class="form-control" formControlName="contractParties" (change)="contractPartiesDropDown($event)">
+              <option [selected]="!i" *ngFor="let org of allContractParties; let i = index"
+                [value]="allContractParties[i].key">
+                {{ allContractParties[i].value }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contracts">Contracts</label><!-- Date Type -->
+            <select class="form-control" formControlName="contracts" (change)="contractsDropDown($event)">
+              <option [selected]="!i" *ngFor="let contract of filterContracts; let i = index"
+                [value]="filterContracts[i].key">
+                {{ filterContracts[i].value }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kpi">KPI's</label><!-- Date Type -->
+            <select class="form-control" formControlName="kpi">
+              <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index" [value]="filterKpis[i].key">
+                {{ filterKpis[i].value }}
+              </option>
+            </select>
+          </div>
+          <!-- display name error -->
+          <span class="text-danger mb-3" *ngIf="submitted && f.name.errors && f.name.errors.required">
+            Dashboard name
+            obbligatorio
+          </span>
+          <div class="row">
+            <div class="col-6">
+              <button [disabled]="formLoading" type="submit" class="btn-sm btn btn-primary">
+                <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- create dashboard model body end -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
