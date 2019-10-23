@@ -183,7 +183,7 @@ export class AdminKpiComponent implements OnInit {
         this.modalData.id_form = data.id_form;
         this.modalData.kpi_description = data.rule_description;
         this.modalData.kpi_computing_description = data.kpi_computing_description;
-        this.modalData.source_type = data.source_type;
+        this.modalData.source_type = '';
         this.modalData.computing_variable = data.computing_variable;
         this.modalData.computing_mode = data.computing_mode;
         this.modalData.tracking_period = 'MENSILE';
@@ -195,7 +195,7 @@ export class AdminKpiComponent implements OnInit {
         this.modalData.source_name = data.source_name;
         this.modalData.organization_unit = data.organization_unit;
         this.modalData.id_booklet = data.id_booklet;
-        this.modalData.file_name = data.file_name;
+        this.modalData.file_name = '';
         this.modalData.file_path = data.file_path;
         this.modalData.referent = data.referent;
         this.modalData.referent_1 = data.referent_1;

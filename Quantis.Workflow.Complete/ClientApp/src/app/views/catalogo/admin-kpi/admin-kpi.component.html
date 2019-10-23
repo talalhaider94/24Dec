@@ -66,6 +66,16 @@
                           <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
                           <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
                           <tr>
+                            <th>CARICAMENTO</th>
+                            <td colspan="2">
+                              <select class="form-control" [(ngModel)]="modalData.source_type" name="source_type">
+                                <option value="AUTOMATICO">AUTOMATICO</option>
+                                <option value="MANUALE LF">MANUALE LOADING FORM</option>
+                                <option value="MANUALE CSV">MANUALE CSV</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr *ngIf="modalData.source_type == 'MANUALE LF'">
                             <th>LOADING FORM</th>
                             <td colspan="2">
                               <select class="form-control" [(ngModel)]="modalData.id_form">
@@ -74,7 +84,12 @@
                               </select>
                             </td>
                           </tr>
-                          <tr><th>CARICAMENTO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.source_type"></td></tr>
+                          <tr *ngIf="modalData.source_type == 'MANUALE CSV'">
+                            <th>CSV FILE NAME</th>
+                            <td colspan="2">
+                              <input type="text" class="form-control" [(ngModel)]="modalData.file_name">
+                            </td>
+                          </tr>
                           <tr>
                             <th>FREQUENZA</th>
                             <td colspan="2">
