@@ -6,6 +6,7 @@ using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.DTOs.Widgets;
 using Quantis.WorkFlow.Services.Framework;
 using System.Collections.Generic;
 
@@ -457,6 +458,12 @@ namespace Quantis.WorkFlow.Controllers
         {
             var usr = (HttpContext.User) as AuthUser;
             return _dataAPI.GetCatalogEmailByUser(usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetDayLevelKPIData")]
+        public List<XYZDTO> GetDayLevelKPIData(int globalRuleId, int month, int year)
+        {
+            return _dataAPI.GetDayLevelKPIData(globalRuleId, month, year);
         }
 
         ////////////////////////////

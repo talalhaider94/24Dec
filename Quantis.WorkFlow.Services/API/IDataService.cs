@@ -1,6 +1,7 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.DTOs.Widgets;
 using Quantis.WorkFlow.Services.Framework;
 using System.Collections.Generic;
 
@@ -23,7 +24,7 @@ namespace Quantis.WorkFlow.Services.API
         List<FormLVDTO> GetAllForms();
 
         List<FormUsersDTO> GetAllFormUsers(int formId, int userId);
-
+        List<XYZDTO> GetDayLevelKPIData(int globalRuleId, int month, int year);
         List<FormsFromCatalogDTO> GetFormsFromCatalog(int userid, bool isSecurityMember, int fakeUserID, string type);
         List<LogDTO> GetLogs(int limit);
 
