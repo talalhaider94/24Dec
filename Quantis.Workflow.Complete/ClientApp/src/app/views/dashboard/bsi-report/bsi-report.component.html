@@ -54,7 +54,7 @@
       <div class="modal-body">
         <div *ngIf="reportsDataLength==1">
           <div class="table-responsive" *ngIf="ReportData">
-            <table class="table table-bordered freeFormReportTable font-10">
+            <table class="table table-bordered freeFormReportTable font-12">
               <thead>
                 <tr>
                   <th>Contraente</th>
@@ -87,12 +87,15 @@
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </h5>
           <div [hidden]="isLoadedDati==0" class="table-responsive" style="background: #ffffff; padding: 10px">
-            <h4 style="color:#565656;">Periodo:</h4>
-            <select [(ngModel)]="monthVar" class="form-control ml-1" style="width:15%;" (change)="selectedMonth($event)">
-              <!-- <option value="">Select</option> -->
-              <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
-            </select><br>  
-            <table id="classTable" class="table table-bordered" #table>
+            <div class="row">
+                <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
+                <select [(ngModel)]="monthVar" class="form-control ml-2" style="width:15%;" (change)="selectedMonth($event)">
+                  <!-- <option value="">Select</option> -->
+                  <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
+                </select>
+                <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
+            </div><br>  
+            <table id="classTable" class="table table-bordered  font-12" #table>
                   <thead style="background: #20a8d8; color:white">
                       <tr>
                           <!-- <th style="text-align:center"></th> -->
@@ -138,7 +141,7 @@
         <div *ngIf="reportsDataLength>1" class="row">
           <div class="col-md-6">
             <div class="table-responsive" *ngIf="ReportData">
-              <table class="table table-bordered freeFormReportTable font-10">
+              <table class="table table-bordered freeFormReportTable font-12">
                 <thead>
                   <tr>
                     <th>Contraente</th>
@@ -216,7 +219,7 @@
           <!-- ///////////////// -->
           <div class="col-md-6">
             <div class="table-responsive" *ngIf="ReportData">
-              <table class="table table-bordered freeFormReportTable font-10">
+              <table class="table table-bordered freeFormReportTable font-12">
                 <thead>
                   <tr>
                     <th>Contraente</th>
@@ -294,10 +297,15 @@
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </h5>
           <div [hidden]="isLoadedDati==0" class="table-responsive" style="background: #ffffff; padding: 10px">
-            <select [(ngModel)]="monthVar" class="form-control ml-1" style="width:15%;" (change)="selectedMonth($event)">
-              <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
-            </select><br>  
-              <table id="classTable" class="table table-bordered" #table>
+            <div class="row">
+              <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
+              <select [(ngModel)]="monthVar" class="form-control ml-2" style="width:15%;" (change)="selectedMonth($event)">
+                <!-- <option value="">Select</option> -->
+                <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
+              </select>
+              <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
+            </div><br> 
+              <table id="classTable" class="table table-bordered font-12" #table>
                   <thead style="background: #20a8d8; color:white">
                       <tr>
                           <th style="text-align:center">create date</th>
@@ -339,10 +347,15 @@
             <span class="fa fa-spin fa-spinner fa-3x text-primary"></span>
           </h5>
           <div [hidden]="isLoadedDati2==0" class="table-responsive" style="background: #ffffff; padding: 10px">
-            <select [(ngModel)]="monthVar2" class="form-control ml-1" style="width:15%;" (change)="selectedMonth2($event)">
-              <option *ngFor="let month2 of months2; index as i" value={{i+1}}>{{month2}}</option>
-            </select><br> 
-            <table id="classTable" class="table table-bordered" #table>
+            <div class="row">
+              <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
+              <select [(ngModel)]="monthVar2" class="form-control ml-2" style="width:15%;" (change)="selectedMonth2($event)">
+                <!-- <option value="">Select</option> -->
+                <option *ngFor="let month2 of months2; index as i" value={{i+1}}>{{month2}}</option>
+              </select>
+              <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
+            </div><br> 
+            <table id="classTable" class="table table-bordered font-12" #table>
                   <thead style="background: #20a8d8; color:white">
                       <tr>
                           <th style="text-align:center">create date</th>
