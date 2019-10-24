@@ -142,6 +142,6 @@ namespace Quantis.WorkFlow.Services.API
 
         List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid, int userId);
 
-        object ExecuteReportQuery(ReportQueryDetailDTO dto);
+        object ExecuteReportQuery(ReportQueryDetailDTO dto, int userId);
     }
 }
