@@ -64,6 +64,11 @@ export class BookletComponent implements OnInit {
         contratto: ''
     }];
 
+    createBooklet = {
+        BookletDocumentId:0,
+        ListContract:[]
+    }
+
     documentiDef: any = [{
         id: 'documentid',
         nome: 'documentname'
@@ -180,9 +185,12 @@ export class BookletComponent implements OnInit {
     }
 
     addBooklet(){
-        //console.log('Add Booklet Data -> ',this.documentiDef.documentid);
+        
         //if(this.documentId!=0){
-            this.apiService.CreateBooklet(this.documentiDef.documentid).subscribe((data: any) => {
+            this.createBooklet.BookletDocumentId = this.documentiDef.documentid;
+            this.createBooklet.ListContract = [1090,1075];
+            console.log('Add Booklet Data -> ',this.createBooklet);
+            this.apiService.CreateBooklet(this.createBooklet).subscribe((data: any) => {
             });
         //}
     }

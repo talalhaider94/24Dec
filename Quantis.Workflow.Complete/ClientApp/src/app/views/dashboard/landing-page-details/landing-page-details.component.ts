@@ -53,12 +53,15 @@ export class LandingPageDetailsComponent implements OnInit {
     dtTrigger: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
+    contName: any = [];
     limitedData: any = [];
     bestContracts: any = [];
     monthVar: any;
+    contractName:any;
     month: any;
     yearVar: any;
     contractpartyname: any;
+    showMultiSelect  : boolean =false;
     count = 0;
     setViewAll = 0;
     thresholdkey = '@thresholdKey1';
@@ -80,7 +83,7 @@ export class LandingPageDetailsComponent implements OnInit {
         this.setThresholdValue=0;
         this.setViewAll=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
-        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
+        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname,
         this.queryParams.month, this.queryParams.year);
 
         this.contractpartyname = this.queryParams.contractpartyname;
@@ -91,14 +94,17 @@ export class LandingPageDetailsComponent implements OnInit {
         this.yearVar = this.queryParams.year;
         this.getAnno();
 
+
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
+	    //  this.contName = data;
             if(this.gridsData.length>6){
-                this.limitedData = this.gridsData.splice(0,6); 
+                this.limitedData = this.gridsData.splice(0,6);
             }else{
                 this.limitedData = this.gridsData;
             }
+            this.contName = this.limitedData;
             console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
@@ -130,7 +136,7 @@ export class LandingPageDetailsComponent implements OnInit {
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
                 if(this.gridsData.length>6){
-                    this.limitedData = this.gridsData.splice(0,6); 
+                    this.limitedData = this.gridsData.splice(0,6);
                 }else{
                     this.limitedData = this.gridsData;
                 }
@@ -139,6 +145,47 @@ export class LandingPageDetailsComponent implements OnInit {
             });
         }
     }
+
+    multiSelect(){
+      this.showMultiSelect = (this.showMultiSelect) ? false : true;
+    }
+
+
+    async customFilter(){
+
+        let value:any = this.contractName;
+        if(value == 'ALL'){
+            this.loading = true;
+            this.limitedData = this.contName;
+            this.loading = false;
+        }else{
+            this.loading = true;
+            var temp:any = this.contName
+            var temp2:any = [];
+            await value.forEach(async element => {
+                await temp.forEach(ele =>  {
+                    let e = element.item_text?element.item_text:element
+                    if(ele.contractname == e){
+                    temp2.push(ele);
+                    }else{}});
+            });
+            await temp2.forEach((val, i) => temp2[i] =  {
+
+                bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+                complaintcontracts: temp2[i].complaintcontracts,
+                complaintkpis: temp2[i].complaintkpis,
+                contractpartyid: temp2[i].contractpartyid,
+                contractname: temp2[i].contractname,
+                noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+                noncomplaintkpis: temp2[i].noncomplaintkpis,
+                totalcontracts: temp2[i].totalcontracts,
+                totalkpis: temp2[i].totalkpis,
+                worstcontracts: temp2[i].worstcontracts
+            })
+              this.limitedData = temp2;
+            this.loading = false;
+        }
+     }
 
     anni = [];
     //+(moment().add('months', 6).format('YYYY'))

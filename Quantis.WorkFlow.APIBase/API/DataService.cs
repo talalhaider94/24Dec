@@ -1779,6 +1779,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
                             arules.symbol = (reader.IsDBNull(reader.GetOrdinal("symbol")) ? null : reader.GetString(reader.GetOrdinal("symbol")));
+                            arules.progressive = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == reader.GetInt32(reader.GetOrdinal("global_rule_id"))).progressive;
                             list.Add(arules);
                         }
                         return list;

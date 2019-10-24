@@ -7,11 +7,12 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-4" style="margin-top:-30px">
+        <div class="row pull-right col-md-8" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
-            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:30%;" (change)="populateDateFilter()">
+
+            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
                 <option value="00">Tutti i mesi</option>
                 <option value="01">Gennaio</option>
                 <option value="02">Febbraio</option>
@@ -30,8 +31,12 @@
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>
+            <button type="button" class="btn btn-primary" name="button" (click)="multiSelect()">Contraenti</button>
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" class="form-control ml-1" style="width:40%;position:absolute;right: 13%;top: 37px;z-index: 9;">
+                <option>ALL</option>
+                <option *ngFor = "let row of contName">{{row.contractpartyname}}</option>
+            </select>
             <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">View All</button>
         </div>
     </section>
     <br>
@@ -46,7 +51,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
@@ -85,8 +90,8 @@
                                         <a href="#">
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
-                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
-                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                                <div *ngIf="row.complaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-success':row.complaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.complaintkpis}}</div>
+                                                <div *ngIf="row.noncomplaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-danger':row.noncomplaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.noncomplaintkpis}}</div>
                                             </div>
                                         </a>
                                     </li>
@@ -178,7 +183,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
@@ -357,7 +362,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let row of KpiCompliants; index as i" [hidden]="row.result!='compliant'">
+                                <tr *ngFor="let row of KpiCompliants; index as i">
                                 <td style="width:60%">{{row.globalrulename}}</td>
                                 <td style="text-align:center">{{row.target}}</td>
                                 <td style="text-align:center">{{row.actual}}</td>
@@ -384,17 +389,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stripe" #NonCompliantTable>
+                <table class="table stripe" #NonCompliantTable datatable>
                     <thead style="background: #20a8d8">
                         <tr style="font-size:12px;color:white">
-                            <th style="text-align:center">KPI</th>
+                            <th style="text-align:center; width:60%">KPI</th>
                             <th style="text-align:center">KEY</th>
                             <th style="text-align:center">VALUE</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let row of KpiNonCompliants; index as i" [hidden]="row.result!='non compliant'">
-                            <td style="">{{row.globalrulename}}</td>
+                        <tr *ngFor="let row of KpiNonCompliants; index as i" >
+                            <td style="width:60%">{{row.globalrulename}}</td>
                             <td style="text-align:center">{{row.target}}</td>
                             <td style="text-align:center">{{row.actual}}</td>
                         </tr>

@@ -9,7 +9,7 @@ import { FreeFormReportComponent } from './free-form-report/free-form-report.com
 import { FormReportQueryComponent } from './form-report-query/form-report-query.component';
 import { ImportFormReportComponent } from './import-form-report/import-form-report.component';
 import { BSIReportComponent } from './bsi-report/bsi-report.component';
-import { PersonalReportComponent } from './personal-report/personal-report.component';
+// import { PersonalReportComponent } from './personal-report/personal-report.component';
 import { LandingPageDetailsComponent } from './landing-page-details/landing-page-details.component';
 
 const routes: Routes = [
@@ -88,13 +88,13 @@ const routes: Routes = [
             title: 'Report da BSI'
         }
     },
-    {
-        path: 'personal-report',
-        component: PersonalReportComponent,
-        data: {
-            title: 'Report personali'
-        }
-    },
+    // {
+    //     path: 'personal-report',
+    //     component: PersonalReportComponent,
+    //     data: {
+    //         title: 'Report personali'
+    //     }
+    // },
     {
         path: 'landing-page-details',
         component: LandingPageDetailsComponent,

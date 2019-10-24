@@ -208,13 +208,13 @@ export const navItems: NavData[] = [
                 version: '0.0.1',
                 key: 'VIEW_REPORT_FROM_BSI'
             },
-            {
-                name: 'Report personali',
-                url: '/dashboard/personal-report',
-                icon: 'fa fa-file-text-o',
-                version: '0.0.1',
-                key: 'VIEW_CHART_REPORT'
-            }
+            // {
+            //     name: 'Report personali',
+            //     url: '/dashboard/personal-report',
+            //     icon: 'fa fa-file-text-o',
+            //     version: '0.0.1',
+            //     key: 'VIEW_CHART_REPORT'
+            // }
         ]
     },
     {
@@ -223,7 +223,7 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         key: ['VIEW_CONFIGURATION_GENERAL', 'VIEW_CONFIGURATION_ADVANCED', 'VIEW_CONFIGURATION_SDM_GROUP',
             'VIEW_CONFIGURATION_SDM_TICKET_STATUS', 'VIEW_CONFIGURATION_ROLES', 'VIEW_CONFIGURATION_USER_ROLES',
-            'VIEW_CONFIGURATION_USER_PROFILING', 'VIEW_STANDARD_DASHBOARD', 'VIEW_REPORT_QUERIES', 'IMPORT_FREE_FORM_REPORT',
+            'VIEW_CONFIGURATION_USER_PROFILING', 'VIEW_STANDARD_DASHBOARD', 'IMPORT_FREE_FORM_REPORT',
             'VIEW_CUTOFF_WORKFLOW_DAY'
         ],
         children: [
