@@ -301,5 +301,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.UploadFileToSFTPServer(fileDTO);
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetContractsWithContractParties")]
+        public List<ContractPartyContractDTO> GetContractsWithContractParties()
+        {
+            var user = HttpContext.User as AuthUser;
+            return _infomationAPI.GetContractsWithContractParties(user.UserId);
+        }
     }
 }
