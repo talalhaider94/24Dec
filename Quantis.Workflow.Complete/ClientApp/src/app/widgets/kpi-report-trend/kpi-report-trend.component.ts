@@ -269,7 +269,6 @@ export class KpiReportTrendComponent implements OnInit {
                         kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
                     }
                     this.setWidgetFormValues = kpiReportTrendFormValues;
-
                     this.getContractParties(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getContracts(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getKPI(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
@@ -597,7 +596,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getContractParties(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContractParties) {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties;
             if (contractPartyKey) {
@@ -612,7 +611,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getContractParties1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContractParties1) {
             const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
             if (contractPartyKey) {
@@ -628,7 +627,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getContracts(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContracts) {
             const contracts = kpiReportTrendWidgetParameters.allContracts;
             const contractKey = setWidgetFormValues.Filters.contracts;
             if (contractKey) {
@@ -643,7 +642,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getContracts1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContracts1) {
             const contractParties = kpiReportTrendWidgetParameters.allContracts1;
             const contractPartyKey = setWidgetFormValues.Filters.contracts1;
             if (contractPartyKey) {
@@ -658,7 +657,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getKPI(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allKpis) {
             const contractParties = kpiReportTrendWidgetParameters.allKpis;
             const contractPartyKey = setWidgetFormValues.Filters.kpi;
             if (contractPartyKey) {
@@ -673,7 +672,7 @@ export class KpiReportTrendComponent implements OnInit {
     }
 
     getKPI1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
-        if (kpiReportTrendWidgetParameters && setWidgetFormValues) {
+        if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allKpis1) {
             const contractParties = kpiReportTrendWidgetParameters.allKpis1;
             const contractPartyKey = setWidgetFormValues.Filters.kpi1;
             if (contractPartyKey) {
