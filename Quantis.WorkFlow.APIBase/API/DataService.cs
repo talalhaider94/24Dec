@@ -1399,7 +1399,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
                 {
                     con.Open();
-                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period,symbol) values (:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period,:symbol)";
+                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period,symbol,kpi_description_bsi) values (:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period,:symbol,:kpi_description_bsi)";
                     var command = new NpgsqlCommand(sp, con);
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue(":id_kpi", dto.id_kpi);
@@ -1416,6 +1416,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     command.Parameters.AddWithValue(":global_rule_id", dto.global_rule_id);
                     command.Parameters.AddWithValue(":tracking_period", dto.tracking_period);
                     command.Parameters.AddWithValue(":symbol", dto.symbol);
+                    command.Parameters.AddWithValue(":kpi_description_bsi", dto.kpi_description_bsi);
                     command.ExecuteScalar();
                 }
             }
@@ -1778,6 +1779,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
                             arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
+                            arules.kpi_description_bsi = reader.GetString(reader.GetOrdinal("kpi_description_bsi"));
                             arules.symbol = (reader.IsDBNull(reader.GetOrdinal("symbol")) ? null : reader.GetString(reader.GetOrdinal("symbol")));
                             arules.progressive = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == reader.GetInt32(reader.GetOrdinal("global_rule_id"))).progressive;
                             list.Add(arules);
