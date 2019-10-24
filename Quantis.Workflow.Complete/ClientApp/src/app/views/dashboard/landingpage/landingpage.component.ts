@@ -13,7 +13,6 @@ import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-// import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
@@ -21,9 +20,6 @@ import { forEach } from '@angular/router/src/utils/collection';
     styleUrls: ['landingpage.component.scss']
 })
 export class LandingPageComponent implements OnInit {
-    dropdownList = [];
-    selectedItems = [];
-    dropdownSettings = {};
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
@@ -74,6 +70,7 @@ export class LandingPageComponent implements OnInit {
     setViewAll = 0;
     thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
+    showMultiSelect : boolean = false;
     constructor(
         private dashboardService: DashboardService,
         private apiService: ApiService,
@@ -91,17 +88,6 @@ export class LandingPageComponent implements OnInit {
         this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
             this.thresholdvalue = data;
         });
-
-
-        this.dropdownSettings = {
-            singleSelection: false,
-            idField: 'item_id',
-            textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            itemsShowLimit: 3,
-            allowSearchFilter: true
-          };
 
 
         this.thresholdvalue = 0;
@@ -122,7 +108,6 @@ export class LandingPageComponent implements OnInit {
                 this.limitedData = this.gridsData;
             }
             this.contName = this.limitedData;
-            this.dropdownList = this.limitedData.map(value => value.contractpartyname);
             console.log("gridsData -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
@@ -223,40 +208,23 @@ export class LandingPageComponent implements OnInit {
             });
         }
     }
-
-onItemSelect(item: any) {
-        console.log(item);
-        this.customFilter();
-      }
-    onSelectAll(items: any) {
-        console.log(items);
-        this.limitedData = this.contName;
-
-      }
-    onItemDeSelect(items:any){
-        console.log(items,'onitemDeselect');
-        this.customFilter();
-
-    }
-    onFilterChange(items:any){
-        console.log(items,'onFilterChange');
-    }
-    onDropDownClose(items:any){
-        console.log(items,'onDropDownClose');
+    multiSelect(){
+      this.showMultiSelect = (this.showMultiSelect) ? false : true;
     }
 
     async customFilter(){
-        if (this.selectedItems === undefined || this.selectedItems.length == 0) {
-            this.limitedData = this.contName;
-
-        }else{
-            let value:any = this.selectedItems;
-            this.loading = true;
+            let value:any = this.contractName;
+            if(value == 'ALL'){
+                this.loading = true;
+                this.limitedData = this.contName;
+                this.loading = false;
+            }else{
+                this.loading = true;
             var temp:any = this.contName
             var temp2:any = [];
             await value.forEach(async element => {
                 await temp.forEach(ele =>  {
-                    let e = element.item_text ? element.item_text : element
+                    let e = element.item_text?element.item_text:element
                     if(ele.contractpartyname == e){
                     temp2.push(ele);
                     }else{}});
@@ -275,9 +243,9 @@ onItemSelect(item: any) {
                 worstcontracts: temp2[i].worstcontracts
             })
               this.limitedData = temp2;
-              debugger;
             this.loading = false;
-        }
+            }
+            
      }
 
     anni = [];

@@ -7,7 +7,7 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-8" style="margin-top:-30px">
+        <div class="row pull-right col-md-6" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
@@ -31,20 +31,12 @@
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>
-                <ng-multiselect-dropdown style="width:38% ;background: white;border-radius: 6px; margin-left:0.3vw"
-                    [placeholder]= "'Contraenti'"
-                    [data]="dropdownList"
-                    [(ngModel)]="selectedItems"
-                    [settings]="dropdownSettings"
-                    (onSelect)="onItemSelect($event)"
-                    (onSelectAll)="onSelectAll($event)"
-                    (onDeSelect)="onItemDeSelect($event)"
-                    (onFilterChange)="onFilterChange($event)"
-                    (onDropDownClose)="onDropDownClose($event)"
-                    >
-                </ng-multiselect-dropdown>
+            <button type="button" class="btn btn-primary" name="button" (click)="multiSelect()">Contraenti</button>
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" class="form-control ml-1" style="width:40%;position:absolute;right: 13%;top: 37px;z-index: 9;">
+                <option>ALL</option>
+                <option *ngFor = "let row of contName">{{row.contractpartyname}}</option>
+            </select>
             <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">Tutti</button>
         </div>
     </section>
     <br>
@@ -59,7 +51,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
@@ -191,7 +183,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
