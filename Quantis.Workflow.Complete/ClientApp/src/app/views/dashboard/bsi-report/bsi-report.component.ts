@@ -30,6 +30,8 @@ export class BSIReportComponent implements OnInit {
     yearVar: any;
     months = [];
     months2 = [];
+    selectedmonth;
+    selectedyear;
     countCampiData = [];
     eventTypes: any = {};
     resources: any = {};
@@ -420,6 +422,9 @@ export class BSIReportComponent implements OnInit {
         var toMonth = toCheck.format('M');
         var toYear  = toCheck.format('YYYY');
 
+        this.selectedmonth = toMonth;
+        this.selectedyear = toYear;
+
         this.to_year = toYear;
 
         while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
@@ -450,6 +455,9 @@ export class BSIReportComponent implements OnInit {
         var toMonth = toCheck.format('M');
         var toYear  = toCheck.format('YYYY');
 
+        this.selectedmonth = toMonth;
+        this.selectedyear = toYear;
+
         this.to_year2 = toYear;
 
         while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
@@ -474,7 +482,7 @@ export class BSIReportComponent implements OnInit {
         }else{
             month = toMonth;
         }
-        // year = '2018';
+        //year = '2018';
         year = toYear;
         let kpiId = this.ReportDetailsData.globalruleid;
         // let month = '08';
@@ -531,7 +539,7 @@ export class BSIReportComponent implements OnInit {
                     }
                 }
             })
-            //console.log('dati', dati);
+            console.log('dati', dati);
             this.loadingModalDati = false;
         },
         error => {
@@ -644,13 +652,19 @@ export class BSIReportComponent implements OnInit {
     selectedMonth(e){
         console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar,' - Selected Year -> ',this.to_year);
     
+        this.selectedmonth = this.monthVar;
+        this.selectedyear = this.to_year;
+
         this.getdati1(this.monthVar,this.to_year);
     }
 
     selectedMonth2(e){
         console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar2,' - Selected Year -> ',this.to_year2);
-        console.log('Selected Month -> ',this.monthVar);
+        //console.log('Selected Month -> ',this.monthVar);
     
+        this.selectedmonth = this.monthVar2;
+        this.selectedyear = this.to_year2;
+
         this.getdati2(this.monthVar2,this.to_year2);
     }
 
