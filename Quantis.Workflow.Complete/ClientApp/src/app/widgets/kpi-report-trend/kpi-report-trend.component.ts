@@ -278,7 +278,7 @@ export class KpiReportTrendComponent implements OnInit {
             }
         });
     }
-
+    // Danial: TODO: need to check for comboboxes 1 values fro dropdown
     subscriptionForDataChangesFromParent1() {
         this.emitter.getData().subscribe(result => {
             const { type, data } = result;
