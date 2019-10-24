@@ -474,12 +474,12 @@ export class BSIReportComponent implements OnInit {
         }else{
             month = toMonth;
         }
-        year = '2018';
-       // year = toYear;
-        // let kpiId = this.ReportDetailsData.globalruleid;
+        // year = '2018';
+        year = toYear;
+        let kpiId = this.ReportDetailsData.globalruleid;
         // let month = '08';
         // let year = '2018';
-        let kpiId = 39412;
+        //let kpiId = 39412;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
 
@@ -549,9 +549,10 @@ export class BSIReportComponent implements OnInit {
             month = toMonth;
         }
         // let month = '10';
-        year = '2018';
-        //let kpiId = this.ReportDetailsData.globalruleid;
-        let kpiId = 39412;
+        //year = '2018';
+        year = toYear;
+        let kpiId = this.ReportDetailsData.globalruleid;
+        //let kpiId = 39412;
         this.loadingModalDati2 = true;
         this.isLoadedDati2=1;
 

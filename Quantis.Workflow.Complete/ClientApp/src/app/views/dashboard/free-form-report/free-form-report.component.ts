@@ -488,7 +488,6 @@ export class FreeFormReportComponent implements OnInit {
           let totalRows =  $(tableElm + ' tbody tr').length;
           for (let i = 0; i < totalRows; i++) {
               var row = [];
-              debugger;
               $($(tableElm).DataTable().row(i).node()).find('td:not(.notExportCsv)').each((i, e) => {
                   var $td = $(e);
                   var text = $td.text();
