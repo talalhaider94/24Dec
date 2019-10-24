@@ -89,6 +89,7 @@ export class BarchartComponent implements OnInit {
             }
         });
     }
+
     // invokes on component initialization
     getChartParametersAndData(url) {
         // these are default parameters need to update this logic
@@ -185,16 +186,14 @@ export class BarchartComponent implements OnInit {
             label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
             this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
         }
-        if (chartIndexData.length) {
-            setTimeout(() => {
-                let allLabels = chartIndexData.map(label => label.xvalue);
-                let allData = chartIndexData.map(data => data.yvalue);
-                this.barChartData = [{ data: allData, label: label }]
-                this.barChartLabels.length = 0;
-                this.barChartLabels.push(...allLabels);
-                this.closeModal();
-            });
-        }
+        setTimeout(() => {
+            let allLabels = chartIndexData.map(label => label.xvalue);
+            let allData = chartIndexData.map(data => data.yvalue);
+            this.barChartData = [{ data: allData, label: label }]
+            this.barChartLabels.length = 0;
+            this.barChartLabels.push(...allLabels);
+            this.closeModal();
+        });
     }
 
     widgetnameChange(event) {

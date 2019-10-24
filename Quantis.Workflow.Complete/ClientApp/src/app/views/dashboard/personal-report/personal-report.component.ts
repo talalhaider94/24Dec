@@ -66,8 +66,8 @@ export class PersonalReportComponent implements OnInit {
     filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
     allAggregationOptions: Array<any> = [
         { key: '', value: `Select Aggregation` },
-        { key: 0, value: 'Period' },
-        { key: 1, value: 'Tracking Period' },
+        { key: 'period', value: 'Period' },
+        { key: 'trackingperiod', value: 'Tracking Period' },
     ];
     modalLoading: boolean = false;
     constructor(

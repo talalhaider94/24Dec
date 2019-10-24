@@ -84,5 +84,6 @@
         public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
         public const string VIEW_CHART_REPORT = "VIEW_CHART_REPORT";
         public const string VIEW_CUTOFF_WORKFLOW_DAY = "VIEW_CUTOFF_WORKFLOW_DAY";
+        public const string VIEW_LOADING_CSV = "VIEW_LOADING_CSV";
     }
 }

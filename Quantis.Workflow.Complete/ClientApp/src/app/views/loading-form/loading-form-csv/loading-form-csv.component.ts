@@ -183,18 +183,23 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
       this.uploader.queue.forEach((element, index) => {
         let file = element._file;
         let uploadName = file.name;
-        let patternArray = this.loadingPattern.split('_');
-        let patternExtArray = patternArray[2].split('.');
-        let patternExt = patternExtArray[1];
+        if (this.loadingPattern != null && this.loadingPattern.length > 5) {
+          let patternArray = this.loadingPattern.split('_');
+          let patternExtArray = patternArray[2].split('.');
+          let patternExt = patternExtArray[1];
 
-        let uploadNameArray = uploadName.split('_');
-        let uploadExtArray = uploadNameArray[2] ? uploadNameArray[2].split('.') : null;
-        let uploadExt = uploadExtArray != null ? uploadExtArray[1] : null;
+          let uploadNameArray = uploadName.split('_');
+          let uploadExtArray = uploadNameArray[2] ? uploadNameArray[2].split('.') : null;
+          let uploadExt = uploadExtArray != null ? uploadExtArray[1] : null;
 
-        if (patternArray[0] == uploadNameArray[0]) {
-          if (uploadNameArray[1].length == 6) {
-            if (patternExt == uploadExt) {
-              this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
+          if (patternArray[0] == uploadNameArray[0]) {
+            if (uploadNameArray[1].length == 6) {
+              if (patternExt == uploadExt) {
+                this._getUploadedFile(file, this.fileUploadMonth[index], this.fileUploadYear[index]);
+              } else {
+                //errore
+                this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
+              }
             } else {
               //errore
               this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
@@ -204,8 +209,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
             this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
           }
         } else {
-          //errore
-          this.toastr.error('Nome file errato. Pattern: ' + this.loadingPattern)
+          this.toastr.error('Pattern non impostato. Contattare un amministratore.')
         }
       });
     } else {
