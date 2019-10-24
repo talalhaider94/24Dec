@@ -440,7 +440,8 @@ namespace Quantis.WorkFlow.Controllers
         [HttpPost("ExecuteReportQuery")]
         public object ExecuteReportQuery([FromBody]ReportQueryDetailDTO dto)
         {
-            return _dataAPI.ExecuteReportQuery(dto);
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.ExecuteReportQuery(dto,usr.UserId);
         }
 
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]

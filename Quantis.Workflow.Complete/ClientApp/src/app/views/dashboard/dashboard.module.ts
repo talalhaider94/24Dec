@@ -16,7 +16,6 @@ import { DataTablesModule } from 'angular-datatables';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 import {MatProgressBarModule} from '@angular/material';
-import { ContextMenuModule } from 'ngx-contextmenu';
 import { KeysPipePipe } from './bsi-report/bsi-pipe.pipe';
 
 import { DashboardComponent } from './dashboard.component';
@@ -43,7 +42,6 @@ import { ImportFormReportComponent } from './import-form-report/import-form-repo
 import { BSIReportComponent } from './bsi-report/bsi-report.component';
 //import { PersonalReportComponent } from './personal-report/personal-report.component';
 import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
     imports: [
@@ -76,9 +74,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
         ]),
         HighchartsChartModule,
         ModalModule.forRoot(),
-        BsDatepickerModule.forRoot(),
-        ContextMenuModule.forRoot(),
-	NgMultiSelectDropDownModule.forRoot()
+        BsDatepickerModule.forRoot()
     ],
     declarations: [
         DashboardComponent,

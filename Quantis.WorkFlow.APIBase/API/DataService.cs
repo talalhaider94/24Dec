@@ -7,6 +7,7 @@ using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
@@ -2228,7 +2229,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 ParameterCount = e.Parameters.Count,
                 IsEnabled=e.is_enable
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o=>o.QueryName).ToList();
         }
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
@@ -2243,7 +2244,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o => o.QueryName).ToList();
         }
 
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id, int userId)
@@ -2397,12 +2398,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public object ExecuteReportQuery(ReportQueryDetailDTO dto)
+        public object ExecuteReportQuery(ReportQueryDetailDTO dto,int userId)
         {
             string query = dto.QueryText;
             foreach (var p in dto.Parameters)
             {
                 query = query.Replace(p.Key, p.Value);
+            }
+            if (query.Trim() == "$kpiCalculationStatus")
+            {
+                var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
+                var conditionString=QuantisUtilities.GetOracleGlobalRuleInQuery("g.global_rule_id", rules);
+                query = string.Format(WorkFlowConstants.KPI_Calculation_Status_Query, conditionString);
             }
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {

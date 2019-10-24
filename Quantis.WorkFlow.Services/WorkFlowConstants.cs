@@ -3,6 +3,53 @@
     public static class WorkFlowConstants
     {
         public static string Configuration_SessionTimeOutKey = "";
+
+        public static string KPI_Calculation_Status_Query = @"select * from (
+        select
+        t.customer_name  ""Cliente"",
+        t.sla_name ""Contratto"" ,
+        t.rule_name ""KPI"" ,
+        t.interval_length || ' ' || initcap(t.time_unit) ||
+        decode(t.is_period, 1, ' (Rule''s tracking period)', '') ""Tracking Period"" ,
+        to_date(decode (to_char (t.last_psl_record_date, 'dd/mm/yyyy') , '02/01/1970' , null , t.last_psl_record_date)) ""Aggiornato al""
+        from
+        (
+            select cu.customer_name,
+            s.customer_id,
+            s.sla_name ,
+            r.rule_name             ,
+            t.interval_length       ,
+            t.time_unit             ,
+            t.is_period             ,
+            t.last_psl_record_date  ,
+            t.rule_tu_modify_date   ,
+            t.last_psl_cycle_date   ,
+            t.min_time_not_used     ,
+            t.min_time_of_exception ,
+            t.min_time_of_version   ,
+            g.psl_instance_id       ,
+            least (nvl (t.min_time_not_used, to_date ('18/01/2038' ,'dd/mm/yyyy'))           ,
+                nvl(t.min_time_of_version   , to_date ('18/01/2038' ,'dd/mm/yyyy'))           ,
+                nvl(t.min_time_of_exception , to_date ('18/01/2038' ,'dd/mm/yyyy'))) min_time
+            from oblicore.t_rules_time_units t,
+        oblicore.t_rules r,
+        oblicore.t_sla_versions sv,
+        oblicore.t_slas s,
+        oblicore.t_global_rules g,
+        oblicore.t_customers cu
+        where s.sla_id          = sv.sla_id
+        and sv.sla_version_id = r.sla_version_id
+        and r.psl_rule_id     = t.rule_id
+        and sv.status         in ('EFFECTIVE', 'NOT_EFFECTIVE')
+        and s.sla_status      not in ('ARCHIVED','PURGING')
+        and t.status          = 'ON'
+        and r.measurability_status = 'TXT_MEASURABILITY_STATUS_ACTIVE'
+        and r.global_rule_id  = g.global_rule_id
+        and {0}
+        and s.CUSTOMER_ID=cu.CUSTOMER_ID) t order by t.min_time , t.rule_tu_modify_date)
+        order by 1,2,3,4";
+
+
     }
 
     public static class WorkFlowPermissions

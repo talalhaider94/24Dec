@@ -30,6 +30,8 @@ export class BSIReportComponent implements OnInit {
     yearVar: any;
     months = [];
     months2 = [];
+    selectedmonth;
+    selectedyear;
     countCampiData = [];
     eventTypes: any = {};
     resources: any = {};
@@ -145,22 +147,18 @@ export class BSIReportComponent implements OnInit {
                 text: 'Percent'
             }
         },
-        series: [
-            // {
-            //     type: 'column',
-            //     name: 'Values',
-            //     data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
-            //     color: 'black'
-            // },
-            // {
-            //     type: 'scatter',
-            //     name: 'Target',
-            //     data: [2, 2, 2, 2, 2],
-            //     marker: {
-            //         fillColor: 'orange'
-            //     }
-            // }
-        ],
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [],
         exporting: {
             enabled: true
         },
@@ -328,10 +326,15 @@ export class BSIReportComponent implements OnInit {
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
         let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
+        let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
+        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
         let allTargetData = targetData.map(data => data.yvalue);
+        let allMinorData = minorData.map(data => data.yvalue);
+        let allCriticalData = criticalData.map(data => data.yvalue);
+
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels,
@@ -359,6 +362,22 @@ export class BSIReportComponent implements OnInit {
                 fillColor: '#ffc107'
             }
         };
+        this.chartOptions.series[3] = {
+            type: 'scatter',
+            name: 'Minor',
+            data: allMinorData,
+            marker: {
+                fillColor: '#1985ac'
+            }
+        };
+        this.chartOptions.series[4] = {
+            type: 'scatter',
+            name: 'Critical',
+            data: allCriticalData,
+            marker: {
+                fillColor: '#f86c6b'
+            }
+        };
         this.chartUpdateFlag = true;
     }
 
@@ -366,14 +385,21 @@ export class BSIReportComponent implements OnInit {
         // debugger
         const chartArray = data.reports[1].data;
         // Danial TODO: improve code later by modifying all data in a single loop
-        let violationData = chartArray.filter(data => data.zvalue === 'Violation');
-        let compliantData = chartArray.filter(data => data.zvalue === 'Compliant');
-        let targetData = chartArray.filter(data => data.zvalue === 'Target');
+        let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
+        let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
+        let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
+
+        let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
+        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
 
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
         let allTargetData = targetData.map(data => data.yvalue);
+
+        let allMinorData = minorData.map(data => data.yvalue);
+        let allCriticalData = criticalData.map(data => data.yvalue);
+
         this.chartOptions2.xAxis = {
             type: 'date',
             categories: allChartLabels,
@@ -401,6 +427,22 @@ export class BSIReportComponent implements OnInit {
                 fillColor: '#ffc107'
             }
         };
+        this.chartOptions2.series[3] = {
+            type: 'scatter',
+            name: 'Minor',
+            data: allMinorData,
+            marker: {
+                fillColor: '#1985ac'
+            }
+        };
+        this.chartOptions2.series[4] = {
+            type: 'scatter',
+            name: 'Critical',
+            data: allCriticalData,
+            marker: {
+                fillColor: '#f86c6b'
+            }
+        };
         this.chartUpdateFlag2 = true;
     }
 
@@ -419,6 +461,9 @@ export class BSIReportComponent implements OnInit {
 
         var toMonth = toCheck.format('M');
         var toYear  = toCheck.format('YYYY');
+
+        this.selectedmonth = toMonth;
+        this.selectedyear = toYear;
 
         this.to_year = toYear;
 
@@ -450,6 +495,9 @@ export class BSIReportComponent implements OnInit {
         var toMonth = toCheck.format('M');
         var toYear  = toCheck.format('YYYY');
 
+        this.selectedmonth = toMonth;
+        this.selectedyear = toYear;
+
         this.to_year2 = toYear;
 
         while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
@@ -474,12 +522,12 @@ export class BSIReportComponent implements OnInit {
         }else{
             month = toMonth;
         }
-        year = '2018';
-       // year = toYear;
-        // let kpiId = this.ReportDetailsData.globalruleid;
+        //year = '2018';
+        year = toYear;
+        let kpiId = this.ReportDetailsData.globalruleid;
         // let month = '08';
         // let year = '2018';
-        let kpiId = 39412;
+        //let kpiId = 39412;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
 
@@ -531,7 +579,7 @@ export class BSIReportComponent implements OnInit {
                     }
                 }
             })
-            //console.log('dati', dati);
+            console.log('dati', dati);
             this.loadingModalDati = false;
         },
         error => {
@@ -549,9 +597,10 @@ export class BSIReportComponent implements OnInit {
             month = toMonth;
         }
         // let month = '10';
-        year = '2018';
-        //let kpiId = this.ReportDetailsData.globalruleid;
-        let kpiId = 39412;
+        //year = '2018';
+        year = toYear;
+        let kpiId = this.ReportDetailsData.globalruleid;
+        //let kpiId = 39412;
         this.loadingModalDati2 = true;
         this.isLoadedDati2=1;
 
@@ -643,13 +692,19 @@ export class BSIReportComponent implements OnInit {
     selectedMonth(e){
         console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar,' - Selected Year -> ',this.to_year);
     
+        this.selectedmonth = this.monthVar;
+        this.selectedyear = this.to_year;
+
         this.getdati1(this.monthVar,this.to_year);
     }
 
     selectedMonth2(e){
         console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar2,' - Selected Year -> ',this.to_year2);
-        console.log('Selected Month -> ',this.monthVar);
+        //console.log('Selected Month -> ',this.monthVar);
     
+        this.selectedmonth = this.monthVar2;
+        this.selectedyear = this.to_year2;
+
         this.getdati2(this.monthVar2,this.to_year2);
     }
 
