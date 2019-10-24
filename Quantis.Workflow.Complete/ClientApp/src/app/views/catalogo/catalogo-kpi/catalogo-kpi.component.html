@@ -177,53 +177,63 @@
                         <thead style="background: #20a8d8">
                         </thead>
                         <tbody>
-                            <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknown'"><b>Primario: </b>[{{modalData.primary_contract_party}}] {{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow' && modalData.secondary_contract_party_name != null"><b>Secondario: </b>[{{modalData.secondary_contract_party}}] {{modalData.secondary_contract_party_name}}</span></td></tr>
-                            <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
-                            <tr><th>NOME KPI BSI</th><td colspan="2">[{{modalData.global_rule_id_bsi}}] {{modalData.kpi_name_bsi}}</td></tr>
-                            <tr><th>DESCRIZIONE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
-                            <tr><th>CALCOLO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
-                            <tr><th>ID KPI</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
-                            <tr><th>TITOLO BREVE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
-                            <tr>
-                                <th>LOADING FORM</th>
-                                <td colspan="2">
-                                    <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.id_form">
-                                        <option value="">Loading Form: </option>
-                                        <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr><th>CARICAMENTO</th>
-                          <td colspan="2">
+                          <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknown'"><b>Primario: </b>[{{modalData.primary_contract_party}}] {{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow' && modalData.secondary_contract_party_name != null"><b>Secondario: </b>[{{modalData.secondary_contract_party}}] {{modalData.secondary_contract_party_name}}</span></td></tr>
+                          <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract_name}}</td></tr>
+                          <tr><th>NOME KPI BSI</th><td colspan="2">[{{modalData.global_rule_id_bsi}}] {{modalData.kpi_name_bsi}}</td></tr>
+                          <tr><th>DESCRIZIONE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
+                          <tr><th>CALCOLO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
+                          <tr><th>ID KPI</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
+                          <tr><th>TITOLO BREVE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
+
+                          <tr>
+                            <th>CARICAMENTO</th>
+                            <td colspan="2">
                               <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.source_type" name="source_type">
                                 <option value="AUTOMATICO">AUTOMATICO</option>
                                 <option value="MANUALE LF">MANUALE LOADING FORM</option>
                                 <option value="MANUALE CSV">MANUALE CSV</option>
                               </select>
-                            </td></tr>
-                            <tr>
-                                <th>FREQUENZA</th>
-                                <td colspan="2">
-                                    <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
-                                        <option value="MENSILE">MENSILE</option>
-                                        <option value="TRIMESTRALE">TRIMESTRALE</option>
-                                        <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
-                                        <option value="SEMESTRALE">SEMESTRALE</option>
-                                        <option value="ANNUALE">ANNUALE</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>TIPOLOGIA</th>
-                                <td colspan="2">
-                                    <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.kpi_type" name="kpi_type">
-                                        <option value="P">PENALE</option>
-                                        <option value="M">MONITORAGGIO</option>
-                                        <option value="O">OBIETTIVO</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr><th>FORNITURA</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.source_name"></td></tr>
+                            </td>
+                          </tr>
+                          <tr *ngIf="modalData.source_type == 'MANUALE LF'">
+                            <th>LOADING FORM</th>
+                            <td colspan="2">
+                              <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.id_form">
+                                <option value="">Loading Form: </option>
+                                <option *ngFor="let item of allForms " value="{{item.form_id}}">{{item.form_name}}</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr *ngIf="modalData.source_type == 'MANUALE CSV'">
+                            <th>CSV FILE NAME</th>
+                            <td colspan="2">
+                              <input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.file_name">
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>FREQUENZA</th>
+                            <td colspan="2">
+                              <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.tracking_period" name="tracking_period">
+                                <option value="MENSILE">MENSILE</option>
+                                <option value="TRIMESTRALE">TRIMESTRALE</option>
+                                <option value="QUADRIMESTRALE">QUADRIMESTRALE</option>
+                                <option value="SEMESTRALE">SEMESTRALE</option>
+                                <option value="ANNUALE">ANNUALE</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>TIPOLOGIA</th>
+                            <td colspan="2">
+                              <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.kpi_type" name="kpi_type">
+                                <option value="P">PENALE</option>
+                                <option value="M">MONITORAGGIO</option>
+                                <option value="O">OBIETTIVO</option>
+                              </select>
+                            </td>
+                          </tr>
+                          <tr><th>FORNITURA</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.source_name"></td></tr>
+                          <tr><th>PROGRESSIVO</th><td colspan="2" style="text-align:center"><input type="checkbox" [(ngModel)]="modalData.progressive" /></td></tr>
                         </tbody>
                     </table>
                     <table id="classTable" class="table stripe">

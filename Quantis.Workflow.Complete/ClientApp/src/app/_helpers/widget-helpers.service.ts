@@ -153,8 +153,6 @@ export class WidgetHelpersService {
         buildParams.Filters.kpi1 = filters.kpi1 || apiParams.allKpis1[0].key;
       }
 
-      if(apiParams.getReportQueryDetailByID) {
-      }
       if(!apiParams.showincompleteperiodcheck) {
         buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
       }

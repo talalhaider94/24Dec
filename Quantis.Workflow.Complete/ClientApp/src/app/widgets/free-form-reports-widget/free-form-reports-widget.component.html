@@ -13,46 +13,17 @@
 </div>
 <div class="table-responsive text-center">
     <h6>{{reportName}}</h6>
-    <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions"
-        [dtTrigger]="dtTrigger">
-        <thead>
+    <h5 *ngIf="tableHeader.length === 0"> No Report data.</h5>
+    <!-- <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"> -->
+    <table class="font-12 freeFormReportTable table table-bordered table-striped">
+        <thead class="bg-info text-capitalize">
             <tr>
-                <th>Assigned Psl Instance Id</th>
-                <th>Calc Policy Change Seq</th>
-                <th>Calculation Policy Id</th>
-                <th>Current Status Freq Time Unit</th>
-                <th>Current Status Interval Length</th>
-                <th>Current Status Time Unit</th>
-                <th>Global Rule Create Date</th>
-                <th>Global Rule Guid</th>
-                <th>Global Rule Id</th>
-                <th>Global Rule Modify Date</th>
-                <th>Global Rule Name</th>
-                <th>Global Rule Name Key</th>
-                <th>Is Current Status</th>
-                <th>Is Preliminary</th>
-                <th>Psl Instance Id</th>
-                <th>Sla Id</th>
+                <th *ngFor="let value of tableHeader">{{ value }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let form of freeFormReportData; let i = index;">
-                <td>{{ form.assigned_psl_instance_id || 'N/A' }}</td>
-                <td>{{ form.calc_policy_change_seq }}</td>
-                <td>{{ form.calculation_policy_id }}</td>
-                <td>{{ form.current_status_freq_time_unit || 'N/A' }}</td>
-                <td>{{ form.current_status_interval_length || 'N/A' }}</td>
-                <td>{{ form.current_status_time_unit || 'N/A' }}</td>
-                <td>{{ form.global_rule_create_date }}</td>
-                <td>{{ form.global_rule_guid }}</td>
-                <td>{{ form.global_rule_id }}</td>
-                <td>{{ form.global_rule_modify_date }}</td>
-                <td>{{ form.global_rule_name }}</td>
-                <td>{{ form.global_rule_name_key  || 'N/A' }}</td>
-                <td>{{ form.is_current_status }}</td>
-                <td>{{ form.is_preliminary }}</td>
-                <td>{{ form.psl_instance_id }}</td>
-                <td>{{ form.sla_id }}</td>
+                <td *ngFor="let key of tableHeader" [innerHTML]="form[key]"></td>
             </tr>
         </tbody>
     </table>

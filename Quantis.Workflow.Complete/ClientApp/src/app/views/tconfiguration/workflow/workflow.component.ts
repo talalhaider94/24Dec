@@ -104,7 +104,7 @@ export class WorkflowComponent implements OnInit {
         clearTimeout(this.timer);
         this.timer = setTimeout(() => {
             if (value < 0 || value > 28) {
-                this.toastr.error('Il valore deve essere compreso tra 0 e 31', 'Error');
+                this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Error');
             }
         }, 500) //time to wait in ms before do the check
     }

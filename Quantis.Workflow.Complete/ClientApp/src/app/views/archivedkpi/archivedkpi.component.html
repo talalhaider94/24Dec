@@ -3,9 +3,9 @@
         <br><h2 style="color:#565656">KPI CERTIFICATI: {{monthVar}}/{{yearVar}}</h2><br>
         <p>
 
-            <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary info-btn" aria-hidden="true" type="button" data-toggle="collapse" data-target=".multi" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"><b>INFO</b></button>
+            <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary info-btn" aria-hidden="true" type="button" data-toggle="collapse" data-target=".multi" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2" (click)="showCollapse()"><b>INFO</b></button>
         </p>
-        <div class="row" class="collapse multi" id="multiCollapseExample1">
+        <div class="row collapse multi" id="multiCollapseExample1" bsModal #multiCollapseExample1>
 
             <!-- <mat-card class="example-card" style="margin-left: 20px; width: 50%">
                <mat-card-header style="margin-left: 30px">
@@ -111,7 +111,7 @@
                                 data-target="#archivedKpiModal" title="VEDI">
                             <i class="fa fa-eye"></i>
                         </button>
-                        <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.global_rule_id,row.tracking_period,row.interval_kpi)"
+                        <button style="text-align: center;display: inline-block; background-color: #20a8d8" class="btn btn-primary btn-esempio" title="DATI" data-toggle="modal" (click)="getdati(row.global_rule_id,row.tracking_period,row.interval_kpi,row.progressive)"
                                 data-target="#datiModal">
                             <i class="fa fa-table"></i>
                         </button>
@@ -185,7 +185,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="approveModalLabel">DATI</h5><br><br>
 
-                <button type="button" class="close" (click)="clear()" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" (click)="clearAndClose()" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -325,7 +325,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="clear()" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" (click)="clearAndClose()" data-dismiss="modal">Chiudi</button>
             </div>
         </div>
     </div>
@@ -337,7 +337,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="approveModalLabel">DATI</h5><br><br>
 
-                <button type="button" class="close" (click)="clear1()" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" (click)="clear1AndClose()" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -474,7 +474,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="clear1()" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" (click)="clear1AndClose()" data-dismiss="modal">Chiudi</button>
             </div>
         </div>
     </div>
