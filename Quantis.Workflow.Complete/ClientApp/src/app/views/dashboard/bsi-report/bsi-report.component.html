@@ -91,7 +91,7 @@
                 <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
                 <select [(ngModel)]="monthVar" class="form-control ml-2" style="width:15%;" (change)="selectedMonth($event)">
                   <!-- <option value="">Select</option> -->
-                  <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
+                  <option *ngFor="let month of months; index as i" value={{month}}>{{month}}</option>
                 </select>
                 <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
             </div><br>  
@@ -301,7 +301,7 @@
               <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
               <select [(ngModel)]="monthVar" class="form-control ml-2" style="width:15%;" (change)="selectedMonth($event)">
                 <!-- <option value="">Select</option> -->
-                <option *ngFor="let month of months; index as i" value={{i+1}}>{{month}}</option>
+                <option *ngFor="let month of months; index as i" value={{month}}>{{month}}</option>
               </select>
               <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
             </div><br> 
@@ -351,7 +351,7 @@
               <h5 class="ml-2" style="color:#565656;">Periodo:</h5>
               <select [(ngModel)]="monthVar2" class="form-control ml-2" style="width:15%;" (change)="selectedMonth2($event)">
                 <!-- <option value="">Select</option> -->
-                <option *ngFor="let month2 of months2; index as i" value={{i+1}}>{{month2}}</option>
+                <option *ngFor="let month2 of months2; index as i" value={{month2}}>{{month2}}</option>
               </select>
               <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
             </div><br> 
