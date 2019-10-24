@@ -2225,7 +2225,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 ParameterCount = e.Parameters.Count,
                 IsEnabled=e.is_enable
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o=>o.QueryName).ToList();
         }
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
@@ -2240,7 +2240,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o => o.QueryName).ToList();
         }
 
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id, int userId)
