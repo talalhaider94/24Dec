@@ -134,23 +134,29 @@ export class WidgetHelpersService {
         buildParams.Filters.endDate = dateRangeValue[1];
       }
       if(apiParams.allContractParties) {
-        buildParams.Filters.contractParties = filters.contractParties || apiParams.allContractParties[0].key;
+        // buildParams.Filters.contractParties = filters.contractParties || apiParams.allContractParties[0].key;
+        buildParams.Filters.contractParties = filters.contractParties || '';
       }
       if(apiParams.allContracts) {
-        buildParams.Filters.contracts = filters.contracts || apiParams.allContracts[0].key;
+        // buildParams.Filters.contracts = filters.contracts || apiParams.allContracts[0].key;
+        buildParams.Filters.contracts = filters.contracts || '';
       }
       if(apiParams.allKpis) {
-        buildParams.Filters.kpi = filters.kpi || apiParams.allKpis[0].key;
+        // buildParams.Filters.kpi = filters.kpi || apiParams.allKpis[0].key;
+        buildParams.Filters.kpi = filters.kpi || '';
       }
 
       if(apiParams.allContractParties1) {
-        buildParams.Filters.contractParties1 = filters.contractParties1 || apiParams.allContractParties1[0].key;
+        // buildParams.Filters.contractParties1 = filters.contractParties1 || apiParams.allContractParties1[0].key;
+        buildParams.Filters.contractParties1 = filters.contractParties1 || '';
       }
       if(apiParams.allContracts1) {
-        buildParams.Filters.contracts1 = filters.contracts1 || apiParams.allContracts1[0].key;
+        // buildParams.Filters.contracts1 = filters.contracts1 || apiParams.allContracts1[0].key;
+        buildParams.Filters.contracts1 = filters.contracts1 || '';
       }
       if(apiParams.allKpis1) {
-        buildParams.Filters.kpi1 = filters.kpi1 || apiParams.allKpis1[0].key;
+        // buildParams.Filters.kpi1 = filters.kpi1 || apiParams.allKpis1[0].key;
+        buildParams.Filters.kpi1 = filters.kpi1 || '';
       }
 
       if(!apiParams.showincompleteperiodcheck) {
