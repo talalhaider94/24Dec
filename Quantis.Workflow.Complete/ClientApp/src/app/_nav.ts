@@ -121,7 +121,7 @@ export const navItems: NavData[] = [
         name: 'Loading Form',
         url: '/loadingform-menu',
         icon: 'fa fa-pencil-square-o',
-        key: ['VIEW_ADMIN_LOADING_FORM', 'VIEW_LOADING_FORM_UTENTI'],
+      key: ['VIEW_ADMIN_LOADING_FORM', 'VIEW_LOADING_FORM_UTENTI', 'VIEW_LOADING_CSV'],
         children: [
             {
                 name: 'Admin',
@@ -156,7 +156,7 @@ export const navItems: NavData[] = [
               url: '/loading-form/utente-csv',
               icon: 'fa fa-user-circle-o',
               version: '0.0.12',
-              key: 'VIEW_LOADING_FORM_UTENTI'
+              key: 'VIEW_LOADING_CSV'
             },
         ]
     },

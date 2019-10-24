@@ -12,6 +12,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.DTOs.Widgets;
 using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
@@ -1958,7 +1959,46 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public List<XYZDTO> GetDayLevelKPIData(int globalRuleId, int month, int year)
+        {
+            var res = new List<XYZDTO>();
+            string query = @"select time_stamp,service_level_target,provided_ce from t_psl_0_day
+                            where global_rule_id =:global_rule_id
+                            and TRUNC(begin_time_stamp) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                            and TRUNC(time_stamp) <= TO_DATE(:end_period,'yyyy-mm-dd')";
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    var startdate = new DateTime(year, month, 1);
+                    var enddate = startdate.AddMonths(1).AddDays(-1);
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleParameter param1 = new OracleParameter("start_period", startdate.AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param2 = new OracleParameter("end_period", enddate.ToString("yyyy-MM-dd"));
+                    OracleParameter param3 = new OracleParameter("global_rule_id", globalRuleId);
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    cmd.Parameters.Add(param3);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var tar = new XYZDTO();
+                        tar.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        tar.YValue = (double)reader[1];
+                        tar.ZValue = "Target";
+                        res.Add(tar);
+                        var pro = new XYZDTO();
+                        pro.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        pro.YValue =(reader[2]==DBNull.Value)?null:(double?)reader[2];
+                        pro.ZValue = "Provided";
+                        res.Add(pro);
+                    }
+                }
+            }
+            return res;
+        }
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
