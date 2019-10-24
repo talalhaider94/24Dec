@@ -7,12 +7,12 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-10" style="margin-top:-30px">
+        <div class="row pull-right col-md-5" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
 
-            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:22%;" (change)="populateDateFilter()">
                 <option value="00">Tutti i mesi</option>
                 <option value="01">Gennaio</option>
                 <option value="02">Febbraio</option>
@@ -27,7 +27,7 @@
                 <option value="11">Novembre</option>
                 <option value="12">Dicembre</option>
             </select>
-            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:20%;" (change)="populateDateFilter()">
+            <select [(ngModel)]="yearVar" class="form-control ml-1" style="width:17%;" (change)="populateDateFilter()">
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>

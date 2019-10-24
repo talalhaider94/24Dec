@@ -177,7 +177,11 @@ export class PersonalReportComponent implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
-
+        console.log('PersonalReportFilterDTO ->', this.personalReportForm.value);
+        this.apiService.GetPersonalReport(this.personalReportForm.value).subscribe((data) => {
+            console.log('GetPersonalReport -> ', data);
+            this.rerender();
+        });
     }
 }
 */

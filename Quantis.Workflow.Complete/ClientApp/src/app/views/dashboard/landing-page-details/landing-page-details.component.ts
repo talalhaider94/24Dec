@@ -84,7 +84,7 @@ export class LandingPageDetailsComponent implements OnInit {
         this.setThresholdValue=0;
         this.setViewAll=0;
         this.queryParams = this.route.snapshot.queryParamMap['params'];
-        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname, 
+        console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname,
         this.queryParams.month, this.queryParams.year);
 
         this.contractpartyname = this.queryParams.contractpartyname;
@@ -104,13 +104,13 @@ export class LandingPageDetailsComponent implements OnInit {
             itemsShowLimit: 3,
             allowSearchFilter: true
           };
-      
+
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
 	    //  this.contName = data;
             if(this.gridsData.length>6){
-                this.limitedData = this.gridsData.splice(0,6); 
+                this.limitedData = this.gridsData.splice(0,6);
             }else{
                 this.limitedData = this.gridsData;
             }
@@ -147,7 +147,7 @@ export class LandingPageDetailsComponent implements OnInit {
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
                 if(this.gridsData.length>6){
-                    this.limitedData = this.gridsData.splice(0,6); 
+                    this.limitedData = this.gridsData.splice(0,6);
                 }else{
                     this.limitedData = this.gridsData;
                 }
@@ -156,7 +156,7 @@ export class LandingPageDetailsComponent implements OnInit {
             });
         }
     }
-    
+
     onItemSelect(item: any) {
         console.log(item);
         this.customFilter();
@@ -189,7 +189,8 @@ export class LandingPageDetailsComponent implements OnInit {
             var temp2:any = [];
             await value.forEach(async element => {
                 await temp.forEach(ele =>  {
-                    if(ele.contractname == element.item_text){
+                    let e = element.item_text ? element.item_text : element;
+                    if(ele.contractname == e){
                     temp2.push(ele);
                     }else{}});
             });

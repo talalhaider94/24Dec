@@ -256,7 +256,8 @@ onItemSelect(item: any) {
             var temp2:any = [];
             await value.forEach(async element => {
                 await temp.forEach(ele =>  {
-                    if(ele.contractpartyname == element.item_text){
+                    let e = element.item_text ? element.item_text : element
+                    if(ele.contractpartyname == e){
                     temp2.push(ele);
                     }else{}});
             });
@@ -274,6 +275,7 @@ onItemSelect(item: any) {
                 worstcontracts: temp2[i].worstcontracts
             })
               this.limitedData = temp2;
+              //debugger;
             this.loading = false;
         }
      }
