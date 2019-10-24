@@ -204,13 +204,14 @@ export class FreeFormReportsWidgetComponent implements OnInit {
   // dashboardComponentData is result of data coming from 
   updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
     console.log('freeFormReport chartIndexData', chartIndexData);
-    debugger
     if(Array.isArray(chartIndexData)) {
         this.tableHeader = Object.keys(chartIndexData[0]);
 
         this.freeFormReportData = chartIndexData;
         // this.rerender();
     } else {
+        this.tableHeader = [];
+        this.freeFormReportData = [];
         this.$toastr.info(chartIndexData, 'Info!');
         this.freeFormReportData = [];
         // this.rerender();
