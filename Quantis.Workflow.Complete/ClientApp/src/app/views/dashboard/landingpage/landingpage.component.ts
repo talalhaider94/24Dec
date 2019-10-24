@@ -245,7 +245,7 @@ export class LandingPageComponent implements OnInit {
               this.limitedData = temp2;
             this.loading = false;
             }
-            
+
      }
 
     anni = [];

@@ -145,6 +145,8 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.contracts1').enable();
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
+			//Danial: TODO: add isFreeFormReportCheck and getReportQueryDetailByID is no longer being used i suppose
+			// need to verify
 			if (this.barChartWidgetParameters.getReportQueryDetailByID) {
 				const params = this.barChartWidgetParameters.getReportQueryDetailByID.parameters;
 				params.map(p => this.addParameters(p)); // pushing in formGroup Controls array 
@@ -154,7 +156,8 @@ export class PublicComponent implements OnInit {
 				this.groupReportCheck = (this.barChartWidgetParameters.filters.groupReportCheck === 'true');
 			}
 			
-			if(childData.setWidgetFormValues.Properties.hasOwnProperty('measure')) {
+			if(childData.setWidgetFormValues.Properties.hasOwnProperty('measure') && !!childData.setWidgetFormValues.Properties.measure) {
+				console.log('childData.setWidgetFormValues', childData.setWidgetFormValues);
 				childData.setWidgetFormValues.Properties.measure = childData.setWidgetFormValues.Properties.measure.toString(); 
 			}
 			this.updateDashboardWidgetsArray(this.barChartWidgetParameters.id, childData.setWidgetFormValues);
@@ -700,9 +703,10 @@ export class PublicComponent implements OnInit {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.contracts').enable();
+			this.barChartWidgetParameters.allContracts = result;
 			this.widgetParametersForm.patchValue({
 				Filters: {
-					contracts: result[0].key
+					contracts: ''
 				}
 			});
 			this.loadingFiltersDropDown = false;
@@ -718,10 +722,11 @@ export class PublicComponent implements OnInit {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.kpi').enable();
+			this.barChartWidgetParameters.allKpis = result;
 			this.filterKpis = [...this.filterKpis, ...result];
 			this.widgetParametersForm.patchValue({
 				Filters: {
-					kpi: result[0].key
+					kpi: ''
 				}
 			});
 			this.loadingFiltersDropDown = false;
@@ -735,9 +740,10 @@ export class PublicComponent implements OnInit {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.contracts1').enable();
+			this.barChartWidgetParameters.allContracts1 = result;
 			this.widgetParametersForm.patchValue({
 				Filters: {
-					contracts1: result[0].key
+					contracts1: ''
 				}
 			});
 			this.loadingFiltersDropDown = false;
@@ -753,10 +759,11 @@ export class PublicComponent implements OnInit {
 		this.loadingFiltersDropDown = true;
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.kpi1').enable();
+			this.barChartWidgetParameters.allKpis1 = result;
 			this.filterKpis1 = [...this.filterKpis1, ...result];
 			this.widgetParametersForm.patchValue({
 				Filters: {
-					kpi1: result[0].key
+					kpi1: ''
 				}
 			});
 			this.loadingFiltersDropDown = false;

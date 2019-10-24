@@ -7,7 +7,7 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-6" style="margin-top:-30px">
+        <div class="row pull-right col-md-8" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
@@ -51,7 +51,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
@@ -183,7 +183,7 @@
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
                 <br>
-                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title"><a (click)="details(row.contractpartyid,row.contractpartyname)">{{row.contractpartyname}}</a></h3>
                         <!-- /.box-tools -->
