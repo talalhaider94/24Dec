@@ -42,7 +42,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             var queryDetail = _dataService.GetReportQueryDetailByID(queryId, GetUserId());
             var parameters = props.Properties["parameters"];
             queryDetail.Parameters = JsonConvert.DeserializeObject<List<KeyValuePairDTO>>(parameters);
-            var result = _dataService.ExecuteReportQuery(queryDetail);
+            var result = _dataService.ExecuteReportQuery(queryDetail,props.UserId);
             return result;
         }
     }

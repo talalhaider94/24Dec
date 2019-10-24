@@ -798,6 +798,7 @@ namespace Quantis.WorkFlow.APIBase.API
                                 tracking_period = kpi.tracking_period,
                                 name_kpi = kpi.short_name,
                                 kpi_name_bsi = kpi.kpi_name_bsi,
+                                kpi_description_bsi = _dbcontext.Rules.Where(o => o.global_rule_id == kpi.global_rule_id_bsi && o.status == "EFFECTIVE").OrderByDescending(o=> o.sla_version_id).FirstOrDefault().rule_description,
                                 rule_id_bsi = kpi.global_rule_id_bsi,
                                 close_timestamp_ticket = DateTime.Now,
                                 ticket_id = int.Parse(ticket.ref_num),
