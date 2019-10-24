@@ -23,6 +23,8 @@ export class BSIReportComponent implements OnInit {
     @ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
     @ViewChild('cartellaSelect') cartellaSelect: ElementRef;
     category_id: number = 0;
+    bar_period;
+    bar_value;
     testArray = [1,2];
     datiGrezzi = [];
     monthVar: any;
@@ -155,7 +157,9 @@ export class BSIReportComponent implements OnInit {
                 point: {
                     events: {
                         click: function () {
-                            alert('Category: ' + this.category + ', value: ' + this.y);
+                            this.bar_period = this.category;
+                            this.bar_value = this.y;
+                            alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
                         }
                     }
                 }
