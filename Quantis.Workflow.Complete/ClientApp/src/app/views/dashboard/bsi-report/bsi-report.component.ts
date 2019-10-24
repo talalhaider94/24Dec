@@ -26,18 +26,38 @@ export class BSIReportComponent implements OnInit {
     testArray = [1,2];
     datiGrezzi = [];
     monthVar: any;
+    monthVar2: any;
     yearVar: any;
+    months = [];
+    months2 = [];
     countCampiData = [];
     eventTypes: any = {};
     resources: any = {};
     id_kpi_temp = '';
+    to_year;
+    to_year2;
     isLoadedDati=0;
     isLoadedDati2=0;
     loadingModalDati: boolean = false;
     loadingModalDati2: boolean = false;
     public periodFilter: number;
-    campoData: any = []
+    campoData: any = [];
     fitroDataById: any = [
+        {
+            event_type_id: '   ',
+            resource_id: '',
+            time_stamp: ' ',
+            raw_data_id: '',
+            create_date: ' ',
+            data: this.datiGrezzi,
+            modify_date: '',
+            reader_id: '',
+            event_source_type_id: ' ',
+            event_state_id: ' ',
+            partner_raw_data_id: ' ',
+        }
+    ]
+    fitroDataById2: any = [
         {
             event_type_id: '   ',
             resource_id: '',
@@ -218,6 +238,10 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        // this.monthVar = 'Select';
+        // this.monthVar2 = 'Select';
+        this.months.length = 0;
+        this.months2.length = 0;
         this.isLoadedDati=0;
         this.isLoadedDati2=0;
         this.loading = true;
@@ -374,28 +398,88 @@ export class BSIReportComponent implements OnInit {
 
     
     public chartClicked(): void {
-        console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid, this.ReportDetailsData.fromdate,
-        this.ReportDetailsData.todate, this.ReportDetailsData.datagranularity);
-        this.getdati1();
+        this.months.length = 0;
+        this.isLoadedDati2 = 0;
+        // this.monthVar = 'Select';
+        // this.monthVar2 = 'Select';
+        //moment(this.ReportDetailsData.todate).format("YYYY/MM/DD").getUTCMonth();
+        var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+        var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+
+        var fromMonth = fromCheck.format('M');
+        var fromYear  = fromCheck.format('YYYY');
+
+        var toMonth = toCheck.format('M');
+        var toYear  = toCheck.format('YYYY');
+
+        this.to_year = toYear;
+
+        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+            this.months.push(fromCheck.format('MMM'));
+            fromCheck.add(1,'month');
+        }
+
+        // console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid, this.ReportDetailsData.fromdate,
+        // this.ReportDetailsData.todate);
+
+        console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+        console.log('Months -> ',this.months);
+
+        this.getdati1(toMonth,toYear);
     }
 
     public chartClicked2(): void {
-        console.log('Chart Clicked2 -> ',this.ReportDetailsData);
-        this.getdati2();
+        this.months2.length = 0;
+        this.isLoadedDati = 0;
+        // this.monthVar = 'Select';
+        // this.monthVar2 = 'Select';
+        var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+        var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+
+        var fromMonth = fromCheck.format('M');
+        var fromYear  = fromCheck.format('YYYY');
+
+        var toMonth = toCheck.format('M');
+        var toYear  = toCheck.format('YYYY');
+
+        this.to_year2 = toYear;
+
+        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+            this.months2.push(fromCheck.format('MMM'));
+            fromCheck.add(1,'month');
+        }
+
+        console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+        console.log('Months -> ',this.months2);
+
+        // console.log('Chart Clicked2 -> ',this.ReportDetailsData);
+
+        this.getdati2(toMonth,toYear);
     }
 
-    getdati1() {
+    getdati1(toMonth,toYear) {
         this.periodFilter = 1;
-        let month = '10';
-        let year = '2018';
-        //let kpiId = this.ReportDetailsData.globalruleid;
+        let month;
+        let year;
+        if(toMonth<10){
+            month = '0' + toMonth;
+        }else{
+            month = toMonth;
+        }
+        year = '2018';
+       // year = toYear;
+        // let kpiId = this.ReportDetailsData.globalruleid;
+        // let month = '08';
+        // let year = '2018';
         let kpiId = 39412;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
 
+        console.log('getdati1 -> ',kpiId,month,year);
+
         this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
             this.fitroDataById = dati;
-            console.log(dati);
+            //console.log(dati);
             Object.keys(this.fitroDataById).forEach(key => {
                 this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
                 switch (this.fitroDataById[key].event_state_id) {
@@ -439,7 +523,7 @@ export class BSIReportComponent implements OnInit {
                     }
                 }
             })
-            console.log('dati', dati);
+            //console.log('dati', dati);
             this.loadingModalDati = false;
         },
         error => {
@@ -447,62 +531,71 @@ export class BSIReportComponent implements OnInit {
         });
     }
 
-    getdati2() {
+    getdati2(toMonth,toYear) {
         this.periodFilter = 1;
-        let month = '10';
-        let year = '2018';
+        let month;
+        let year;
+        if(toMonth<10){
+            month = '0' + toMonth;
+        }else{
+            month = toMonth;
+        }
+        // let month = '10';
+        year = '2018';
         //let kpiId = this.ReportDetailsData.globalruleid;
         let kpiId = 39412;
         this.loadingModalDati2 = true;
         this.isLoadedDati2=1;
 
+        console.log('getdati2 -> ',kpiId,month,year);
+
         this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
-            this.fitroDataById = dati;
-            console.log(dati);
-            Object.keys(this.fitroDataById).forEach(key => {
-                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
-                switch (this.fitroDataById[key].event_state_id) {
+            this.fitroDataById2 = dati;
+            //console.log(dati);
+            Object.keys(this.fitroDataById2).forEach(key => {
+                this.fitroDataById2[key].data = JSON.parse(this.fitroDataById2[key].data);
+                switch (this.fitroDataById2[key].event_state_id) {
                     case 1:
-                        this.fitroDataById[key].event_state_id = "Originale";
+                        this.fitroDataById2[key].event_state_id = "Originale";
                         break;
                     case 2:
-                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        this.fitroDataById2[key].event_state_id = "Sovrascritto";
                         break;
                     case 3:
-                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        this.fitroDataById2[key].event_state_id = "Eliminato";
                         break;
                     case 4:
-                        this.fitroDataById[key].event_state_id = "Correzione";
+                        this.fitroDataById2[key].event_state_id = "Correzione";
                         break;
                     case 5:
-                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        this.fitroDataById2[key].event_state_id = "Correzione eliminata";
                         break;
                     case 6:
-                        this.fitroDataById[key].event_state_id = "Business";
+                        this.fitroDataById2[key].event_state_id = "Business";
                         break;
                     default:
-                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        this.fitroDataById2[key].event_state_id = this.fitroDataById2[key].event_state_id;
                         break;
                 }
-                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
-                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
-                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
-                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
-                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById2[key].event_type_id = this.eventTypes[this.fitroDataById2[key].event_type_id] ? this.eventTypes[this.fitroDataById2[key].event_type_id] : this.fitroDataById2[key].event_type_id;
+                this.fitroDataById2[key].resource_id = this.resources[this.fitroDataById2[key].resource_id] ? this.resources[this.fitroDataById2[key].resource_id] : this.fitroDataById2[key].resource_id;
+                this.fitroDataById2[key].modify_date = moment(this.fitroDataById2[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById2[key].create_date = moment(this.fitroDataById2[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById2[key].time_stamp = moment(this.fitroDataById2[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
             })
-            this.getCountCampiData();
+            this.getCountCampiData2();
 
             let max = this.countCampiData.length;
 
-            Object.keys(this.fitroDataById).forEach(key => {
-                let temp = Object.keys(this.fitroDataById[key].data).length;
+            Object.keys(this.fitroDataById2).forEach(key => {
+                let temp = Object.keys(this.fitroDataById2[key].data).length;
                 if (temp < max) {
                     for (let i = 0; i < (max - temp); i++) {
-                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                        this.fitroDataById2[key].data['empty#' + i] = '##empty##';
                     }
                 }
             })
-            console.log('dati', dati);
+            //console.log('dati', dati);
             this.loadingModalDati2 = false;
         },
         error => {
@@ -523,6 +616,33 @@ export class BSIReportComponent implements OnInit {
         for (let i = 1; i <= maxLength; i++) {
             this.countCampiData.push(i);
         }
+    }
+    
+    getCountCampiData2() {
+        let maxLength = 0;
+        this.fitroDataById2.forEach(f => {
+            //let data = JSON.parse(f.data);
+            if (Object.keys(f.data).length > maxLength) {
+                maxLength = Object.keys(f.data).length;
+            }
+        });
+        this.countCampiData = [];
+        for (let i = 1; i <= maxLength; i++) {
+            this.countCampiData.push(i);
+        }
+    }
+
+    selectedMonth(e){
+        console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar,' - Selected Year -> ',this.to_year);
+    
+        this.getdati1(this.monthVar,this.to_year);
+    }
+
+    selectedMonth2(e){
+        console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',this.monthVar2,' - Selected Year -> ',this.to_year2);
+        console.log('Selected Month -> ',this.monthVar);
+    
+        this.getdati2(this.monthVar2,this.to_year2);
     }
 
 
