@@ -275,7 +275,7 @@ onItemSelect(item: any) {
                 worstcontracts: temp2[i].worstcontracts
             })
               this.limitedData = temp2;
-              debugger;
+              //debugger;
             this.loading = false;
         }
      }
