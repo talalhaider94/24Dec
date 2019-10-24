@@ -151,6 +151,13 @@ export class BSIReportComponent implements OnInit {
             series: {
                 dataLabels: {
                     enabled: true
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            alert('Category: ' + this.category + ', value: ' + this.y);
+                        }
+                    }
                 }
             }
         },
