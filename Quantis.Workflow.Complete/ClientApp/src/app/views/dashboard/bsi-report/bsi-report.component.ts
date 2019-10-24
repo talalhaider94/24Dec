@@ -549,9 +549,10 @@ export class BSIReportComponent implements OnInit {
             month = toMonth;
         }
         // let month = '10';
-        year = '2018';
-        //let kpiId = this.ReportDetailsData.globalruleid;
-        let kpiId = 39412;
+        //year = '2018';
+        year = toYear;
+        let kpiId = this.ReportDetailsData.globalruleid;
+        //let kpiId = 39412;
         this.loadingModalDati2 = true;
         this.isLoadedDati2=1;
 
