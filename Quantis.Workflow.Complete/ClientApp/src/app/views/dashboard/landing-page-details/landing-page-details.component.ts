@@ -24,9 +24,7 @@ export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     queryParams;
-    dropdownList = [];
-    selectedItems = [];
-    dropdownSettings = {};
+
     dtOptions: DataTables.Settings = {
         language: {
             processing: "Elaborazione...",
@@ -63,6 +61,7 @@ export class LandingPageDetailsComponent implements OnInit {
     month: any;
     yearVar: any;
     contractpartyname: any;
+    showMultiSelect  : boolean =false;
     count = 0;
     setViewAll = 0;
     thresholdkey = '@thresholdKey1';
@@ -95,15 +94,6 @@ export class LandingPageDetailsComponent implements OnInit {
         this.yearVar = this.queryParams.year;
         this.getAnno();
 
-        this.dropdownSettings = {
-            singleSelection: false,
-            idField: 'item_id',
-            textField: 'item_text',
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            itemsShowLimit: 3,
-            allowSearchFilter: true
-          };
 
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
@@ -115,7 +105,6 @@ export class LandingPageDetailsComponent implements OnInit {
                 this.limitedData = this.gridsData;
             }
             this.contName = this.limitedData;
-            this.dropdownList = this.limitedData.map(value => value.contractname);
             console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
@@ -157,39 +146,25 @@ export class LandingPageDetailsComponent implements OnInit {
         }
     }
 
-    onItemSelect(item: any) {
-        console.log(item);
-        this.customFilter();
-      }
-    onSelectAll(items: any) {
-        console.log(items);
-        this.limitedData = this.contName;
+    multiSelect(){
+      this.showMultiSelect = (this.showMultiSelect) ? false : true;
+    }
 
-      }
-    onItemDeSelect(items:any){
-        console.log(items,'onitemDeselect');
-        this.customFilter();
-
-    }
-    onFilterChange(items:any){
-        console.log(items,'onFilterChange');
-    }
-    onDropDownClose(items:any){
-        console.log(items,'onDropDownClose');
-    }
 
     async customFilter(){
-        if (this.selectedItems === undefined || this.selectedItems.length == 0) {
-            this.limitedData = this.contName;
 
+        let value:any = this.contractName;
+        if(value == 'ALL'){
+            this.loading = true;
+            this.limitedData = this.contName;
+            this.loading = false;
         }else{
-            let value:any = this.selectedItems;
             this.loading = true;
             var temp:any = this.contName
             var temp2:any = [];
             await value.forEach(async element => {
                 await temp.forEach(ele =>  {
-                    let e = element.item_text ? element.item_text : element;
+                    let e = element.item_text?element.item_text:element
                     if(ele.contractname == e){
                     temp2.push(ele);
                     }else{}});

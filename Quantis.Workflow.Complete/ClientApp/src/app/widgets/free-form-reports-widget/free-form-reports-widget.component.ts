@@ -211,7 +211,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
         this.freeFormReportData = chartIndexData;
         // this.rerender();
     } else {
-        this.$toastr.error(chartIndexData, 'Error!');
+        this.$toastr.info(chartIndexData, 'Info!');
         this.freeFormReportData = [];
         // this.rerender();
     }

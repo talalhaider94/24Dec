@@ -34,20 +34,13 @@
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractname}}</option>
             </select> -->
-            <ng-multiselect-dropdown style="width:27% ;background: white;border-radius: 6px; margin-left:0.3vw"
-            [placeholder]= "'Contraenti'"
-            [data]="dropdownList"
-            [(ngModel)]="selectedItems"
-            [settings]="dropdownSettings"
-            (onSelect)="onItemSelect($event)"
-            (onSelectAll)="onSelectAll($event)"
-            (onDeSelect)="onItemDeSelect($event)"
-            (onFilterChange)="onFilterChange($event)"
-            (onDropDownClose)="onDropDownClose($event)"
-            >
-        </ng-multiselect-dropdown>
+            <button type="button" class="btn btn-primary" name="button" (click)="multiSelect()">Contraenti</button>
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" class="form-control ml-1" style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;">
+                <option>ALL</option>
+                <option *ngFor = "let row of contName">{{row.contractname}}</option>
+            </select>
             <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">Tutti</button>
+            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">View All</button>
             <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
         </div>
     </section>
@@ -59,7 +52,7 @@
     <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==1" class="content">
         <!-- Main row -->
         <div class="row">
-            <!-- Left col class= "box box-danger box-solid" 
+            <!-- Left col class= "box box-danger box-solid"
             [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
@@ -75,7 +68,7 @@
                                 <!-- /.box-tools -->
                             </div>
                             <!-- /.box-header -->
-                            
+
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li>
@@ -156,7 +149,7 @@
     <section *ngIf="setViewAll==1" [hidden]="setThresholdValue==1" class="content">
         <!-- Main row -->
         <div class="row">
-            <!-- Left col class= "box box-danger box-solid" 
+            <!-- Left col class= "box box-danger box-solid"
             [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'" -->
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
@@ -172,7 +165,7 @@
                                 <!-- /.box-tools -->
                             </div>
                             <!-- /.box-header -->
-                            
+
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li>
@@ -248,15 +241,15 @@
             </section>
         </div>
     </section>
-    
+
     <!-- ///////////////////////// -->
 
     <section *ngIf="setViewAll==0" [hidden]="setThresholdValue==0" class="content">
         <!-- Main row -->
-        <div class="row">    
+        <div class="row">
             <section *ngFor="let row of limitedData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
-                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
@@ -268,7 +261,7 @@
                                 <!-- /.box-tools -->
                             </div>
                             <!-- /.box-header -->
-                            
+
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li>
@@ -335,7 +328,7 @@
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
-                                </table> 
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
@@ -349,10 +342,10 @@
 
     <section *ngIf="setViewAll==1" [hidden]="setThresholdValue==0" class="content">
         <!-- Main row -->
-        <div class="row">    
+        <div class="row">
             <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable ml-5">
                 <br>
-                <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
+                <div [ngClass]="(row.noncomplaintkpis >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
                         <h3 class="box-title">{{row.contractname}}</h3>
                         <!-- /.box-tools -->
@@ -364,7 +357,7 @@
                                 <!-- /.box-tools -->
                             </div>
                             <!-- /.box-header -->
-                            
+
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li>
@@ -431,7 +424,7 @@
                                         <td class="center-td" style="padding-left:40px"><span class="badge bg-red">{{ b.value.toFixed(3) }}%</span></td>
                                         <td class="center-td"><span class="badge bg-blue">{{b.target.toFixed(3)}}%</span></td>
                                     </tr>
-                                </table> 
+                                </table>
                             </div>
                             <!-- /.box-body -->
                         </div>
