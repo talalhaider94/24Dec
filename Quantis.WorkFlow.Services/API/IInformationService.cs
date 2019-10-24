@@ -75,5 +75,7 @@ namespace Quantis.WorkFlow.Services.API
         List<ContractPartyContractDTO> GetAllContractPartiesContracts();
         void UploadFileToSFTPServer(BaseFileDTO fileDTO);
         void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday);
+
+        List<ContractPartyContractDTO> GetContractsWithContractParties(int userId);
     }
 }

@@ -7,10 +7,12 @@ using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models;
+using Quantis.WorkFlow.Services;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
+using Quantis.WorkFlow.Services.DTOs.Widgets;
 using Quantis.WorkFlow.Services.Framework;
 using System;
 using System.Collections.Generic;
@@ -1399,7 +1401,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlArchivedProvider")))
                 {
                     con.Open();
-                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period,symbol) values (:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period,:symbol)";
+                    var sp = @"insert into a_rules (id_kpi,name_kpi,interval_kpi,value_kpi,ticket_id,close_timestamp_ticket,archived,customer_name,contract_name,kpi_name_bsi,rule_id_bsi,global_rule_id,tracking_period,symbol,kpi_description_bsi) values (:id_kpi,:name_kpi,:interval_kpi,:value_kpi,:ticket_id,:close_timestamp_ticket,:archived,:customer_name,:contract_name,:kpi_name_bsi,:rule_id_bsi,:global_rule_id,:tracking_period,:symbol,:kpi_description_bsi)";
                     var command = new NpgsqlCommand(sp, con);
                     command.CommandType = CommandType.Text;
                     command.Parameters.AddWithValue(":id_kpi", dto.id_kpi);
@@ -1416,6 +1418,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     command.Parameters.AddWithValue(":global_rule_id", dto.global_rule_id);
                     command.Parameters.AddWithValue(":tracking_period", dto.tracking_period);
                     command.Parameters.AddWithValue(":symbol", dto.symbol);
+                    command.Parameters.AddWithValue(":kpi_description_bsi", dto.kpi_description_bsi);
                     command.ExecuteScalar();
                 }
             }
@@ -1778,6 +1781,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             arules.rule_id_bsi = reader.GetInt32(reader.GetOrdinal("rule_id_bsi"));
                             arules.global_rule_id = reader.GetInt32(reader.GetOrdinal("global_rule_id"));
                             arules.tracking_period = reader.GetString(reader.GetOrdinal("tracking_period"));
+                            arules.kpi_description_bsi = reader.IsDBNull(reader.GetOrdinal("kpi_description_bsi")) ? null : reader.GetString(reader.GetOrdinal("kpi_description_bsi"));
                             arules.symbol = (reader.IsDBNull(reader.GetOrdinal("symbol")) ? null : reader.GetString(reader.GetOrdinal("symbol")));
                             arules.progressive = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == reader.GetInt32(reader.GetOrdinal("global_rule_id"))).progressive;
                             list.Add(arules);
@@ -1955,7 +1959,46 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public List<XYZDTO> GetDayLevelKPIData(int globalRuleId, int month, int year)
+        {
+            var res = new List<XYZDTO>();
+            string query = @"select time_stamp,service_level_target,provided_ce from t_psl_0_day
+                            where global_rule_id =:global_rule_id
+                            and TRUNC(begin_time_stamp) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                            and TRUNC(time_stamp) <= TO_DATE(:end_period,'yyyy-mm-dd')";
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    var startdate = new DateTime(year, month, 1);
+                    var enddate = startdate.AddMonths(1).AddDays(-1);
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleParameter param1 = new OracleParameter("start_period", startdate.AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param2 = new OracleParameter("end_period", enddate.ToString("yyyy-MM-dd"));
+                    OracleParameter param3 = new OracleParameter("global_rule_id", globalRuleId);
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    cmd.Parameters.Add(param3);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var tar = new XYZDTO();
+                        tar.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        tar.YValue = (double)reader[1];
+                        tar.ZValue = "Target";
+                        res.Add(tar);
+                        var pro = new XYZDTO();
+                        pro.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        pro.YValue =(reader[2]==DBNull.Value)?null:(double?)reader[2];
+                        pro.ZValue = "Provided";
+                        res.Add(pro);
+                    }
+                }
+            }
+            return res;
+        }
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
@@ -2226,7 +2269,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 ParameterCount = e.Parameters.Count,
                 IsEnabled=e.is_enable
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o=>o.QueryName).ToList();
         }
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
@@ -2241,7 +2284,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count
             });
-            return dtos.ToList();
+            return dtos.OrderBy(o => o.QueryName).ToList();
         }
 
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id, int userId)
@@ -2395,12 +2438,18 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public object ExecuteReportQuery(ReportQueryDetailDTO dto)
+        public object ExecuteReportQuery(ReportQueryDetailDTO dto,int userId)
         {
             string query = dto.QueryText;
             foreach (var p in dto.Parameters)
             {
                 query = query.Replace(p.Key, p.Value);
+            }
+            if (query.Trim() == "$kpiCalculationStatus")
+            {
+                var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
+                var conditionString=QuantisUtilities.GetOracleGlobalRuleInQuery("g.global_rule_id", rules);
+                query = string.Format(WorkFlowConstants.KPI_Calculation_Status_Query, conditionString);
             }
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {

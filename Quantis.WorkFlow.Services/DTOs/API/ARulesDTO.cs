@@ -19,5 +19,6 @@ namespace Quantis.WorkFlow.Services.DTOs.API
         public string tracking_period { get; set; }
         public string symbol { get; set; }
         public bool progressive { get; set; }
+        public string kpi_description_bsi { get; set; }
     }
 }

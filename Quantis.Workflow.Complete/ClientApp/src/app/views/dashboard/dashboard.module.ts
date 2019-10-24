@@ -16,7 +16,6 @@ import { DataTablesModule } from 'angular-datatables';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 import {MatProgressBarModule} from '@angular/material';
-import { ContextMenuModule } from 'ngx-contextmenu';
 import { KeysPipePipe } from './bsi-report/bsi-pipe.pipe';
 
 import { DashboardComponent } from './dashboard.component';
@@ -75,8 +74,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         ]),
         HighchartsChartModule,
         ModalModule.forRoot(),
-        BsDatepickerModule.forRoot(),
-        ContextMenuModule.forRoot(),
+        BsDatepickerModule.forRoot()
     ],
     declarations: [
         DashboardComponent,
