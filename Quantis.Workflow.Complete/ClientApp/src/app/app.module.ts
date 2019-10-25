@@ -12,6 +12,7 @@ import { TreeviewModule } from 'ngx-treeview';
 import { TokenInterceptorService, ErrorInterceptorService } from '../app/_helpers';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { itLocale } from 'ngx-bootstrap/locale';
+import { ModalModule } from "ngx-bootstrap";
 // import { ContextMenuModule } from 'ngx-contextmenu';
 
 defineLocale('it', itLocale);
@@ -77,6 +78,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         ToastrModule.forRoot(), // ToastrModule added
         FileSaverModule,
         SweetAlert2Module.forRoot(),
+        ModalModule.forRoot(),
         // ContextMenuModule.forRoot(),
         TreeviewModule.forRoot()
     ],

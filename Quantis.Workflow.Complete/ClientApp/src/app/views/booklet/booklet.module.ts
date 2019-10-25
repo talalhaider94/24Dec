@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 
 import { BookletComponent } from './booklet.component';
-
+import { ModalModule } from "ngx-bootstrap";
 import { BookletRoutingModule } from './booklet-routing.module';
 
 @NgModule({
@@ -18,7 +18,8 @@ import { BookletRoutingModule } from './booklet-routing.module';
         ChartsModule,
         BsDropdownModule,
         ButtonsModule.forRoot(),
-        DataTablesModule
+        DataTablesModule,
+        ModalModule.forRoot()
     ],
     declarations: [BookletComponent]
 })

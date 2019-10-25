@@ -82,7 +82,11 @@ export class ApiService {
         const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?id_kpi=${id}`;
         return this.http.get(getArchivedKpisEndPoint);
     }
-
+    getCatalogEmailByUser() {
+        const getValidEmail = `${environment.API_URL}/data/GetCatalogEmailByUser`
+        
+        return false;
+    }
     deleteSDMGroupConfiguration(id): Observable<any> {
         const deleteSDMGroupConfiguration = `${environment.API_URL}/information/DeleteSDMGroupConfiguration/${id}`;
         return this.http.get(deleteSDMGroupConfiguration);
@@ -176,9 +180,9 @@ export class ApiService {
         return this.http.post(addConfig, data);
     }
     
-    CreateBooklet(createBooklet): Observable<any> {
+    CreateBooklet(data): Observable<any> {
         const booklet = `${environment.API_URL}/data/CreateBooklet`;
-        return this.http.post(booklet, createBooklet);
+        return this.http.post(booklet, data);
     }
     GetPersonalReport(PersonalReportFilterDTO): Observable<any> {
         const booklet = `${environment.API_URL}/oracle/GetPersonalReport`;
@@ -369,5 +373,10 @@ export class ApiService {
     setLandingPagePermission(userId, set): Observable<any> {
         const lpPermissionsEndPoint = `${environment.API_URL}/data/SetLandingPageByUser?userId=${userId}&set=${set}`;
         return this.http.get(lpPermissionsEndPoint);
+    }
+
+    getContractWithContractParties():Observable<any> {
+        const getContract = `${environment.API_URL}/information/GetContractsWithContractParties`;
+        return this.http.get(getContract);
     }
 }

@@ -21,8 +21,7 @@
             </button>
         </div>
         <span>&nbsp;&nbsp;</span><br>
-        <table class="table stripe" #ArchivedkpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-
+        <table  class="table-striped " datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead style="background: #20a8d8; color:white">
                 <tr>
                     <th style="align-content: center">SELEZIONA</th>
@@ -33,14 +32,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let row of array">
-                    <td align="center"><input [(ngModel)]="row.checked" type="checkbox" (change)="getCheckedItemList()" /></td>
+                <tr *ngFor="let row of contrat">
+                    <td align="center"><input [(ngModel)]="row.checked" type="checkbox" (change)="getCheckedItemList();getId(row)" /></td>
 
-                    <td style="align-content: center">{{row.cliente}}</td>
-                    <td style="align-content: center">{{row.contratto}}</td>
-                    <th>
-                    </th>
-                    <th></th>
+                    <td style="align-content: center">{{row.contractpartyname}}</td>
+                    <td style="align-content: center">{{row.contractname}}</td>
+                    <td>
+                    </td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -77,3 +76,28 @@
             </table>
           </div>
         </div>-->
+        <div id="thresholdModal" bsModal #thresholdModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideThresholdModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-3">
+                    <h5>Enter Email:</h5>
+                </div>
+                <div class="col-md-6" style="margin-top:-5px">
+                    <input type="email" class="form-control" [(ngModel)]="validEmail" placeholder="Email" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" (click)="createbooklet()">Salva</button> 
+                <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideThresholdModal()">Chiudi</button> -->
+            </div>
+        </div>
+    </div>
+</div>
