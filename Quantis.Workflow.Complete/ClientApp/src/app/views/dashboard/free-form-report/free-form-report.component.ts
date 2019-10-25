@@ -28,8 +28,10 @@ export class FreeFormReportComponent implements OnInit {
   reportQueryDetail: any = [];
   ownername;
   emptyMessage=null;
+  isSpecialReport = 0
 
   loading: boolean = true;
+  loadingResult: boolean;
   formLoading: boolean = false;
   submitted: boolean = false;
   queryId=0;
@@ -557,6 +559,13 @@ export class FreeFormReportComponent implements OnInit {
       this.editQueryData.id = data.id;
       this.editQueryData.QueryName = data.queryname;
       this.editQueryData.QueryText = data.querytext;
+
+      if(this.editQueryData.QueryName == 'kpiCalculationStatus'){
+        this.isSpecialReport = 1;
+      }else{
+        this.isSpecialReport = 0;
+      }
+
       console.log('data.parameters -> ',data.parameters.length);
       if(data.parameters.length==0){
       }else{
@@ -575,6 +584,7 @@ export class FreeFormReportComponent implements OnInit {
   debug(){
     this.hideData=0;
     this.valueCount = 0;
+    this.loadingResult = true;
     this.clearData();
 
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
@@ -612,7 +622,7 @@ export class FreeFormReportComponent implements OnInit {
           setTimeout(() => {
           this.dtTrigger3.next();
            this.rerender();
-
+           this.loadingResult = false;
           }, 2000);
         }
       }
@@ -625,6 +635,7 @@ export class FreeFormReportComponent implements OnInit {
   test(){
     this.hideData=0;
     this.valueCount = 0;
+    this.loadingResult = true;
     this.clearData();
 
     this.executeQueryData.QueryText = this.addEditQueryForm.value.QueryText;
@@ -653,11 +664,11 @@ export class FreeFormReportComponent implements OnInit {
           ////////////// Setting Key ///////////////
           this.hideExport = false;
           this.debugQueryData = Object.keys(data[0]);
-          debugger;
+          //debugger;
           setTimeout(() => {
           this.dtTrigger3.next();
            this.rerender();
-
+           this.loadingResult = false;
           }, 2000);
         }
       }
