@@ -198,6 +198,7 @@ export class LandingPageComponent implements OnInit {
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
                 this.gridLength = this.gridsData.length;
+                this.contName = this.gridsData;
                 if(this.gridsData.length==0){
                     this.toastr.error("Nessun contraente assegnato all'utente");
                 }

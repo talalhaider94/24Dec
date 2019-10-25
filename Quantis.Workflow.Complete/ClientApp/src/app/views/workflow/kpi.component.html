@@ -492,7 +492,6 @@
                             <th>No.</th>
                             <th>Rif. Num</th>
                             <th>SDM</th>
-                            <th>BSI</th>
                             <th>Stato</th>
                         </tr>
                         <tbody>
@@ -509,10 +508,6 @@
                                 <td>
                                     <i class="fa fa-square"
                                        [ngClass]="status.result.issdmstatuschanged ? 'text-success' : 'text-danger' "></i>
-                                </td>
-                                <td>
-                                    <i class="fa fa-square"
-                                       [ngClass]="status.result.isbsistatuschanged ? 'text-success' : 'text-danger' "></i>
                                 </td>
                                 <td>
                                     <div>{{ status.ticket.status }}</div>

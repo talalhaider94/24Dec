@@ -82,10 +82,10 @@ export class ApiService {
         const getArchivedKpisEndPoint = `${environment.API_URL}/data/getallarchivedkpis?id_kpi=${id}`;
         return this.http.get(getArchivedKpisEndPoint);
     }
-    getCatalogEmailByUser() {
+    getCatalogEmailByUser(): Observable<any> {
         const getValidEmail = `${environment.API_URL}/data/GetCatalogEmailByUser`
         
-        return false;
+        return this.http.get(getValidEmail);
     }
     deleteSDMGroupConfiguration(id): Observable<any> {
         const deleteSDMGroupConfiguration = `${environment.API_URL}/information/DeleteSDMGroupConfiguration/${id}`;

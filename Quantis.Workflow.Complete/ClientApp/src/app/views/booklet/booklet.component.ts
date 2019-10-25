@@ -72,7 +72,7 @@ export class BookletComponent implements OnInit {
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
         this.datacorrente = moment().format('MM/YYYY');
-        this.dtOptions = { 
+        this.dtOptions = {
             pagingType: 'full_numbers',
             pageLength: 10,
             language: {
@@ -104,7 +104,7 @@ export class BookletComponent implements OnInit {
         setTimeout(() => {
         this.dtTrigger.next();
          this.rerender();
-            
+
         }, 2000);
         // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
         //this.contrattiDef=data;
@@ -128,7 +128,7 @@ export class BookletComponent implements OnInit {
         });
     }
 
-    
+
 
     getContratti() {
         this.apiService.getAllKpiHierarchy(this.utente.userid).subscribe((data: any) => {
@@ -222,17 +222,25 @@ export class BookletComponent implements OnInit {
         }
     }
     async addBooklet(){
-        let isValid = this.apiService.getCatalogEmailByUser();
-        if (isValid == false){
-           await this.showThresholdModal();
-            //   this.apiService.CreateBooklet(this.documentiDef.documentid).subscribe((data: any) => {
-            // });
-        }
-        //console.log('Add Booklet Data -> ',this.documentiDef.documentid);
-        //if(this.documentId!=0){
+        let isValid ;
+         this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
+            isValid = data;
+        });
+        if(isValid = this.utente.useremail){
+            let data = {
+                ListContract:this.itemArray,
+                BookletDocumentId:this.documentiDef.documentid,
+                RecipientEmail:this.validEmail
+            }
+              this.apiService.CreateBooklet(data).subscribe((data: any) => {
+                  console.log(data)
+            });
+        }else{
+              await this.showThresholdModal();
+              this.createbooklet();
 
-          
-        //}
+        }
+
     }
 
     async showThresholdModal() {
