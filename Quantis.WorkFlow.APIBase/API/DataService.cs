@@ -2356,7 +2356,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public string GetCatalogEmailByUser(int userId)
         {
-            return _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_user_id == userId).mail;
+            return _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_user_id == userId)?.mail;
         }
         public int CreateBooklet(CreateBookletDTO dto,int userId)
         {

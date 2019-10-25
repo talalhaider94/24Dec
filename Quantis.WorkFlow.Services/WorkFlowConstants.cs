@@ -11,7 +11,7 @@
         t.rule_name ""KPI"" ,
         t.interval_length || ' ' || initcap(t.time_unit) ||
         decode(t.is_period, 1, ' (Rule''s tracking period)', '') ""Tracking Period"" ,
-        to_date(decode (to_char (t.last_psl_record_date, 'dd/mm/yyyy') , '02/01/1970' , null , t.last_psl_record_date)) ""Aggiornato al""
+        to_char(to_date(decode (to_char (t.last_psl_record_date , 'dd/mm/yyyy') , '02/01/1970' , null , t.last_psl_record_date)),'dd/mm/yyyy HH:mm:ss') ""Aggiornato al"" 
         from
         (
             select cu.customer_name,
