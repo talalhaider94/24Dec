@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Information;
@@ -8,6 +9,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using Renci.SshNet;
+using Renci.SshNet.Sftp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,34 +25,46 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
         private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
         private readonly IConfiguration _configuration;
+        private ILogger<InformationService> _logger;
 
         public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
              IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
              IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             ILogger<InformationService> logger)
         {
             _dbcontext = dbcontext;
             _configurationMapper = configurationMapper;
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
             _configuration = configuration;
+            _logger = logger;
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
-            AuthenticationMethod[] methods = new AuthenticationMethod[]
-            {
-                new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(@"/home/srv_addon/.ssh/id_rsa"))
-            };
-            ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
-            using (var sftp = new SftpClient(connectionInfo))
-            {
-                sftp.Connect();
-                sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
-                MemoryStream mStream = new MemoryStream();
-                mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
-                mStream.Position = 0;
-                sftp.UploadFile(mStream, fileDTO.Name, true);
-                sftp.Disconnect();
+            try {
+                var path = @"/home/srv_addon/.ssh/id_rsa";
+                
+                AuthenticationMethod[] methods = new AuthenticationMethod[]
+                {
+                    //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
+                     new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile[]{new PrivateKeyFile(path) })
+
+                };
+                ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
+                using (var sftp = new SftpClient(connectionInfo))
+                {
+                    sftp.Connect();
+                    sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
+                    MemoryStream mStream = new MemoryStream();
+                    mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
+                    mStream.Position = 0;
+                    sftp.UploadFile(mStream, fileDTO.Name, true);
+                    sftp.Disconnect();
+                } // sudo scp -i keypath utente@host file
+            }
+            catch (Exception e){
+                throw e;
             }
         }
         public void AddUpdateBasicConfiguration(ConfigurationDTO dto)

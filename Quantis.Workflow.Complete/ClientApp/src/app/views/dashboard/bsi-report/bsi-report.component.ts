@@ -184,11 +184,32 @@ export class BSIReportComponent implements OnInit {
         xAxis: {
             type: 'date',
             categories: []
+            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
         },
         yAxis: {
             title: {
                 text: 'Percent'
             }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            this.bar_period = this.category;
+                            this.bar_value = this.y;
+                            alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
         },
         series: [],
         exporting: {

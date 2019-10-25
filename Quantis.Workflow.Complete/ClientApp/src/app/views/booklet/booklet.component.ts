@@ -45,10 +45,15 @@ export class BookletComponent implements OnInit {
         contratto: ''
     }];
 
-    documentiDef: any = [{
-        id: 'documentid',
-        nome: 'documentname'
-    }]
+  documentiDef: any = [{
+    id: 'documentid',
+    nome: 'documentname'
+  }];
+  viewModel = {
+    filters: {
+      tuttiClienti: ''
+    }
+  };
     dtOptions: DataTables.Settings = {};
     dtTrigger: Subject<any> = new Subject();
     // dtTrigger: Subject<any> = new Subject();
@@ -124,8 +129,32 @@ export class BookletComponent implements OnInit {
             // Destroy the table first
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
-             this.dtTrigger.next();
+            this.dtTrigger.next();
+            dtInstance.columns(1).every(function () {
+              const that = this;
+
+              // Create the select list and search operation
+              const select = $('#searchCol1')
+                .on('change', function () {
+                  that
+                    .search($(this).val(), false, false, false)
+                    .draw();
+                });
+
+              // Get the search data for the first column and add to the select list
+              this
+                .cache('search')
+                .sort()
+                .unique()
+                .each(function (d) {
+                  select.append($('<option value="' + d + '">' + d + '</option>'));
+                });
+            });
+             
         });
+        /*$this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+          
+        });*/
     }
 
 
