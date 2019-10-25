@@ -2443,7 +2443,10 @@ namespace Quantis.WorkFlow.APIBase.API
             string query = dto.QueryText;
             foreach (var p in dto.Parameters)
             {
-                query = query.Replace(p.Key, p.Value);
+                if(p.Key.Length > 0 && p.Value.Length > 0)
+                {
+                    query = query.Replace(p.Key, p.Value);
+                }
             }
             if (query.Trim() == "$kpiCalculationStatus")
             {
