@@ -68,6 +68,7 @@ export class LandingPageComponent implements OnInit {
     contractName: any;
     count = 0;
     setViewAll = 0;
+    gridLength = 0;
     thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
     showMultiSelect : boolean = false;
@@ -99,6 +100,7 @@ export class LandingPageComponent implements OnInit {
         this.loading = true;
         this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
             this.gridsData = data;
+            this.gridLength = this.gridsData.length;
             if(this.gridsData.length==0){
                 this.toastr.error("Nessun contraente assegnato all'utente");
             }
@@ -195,6 +197,7 @@ export class LandingPageComponent implements OnInit {
             this.loading = true;
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
+                this.gridLength = this.gridsData.length;
                 if(this.gridsData.length==0){
                     this.toastr.error("Nessun contraente assegnato all'utente");
                 }

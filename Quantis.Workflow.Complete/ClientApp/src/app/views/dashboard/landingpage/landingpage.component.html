@@ -7,13 +7,13 @@
         </h4>
         <!-- <br> -->
         <!-- <h4 style="color:#565656;">Periodo:</h4> -->
-        <div class="row pull-right col-md-8" style="margin-top:-30px">
+        <div class="row pull-right col-md-5" style="margin-top:-30px">
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
 
             <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
-                <option value="00">Tutti i mesi</option>
+                <!-- <option value="00">Tutti i mesi</option> -->
                 <option value="01">Gennaio</option>
                 <option value="02">Febbraio</option>
                 <option value="03">Marzo</option>
@@ -31,12 +31,13 @@
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>
-            <button type="button" class="btn btn-primary" name="button" (click)="multiSelect()">Contraenti</button>
-            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" class="form-control ml-1" style="width:40%;position:absolute;right: 13%;top: 37px;z-index: 9;">
+            <button type="button" class="btn btn-primary ml-1" name="button" (click)="multiSelect()">Contraenti</button>
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" size='{{gridLength+1}}' style="width:40%;position:absolute;right: 13%;top: 37px;z-index: 9;">
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractpartyname}}</option>
             </select>
-            <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
+            <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
+            <button type="button" class="btn btn-success ml-1" (click)="viewAll()">Tutti</button>
         </div>
     </section>
     <br>
