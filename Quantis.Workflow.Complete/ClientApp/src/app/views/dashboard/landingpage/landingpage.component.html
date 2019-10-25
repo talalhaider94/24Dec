@@ -31,13 +31,13 @@
                 <option value="">Anno</option>
                 <option *ngFor="let year of anni">{{year}}</option>
             </select>
-            <button type="button" class="btn btn-primary ml-2" name="button" (click)="multiSelect()">Contraenti</button>
+            <button type="button" class="btn btn-primary ml-1" name="button" (click)="multiSelect()">Contraenti</button>
             <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" size='{{gridLength+1}}' style="width:40%;position:absolute;right: 13%;top: 37px;z-index: 9;">
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractpartyname}}</option>
             </select>
-            <div style='height:80%'><button class="btn btn-primary ml-2" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success ml-2" (click)="viewAll()">Tutti</button>
+            <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
+            <button type="button" class="btn btn-success ml-1" (click)="viewAll()">Tutti</button>
         </div>
     </section>
     <br>
