@@ -83,6 +83,8 @@ export class LandingPageDetailsComponent implements OnInit {
         this.thresholdvalue = 0;
         this.setThresholdValue=0;
         this.setViewAll=0;
+        this.gridLength = 0;
+
         this.queryParams = this.route.snapshot.queryParamMap['params'];
         console.log('queryParams -> ', this.queryParams.contractpartyid, this.queryParams.contractpartyname,
         this.queryParams.month, this.queryParams.year);
@@ -99,15 +101,19 @@ export class LandingPageDetailsComponent implements OnInit {
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
-            this.gridLength = this.gridsData.length;
-	    //  this.contName = data;
-            if(this.gridsData.length>6){
-                this.limitedData = this.gridsData.splice(0,6);
+            if(this.gridsData == null){
+                this.toastr.error("Nessun contratti assegnato all'utente");
+                this.loading = false;
             }else{
-                this.limitedData = this.gridsData;
+                this.gridLength = this.gridsData.length;
+                if(this.gridsData.length>6){
+                    this.limitedData = this.gridsData.splice(0,6);
+                }else{
+                    this.limitedData = this.gridsData;
+                }
             }
             this.contName = this.gridsData;
-            console.log("Level1 Data -> ", this.gridsData, this.limitedData);
+            console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
             this.loading = false;
         });
     }
@@ -137,13 +143,18 @@ export class LandingPageDetailsComponent implements OnInit {
             this.loading = true;
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
-                this.gridLength = this.gridsData.length;
-                if(this.gridsData.length>6){
-                    this.limitedData = this.gridsData.splice(0,6);
+                if(this.gridsData == null){
+                    this.toastr.error("Nessun contratti assegnato all'utente");
+                    this.loading = false;
                 }else{
-                    this.limitedData = this.gridsData;
+                    this.gridLength = this.gridsData.length;
+                    if(this.gridsData.length>6){
+                        this.limitedData = this.gridsData.splice(0,6);
+                    }else{
+                        this.limitedData = this.gridsData;
+                    }
                 }
-                console.log("Level1 Data -> ", this.gridsData, this.limitedData);
+                console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
                 this.contName = this.gridsData;
                 this.loading = false;
             });
@@ -161,6 +172,7 @@ export class LandingPageDetailsComponent implements OnInit {
         if(value == 'ALL'){
             this.loading = true;
             this.limitedData = this.contName;
+            this.gridsData = this.contName;
             this.loading = false;
         }else{
             this.loading = true;
@@ -187,6 +199,7 @@ export class LandingPageDetailsComponent implements OnInit {
                 worstcontracts: temp2[i].worstcontracts
             })
               this.limitedData = temp2;
+              this.gridsData = temp2;
             this.loading = false;
         }
      }
