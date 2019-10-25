@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Information;
@@ -23,20 +24,24 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
         private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
         private readonly IConfiguration _configuration;
+        private ILogger<InformationService> _logger;
 
         public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
              IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
              IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             ILogger<InformationService> logger)
         {
             _dbcontext = dbcontext;
             _configurationMapper = configurationMapper;
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
             _configuration = configuration;
+            _logger = logger;
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
+            _logger.LogInformation("Entered into SFTP function");
             AuthenticationMethod[] methods = new AuthenticationMethod[]
             {
                 new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(@"/home/srv_addon/.ssh/id_rsa"))
