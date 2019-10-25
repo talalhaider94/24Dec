@@ -609,6 +609,11 @@ export class FreeFormReportComponent implements OnInit {
         }else{
           ////////////// Setting Key ///////////////
           this.debugQueryData = Object.keys(data[0]);
+          setTimeout(() => {
+          this.dtTrigger3.next();
+           this.rerender();
+
+          }, 2000);
         }
       }
     },error => {
@@ -648,7 +653,12 @@ export class FreeFormReportComponent implements OnInit {
           ////////////// Setting Key ///////////////
           this.hideExport = false;
           this.debugQueryData = Object.keys(data[0]);
-          this.rerender();
+          debugger;
+          setTimeout(() => {
+          this.dtTrigger3.next();
+           this.rerender();
+
+          }, 2000);
         }
       }
     },error => {
