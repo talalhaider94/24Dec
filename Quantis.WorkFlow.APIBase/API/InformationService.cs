@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Information;
@@ -23,23 +24,66 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<SDMGroupDTO, SDM_TicketGroup> _sdmGroupMapper;
         private readonly IMappingService<SDMStatusDTO, SDM_TicketStatus> _sdmStatusMapper;
         private readonly IConfiguration _configuration;
+        private ILogger<InformationService> _logger;
 
         public InformationService(WorkFlowPostgreSqlContext dbcontext, IMappingService<ConfigurationDTO, T_Configuration> configurationMapper,
              IMappingService<SDMGroupDTO, SDM_TicketGroup> sdmGroupMapper,
              IMappingService<SDMStatusDTO, SDM_TicketStatus> sdmStatusMapper,
-             IConfiguration configuration)
+             IConfiguration configuration,
+             ILogger<InformationService> logger)
         {
             _dbcontext = dbcontext;
             _configurationMapper = configurationMapper;
             _sdmGroupMapper = sdmGroupMapper;
             _sdmStatusMapper = sdmStatusMapper;
             _configuration = configuration;
+            _logger = logger;
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
+            var path = "";
+            Console.WriteLine("Cerco i path");
+            if (File.Exists(@"/home/srv_addon/.ssh/id_rsa"))
+            {
+                Console.WriteLine("file exists type 1");
+                path = @"/home/srv_addon/.ssh/id_rsa";
+            }
+            else
+            {
+                Console.WriteLine("not exists type 1");
+            }
+            if (File.Exists(@"\home\srv_addon\.ssh\id_rsa"))
+            {
+                Console.WriteLine("file exists type 2");
+                path = @"\home\srv_addon\.ssh\id_rsa";
+            }
+            else
+            {
+                Console.WriteLine("not exists type 2");
+            }
+            if (File.Exists("/home/srv_addon/.ssh/id_rsa"))
+            {
+                Console.WriteLine("file exists type 3");
+                path = "/home/srv_addon/.ssh/id_rsa";
+            }
+            else
+            {
+                Console.WriteLine("not exists type 3");
+            }
+            if (File.Exists("\\home\\srv_addon\\.ssh\\id_rsa"))
+            {
+                Console.WriteLine("file exists type 4");
+                path = "\\home\\srv_addon\\.ssh\\id_rsa";
+            }
+            else
+            {
+                Console.WriteLine("not exists type 4");
+            }
+            _logger.LogInformation("Entered into SFTP function");
             AuthenticationMethod[] methods = new AuthenticationMethod[]
             {
-                new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(@"/home/srv_addon/.ssh/id_rsa"))
+                new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
+               
             };
             ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
             using (var sftp = new SftpClient(connectionInfo))
