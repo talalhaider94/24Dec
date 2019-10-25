@@ -11,6 +11,7 @@ import { ImportFormReportComponent } from './import-form-report/import-form-repo
 import { BSIReportComponent } from './bsi-report/bsi-report.component';
 // import { PersonalReportComponent } from './personal-report/personal-report.component';
 import { LandingPageDetailsComponent } from './landing-page-details/landing-page-details.component';
+import { BlankPageComponent } from './blankpage/blankpage.component';
 
 const routes: Routes = [
     // {
@@ -100,6 +101,13 @@ const routes: Routes = [
         component: LandingPageDetailsComponent,
         data: {
             title: 'Landing Page Details'
+        }
+    },
+    {
+        path: 'nodashboard',
+        component: BlankPageComponent,
+        data: {
+            title: ''
         }
     }
 ];

@@ -453,7 +453,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.CreateBooklet(dto, usr.UserId);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
-        [HttpPost("GetCatalogEmailByUser")]
+        [HttpGet("GetCatalogEmailByUser")]
         public string GetCatalogEmailByUser()
         {
             var usr = (HttpContext.User) as AuthUser;
