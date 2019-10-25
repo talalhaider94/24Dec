@@ -106,7 +106,7 @@ export class LandingPageDetailsComponent implements OnInit {
             }else{
                 this.limitedData = this.gridsData;
             }
-            this.contName = this.limitedData;
+            this.contName = this.gridsData;
             console.log("Level1 Data -> ", this.gridsData, this.limitedData);
             this.loading = false;
         });
@@ -144,6 +144,7 @@ export class LandingPageDetailsComponent implements OnInit {
                     this.limitedData = this.gridsData;
                 }
                 console.log("Level1 Data -> ", this.gridsData, this.limitedData);
+                this.contName = this.gridsData;
                 this.loading = false;
             });
         }
