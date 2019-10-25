@@ -2450,6 +2450,12 @@ namespace Quantis.WorkFlow.APIBase.API
                 var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
                 var conditionString=QuantisUtilities.GetOracleGlobalRuleInQuery("g.global_rule_id", rules);
                 query = string.Format(WorkFlowConstants.KPI_Calculation_Status_Query, conditionString);
+                if(rules.Count == 0)
+                {
+                    List<object> arrayerror = new List<object>();
+                    arrayerror.Add(new { Errore = "Nessun KPI associato all'utente" });
+                    return arrayerror;
+                }
             }
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
