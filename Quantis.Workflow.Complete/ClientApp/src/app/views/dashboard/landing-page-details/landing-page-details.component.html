@@ -34,13 +34,13 @@
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractname}}</option>
             </select> -->
-            <button type="button" class="btn btn-primary" name="button" (click)="multiSelect()">Contraenti</button>
-            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" class="form-control ml-1" style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;">
+            <button type="button" class="btn btn-primary ml-1" name="button" (click)="multiSelect()">Contratti</button>
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" size='{{gridLength-5}}' style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;">
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractname}}</option>
             </select>
             <div style='height:80%'><button class="btn btn-primary ml-1" (click)="showThresholdModal()"><i class="icon-settings"></i></button></div>
-            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">View All</button>
+            <button type="button" class="btn btn-success float-right ml-1" (click)="viewAll()">Tutti</button>
             <button type="button" class="btn btn-danger float-right ml-2" routerLink="/dashboard/landingpage">Indietro</button>
         </div>
     </section>
@@ -175,8 +175,8 @@
                                         <a href="#">
                                             Severity Contratti
                                             <div class="progress" style="height: 20px">
-                                                <div class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
-                                                <div class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
+                                                <div *ngIf="row.complaintkpis!=0" class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
+                                                <div *ngIf="row.noncomplaintkpis!=0" class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
                                         </a>
                                     </li>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef,QueryList, ElementRef } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { FormControl, FormGroup, FormControlName } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { forEach } from '@angular/router/src/utils/collection';
 import { deepStrictEqual } from 'assert';
 import { DateAdapter } from '@angular/material';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 
 declare var $;
@@ -24,37 +25,17 @@ export class BookletComponent implements OnInit {
     dataprecedente: any;
     documenti = [];
     array = [];
+    contrat = [];
+    itemArray = [];
+    utente:any = JSON.parse(localStorage.getItem('currentUser'));
     @ViewChild('ArchivedkpiTable') block: ElementRef;
-
+    @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
     @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild('searchCol2') searchCol2: ElementRef;
     @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
-    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChild(DataTableDirective)  datatableElement: DataTableDirective;
+    validEmail='';
 
-    dtOptions: DataTables.Settings = {
-        language: {
-            processing: "Elaborazione...",
-            search: "Cerca:",
-            lengthMenu: "Visualizza _MENU_ elementi",
-            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-            infoEmpty: "Vista da 0 a 0 di 0 elementi",
-            infoFiltered: "(filtrati da _MAX_ elementi totali)",
-            infoPostFix: "",
-            loadingRecords: "Caricamento...",
-            zeroRecords: "La ricerca non ha portato alcun risultato.",
-            emptyTable: "Nessun dato presente nella tabella.",
-            paginate: {
-                first: "Primo",
-                previous: "Precedente",
-                next: "Seguente",
-                last: "Ultimo"
-            },
-            aria: {
-                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-            }
-        }
-    };
 
     documentId=0;
 
@@ -64,19 +45,15 @@ export class BookletComponent implements OnInit {
         contratto: ''
     }];
 
-    createBooklet = {
-        BookletDocumentId:0,
-        ListContract:[]
-    }
-
     documentiDef: any = [{
         id: 'documentid',
         nome: 'documentname'
     }]
-
+    dtOptions: DataTables.Settings = {};
     dtTrigger: Subject<any> = new Subject();
+    // dtTrigger: Subject<any> = new Subject();
 
-    @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+    // @ViewChild(DataTableDirective) dtElement: DataTableDirective;
     constructor(private apiService: ApiService) {
         this.documenti = [
             { id: 1, nome: 'contratto1', cognome: 'giacomo', status: 'attivo', success: 50, danger: 10, warning: 12 },
@@ -91,19 +68,48 @@ export class BookletComponent implements OnInit {
     ngOnInit() {
         this.getDocumenti();
         this.getContratti();
-
+        this.getcontract();
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
         this.datacorrente = moment().format('MM/YYYY');
+        this.dtOptions = { 
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            language: {
+                processing: "Elaborazione...",
+                search: "Cerca:",
+                lengthMenu: "Visualizza _MENU_ elementi",
+                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+                infoEmpty: "Vista da 0 a 0 di 0 elementi",
+                infoFiltered: "(filtrati da _MAX_ elementi totali)",
+                infoPostFix: "",
+                loadingRecords: "Caricamento...",
+                zeroRecords: "La ricerca non ha portato alcun risultato.",
+                emptyTable: "Nessun dato presente nella tabella.",
+                paginate: {
+                    first: "Primo",
+                    previous: "Precedente",
+                    next: "Seguente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+                }
+            }
+        };
     }
 
     ngAfterViewInit() {
+        setTimeout(() => {
         this.dtTrigger.next();
+         this.rerender();
+            
+        }, 2000);
         // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
         //this.contrattiDef=data;
 
         // this.recuperoChildren();
-        this.rerender();
 
         // });
     }
@@ -118,11 +124,11 @@ export class BookletComponent implements OnInit {
             // Destroy the table first
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
-            this.dtTrigger.next();
+             this.dtTrigger.next();
         });
     }
 
-    utente = JSON.parse(localStorage.getItem('currentUser'));
+    
 
     getContratti() {
         this.apiService.getAllKpiHierarchy(this.utente.userid).subscribe((data: any) => {
@@ -131,7 +137,12 @@ export class BookletComponent implements OnInit {
             //this.recuperoChildren();
         });
     }
-
+    getcontract(){
+        this.apiService.getContractWithContractParties().subscribe((data:any)=>{
+            this.contrat = data;
+            console.log('getContractsWithContractParties',data)
+        })
+    }
     getDocumenti() {
         this.apiService.getBooklet().subscribe((data: any) => {
             this.documentiDef = data;
@@ -175,6 +186,19 @@ export class BookletComponent implements OnInit {
         console.log('documentId -> ',this.documentId);
     }
 
+    getId(obj){
+        console.log(obj,'selected obj');
+        var index = this.itemArray.indexOf(obj.contractid);
+        if(index === -1){
+          // val not found, pushing onto array
+          this.itemArray.push(obj.contractid);
+        }else{
+          // val is found, removing from array
+          this.itemArray.splice(index,1);
+        }
+        console.log(this.itemArray,'contractid')
+
+    }
     getCheckedItemList() {
         this.checkedList = [];
         for (var i = 0; i < this.array.length; i++) {
@@ -183,15 +207,39 @@ export class BookletComponent implements OnInit {
         }
         console.log('data ', this.checkedList);
     }
-
-    addBooklet(){
-        
-        //if(this.documentId!=0){
-            this.createBooklet.BookletDocumentId = this.documentiDef.documentid;
-            this.createBooklet.ListContract = [1090,1075];
-            console.log('Add Booklet Data -> ',this.createBooklet);
-            this.apiService.CreateBooklet(this.createBooklet).subscribe((data: any) => {
+    createbooklet(){
+        this.hideThresholdModal();
+        if(this.validEmail != null || this.validEmail != ''){
+            let data = {
+                ListContract:this.itemArray,
+                BookletDocumentId:this.documentiDef.documentid,
+                RecipientEmail:this.validEmail
+            }
+            console.log(data,'payload');
+            this.apiService.CreateBooklet(data).subscribe((data: any) => {
+                console.log(data,'called createbookley')
             });
+        }
+    }
+    async addBooklet(){
+        let isValid = this.apiService.getCatalogEmailByUser();
+        if (isValid == false){
+           await this.showThresholdModal();
+            //   this.apiService.CreateBooklet(this.documentiDef.documentid).subscribe((data: any) => {
+            // });
+        }
+        //console.log('Add Booklet Data -> ',this.documentiDef.documentid);
+        //if(this.documentId!=0){
+
+          
         //}
+    }
+
+    async showThresholdModal() {
+        this.thresholdModal.show();
+    }
+
+    async hideThresholdModal() {
+        this.thresholdModal.hide();
     }
 }

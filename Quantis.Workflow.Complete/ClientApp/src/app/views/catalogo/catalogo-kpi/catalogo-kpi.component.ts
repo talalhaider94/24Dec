@@ -210,11 +210,11 @@ export class CatalogoKpiComponent implements OnInit {
     ngOnInit() {
         this.dtOptions = {
             //dom: 'Bfrtip',
-            "columnDefs": [{
+            /*"columnDefs": [{
                 "targets": [20],
                 "visible": false,
                 "searchable": true
-            }],
+            }],*/
             // buttons: [
             //   {
             //     extend: 'csv',
