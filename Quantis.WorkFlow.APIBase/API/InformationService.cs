@@ -9,6 +9,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
 using Renci.SshNet;
+using Renci.SshNet.Sftp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -41,60 +42,29 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
-            var path = "";
-            Console.WriteLine("Cerco i path");
-            if (File.Exists(@"/home/srv_addon/.ssh/id_rsa"))
-            {
-                Console.WriteLine("file exists type 1");
-                path = @"/home/srv_addon/.ssh/id_rsa";
+            try {
+                var path = @"/home/srv_addon/.ssh/id_rsa";
+                
+                AuthenticationMethod[] methods = new AuthenticationMethod[]
+                {
+                    //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
+                     new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile[]{new PrivateKeyFile(path) })
+
+                };
+                ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
+                using (var sftp = new SftpClient(connectionInfo))
+                {
+                    sftp.Connect();
+                    sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
+                    MemoryStream mStream = new MemoryStream();
+                    mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
+                    mStream.Position = 0;
+                    sftp.UploadFile(mStream, fileDTO.Name, true);
+                    sftp.Disconnect();
+                } // sudo scp -i keypath utente@host file
             }
-            else
-            {
-                Console.WriteLine("not exists type 1");
-            }
-            if (File.Exists(@"\home\srv_addon\.ssh\id_rsa"))
-            {
-                Console.WriteLine("file exists type 2");
-                path = @"\home\srv_addon\.ssh\id_rsa";
-            }
-            else
-            {
-                Console.WriteLine("not exists type 2");
-            }
-            if (File.Exists("/home/srv_addon/.ssh/id_rsa"))
-            {
-                Console.WriteLine("file exists type 3");
-                path = "/home/srv_addon/.ssh/id_rsa";
-            }
-            else
-            {
-                Console.WriteLine("not exists type 3");
-            }
-            if (File.Exists("\\home\\srv_addon\\.ssh\\id_rsa"))
-            {
-                Console.WriteLine("file exists type 4");
-                path = "\\home\\srv_addon\\.ssh\\id_rsa";
-            }
-            else
-            {
-                Console.WriteLine("not exists type 4");
-            }
-            _logger.LogInformation("Entered into SFTP function");
-            AuthenticationMethod[] methods = new AuthenticationMethod[]
-            {
-                new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
-               
-            };
-            ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
-            using (var sftp = new SftpClient(connectionInfo))
-            {
-                sftp.Connect();
-                sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
-                MemoryStream mStream = new MemoryStream();
-                mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
-                mStream.Position = 0;
-                sftp.UploadFile(mStream, fileDTO.Name, true);
-                sftp.Disconnect();
+            catch (Exception e){
+                throw e;
             }
         }
         public void AddUpdateBasicConfiguration(ConfigurationDTO dto)
