@@ -67,6 +67,7 @@ export class LandingPageDetailsComponent implements OnInit {
     thresholdkey = '@thresholdKey1';
     thresholdvalue = 0;
     setThresholdValue = 0;
+    gridLength = 0;
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
@@ -98,6 +99,7 @@ export class LandingPageDetailsComponent implements OnInit {
         this.loading = true;
         this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.queryParams.month,this.queryParams.year).subscribe((data: any) => {
             this.gridsData = data;
+            this.gridLength = this.gridsData.length;
 	    //  this.contName = data;
             if(this.gridsData.length>6){
                 this.limitedData = this.gridsData.splice(0,6);
@@ -135,6 +137,7 @@ export class LandingPageDetailsComponent implements OnInit {
             this.loading = true;
             this.apiService.getLandingPageLevel1(this.queryParams.contractpartyid,this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
+                this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
                 }else{
