@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
     submitted: boolean = false;
     returnUrl: string;
     loading: boolean = false;
+    public showLandingPage: any;
     constructor(
         private formBuilder: FormBuilder,
         private authService: AuthService,
@@ -51,16 +52,25 @@ export class LoginComponent implements OnInit {
             const { userName, password } = this.f;
             this.loading = true;
             this.authService.login(userName.value, password.value).pipe(first()).subscribe(data => {
-                if (data.defaultdashboardid !== -1) {
-                    this.router.navigate(['dashboard/public', data.defaultdashboardid]);
-                } else if (data.defaultdashboardid == -1) {
-                    this.router.navigate(['dashboard/landingpage']);
-                } else {
-                    this.router.navigate(['dashboard/list']);
-                }
+                this.dashboardService.getLandingPageInfo().subscribe(row => {
+                    this.showLandingPage = row.showlandingpage;
+                    console.log("Landing Page Info -> ",this.showLandingPage);
 
-                this.toastr.success('Login eseguito con successo.');
-                this.loading = false;
+                    if(this.showLandingPage==true){
+                        if (data.defaultdashboardid !== -1) {
+                            this.router.navigate(['dashboard/public', data.defaultdashboardid]);
+                        } else if (data.defaultdashboardid == -1) {
+                            this.router.navigate(['dashboard/landingpage']);
+                        } else {
+                            this.router.navigate(['dashboard/list']);
+                        }
+                    }else{
+                        this.router.navigate(['dashboard/nodashboard']);
+                    }
+                    this.toastr.success('Login eseguito con successo.');
+                    this.loading = false;
+                });
+                
             }, error => {
                 console.log('onLoginFormSubmit: error', error);
                 this.toastr.error(error.error, error.description);
