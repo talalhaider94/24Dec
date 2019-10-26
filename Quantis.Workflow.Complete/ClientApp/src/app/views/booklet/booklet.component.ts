@@ -253,7 +253,7 @@ export class BookletComponent implements OnInit {
     async addBooklet(){
         let isValid ;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
-            isValid = false;
+            isValid = data;
             if(isValid == this.utente.useremail) {
               this.validEmail = data;
               this.createbooklet();
