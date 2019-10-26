@@ -29,6 +29,8 @@ export class FreeFormReportComponent implements OnInit {
   ownername;
   emptyMessage=null;
   isSpecialReport = 0
+  client;
+  contract;
 
   loading: boolean = true;
   loadingResult: boolean;
