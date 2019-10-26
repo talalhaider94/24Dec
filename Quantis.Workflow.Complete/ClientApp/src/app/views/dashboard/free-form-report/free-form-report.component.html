@@ -103,13 +103,13 @@
                         </h5>
                         <div class="row mb-2">
                             <div class="col-md-2">
-                                <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" (change)="populateDateFilter()" placeholder="Cliente">
+                                <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" placeholder="Cliente">
                                     <option value="">Anno</option>
                                     <!-- <option *ngFor="let year of anni">{{year}}</option> -->
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" (change)="populateDateFilter()" placeholder="Contratto">
+                                <select [hidden]="isSpecialReport==0" [(ngModel)]="contract" class="form-control" placeholder="Contratto">
                                     <option value="">Anno</option>
                                     <!-- <option *ngFor="let year of anni">{{year}}</option> -->
                                 </select>
