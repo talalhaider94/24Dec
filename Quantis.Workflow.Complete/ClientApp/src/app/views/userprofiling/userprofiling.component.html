@@ -8,7 +8,9 @@
         </div> -->
         <div class="row">
           <div class="col-md-12 userprof-exporta-csv">
-            <button [hidden]="hideExport" class="ml-2 pull-right btn btn-primary" #btnExporta>Esporta CSV</button>
+            <button [hidden]="hideExport" class="ml-2 pull-right btn btn-primary" #btnExporta>
+              <span *ngIf="loadingSpinner" class="fa fa-spinner fa-spin"></span>  Esporta CSV
+            </button>
           </div>
         </div>
         <div class="row role-permissions-lists col-md-12">

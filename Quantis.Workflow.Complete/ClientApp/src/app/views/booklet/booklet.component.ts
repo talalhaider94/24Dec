@@ -150,10 +150,10 @@ export class BookletComponent implements OnInit {
                   select.append($('<option value="' + d + '">' + d + '</option>'));
                 });
             });
-             
+
         });
         /*$this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-          
+
         });*/
     }
 
@@ -254,12 +254,20 @@ export class BookletComponent implements OnInit {
         let isValid ;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
             isValid = data;
+            if(isValid == this.utente.useremail) {
+              this.validEmail = data;
+              this.createbooklet();
+            }else{
+              this.showThresholdModal();
+            }
+
         });
-        if(isValid = this.utente.useremail){
+        debugger;
+        /*if(isValid == this.utente.useremail){
             let data = {
                 ListContract:this.itemArray,
                 BookletDocumentId:this.documentiDef.documentid,
-                RecipientEmail:this.validEmail
+                RecipientEmail: isValid
             }
               this.apiService.CreateBooklet(data).subscribe((data: any) => {
                   console.log(data)
@@ -268,9 +276,10 @@ export class BookletComponent implements OnInit {
               await this.showThresholdModal();
               this.createbooklet();
 
-        }
+        }*/
 
     }
+    createBookLet
 
     async showThresholdModal() {
         this.thresholdModal.show();

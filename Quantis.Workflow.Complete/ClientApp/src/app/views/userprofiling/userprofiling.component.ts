@@ -28,7 +28,7 @@ export class UserProfilingComponent implements OnInit {
     datatableElement: DataTableDirective;
     dtTrigger: Subject<any> = new Subject();
     dtOptions: any = {};
-
+    loadingSpinner : boolean = false;
     isTreeLoaded = false;
     treesArray = [];
     allCurrentChildIds = [];
@@ -460,6 +460,7 @@ export class UserProfilingComponent implements OnInit {
         $(this.btnExporta.nativeElement).on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
+            $this.loadingSpinner = true;
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
                 $this.table2csv(datatable_Ref, 'full', '.csvTable');
             });
@@ -498,6 +499,10 @@ export class UserProfilingComponent implements OnInit {
         csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "ExportUserProfiling.csv");
+        setTimeout(()=>{
+          this.loadingSpinner=false;
+          debugger;
+        },500);
     }
 
     showContractsModal() {
