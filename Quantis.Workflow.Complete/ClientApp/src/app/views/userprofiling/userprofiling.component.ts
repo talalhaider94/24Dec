@@ -501,7 +501,6 @@ export class UserProfilingComponent implements OnInit {
         saveAs(blob, "ExportUserProfiling.csv");
         setTimeout(()=>{
           this.loadingSpinner=false;
-          debugger;
         },500);
     }
 

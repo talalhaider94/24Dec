@@ -253,7 +253,7 @@ export class BookletComponent implements OnInit {
     async addBooklet(){
         let isValid ;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
-            isValid = data;
+            isValid = false;
             if(isValid == this.utente.useremail) {
               this.validEmail = data;
               this.createbooklet();
@@ -262,7 +262,7 @@ export class BookletComponent implements OnInit {
             }
 
         });
-        debugger;
+
         /*if(isValid == this.utente.useremail){
             let data = {
                 ListContract:this.itemArray,
@@ -279,7 +279,6 @@ export class BookletComponent implements OnInit {
         }*/
 
     }
-    createBookLet
 
     async showThresholdModal() {
         this.thresholdModal.show();
