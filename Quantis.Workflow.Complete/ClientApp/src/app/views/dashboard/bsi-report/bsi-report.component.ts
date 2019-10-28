@@ -335,10 +335,11 @@ export class BSIReportComponent implements OnInit {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
                 // Create the select list and search operation
+
                 const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
                         that
-                            .search($(this).val())
+                          .search($(this).val()+'$', true, false, false)
                             .draw();
                     });
             });
