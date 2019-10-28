@@ -220,9 +220,13 @@ export class LandingPageComponent implements OnInit {
                 }else{
                     this.gridLength = this.gridsData.length;
                     if(this.gridsData.length>6){
-                        this.limitedData = this.gridsData.splice(0,6);
+                      this.limitedData = this.gridsData.splice(0,6);
+                      this.contName = this.limitedData;
+                      this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
-                        this.limitedData = this.gridsData;
+                      this.limitedData = this.gridsData;
+                      this.orignalArray = this.gridsData;
+                      this.contName = this.limitedData;
                     }
                 }
                 console.log("gridsData -> ", this.gridsData, this.limitedData);
