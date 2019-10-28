@@ -26,34 +26,11 @@ export class LandingPageComponent implements OnInit {
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
     @ViewChild('CompliantTable') block: ElementRef;
     @ViewChild('NonCompliantTable') block1: ElementRef;
-    dtOptions2: DataTables.Settings = {};
-    dtOptions: DataTables.Settings = {
-        language: {
-            processing: "Elaborazione...",
-            search: "Cerca:",
-            lengthMenu: "Visualizza _MENU_ elementi",
-            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-            infoEmpty: "Vista da 0 a 0 di 0 elementi",
-            infoFiltered: "(filtrati da _MAX_ elementi totali)",
-            infoPostFix: "",
-            loadingRecords: "Caricamento...",
-            zeroRecords: "La ricerca non ha portato alcun risultato.",
-            emptyTable: "Nessun dato presente nella tabella.",
-            paginate: {
-                first: "Primo",
-                previous: "Precedente",
-                next: "Seguente",
-                last: "Ultimo"
-            },
-            aria: {
-                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-            }
-        }
-    };
+    dtOptions: DataTables.Settings = {};
+    dtOpt: DataTables.Settings ={};
     loading: boolean;
     dtTrigger: Subject<any> = new Subject();
-    dtTrigger2: Subject<any> = new Subject();
+    dtTri: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
     contName: any = [];
@@ -154,8 +131,9 @@ export class LandingPageComponent implements OnInit {
             destroy:true
         };
 
-
-        this.dtOptions2 = {
+        this.dtOpt = {
+            pagingType: 'full_numbers',
+            pageLength: 1,
             language: {
                 processing: "Elaborazione...",
                 search: "Cerca:",
@@ -180,18 +158,18 @@ export class LandingPageComponent implements OnInit {
             },
             destroy:true
         };
-
     }
 
     ngAfterViewInit() {
-        this.dtTrigger.next();
-        this.dtTrigger2.next();
+    
+            this.dtTrigger.next();
+            this.dtTri.next();
         //this.getCOnfigurations();
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
-        this.dtTrigger2.unsubscribe();
+        this.dtTri.unsubscribe();
     }
 
     rerender(): void {
@@ -199,9 +177,11 @@ export class LandingPageComponent implements OnInit {
             // Destroy the table first
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
-            this.dtTrigger.next();
-            this.dtTrigger2.next();
-            this.loading = false;
+                this.dtTrigger.next();
+                setTimeout(() => {
+                this.dtTri.next();             
+                    
+                }, 1000);
         });
     }
 
@@ -338,9 +318,12 @@ export class LandingPageComponent implements OnInit {
 
     showNonCompliantModal(contractPartyId) {
         this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
-            this.KpiNonCompliants = data.filter(a => a.result != 'compliant')
-            console.log(this.KpiNonCompliants)
-            this.rerender();
+            this.KpiNonCompliants = data.filter(a => a.result == 'non compliant')
+            console.log(this.KpiNonCompliants,'kpinonCompiant')
+            // setTimeout(() => {
+                this.rerender();
+            // }, 1000);
+           
         });
         this.nonCompliantModal.show();
     }
