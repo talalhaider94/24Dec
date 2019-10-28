@@ -15,7 +15,7 @@
     <p class="mb-0 font-12"><b>Contracts:</b> {{ contracts }}</p>
     <p class="mb-0 font-12"><b>KPI:</b> {{ kpi }}</p>
     <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag" [oneToOne]="true"
-        class="w-100p d-block">
+        class="w-100p d-block" (click)="chartClicked($event)">
     </highcharts-chart>
 </div>
 
