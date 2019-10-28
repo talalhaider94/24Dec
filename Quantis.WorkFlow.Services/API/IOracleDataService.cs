@@ -32,5 +32,6 @@ namespace Quantis.WorkFlow.Services.API
 
         List<LandingPageLevel1DTO> GetLandingPageLevel1(int userId, int contractPartyId, string period);
         List<LandingPageBaseDTO> GetLandingPageKPIDetails(int userId, int contractPartyId, string period);
+        LandingPageLevel1DTO GetLandingPageLevel1ByContract(int userId, int contractId, string period);
     }
 }

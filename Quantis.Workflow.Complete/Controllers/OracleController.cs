@@ -178,6 +178,13 @@ namespace Quantis.WorkFlow.Controllers
             return _oracleAPI.GetLandingPageLevel1(usr.UserId, contractPartyId, period);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetLandingPageLevel1ByContract")]
+        public LandingPageLevel1DTO GetLandingPageLevel1ByContract(int contractId, string period)
+        {
+            var usr = HttpContext.User as AuthUser;
+            return _oracleAPI.GetLandingPageLevel1ByContract(usr.UserId, contractId, period);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetLandingPageKPIDetails")]
         public List<LandingPageBaseDTO> GetLandingPageKPIDetails(int contractPartyId, string period)
         {

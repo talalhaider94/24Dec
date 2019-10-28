@@ -487,6 +487,163 @@ r.rule_name,
             }
         }
 
+        public LandingPageLevel1DTO GetLandingPageLevel1ByContract(int userId, int contractId, string period)
+        {
+            var basedtos = new List<LandingPageBaseDTO>();
+            var kpis = _dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
+            if (!kpis.Any())
+            {
+                return null;
+            }
+            string query = @"select temp.customer_id, temp.customer_name, temp.sla_id, temp.sla_name, temp.global_rule_name, temp.global_rule_id,
+                                psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce from (
+                                select
+                                c.customer_id,
+                                c.customer_name,
+                                r.rule_id,
+                                r.rule_name,
+                                r.global_rule_id,
+                                m.sla_id,
+                                m.sla_name,
+                                gr.global_rule_name,
+                                r.service_level_target,
+                                trf.yellow_thr as ESCALATION,
+                                h.DOMAIN_CATEGORY_RELATION AS RELATION,
+                                r.RULE_PERIOD_TIME_UNIT,
+                                r.RULE_PERIOD_INTERVAL_LENGTH,
+                                h.DOMAIN_CATEGORY_ID,
+                                h.DOMAIN_CATEGORY_NAME,
+                                r.HOUR_TU_CALC_STATUS,
+                                r.DAY_TU_CALC_STATUS,
+                                r.WEEK_TU_CALC_STATUS,
+                                r.MONTH_TU_CALC_STATUS,
+                                r.QUARTER_TU_CALC_STATUS,
+                                r.YEAR_TU_CALC_STATUS
+                                from t_rules r
+                                left join t_sla_versions s on r.sla_version_id = s.sla_version_id
+                                left join t_slas m on m.sla_id = s.sla_id
+                                left join T_GLOBAL_RULES gr on r.global_rule_id = gr.global_rule_id
+                                left join T_DOMAIN_CATEGORIES h on r.DOMAIN_CATEGORY_ID = h.DOMAIN_CATEGORY_ID
+                                left join t_customers c on c.customer_id = m.customer_id
+                                left join t_report_threshold_rules_flat trf on r.global_rule_id = trf.global_rule_id
+                                where s.status ='EFFECTIVE' AND m.sla_status ='EFFECTIVE'
+                                and r.is_effective = 'Y'
+                                and m.sla_id = :sla_id
+                                and {0}
+                               ) temp
+
+                                left join
+                                 ( select
+                                  temp.global_rule_id,
+                                  temp.time_stamp as timestamp,
+                                  temp.time_stamp_utc as end_period,
+                                  temp.begin_time_stamp_utc as start_period,
+                                  temp.sla_id,
+                                  temp.rule_id,
+                                  temp.time_unit,
+                                  temp.interval_length,
+                                  temp.is_period,
+                                  temp.service_level_target,
+                                  temp.service_level_target_ce,
+                                  temp.provided_ce,
+                                  temp.deviation_ce,
+                                  temp.complete_record,
+                                  temp.sla_version_id,
+                                  temp.metric_type_id,
+                                  temp.domain_category_id,
+                                  temp.service_domain_id,
+                                  case
+                                    when deviation_ce > 0 then 'non compliant'
+                                    when deviation_ce < 0 then 'compliant'
+                                    else 'nc'
+                                  end as resultPsl
+                                  from
+                                  (
+                                    select *
+                                    from t_psl_0_month pm
+                                    union all
+                                    select *
+                                    from t_psl_0_quarter pq
+                                    union all
+                                    select *
+                                    from t_psl_0_year py
+                                   union all
+                                    select *
+                                    from t_psl_1_all pa
+                                  ) temp
+                                  where provided is not null
+                                  and service_level_target is not null
+                                  and time_unit='MONTH'
+                                    and complete_record=1
+                                    and TRUNC(begin_time_stamp_utc) >= TO_DATE(:start_period,'yyyy-mm-dd')
+                                    and TRUNC(time_stamp_utc) <= TO_DATE(:end_period,'yyyy-mm-dd')
+                                    and {1}
+                                ) psl
+                                on psl.global_rule_id = temp.global_rule_id";
+            string filter1 = QuantisUtilities.GetOracleGlobalRuleInQuery("gr.global_rule_id", kpis);
+            string filter2 = QuantisUtilities.GetOracleGlobalRuleInQuery("global_rule_id", kpis);
+
+            query = string.Format(query, filter1, filter2);
+            var startDate = new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
+            using (OracleConnection con = new OracleConnection(_connectionstring))
+            {
+                using (OracleCommand cmd = con.CreateCommand())
+                {
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = query;
+                    OracleParameter param1 = new OracleParameter("start_period", startDate.AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param2 = new OracleParameter("end_period", startDate.AddMonths(1).AddDays(-1).ToString("yyyy-MM-dd"));
+                    OracleParameter param3 = new OracleParameter("sla_id", contractId);
+                    cmd.Parameters.Add(param1);
+                    cmd.Parameters.Add(param2);
+                    cmd.Parameters.Add(param3);
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        basedtos.Add(new LandingPageBaseDTO()
+                        {
+                            ContractPartyId = Decimal.ToInt32((Decimal)reader[0]),
+                            ContractPartyName = (string)reader[1],
+                            ContractId = Decimal.ToInt32((Decimal)reader[2]),
+                            ContractName = (string)reader[3],
+                            GlobalRuleName = (string)reader[4],
+                            GlobalRuleId = Decimal.ToInt32((Decimal)reader[5]),
+                            Target = (reader[6] == DBNull.Value) ? 0 : (double)reader[6],
+                            Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
+                            Result = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
+                            Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
+                        });
+                    }
+                    var result = basedtos.GroupBy(o => new { o.ContractId, o.ContractName }).Select(p => new LandingPageLevel1DTO()
+                    {
+                        ContractId = p.Key.ContractId,
+                        ContractName = p.Key.ContractName,
+                        AverageDeviation = p.Average(o => o.Deviation),
+                        ComplaintPercentage = (p.Count(o => o.Result == "compliant") * 100) / p.Count(),
+                        TotalKPIs = p.Count(),
+                        ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
+                        NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
+                        BestKPIs = p.Where(o => o.Result != "").OrderByDescending(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        {
+                            KPIID = o.GlobalRuleId,
+                            KPIName = o.GlobalRuleName,
+                            Target = o.Target,
+                            Value = o.Actual
+                        }).ToList(),
+                        WorstKPIs = p.Where(o => o.Result != "").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        {
+                            KPIID = o.GlobalRuleId,
+                            KPIName = o.GlobalRuleName,
+                            Target = o.Target,
+                            Value = o.Actual
+                        }).ToList(),
+                    }).FirstOrDefault();
+                    return result;
+                }
+            }
+        }
+
         public List<LandingPageBaseDTO> GetLandingPageKPIDetails(int userId, int contractPartyId, string period)
         {
             var basedtos = new List<LandingPageBaseDTO>();
