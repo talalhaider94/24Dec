@@ -108,6 +108,7 @@ export class LandingPageComponent implements OnInit {
                 this.toastr.error("Nessun contraente assegnato all'utente");
                 this.loading = false;
             }else{
+                this.setViewAll=0;
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
@@ -207,6 +208,7 @@ export class LandingPageComponent implements OnInit {
     populateDateFilter() {
         if (this.monthVar == null || this.yearVar == null) {
         } else {
+            this.setViewAll=0;
             this.loading = true;
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;

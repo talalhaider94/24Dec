@@ -88,13 +88,13 @@
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li class="top-border">
-                                        <a href="#">
+                                        <!-- <a href="#"> -->
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
                                                 <div *ngIf="row.complaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-success':row.complaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.complaintkpis}}</div>
                                                 <div *ngIf="row.noncomplaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-danger':row.noncomplaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.noncomplaintkpis}}</div>
                                             </div>
-                                        </a>
+                                        <!-- </a> -->
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
                                     <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal(row.contractpartyid)">{{row.noncomplaintkpis}}</button></a></li>
@@ -220,13 +220,13 @@
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li class="top-border">
-                                        <a href="#">
+                                        <!-- <a href="#"> -->
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
                                                 <div *ngIf="row.complaintkpis!=0" class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
                                                 <div *ngIf="row.noncomplaintkpis!=0" class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
-                                        </a>
+                                        <!-- </a> -->
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
                                     <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal(row.contractpartyid)">{{row.noncomplaintkpis}}</button></a></li>
