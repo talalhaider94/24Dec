@@ -24,30 +24,8 @@ export class EmailComponent implements OnInit {
     isenable: boolean = false;
     description: any = '';
 
-    dtOptions: DataTables.Settings = {
-        language: {
-            processing: "Elaborazione...",
-            search: "Cerca:",
-            lengthMenu: "Visualizza _MENU_ elementi",
-            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-            infoEmpty: "Vista da 0 a 0 di 0 elementi",
-            infoFiltered: "(filtrati da _MAX_ elementi totali)",
-            infoPostFix: "",
-            loadingRecords: "Caricamento...",
-            zeroRecords: "La ricerca non ha portato alcun risultato.",
-            emptyTable: "Nessun dato presente nella tabella.",
-            paginate: {
-                first: "Primo",
-                previous: "Precedente",
-                next: "Seguente",
-                last: "Ultimo"
-            },
-            aria: {
-                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-            }
-        }
-    };
+  dtOptions: DataTables.Settings = {};
+    
 
     modalData = {
         email_body: ''
@@ -61,16 +39,17 @@ export class EmailComponent implements OnInit {
         description: ''
     };
 
-    dtTrigger: Subject<any> = new Subject();
-    ConfigTableBodyData: any = [
+  dtTrigger: Subject<any> = new Subject();
+  dataEmails: any = {};
+  ConfigTableBodyData: any = {};/* [
         {
             type: '',
             user_domain: '',
             period: '',
             form_name: '',
             notify_date: ''
-        }
-    ]
+      }
+    ]*/
 
     constructor(
         private apiService: ApiService,
@@ -85,7 +64,47 @@ export class EmailComponent implements OnInit {
 
     ngOnInit() {
         this.monthVar = moment().format('MM');
-        this.yearVar = moment().format('YY');
+      this.yearVar = moment().format('YY');
+      this.dtOptions = {
+        columnDefs: [
+          { "visible": false, "targets": 0 }
+        ],
+        drawCallback: function (settings) {
+          var api = this.api();
+          var rows = api.rows({ page: 'current' }).nodes();
+          var last = null;
+          api.column(0, { page: 'current' }).data().each(function (group, i) {
+            if (last !== group) {
+              $(rows).eq(i).before(
+                '<tr style="background-color:#eedc00" class="group"><th colspan="6">' + group + '</th></tr>'
+              );
+              last = group;
+            }
+          });
+        },
+        language: {
+          processing: "Elaborazione...",
+          search: "Cerca:",
+          lengthMenu: "Visualizza _MENU_ elementi",
+          info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+          infoEmpty: "Vista da 0 a 0 di 0 elementi",
+          infoFiltered: "(filtrati da _MAX_ elementi totali)",
+          infoPostFix: "",
+          loadingRecords: "Caricamento...",
+          zeroRecords: "La ricerca non ha portato alcun risultato.",
+          emptyTable: "Nessun dato presente nella tabella.",
+          paginate: {
+            first: "Primo",
+            previous: "Precedente",
+            next: "Seguente",
+            last: "Ultimo"
+          },
+          aria: {
+            sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+            sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+          }
+        }
+      };
         this.populateDateFilter();
 
         console.log(this.monthVar + '/' + this.yearVar);
@@ -99,7 +118,22 @@ export class EmailComponent implements OnInit {
     populateDateFilter() {
         this.loading = true;
         this.apiService.getEmails(this.monthVar, this.yearVar).subscribe((data: any) => {
-            this.ConfigTableBodyData = data;
+          //this.ConfigTableBodyData = data;
+          this.dataEmails = data;
+          console.log(this.dataEmails)
+          var groupBy = function (xs, key) {
+            return xs.reduce(function (rv, x) {
+              //(rv[x[key]] = rv[x[key]] || []).push(x);
+              //(rv[x[key]] = rv[x[key]] || [])[x.form_id] = { form_name: x.form_name };
+              var index = (rv[x[key]] = rv[x[key]] || []).findIndex(e => e.form_name == x.form_name);
+              if (index === -1) {
+                (rv[x[key]] = rv[x[key]] || []).push(x);
+              }
+              return rv;
+            }, {});
+          };
+          this.ConfigTableBodyData = groupBy(data, 'user_domain')
+          console.log(this.ConfigTableBodyData)
             this.rerender();
 
             // this.numeroContratti();
@@ -107,7 +141,7 @@ export class EmailComponent implements OnInit {
             // },error=>{
             //   this.toastr.error("errore di connessione al sever");
         }, (err) => {
-            this.ConfigTableBodyData = [];
+          this.ConfigTableBodyData = {};
             this.loading = false;
         });
     }
@@ -197,8 +231,22 @@ export class EmailComponent implements OnInit {
 
     getCOnfigurations() {
         this.loading = true;
-        this.apiService.getEmails(this.monthVar, this.yearVar).subscribe((data) => {
-            this.ConfigTableBodyData = data;
+      this.apiService.getEmails(this.monthVar, this.yearVar).subscribe((data) => {
+        this.dataEmails = data;
+        console.log(this.dataEmails)
+        var groupBy = function (xs, key) {
+          return xs.reduce(function (rv, x) {
+            //(rv[x[key]] = rv[x[key]] || []).push(x);
+            //(rv[x[key]] = rv[x[key]] || [])[x.form_id] = { form_name: x.form_name };
+            var index = (rv[x[key]] = rv[x[key]] || []).findIndex(e => e.form_name == x.form_name);
+            if (index === -1) {
+              (rv[x[key]] = rv[x[key]] || []).push(x);
+            }
+            return rv;
+          }, {});
+        };
+        this.ConfigTableBodyData = groupBy(data, 'user_domain')
+            //this.ConfigTableBodyData = data;
             console.log('Emails Data ', data);
             this.rerender();
         }, (err) => {
