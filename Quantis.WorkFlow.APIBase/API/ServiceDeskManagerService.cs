@@ -316,11 +316,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 ret = parseNewTicket(ticket);
                 var sdm_fact = new SDM_TicketFact()
                 {
-                    complaint = (dto.Description.IndexOf("[Complaint]") != -1),
+                    complaint = (dto.Description.IndexOf("[Compliant]") != -1),
                     created_on = DateTime.Now,
                     global_rule_id = int.Parse(dto.zz3_KpiIds.Split('|')[1]),
                     notcalculated = (dto.Description.IndexOf("[Non Calcolato]") != -1),
-                    notcomplaint = (dto.Description.IndexOf("[Non Complaint]") != -1),
+                    notcomplaint = (dto.Description.IndexOf("[Non Compliant]") != -1),
                     period_month = DateTime.Now.AddMonths(-1).Month,
                     period_year = DateTime.Now.AddMonths(-1).Year,
                     primary_contract_party_id = dto.GroupCategoryId,

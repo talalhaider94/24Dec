@@ -144,6 +144,10 @@ export class ApiService {
         const getkpidetailsEndPoint = `${environment.API_URL}/oracle/GetLandingPageKPIDetails?contractPartyId=${contractPartyId}&period=${month}/${year}`;
         return this.http.get(getkpidetailsEndPoint);
     }
+    GetDayLevelKPIData(globalRuleId, month, year): Observable<any> {
+        const getDayLevelEndPoint = `${environment.API_URL}/data/GetDayLevelKPIData?globalRuleId=${globalRuleId}&month=${month}&year=${year}`;
+        return this.http.get(getDayLevelEndPoint);
+    }
 
 
     AddUpdateUserSettings(key,value): Observable<any> {

@@ -44,34 +44,34 @@
         </div>
         <br>
         <div [ngStyle]="{'display': loading? 'none' : 'unset'}">
-            <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <table class="table stripe" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                 <thead style="background: #20a8d8">
-                    <tr style="font-size:12px;color:white">
-                        <th style="text-align:center">TIPO</th>
-                        <th style="text-align:center">DESTINATARIO</th>
-                        <th style="text-align:center">PERIODO</th>
-                        <th style="text-align:center">FORM</th>
-                        <th style="text-align:center">DATA DI INVIO</th>
-                        <th style="text-align:center;">TESTO</th>
-                        <th style="display:none">TESTO1</th>
-                    </tr>
+                  <tr style="font-size:12px;color:white">
+                    <th class="text-center" style="display:none">DESTINATARIO</th>
+                    <th style="text-align:center">TIPO</th>
+                    <th style="text-align:center">PERIODO</th>
+                    <th style="text-align:center">FORM</th>
+                    <th style="text-align:center">DATA DI INVIO</th>
+                    <th style="text-align:center;">TESTO</th>
+                    <th style="display:none">TESTO1</th>
+                  </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of ConfigTableBodyData; index as i">
-                        <td style="text-align: center">{{row.type}}</td>
-                        <td style="text-align: center">{{row.user_domain}} {{row.recipient}}</td>
-                        <td style="text-align: center">{{row.period}}</td>
-                        <td style="text-align: center">{{row.form_name}}</td>
-                        <td style="text-align: center">{{row.notify_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
-                        <td style="text-align: center">
-                            <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
-                                    data-target="#configModal" style="font-size:10px">
-                                <i class="fa fa-envelope"></i>
-                            </button>
-                        </td>
-                        <td style="display:none">{{row.email_body}}</td>
-                        <!-- <td class="tagsTip" style="text-align: center" data-ext="" attr.data-ext="{{row.email_body}}" [innerHTML]="row.email_body | slice:0:100"></td> -->
-                    </tr>
+                  <tr *ngFor="let row of dataEmails; let i = index">
+                    <td style="text-align: center">{{row.user_domain}} {{row.recipient}}</td>
+                    <td style="text-align: center">{{row.type}}</td>
+                    <td style="text-align: center">{{row.period}}</td>
+                    <td style="text-align: center">{{row.form_name}}</td>
+                    <td style="text-align: center">{{row.notify_date | date: 'dd/MM/yyyy, h:mm a' || 'N/A' }}</td>
+                    <td style="text-align: center">
+                      <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
+                              data-target="#configModal" style="font-size:10px">
+                        <i class="fa fa-envelope"></i>
+                      </button>
+                    </td>
+                    <td style="display:none">{{row.email_body}}</td>
+                    <!-- <td class="tagsTip" style="text-align: center" data-ext="" attr.data-ext="{{row.email_body}}" [innerHTML]="row.email_body | slice:0:100"></td> -->
+                  </tr>
                 </tbody>
             </table>
         </div>

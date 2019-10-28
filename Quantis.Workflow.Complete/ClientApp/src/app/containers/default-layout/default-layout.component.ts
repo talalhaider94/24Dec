@@ -212,4 +212,8 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         this.dashboardService.selectLandingPage().subscribe(data => {
         });
     }
+
+    powerBI(){
+        window.open("https://rapid.posteitaliane.it", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1200,height=1200");
+    }
 }

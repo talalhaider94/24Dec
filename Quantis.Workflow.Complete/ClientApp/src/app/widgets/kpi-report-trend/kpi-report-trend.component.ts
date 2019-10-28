@@ -676,4 +676,280 @@ export class KpiReportTrendComponent implements OnInit {
         }
     }
 
+
+
+    // public chartClicked(): void {
+    //     this.months.length = 0;
+    //     this.isLoadedDati2 = 0;
+
+    //     var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+    //     var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+
+    //     var fromMonth = fromCheck.format('M');
+    //     var fromYear  = fromCheck.format('YYYY');
+
+    //     var toMonth = toCheck.format('M');
+    //     var toYear  = toCheck.format('YYYY');
+
+    //     this.selectedmonth = toMonth;
+    //     this.selectedyear = toYear;
+
+    //     this.to_year = toYear;
+
+    //     while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+    //         let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+    //         this.months.push(monthyear);
+    //         fromCheck.add(1,'month');
+    //     }
+
+    //     // console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid, this.ReportDetailsData.fromdate,
+    //     // this.ReportDetailsData.todate);
+
+    //     console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+    //     console.log('Months -> ',this.months);
+
+    //     this.getdati1(toMonth,toYear);
+    // }
+
+    // public chartClicked2(): void {
+    //     this.months2.length = 0;
+    //     this.isLoadedDati = 0;
+
+    //     var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+    //     var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+
+    //     var fromMonth = fromCheck.format('M');
+    //     var fromYear  = fromCheck.format('YYYY');
+
+    //     var toMonth = toCheck.format('M');
+    //     var toYear  = toCheck.format('YYYY');
+
+    //     this.selectedmonth = toMonth;
+    //     this.selectedyear = toYear;
+
+    //     this.to_year2 = toYear;
+
+    //     while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+    //         let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+    //         this.months2.push(monthyear);
+    //         fromCheck.add(1,'month');
+    //     }
+
+    //     console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+    //     console.log('Months -> ',this.months2);
+
+    //     // console.log('Chart Clicked2 -> ',this.ReportDetailsData);
+
+    //     this.getdati2(toMonth,toYear);
+    // }
+
+    // getdati1(toMonth,toYear) {
+    //     this.periodFilter = 1;
+    //     let month;
+    //     let year;
+    //     if(toMonth<10){
+    //         month = '0' + toMonth;
+    //     }else{
+    //         month = toMonth;
+    //     }
+    //     //year = '2018';
+    //     year = toYear;
+    //     let kpiId = this.ReportDetailsData.globalruleid;
+    //     // let month = '08';
+    //     // let year = '2018';
+    //     //let kpiId = 39412;
+    //     this.loadingModalDati = true;
+    //     this.isLoadedDati=1;
+
+    //     console.log('getdati1 -> ',kpiId,month,year);
+
+    //     this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+    //         this.fitroDataById = dati;
+    //         //console.log(dati);
+    //         Object.keys(this.fitroDataById).forEach(key => {
+    //             this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+    //             switch (this.fitroDataById[key].event_state_id) {
+    //                 case 1:
+    //                     this.fitroDataById[key].event_state_id = "Originale";
+    //                     break;
+    //                 case 2:
+    //                     this.fitroDataById[key].event_state_id = "Sovrascritto";
+    //                     break;
+    //                 case 3:
+    //                     this.fitroDataById[key].event_state_id = "Eliminato";
+    //                     break;
+    //                 case 4:
+    //                     this.fitroDataById[key].event_state_id = "Correzione";
+    //                     break;
+    //                 case 5:
+    //                     this.fitroDataById[key].event_state_id = "Correzione eliminata";
+    //                     break;
+    //                 case 6:
+    //                     this.fitroDataById[key].event_state_id = "Business";
+    //                     break;
+    //                 default:
+    //                     this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+    //                     break;
+    //             }
+    //             this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+    //             this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+    //             this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+    //             this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+    //             this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+    //         })
+    //         this.getCountCampiData();
+
+    //         let max = this.countCampiData.length;
+
+    //         Object.keys(this.fitroDataById).forEach(key => {
+    //             let temp = Object.keys(this.fitroDataById[key].data).length;
+    //             if (temp < max) {
+    //                 for (let i = 0; i < (max - temp); i++) {
+    //                     this.fitroDataById[key].data['empty#' + i] = '##empty##';
+    //                 }
+    //             }
+    //         })
+    //         console.log('dati', dati);
+    //         this.loadingModalDati = false;
+    //     },
+    //     error => {
+    //         this.loadingModalDati = false;
+    //     });
+    // }
+
+    // getdati2(toMonth,toYear) {
+    //     this.periodFilter = 1;
+    //     let month;
+    //     let year;
+    //     if(toMonth<10){
+    //         month = '0' + toMonth;
+    //     }else{
+    //         month = toMonth;
+    //     }
+    //     // let month = '10';
+    //     //year = '2018';
+    //     year = toYear;
+    //     let kpiId = this.ReportDetailsData.globalruleid;
+    //     //let kpiId = 39412;
+    //     this.loadingModalDati2 = true;
+    //     this.isLoadedDati2=1;
+
+    //     console.log('getdati2 -> ',kpiId,month,year);
+
+    //     this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+    //         this.fitroDataById2 = dati;
+    //         //console.log(dati);
+    //         Object.keys(this.fitroDataById2).forEach(key => {
+    //             this.fitroDataById2[key].data = JSON.parse(this.fitroDataById2[key].data);
+    //             switch (this.fitroDataById2[key].event_state_id) {
+    //                 case 1:
+    //                     this.fitroDataById2[key].event_state_id = "Originale";
+    //                     break;
+    //                 case 2:
+    //                     this.fitroDataById2[key].event_state_id = "Sovrascritto";
+    //                     break;
+    //                 case 3:
+    //                     this.fitroDataById2[key].event_state_id = "Eliminato";
+    //                     break;
+    //                 case 4:
+    //                     this.fitroDataById2[key].event_state_id = "Correzione";
+    //                     break;
+    //                 case 5:
+    //                     this.fitroDataById2[key].event_state_id = "Correzione eliminata";
+    //                     break;
+    //                 case 6:
+    //                     this.fitroDataById2[key].event_state_id = "Business";
+    //                     break;
+    //                 default:
+    //                     this.fitroDataById2[key].event_state_id = this.fitroDataById2[key].event_state_id;
+    //                     break;
+    //             }
+    //             this.fitroDataById2[key].event_type_id = this.eventTypes[this.fitroDataById2[key].event_type_id] ? this.eventTypes[this.fitroDataById2[key].event_type_id] : this.fitroDataById2[key].event_type_id;
+    //             this.fitroDataById2[key].resource_id = this.resources[this.fitroDataById2[key].resource_id] ? this.resources[this.fitroDataById2[key].resource_id] : this.fitroDataById2[key].resource_id;
+    //             this.fitroDataById2[key].modify_date = moment(this.fitroDataById2[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+    //             this.fitroDataById2[key].create_date = moment(this.fitroDataById2[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+    //             this.fitroDataById2[key].time_stamp = moment(this.fitroDataById2[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+    //         })
+    //         this.getCountCampiData2();
+
+    //         let max = this.countCampiData.length;
+
+    //         Object.keys(this.fitroDataById2).forEach(key => {
+    //             let temp = Object.keys(this.fitroDataById2[key].data).length;
+    //             if (temp < max) {
+    //                 for (let i = 0; i < (max - temp); i++) {
+    //                     this.fitroDataById2[key].data['empty#' + i] = '##empty##';
+    //                 }
+    //             }
+    //         })
+    //         //console.log('dati', dati);
+    //         this.loadingModalDati2 = false;
+    //     },
+    //     error => {
+    //         this.loadingModalDati2 = false;
+    //     });
+    // }
+
+
+    // getCountCampiData() {
+    //     let maxLength = 0;
+    //     this.fitroDataById.forEach(f => {
+    //         //let data = JSON.parse(f.data);
+    //         if (Object.keys(f.data).length > maxLength) {
+    //             maxLength = Object.keys(f.data).length;
+    //         }
+    //     });
+    //     this.countCampiData = [];
+    //     for (let i = 1; i <= maxLength; i++) {
+    //         this.countCampiData.push(i);
+    //     }
+    // }
+    
+    // getCountCampiData2() {
+    //     let maxLength = 0;
+    //     this.fitroDataById2.forEach(f => {
+    //         //let data = JSON.parse(f.data);
+    //         if (Object.keys(f.data).length > maxLength) {
+    //             maxLength = Object.keys(f.data).length;
+    //         }
+    //     });
+    //     this.countCampiData = [];
+    //     for (let i = 1; i <= maxLength; i++) {
+    //         this.countCampiData.push(i);
+    //     }
+    // }
+
+    // selectedMonth(e){
+    //     let stringToSplit = this.monthVar;
+    //     let split = stringToSplit.split("/");
+    //     let month = split[0];
+    //     let year = split[1];
+
+    //     console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+    //     this.selectedmonth = month;
+    //     this.selectedyear = year;
+
+    //     this.getdati1(month,year);
+    // }
+
+    // selectedMonth2(e){
+    //     let stringToSplit = this.monthVar2;
+    //     let split = stringToSplit.split("/");
+    //     let month = split[0];
+    //     let year = split[1];
+
+    //     console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+    //     this.selectedmonth = month;
+    //     this.selectedyear = year;
+
+    //     this.getdati2(month,year);
+    // }
+
+
+    chartClicked(e){
+        console.log(e);
+    }
+
 }

@@ -3,7 +3,14 @@
             [asideMenuToggler]="'lg'">
   <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
-      <a class="nav-link pointer-cursor text-gray" (click)="dashboardList()">Dashboards</a>
+     <div class="row">
+        <div class="col-md-6">
+          <a class="nav-link pointer-cursor text-gray" (click)="dashboardList()">Dashboards</a>
+        </div>
+        <div class="col-md-6">
+          <a class="nav-link pointer-cursor text-gray" (click)="powerBI()">Power BI</a>
+        </div>
+     </div>
     </li>
   </ul>
   <ul class="nav navbar-nav ml-auto">

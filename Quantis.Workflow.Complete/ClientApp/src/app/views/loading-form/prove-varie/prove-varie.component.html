@@ -142,16 +142,17 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 offset-sm-6 text-right" *ngIf="readOnlyUserForm">
-                                    <button type="submit" class="btn btn-primary" (click)="after_submit('save')"
-                                            [disabled]="!myInputForm.valid || loading || formElementsLoading">
-                                        <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
-                                    </button>
-                                    <button type="submit" class="btn btn-primary" (click)="after_submit('saveExit')"
-                                            [disabled]="!myInputForm.valid || loading || formElementsLoading">
-                                        <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva e Esci
-                                    </button>
-                                    <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
-                                       class="btn btn-danger text-white">Annulla</a>
+                                  <button type="submit" class="btn btn-primary" (click)="after_submit('saveExit')"
+                                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
+                                  </button>
+                                  <button type="submit" class="btn btn-primary" (click)="after_submit('save')"
+                                          [disabled]="!myInputForm.valid || loading || formElementsLoading">
+                                    <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva e Continua
+                                  </button>
+
+                                  <a [ngClass]="{'disabled': loading}" [routerLink]="['/loading-form/utente']"
+                                     class="btn btn-danger text-white">Annulla</a>
                                 </div>
                             </div>
                         </form>

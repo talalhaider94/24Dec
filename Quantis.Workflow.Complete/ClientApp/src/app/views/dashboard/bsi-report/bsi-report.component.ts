@@ -133,6 +133,14 @@ export class BSIReportComponent implements OnInit {
     highcharts = Highcharts;
     reportsDataLength;
     cartellaList : any = [];
+
+    constructor(
+        private apiService: ApiService,
+        private $toastr: ToastrService,
+    ) {
+        $this = this;
+    }
+
     chartOptions = {
         lang: chartExportTranslations,
         credits: false,
@@ -157,9 +165,22 @@ export class BSIReportComponent implements OnInit {
                 point: {
                     events: {
                         click: function () {
+                            
                             this.bar_period = this.category;
                             this.bar_value = this.y;
                             alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
+
+                            let stringToSplit = this.bar_period;
+                            let split = stringToSplit.split("/");
+                            let month = split[0];
+                            let year = split[1];
+
+                            this.getDayLevelData(month,year);
+
+                            // let kpiId = this.ReportDetailsData.globalruleid;
+                            // let x = JSON.parse(localStorage.getItem('globalruleid'));
+                            //console.log('GetDayLevelKPIData -> ',x,kpiId,month,year);
+                           
                         }
                     }
                 }
@@ -217,15 +238,9 @@ export class BSIReportComponent implements OnInit {
         },
     };
 
-    constructor(
-        private apiService: ApiService,
-        private $toastr: ToastrService,
-    ) {
-        $this = this;
-    }
-
     ngOnInit() {
       this.cartellaSelectOption = '';
+      //this.getDayLevelData('02','2019');
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -298,6 +313,12 @@ export class BSIReportComponent implements OnInit {
             console.error('getReportDetails', error);
             this.loading = false;
             this.$toastr.error('Error while fetching report data');
+        });
+    }
+
+    getDayLevelData(month, year){
+        this.apiService.GetDayLevelKPIData(37799,month,year).subscribe((data) => {
+            console.log('GetDayLevelKPIData -> ',data);
         });
     }
 
@@ -555,6 +576,7 @@ export class BSIReportComponent implements OnInit {
         //year = '2018';
         year = toYear;
         let kpiId = this.ReportDetailsData.globalruleid;
+        localStorage.setItem('globalruleid', JSON.stringify(this.ReportDetailsData.globalruleid));
         // let month = '08';
         // let year = '2018';
         //let kpiId = 39412;
