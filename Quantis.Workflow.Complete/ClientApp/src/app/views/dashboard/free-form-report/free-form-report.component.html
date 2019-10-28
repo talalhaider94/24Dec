@@ -30,7 +30,7 @@
                                     <td>
                                         <div>
                                             <button class="btn btn-primary btn-sm" title="View" (click)="viewAssigned(assignedQuery)"><span class="fa fa-eye"></span></button>
-                                            <button class="btn btn-success btn-sm" title="Edit" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
+                                            <button class="btn btn-warning btn-sm" title="Edit" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -276,28 +276,28 @@ aria-hidden="true">
         </div>
         <div class="modal-body">
             <form [formGroup]="addEditQueryForm" (ngSubmit)="onQueryReportFormSubmit($event)">
-                <button type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
+                <button [hidden]="isReadonly==1" type="button" class="btn btn-success float-right" (click)="addParameters()">+ Parametri</button><br><br>
                 <div class="form-group" style="width:50%">
-                    <input type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
+                    <input [readonly]="isReadonly==1" type="text" formControlName="QueryName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryName.errors }" placeholder="Nome Query">
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryName.errors && f.QueryName.errors.required">Inserire nome valido per la query</span>
                 <div class="form-group">
-                    <textarea type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
+                    <textarea [readonly]="isReadonly==1" type="text" rows="6" formControlName="QueryText" style="font-size:16px" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.QueryText.errors }" placeholder="Testo Query"></textarea>
                 </div>
                 <span class="text-danger mb-3" *ngIf="submitted && f.QueryText.errors && f.QueryText.errors.required">Inserire testo valido per la query</span>
                 <!-- <span *ngIf="parameterCount>0"> -->
                 <div style="width:50%" formArrayName="Parameters" *ngFor="let Parameter of addEditQueryForm.get('Parameters')['controls']; let i = index;">
                     <div class="row" [formGroupName]="i">
-                        <div class="col-md-4"><input (keypress)="omit_special_char($event)" (keydown)="onKeydown($event)" placeholder="Key" formControlName="key" class="form-control"></div>
+                        <div class="col-md-4"><input [readonly]="isReadonly==1" (keypress)="omit_special_char($event)" (keydown)="onKeydown($event)" placeholder="Key" formControlName="key" class="form-control"></div>
                         <div class="col-md-5"><input placeholder="Value" formControlName="value" class="form-control"></div>
                         <div class="col-md-2 ml-1">
-                            <button type="button" class="btn btn-danger" (click)="deleteParameters(i)"><span class="fa fa-times"></span></button>
+                            <button [hidden]="isReadonly==1" type="button" class="btn btn-danger" (click)="deleteParameters(i)"><span class="fa fa-times"></span></button>
                         </div>
                     </div><br>
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <button [disabled]="formLoading" type="submit" class="btn btn-success">
+                        <button [hidden]="isReadonly==1" [disabled]="formLoading" type="submit" class="btn btn-success">
                             <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva
                         </button>
                         <button [disabled]="" type="button" name="debug" (click)="onQueryReportFormSubmit('debug')" class="btn btn-primary">Esegui</button>
