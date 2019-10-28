@@ -240,7 +240,7 @@ export class BSIReportComponent implements OnInit {
 
     ngOnInit() {
       this.cartellaSelectOption = '';
-      this.getDayLevelData('02','2019');
+      //this.getDayLevelData('02','2019');
     }
 
     // tslint:disable-next-line:use-life-cycle-interface

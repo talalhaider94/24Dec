@@ -145,7 +145,7 @@ export class ApiService {
         return this.http.get(getkpidetailsEndPoint);
     }
     GetDayLevelKPIData(globalRuleId, month, year): Observable<any> {
-        const getDayLevelEndPoint = `${environment.API_URL}/data/GetDayLevelKPIData?globalRuleId=${globalRuleId}&month=${month}&year${year}`;
+        const getDayLevelEndPoint = `${environment.API_URL}/data/GetDayLevelKPIData?globalRuleId=${globalRuleId}&month=${month}&year=${year}`;
         return this.http.get(getDayLevelEndPoint);
     }
 
