@@ -138,7 +138,18 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     }
 
     dashboardList() {
-        this.router.navigate(['/dashboard/list']);
+        //this.router.navigate(['/dashboard/list']);
+        let x = JSON.parse(localStorage.getItem('currentUser'));
+        let dashboardid = x.defaultdashboardid;
+
+        if(dashboardid==-1){
+            this.router.navigate(['/dashboard/landingpage']);
+        }else if(dashboardid!=-1){
+            this.router.navigate(['/dashboard/public', dashboardid]);
+        }else{
+            this.router.navigate(['dashboard/nodashboard']);
+        }
+        //console.log('dashboardid: ',dashboardid);
     }
 
     dashboardNavigation(id) {

@@ -100,6 +100,7 @@ export class LandingPageComponent implements OnInit {
 
         this.loading = true;
         this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
+            console.log("gridsData -> ", data);
             this.gridsData = data;
             if(this.gridsData == null){
                 this.toastr.error("Nessun contraente assegnato all'utente");
@@ -113,7 +114,7 @@ export class LandingPageComponent implements OnInit {
                 }
             }
             this.contName = this.gridsData;
-            console.log("gridsData -> ", this.gridsData, this.limitedData);
+            //console.log("gridsData -> ", this.gridsData, this.limitedData);
             this.loading = false;
         },error =>{
             this.toastr.error("Nessun contraente assegnato all'utente");
