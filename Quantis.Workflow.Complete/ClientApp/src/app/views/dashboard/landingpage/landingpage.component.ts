@@ -72,6 +72,7 @@ export class LandingPageComponent implements OnInit {
     thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
     showMultiSelect : boolean = false;
+    orignalArray:any = [];
     constructor(
         private dashboardService: DashboardService,
         private apiService: ApiService,
@@ -100,21 +101,28 @@ export class LandingPageComponent implements OnInit {
 
         this.loading = true;
         this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
-            console.log("gridsData -> ", data);
+
             this.gridsData = data;
+
             if(this.gridsData == null){
                 this.toastr.error("Nessun contraente assegnato all'utente");
                 this.loading = false;
             }else{
+                this.setViewAll=0;
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
+                    this.contName = this.limitedData;
+                    this.orignalArray = [...this.limitedData, ...this.gridsData]
                 }else{
                     this.limitedData = this.gridsData;
+                    this.orignalArray = this.gridsData;
+                    this.contName = this.limitedData;
                 }
             }
-            this.contName = this.gridsData;
-            //console.log("gridsData -> ", this.gridsData, this.limitedData);
+            console.log("orignalArray -->", this.orignalArray);
+
+            console.log("gridsData -> ", this.gridsData, this.limitedData);
             this.loading = false;
         },error =>{
             this.toastr.error("Nessun contraente assegnato all'utente");
@@ -200,6 +208,7 @@ export class LandingPageComponent implements OnInit {
     populateDateFilter() {
         if (this.monthVar == null || this.yearVar == null) {
         } else {
+            this.setViewAll=0;
             this.loading = true;
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
@@ -211,9 +220,13 @@ export class LandingPageComponent implements OnInit {
                 }else{
                     this.gridLength = this.gridsData.length;
                     if(this.gridsData.length>6){
-                        this.limitedData = this.gridsData.splice(0,6);
+                      this.limitedData = this.gridsData.splice(0,6);
+                      this.contName = this.limitedData;
+                      this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
-                        this.limitedData = this.gridsData;
+                      this.limitedData = this.gridsData;
+                      this.orignalArray = this.gridsData;
+                      this.contName = this.limitedData;
                     }
                 }
                 console.log("gridsData -> ", this.gridsData, this.limitedData);
@@ -229,8 +242,13 @@ export class LandingPageComponent implements OnInit {
             let value:any = this.contractName;
             if(value == 'ALL'){
                 this.loading = true;
-                this.limitedData = this.contName;
-                this.gridsData = this.contName;
+                if(this.setViewAll == 0){
+                  this.limitedData = this.contName
+                }else{
+                  this.orignalArray = this.contName;
+                }
+                //this.limitedData = this.contName;
+                //this.gridsData = this.contName;
                 this.loading = false;
             }else{
                 this.loading = true;
@@ -256,8 +274,13 @@ export class LandingPageComponent implements OnInit {
                 totalkpis: temp2[i].totalkpis,
                 worstcontracts: temp2[i].worstcontracts
             })
+            if(this.setViewAll == 0){
               this.limitedData = temp2;
-              this.gridsData = temp2;
+            }else{
+              this.orignalArray = temp2;
+            }
+
+
             this.loading = false;
             }
 
@@ -274,6 +297,8 @@ export class LandingPageComponent implements OnInit {
 
     viewAll(){
         this.setViewAll=1;
+        this.contName = this.orignalArray;
+        this.showMultiSelect = false;
     }
 
     details(contractpartyid,contractpartyname) {

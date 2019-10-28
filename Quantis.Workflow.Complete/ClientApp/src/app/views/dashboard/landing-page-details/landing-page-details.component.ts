@@ -68,6 +68,7 @@ export class LandingPageDetailsComponent implements OnInit {
     thresholdvalue = 0;
     setThresholdValue = 0;
     gridLength = 0;
+    orignalArray:any = [];
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
@@ -108,11 +109,15 @@ export class LandingPageDetailsComponent implements OnInit {
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
+                    this.contName = this.limitedData;
+                    this.orignalArray = [...this.limitedData, ...this.gridsData]
                 }else{
                     this.limitedData = this.gridsData;
+                    this.orignalArray = this.gridsData;
+                    this.contName = this.limitedData;
                 }
             }
-            this.contName = this.gridsData;
+            console.log("orignalArray -->", this.orignalArray);
             console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
             this.loading = false;
         });
@@ -150,8 +155,12 @@ export class LandingPageDetailsComponent implements OnInit {
                     this.gridLength = this.gridsData.length;
                     if(this.gridsData.length>6){
                         this.limitedData = this.gridsData.splice(0,6);
+                        this.contName = this.limitedData;
+                        this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
                         this.limitedData = this.gridsData;
+                        this.orignalArray = this.gridsData;
+                        this.contName = this.limitedData;
                     }
                 }
                 console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
@@ -171,8 +180,11 @@ export class LandingPageDetailsComponent implements OnInit {
         let value:any = this.contractName;
         if(value == 'ALL'){
             this.loading = true;
-            this.limitedData = this.contName;
-            this.gridsData = this.contName;
+            if(this.setViewAll == 0){
+              this.limitedData = this.contName
+            }else{
+              this.orignalArray = this.contName;
+            }
             this.loading = false;
         }else{
             this.loading = true;
@@ -198,8 +210,12 @@ export class LandingPageDetailsComponent implements OnInit {
                 totalkpis: temp2[i].totalkpis,
                 worstcontracts: temp2[i].worstcontracts
             })
+            if(this.setViewAll == 0){
               this.limitedData = temp2;
-              this.gridsData = temp2;
+            }else{
+              this.orignalArray = temp2;
+            }
+
             this.loading = false;
         }
      }
@@ -215,6 +231,8 @@ export class LandingPageDetailsComponent implements OnInit {
 
     viewAll(){
         this.setViewAll=1;
+        this.contName = this.orignalArray;
+        this.showMultiSelect = false;
     }
 
     setThreshold() {

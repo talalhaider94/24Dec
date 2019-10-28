@@ -11,7 +11,7 @@
             <!-- <h2>
                 <small class="" style="margin-top: 9px;font-size: 19px; font-weight:500"><b>{{month}} {{yearVar}}</b></small>
             </h2> -->
-          
+
             <select [(ngModel)]="monthVar" name="monthVar" class="form-control ml-3" style="width:25%;" (change)="populateDateFilter()">
                 <!-- <option value="00">Tutti i mesi</option> -->
                 <option value="01">Gennaio</option>
@@ -88,13 +88,13 @@
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li class="top-border">
-                                        <a href="#">
+                                        <!-- <a href="#"> -->
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
                                                 <div *ngIf="row.complaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-success':row.complaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.complaintkpis}}</div>
                                                 <div *ngIf="row.noncomplaintkpis!=0" [ngClass]="{'progress-bar active progress-bar-danger':row.noncomplaintkpis!=0}" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%;margin-top: 1%;">{{row.noncomplaintkpis}}</div>
                                             </div>
-                                        </a>
+                                        <!-- </a> -->
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
                                     <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal(row.contractpartyid)">{{row.noncomplaintkpis}}</button></a></li>
@@ -182,7 +182,7 @@
         <div class="row">
             <!-- Left col class= "box box-danger box-solid"
             [ngClass]="{'box box-danger box-solid': row.noncomplaintkpis > thresholdvalue, 'box box-success box-solid': row.noncomplaintkpis < thresholdvalue }"-->
-            <section *ngFor="let row of gridsData; index as i" class="col-lg-3 connectedSortable">
+            <section *ngFor="let row of orignalArray; index as i" class="col-lg-3 connectedSortable">
                 <br>
                 <div [ngClass]="(((row.noncomplaintkpis/(row.noncomplaintkpis + row.complaintkpis))*100) >= thresholdvalue)?'box box-danger box-solid':'box box-success box-solid'">
                     <div class="box-header with-border">
@@ -220,13 +220,13 @@
                             <div class="box-footer no-padding">
                                 <ul class="nav nav-stacked">
                                     <li class="top-border">
-                                        <a href="#">
+                                        <!-- <a href="#"> -->
                                             Severity Contraenti
                                             <div class="progress" style="height: 20px">
                                                 <div *ngIf="row.complaintkpis!=0" class="progress-bar active progress-bar-success" role="progressbar" [ngStyle]="{ 'width': ((row.complaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.complaintkpis}}</div>
                                                 <div *ngIf="row.noncomplaintkpis!=0" class="progress-bar active progress-bar-danger" role="progressbar" [ngStyle]="{ 'width': ((row.noncomplaintkpis)/(row.complaintkpis+row.noncomplaintkpis)*100) + '%' }" style="height:100%">{{row.noncomplaintkpis}}</div>
                                             </div>
-                                        </a>
+                                        <!-- </a> -->
                                     </li>
                                     <!-- <li><a href="#">KPI in Escalation <span class="pull-right badge bg-red">0</span></a></li> -->
                                     <li><a>KPI non Compliant <button [disabled]="row.noncomplaintkpis==0" class="btn btn-danger pull-right badge bg-red" (click)="showNonCompliantModal(row.contractpartyid)">{{row.noncomplaintkpis}}</button></a></li>
