@@ -1,4 +1,4 @@
-/*import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -13,7 +13,7 @@ var $this;
     templateUrl: './personal-report.component.html'
 })
 
-export class PersonalReportComponent implements OnInit {
+export class personal_report_component implements OnInit {
     @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -184,4 +184,4 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 }
-*/
+

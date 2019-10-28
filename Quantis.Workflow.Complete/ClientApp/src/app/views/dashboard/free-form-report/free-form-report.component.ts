@@ -666,6 +666,14 @@ export class FreeFormReportComponent implements OnInit {
           ////////////// Setting Key ///////////////
           this.hideExport = false;
           this.debugQueryData = Object.keys(data[0]);
+
+          // for(let value of this.debugResult){
+          //   for(let key of this.debugQueryData[0]){
+          //     console.log(value[key]);
+          //   }
+          // }
+
+          console.log(this.debugQueryData[0]);
           //debugger;
           setTimeout(() => {
           this.dtTrigger3.next();

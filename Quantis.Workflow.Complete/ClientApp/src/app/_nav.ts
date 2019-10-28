@@ -208,13 +208,13 @@ export const navItems: NavData[] = [
                 version: '0.0.1',
                 key: 'VIEW_REPORT_FROM_BSI'
             },
-            // {
-            //     name: 'Report personali',
-            //     url: '/dashboard/personal-report',
-            //     icon: 'fa fa-file-text-o',
-            //     version: '0.0.1',
-            //     key: 'VIEW_CHART_REPORT'
-            // }
+            {
+                name: 'Report personali',
+                url: '/dashboard/personal-report',
+                icon: 'fa fa-file-text-o',
+                version: '0.0.1',
+                key: 'VIEW_CHART_REPORT'
+            }
         ]
     },
     {
@@ -301,7 +301,7 @@ export const navItems: NavData[] = [
     },
     // {
     //     name: 'Power BI',
-    //     url: '/goback',
+    //     url: "window.open('www.google.com', '_blank')",
     //     icon: 'fa fa-archive',
     //     version: '0.0.1',
     //     key: 'VIEW_EXTERNAL_POWERBI',

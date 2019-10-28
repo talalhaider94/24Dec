@@ -41,7 +41,7 @@ import { FormReportQueryComponent } from './form-report-query/form-report-query.
 import { ImportFormReportComponent } from './import-form-report/import-form-report.component';
 import { BSIReportComponent } from './bsi-report/bsi-report.component';
 import { BlankPageComponent } from './blankpage/blankpage.component';
-//import { PersonalReportComponent } from './personal-report/personal-report.component';
+import { personal_report_component } from './personal-report/personal-report.component';
 import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 
 @NgModule({
@@ -99,7 +99,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         ImportFormReportComponent,
         BSIReportComponent,
         BlankPageComponent,
-        //PersonalReportComponent,
+        personal_report_component,
         FreeFormReportsWidgetComponent,
         FilterUsersFFRPipe,
         KeysPipePipe
