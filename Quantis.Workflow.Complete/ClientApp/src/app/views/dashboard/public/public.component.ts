@@ -55,6 +55,7 @@ export class PublicComponent implements OnInit {
 	datiGrezzi = [];
 	from_changed;
 	to_changed;
+	kpiId;
 	startDate;
 	endDate;
 	selectedmonth;
@@ -267,6 +268,7 @@ export class PublicComponent implements OnInit {
 
 				///////////////////////////////////////////////////
 
+				this.kpiId = this.kpiReportDrillDownTable.Filters.kpi;
 				this.startDate = this.kpiReportDrillDownTable.Filters.startDate;
 				this.endDate = this.kpiReportDrillDownTable.Filters.endDate;
 				
@@ -284,7 +286,7 @@ export class PublicComponent implements OnInit {
 				let fromMonth = moment().month(month).format("M");
 				let fromYear = fromSplit[3];
 
-				console.log(fromMonth,fromYear);
+				console.log(this.startDate,this.endDate,fromMonth,fromYear);
 				
 				///////////////////// To Month and Year ////////////////////
 
@@ -986,7 +988,7 @@ export class PublicComponent implements OnInit {
 
         console.log('getdati1 -> ',kpiId,month,year);
 
-        this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
+        this.apiService.getKpiRawData(39412, month, 2018).subscribe((dati: any) => {
             this.fitroDataById = dati;
             //console.log(dati);
             Object.keys(this.fitroDataById).forEach(key => {
