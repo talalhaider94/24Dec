@@ -307,7 +307,7 @@ export class PublicComponent implements OnInit {
 
 				let fromYear = fromSplit[3];
 
-				let fromDateString = day+'/'+from_month+'/'+fromYear;
+				let fromDateString = day+'/'+fromMonth+'/'+fromYear;
 				
 				///////////////////// To Month and Year ////////////////////
 
@@ -332,7 +332,7 @@ export class PublicComponent implements OnInit {
 
 				/////////////////////////////////////////////
 
-				let toDateString = day2+'/'+to_month+'/'+toYear;
+				let toDateString = day2+'/'+toMonth+'/'+toYear;
 
 				console.log('fromtomonths -> ',fromDateString,toDateString);
 
