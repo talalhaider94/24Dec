@@ -2,6 +2,10 @@
     <input type="text" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
 </p>
 <button type="button" [disabled]="loading" *ngIf="!editWidgetName"
+    class="no-drag btn-sm btn btn-primary float-right" (click)="openDrillDownTable()">
+    <i class="fa fa-table"></i>
+</button>
+<button type="button" [disabled]="loading" *ngIf="!editWidgetName"
     class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
     <i class="fa fa-cog"></i>
 </button>

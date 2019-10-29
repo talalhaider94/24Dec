@@ -676,6 +676,14 @@ export class KpiReportTrendComponent implements OnInit {
         }
     }
 
+    openDrillDownTable() {
+        this.kpiReportTrendParent.emit({
+            type: 'openKpiReportDrillDownTable',
+            data: {
+                setWidgetFormValues: this.setWidgetFormValues,
+            }
+        });
+    }
 
 
     // public chartClicked(): void {

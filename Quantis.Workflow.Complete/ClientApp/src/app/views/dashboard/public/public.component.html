@@ -249,3 +249,18 @@
   </div>
 </div>
 <!-- modal end -->
+<!-- kpi report drill down table modal start -->
+<div bsModal #kpiReportDrillDownTableModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h4>KPI REPORT DRILL DOWN</h4>
+        <p>
+          {{kpiReportDrillDownTable | json}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- kpi report drill down table modal end -->

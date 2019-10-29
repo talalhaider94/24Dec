@@ -96,6 +96,8 @@ export class PublicComponent implements OnInit {
 	loadingModalForm: boolean = false;
 	parametersArray: FormArray;
 	groupReportCheck: boolean = false;
+	@ViewChild('kpiReportDrillDownTableModal') public kpiReportDrillDownTableModal: ModalDirective;
+	kpiReportDrillDownTable: any;
 	constructor(
 		private dashboardService: DashboardService,
 		private _route: ActivatedRoute,
@@ -228,6 +230,11 @@ export class PublicComponent implements OnInit {
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
 			}
+			if (childData.type === 'openKpiReportDrillDownTable') {
+				this.kpiReportDrillDownTableModal.show();
+				this.kpiReportDrillDownTable = childData.data.setWidgetFormValues;
+			}
+
 		},
 		kpiCountOrgParent: childData => {
 			console.log('kpiCountOrgParent childData', childData);
