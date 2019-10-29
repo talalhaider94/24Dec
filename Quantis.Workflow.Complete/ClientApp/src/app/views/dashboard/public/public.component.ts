@@ -58,8 +58,11 @@ export class PublicComponent implements OnInit {
 	kpiId;
 	startDate;
 	endDate;
+	selectedday;
 	selectedmonth;
 	selectedyear;
+	months = [];
+	monthVar
 
 	isLoadedDati=0;
 	loadingModalDati: boolean = false;
@@ -268,9 +271,22 @@ export class PublicComponent implements OnInit {
 
 				///////////////////////////////////////////////////
 
-				this.kpiId = this.kpiReportDrillDownTable.Filters.kpi;
-				this.startDate = this.kpiReportDrillDownTable.Filters.startDate;
-				this.endDate = this.kpiReportDrillDownTable.Filters.endDate;
+				this.months.length = 0;
+				if(this.kpiReportDrillDownTable.Filters.kpi){
+					this.kpiId = this.kpiReportDrillDownTable.Filters.kpi;
+				}
+				else{
+					this.kpiId = 0;
+				}
+				if(this.kpiReportDrillDownTable.Filters.daterange){
+					this.startDate = this.kpiReportDrillDownTable.Filters.daterange[0];
+					this.endDate = this.kpiReportDrillDownTable.Filters.daterange[1];
+				}
+				else{
+					this.startDate = this.kpiReportDrillDownTable.Filters.startDate;
+					this.endDate = this.kpiReportDrillDownTable.Filters.endDate;
+				}
+				
 				
 				this.startDate = new Date(this.startDate).toUTCString();
 				this.endDate = new Date(this.endDate).toUTCString();
@@ -282,11 +298,16 @@ export class PublicComponent implements OnInit {
 				let extra = split[1];
 				let fromSplit = extra.split(" ");
 
+				let day = fromSplit[1];
 				let month = fromSplit[2];
 				let fromMonth = moment().month(month).format("M");
+
+				let from_month = +fromMonth;
+				from_month=from_month+1;
+
 				let fromYear = fromSplit[3];
 
-				console.log(this.startDate,this.endDate,fromMonth,fromYear);
+				let fromDateString = day+'/'+from_month+'/'+fromYear;
 				
 				///////////////////// To Month and Year ////////////////////
 
@@ -296,16 +317,39 @@ export class PublicComponent implements OnInit {
 				let extra2 = split2[1];
 				let toSplit = extra2.split(" ");
 
+				let day2 = toSplit[1];
 				let month2 = toSplit[2];
 				let toMonth = moment().month(month2).format("M");
 				let toYear = toSplit[3];
 
-				console.log(toMonth,toYear);
+				let to_month = +toMonth;
+				to_month=to_month+1;
 
-				this.selectedmonth = toMonth;
+				console.log(to_month,toYear);
+
+				this.selectedmonth = to_month;
 				this.selectedyear = toYear;
 
-				this.getdati1(toMonth,toYear)
+				/////////////////////////////////////////////
+
+				let toDateString = day2+'/'+to_month+'/'+toYear;
+
+				console.log('fromtomonths -> ',fromDateString,toDateString);
+
+				var fromCheck = moment(fromDateString, 'DD/MM/YYYY');
+        		var toCheck = moment(toDateString, 'DD/MM/YYYY');
+
+				while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+					let monthyear = fromCheck.format('MM') + '/' + fromCheck.format('YYYY');
+					this.months.push(monthyear);
+					fromCheck.add(1,'month');
+				}
+
+				console.log('months -> ',this.months);
+
+				/////////////////////////////////////////////
+
+				this.getdati1(this.kpiId,to_month,toYear)
 			}
 
 		},
@@ -972,23 +1016,22 @@ export class PublicComponent implements OnInit {
 		}
 	}
 
-	getdati1(toMonth,toYear) {
+	getdati1(kpiId:number,toMonth:number,toYear:number) {
         this.periodFilter = 1;
         let month;
-        let year;
+		let year;
         if(toMonth<10){
             month = '0' + toMonth;
         }else{
             month = toMonth;
         }
         year = toYear;
-        let kpiId = 0;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
 
         console.log('getdati1 -> ',kpiId,month,year);
 
-        this.apiService.getKpiRawData(39412, month, 2018).subscribe((dati: any) => {
+        this.apiService.getKpiRawData(kpiId, month, 2018).subscribe((dati: any) => {
             this.fitroDataById = dati;
             //console.log(dati);
             Object.keys(this.fitroDataById).forEach(key => {
@@ -1055,5 +1098,19 @@ export class PublicComponent implements OnInit {
             this.countCampiData.push(i);
         }
 	}
+	
+    selectedMonth(e){
+        let stringToSplit = this.monthVar;
+        let split = stringToSplit.split("/");
+        let month = split[0];
+        let year = split[1];
+
+        console.log('KPI ID -> ',this.kpiId,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+        this.selectedmonth = month;
+        this.selectedyear = year;
+
+        this.getdati1(this.kpiId,month,year);
+    }
 	
 }
