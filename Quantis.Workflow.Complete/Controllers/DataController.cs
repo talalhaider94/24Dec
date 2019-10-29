@@ -534,8 +534,8 @@ namespace Quantis.WorkFlow.Controllers
         }
         [HttpGet("GetHeaders")]
         public IActionResult GetHeaders()
-        {    
-            var json = new { websocket = HttpContext.WebSockets.WebSocketRequestedProtocols, /*requestservice = HttpContext.RequestServices, features = HttpContext.Features,*/ request = HttpContext.Request.Headers, response = HttpContext.Response.Headers };
+        {   
+            var json = new { identity = HttpContext.User.Identity.Name, websocket = HttpContext.WebSockets.WebSocketRequestedProtocols, /*requestservice = HttpContext.RequestServices, features = HttpContext.Features,*/ request = HttpContext.Request.Headers, response = HttpContext.Response.Headers };
             return Ok(json);
         }
     }
