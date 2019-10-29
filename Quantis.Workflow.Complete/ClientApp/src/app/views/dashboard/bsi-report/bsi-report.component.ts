@@ -517,6 +517,8 @@ export class BSIReportComponent implements OnInit {
 
         this.to_year = toYear;
 
+        //console.log('months -> ',fromCheck,toCheck);
+
         while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
             let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
             this.months.push(monthyear);
