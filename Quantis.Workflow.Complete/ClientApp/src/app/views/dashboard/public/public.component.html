@@ -17,11 +17,11 @@
 <gridster [options]="options" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
-    <div class="card">
-      <div class="card-body">
+    <div class="card" style="height:100%;padding-bottom: 1.5rem;">
+      <div class="card-body" style="height:100%">
 
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
-          [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
+                     [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
       </div>
     </div>

@@ -12,11 +12,15 @@ import { ApiService } from '../../../_services/api.service';
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { GlobalVarsService } from '../../../_services/global-vars.service';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
     templateUrl: 'landing-page-details.component.html',
-    styleUrls: ['landing-page-details.component.scss']
+    styleUrls: ['landing-page-details.component.scss'],
+    providers:[GlobalVarsService]
+
 })
 export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
@@ -72,7 +76,9 @@ export class LandingPageDetailsComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        public globalvar :GlobalVarsService,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -170,6 +176,11 @@ export class LandingPageDetailsComponent implements OnInit {
         }
     }
 
+    gotTOlandingPage(){
+        this.globalvar.setmonth(this.monthVar);
+        localStorage.setItem("month", this.monthVar);
+        this.router.navigate(['/dashboard/landingpage'])
+    }
     multiSelect(){
       this.showMultiSelect = (this.showMultiSelect) ? false : true;
     }

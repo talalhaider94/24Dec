@@ -106,7 +106,7 @@ export class PublicComponent implements OnInit {
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
 	showCustomDate: boolean = false;
-
+  showEventCol: boolean = true;
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;

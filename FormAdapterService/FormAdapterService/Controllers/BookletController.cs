@@ -11,11 +11,20 @@ namespace FormAdapterService.Controllers
 {
     public class BookletController : ApiController
     {
-        public int CreateBooklet(CreateBookletDTO dto)
+        [HttpPost]
+        public string CreateBooklet([FromBody]CreateBookletDTO dto)
         {
-            Class5 class5 = new Class5(dto.MainPath);
-            int result=class5.CreateBooklet(dto.ListContract, dto.UserId, dto.BookletDocumentId, dto.MailSetup);
-            return result;
+            try
+            {
+                Class5 class5 = new Class5(dto.MainPath);
+                int result = class5.CreateBooklet(dto.ListContract, dto.UserId, dto.BookletDocumentId, dto.MailSetup);
+                return result+"";
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+            
         }
     }
 }

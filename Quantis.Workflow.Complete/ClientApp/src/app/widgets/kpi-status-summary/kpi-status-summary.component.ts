@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
-import { DashboardService, EmitterService } from '../../_services';
+import { DashboardService, EmitterService, FreeFormReportService } from '../../_services';
 import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-kpi-status-summary',
     templateUrl: './kpi-status-summary.component.html',
@@ -25,18 +26,33 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
     @Output()
     kpiStatusSummaryParent = new EventEmitter<any>();
     kpiStatusSummaryData: any = [];
-    // need to update these preselected ndoes
-    preSelectedNodes = [1075, 1405, 1420, 1424, 1425, 1430, 1435, 1436, 1437, 1438, 1439, 1441, 1442, 1444, 1445, 1446, 1447, 1448, 1449, 1460, 1465, 1470, 1471, 1485];
-    @ViewChild(DataTableDirective)
+   @ViewChild(DataTableDirective)
     datatableElement: DataTableDirective;
     dtOptions: any = {};
     dtTrigger = new Subject();
-
-    constructor(
+    editQueryData = {
+      id: 0,
+      QueryName: '',
+      QueryText: '',
+      Parameters: [{
+        key: '',
+        value: ''
+      }]
+    }
+    executeQueryData = {
+      QueryText: '',
+      Parameters: [{
+        key: '',
+        value: ''
+      }]
+    }
+  constructor(
+        private _freeFormReport: FreeFormReportService,
         private dashboardService: DashboardService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
-        private router: Router,
+    private router: Router,
+    private toastr: ToastrService,
         private widgetHelper: WidgetHelpersService
     ) { }
 
@@ -92,7 +108,7 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
             this.isDashboardModeEdit = false;
             if (this.url) {
                 this.emitter.loadingStatus(true);
-                this.getChartParametersAndData(this.url);
+                this.getChartParametersAndData();
             }
         }
     }
@@ -111,7 +127,7 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
         });
     }
     // invokes on component initialization
-    getChartParametersAndData(url) {
+    /*getChartParametersAndData(url) {
         let myWidgetParameters = null;
         this.loading = true;
         this.dashboardService.getWidgetParameters(url).pipe(
@@ -159,8 +175,25 @@ export class KpiStatusSummaryComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.emitter.loadingStatus(false);
         });
-    }
+    }*/
 
+    getChartParametersAndData() {
+        this.loading = true;
+        this.clearData();
+
+        this.executeQueryData.QueryText = '$kpiCalculationStatus';
+        this.executeQueryData.Parameters = [];
+        this._freeFormReport.ExecuteReportQuery(this.executeQueryData).subscribe(data => {
+          this.kpiStatusSummaryData = data;
+          this.rerender();
+          this.loading = false;
+        }, error => {
+          this.toastr.error('Errore in query execution', 'Error');
+        });
+    }
+    clearData() {
+      this.kpiStatusSummaryData = [];
+    }
     // dashboardComponentData is result of data coming from
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
         this.kpiStatusSummaryData = chartIndexData;
