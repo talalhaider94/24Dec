@@ -17,11 +17,11 @@
 <gridster [options]="options" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
-    <div class="card">
-      <div class="card-body">
+    <div class="card" style="height:100%;padding-bottom: 1.5rem;">
+      <div class="card-body" style="height:100%">
 
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
-          [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
+                     [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
         </ndc-dynamic>
       </div>
     </div>
@@ -252,10 +252,10 @@
 <!-- kpi report drill down table modal start -->
 <div bsModal #kpiReportDrillDownTableModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <h4>KPI REPORT DRILL DOWN</h4>
+        <h4>KPI REPORT DRILL DOWN</h4><hr>
         <!-- <p>
           {{kpiReportDrillDownTable | json}}
         </p> -->
@@ -272,7 +272,8 @@
               </select>
               <h6 class="float-right" style="color:#565656; margin-left: 90%; margin-top: -2%">{{selectedmonth}}/{{selectedyear}}</h6>
               <!-- <h6 class="float-right" style="color:#565656; margin-left: 70%; margin-top: -2%">{{bar_period}}/{{bar_value}}</h6> -->
-          </div><br>  
+          </div><br>
+          <perfect-scrollbar style="max-height: 400px;">  
           <table id="classTable" class="table table-bordered  font-12" #table>
                 <thead style="background: #20a8d8; color:white">
                     <tr>
@@ -311,6 +312,7 @@
                     </tr>
                 </tbody>
             </table>
+            </perfect-scrollbar>
             <!-- <pagination-controls previousLabel="precedente" nextLabel="successiva" (pageChange)="p = $event"></pagination-controls> -->
         </div>
 

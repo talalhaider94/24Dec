@@ -20,8 +20,8 @@
     <!-- Earch grister-item is generated with *ngFor -->
     <gridster-item [ngClass]="(item.uiidentifier == 'kpi_count_summary') ? 'kpi_count_summary' : 'other-widgets'"
                    [item]="item" *ngFor="let item of dashboardWidgetsArray">
-        <div class="card">
-            <div class="card-body">
+        <div class="card" style="height:100%;padding-bottom: 1.5rem;">
+            <div class="card-body" style="height:100%">
                 <div class="float-right">
                     <!-- Delete button call removeItem() who takes as parameter item -->
                     <button class="no-drag btn btn-sm btn-danger" (click)="removeItem(item)">

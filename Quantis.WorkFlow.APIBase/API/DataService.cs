@@ -2392,8 +2392,17 @@ namespace Quantis.WorkFlow.APIBase.API
                 var response = client.PostAsync(output.Item2, content).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    int res = int.Parse(response.Content.ReadAsStringAsync().Result);
-                    return res;
+                    var respo = response.Content.ReadAsStringAsync().Result;
+                    if (respo.All(char.IsDigit))
+                    {
+                        int res = int.Parse(respo);
+                        return res;
+                    }
+                    else
+                    {
+                        throw new Exception($"The return from Create Booklet is not valid the input is:{dataAsString} and response as {respo}" );
+                    }
+                    
                 }
                 else
                 {

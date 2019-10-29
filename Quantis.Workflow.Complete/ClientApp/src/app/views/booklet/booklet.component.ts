@@ -240,7 +240,7 @@ export class BookletComponent implements OnInit {
         this.hideThresholdModal();
         if(this.validEmail != null || this.validEmail != ''){
             let data = {
-                ListContract:this.itemArray,
+                ContractIds:this.itemArray,
                 BookletDocumentId:this.documentiDef.documentid,
                 RecipientEmail:this.validEmail
             }
