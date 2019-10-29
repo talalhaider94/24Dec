@@ -14,7 +14,7 @@
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Contraenti</th>
                     <th style="text-align:center">Contratti</th>
-                    <th style="text-align:center">Cut Off Day</th>
+                    <th style="text-align:center;display:none">Cut Off Day</th>
                     <th style="text-align:center">Workflow Day</th>
                     <th style="text-align:center">AZIONE</th>
                 </tr>
@@ -23,7 +23,7 @@
                 <tr *ngFor="let row of ConfigTableBodyData; index as i">
                     <td>{{row.contractpartyname}}</td>
                     <td>{{row.contractname}}</td>
-                    <td style="text-align: center">{{row.daycuttoff}}</td>
+                    <td style="text-align: center;display:none">{{row.daycuttoff}}</td>
                     <td style="text-align: center">{{row.dayworkflow}}</td>
                     <td style="text-align: center">
                         <button class="btn btn-primary" data-toggle="modal" (click)="populateModalData(row)"
@@ -53,7 +53,7 @@
                         <tr>
                             <th>Contraenti</th>
                             <th>Contratti</th>
-                            <th style="width:15%">Cut Off Day</th>
+                            <th style="width:15%;display:none">Cut Off Day</th>
                             <th style="width:15%">Workflow Day</th>
                         </tr>
                     </thead>
@@ -61,7 +61,7 @@
                         <tr>
                             <td>{{modalData.contractparty}}</td>
                             <td>{{modalData.contract}}</td>
-                            <td style="width:15%"><input type="number" class="form-control" [(ngModel)]="modalData.cutoff" (ngModelChange)="changeModal($event)"></td>
+                            <td style="width:15%;display:none"><input type="number" class="form-control" [(ngModel)]="modalData.cutoff" (ngModelChange)="changeModal($event)"></td>
                             <td style="width:16%"><input type="number" class="form-control" [(ngModel)]="modalData.workflowday" (ngModelChange)="changeModal($event)"></td>
                         </tr>
                     </tbody>
