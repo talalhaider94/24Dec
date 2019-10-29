@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChildren,ViewChild, ElementRef,QueryList } from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { DateTimeService } from '../../../_helpers';
@@ -23,14 +23,16 @@ export class LandingPageComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
-    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+
+    @ViewChildren(DataTableDirective)
+    datatableElements: QueryList<DataTableDirective>;
     @ViewChild('CompliantTable') block: ElementRef;
     @ViewChild('NonCompliantTable') block1: ElementRef;
     dtOptions: DataTables.Settings = {};
-    dtOpt: DataTables.Settings ={};
+    dtOptions2: DataTables.Settings ={};
     loading: boolean;
     dtTrigger: Subject<any> = new Subject();
-    dtTri: Subject<any> = new Subject();
+    dtTrigger2: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
     contName: any = [];
@@ -131,9 +133,9 @@ export class LandingPageComponent implements OnInit {
             destroy:true
         };
 
-        this.dtOpt = {
+        this.dtOptions2 = {
             pagingType: 'full_numbers',
-            pageLength: 1,
+            pageLength: 10,
             language: {
                 processing: "Elaborazione...",
                 search: "Cerca:",
@@ -161,27 +163,34 @@ export class LandingPageComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-    
+
             this.dtTrigger.next();
-            this.dtTri.next();
+            this.dtTrigger2.next();
         //this.getCOnfigurations();
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
-        this.dtTri.unsubscribe();
+        this.dtTrigger2.unsubscribe();
     }
 
     rerender(): void {
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        /*this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             // Destroy the table first
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
                 this.dtTrigger.next();
                 setTimeout(() => {
-                this.dtTri.next();             
-                    
+                this.dtTri.next();
+
                 }, 1000);
+        });*/
+        this.datatableElements.forEach((dtElement: DataTableDirective) => {
+          dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+            this.dtTrigger2.next();
+          });
         });
     }
 
@@ -323,7 +332,7 @@ export class LandingPageComponent implements OnInit {
             // setTimeout(() => {
                 this.rerender();
             // }, 1000);
-           
+
         });
         this.nonCompliantModal.show();
     }
