@@ -13,7 +13,7 @@ var $this;
     templateUrl: './personal-report.component.html'
 })
 
-export class personal_report_component implements OnInit {
+export class PersonalReportComponent implements OnInit {
     @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
@@ -66,8 +66,8 @@ export class personal_report_component implements OnInit {
     filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
     allAggregationOptions: Array<any> = [
         { key: '', value: `Select Aggregation` },
-        { key: 'period', value: 'Period' },
-        { key: 'trackingperiod', value: 'Tracking Period' },
+        { key: 0, value: 'Period' },
+        { key: 1, value: 'Tracking Period' },
     ];
     modalLoading: boolean = false;
     constructor(
@@ -177,11 +177,7 @@ export class personal_report_component implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
-        console.log('PersonalReportFilterDTO ->', this.personalReportForm.value);
-        this.apiService.GetPersonalReport(this.personalReportForm.value).subscribe((data) => {
-            console.log('GetPersonalReport -> ', data);
-            this.rerender();
-        });
+        console.log(this.personalReportForm.value);
+
     }
 }
-
