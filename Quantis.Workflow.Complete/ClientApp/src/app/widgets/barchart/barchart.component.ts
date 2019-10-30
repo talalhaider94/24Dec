@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
@@ -45,7 +46,6 @@ export class BarchartComponent implements OnInit {
             type: 'date',
             categories: [],
             crosshair: true
-            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
         },
         plotOptions: {
             series: {
@@ -70,13 +70,14 @@ export class BarchartComponent implements OnInit {
             enabled: true
         },
     };
-
+    allLeafNodesIds: any = [];
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
-        private widgetHelper: WidgetHelpersService
+        private widgetHelper: WidgetHelpersService,
+        private toastr: ToastrService,
     ) { }
 
     ngOnInit() {
@@ -85,7 +86,12 @@ export class BarchartComponent implements OnInit {
             this.isDashboardModeEdit = false;
             if (this.url) {
                 this.emitter.loadingStatus(true);
-                this.getChartParametersAndData(this.url);
+                this.dashboardService.GetOrganizationHierarcy().subscribe(result => {
+                    this.getChartParametersAndData(this.url, result);
+                }, error => {
+                    console.error('GetOrganizationHierarcy', error);
+                    this.toastr.error(`Unable to get contracts for ${this.widgetname}`, 'Error!');
+                });
             }
             // coming from dashboard or public parent components
             this.subscriptionForDataChangesFromParent();
@@ -112,7 +118,7 @@ export class BarchartComponent implements OnInit {
     }
 
     // invokes on component initialization
-    getChartParametersAndData(url) {
+    getChartParametersAndData(url, getOrgHierarcy) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         this.loading = true;
@@ -121,7 +127,9 @@ export class BarchartComponent implements OnInit {
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
+                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                debugger
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
@@ -192,7 +200,7 @@ export class BarchartComponent implements OnInit {
             let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
             label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
             let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
-            if(charttype === 'line') {
+            if (charttype === 'line') {
                 this.myChartOptions.chart = {
                     type: 'spline'
                 }
@@ -201,13 +209,13 @@ export class BarchartComponent implements OnInit {
                     type: 'column'
                 }
             }
-            
+
         }
         if (currentWidgetComponentData) {
             // setting chart label and type on first load
             label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
             console.log('CHART TYPE 2', Object.keys(currentWidgetComponentData.charttypes)[0]);
-            if(Object.keys(currentWidgetComponentData.charttypes)[0] === 'line') {
+            if (Object.keys(currentWidgetComponentData.charttypes)[0] === 'line') {
                 this.myChartOptions.chart = {
                     type: 'spline'
                 }
@@ -219,7 +227,7 @@ export class BarchartComponent implements OnInit {
         }
         let allLabels = chartIndexData.map(label => label.xvalue);
         let allData = chartIndexData.map(data => data.yvalue);
-        if(chartIndexData.length) {
+        if (chartIndexData.length) {
             this.myChartOptions.subtitle = {
                 text: ''
             }
@@ -252,5 +260,21 @@ export class BarchartComponent implements OnInit {
                 widgetid: this.widgetid
             }
         });
+    }
+    getAllLeafNodesIds(complexJson) {
+        try {
+            if (complexJson) {
+                complexJson.forEach((item: any) => {
+                    if (item.children) {
+                        this.getAllLeafNodesIds(item.children);
+                    } else {
+                        this.allLeafNodesIds.push(item.id);
+                    }
+                });
+                return this.allLeafNodesIds;
+            }
+        } catch(error) {
+            console.error('getAllLeafNodesIds', error);
+        }
     }
 }
