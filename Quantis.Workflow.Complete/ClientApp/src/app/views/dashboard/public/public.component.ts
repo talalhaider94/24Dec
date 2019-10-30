@@ -344,8 +344,8 @@ export class PublicComponent implements OnInit {
 
 				console.log('fromtomonths -> ',fromDateString,toDateString);
 
-				var fromCheck = moment(fromDateString, 'DD/MM/YYYY');
-        		var toCheck = moment(toDateString, 'DD/MM/YYYY');
+				var fromCheck = moment(fromDateString, 'DD/MM/YYYY').add(1, 'M');
+        		var toCheck = moment(toDateString, 'DD/MM/YYYY').add(1, 'M');
 
 				while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
 					let monthyear = fromCheck.format('MM') + '/' + fromCheck.format('YYYY');

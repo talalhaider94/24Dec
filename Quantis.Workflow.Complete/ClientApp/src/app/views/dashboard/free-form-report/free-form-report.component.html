@@ -30,7 +30,7 @@
                                     <td>
                                         <div>
                                             <button class="btn btn-primary btn-sm" title="View" (click)="viewAssigned(assignedQuery)"><span class="fa fa-eye"></span></button>
-                                            <button class="btn btn-warning btn-sm" title="Edit" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
+                                            <button class="btn btn-warning btn-sm" title="Esegui" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -78,7 +78,7 @@
                                                 data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 Assegna
                                             </button>
-                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
+                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-warning btn-sm" title="Esegui" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
                                             <button [disabled]="ownedQuery.isenabled==false" class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
                                                 Disabilita
                                             </button>
