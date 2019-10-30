@@ -241,7 +241,7 @@ namespace Quantis.WorkFlow.Complete.Controllers
             return Ok(json);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_BSI_LINK)]
+        [Authorize(WorkFlowPermissions.VIEW_LINK_BSI)]
         [HttpGet("GetBSILink")]
         public string GetBSILink()
         {

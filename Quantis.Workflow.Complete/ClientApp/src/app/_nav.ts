@@ -164,7 +164,7 @@ export const navItems: NavData[] = [
         name: 'Report',
         url: '/report',
         icon: 'fa fa-bar-chart',
-        key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_BOOKLET', 'VIEW_REPORT_QUERIES', 'VIEW_REPORT_FROM_BSI', 'VIEW_CHART_REPORT'],
+      key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_BOOKLET', 'VIEW_REPORT_QUERIES', 'VIEW_REPORT_FROM_BSI', 'VIEW_REPORT_CUSTOM'],
         children: [
             {
                 name: 'Notifiche LoadingForm',
@@ -213,7 +213,7 @@ export const navItems: NavData[] = [
                 url: '/dashboard/personal-report',
                 icon: 'fa fa-file-text-o',
                 version: '0.0.1',
-                key: 'VIEW_CHART_REPORT'
+              key: 'VIEW_REPORT_CUSTOM'
             }
         ]
     },
