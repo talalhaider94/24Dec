@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChild ,ViewChildren , QueryList} from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { DateTimeService } from '../../../_helpers';
@@ -12,20 +12,55 @@ import { ApiService } from '../../../_services/api.service';
 import { UUID } from 'angular2-uuid';
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { GlobalVarsService } from '../../../_services/global-vars.service';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({
     templateUrl: 'landing-page-details.component.html',
-    styleUrls: ['landing-page-details.component.scss']
+    styleUrls: ['landing-page-details.component.scss'],
+    providers:[GlobalVarsService]
+
 })
 export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
-    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    // @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChildren(DataTableDirective)
+    datatableElements: QueryList<DataTableDirective>;
     queryParams;
 
     dtOptions: DataTables.Settings = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            language: {
+                processing: "Elaborazione...",
+                search: "Cerca:",
+                lengthMenu: "Visualizza _MENU_ elementi",
+                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+                infoEmpty: "Vista da 0 a 0 di 0 elementi",
+                infoFiltered: "(filtrati da _MAX_ elementi totali)",
+                infoPostFix: "",
+                loadingRecords: "Caricamento...",
+                zeroRecords: "La ricerca non ha portato alcun risultato.",
+                emptyTable: "Nessun dato presente nella tabella.",
+                paginate: {
+                    first: "Primo",
+                    previous: "Precedente",
+                    next: "Seguente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+                }
+            },
+            destroy:true
+        };
+    dtOptions2:DataTables.Settings = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
@@ -47,15 +82,20 @@ export class LandingPageDetailsComponent implements OnInit {
                 sortAscending: ": attiva per ordinare la colonna in ordine crescente",
                 sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
             }
-        }
+        },
+        destroy:true
     };
     loading: boolean;
     dtTrigger: Subject<any> = new Subject();
+    dtTrigger2: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
     contName: any = [];
     limitedData: any = [];
     bestContracts: any = [];
+    kpis:any = [];
+    KpiCompliants: any = [];
+    KpiNonCompliants: any = [];
     monthVar: any;
     contractName:any;
     month: any;
@@ -72,7 +112,9 @@ export class LandingPageDetailsComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        public globalvar :GlobalVarsService,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -125,21 +167,24 @@ export class LandingPageDetailsComponent implements OnInit {
 
     ngAfterViewInit() {
         this.dtTrigger.next();
+        this.dtTrigger2.next();
+
         //this.getCOnfigurations();
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
+        this.dtTrigger2.unsubscribe();
     }
 
     rerender(): void {
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            // Destroy the table first
-            dtInstance.destroy();
-            // Call the dtTrigger to rerender again
-            this.dtTrigger.next();
-            this.loading = false;
-        });
+        this.datatableElements.forEach((dtElement: DataTableDirective) => {
+            dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              dtInstance.destroy();
+              this.dtTrigger.next();
+              this.dtTrigger2.next();
+            });
+          });
     }
 
     populateDateFilter() {
@@ -170,6 +215,11 @@ export class LandingPageDetailsComponent implements OnInit {
         }
     }
 
+    gotTOlandingPage(){
+        this.globalvar.setmonth(this.monthVar);
+        localStorage.setItem("month", this.monthVar);
+        this.router.navigate(['/dashboard/landingpage'])
+    }
     multiSelect(){
       this.showMultiSelect = (this.showMultiSelect) ? false : true;
     }
@@ -253,15 +303,29 @@ export class LandingPageDetailsComponent implements OnInit {
         this.thresholdModal.hide();
     }
 
-    showCompliantModal() {
-        this.compliantModal.show();
+     showCompliantModal(contract) {
+       var kpi= this.orignalArray
+       var filteredkpi = kpi.filter(a => a.contractname == contract)
+        if (filteredkpi[0].complaintkpis != 0){
+            this.KpiCompliants = filteredkpi[0].bestkpis;
+            console.log(this.KpiCompliants,'kpiCompiant')
+        }
+         this.rerender();
+    this.compliantModal.show();
     }
 
     hideCompliantModal() {
         this.compliantModal.hide();
     }
 
-    showNonCompliantModal() {
+    showNonCompliantModal(contract) {
+        var kpi= this.orignalArray
+        var filteredkpi = kpi.filter(a => a.contractname == contract)
+         if (filteredkpi[0].noncomplaintkpis != 0){
+             this.KpiNonCompliants = filteredkpi[0].bestkpis;
+             console.log(this.KpiNonCompliants,'kpiCompiant')
+         }
+          this.rerender();
         this.nonCompliantModal.show();
     }
 

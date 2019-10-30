@@ -11,6 +11,7 @@ import { deepStrictEqual } from 'assert';
 import { DateAdapter } from '@angular/material';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -34,10 +35,11 @@ export class BookletComponent implements OnInit {
     @ViewChild('searchCol2') searchCol2: ElementRef;
     @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
     @ViewChild(DataTableDirective)  datatableElement: DataTableDirective;
-    validEmail='';
+    validEmail;
 
 
     documentId=0;
+    item=0;
 
     contrattiDef: any = [{
         checked: false,
@@ -54,12 +56,38 @@ export class BookletComponent implements OnInit {
       tuttiClienti: ''
     }
   };
-    dtOptions: DataTables.Settings = {};
+    dtOptions: DataTables.Settings = {
+        pagingType: 'full_numbers',
+        pageLength: 25,
+        language: {
+            processing: "Elaborazione...",
+            search: "Cerca:",
+            lengthMenu: "Visualizza _MENU_ elementi",
+            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+            infoEmpty: "Vista da 0 a 0 di 0 elementi",
+            infoFiltered: "(filtrati da _MAX_ elementi totali)",
+            infoPostFix: "",
+            loadingRecords: "Caricamento...",
+            zeroRecords: "La ricerca non ha portato alcun risultato.",
+            emptyTable: "Nessun dato presente nella tabella.",
+            paginate: {
+                first: "Primo",
+                previous: "Precedente",
+                next: "Seguente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+            }
+        },
+        destroy:true
+    };
     dtTrigger: Subject<any> = new Subject();
     // dtTrigger: Subject<any> = new Subject();
 
     // @ViewChild(DataTableDirective) dtElement: DataTableDirective;
-    constructor(private apiService: ApiService) {
+    constructor(private apiService: ApiService,private toastr: ToastrService) {
         this.documenti = [
             { id: 1, nome: 'contratto1', cognome: 'giacomo', status: 'attivo', success: 50, danger: 10, warning: 12 },
             { id: 2, nome: 'contratto2', cognome: 'rino', status: 'attesa', success: 200, danger: 0, warning: 0 },
@@ -77,40 +105,15 @@ export class BookletComponent implements OnInit {
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
         this.datacorrente = moment().format('MM/YYYY');
-        this.dtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 10,
-            language: {
-                processing: "Elaborazione...",
-                search: "Cerca:",
-                lengthMenu: "Visualizza _MENU_ elementi",
-                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-                infoEmpty: "Vista da 0 a 0 di 0 elementi",
-                infoFiltered: "(filtrati da _MAX_ elementi totali)",
-                infoPostFix: "",
-                loadingRecords: "Caricamento...",
-                zeroRecords: "La ricerca non ha portato alcun risultato.",
-                emptyTable: "Nessun dato presente nella tabella.",
-                paginate: {
-                    first: "Primo",
-                    previous: "Precedente",
-                    next: "Seguente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-                }
-            }
-        };
+    
     }
 
     ngAfterViewInit() {
         setTimeout(() => {
-        this.dtTrigger.next();
-         this.rerender();
-
-        }, 2000);
+            this.dtTrigger.next();
+            this.rerender()
+        }, 1800);
+      
         // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
         //this.contrattiDef=data;
 
@@ -137,7 +140,7 @@ export class BookletComponent implements OnInit {
               const select = $('#searchCol1')
                 .on('change', function () {
                   that
-                    .search($(this).val(), false, false, false)
+                    .search('^' + $(this).val().replace(')', '\\)').replace('(', '\\(') + '$', true, false, false)
                     .draw();
                 });
 
@@ -216,7 +219,8 @@ export class BookletComponent implements OnInit {
     }
 
     getId(obj){
-        console.log(obj,'selected obj');
+        // console.log(obj,'selected obj');
+        this.item = 1;
         var index = this.itemArray.indexOf(obj.contractid);
         if(index === -1){
           // val not found, pushing onto array
@@ -224,6 +228,9 @@ export class BookletComponent implements OnInit {
         }else{
           // val is found, removing from array
           this.itemArray.splice(index,1);
+        }
+        if(this.itemArray.length == 0){
+        this.item = 0;
         }
         console.log(this.itemArray,'contractid')
 
@@ -240,26 +247,34 @@ export class BookletComponent implements OnInit {
         this.hideThresholdModal();
         if(this.validEmail != null || this.validEmail != ''){
             let data = {
-                ContractIds:this.itemArray,
+                ListContract:this.itemArray,
                 BookletDocumentId:this.documentiDef.documentid,
                 RecipientEmail:this.validEmail
             }
             console.log(data,'payload');
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
-                console.log(data,'called createbookley')
+                console.log(data,' called createbooklet')
             });
+            this.toastr.success('Success', 'Al termine della elaborazione i booklet (X) verranno inviati al seguente indirizzo : '+this.validEmail);
         }
     }
-    async addBooklet(){
+    addBooklet(){
         let isValid ;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
+            console.log('Email: ',data)
             isValid = data;
-            if(isValid == this.utente.useremail) {
-              this.validEmail = data;
-              this.createbooklet();
+            if(data == null || data==''){
+                this.showThresholdModal();
             }else{
-              this.showThresholdModal();
+                this.validEmail = data;
+                this.createbooklet();
             }
+            // if(isValid == this.utente.useremail) {
+            //   this.validEmail = data;
+            //   this.createbooklet();
+            // }else{
+            //   this.showThresholdModal();
+            // }
 
         });
 
@@ -280,7 +295,7 @@ export class BookletComponent implements OnInit {
 
     }
 
-    async showThresholdModal() {
+    showThresholdModal() {
         this.thresholdModal.show();
     }
 

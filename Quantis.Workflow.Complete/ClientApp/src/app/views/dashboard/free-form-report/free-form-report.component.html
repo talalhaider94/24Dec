@@ -30,7 +30,7 @@
                                     <td>
                                         <div>
                                             <button class="btn btn-primary btn-sm" title="View" (click)="viewAssigned(assignedQuery)"><span class="fa fa-eye"></span></button>
-                                            <button class="btn btn-warning btn-sm" title="Edit" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
+                                            <button class="btn btn-warning btn-sm" title="Esegui" (click)="editQuery(assignedQuery,'assigned')"><span class="fa fa-edit"></span></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -78,7 +78,7 @@
                                                 data-target="#ConfigModal" (click)="showConfigModal(ownedQuery)">
                                                 Assegna
                                             </button>
-                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-warning btn-sm" title="Execute" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
+                                            <button [disabled]="ownedQuery.isenabled==false" class="btn btn-warning btn-sm" title="Esegui" (click)="editQuery(ownedQuery,'owned')"><span class="fa fa-edit"></span></button>
                                             <button [disabled]="ownedQuery.isenabled==false" class="btn btn-danger btn-sm" (click)="disable(ownedQuery)">
                                                 Disabilita
                                             </button>
@@ -104,13 +104,13 @@
                         <div class="row mb-2">
                             <div class="col-md-2">
                                 <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" placeholder="Cliente">
-                                    <option value="">Anno</option>
+                                    <option value="">Select</option>
                                     <!-- <option *ngFor="let year of anni">{{year}}</option> -->
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <select [hidden]="isSpecialReport==0" [(ngModel)]="contract" class="form-control" placeholder="Contratto">
-                                    <option value="">Anno</option>
+                                    <option value="">Select</option>
                                     <!-- <option *ngFor="let year of anni">{{year}}</option> -->
                                 </select>
                             </div>
@@ -123,7 +123,7 @@
                         </div>
 
                         <!-- //////////////////////////////////// -->
-
+                        <perfect-scrollbar style="max-height: 400px;">
                         <table class="table stripe executedQueryResult">
                             <thead class="text-center" style="background: #20a8d8">
                                 <tr style="font-size:12px;color:white">
@@ -136,6 +136,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </perfect-scrollbar>
                     </div>
                   </div>
                 </div>

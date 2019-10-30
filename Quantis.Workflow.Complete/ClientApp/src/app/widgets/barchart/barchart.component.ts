@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { DashboardService, EmitterService } from '../../_services';
-import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetsHelper, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
 @Component({
     selector: 'app-barchart',
     templateUrl: './barchart.component.html',
@@ -28,35 +30,54 @@ export class BarchartComponent implements OnInit {
     @Output()
     barChartParent = new EventEmitter<any>();
 
-    public barChartData: Array<any> = [
-        { data: [], label: 'No Data in Count Trend' }
-    ];
-
-    public barChartLabels: Array<any> = [];
-    public barChartOptions: any = {
-        responsive: true,
-        legend: { position: 'bottom' },
+    highcharts = Highcharts;
+    myChartUpdateFlag: boolean = true;
+    myChartOptions = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: false,
+        subtitle: {
+            text: ''
+        },
+        chart: {
+            type: 'column'
+        },
+        xAxis: {
+            type: 'date',
+            categories: [],
+            crosshair: true
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            console.log('Count Trend Bar Click Event');
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [],
+        exporting: {
+            enabled: true
+        },
     };
-    public barChartLegend: boolean = true;
-    public barChartType: string = 'bar';
-    public barChartColors: Array<any> = [
-        {
-            backgroundColor: 'rgba(76,175,80,1)',
-            borderColor: 'rgba(76,175,80,1)',
-            pointBackgroundColor: 'rgba(76,175,80,1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(76,175,80,0.8)'
-        }
-    ];
-    getOrgHierarchy: any = [];
-
+    allLeafNodesIds: any = [];
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
-        private widgetHelper: WidgetHelpersService
+        private widgetHelper: WidgetHelpersService,
+        private toastr: ToastrService,
     ) { }
 
     ngOnInit() {
@@ -65,11 +86,17 @@ export class BarchartComponent implements OnInit {
             this.isDashboardModeEdit = false;
             if (this.url) {
                 this.emitter.loadingStatus(true);
-                this.getChartParametersAndData(this.url);
+                this.dashboardService.GetOrganizationHierarcy().subscribe(result => {
+                    this.getChartParametersAndData(this.url, result);
+                }, error => {
+                    console.error('GetOrganizationHierarcy', error);
+                    this.toastr.error(`Unable to get contracts for ${this.widgetname}`, 'Error!');
+                });
             }
             // coming from dashboard or public parent components
             this.subscriptionForDataChangesFromParent();
         }
+        window.dispatchEvent(new Event('resize'));
     }
 
     subscriptionForDataChangesFromParent() {
@@ -91,7 +118,7 @@ export class BarchartComponent implements OnInit {
     }
 
     // invokes on component initialization
-    getChartParametersAndData(url) {
+    getChartParametersAndData(url, getOrgHierarcy) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         this.loading = true;
@@ -100,8 +127,9 @@ export class BarchartComponent implements OnInit {
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
+                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-                console.log('BarChart newParams', JSON.stringify(newParams));
+                debugger
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
@@ -125,10 +153,7 @@ export class BarchartComponent implements OnInit {
                 // have to use setTimeout if i am not emitting it in dashbaordComponent
                 // this.barChartParent.emit(barChartParams);
                 // setting initial Paramter form widget values
-                console.log('Count trend Bar Chart THIS.FILTERS', this.filters);
-                console.log('Count trend Bar Chart THIS.PROPERTIES', this.properties);
                 this.setWidgetFormValues = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
-                console.log('BarChart this.setWidgetFormValues', this.setWidgetFormValues);
             }
             // popular chart data
             if (getWidgetIndex) {
@@ -166,9 +191,7 @@ export class BarchartComponent implements OnInit {
     closeModal() {
         this.emitter.sendNext({ type: 'closeModal' });
     }
-    chartHovered(e) {
-        console.log(e);
-    }
+
     // dashboardComponentData is result of data coming from
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
@@ -177,27 +200,58 @@ export class BarchartComponent implements OnInit {
             let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
             label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
             let charttype = dashboardComponentData.barChartWidgetParameterValues.Properties.charttype;
-            setTimeout(() => {
-                this.barChartType = charttype;
-            });
+            if (charttype === 'line') {
+                this.myChartOptions.chart = {
+                    type: 'spline'
+                }
+            } else {
+                this.myChartOptions.chart = {
+                    type: 'column'
+                }
+            }
+
         }
         if (currentWidgetComponentData) {
             // setting chart label and type on first load
             label = currentWidgetComponentData.measures[Object.keys(currentWidgetComponentData.measures)[0]];
-            this.barChartType = Object.keys(currentWidgetComponentData.charttypes)[0];
+            console.log('CHART TYPE 2', Object.keys(currentWidgetComponentData.charttypes)[0]);
+            if (Object.keys(currentWidgetComponentData.charttypes)[0] === 'line') {
+                this.myChartOptions.chart = {
+                    type: 'spline'
+                }
+            } else {
+                this.myChartOptions.chart = {
+                    type: 'column'
+                }
+            }
         }
-        setTimeout(() => {
-            let allLabels = chartIndexData.map(label => label.xvalue);
-            let allData = chartIndexData.map(data => data.yvalue);
-            this.barChartData = [{ data: allData, label: label }]
-            this.barChartLabels.length = 0;
-            this.barChartLabels.push(...allLabels);
-            this.closeModal();
-        });
+        let allLabels = chartIndexData.map(label => label.xvalue);
+        let allData = chartIndexData.map(data => data.yvalue);
+        if (chartIndexData.length) {
+            this.myChartOptions.subtitle = {
+                text: ''
+            }
+        } else {
+            this.myChartOptions.subtitle = {
+                text: `No data in ${this.widgetname}`
+            }
+        }
+
+        this.myChartOptions.xAxis = {
+            type: 'date',
+            categories: allLabels,
+            crosshair: true
+        }
+        this.myChartOptions.series[0] = {
+            name: label,
+            data: allData,
+            color: '#f86c6b'
+        };
+        this.myChartUpdateFlag = true;
+        this.closeModal();
     }
 
     widgetnameChange(event) {
-        console.log('widgetnameChange', this.id, event);
         this.emitter.sendNext({
             type: 'changeWidgetName',
             data: {
@@ -206,5 +260,21 @@ export class BarchartComponent implements OnInit {
                 widgetid: this.widgetid
             }
         });
+    }
+    getAllLeafNodesIds(complexJson) {
+        try {
+            if (complexJson) {
+                complexJson.forEach((item: any) => {
+                    if (item.children) {
+                        this.getAllLeafNodesIds(item.children);
+                    } else {
+                        this.allLeafNodesIds.push(item.id);
+                    }
+                });
+                return this.allLeafNodesIds;
+            }
+        } catch(error) {
+            console.error('getAllLeafNodesIds', error);
+        }
     }
 }

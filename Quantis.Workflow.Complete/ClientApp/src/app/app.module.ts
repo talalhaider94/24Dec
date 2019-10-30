@@ -12,6 +12,7 @@ import { TreeviewModule } from 'ngx-treeview';
 import { TokenInterceptorService, ErrorInterceptorService } from '../app/_helpers';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { itLocale } from 'ngx-bootstrap/locale';
+import {GlobalVarsService } from './_services/global-vars.service';
 import { ModalModule } from "ngx-bootstrap";
 // import { ContextMenuModule } from 'ngx-contextmenu';
 
@@ -103,7 +104,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         {
             provide: LocationStrategy,
             useClass: HashLocationStrategy // commenting this and location strategry hides the # from url. need to see sideeffect.
-        }],
+        },GlobalVarsService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

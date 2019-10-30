@@ -360,7 +360,7 @@ export class BSIReportComponent implements OnInit {
                 const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
                         that
-                          .search($(this).val()+'$', true, false, false)
+                          .search($(this).val().replace(')','\\)').replace('(','\\(')+'$', true, false, false)
                             .draw();
                     });
             });
@@ -441,8 +441,8 @@ export class BSIReportComponent implements OnInit {
         let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
 
-        let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
-        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
+        let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
+        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
 
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);

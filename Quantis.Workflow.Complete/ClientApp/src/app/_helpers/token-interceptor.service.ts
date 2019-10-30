@@ -18,6 +18,7 @@ export class TokenInterceptorService implements HttpInterceptor {
                 'Content-Type': 'application/json',
             }
         });
+      console.log('request', request)
     }
 
     return next.handle(request);

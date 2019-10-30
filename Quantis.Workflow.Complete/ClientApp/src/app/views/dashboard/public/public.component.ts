@@ -182,6 +182,13 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.contracts1').enable();
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
+			if (this.barChartWidgetParameters.getOrgHierarcy && this.barChartWidgetParameters.getOrgHierarcy.length > 0) {
+				// debugger
+				this.treeDataFields = { dataSource: this.barChartWidgetParameters.getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
+				// this.preSelectedNodes = this.barChartWidgetParameters.getOrgHierarcy.map (org => org.id);	
+				this.preSelectedNodes = this.barChartWidgetParameters.filters.organizations.split(',');
+				this.getAllLeafNodesIds(this.barChartWidgetParameters.getOrgHierarcy);
+			}
 			//Danial: TODO: add isFreeFormReportCheck and getReportQueryDetailByID is no longer being used i suppose
 			// need to verify
 			if (this.barChartWidgetParameters.getReportQueryDetailByID) {
@@ -220,6 +227,7 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openBarChartModal') {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
+				debugger
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
@@ -307,7 +315,7 @@ export class PublicComponent implements OnInit {
 
 				let fromYear = fromSplit[3];
 
-				let fromDateString = day+'/'+from_month+'/'+fromYear;
+				let fromDateString = day+'/'+fromMonth+'/'+fromYear;
 				
 				///////////////////// To Month and Year ////////////////////
 
@@ -332,12 +340,12 @@ export class PublicComponent implements OnInit {
 
 				/////////////////////////////////////////////
 
-				let toDateString = day2+'/'+to_month+'/'+toYear;
+				let toDateString = day2+'/'+toMonth+'/'+toYear;
 
 				console.log('fromtomonths -> ',fromDateString,toDateString);
 
-				var fromCheck = moment(fromDateString, 'DD/MM/YYYY');
-        		var toCheck = moment(toDateString, 'DD/MM/YYYY');
+				var fromCheck = moment(fromDateString, 'DD/MM/YYYY').add(1, 'M');
+        		var toCheck = moment(toDateString, 'DD/MM/YYYY').add(1, 'M');
 
 				while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
 					let monthyear = fromCheck.format('MM') + '/' + fromCheck.format('YYYY');
@@ -489,11 +497,11 @@ export class PublicComponent implements OnInit {
 	getData(dashboardId: number) {
 		const getAllWidgets = this.dashboardService.getWidgets();
 		const getDashboardWidgets = this.dashboardService.getDashboard(dashboardId);
-		const getOrgHierarcy = this.dashboardService.GetOrganizationHierarcy();
+		// const getOrgHierarcy = this.dashboardService.GetOrganizationHierarcy();
 
-		forkJoin([getAllWidgets, getDashboardWidgets, getOrgHierarcy]).subscribe(result => {
+		forkJoin([getAllWidgets, getDashboardWidgets]).subscribe(result => {
 			if (result) {
-				const [allWidgets, dashboardData, getOrgHierarcy] = result;
+				const [allWidgets, dashboardData] = result;
 				if (allWidgets && allWidgets.length > 0) {
 					this.widgetCollection = allWidgets;
 				}
@@ -507,10 +515,10 @@ export class PublicComponent implements OnInit {
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
 
-				if (getOrgHierarcy && getOrgHierarcy.length > 0) {
-					this.treeDataFields = { dataSource: getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
-					this.getAllLeafNodesIds(getOrgHierarcy);
-				}
+				// if (getOrgHierarcy && getOrgHierarcy.length > 0) {
+				// 	this.treeDataFields = { dataSource: getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
+				// 	this.getAllLeafNodesIds(getOrgHierarcy);
+				// }
 
 			} else {
 				console.log('WHY NO DASHBOARD DATA');
@@ -613,12 +621,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeCheckEvent($event) {
-		// alert("All Checked Nodes" + this.organizationTree.checkedNodes);
+		console.log("All Checked Nodes" + this.organizationTree.checkedNodes);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
 
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-		// alert("The selected node's id: " + this.organizationTree.selectedNodes);
+		console.log("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
 
 	getAllLeafNodesIds(complexJson) {
