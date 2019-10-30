@@ -34,10 +34,11 @@ export class BookletComponent implements OnInit {
     @ViewChild('searchCol2') searchCol2: ElementRef;
     @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
     @ViewChild(DataTableDirective)  datatableElement: DataTableDirective;
-    validEmail='';
+    validEmail;
 
 
     documentId=0;
+    item=0;
 
     contrattiDef: any = [{
         checked: false,
@@ -54,7 +55,33 @@ export class BookletComponent implements OnInit {
       tuttiClienti: ''
     }
   };
-    dtOptions: DataTables.Settings = {};
+    dtOptions: DataTables.Settings = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
+        language: {
+            processing: "Elaborazione...",
+            search: "Cerca:",
+            lengthMenu: "Visualizza _MENU_ elementi",
+            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+            infoEmpty: "Vista da 0 a 0 di 0 elementi",
+            infoFiltered: "(filtrati da _MAX_ elementi totali)",
+            infoPostFix: "",
+            loadingRecords: "Caricamento...",
+            zeroRecords: "La ricerca non ha portato alcun risultato.",
+            emptyTable: "Nessun dato presente nella tabella.",
+            paginate: {
+                first: "Primo",
+                previous: "Precedente",
+                next: "Seguente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+            }
+        },
+        destroy:true
+    };
     dtTrigger: Subject<any> = new Subject();
     // dtTrigger: Subject<any> = new Subject();
 
@@ -77,40 +104,15 @@ export class BookletComponent implements OnInit {
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
         this.datacorrente = moment().format('MM/YYYY');
-        this.dtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 10,
-            language: {
-                processing: "Elaborazione...",
-                search: "Cerca:",
-                lengthMenu: "Visualizza _MENU_ elementi",
-                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-                infoEmpty: "Vista da 0 a 0 di 0 elementi",
-                infoFiltered: "(filtrati da _MAX_ elementi totali)",
-                infoPostFix: "",
-                loadingRecords: "Caricamento...",
-                zeroRecords: "La ricerca non ha portato alcun risultato.",
-                emptyTable: "Nessun dato presente nella tabella.",
-                paginate: {
-                    first: "Primo",
-                    previous: "Precedente",
-                    next: "Seguente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-                }
-            }
-        };
+    
     }
 
     ngAfterViewInit() {
         setTimeout(() => {
-        this.dtTrigger.next();
-         this.rerender();
-
-        }, 2000);
+            this.dtTrigger.next();
+            this.rerender()
+        }, 1800);
+      
         // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
         //this.contrattiDef=data;
 
@@ -216,7 +218,8 @@ export class BookletComponent implements OnInit {
     }
 
     getId(obj){
-        console.log(obj,'selected obj');
+        // console.log(obj,'selected obj');
+        this.item = 1;
         var index = this.itemArray.indexOf(obj.contractid);
         if(index === -1){
           // val not found, pushing onto array
@@ -224,6 +227,9 @@ export class BookletComponent implements OnInit {
         }else{
           // val is found, removing from array
           this.itemArray.splice(index,1);
+        }
+        if(this.itemArray.length == 0){
+        this.item = 0;
         }
         console.log(this.itemArray,'contractid')
 
@@ -240,7 +246,7 @@ export class BookletComponent implements OnInit {
         this.hideThresholdModal();
         if(this.validEmail != null || this.validEmail != ''){
             let data = {
-                ContractIds:this.itemArray,
+                ListContract:this.itemArray,
                 BookletDocumentId:this.documentiDef.documentid,
                 RecipientEmail:this.validEmail
             }

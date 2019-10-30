@@ -18,7 +18,7 @@
       </select>
       <select class="form-control" style="width:15%;margin-left:1%" #searchCol1 id="searchCol1" [(ngModel)]="viewModel.filters.tuttiClienti" name="tuttiClienti"><option value="">Tutti i Clienti</option></select>
 
-      <button [disabled]="documentId==0" style="margin-left:1%" class="btn btn-success float-right" (click)="addBooklet()">
+      <button [disabled]="(documentId==0 || item==0) " style="margin-left:1%" class="btn btn-success float-right" (click)="addBooklet()">
         Crea Booklet
       </button>
     </div>
@@ -30,14 +30,15 @@
           <th style="align-content: center">SELEZIONA</th>
           <th style="align-content: center">CLIENTE</th>
           <th style="align-content: center">CONTRATTO</th>
+          <th></th>
+          <th></th>
           <!-- <th style="align-content: center">PRECEDENTE <span>&nbsp;</span>{{dataprecedente}}</th>
           <th style="align-content: center">CORRENTE<span>&nbsp;</span> {{datacorrente}}</th> -->
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of contrat">
-          <td align="center"><input [(ngModel)]="row.checked" type="checkbox" (change)="getCheckedItemList();getId(row)" /></td>
-
+          <td align="center"><input [(ngModel)]="row.checked" type="checkbox" (change)="getId(row)" /></td>
           <td style="align-content: center">{{row.contractpartyname}}</td>
           <td style="align-content: center">{{row.contractname}}</td>
           <td></td>

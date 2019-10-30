@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ComponentRef, ViewChild ,ViewChildren , QueryList} from '@angular/core';
 import { GridsterConfig, GridsterItem, GridType, CompactType, DisplayGrid } from 'angular-gridster2';
 import { DashboardService, EmitterService } from '../../../_services';
 import { DateTimeService } from '../../../_helpers';
@@ -26,10 +26,41 @@ export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
-    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    // @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChildren(DataTableDirective)
+    datatableElements: QueryList<DataTableDirective>;
     queryParams;
 
     dtOptions: DataTables.Settings = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            language: {
+                processing: "Elaborazione...",
+                search: "Cerca:",
+                lengthMenu: "Visualizza _MENU_ elementi",
+                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+                infoEmpty: "Vista da 0 a 0 di 0 elementi",
+                infoFiltered: "(filtrati da _MAX_ elementi totali)",
+                infoPostFix: "",
+                loadingRecords: "Caricamento...",
+                zeroRecords: "La ricerca non ha portato alcun risultato.",
+                emptyTable: "Nessun dato presente nella tabella.",
+                paginate: {
+                    first: "Primo",
+                    previous: "Precedente",
+                    next: "Seguente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+                }
+            },
+            destroy:true
+        };
+    dtOptions2:DataTables.Settings = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
@@ -51,15 +82,20 @@ export class LandingPageDetailsComponent implements OnInit {
                 sortAscending: ": attiva per ordinare la colonna in ordine crescente",
                 sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
             }
-        }
+        },
+        destroy:true
     };
     loading: boolean;
     dtTrigger: Subject<any> = new Subject();
+    dtTrigger2: Subject<any> = new Subject();
     public period = '02/2019';
     gridsData: any = [];
     contName: any = [];
     limitedData: any = [];
     bestContracts: any = [];
+    kpis:any = [];
+    KpiCompliants: any = [];
+    KpiNonCompliants: any = [];
     monthVar: any;
     contractName:any;
     month: any;
@@ -72,16 +108,7 @@ export class LandingPageDetailsComponent implements OnInit {
     thresholdvalue = 0;
     setThresholdValue = 0;
     gridLength = 0;
-  orignalArray: any = [];
-  //style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;"
-  myStyle = {
-    'width': '30%',
-    'position': 'absolute',
-    'right': '49%',
-    'top': '37px',
-    'z-index': '9',
-    height: 'auto'
-  }
+    orignalArray:any = [];
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
@@ -124,14 +151,12 @@ export class LandingPageDetailsComponent implements OnInit {
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
-                  this.contName = this.limitedData;
-                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+                    this.contName = this.limitedData;
                     this.orignalArray = [...this.limitedData, ...this.gridsData]
                 }else{
                     this.limitedData = this.gridsData;
                     this.orignalArray = this.gridsData;
-                  this.contName = this.limitedData;
-                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+                    this.contName = this.limitedData;
                 }
             }
             console.log("orignalArray -->", this.orignalArray);
@@ -142,21 +167,24 @@ export class LandingPageDetailsComponent implements OnInit {
 
     ngAfterViewInit() {
         this.dtTrigger.next();
+        this.dtTrigger2.next();
+
         //this.getCOnfigurations();
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
+        this.dtTrigger2.unsubscribe();
     }
 
     rerender(): void {
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            // Destroy the table first
-            dtInstance.destroy();
-            // Call the dtTrigger to rerender again
-            this.dtTrigger.next();
-            this.loading = false;
-        });
+        this.datatableElements.forEach((dtElement: DataTableDirective) => {
+            dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              dtInstance.destroy();
+              this.dtTrigger.next();
+              this.dtTrigger2.next();
+            });
+          });
     }
 
     populateDateFilter() {
@@ -172,19 +200,16 @@ export class LandingPageDetailsComponent implements OnInit {
                     this.gridLength = this.gridsData.length;
                     if(this.gridsData.length>6){
                         this.limitedData = this.gridsData.splice(0,6);
-                      this.contName = this.limitedData;
-                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+                        this.contName = this.limitedData;
                         this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
                         this.limitedData = this.gridsData;
                         this.orignalArray = this.gridsData;
-                      this.contName = this.limitedData;
-                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+                        this.contName = this.limitedData;
                     }
                 }
                 console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
-              this.contName = this.gridsData;
-              this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+                this.contName = this.gridsData;
                 this.loading = false;
             });
         }
@@ -256,8 +281,7 @@ export class LandingPageDetailsComponent implements OnInit {
 
     viewAll(){
         this.setViewAll=1;
-      this.contName = this.orignalArray;
-      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
+        this.contName = this.orignalArray;
         this.showMultiSelect = false;
     }
 
@@ -279,15 +303,29 @@ export class LandingPageDetailsComponent implements OnInit {
         this.thresholdModal.hide();
     }
 
-    showCompliantModal() {
-        this.compliantModal.show();
+     showCompliantModal(contract) {
+       var kpi= this.orignalArray
+       var filteredkpi = kpi.filter(a => a.contractname == contract)
+        if (filteredkpi[0].complaintkpis != 0){
+            this.KpiCompliants = filteredkpi[0].bestkpis;
+            console.log(this.KpiCompliants,'kpiCompiant')
+        }
+         this.rerender();
+    this.compliantModal.show();
     }
 
     hideCompliantModal() {
         this.compliantModal.hide();
     }
 
-    showNonCompliantModal() {
+    showNonCompliantModal(contract) {
+        var kpi= this.orignalArray
+        var filteredkpi = kpi.filter(a => a.contractname == contract)
+         if (filteredkpi[0].noncomplaintkpis != 0){
+             this.KpiNonCompliants = filteredkpi[0].bestkpis;
+             console.log(this.KpiNonCompliants,'kpiCompiant')
+         }
+          this.rerender();
         this.nonCompliantModal.show();
     }
 
