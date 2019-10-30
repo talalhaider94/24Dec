@@ -11,6 +11,7 @@ import { deepStrictEqual } from 'assert';
 import { DateAdapter } from '@angular/material';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
 
 declare var $;
 var $this;
@@ -86,7 +87,7 @@ export class BookletComponent implements OnInit {
     // dtTrigger: Subject<any> = new Subject();
 
     // @ViewChild(DataTableDirective) dtElement: DataTableDirective;
-    constructor(private apiService: ApiService) {
+    constructor(private apiService: ApiService,private toastr: ToastrService) {
         this.documenti = [
             { id: 1, nome: 'contratto1', cognome: 'giacomo', status: 'attivo', success: 50, danger: 10, warning: 12 },
             { id: 2, nome: 'contratto2', cognome: 'rino', status: 'attesa', success: 200, danger: 0, warning: 0 },
@@ -254,6 +255,7 @@ export class BookletComponent implements OnInit {
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
                 console.log(data,' called createbooklet')
             });
+            this.toastr.success('Success', 'Al termine della elaborazione i booklet (X) verranno inviati al seguente indirizzo : '+this.validEmail);
         }
     }
     addBooklet(){
