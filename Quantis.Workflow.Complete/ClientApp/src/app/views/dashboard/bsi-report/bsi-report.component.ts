@@ -360,7 +360,7 @@ export class BSIReportComponent implements OnInit {
                 const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
                         that
-                          .search($(this).val()+'$', true, false, false)
+                          .search($(this).val().replace(')','\\)').replace('(','\\(')+'$', true, false, false)
                             .draw();
                     });
             });
