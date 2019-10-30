@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { DateTimeService} from './date-time.service';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WidgetHelpersService {
+  allLeafNodesIds: Array<number> = [];
   constructor(
     private dateTimeService: DateTimeService
   ) { }
@@ -74,6 +76,16 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+
+      if(apiParams.getOrgHierarcy) {
+        if(filters.organizations) {
+          buildParams.Filters.organizations = filters.organizations;
+        } else {
+          const organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
+          buildParams.Filters.organizations = organizations.join(',');
+        }
+      }
+
       console.log('initWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
@@ -165,10 +177,34 @@ export class WidgetHelpersService {
       if(filters.groupReportCheck) {
         buildParams.Filters.groupReportCheck = (filters.groupReportCheck === "true"); 
       }
+      if(apiParams.getOrgHierarcy) {
+        if(filters.organizations) {
+          buildParams.Filters.organizations = filters.organizations;
+        } else {
+          buildParams.Filters.organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
+        }
+      }
       console.log('setWidgetParameters buildParams', buildParams);
       return buildParams;
     } catch (error) {
       console.error('setWidgetParameters', error);
     }
   }
+  
+  getAllLeafNodesIds(complexJson) {
+    try {
+        if (complexJson) {
+            complexJson.forEach((item: any) => {
+                if (item.children) {
+                    this.getAllLeafNodesIds(item.children);
+                } else {
+                    this.allLeafNodesIds.push(item.id);
+                }
+            });
+            return this.allLeafNodesIds;
+        }
+    } catch(error) {
+        console.error('getAllLeafNodesIds', error);
+    }
+}
 }
