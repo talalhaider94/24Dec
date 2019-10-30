@@ -51,7 +51,15 @@ export class LandingPageComponent implements OnInit {
     thresholdkey = '@thresholdKey';
     thresholdvalue = 0;
     showMultiSelect : boolean = false;
-    orignalArray:any = [];
+    orignalArray: any = [];
+    myStyle = {
+      'width': '40%',
+      'position': 'absolute',
+      'right': '13%',
+      'top': '37px',
+      'z-index': '9',
+      height: 'auto'
+    }
     constructor(
         private dashboardService: DashboardService,
         private apiService: ApiService,
@@ -91,12 +99,14 @@ export class LandingPageComponent implements OnInit {
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
-                    this.contName = this.limitedData;
+                  this.contName = this.limitedData;
+                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                     this.orignalArray = [...this.limitedData, ...this.gridsData]
                 }else{
                     this.limitedData = this.gridsData;
                     this.orignalArray = this.gridsData;
-                    this.contName = this.limitedData;
+                  this.contName = this.limitedData;
+                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                 }
             }
             console.log("orignalArray -->", this.orignalArray);
@@ -202,7 +212,8 @@ export class LandingPageComponent implements OnInit {
             this.apiService.getLandingPage(this.monthVar, this.yearVar).subscribe((data: any) => {
                 this.gridsData = data;
                 this.gridLength = this.gridsData.length;
-                this.contName = this.gridsData;
+              this.contName = this.gridsData;
+              this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                 if(this.gridsData.length==0){
                     this.toastr.error("Nessun contraente assegnato all'utente");
                     this.loading = false;
@@ -211,11 +222,13 @@ export class LandingPageComponent implements OnInit {
                     if(this.gridsData.length>6){
                       this.limitedData = this.gridsData.splice(0,6);
                       this.contName = this.limitedData;
+                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                       this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
                       this.limitedData = this.gridsData;
                       this.orignalArray = this.gridsData;
                       this.contName = this.limitedData;
+                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                     }
                 }
                 console.log("gridsData -> ", this.gridsData, this.limitedData);
@@ -286,7 +299,8 @@ export class LandingPageComponent implements OnInit {
 
     viewAll(){
         this.setViewAll=1;
-        this.contName = this.orignalArray;
+      this.contName = this.orignalArray;
+      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
         this.showMultiSelect = false;
     }
 

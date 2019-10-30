@@ -83,8 +83,13 @@ export class AuthService {
         return false
     }
     checkLogin(): Observable<any> {
-        const checkLoginEndPoint = `${environment.API_URL}/Information/CheckLogin`;
-        return this.http.get(checkLoginEndPoint);
+      const checkLoginEndPoint = `${environment.API_URL}/Information/CheckLogin`;
+      this.http.get<any>(`${environment.API_URL}/Data/GetHeaders`, Headers.setTokenHeaders('GET') ).subscribe(resp => {
+        console.log(resp.headers.get('Cookie'));
+        console.log(resp.headers);
+        console.log()
+        });
+      return this.http.get(checkLoginEndPoint, Headers.setTokenHeaders('GET'));
     }
     checkToken() {
         this.checkLogin().subscribe((data: any) => {

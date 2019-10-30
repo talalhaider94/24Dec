@@ -68,7 +68,16 @@ export class LandingPageDetailsComponent implements OnInit {
     thresholdvalue = 0;
     setThresholdValue = 0;
     gridLength = 0;
-    orignalArray:any = [];
+  orignalArray: any = [];
+  //style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;"
+  myStyle = {
+    'width': '30%',
+    'position': 'absolute',
+    'right': '49%',
+    'top': '37px',
+    'z-index': '9',
+    height: 'auto'
+  }
     constructor(
         private apiService: ApiService,
         private route: ActivatedRoute,
@@ -109,12 +118,14 @@ export class LandingPageDetailsComponent implements OnInit {
                 this.gridLength = this.gridsData.length;
                 if(this.gridsData.length>6){
                     this.limitedData = this.gridsData.splice(0,6);
-                    this.contName = this.limitedData;
+                  this.contName = this.limitedData;
+                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                     this.orignalArray = [...this.limitedData, ...this.gridsData]
                 }else{
                     this.limitedData = this.gridsData;
                     this.orignalArray = this.gridsData;
-                    this.contName = this.limitedData;
+                  this.contName = this.limitedData;
+                  this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                 }
             }
             console.log("orignalArray -->", this.orignalArray);
@@ -155,16 +166,19 @@ export class LandingPageDetailsComponent implements OnInit {
                     this.gridLength = this.gridsData.length;
                     if(this.gridsData.length>6){
                         this.limitedData = this.gridsData.splice(0,6);
-                        this.contName = this.limitedData;
+                      this.contName = this.limitedData;
+                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                         this.orignalArray = [...this.limitedData, ...this.gridsData]
                     }else{
                         this.limitedData = this.gridsData;
                         this.orignalArray = this.gridsData;
-                        this.contName = this.limitedData;
+                      this.contName = this.limitedData;
+                      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                     }
                 }
                 console.log("Level1 Data -> ", this.gridsData, this.limitedData,this.gridLength);
-                this.contName = this.gridsData;
+              this.contName = this.gridsData;
+              this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
                 this.loading = false;
             });
         }
@@ -231,7 +245,8 @@ export class LandingPageDetailsComponent implements OnInit {
 
     viewAll(){
         this.setViewAll=1;
-        this.contName = this.orignalArray;
+      this.contName = this.orignalArray;
+      this.myStyle.height = ((this.contName.length + 2) * 20) + 'px';
         this.showMultiSelect = false;
     }
 

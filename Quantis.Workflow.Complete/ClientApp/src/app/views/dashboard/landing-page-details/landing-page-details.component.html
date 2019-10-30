@@ -35,7 +35,7 @@
                 <option *ngFor = "let row of contName">{{row.contractname}}</option>
             </select> -->
             <button type="button" class="btn btn-primary ml-1" name="button" (click)="multiSelect()">Contratti</button>
-            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" size='{{gridLength-5}}' style="width:30%;position:absolute;right: 49%;top: 37px;z-index: 9;">
+            <select multiple [hidden]="!showMultiSelect" [(ngModel)]="contractName" (change)='customFilter()' class="form-control ml-1" size='{{gridLength-5}}' [ngStyle]="myStyle" >
                 <option>ALL</option>
                 <option *ngFor = "let row of contName">{{row.contractname}}</option>
             </select>

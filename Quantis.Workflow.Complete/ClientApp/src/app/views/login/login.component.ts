@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit {
 
     get f() { return this.loginForm.controls; }
 
-    ngOnInit() {
+  ngOnInit() {
+        this.authService.checkToken();
         this.loginForm = this.formBuilder.group({
             userName: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(4)]]
