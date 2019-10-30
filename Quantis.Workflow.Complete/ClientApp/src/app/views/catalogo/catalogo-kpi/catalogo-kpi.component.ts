@@ -262,9 +262,11 @@ export class CatalogoKpiComponent implements OnInit {
 
         this.checkEditPermission = this.userPermissions.indexOf("EDIT_CATALOG_KPI");
 
-        if (this.checkEditPermission !== -1) {
-            this.kpiButtonState = '1';
-        }
+      if (this.checkEditPermission !== -1) {
+        this.kpiButtonState = '1';
+      } else {
+        this.kpiButtonState = '0';
+      }
         // if(permission.EDIT_CATALOG_KPI == true || permission.EDIT_CATALOG_KPI == 1){
         //   console.log('permission.EDIT_CATALOG_KPI => ', permission.EDIT_CATALOG_KPI);
         //   this.kpiButtonState = '1';
@@ -659,8 +661,19 @@ export class CatalogoKpiComponent implements OnInit {
 
     getKpis() {
         this.loading = true;
-        this.apiService.getCatalogoKpisByUserId().subscribe((data: any) => {
-            this.kpiTableBodyData = data;
+      this.apiService.getCatalogoKpisByUserId().subscribe((data: any) => {
+        if (this.kpiButtonState !== '1') {
+          
+          for (let i = 0; i < data.length; i++) {
+            console.log(data[i].id);
+            if (data[i].enable == true) {  // check if kpi is enable for users without edit mode
+              this.kpiTableBodyData.push(data[i]);
+            }
+          }
+        } else {
+          this.kpiTableBodyData = data;
+        }
+            
             console.log('Kpis ', data);
             this.rerender();
         });

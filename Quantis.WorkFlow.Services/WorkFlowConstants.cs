@@ -72,7 +72,7 @@
         public const string VIEW_CONFIGURATION_ADVANCED = "VIEW_CONFIGURATION_ADVANCED";
         public const string VIEW_CONFIGURATION_SDM_GROUP = "VIEW_CONFIGURATION_SDM_GROUP";
         public const string VIEW_CONFIGURATION_SDM_TICKET_STATUS = "VIEW_CONFIGURATION_SDM_TICKET_STATUS";
-        public const string VIEW_BSI_LINK = "VIEW_BSI_LINK";
+        public const string VIEW_LINK_BSI = "VIEW_LINK_BSI";
         public const string VIEW_NOTIFIER_EMAILS = "VIEW_NOTIFIER_EMAILS";
         public const string VIEW_RAW_DATA = "VIEW_RAW_DATA";
         public const string VIEW_BOOKLET = "VIEW_BOOKLET";
@@ -82,7 +82,7 @@
         public const string VIEW_REPORT_QUERIES = "VIEW_REPORT_QUERIES";
         public const string IMPORT_FREE_FORM_REPORT = "IMPORT_FREE_FORM_REPORT";
         public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
-        public const string VIEW_CHART_REPORT = "VIEW_CHART_REPORT";
+        public const string VIEW_REPORT_CUSTOM = "VIEW_REPORT_CUSTOM";
         public const string VIEW_CUTOFF_WORKFLOW_DAY = "VIEW_CUTOFF_WORKFLOW_DAY";
         public const string VIEW_LOADING_CSV = "VIEW_LOADING_CSV";
         public const string VIEW_LINK_POWERBI = "VIEW_LINK_POWERBI";
