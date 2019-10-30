@@ -532,5 +532,11 @@ namespace Quantis.WorkFlow.Controllers
         {
             return _dataAPI.GetLogs(limit);
         }
+        [HttpGet("GetHeaders")]
+        public IActionResult GetHeaders()
+        {   
+            var json = new { identity = HttpContext.User.Identity.Name, websocket = HttpContext.WebSockets.WebSocketRequestedProtocols, /*requestservice = HttpContext.RequestServices, features = HttpContext.Features,*/ request = HttpContext.Request.Headers, response = HttpContext.Response.Headers };
+            return Ok(json);
+        }
     }
 }

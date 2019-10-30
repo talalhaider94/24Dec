@@ -390,7 +390,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table stripe" #NonCompliantTable  class="table table-responsive-sm table-hover table-outline mb-0">
+                <table class="table stripe" #NonCompliantTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2"  class="table table-responsive-sm table-hover table-outline mb-0">
                     <thead style="background: #20a8d8">
                         <tr style="font-size:12px;color:white">
                             <th style="text-align:center; width:60%">KPI</th>

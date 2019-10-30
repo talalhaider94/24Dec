@@ -1,7 +1,7 @@
 import { Component, OnInit, ComponentRef, ViewChild, HostListener, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { GridsterConfig, GridType, DisplayGrid } from 'angular-gridster2';
-import { DashboardService, EmitterService, FreeFormReportService } from '../../../_services';
+import { DashboardService, EmitterService, FreeFormReportService,ApiService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
 import { DashboardModel, DashboardContentModel, WidgetModel, ComponentCollection } from '../../../_models';
 import { forkJoin } from 'rxjs';
@@ -22,6 +22,7 @@ import { KpiCountByOrganizationComponent } from '../../../widgets/kpi-count-by-o
 import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/kpi-status-summary.component';
 import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-public',
@@ -51,8 +52,41 @@ export class PublicComponent implements OnInit {
 	treeDataFields: Object;
 	allLeafNodesIds = [];
 	uncheckedNodes = [];
+	datiGrezzi = [];
 	from_changed;
 	to_changed;
+	kpiId;
+	startDate;
+	endDate;
+	selectedday;
+	selectedmonth;
+	selectedyear;
+	months = [];
+	monthVar
+
+	isLoadedDati=0;
+	loadingModalDati: boolean = false;
+	public periodFilter: number;
+	countCampiData = [];
+    eventTypes: any = {};
+	resources: any = {};
+	
+	fitroDataById: any = [
+        {
+            event_type_id: '   ',
+            resource_id: '',
+            time_stamp: ' ',
+            raw_data_id: '',
+            create_date: ' ',
+            data: this.datiGrezzi,
+            modify_date: '',
+            reader_id: '',
+            event_source_type_id: ' ',
+            event_state_id: ' ',
+            partner_raw_data_id: ' ',
+        }
+	]
+	
 	// FORM
 	widgetParametersForm: FormGroup;
 	submitted: boolean = false;
@@ -72,7 +106,7 @@ export class PublicComponent implements OnInit {
 	helpText: string = '';
 	showDateRangeInFilters: boolean = false;
 	showCustomDate: boolean = false;
-
+  showEventCol: boolean = true;
 	isBarChartComponent: boolean = false;
 	isKpiCountSummaryComponent: boolean = false;
 	isverificaDoughnutComponent: boolean = false;
@@ -100,6 +134,7 @@ export class PublicComponent implements OnInit {
 	kpiReportDrillDownTable: any;
 	constructor(
 		private dashboardService: DashboardService,
+		private apiService: ApiService,
 		private _route: ActivatedRoute,
 		private emitter: EmitterService,
 		private toastr: ToastrService,
@@ -233,6 +268,88 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openKpiReportDrillDownTable') {
 				this.kpiReportDrillDownTableModal.show();
 				this.kpiReportDrillDownTable = childData.data.setWidgetFormValues;
+
+				///////////////////////////////////////////////////
+
+				this.months.length = 0;
+				if(this.kpiReportDrillDownTable.Filters.kpi){
+					this.kpiId = this.kpiReportDrillDownTable.Filters.kpi;
+				}
+				else{
+					this.kpiId = 0;
+				}
+				if(this.kpiReportDrillDownTable.Filters.daterange){
+					this.startDate = this.kpiReportDrillDownTable.Filters.daterange[0];
+					this.endDate = this.kpiReportDrillDownTable.Filters.daterange[1];
+				}
+				else{
+					this.startDate = this.kpiReportDrillDownTable.Filters.startDate;
+					this.endDate = this.kpiReportDrillDownTable.Filters.endDate;
+				}
+				
+				
+				this.startDate = new Date(this.startDate).toUTCString();
+				this.endDate = new Date(this.endDate).toUTCString();
+
+				///////////////////// From Month and Year ////////////////////
+				let stringToSplit = this.startDate;
+				let split = stringToSplit.split(",");
+
+				let extra = split[1];
+				let fromSplit = extra.split(" ");
+
+				let day = fromSplit[1];
+				let month = fromSplit[2];
+				let fromMonth = moment().month(month).format("M");
+
+				let from_month = +fromMonth;
+				from_month=from_month+1;
+
+				let fromYear = fromSplit[3];
+
+				let fromDateString = day+'/'+fromMonth+'/'+fromYear;
+				
+				///////////////////// To Month and Year ////////////////////
+
+				let stringToSplit2 = this.endDate;
+				let split2 = stringToSplit2.split(",");
+
+				let extra2 = split2[1];
+				let toSplit = extra2.split(" ");
+
+				let day2 = toSplit[1];
+				let month2 = toSplit[2];
+				let toMonth = moment().month(month2).format("M");
+				let toYear = toSplit[3];
+
+				let to_month = +toMonth;
+				to_month=to_month+1;
+
+				console.log(to_month,toYear);
+
+				this.selectedmonth = to_month;
+				this.selectedyear = toYear;
+
+				/////////////////////////////////////////////
+
+				let toDateString = day2+'/'+toMonth+'/'+toYear;
+
+				console.log('fromtomonths -> ',fromDateString,toDateString);
+
+				var fromCheck = moment(fromDateString, 'DD/MM/YYYY');
+        		var toCheck = moment(toDateString, 'DD/MM/YYYY');
+
+				while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+					let monthyear = fromCheck.format('MM') + '/' + fromCheck.format('YYYY');
+					this.months.push(monthyear);
+					fromCheck.add(1,'month');
+				}
+
+				console.log('months -> ',this.months);
+
+				/////////////////////////////////////////////
+
+				this.getdati1(this.kpiId,to_month,toYear)
 			}
 
 		},
@@ -898,4 +1015,102 @@ export class PublicComponent implements OnInit {
 			});	
 		}
 	}
+
+	getdati1(kpiId:number,toMonth:number,toYear:number) {
+        this.periodFilter = 1;
+        let month;
+		let year;
+        if(toMonth<10){
+            month = '0' + toMonth;
+        }else{
+            month = toMonth;
+        }
+        year = toYear;
+        this.loadingModalDati = true;
+        this.isLoadedDati=1;
+
+        console.log('getdati1 -> ',kpiId,month,year);
+
+        this.apiService.getKpiRawData(kpiId, month, 2018).subscribe((dati: any) => {
+            this.fitroDataById = dati;
+            //console.log(dati);
+            Object.keys(this.fitroDataById).forEach(key => {
+                this.fitroDataById[key].data = JSON.parse(this.fitroDataById[key].data);
+                switch (this.fitroDataById[key].event_state_id) {
+                    case 1:
+                        this.fitroDataById[key].event_state_id = "Originale";
+                        break;
+                    case 2:
+                        this.fitroDataById[key].event_state_id = "Sovrascritto";
+                        break;
+                    case 3:
+                        this.fitroDataById[key].event_state_id = "Eliminato";
+                        break;
+                    case 4:
+                        this.fitroDataById[key].event_state_id = "Correzione";
+                        break;
+                    case 5:
+                        this.fitroDataById[key].event_state_id = "Correzione eliminata";
+                        break;
+                    case 6:
+                        this.fitroDataById[key].event_state_id = "Business";
+                        break;
+                    default:
+                        this.fitroDataById[key].event_state_id = this.fitroDataById[key].event_state_id;
+                        break;
+                }
+                this.fitroDataById[key].event_type_id = this.eventTypes[this.fitroDataById[key].event_type_id] ? this.eventTypes[this.fitroDataById[key].event_type_id] : this.fitroDataById[key].event_type_id;
+                this.fitroDataById[key].resource_id = this.resources[this.fitroDataById[key].resource_id] ? this.resources[this.fitroDataById[key].resource_id] : this.fitroDataById[key].resource_id;
+                this.fitroDataById[key].modify_date = moment(this.fitroDataById[key].modify_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].create_date = moment(this.fitroDataById[key].create_date).format('DD/MM/YYYY HH:mm:ss');
+                this.fitroDataById[key].time_stamp = moment(this.fitroDataById[key].time_stamp).format('DD/MM/YYYY HH:mm:ss');
+            })
+            this.getCountCampiData();
+
+            let max = this.countCampiData.length;
+
+            Object.keys(this.fitroDataById).forEach(key => {
+                let temp = Object.keys(this.fitroDataById[key].data).length;
+                if (temp < max) {
+                    for (let i = 0; i < (max - temp); i++) {
+                        this.fitroDataById[key].data['empty#' + i] = '##empty##';
+                    }
+                }
+            })
+            console.log('dati', dati);
+            this.loadingModalDati = false;
+        },
+        error => {
+            this.loadingModalDati = false;
+        });
+	}
+	
+	getCountCampiData() {
+        let maxLength = 0;
+        this.fitroDataById.forEach(f => {
+            //let data = JSON.parse(f.data);
+            if (Object.keys(f.data).length > maxLength) {
+                maxLength = Object.keys(f.data).length;
+            }
+        });
+        this.countCampiData = [];
+        for (let i = 1; i <= maxLength; i++) {
+            this.countCampiData.push(i);
+        }
+	}
+	
+    selectedMonth(e){
+        let stringToSplit = this.monthVar;
+        let split = stringToSplit.split("/");
+        let month = split[0];
+        let year = split[1];
+
+        console.log('KPI ID -> ',this.kpiId,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+        this.selectedmonth = month;
+        this.selectedyear = year;
+
+        this.getdati1(this.kpiId,month,year);
+    }
+	
 }
