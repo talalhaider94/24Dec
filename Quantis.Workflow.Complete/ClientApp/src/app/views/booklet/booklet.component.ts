@@ -252,20 +252,27 @@ export class BookletComponent implements OnInit {
             }
             console.log(data,'payload');
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
-                console.log(data,'called createbookley')
+                console.log(data,' called createbooklet')
             });
         }
     }
-    async addBooklet(){
+    addBooklet(){
         let isValid ;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
+            console.log('Email: ',data)
             isValid = data;
-            if(isValid == this.utente.useremail) {
-              this.validEmail = data;
-              this.createbooklet();
+            if(data == null || data==''){
+                this.showThresholdModal();
             }else{
-              this.showThresholdModal();
+                this.validEmail = data;
+                this.createbooklet();
             }
+            // if(isValid == this.utente.useremail) {
+            //   this.validEmail = data;
+            //   this.createbooklet();
+            // }else{
+            //   this.showThresholdModal();
+            // }
 
         });
 
@@ -286,7 +293,7 @@ export class BookletComponent implements OnInit {
 
     }
 
-    async showThresholdModal() {
+    showThresholdModal() {
         this.thresholdModal.show();
     }
 
