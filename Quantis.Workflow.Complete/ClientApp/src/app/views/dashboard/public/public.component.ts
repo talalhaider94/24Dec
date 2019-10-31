@@ -195,8 +195,16 @@ export class PublicComponent implements OnInit {
 					}, 50);
 					console.log('this.preSelectedNodes if', JSON.stringify(this.preSelectedNodes));
 				} else {
-					// debugger
-					const allOrganizationIds = this.barChartWidgetParameters.filters.organizations.split(',');
+					let allOrganizationIds;
+					if(this.barChartWidgetParameters.filters.organizations) {
+						allOrganizationIds = this.barChartWidgetParameters.filters.organizations.split(',');
+					} else {
+						if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
+							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
+						} else {
+							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.split(',');
+						}
+					}
 					setTimeout(() => {
 						this.preSelectedNodes = allOrganizationIds;
 					}, 50);
