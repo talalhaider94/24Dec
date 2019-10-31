@@ -153,23 +153,27 @@ export class FormReportQueryComponent implements OnInit {
       this.loading=true;
       this.debug();
     }else{
-      this.submitted = true;
-      if (this.addEditQueryForm.invalid) {
-      } else {
-        this.formLoading = true;
-        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-          //this.getReportsData();
-          this.formLoading = false;
-          this.submitted = false;
-          this.addEditQueryForm.reset();
-          this.toastr.success('Query created successfully');
-        }, error => {
-          this.loading = false;
-          this.formLoading = false;
-          this.toastr.error('Errore esecuzione report');
-        });
+      if(this.addEditQueryForm.value.QueryName == 'KpiCalculationStatus'){
+        this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
+      }else{
+        this.submitted = true;
+        if (this.addEditQueryForm.invalid) {
+        } else {
+          this.formLoading = true;
+          this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+            //this.getReportsData();
+            this.formLoading = false;
+            this.submitted = false;
+            this.addEditQueryForm.reset();
+            this.toastr.success('Query created successfully');
+          }, error => {
+            this.loading = false;
+            this.formLoading = false;
+            this.toastr.error('Errore esecuzione report');
+          });
+        }
+        this.isSubmit=1;
       }
-      this.isSubmit=1;
     }
   }
   
