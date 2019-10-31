@@ -153,7 +153,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 var reportInfoCal = reportInfo.Element("CALC_STATUS");
                 result.CalculationStatusText = reportInfoCal.Element("TEXT")?.Value;
                 result.CalculationStatusBookletText = reportInfoCal.Element("BOOKLET_TEXT")?.Value;
-                result.CalculationStatusLastDate = reportInfoCal.Element("LAST_CALC_DATE").Value;
+                result.CalculationStatusLastDate = reportInfoCal.Element("LAST_CALC_DATE")?.Value;
                 result.Data = new List<Services.DTOs.Widgets.XYZDTO>();
                 result.GlobalRuleId= int.Parse(reportInfo.Element("FILTER").Element("RULE").Value);
                 var reportGrid = reportInfo.Element("GRID").Elements();

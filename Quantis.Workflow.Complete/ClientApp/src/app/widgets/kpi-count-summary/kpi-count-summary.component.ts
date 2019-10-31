@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import { ToastrService } from 'ngx-toastr';
 import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -34,7 +34,8 @@ export class KpiCountSummaryComponent implements OnInit {
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
-        private widgetHelper: WidgetHelpersService
+        private widgetHelper: WidgetHelpersService,
+        private toastr: ToastrService,
     ) { }
 
     ngOnInit() {
@@ -43,7 +44,12 @@ export class KpiCountSummaryComponent implements OnInit {
             this.isDashboardModeEdit = false;
             if (this.url) {
                 this.emitter.loadingStatus(true);
-                this.getChartParametersAndData(this.url);
+                this.dashboardService.GetOrganizationHierarcy().subscribe(result => {
+                    this.getChartParametersAndData(this.url, result);
+                }, error => {
+                    console.error('GetOrganizationHierarcy', error);
+                    this.toastr.error(`Unable to get contracts for ${this.widgetname}`, 'Error!');
+                });
             }
             // coming from dashboard component
             this.subscriptionForDataChangesFromParent();
@@ -71,7 +77,7 @@ export class KpiCountSummaryComponent implements OnInit {
     }
 
     // invokes on component initialization
-    getChartParametersAndData(url) {
+    getChartParametersAndData(url, getOrgHierarcy) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         this.loading = true;
@@ -80,6 +86,7 @@ export class KpiCountSummaryComponent implements OnInit {
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
                 this.allMeasuresObj = myWidgetParameters.measures;
+                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 // Map Params for widget index when widgets initializes for first time
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 this.measure = this.allMeasuresObj[newParams.Properties.measure];

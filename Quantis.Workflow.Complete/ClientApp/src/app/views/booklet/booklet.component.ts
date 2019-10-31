@@ -58,7 +58,7 @@ export class BookletComponent implements OnInit {
   };
     dtOptions: DataTables.Settings = {
         pagingType: 'full_numbers',
-        pageLength: 10,
+        pageLength: 25,
         language: {
             processing: "Elaborazione...",
             search: "Cerca:",
@@ -140,7 +140,7 @@ export class BookletComponent implements OnInit {
               const select = $('#searchCol1')
                 .on('change', function () {
                   that
-                    .search($(this).val(), false, false, false)
+                    .search('^' + $(this).val().replace(')', '\\)').replace('(', '\\(') + '$', true, false, false)
                     .draw();
                 });
 
