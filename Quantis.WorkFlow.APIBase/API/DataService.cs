@@ -1185,13 +1185,11 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account.ToLower() == username.ToLower());
-                if (usr != null)
+                if (password == "siteminderAccess")
                 {
-                    var secret_key = _infomationAPI.GetConfiguration("be_restserver", "secret_key");
-
-                    var db_password = sha256_hash(secret_key.Value + usr.password);
-                    if (password == db_password)
+                    var usernameRete = "rete\\" + username.Replace("[", "").Replace("]", "").Replace("\"", "").Replace("\"", "");
+                    var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.userid.ToLower() == usernameRete.ToLower());
+                    if (usr != null)
                     {
                         var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
                         //var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
@@ -1226,8 +1224,54 @@ namespace Quantis.WorkFlow.APIBase.API
                             };
                         }
                     }
+                    return null;
                 }
-                return null;
+                else
+                {
+                    var usr = _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_account.ToLower() == username.ToLower());
+                    if (usr != null)
+                    {
+                        var secret_key = _infomationAPI.GetConfiguration("be_restserver", "secret_key");
+
+                        var db_password = sha256_hash(secret_key.Value + usr.password);
+                        if (password == db_password)
+                        {
+                            var token = MD5Hash(usr.userid + DateTime.Now.Ticks);
+                            //var res = _oracleAPI.GetUserIdLocaleIdByUserName(usr.ca_bsi_account);
+                            var res = _dbcontext.TUsers.FirstOrDefault(u => u.user_id == usr.ca_bsi_user_id && u.user_status == "ACTIVE");
+                            if (res != null)
+                            {
+                                _dbcontext.Sessions.Add(new T_Session()
+                                {
+                                    //user_id = res.Item1,
+                                    user_id = res.user_id,
+                                    user_name = usr.ca_bsi_account,
+                                    login_time = DateTime.Now,
+                                    session_token = token,
+                                    expire_time = DateTime.Now.AddMinutes(getSessionTimeOut())
+                                });
+                                _dbcontext.SaveChanges();
+                                _cache.Remove("Permission_" + res.user_id);
+                                var permissions = _infomationAPI.GetPermissionsByUserId(res.user_id).Select(o => o.Code).ToList();
+                                _cache.GetOrCreate("Permission_" + res.user_id, entry => permissions);
+                                var dash = _dbcontext.DB_Dashboards.FirstOrDefault(o => o.UserId == res.user_id && o.IsDefault);
+
+                                return new LoginResultDTO()
+                                {
+                                    Token = token,
+                                    UserID = res.user_id,
+                                    LocaleID = res.user_locale_id,
+                                    UserEmail = usr.mail,
+                                    UserName = usr.ca_bsi_account,
+                                    Permissions = permissions,
+                                    DefaultDashboardId = dash == null ? -1 : dash.Id,
+                                    UIVersion = _configuration["UIVersion"],
+                                };
+                            }
+                        }
+                    }
+                    return null;
+                }
             }
             catch (Exception e)
             {

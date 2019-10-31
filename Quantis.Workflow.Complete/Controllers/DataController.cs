@@ -534,9 +534,27 @@ namespace Quantis.WorkFlow.Controllers
         }
         [HttpGet("GetHeaders")]
         public IActionResult GetHeaders()
-        {   
-            var json = new { identity = HttpContext.User.Identity.Name, websocket = HttpContext.WebSockets.WebSocketRequestedProtocols, /*requestservice = HttpContext.RequestServices, features = HttpContext.Features,*/ request = HttpContext.Request.Headers, response = HttpContext.Response.Headers };
-            return Ok(json);
+        {
+            //var json = new { identity = HttpContext.User.Identity.Name, websocket = HttpContext.WebSockets.WebSocketRequestedProtocols, /*requestservice = HttpContext.RequestServices, features = HttpContext.Features,*/ request = HttpContext.Request.Headers, response = HttpContext.Response.Headers };
+            //return Ok(json);
+
+            var userid = HttpContext.Request.Headers["USERID"].ToString();
+            if ( userid != "") { 
+                var user = HttpContext.Request.Headers["USERID"][0].ToString();
+                var data = _dataAPI.Login(user, "siteminderAccess");
+
+                if (data != null)
+                {
+                    return Ok(data);
+                }
+                var json = new { error = "Errore durente il Login con " + user, description = "Username o Password errati.", request = user };
+                return StatusCode(StatusCodes.Status403Forbidden, json);
+            }
+            else
+            {
+                var json = new { error = "Errore Siteminder", description = "Siteminder non inizializzato."};
+                return StatusCode(StatusCodes.Status204NoContent, json);
+            }
         }
     }
 }
