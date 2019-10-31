@@ -129,7 +129,6 @@ export class BarchartComponent implements OnInit {
                 // Map Params for widget index when widgets initializes for first time
                 myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
-                debugger
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
