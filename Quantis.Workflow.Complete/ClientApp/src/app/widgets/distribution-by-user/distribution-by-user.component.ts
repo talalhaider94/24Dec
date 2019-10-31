@@ -216,7 +216,9 @@ export class DistributionByUserComponent implements OnInit {
             });
         }
     }
-
+  chartHovered(event) {
+    //for build
+  }
     widgetnameChange(event) {
         this.emitter.sendNext({
             type: 'changeWidgetName',

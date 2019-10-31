@@ -553,7 +553,7 @@ namespace Quantis.WorkFlow.Controllers
             else
             {
                 var json = new { error = "Errore Siteminder", description = "Siteminder non inizializzato."};
-                return StatusCode(StatusCodes.Status204NoContent, json);
+                return StatusCode(StatusCodes.Status406NotAcceptable, json);
             }
         }
     }

@@ -30,6 +30,9 @@ export class ErrorInterceptorService implements HttpInterceptor {
       if (err.status === 403) {
         return throwError(err.error);
       }
+      if (err.status === 406) {
+        console.log('errore siteminder');
+      }
       if (err.status >= 500 && err.status < 600) {
         this.toastr.error('Errore durante la comunicazione con il server');
       }
