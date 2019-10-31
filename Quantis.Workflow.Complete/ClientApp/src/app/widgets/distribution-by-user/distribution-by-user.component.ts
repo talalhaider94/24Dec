@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { forkJoin } from 'rxjs';
-import { DateTimeService, WidgetHelpersService } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+HC_exporting(Highcharts);
 @Component({
     selector: 'app-distribution-by-user',
     templateUrl: './distribution-by-user.component.html',
@@ -18,10 +21,10 @@ export class DistributionByUserComponent implements OnInit {
     @Input() dashboardid: number;
     @Input() id: number;
 
-    loading: boolean = true;
+    loading: boolean = false;
     distributionByUserWidgetParameters: any;
     setWidgetFormValues: any;
-    editWidgetName: boolean = true;
+    isDashboardModeEdit: boolean = true;
     @Output()
     distributionByUserParent = new EventEmitter<any>();
 
@@ -36,7 +39,46 @@ export class DistributionByUserComponent implements OnInit {
     };
     public barChartLegend: boolean = true;
     public barChartType: string = 'bar';
-
+    highcharts = Highcharts;
+    myChartUpdateFlag: boolean = true;
+    myChartOptions = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: false,
+        subtitle: {
+            text: ''
+        },
+        chart: {
+            type: 'column'
+        },
+        xAxis: {
+            type: 'date',
+            categories: [],
+            crosshair: true
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            console.log('DistributionByUser Click Event');
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [],
+        exporting: {
+            enabled: true
+        },
+    };
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -48,14 +90,15 @@ export class DistributionByUserComponent implements OnInit {
     ngOnInit() {
         console.log('Distribution By User', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         if (this.router.url.includes('dashboard/public')) {
-            this.editWidgetName = false;
+            this.isDashboardModeEdit = false;
+            if (this.url) {
+                this.emitter.loadingStatus(true);
+                this.getChartParametersAndData(this.url);
+            }
+            // coming from dashboard or public parent components
+            this.subscriptionForDataChangesFromParent();
         }
-        if (this.url) {
-            this.emitter.loadingStatus(true);
-            this.getChartParametersAndData(this.url);
-        }
-        // coming from dashboard or public parent components
-        this.subscriptionForDataChangesFromParent()
+        window.dispatchEvent(new Event('resize'));
     }
     // DANIAL: TODO NEED TO UPDATE
     subscriptionForDataChangesFromParent() {
@@ -79,6 +122,7 @@ export class DistributionByUserComponent implements OnInit {
     getChartParametersAndData(url) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
+        this.loading = true;
         let myWidgetParameters = null;
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
@@ -129,9 +173,6 @@ export class DistributionByUserComponent implements OnInit {
         //this.router.navigate(['/workflow/verifica'], {state: {data: {month:'all', year:'19', key: 'bar_chart'}}});
         let params = { month: 'all', year: '19', key: 'bar_chart' };
         window.open(`/#/workflow/verifica/?m=${params.month}&y=${params.year}&k=${params.key}`, '_blank');
-    }
-
-    public chartHovered(e: any): void {
     }
 
     openModal() {
