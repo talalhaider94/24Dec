@@ -245,6 +245,7 @@ export class BookletComponent implements OnInit {
     }
     createbooklet(){
         this.hideThresholdModal();
+        let count = this.itemArray.length;
         if(this.validEmail != null || this.validEmail != ''){
             let data = {
                 ListContract:this.itemArray,
@@ -255,7 +256,7 @@ export class BookletComponent implements OnInit {
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
                 console.log(data,' called createbooklet')
             });
-            this.toastr.success('Success', 'Al termine della elaborazione i booklet (X) verranno inviati al seguente indirizzo : '+this.validEmail);
+            this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
         }
     }
     addBooklet(){

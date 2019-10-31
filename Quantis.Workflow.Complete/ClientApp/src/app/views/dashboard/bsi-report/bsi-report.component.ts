@@ -160,7 +160,7 @@ export class BSIReportComponent implements OnInit {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
                 },
                 point: {
                     events: {
@@ -398,13 +398,19 @@ export class BSIReportComponent implements OnInit {
             type: 'column',
             name: 'Violation',
             data: allViolationData,
-            color: '#f86c6b'
+            color: '#f86c6b',
+            dataLabels: {
+                color: '#f86c6b'
+            },
         };
         this.chartOptions.series[1] = {
             type: 'column',
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
+            dataLabels: {
+                color: '#379457'
+            },
         };
         this.chartOptions.series[2] = {
             type: 'scatter',
@@ -412,7 +418,10 @@ export class BSIReportComponent implements OnInit {
             data: allTargetData,
             marker: {
                 fillColor: '#ffc107'
-            }
+            },
+            dataLabels: {
+                color: '#ffc107'
+            },
         };
         this.chartOptions.series[3] = {
             type: 'scatter',
@@ -420,7 +429,10 @@ export class BSIReportComponent implements OnInit {
             data: allMinorData,
             marker: {
                 fillColor: '#1985ac'
-            }
+            },
+            dataLabels: {
+                color: '#1985ac'
+            },
         };
         this.chartOptions.series[4] = {
             type: 'scatter',
@@ -428,7 +440,10 @@ export class BSIReportComponent implements OnInit {
             data: allCriticalData,
             marker: {
                 fillColor: '#f86c6b'
-            }
+            },
+            dataLabels: {
+                color: '#f86c6b'
+            },
         };
         this.chartUpdateFlag = true;
     }
@@ -463,13 +478,19 @@ export class BSIReportComponent implements OnInit {
             type: 'column',
             name: 'Violation',
             data: allViolationData,
-            color: '#f86c6b'
+            color: '#f86c6b',
+            dataLabels: {
+                color: '#f86c6b'
+            },
         };
         this.chartOptions2.series[1] = {
             type: 'column',
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
+            dataLabels: {
+                color: '#379457'
+            },
         };
         this.chartOptions2.series[2] = {
             type: 'scatter',
@@ -477,7 +498,10 @@ export class BSIReportComponent implements OnInit {
             data: allTargetData,
             marker: {
                 fillColor: '#ffc107'
-            }
+            },
+            dataLabels: {
+                color: '#ffc107'
+            },
         };
         this.chartOptions2.series[3] = {
             type: 'scatter',
@@ -485,7 +509,10 @@ export class BSIReportComponent implements OnInit {
             data: allMinorData,
             marker: {
                 fillColor: '#1985ac'
-            }
+            },
+            dataLabels: {
+                color: '#1985ac'
+            },
         };
         this.chartOptions2.series[4] = {
             type: 'scatter',
@@ -493,7 +520,10 @@ export class BSIReportComponent implements OnInit {
             data: allCriticalData,
             marker: {
                 fillColor: '#f86c6b'
-            }
+            },
+            dataLabels: {
+                color: '#f86c6b'
+            },
         };
         this.chartUpdateFlag2 = true;
     }
