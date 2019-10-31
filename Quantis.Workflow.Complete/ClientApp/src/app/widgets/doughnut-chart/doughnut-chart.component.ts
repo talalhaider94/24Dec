@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetsHelper } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+import { ToastrService } from 'ngx-toastr';
+HC_exporting(Highcharts);
 @Component({
     selector: 'app-doughnut-chart',
     templateUrl: './doughnut-chart.component.html',
@@ -18,42 +21,82 @@ export class DoughnutChartComponent implements OnInit {
     @Input() dashboardid: number;
     @Input() id: number; // this is unique id
 
-    loading: boolean = true;
+    loading: boolean = false;
     verificaDoughnutChartWidgetParameters: any;
     setWidgetFormValues: any;
-    editWidgetName: boolean = true;
+    isDashboardModeEdit: boolean = true;
     @Output()
     verificaDoughnutParent = new EventEmitter<any>();
 
-    public doughnutChartLabels: string[] = [
-        "No Data in Compliant",
-        "No Data in Non Compliant",
-        "No Data in Non Calculato"
-    ];
-    public doughnutChartData: number[] = [100, 0, 0];
-    public doughnutChartType: string = "doughnut";
-    public barChartOptions: any = {
-        responsive: true,
-        legend: { position: 'bottom' },
+    highcharts = Highcharts;
+    myChartUpdateFlag: boolean = true;
+    myChartOptions = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: false,
+        subtitle: {
+            text: ''
+        },
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.y}'
+
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [{
+            // name: this.widgetname,
+            colorByPoint: true,
+            data: [{
+                name: 'No Data',
+                y: 100
+            }]
+        }],
+        exporting: {
+            enabled: true
+        },
     };
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
-        private router: Router
+        private router: Router,
+        private toastr: ToastrService,
+        private widgetHelper: WidgetHelpersService,
     ) { }
 
     ngOnInit() {
         console.log('DoughnutChartComponent Distribution by Verifica', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         if (this.router.url.includes('dashboard/public')) {
-            this.editWidgetName = false;
+            this.isDashboardModeEdit = false;
+            if (this.url) {
+                this.loading = true;
+                this.emitter.loadingStatus(true);
+                this.dashboardService.GetOrganizationHierarcy().subscribe(result => {
+                    this.getChartParametersAndData(this.url, result);
+                }, error => {
+                    console.error('GetOrganizationHierarcy', error);
+                    this.toastr.error(`Unable to get contracts for ${this.widgetname}`, 'Error!');
+                });
+            }
+            // coming from dashboard or public parent components
+            this.subscriptionForDataChangesFromParent();
         }
-        if (this.url) {
-            this.emitter.loadingStatus(true);
-            this.getChartParametersAndData(this.url);
-        }
-        // coming from dashboard or public parent components
-        this.subscriptionForDataChangesFromParent()
+        window.dispatchEvent(new Event('resize'));
     }
 
     subscriptionForDataChangesFromParent() {
@@ -73,7 +116,7 @@ export class DoughnutChartComponent implements OnInit {
             }
         });
     }
-    getChartParametersAndData(url) {
+    getChartParametersAndData(url, getOrgHierarcy) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         let myWidgetParameters = null;
@@ -81,7 +124,8 @@ export class DoughnutChartComponent implements OnInit {
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
-                let newParams = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
+                const newParams = this.widgetHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
                 /// To be used -> getWidgetIndex method ////
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
@@ -106,7 +150,7 @@ export class DoughnutChartComponent implements OnInit {
                 }
                 this.verificaDoughnutChartWidgetParameters = verificaDoughnutChartParams.data;
                 // setting initial Paramter form widget values
-                this.setWidgetFormValues = WidgetsHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                this.setWidgetFormValues = this.widgetHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
             }
             // popular chart data
             if (getWidgetIndex) {
@@ -141,15 +185,29 @@ export class DoughnutChartComponent implements OnInit {
     // dashboardComponentData is result of data coming from
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-        let allLabels = chartIndexData.map(label => label.xvalue);
-        let allData = chartIndexData.map(data => data.yvalue);
-        if (!allData.every(data => data == 0)) {
-            this.doughnutChartData.length = 0;
-            this.doughnutChartData.push(...allData);
-            this.doughnutChartLabels.length = 0;
-            this.doughnutChartLabels = allLabels;
-            this.closeModal();
+        debugger
+        if (chartIndexData.length) {
+            this.myChartOptions.subtitle = {
+                text: ''
+            }
+        } else {
+            this.myChartOptions.subtitle = {
+                text: `No data in ${this.widgetname}`
+            }
         }
+        if (chartIndexData.length > 0) {
+            const mapData = chartIndexData.map(data => ({ name: data.xvalue, y: data.yvalue }));
+            debugger
+            this.myChartOptions.series[0].data = mapData;
+        } else {
+            this.myChartOptions.series[0].data = [{
+                name: 'No Data',
+                y: 0
+            }];
+        }
+
+        this.myChartUpdateFlag = true;
+        this.closeModal();
     }
 
     widgetnameChange(event) {

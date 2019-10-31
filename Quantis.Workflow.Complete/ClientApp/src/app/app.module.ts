@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { FFRPipe } from './_pipes/ffr.pipe';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -92,6 +93,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         RegisterComponent,
         ForgetComponent,
         SafePipe,
+        FFRPipe,
         // KpiReportTrendComponent
         // FilterUsersPipe
         // LoadingFormComponent,

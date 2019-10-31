@@ -308,24 +308,29 @@ export class FreeFormReportComponent implements OnInit {
     else if(event=='test'){
       this.test();
     }else{
-      this.submitted = true;
-      if (this.addEditQueryForm.invalid) {
-      } else {
-        this.formLoading = true;
-        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-          //this.getReportsData();
-          this.formLoading = false;
-          this.submitted = false;
-          //this.addEditQueryForm.reset();
-          this.getOwnedQueries();
-          this.getAssignedQueries();
-          this.toastr.success('Query created successfully');
-        }, error => {
-          this.formLoading = false;
-          this.toastr.error('Error while creating Query');
-        });
+      //console.log('Selected Query name: ',this.addEditQueryForm.value.QueryName);
+      if(this.addEditQueryForm.value.QueryName == 'KpiCalculationStatus'){
+        this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
+      }else{
+        this.submitted = true;
+        if (this.addEditQueryForm.invalid) {
+        } else {
+          this.formLoading = true;
+          this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+            //this.getReportsData();
+            this.formLoading = false;
+            this.submitted = false;
+            //this.addEditQueryForm.reset();
+            this.getOwnedQueries();
+            this.getAssignedQueries();
+            this.toastr.success('Query created successfully');
+          }, error => {
+            this.formLoading = false;
+            this.toastr.error('Error while creating Query');
+          });
+        }
+        this.isSubmit=1;
       }
-      this.isSubmit=1;
     }
   }
 

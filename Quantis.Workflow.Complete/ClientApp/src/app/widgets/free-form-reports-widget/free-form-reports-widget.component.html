@@ -15,6 +15,10 @@
     <h6>{{reportName}}</h6>
     <h5 *ngIf="tableHeader.length === 0"> No Report data.</h5>
     <!-- <table class="font-12 freeFormReportTable table table-bordered table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"> -->
+    <div [hidden]="tableHeader.length === 0" class="txt-filter-user-div col-md-2 float-right mb-2">
+        <input type="text" class="form-control" placeholder="Cerca" [(ngModel)]="filterText.searchUsersText" />
+    </div><br>
+    <perfect-scrollbar style="max-height: 400px;">
     <table class="font-12 freeFormReportTable table table-bordered table-striped">
         <thead class="bg-info text-capitalize">
             <tr>
@@ -22,9 +26,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let form of freeFormReportData; let i = index;">
+            <tr *ngFor="let form of freeFormReportData | filter : filterText.searchUsersText; let i = index;">
                 <td *ngFor="let key of tableHeader" [innerHTML]="form[key]"></td>
             </tr>
         </tbody>
     </table>
+    </perfect-scrollbar>
 </div>

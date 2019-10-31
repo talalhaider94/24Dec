@@ -34,6 +34,10 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     reportName: string;
     allMeasuresObj: {number:string};
     tableHeader: Array<string> = [];
+    filterText: any = {
+        searchUsersText: ''
+      }
+
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -47,28 +51,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     ngOnInit() {
         console.log('FreeFormReport Widget ==>', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         this.dtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 10,
-            destroy: false,
-            dom: 'lBfrtip',
-            search: {
-                caseInsensitive: true
-            },
-            buttons: [
-                {
-                    extend: 'csv',
-                    text: '<i class="fa fa-file"></i> Esporta CSV',
-                    titleAttr: 'Esporta CSV',
-                    className: 'btn btn-primary mb-3'
-                },
-                {
-                    extend: 'pdf',
-                    text: '<i class="fa fa-file"></i> Esporta PDF',
-                    titleAttr: 'Esporta PDF',
-                    className: 'btn btn-primary mb-3',
-                    orientation: 'landscape',
-                },
-            ],
+            columns: [{}],
             language: {
                 processing: "Elaborazione...",
                 search: "Cerca:",
@@ -206,15 +189,21 @@ export class FreeFormReportsWidgetComponent implements OnInit {
     console.log('freeFormReport chartIndexData', chartIndexData);
     if(Array.isArray(chartIndexData)) {
         this.tableHeader = Object.keys(chartIndexData[0]);
-
         this.freeFormReportData = chartIndexData;
         // this.rerender();
+        // this.dtOptions = {
+        //     columns: [this.tableHeader]
+        // };
+        
     } else {
         this.tableHeader = [];
         this.freeFormReportData = [];
         this.$toastr.info(chartIndexData, 'Info!');
         this.freeFormReportData = [];
         // this.rerender();
+        // this.dtOptions = {
+        //     columns: [{COLUMNS:this.tableHeader}]
+        // };
     }
     this.closeModal();
   }
