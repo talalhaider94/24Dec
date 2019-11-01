@@ -151,7 +151,7 @@ export class FormReportQueryComponent implements OnInit {
     console.log('submit form -> ',this.addEditQueryForm.value);
     let s = this.addEditQueryForm.value.QueryText.toLowerCase();
     if(s.includes('delete') || s.includes('truncate') || s.includes('drop') || s.includes('update') || s.includes('alter')){
-      this.toastr.error('Invalid Character. Please try again!');
+      this.toastr.error('Statement non valido nella query');
     }else{
       if(event=='debug'){
         this.loading=true;
