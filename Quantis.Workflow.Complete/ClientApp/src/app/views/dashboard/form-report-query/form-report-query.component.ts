@@ -157,7 +157,7 @@ export class FormReportQueryComponent implements OnInit {
         this.loading=true;
         this.debug();
       }else{
-        if(this.addEditQueryForm.value.QueryName == 'KpiCalculationStatus'){
+        if(this.addEditQueryForm.value.QueryName == 'kpiCalculationStatus'){
           this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
         }else{
           this.submitted = true;

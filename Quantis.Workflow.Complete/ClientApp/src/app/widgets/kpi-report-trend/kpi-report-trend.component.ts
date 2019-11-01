@@ -424,7 +424,7 @@ export class KpiReportTrendComponent implements OnInit {
         }));
         this.chartOptions.xAxis = {
             type: 'date',
-            categories: allChartLabels,
+            categories: allChartLabels
         }
         this.chartOptions.series[0] = {
             type: 'column',

@@ -420,7 +420,7 @@ export class BSIReportComponent implements OnInit {
                 fillColor: '#ffc107'
             },
             dataLabels: {
-                color: '#ffc107'
+                color: '#ffc107',
             },
         };
         this.chartOptions.series[3] = {

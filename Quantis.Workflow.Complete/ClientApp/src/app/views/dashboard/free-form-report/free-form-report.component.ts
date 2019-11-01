@@ -313,7 +313,7 @@ export class FreeFormReportComponent implements OnInit {
         this.test();
       }else{
         //console.log('Selected Query name: ',this.addEditQueryForm.value.QueryName);
-        if(this.addEditQueryForm.value.QueryName == 'KpiCalculationStatus'){
+        if(this.addEditQueryForm.value.QueryName == 'kpiCalculationStatus'){
           this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
         }else{
           this.submitted = true;
