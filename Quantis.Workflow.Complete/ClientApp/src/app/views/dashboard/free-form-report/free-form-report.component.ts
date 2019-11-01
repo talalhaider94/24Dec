@@ -302,30 +302,40 @@ export class FreeFormReportComponent implements OnInit {
 
   onQueryReportFormSubmit(event) {
     console.log('submit form -> ',this.addEditQueryForm.value);
-    if(event=='debug'){
-      this.debug();
-    }
-    else if(event=='test'){
-      this.test();
+    let s = this.addEditQueryForm.value.QueryText.toLowerCase();
+    if(s.includes('delete') || s.includes('truncate') || s.includes('drop') || s.includes('update') || s.includes('alter')){
+      this.toastr.error('Statement non permesso nella query');
     }else{
-      this.submitted = true;
-      if (this.addEditQueryForm.invalid) {
-      } else {
-        this.formLoading = true;
-        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-          //this.getReportsData();
-          this.formLoading = false;
-          this.submitted = false;
-          //this.addEditQueryForm.reset();
-          this.getOwnedQueries();
-          this.getAssignedQueries();
-          this.toastr.success('Query created successfully');
-        }, error => {
-          this.formLoading = false;
-          this.toastr.error('Error while creating Query');
-        });
+      if(event=='debug'){
+        this.debug();
       }
-      this.isSubmit=1;
+      else if(event=='test'){
+        this.test();
+      }else{
+        //console.log('Selected Query name: ',this.addEditQueryForm.value.QueryName);
+        if(this.addEditQueryForm.value.QueryName == 'kpiCalculationStatus'){
+          this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
+        }else{
+          this.submitted = true;
+          if (this.addEditQueryForm.invalid) {
+          } else {
+            this.formLoading = true;
+            this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+              //this.getReportsData();
+              this.formLoading = false;
+              this.submitted = false;
+              //this.addEditQueryForm.reset();
+              this.getOwnedQueries();
+              this.getAssignedQueries();
+              this.toastr.success('Query created successfully');
+            }, error => {
+              this.formLoading = false;
+              this.toastr.error('Error while creating Query');
+            });
+          }
+          this.isSubmit=1;
+        }
+      }
     }
   }
 

@@ -149,27 +149,36 @@ export class FormReportQueryComponent implements OnInit {
   onQueryReportFormSubmit(event) {
     // const creds = this.form.controls.credentials as FormArray;
     console.log('submit form -> ',this.addEditQueryForm.value);
-    if(event=='debug'){
-      this.loading=true;
-      this.debug();
+    let s = this.addEditQueryForm.value.QueryText.toLowerCase();
+    if(s.includes('delete') || s.includes('truncate') || s.includes('drop') || s.includes('update') || s.includes('alter')){
+      this.toastr.error('Statement non permesso nella query');
     }else{
-      this.submitted = true;
-      if (this.addEditQueryForm.invalid) {
-      } else {
-        this.formLoading = true;
-        this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
-          //this.getReportsData();
-          this.formLoading = false;
-          this.submitted = false;
-          this.addEditQueryForm.reset();
-          this.toastr.success('Query created successfully');
-        }, error => {
-          this.loading = false;
-          this.formLoading = false;
-          this.toastr.error('Errore esecuzione report');
-        });
+      if(event=='debug'){
+        this.loading=true;
+        this.debug();
+      }else{
+        if(this.addEditQueryForm.value.QueryName == 'kpiCalculationStatus'){
+          this.toastr.error('Nome KpiCalculationStatus non consentito. Parola riservata.');
+        }else{
+          this.submitted = true;
+          if (this.addEditQueryForm.invalid) {
+          } else {
+            this.formLoading = true;
+            this._freeFormReport.addEditReportQuery(this.addEditQueryForm.value).subscribe(dashboardCreated => {
+              //this.getReportsData();
+              this.formLoading = false;
+              this.submitted = false;
+              this.addEditQueryForm.reset();
+              this.toastr.success('Query created successfully');
+            }, error => {
+              this.loading = false;
+              this.formLoading = false;
+              this.toastr.error('Errore esecuzione report');
+            });
+          }
+          this.isSubmit=1;
+        }
       }
-      this.isSubmit=1;
     }
   }
   

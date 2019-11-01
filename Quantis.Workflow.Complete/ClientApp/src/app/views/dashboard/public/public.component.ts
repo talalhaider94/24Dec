@@ -186,7 +186,30 @@ export class PublicComponent implements OnInit {
 				// debugger
 				this.treeDataFields = { dataSource: this.barChartWidgetParameters.getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
 				// this.preSelectedNodes = this.barChartWidgetParameters.getOrgHierarcy.map (org => org.id);	
-				this.preSelectedNodes = this.barChartWidgetParameters.filters.organizations.split(',');
+				this.preSelectedNodes = [];
+				if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
+					// debugger
+					const allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
+					setTimeout(() => {
+						this.preSelectedNodes = allOrganizationIds;
+					}, 50);
+					console.log('this.preSelectedNodes if', JSON.stringify(this.preSelectedNodes));
+				} else {
+					let allOrganizationIds;
+					if(this.barChartWidgetParameters.filters.organizations) {
+						allOrganizationIds = this.barChartWidgetParameters.filters.organizations.split(',');
+					} else {
+						if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
+							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
+						} else {
+							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.split(',');
+						}
+					}
+					setTimeout(() => {
+						this.preSelectedNodes = allOrganizationIds;
+					}, 50);
+					console.log('this.preSelectedNodes else', JSON.stringify(this.preSelectedNodes));
+				}
 				this.getAllLeafNodesIds(this.barChartWidgetParameters.getOrgHierarcy);
 			}
 			//Danial: TODO: add isFreeFormReportCheck and getReportQueryDetailByID is no longer being used i suppose
@@ -227,7 +250,6 @@ export class PublicComponent implements OnInit {
 			if (childData.type === 'openBarChartModal') {
 				// this.barChartWidgetParameters should be a generic name
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
-				debugger
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
 				this.isBarChartComponent = childData.data.isBarChartComponent;
@@ -917,7 +939,6 @@ export class PublicComponent implements OnInit {
 	}
 
 	updateDashboardWidgetsArray(widgetId, widgetFormValues) {
-		console.log('Before this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		let updatedDashboardArray = this.dashboardWidgetsArray.map(widget => {
 			if (widget.id === widgetId) {
 				let a = {
@@ -930,8 +951,6 @@ export class PublicComponent implements OnInit {
 				return widget;
 			}
 		});
-		console.log('updatedDashboardArray', updatedDashboardArray);
-		console.log('After this.dashboardWidgetsArray', this.dashboardWidgetsArray);
 		// this.dashboardWidgetsArray = updatedDashboardArray;
 		this.cloneDashboardWidgetsArrayState = updatedDashboardArray;
 		// need to preserve dashbaordCollection state in abother variable to aviod re-rendering

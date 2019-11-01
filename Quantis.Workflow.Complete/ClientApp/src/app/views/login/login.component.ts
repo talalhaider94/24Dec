@@ -36,7 +36,39 @@ export class LoginComponent implements OnInit {
     get f() { return this.loginForm.controls; }
 
   ngOnInit() {
-        this.authService.checkToken();
+
+        ////// START SITEMINDER LOGIN ///////////////////////////////////////////////////
+    this.authService.checkLogin().pipe(first()).subscribe(data => {
+        if (data.length > 0) {
+          this.dashboardService.getLandingPageInfo().subscribe(row => {
+            this.showLandingPage = row.showlandingpage;
+            console.log("Landing Page Info -> ", this.showLandingPage);
+
+            if (this.showLandingPage == true) {
+              if (data.defaultdashboardid !== -1) {
+                this.router.navigate(['dashboard/public', data.defaultdashboardid]);
+              } else if (data.defaultdashboardid == -1) {
+                this.router.navigate(['dashboard/landingpage']);
+              } else {
+                this.router.navigate(['dashboard/list']);
+              }
+            } else {
+              this.router.navigate(['dashboard/nodashboard']);
+            }
+            this.toastr.success('Login eseguito con successo.');
+            this.loading = false;
+          });
+        } else {
+          console.log('errore siteminder');
+        }
+        }, error => {
+          console.log('onLoginFormSubmit: error', error);
+          //this.toastr.error(error.error, error.description);
+          this.loading = false;
+          });
+        ////// END SITEMINDER LOGIN ///////////////////////////////////////////////////
+
+
         this.loginForm = this.formBuilder.group({
             userName: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(4)]]
