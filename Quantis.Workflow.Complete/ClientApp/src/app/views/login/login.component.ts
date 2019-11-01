@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
 
         ////// START SITEMINDER LOGIN ///////////////////////////////////////////////////
-        this.authService.checkLogin().pipe(first()).subscribe(data => {
+    this.authService.checkLogin().pipe(first()).subscribe(data => {
+        if (data.length > 0) {
           this.dashboardService.getLandingPageInfo().subscribe(row => {
             this.showLandingPage = row.showlandingpage;
             console.log("Landing Page Info -> ", this.showLandingPage);
@@ -57,7 +58,9 @@ export class LoginComponent implements OnInit {
             this.toastr.success('Login eseguito con successo.');
             this.loading = false;
           });
-
+        } else {
+          console.log('errore siteminder');
+        }
         }, error => {
           console.log('onLoginFormSubmit: error', error);
           //this.toastr.error(error.error, error.description);
