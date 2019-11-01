@@ -423,28 +423,49 @@ export class BSIReportComponent implements OnInit {
                 color: '#ffc107',
             },
         };
-        this.chartOptions.series[3] = {
-            type: 'scatter',
-            name: 'Minor',
-            data: allMinorData,
-            marker: {
-                fillColor: '#1985ac'
-            },
-            dataLabels: {
-                color: '#1985ac'
-            },
-        };
-        this.chartOptions.series[4] = {
-            type: 'scatter',
-            name: 'Critical',
-            data: allCriticalData,
-            marker: {
-                fillColor: '#f86c6b'
-            },
-            dataLabels: {
-                color: '#f86c6b'
-            },
-        };
+        if(allMinorData==0){
+            this.chartOptions.series[3] = {
+                type: 'scatter',
+                name: 'null',
+                marker: {
+                    fillColor: '#1985ac'
+                },
+            };
+        }else{
+            this.chartOptions.series[3] = {
+                type: 'scatter',
+                name: 'Minor',
+                data: allMinorData,
+                marker: {
+                    fillColor: '#1985ac'
+                },
+                dataLabels: {
+                    color: '#1985ac'
+                },
+            };
+        }
+        
+        if(allCriticalData==0){
+            this.chartOptions.series[4] = {
+                type: 'scatter',
+                name: 'null',
+                marker: {
+                    fillColor: '#f86c6b'
+                },
+            };
+        }else{
+            this.chartOptions.series[4] = {
+                type: 'scatter',
+                name: 'Critical',
+                data: allCriticalData,
+                marker: {
+                    fillColor: '#f86c6b'
+                },
+                dataLabels: {
+                    color: '#f86c6b'
+                },
+            };
+        }
         this.chartUpdateFlag = true;
     }
 
@@ -503,28 +524,49 @@ export class BSIReportComponent implements OnInit {
                 color: '#ffc107'
             },
         };
-        this.chartOptions2.series[3] = {
-            type: 'scatter',
-            name: 'Minor',
-            data: allMinorData,
-            marker: {
-                fillColor: '#1985ac'
-            },
-            dataLabels: {
-                color: '#1985ac'
-            },
-        };
-        this.chartOptions2.series[4] = {
-            type: 'scatter',
-            name: 'Critical',
-            data: allCriticalData,
-            marker: {
-                fillColor: '#f86c6b'
-            },
-            dataLabels: {
-                color: '#f86c6b'
-            },
-        };
+        if(allMinorData==0){
+            this.chartOptions2.series[3] = {
+                type: 'scatter',
+                name: 'null',
+                marker: {
+                    fillColor: '#1985ac'
+                },
+            };
+        }else{
+            this.chartOptions2.series[3] = {
+                type: 'scatter',
+                name: 'Minor',
+                data: allMinorData,
+                marker: {
+                    fillColor: '#1985ac'
+                },
+                dataLabels: {
+                    color: '#1985ac'
+                },
+            };
+        }
+        
+        if(allCriticalData==0){
+            this.chartOptions2.series[4] = {
+                type: 'scatter',
+                name: 'null',
+                marker: {
+                    fillColor: '#f86c6b'
+                },
+            };
+        }else{
+            this.chartOptions2.series[4] = {
+                type: 'scatter',
+                name: 'Critical',
+                data: allCriticalData,
+                marker: {
+                    fillColor: '#f86c6b'
+                },
+                dataLabels: {
+                    color: '#f86c6b'
+                },
+            };
+        }
         this.chartUpdateFlag2 = true;
     }
 
