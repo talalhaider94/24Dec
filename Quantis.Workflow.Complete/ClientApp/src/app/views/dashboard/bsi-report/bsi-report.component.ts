@@ -45,6 +45,8 @@ export class BSIReportComponent implements OnInit {
     loadingModalDati: boolean = false;
     loadingModalDati2: boolean = false;
     public periodFilter: number;
+    dayDrillPeriod;
+    isDayDrill=0;
     campoData: any = [];
     fitroDataById: any = [
         {
@@ -130,6 +132,7 @@ export class BSIReportComponent implements OnInit {
     ReportData: any = [];
     chartUpdateFlag: boolean = true;
     chartUpdateFlag2: boolean = true;
+    dayChartUpdateFlag: boolean = true;
     highcharts = Highcharts;
     reportsDataLength;
     cartellaList : any = [];
@@ -169,17 +172,6 @@ export class BSIReportComponent implements OnInit {
                             this.bar_period = this.category;
                             this.bar_value = this.y;
                             alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
-
-                            let stringToSplit = this.bar_period;
-                            let split = stringToSplit.split("/");
-                            let month = split[0];
-                            let year = split[1];
-
-                            this.getDayLevelData(month,year);
-
-                            // let kpiId = this.ReportDetailsData.globalruleid;
-                            // let x = JSON.parse(localStorage.getItem('globalruleid'));
-                            //console.log('GetDayLevelKPIData -> ',x,kpiId,month,year);
                            
                         }
                     }
@@ -238,9 +230,54 @@ export class BSIReportComponent implements OnInit {
         },
     };
 
+    ///////////////////////////////////
+
+    dayChartOptions = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: {
+            text: 'BSI Report'
+        },
+        xAxis: {
+            type: 'date',
+            categories: []
+            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+        },
+        yAxis: {
+            title: {
+                text: 'Percent'
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            
+                            this.bar_period = this.category;
+                            this.bar_value = this.y;
+                            alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
+                           
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [],
+        exporting: {
+            enabled: true
+        },
+    };
+
     ngOnInit() {
       this.cartellaSelectOption = '';
-      //this.getDayLevelData('02','2019');
     }
 
     // tslint:disable-next-line:use-life-cycle-interface
@@ -288,6 +325,7 @@ export class BSIReportComponent implements OnInit {
         this.months2.length = 0;
         this.isLoadedDati=0;
         this.isLoadedDati2=0;
+        this.isDayDrill=0;
         this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
@@ -298,10 +336,12 @@ export class BSIReportComponent implements OnInit {
                 //console.log('this.reportsDataLength -> ',this.reportsDataLength);
                 if(this.reportsDataLength==1){
                     this.ReportDetailsData = data.reports[0];
+                    this.getPeriod();
                     this.showHighChartsData(data);
                 }else if(this.reportsDataLength>1){
                     this.ReportDetailsData = data.reports[0];
                     this.ReportDetailsData1 = data.reports[1];
+                    this.getPeriod();
                     this.showHighChartsData(data);
                     this.showHighChartsData2(data);
                 }else{
@@ -316,9 +356,129 @@ export class BSIReportComponent implements OnInit {
         });
     }
 
-    getDayLevelData(month, year){
-        this.apiService.GetDayLevelKPIData(37799,month,year).subscribe((data) => {
+    getPeriod(){
+        this.months.length = 0;
+
+        var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+        var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+
+        var fromMonth = fromCheck.format('M');
+        var fromYear  = fromCheck.format('YYYY');
+
+        var toMonth = toCheck.format('M');
+        var toYear  = toCheck.format('YYYY');
+
+        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+            let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+            this.months.push(monthyear);
+            fromCheck.add(1,'month');
+        }
+
+        console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+        //console.log('Months -> ',this.months);
+    }
+
+    getDayLevelData(globalRuleId, month, year){
+        this.apiService.GetDayLevelKPIData(globalRuleId,month,year).subscribe((data) => {
             console.log('GetDayLevelKPIData -> ',data);
+
+            this.isDayDrill=1;
+
+            const chartArray = data;
+
+            let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
+            let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
+            let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
+            let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
+            let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
+            let allChartLabels = chartArray.map(label => label.xvalue);
+            let allViolationData = violationData.map(data => data.yvalue);
+            let allCompliantData = compliantData.map(data => data.yvalue);
+            let allTargetData = targetData.map(data => data.yvalue);
+            let allMinorData = minorData.map(data => data.yvalue);
+            let allCriticalData = criticalData.map(data => data.yvalue);
+
+            this.dayChartOptions.xAxis = {
+                type: 'date',
+                categories: allChartLabels,
+            }
+            this.dayChartOptions.yAxis.title = {
+                text: 'Percent'
+            }
+            this.dayChartOptions.series[0] = {
+                type: 'column',
+                name: 'Violation',
+                data: allViolationData,
+                color: '#f86c6b',
+                dataLabels: {
+                    color: '#f86c6b'
+                },
+            };
+            this.dayChartOptions.series[1] = {
+                type: 'column',
+                name: 'Compliant',
+                color: '#379457',
+                data: allCompliantData,
+                dataLabels: {
+                    color: '#379457'
+                },
+            };
+            this.dayChartOptions.series[2] = {
+                type: 'scatter',
+                name: 'Target',
+                data: allTargetData,
+                marker: {
+                    fillColor: '#ffc107'
+                },
+                dataLabels: {
+                    color: '#ffc107',
+                },
+            };
+            if(allMinorData==0){
+                this.dayChartOptions.series[3] = {
+                    type: 'scatter',
+                    name: 'null',
+                    marker: {
+                        fillColor: '#1985ac'
+                    },
+                };
+            }else{
+                this.dayChartOptions.series[3] = {
+                    type: 'scatter',
+                    name: 'Minor',
+                    data: allMinorData,
+                    marker: {
+                        fillColor: '#1985ac'
+                    },
+                    dataLabels: {
+                        color: '#1985ac'
+                    },
+                };
+            }
+            
+            if(allCriticalData==0){
+                this.dayChartOptions.series[4] = {
+                    type: 'scatter',
+                    name: 'null',
+                    marker: {
+                        fillColor: '#f86c6b'
+                    },
+                };
+            }else{
+                this.dayChartOptions.series[4] = {
+                    type: 'scatter',
+                    name: 'Critical',
+                    data: allCriticalData,
+                    marker: {
+                        fillColor: '#f86c6b'
+                    },
+                    dataLabels: {
+                        color: '#f86c6b'
+                    },
+                };
+            }
+            this.dayChartUpdateFlag = true;
+
         });
     }
 
@@ -841,6 +1001,17 @@ export class BSIReportComponent implements OnInit {
         this.selectedyear = year;
 
         this.getdati2(month,year);
+    }
+
+    selectedPeriod(){
+        let stringToSplit = this.dayDrillPeriod;
+        let split = stringToSplit.split("/");
+        let month = split[0];
+        let year = split[1];
+
+        console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+        this.getDayLevelData(this.ReportDetailsData.globalruleid,month,year);
     }
 
 
