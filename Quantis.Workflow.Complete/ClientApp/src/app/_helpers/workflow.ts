@@ -36,6 +36,6 @@ export default class WorkFlowHelper {
     }
 
     static formatCheckBoxColumn() {
-        return `Verde -> KPI Compliant, Rosso -> KPI Non Compliant, Grigio -> KPI Non Calcolato, Blu -> KPI con Nessun Evento, Bianco -> altri casi`.trim().split(',');
+        return `Verde -> KPI Compliant, Rosso -> KPI Non Compliant, Grigio -> KPI Non Calcolato`.trim().split(',');
     }
 }
