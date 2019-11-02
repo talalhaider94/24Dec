@@ -386,17 +386,13 @@ export class BSIReportComponent implements OnInit {
 
             const chartArray = data;
 
-            let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
-            let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
             let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
-            let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
-            let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
+            let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
+            
             let allChartLabels = chartArray.map(label => label.xvalue);
-            let allViolationData = violationData.map(data => data.yvalue);
-            let allCompliantData = compliantData.map(data => data.yvalue);
+            
             let allTargetData = targetData.map(data => data.yvalue);
-            let allMinorData = minorData.map(data => data.yvalue);
-            let allCriticalData = criticalData.map(data => data.yvalue);
+            let allProvidedData = providedData.map(data => data.yvalue);
 
             this.dayChartOptions.xAxis = {
                 type: 'date',
@@ -405,25 +401,8 @@ export class BSIReportComponent implements OnInit {
             this.dayChartOptions.yAxis.title = {
                 text: 'Percent'
             }
+            
             this.dayChartOptions.series[0] = {
-                type: 'column',
-                name: 'Violation',
-                data: allViolationData,
-                color: '#f86c6b',
-                dataLabels: {
-                    color: '#f86c6b'
-                },
-            };
-            this.dayChartOptions.series[1] = {
-                type: 'column',
-                name: 'Compliant',
-                color: '#379457',
-                data: allCompliantData,
-                dataLabels: {
-                    color: '#379457'
-                },
-            };
-            this.dayChartOptions.series[2] = {
                 type: 'scatter',
                 name: 'Target',
                 data: allTargetData,
@@ -434,49 +413,19 @@ export class BSIReportComponent implements OnInit {
                     color: '#ffc107',
                 },
             };
-            if(allMinorData==0){
-                this.dayChartOptions.series[3] = {
-                    type: 'scatter',
-                    name: 'null',
-                    marker: {
-                        fillColor: '#1985ac'
-                    },
-                };
-            }else{
-                this.dayChartOptions.series[3] = {
-                    type: 'scatter',
-                    name: 'Minor',
-                    data: allMinorData,
-                    marker: {
-                        fillColor: '#1985ac'
-                    },
-                    dataLabels: {
-                        color: '#1985ac'
-                    },
-                };
-            }
+
+            this.dayChartOptions.series[1] = {
+                type: 'scatter',
+                name: 'Provided',
+                data: allProvidedData,
+                marker: {
+                    fillColor: '#379457'
+                },
+                dataLabels: {
+                    color: '#379457',
+                },
+            };
             
-            if(allCriticalData==0){
-                this.dayChartOptions.series[4] = {
-                    type: 'scatter',
-                    name: 'null',
-                    marker: {
-                        fillColor: '#f86c6b'
-                    },
-                };
-            }else{
-                this.dayChartOptions.series[4] = {
-                    type: 'scatter',
-                    name: 'Critical',
-                    data: allCriticalData,
-                    marker: {
-                        fillColor: '#f86c6b'
-                    },
-                    dataLabels: {
-                        color: '#f86c6b'
-                    },
-                };
-            }
             this.dayChartUpdateFlag = true;
 
         });
