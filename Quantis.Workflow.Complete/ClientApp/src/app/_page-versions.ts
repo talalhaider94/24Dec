@@ -16,7 +16,7 @@ export const pageVersion = {
     '/booklet': '0.0.2',
     '/formreport': '0.0.2',
     '/dashboard/free-form-report': '0.0.2',
-    '/dashboard/bsi-report': '0.0.2',
+    '/dashboard/bsi-report': '0.0.3',
     '/dashboard/personal-report': '0.0.1',
     '/tconfiguration/general': '0.0.2',
     '/tconfiguration/advanced': '0.0.2',
