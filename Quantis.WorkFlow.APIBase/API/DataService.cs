@@ -2426,6 +2426,7 @@ namespace Quantis.WorkFlow.APIBase.API
             };
             using (var client = new HttpClient())
             {
+                client.Timeout = TimeSpan.FromMinutes(10);
                 var con = GetBSIServerURL();
                 var apiPath = "/api/Booklet/CreateBooklet";
                 var output = QuantisUtilities.FixHttpURLForCall(con, apiPath);

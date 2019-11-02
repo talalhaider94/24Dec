@@ -248,7 +248,7 @@ export class BookletComponent implements OnInit {
         let count = this.itemArray.length;
         if(this.validEmail != null || this.validEmail != ''){
             let data = {
-                ListContract:this.itemArray,
+                ContractIds:this.itemArray,
                 BookletDocumentId:this.documentiDef.documentid,
                 RecipientEmail:this.validEmail
             }
