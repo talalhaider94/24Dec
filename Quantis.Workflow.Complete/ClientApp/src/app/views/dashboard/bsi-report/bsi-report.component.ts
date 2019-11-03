@@ -489,8 +489,8 @@ export class BSIReportComponent implements OnInit {
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
         let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
-        let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
-        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
+        let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
+        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
@@ -534,37 +534,25 @@ export class BSIReportComponent implements OnInit {
                 color: '#1985ac',
             },
         };
-        if(allMinorData==0){
+        if(allMinorData && allMinorData.length > 0){
             this.chartOptions.series[3] = {
                 type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#ffc107'
-                },
-            };
-        }else{
-            this.chartOptions.series[3] = {
-                type: 'scatter',
-                name: 'Minor',
+                name: 'Escalation',
                 data: allMinorData,
                 marker: {
                     fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#ffc107'
+                    color: '#ffc107',
+                    style: {
+                        textShadow: false, 
+                        textOutline: false 
+                    }
                 },
             };
         }
         
-        if(allCriticalData==0){
-            this.chartOptions.series[4] = {
-                type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#f86c6b'
-                },
-            };
-        }else{
+        if(allCriticalData && allCriticalData.length > 0){
             this.chartOptions.series[4] = {
                 type: 'scatter',
                 name: 'Critical',
@@ -581,7 +569,6 @@ export class BSIReportComponent implements OnInit {
     }
 
     showHighChartsData2(data) {
-        // debugger
         const chartArray = data.reports[1].data;
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
@@ -635,37 +622,25 @@ export class BSIReportComponent implements OnInit {
                 color: '#1985ac'
             },
         };
-        if(allMinorData==0){
+        if(allMinorData && allMinorData.length > 0){
             this.chartOptions2.series[3] = {
                 type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#ffc107'
-                },
-            };
-        }else{
-            this.chartOptions2.series[3] = {
-                type: 'scatter',
-                name: 'Minor',
+                name: 'Escalation', // minor string is replaced with Escalation
                 data: allMinorData,
                 marker: {
                     fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#ffc107'
+                    color: '#ffc107',
+                    style: {
+                        textShadow: false, 
+                        textOutline: false 
+                    }
                 },
             };
         }
         
-        if(allCriticalData==0){
-            this.chartOptions2.series[4] = {
-                type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#f86c6b'
-                },
-            };
-        }else{
+        if(allCriticalData && allCriticalData.length > 0){
             this.chartOptions2.series[4] = {
                 type: 'scatter',
                 name: 'Critical',

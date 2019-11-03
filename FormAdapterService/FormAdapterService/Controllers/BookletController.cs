@@ -35,8 +35,9 @@ namespace FormAdapterService.Controllers
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.RedirectStandardOutput = true;
                     proc.Start();
-                    proc.WaitForExit();
-                    return proc.ExitCode+"";
+                    //proc.WaitForExit();
+                    //return proc.ExitCode+"";
+                    return "1";
                 }
             }
             catch(Exception e)

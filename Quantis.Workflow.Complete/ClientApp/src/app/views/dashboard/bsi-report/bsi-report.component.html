@@ -86,12 +86,12 @@
             </div>
             <button class="btn btn-primary btn-sm float-right" (click)="chartClicked()"><i class="fa fa-table"></i></button>
             <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
-            [oneToOne]="true" style="width: 100%; display: block;">
+            [oneToOne]="true" class="w-100p d-block one">
           </highcharts-chart><br><br>
 
 
           <highcharts-chart [hidden]="isDayDrill==0" [Highcharts]="highcharts" [options]="dayChartOptions" [(update)]="dayChartUpdateFlag"
-            [oneToOne]="true" style="width: 100%; display: block;">
+            [oneToOne]="true" class="w-100p d-block two">
           </highcharts-chart><br><br>
 
           <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
@@ -188,7 +188,7 @@
 
               <button class="btn btn-primary btn-sm float-right" (click)="chartClicked()"><i class="fa fa-table"></i></button>
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" [(update)]="chartUpdateFlag"
-              [oneToOne]="true" style="width: 100%; display: block;">
+              [oneToOne]="true" class="w-100p d-block three">
               </highcharts-chart><br><br>
               
               <!-- <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
@@ -274,7 +274,7 @@
 
               <button class="btn btn-primary btn-sm float-right" (click)="chartClicked2()"><i class="fa fa-table"></i></button>
               <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions2" [(update)]="chartUpdateFlag2"
-              [oneToOne]="true" style="width: 100%; display: block;">
+              [oneToOne]="true" class="w-100p d-block four">
               </highcharts-chart><br><br>
 
               <!-- <h5 *ngIf='loadingModalDati2' id="loader" class="text-center">
