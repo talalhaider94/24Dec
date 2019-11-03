@@ -46,6 +46,7 @@ export class BSIReportComponent implements OnInit {
     loadingModalDati2: boolean = false;
     public periodFilter: number;
     dayDrillPeriod;
+    dayDrillPeriod2;
     isDayDrill=0;
     campoData: any = [];
     fitroDataById: any = [
@@ -929,7 +930,20 @@ export class BSIReportComponent implements OnInit {
     }
 
     selectedPeriod(){
+        this.dayDrillPeriod2='';
         let stringToSplit = this.dayDrillPeriod;
+        let split = stringToSplit.split("/");
+        let month = split[0];
+        let year = split[1];
+
+        console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+        this.getDayLevelData(this.ReportDetailsData.globalruleid,month,year);
+    }
+
+    selectedPeriod2(){
+        this.dayDrillPeriod='';
+        let stringToSplit = this.dayDrillPeriod2;
         let split = stringToSplit.split("/");
         let month = split[0];
         let year = split[1];
