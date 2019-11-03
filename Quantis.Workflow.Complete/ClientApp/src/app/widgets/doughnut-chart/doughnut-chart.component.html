@@ -9,6 +9,8 @@
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
     <span class="sr-only">Loading...</span>
 </div>
+<p class="font-12 mb-1"><b>Periodo:</b> {{ period || 'N/A' }}</p>
+<p class="font-12 mb-1" *ngIf="incompletePeriod">Priodo Incompleto</p>
 <highcharts-chart [Highcharts]="highcharts" [options]="myChartOptions" [(update)]="myChartUpdateFlag"
 [oneToOne]="true" class="w-100p d-block">
 </highcharts-chart>

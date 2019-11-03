@@ -643,12 +643,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeCheckEvent($event) {
-		console.log("All Checked Nodes" + this.organizationTree.checkedNodes);
+		// console.log("All Checked Nodes" + this.organizationTree.checkedNodes);
 		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
 	}
 
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-		console.log("The selected node's id: " + this.organizationTree.selectedNodes);
+		// console.log("The selected node's id: " + this.organizationTree.selectedNodes);
 	}
 
 	getAllLeafNodesIds(complexJson) {
@@ -670,16 +670,18 @@ export class PublicComponent implements OnInit {
 		const formValues = this.widgetParametersForm.value;
 		let startDate;
 		let endDate;
+		debugger
 		if (formValues.Filters.dateTypes === '0') {
 			startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY');
 		} else {
 			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
+
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
 		if (startDate && endDate) {
-			delete formValues.Filters.dateTypes;
+			// delete formValues.Filters.dateTypes;
 			formValues.Filters.daterange = `${startDate}-${endDate}`;
 		} else {
 			formValues.Filters.daterange = null;

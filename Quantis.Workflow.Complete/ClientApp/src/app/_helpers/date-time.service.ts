@@ -49,15 +49,15 @@ export class DateTimeService {
   timePeriodRange(rangeType) {
     let startDate;
     let endDate;
-    startDate = moment().format('MM/YYYY');
+    endDate = moment().format('MM/YYYY');
     if(rangeType === '2') {
-      endDate = moment().subtract(2, 'months').format('MM/YYYY');
+      startDate = moment().subtract(2, 'months').format('MM/YYYY');
     } else if(rangeType === '3') {
-      endDate = moment().subtract(3, 'months').format('MM/YYYY');
+      startDate = moment().subtract(3, 'months').format('MM/YYYY');
     } else if(rangeType === '4') {
-      endDate = moment().subtract(6, 'months').format('MM/YYYY');
+      startDate = moment().subtract(6, 'months').format('MM/YYYY');
     } else if(rangeType === '1') {
-      endDate = moment().subtract(1, 'months').format('MM/YYYY');
+      startDate = moment().subtract(1, 'months').format('MM/YYYY');
     }
     return { startDate, endDate }
   }

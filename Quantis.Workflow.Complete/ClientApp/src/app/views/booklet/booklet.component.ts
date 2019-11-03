@@ -40,6 +40,7 @@ export class BookletComponent implements OnInit {
 
     documentId=0;
     item=0;
+    bookletStatus=0;
 
     contrattiDef: any = [{
         checked: false,
@@ -254,9 +255,15 @@ export class BookletComponent implements OnInit {
             }
             console.log(data,'payload');
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
-                console.log(data,' called createbooklet')
+                console.log(data,' called createbooklet');
+                this.bookletStatus=1;
+            },error=>{
+                this.bookletStatus=0;
             });
-            this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+            console.log('bookletStatus: ',this.bookletStatus);
+            if(this.bookletStatus==1){
+                this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+            }
         }
     }
     addBooklet(){

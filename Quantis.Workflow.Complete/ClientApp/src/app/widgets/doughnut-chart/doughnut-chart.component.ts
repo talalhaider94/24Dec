@@ -70,6 +70,8 @@ export class DoughnutChartComponent implements OnInit {
             enabled: true
         },
     };
+    period: string = '';
+    incompletePeriod: boolean = false;
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -108,8 +110,10 @@ export class DoughnutChartComponent implements OnInit {
                     // updating parameter form widget setValues
                     let verificaDoughnutFormValues = data.verificaDoughnutWidgetParameterValues;
                     if (verificaDoughnutFormValues.Filters.daterange) {
+                        this.period = verificaDoughnutFormValues.Filters.daterange;
                         verificaDoughnutFormValues.Filters.daterange = this.dateTime.buildRangeDate(verificaDoughnutFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = verificaDoughnutFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = verificaDoughnutFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -126,6 +130,9 @@ export class DoughnutChartComponent implements OnInit {
                 // Map Params for widget index when widgets initializes for first time
                 myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 const newParams = this.widgetHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                debugger
+                this.period = newParams.Filters.daterange;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 /// To be used -> getWidgetIndex method ////
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
@@ -185,7 +192,6 @@ export class DoughnutChartComponent implements OnInit {
     // dashboardComponentData is result of data coming from
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
-        debugger
         if (chartIndexData.length) {
             this.myChartOptions.subtitle = {
                 text: ''
@@ -197,7 +203,6 @@ export class DoughnutChartComponent implements OnInit {
         }
         if (chartIndexData.length > 0) {
             const mapData = chartIndexData.map(data => ({ name: data.xvalue, y: data.yvalue }));
-            debugger
             this.myChartOptions.series[0].data = mapData;
         } else {
             this.myChartOptions.series[0].data = [{
