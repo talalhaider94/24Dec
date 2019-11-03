@@ -2438,6 +2438,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 if (response.IsSuccessStatusCode)
                 {
                     var respo = response.Content.ReadAsStringAsync().Result;
+                    respo = respo.Replace("\"", "");
                     if (respo.All(char.IsDigit))
                     {
                         int res = int.Parse(respo);
