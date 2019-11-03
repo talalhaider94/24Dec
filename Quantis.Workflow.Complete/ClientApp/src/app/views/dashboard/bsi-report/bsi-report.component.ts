@@ -407,10 +407,11 @@ export class BSIReportComponent implements OnInit {
                 name: 'Target',
                 data: allTargetData,
                 marker: {
-                    fillColor: '#ffc107'
+                    fillColor: '#1985ac'
                 },
                 dataLabels: {
-                    color: '#ffc107',
+                    color: '#1985ac',
+                    // color: '#ffc107',
                 },
             };
 
@@ -526,10 +527,10 @@ export class BSIReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#ffc107'
+                fillColor: '#1985ac'
             },
             dataLabels: {
-                color: '#ffc107',
+                color: '#1985ac',
             },
         };
         if(allMinorData==0){
@@ -537,7 +538,7 @@ export class BSIReportComponent implements OnInit {
                 type: 'scatter',
                 name: 'null',
                 marker: {
-                    fillColor: '#1985ac'
+                    fillColor: '#ffc107'
                 },
             };
         }else{
@@ -546,10 +547,10 @@ export class BSIReportComponent implements OnInit {
                 name: 'Minor',
                 data: allMinorData,
                 marker: {
-                    fillColor: '#1985ac'
+                    fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#1985ac'
+                    color: '#ffc107'
                 },
             };
         }
@@ -627,10 +628,10 @@ export class BSIReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#ffc107'
+                fillColor: '#1985ac'
             },
             dataLabels: {
-                color: '#ffc107'
+                color: '#1985ac'
             },
         };
         if(allMinorData==0){
@@ -638,7 +639,7 @@ export class BSIReportComponent implements OnInit {
                 type: 'scatter',
                 name: 'null',
                 marker: {
-                    fillColor: '#1985ac'
+                    fillColor: '#ffc107'
                 },
             };
         }else{
@@ -647,10 +648,10 @@ export class BSIReportComponent implements OnInit {
                 name: 'Minor',
                 data: allMinorData,
                 marker: {
-                    fillColor: '#1985ac'
+                    fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#1985ac'
+                    color: '#ffc107'
                 },
             };
         }
