@@ -19,7 +19,6 @@ namespace CreateBookletConsole
             {
                 try
                 {
-                    currentNumber++;
                     var intKey = int.Parse(key);
                     var value = dto.ListContract[key];
                     class5.CreateSingleBooklet(intKey, value, dto.UserId, dto.BookletDocumentId, dto.MailSetup, currentNumber, totalNumbers);
@@ -27,6 +26,10 @@ namespace CreateBookletConsole
                 catch (Exception e)
                 {
 
+                }
+                finally
+                {
+                    currentNumber++;
                 }
 
             }
