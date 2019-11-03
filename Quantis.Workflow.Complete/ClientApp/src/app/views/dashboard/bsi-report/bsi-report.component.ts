@@ -488,8 +488,8 @@ export class BSIReportComponent implements OnInit {
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
         let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
-        let minorData = chartArray.filter(data => (data.zvalue === 'Minor'));
-        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' ));
+        let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
+        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
         let allChartLabels = chartArray.map(label => label.xvalue);
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
@@ -568,7 +568,6 @@ export class BSIReportComponent implements OnInit {
     }
 
     showHighChartsData2(data) {
-        // debugger
         const chartArray = data.reports[1].data;
         // Danial TODO: improve code later by modifying all data in a single loop
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
