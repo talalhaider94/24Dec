@@ -533,37 +533,25 @@ export class BSIReportComponent implements OnInit {
                 color: '#1985ac',
             },
         };
-        if(allMinorData==0){
+        if(allMinorData && allMinorData.length > 0){
             this.chartOptions.series[3] = {
                 type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#ffc107'
-                },
-            };
-        }else{
-            this.chartOptions.series[3] = {
-                type: 'scatter',
-                name: 'Minor',
+                name: 'Escalation',
                 data: allMinorData,
                 marker: {
                     fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#ffc107'
+                    color: '#ffc107',
+                    style: {
+                        textShadow: false, 
+                        textOutline: false 
+                    }
                 },
             };
         }
         
-        if(allCriticalData==0){
-            this.chartOptions.series[4] = {
-                type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#f86c6b'
-                },
-            };
-        }else{
+        if(allCriticalData && allCriticalData.length > 0){
             this.chartOptions.series[4] = {
                 type: 'scatter',
                 name: 'Critical',
@@ -634,37 +622,25 @@ export class BSIReportComponent implements OnInit {
                 color: '#1985ac'
             },
         };
-        if(allMinorData==0){
+        if(allMinorData && allMinorData.length > 0){
             this.chartOptions2.series[3] = {
                 type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#ffc107'
-                },
-            };
-        }else{
-            this.chartOptions2.series[3] = {
-                type: 'scatter',
-                name: 'Minor',
+                name: 'Escalation', // minor string is replaced with Escalation
                 data: allMinorData,
                 marker: {
                     fillColor: '#ffc107'
                 },
                 dataLabels: {
-                    color: '#ffc107'
+                    color: '#ffc107',
+                    style: {
+                        textShadow: false, 
+                        textOutline: false 
+                    }
                 },
             };
         }
         
-        if(allCriticalData==0){
-            this.chartOptions2.series[4] = {
-                type: 'scatter',
-                name: 'null',
-                marker: {
-                    fillColor: '#f86c6b'
-                },
-            };
-        }else{
+        if(allCriticalData && allCriticalData.length > 0){
             this.chartOptions2.series[4] = {
                 type: 'scatter',
                 name: 'Critical',
