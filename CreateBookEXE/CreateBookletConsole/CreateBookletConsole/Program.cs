@@ -15,13 +15,14 @@ namespace CreateBookletConsole
             var class5 = new Class5(dto.MainPath);
             int totalNumbers = dto.ListContract.Count;
             int currentNumber = 1;
+            string requestId = DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss");
             foreach (var key in dto.ListContract.Keys)
             {
                 try
                 {
                     var intKey = int.Parse(key);
                     var value = dto.ListContract[key];
-                    class5.CreateSingleBooklet(intKey, value, dto.UserId, dto.BookletDocumentId, dto.MailSetup, currentNumber, totalNumbers);
+                    class5.CreateSingleBooklet(intKey, value, dto.UserId, dto.BookletDocumentId, dto.MailSetup, currentNumber, totalNumbers, requestId);
                 }
                 catch (Exception e)
                 {

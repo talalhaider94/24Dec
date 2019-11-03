@@ -2439,16 +2439,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     var respo = response.Content.ReadAsStringAsync().Result;
                     respo = respo.Replace("\"", "");
-                    if (respo.All(char.IsDigit))
-                    {
-                        int res = int.Parse(respo);
-                        return res;
-                    }
-                    else
-                    {
-                        throw new Exception($"The return from Create Booklet is not valid the input is:{dataAsString} and response as {respo}" );
-                    }
-                    
+                    _dbcontext.LogInformation($"The return from Create Booklet is not valid the input is:{dataAsString} and response as {respo}");
+                    return 1;
+
                 }
                 else
                 {
