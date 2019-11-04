@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportChartButton } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -119,9 +119,7 @@ export class KpiReportTrendComponent implements OnInit {
                 }
             }
         ],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
     chartUpdateFlag: boolean = true;
     chartOptions1 = {
@@ -166,9 +164,7 @@ export class KpiReportTrendComponent implements OnInit {
                 }
             }
         ],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
     chartUpdateFlag1: boolean = true;
 
@@ -178,7 +174,8 @@ export class KpiReportTrendComponent implements OnInit {
     contractParties1: string = 'N/A';
     contracts1: string = 'N/A';
     kpi1: string = 'N/A';
-
+    period: string = '';
+    incompletePeriod: boolean = false;
     constructor(
         private dashboardService: DashboardService,
         private apiService: ApiService,
@@ -255,8 +252,10 @@ export class KpiReportTrendComponent implements OnInit {
                     // updating parameter form widget setValues
                     let kpiReportTrendFormValues = data.kpiReportTrendWidgetParameterValues;
                     if (kpiReportTrendFormValues.Filters.daterange) {
+                        this.period = kpiReportTrendFormValues.Filters.daterange;
                         kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = kpiReportTrendFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = kpiReportTrendFormValues;
                     this.getContractParties(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getContracts(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
@@ -298,6 +297,8 @@ export class KpiReportTrendComponent implements OnInit {
                 myWidgetParameters = getWidgetParameters;
                 // Map Params for widget index when widgets initializes for first time
                 const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                this.period = newParams.Filters.daterange;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 if (newParams.Filters.hasOwnProperty('kpi1')) {
                     delete newParams.Filters.kpi1;
                 }

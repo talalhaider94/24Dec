@@ -14,5 +14,6 @@
         <div class="h1">{{ catalogCount }}</div>
         <p class="font-12 mb-1">{{ measure }}</p>
         <p class="font-12 mb-1"><b>Periodo: </b>{{ period || 'N/A' }}</p>
+        <p class="font-12 mb-1" *ngIf="incompletePeriod">Priodo Incompleto</p>
     </div>
 </div>

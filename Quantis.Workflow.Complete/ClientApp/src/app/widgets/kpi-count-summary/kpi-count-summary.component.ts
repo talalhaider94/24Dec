@@ -26,9 +26,11 @@ export class KpiCountSummaryComponent implements OnInit {
     sumKPICount: number = 0;
     measure: string = 'Count Summary';
     allMeasuresObj: {number:string};
-    period: string;
     @Output() kpiCountSummaryParent = new EventEmitter<any>();
     // INPUT, OUTPUT PARAMS END
+
+    period: string = '';
+    incompletePeriod: boolean = false;
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -69,6 +71,7 @@ export class KpiCountSummaryComponent implements OnInit {
                     if (kpiCountSummaryFormValues.Filters.daterange) {
                         kpiCountSummaryFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountSummaryFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = kpiCountSummaryFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = kpiCountSummaryFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -91,6 +94,7 @@ export class KpiCountSummaryComponent implements OnInit {
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 this.measure = this.allMeasuresObj[newParams.Properties.measure];
                 this.period = newParams.Filters.date;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {

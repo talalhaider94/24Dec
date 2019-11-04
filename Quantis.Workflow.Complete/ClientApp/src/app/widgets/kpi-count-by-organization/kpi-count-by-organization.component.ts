@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 import { DateTimeService, WidgetHelpersService } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-kpi-count-by-organization',
     templateUrl: './kpi-count-by-organization.component.html',
@@ -37,12 +37,15 @@ export class KpiCountByOrganizationComponent implements OnInit {
     };
     public barChartLegend: boolean = true;
     public barChartType: string = 'bar';
+    period: string = '';
+    incompletePeriod: boolean = false;
 
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
+        private toastr: ToastrService,
         private widgetHelper: WidgetHelpersService
     ) { }
 
@@ -53,7 +56,12 @@ export class KpiCountByOrganizationComponent implements OnInit {
         }
         if (this.url) {
             this.emitter.loadingStatus(true);
-            this.getChartParametersAndData(this.url);
+            this.dashboardService.GetOrganizationHierarcy().subscribe(result => {
+                this.getChartParametersAndData(this.url, result);
+            }, error => {
+                console.error('GetOrganizationHierarcy', error);
+                this.toastr.error(`Unable to get contracts for ${this.widgetname}`, 'Error!');
+            });
         }
         // coming from dashboard or public parent components
         this.subscriptionForDataChangesFromParent()
@@ -68,8 +76,10 @@ export class KpiCountByOrganizationComponent implements OnInit {
                     // updating parameter form widget setValues
                     let kpiCountOrgFormValues = data.kpiCountOrgWidgetParameterValues;
                     if (kpiCountOrgFormValues.Filters.daterange) {
+                        this.period = kpiCountOrgFormValues.Filters.daterange;
                         kpiCountOrgFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiCountOrgFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = kpiCountOrgFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = kpiCountOrgFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -77,15 +87,18 @@ export class KpiCountByOrganizationComponent implements OnInit {
         });
     }
     // invokes on component initialization
-    getChartParametersAndData(url) {
+    getChartParametersAndData(url, getOrgHierarcy) {
         // these are default parameters need to update this logic
         // might have to make both API calls in sequence instead of parallel
         let myWidgetParameters = null;
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
+                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 // Map Params for widget index when widgets initializes for first time
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+                this.period = newParams.Filters.daterange;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {

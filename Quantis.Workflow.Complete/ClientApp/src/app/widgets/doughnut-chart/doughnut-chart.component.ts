@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportChartButton } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
@@ -66,9 +66,7 @@ export class DoughnutChartComponent implements OnInit {
                 y: 100
             }]
         }],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton,
     };
     period: string = '';
     incompletePeriod: boolean = false;

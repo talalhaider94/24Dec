@@ -27,7 +27,8 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
     // widgetTitle: string = 'Catalog Pending Count Trends';
     measure: string = 'Catalog Pending Count Trends';
     allMeasuresObj: {number:string};
-    period: string;
+    period: string = '';
+    incompletePeriod: boolean = false;
     @Output() catalogPendingParent = new EventEmitter<any>();
     // INPUT, OUTPUT PARAMS END
     constructor(
@@ -64,6 +65,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
                     if (catalogPendingFormValues.Filters.daterange) {
                         catalogPendingFormValues.Filters.daterange = this.dateTime.buildRangeDate(catalogPendingFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = catalogPendingFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = catalogPendingFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -85,6 +87,7 @@ export class CatalogPendingCountTrendsComponent implements OnInit {
                 const newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 this.measure = this.allMeasuresObj[newParams.Properties.measure];
                 this.period = newParams.Filters.date;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
