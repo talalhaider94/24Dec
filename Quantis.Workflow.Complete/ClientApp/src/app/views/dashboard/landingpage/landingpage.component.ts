@@ -23,6 +23,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class LandingPageComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;
+    @ViewChild('saveConfig') public saveConfig: ModalDirective;
     @ViewChild('compliantModal') public compliantModal: ModalDirective;
     @ViewChild('nonCompliantModal') public nonCompliantModal: ModalDirective;
 
@@ -51,7 +52,10 @@ export class LandingPageComponent implements OnInit {
     setViewAll = 0;
     gridLength = 0;
     thresholdkey = '@thresholdKey';
+    thresholdkey1 = '@standardDashbroadContractparties';
     thresholdvalue = 0;
+    thresholdvalue1;
+    thresholdLength=0;
     showMultiSelect : boolean = false;
     orignalArray: any = [];
     myStyle = {
@@ -78,11 +82,17 @@ export class LandingPageComponent implements OnInit {
         this.thresholdvalue = 0;
         this.setViewAll=0;
         this.gridLength = 0;
+        this.thresholdLength=0;
 
         this.apiService.getThresholdDetails(this.thresholdkey).subscribe((data: any) => {
             this.thresholdvalue = data;
         });
 
+        this.apiService.getThresholdDetails(this.thresholdkey1).subscribe((data: any) => {
+            this.thresholdvalue1 = data;
+            console.log(this.thresholdvalue1);
+            //this.customFilter1(this.thresholdvalue1);
+        });
 
         this.thresholdvalue = 0;
         this.month = moment().format('MMMM');
@@ -247,50 +257,107 @@ export class LandingPageComponent implements OnInit {
     }
 
     async customFilter(){
-            let value:any = this.contractName;
-            if(value == 'ALL'){
-                this.loading = true;
-                if(this.setViewAll == 0){
-                  this.limitedData = this.contName
-                }else{
-                  this.orignalArray = this.contName;
-                }
-                //this.limitedData = this.contName;
-                //this.gridsData = this.contName;
-                this.loading = false;
-            }else{
-                this.loading = true;
-            var temp:any = this.contName
-            var temp2:any = [];
-            await value.forEach(async element => {
-                await temp.forEach(ele =>  {
-                    let e = element.item_text?element.item_text:element
-                    if(ele.contractpartyname == e){
-                    temp2.push(ele);
-                    }else{}});
-            });
-            await temp2.forEach((val, i) => temp2[i] =  {
+        let value:any = this.contractName;
+        this.thresholdvalue1 = this.contractName;
+        this.thresholdLength=this.thresholdvalue1.length;
 
-                bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
-                complaintcontracts: temp2[i].complaintcontracts,
-                complaintkpis: temp2[i].complaintkpis,
-                contractpartyid: temp2[i].contractpartyid,
-                contractpartyname: temp2[i].contractpartyname,
-                noncomplaintcontracts: temp2[i].noncomplaintcontracts,
-                noncomplaintkpis: temp2[i].noncomplaintkpis,
-                totalcontracts: temp2[i].totalcontracts,
-                totalkpis: temp2[i].totalkpis,
-                worstcontracts: temp2[i].worstcontracts
-            })
+        console.log(this.contractName);
+        if(value == 'ALL'){
+            this.loading = true;
             if(this.setViewAll == 0){
-              this.limitedData = temp2;
+                this.limitedData = this.contName
             }else{
-              this.orignalArray = temp2;
+                this.orignalArray = this.contName;
             }
-
-
+            //this.limitedData = this.contName;
+            //this.gridsData = this.contName;
             this.loading = false;
+        }else{
+            this.loading = true;
+        var temp:any = this.contName
+        var temp2:any = [];
+        await value.forEach(async element => {
+            await temp.forEach(ele =>  {
+                let e = element.item_text?element.item_text:element
+                if(ele.contractpartyname == e){
+                temp2.push(ele);
+                }else{}});
+        });
+        await temp2.forEach((val, i) => temp2[i] =  {
+
+            bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+            complaintcontracts: temp2[i].complaintcontracts,
+            complaintkpis: temp2[i].complaintkpis,
+            contractpartyid: temp2[i].contractpartyid,
+            contractpartyname: temp2[i].contractpartyname,
+            noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+            noncomplaintkpis: temp2[i].noncomplaintkpis,
+            totalcontracts: temp2[i].totalcontracts,
+            totalkpis: temp2[i].totalkpis,
+            worstcontracts: temp2[i].worstcontracts
+        })
+        if(this.setViewAll == 0){
+            this.limitedData = temp2;
+        }else{
+            this.orignalArray = temp2;
+        }
+
+
+        this.loading = false;
+        }
+
+     }
+
+    async customFilter1(data){
+        this.contractName=data;
+        let value:any = this.contractName;
+        this.thresholdvalue1 = this.contractName;
+        //this.thresholdLength=this.thresholdvalue1.length;
+
+        console.log(this.contractName);
+        if(value == 'ALL'){
+            this.loading = true;
+            if(this.setViewAll == 0){
+                this.limitedData = this.contName
+            }else{
+                this.orignalArray = this.contName;
             }
+            //this.limitedData = this.contName;
+            //this.gridsData = this.contName;
+            this.loading = false;
+        }else{
+            this.loading = true;
+        var temp:any = this.contName
+        var temp2:any = [];
+        await value.forEach(async element => {
+            await temp.forEach(ele =>  {
+                let e = element.item_text?element.item_text:element
+                if(ele.contractpartyname == e){
+                temp2.push(ele);
+                }else{}});
+        });
+        await temp2.forEach((val, i) => temp2[i] =  {
+
+            bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+            complaintcontracts: temp2[i].complaintcontracts,
+            complaintkpis: temp2[i].complaintkpis,
+            contractpartyid: temp2[i].contractpartyid,
+            contractpartyname: temp2[i].contractpartyname,
+            noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+            noncomplaintkpis: temp2[i].noncomplaintkpis,
+            totalcontracts: temp2[i].totalcontracts,
+            totalkpis: temp2[i].totalkpis,
+            worstcontracts: temp2[i].worstcontracts
+        })
+        if(this.setViewAll == 0){
+            this.limitedData = temp2;
+        }else{
+            this.orignalArray = temp2;
+        }
+
+
+        this.loading = false;
+        }
 
      }
 
@@ -317,11 +384,19 @@ export class LandingPageComponent implements OnInit {
 
     setThreshold() {
         this.apiService.AddUpdateUserSettings(this.thresholdkey, this.thresholdvalue).subscribe((data: any) => {
-            this.toastr.success('Threshold value updated');
+            this.toastr.success('Configurazione salvata con successo');
         }, error => {
           this.toastr.error('Error while updating threshold value');
         });
         this.hideThresholdModal();
+    }
+    
+    setThreshold1() {
+        this.apiService.AddUpdateUserSettings(this.thresholdkey1, this.thresholdvalue1).subscribe((data: any) => {
+            this.toastr.success('Configurazione salvata con successo');
+        }, error => {
+          this.toastr.error('Error while updating threshold value');
+        });
     }
 
     showThresholdModal() {
@@ -331,6 +406,14 @@ export class LandingPageComponent implements OnInit {
     hideThresholdModal() {
         this.thresholdModal.hide();
     }
+    
+    // showThresholdModal1() {
+    //     this.saveConfig.show();
+    // }
+
+    // hideThresholdModal1() {
+    //     this.saveConfig.hide();
+    // }
 
     showCompliantModal(contractPartyId) {
         this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
