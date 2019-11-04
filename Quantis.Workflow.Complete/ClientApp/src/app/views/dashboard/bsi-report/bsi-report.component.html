@@ -89,9 +89,9 @@
             [oneToOne]="true" class="w-100p d-block one">
           </highcharts-chart><br><br>
 
-
+          
           <highcharts-chart [hidden]="isDayDrill==0" [Highcharts]="highcharts" [options]="dayChartOptions" [(update)]="dayChartUpdateFlag"
-            [oneToOne]="true" class="w-100p d-block two">
+            [oneToOne]="true" style="width: 100%; display: block;">
           </highcharts-chart><br><br>
 
           <h5 *ngIf='loadingModalDati' id="loader" class="text-center">
