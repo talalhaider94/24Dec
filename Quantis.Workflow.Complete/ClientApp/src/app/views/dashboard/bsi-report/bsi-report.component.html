@@ -27,11 +27,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of AllNormalReportsData; index as i">
-        <td><span [hidden]="true">{{i}}</span>{{row.foldername}}</td>
-        <td>{{row.itemname}}</td>
-        <td>{{row.reporttype}}</td>
-        <td>{{row.modifieddate | date:'MM/dd/yyyy, hh:mm a'}}</td>
-        <td>
+        <td style="padding:unset;vertical-align: middle;"><span [hidden]="true">{{i}}</span>{{row.foldername}}</td>
+        <td style="padding:unset;vertical-align: middle;">{{row.itemname}}</td>
+        <td style="padding:unset;vertical-align: middle;">{{row.reporttype}}</td>
+        <td style="padding:unset;vertical-align: middle;">{{row.modifieddate | date:'MM/dd/yyyy, hh:mm a'}}</td>
+        <td style="padding:unset;vertical-align: middle;">
           <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
             <i class="fa fa-eye"></i>
           </a>
@@ -89,9 +89,9 @@
             [oneToOne]="true" class="w-100p d-block one">
           </highcharts-chart><br><br>
 
-
+          
           <highcharts-chart [hidden]="isDayDrill==0" [Highcharts]="highcharts" [options]="dayChartOptions" [(update)]="dayChartUpdateFlag"
-            [oneToOne]="true" class="w-100p d-block two">
+            [oneToOne]="true" style="width: 100%; display: block;">
           </highcharts-chart><br><br>
 
           <h5 *ngIf='loadingModalDati' id="loader" class="text-center">

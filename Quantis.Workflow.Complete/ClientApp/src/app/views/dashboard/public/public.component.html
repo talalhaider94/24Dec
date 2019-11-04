@@ -174,13 +174,12 @@
                     </div>
                   </span>
                 </span>
-                <div [hidden]="isCatalogPendingComponent!=false || isFreeFormReportComponent!=false">
                 <div class="form-group form-check" *ngIf="!barChartWidgetParameters.showincompleteperiodcheck">
                   <input type="checkbox" formControlName="incompletePeriod" class="form-check-input"
                     id="incompletePeriod">
                   <label class="form-check-label" for="incompletePeriod">Periodo incompleto</label>
                 </div>
-                <div class="form-group">
+                <div class="form-group" *ngIf="barChartWidgetParameters.showdatetype">
                   <label for="dateTypes">Tipi di data</label>
                   <!-- Date Type -->
                   <select class="form-control" id="dateTypes" formControlName="dateTypes"
@@ -190,7 +189,6 @@
                       {{ datetype.value }}
                     </option>
                   </select>
-                </div>
                 </div>
                 <span *ngIf="showDateRangeInFilters">
                   <div class="form-group" *ngIf="barChartWidgetParameters.showdaterangefilter">

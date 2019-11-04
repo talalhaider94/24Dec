@@ -58,6 +58,8 @@ export class DateTimeService {
       startDate = moment().subtract(6, 'months').format('MM/YYYY');
     } else if(rangeType === '1') {
       startDate = moment().subtract(1, 'months').format('MM/YYYY');
+    } else {
+      alert('Please notify developer.');
     }
     return { startDate, endDate }
   }

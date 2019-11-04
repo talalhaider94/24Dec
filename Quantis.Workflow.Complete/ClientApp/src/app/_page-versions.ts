@@ -1,5 +1,5 @@
 export const pageVersion = {
-    '/dashboard/list': '1.0.0',
+    '/dashboard/list': '1.0.1',
     '/workflow/verifica': '0.1.5',
     '/workflow/ricerca': '0.1.5',
     '/workflow/amministrazione': '0.0.2',
@@ -16,7 +16,7 @@ export const pageVersion = {
     '/booklet': '0.0.2',
     '/formreport': '0.0.2',
     '/dashboard/free-form-report': '0.0.2',
-    '/dashboard/bsi-report': '0.0.6',
+    '/dashboard/bsi-report': '0.0.7',
     '/dashboard/personal-report': '0.0.1',
     '/tconfiguration/general': '0.0.2',
     '/tconfiguration/advanced': '0.0.2',

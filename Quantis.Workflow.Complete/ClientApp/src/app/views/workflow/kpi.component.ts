@@ -100,13 +100,13 @@ export class KPIComponent implements OnInit, OnDestroy {
             search: {
                 caseInsensitive: true
             },
-            "columnDefs": [{
+           "columnDefs": [{
                 "targets": 0,
                 "orderable": false,
                 "visible": true,
                 "searchable": false
             },
-            ],
+            ],   
             buttons: [
                 {
                     extend: 'csv',
@@ -380,7 +380,7 @@ export class KPIComponent implements OnInit, OnDestroy {
 
     setUpDataTableDependencies() {
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-            datatable_Ref.columns(7).every(function () {
+            datatable_Ref.columns(10).every(function () {
                 const that = this;
                 $($this.statoKPISelect.nativeElement).on('change', function () {
                     that.search($(this).val()).draw();
