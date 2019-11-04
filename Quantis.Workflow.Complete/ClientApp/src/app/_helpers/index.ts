@@ -26,3 +26,12 @@ export const chartExportTranslations = {
   viewFullscreen: 'Vedi in full screen',
   printChart: 'Stampa'
 }
+
+export const exportChartButton = {
+  enabled: true,
+  buttons: {
+  contextButton: {
+      menuItems: ['printChart', 'separator', 'downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG']
+  }
+}
+}

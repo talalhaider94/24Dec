@@ -10,6 +10,8 @@
     <span class="sr-only">Loading...</span>
 </div>
 <div style="display: block; position:relative">
+    <p class="font-12 mb-1"><b>Periodo:</b> {{ period || 'N/A' }}</p>
+    <p class="font-12 mb-1" *ngIf="incompletePeriod">Priodo Incompleto</p>
     <canvas id="chart" baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
             [legend]="barChartLegend" [chartType]="barChartType" (chartHover)="chartHovered($event)"
             (chartClick)="chartClicked($event)"></canvas>

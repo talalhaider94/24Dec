@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetHelpersService, chartExportTranslations } from '../../_helpers';
+import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportChartButton } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
@@ -31,10 +31,11 @@ export class BarchartComponent implements OnInit {
     barChartParent = new EventEmitter<any>();
 
     highcharts = Highcharts;
+
     myChartUpdateFlag: boolean = true;
     myChartOptions = {
         lang: chartExportTranslations,
-        credits: false,
+        credits: true,
         title: false,
         subtitle: {
             text: ''
@@ -66,11 +67,11 @@ export class BarchartComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
     allLeafNodesIds: any = [];
+    period: string = '';
+    incompletePeriod: boolean = false;
     constructor(
         private dashboardService: DashboardService,
         private emitter: EmitterService,
@@ -110,6 +111,7 @@ export class BarchartComponent implements OnInit {
                     if (barChartFormValues.Filters.daterange) {
                         barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
                     }
+                    this.incompletePeriod = barChartFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = barChartFormValues;
                     this.updateChart(data.result.body, data, null);
                 }
@@ -129,6 +131,9 @@ export class BarchartComponent implements OnInit {
                 // Map Params for widget index when widgets initializes for first time
                 myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
+
+                this.period = newParams.Filters.daterange;
+                this.incompletePeriod = newParams.Filters.incompletePeriod;
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
         ).subscribe(getWidgetIndex => {
