@@ -100,13 +100,13 @@ export class KPIComponent implements OnInit, OnDestroy {
             search: {
                 caseInsensitive: true
             },
-            "columnDefs": [{
+           "columnDefs": [{
                 "targets": 0,
                 "orderable": false,
                 "visible": true,
                 "searchable": false
             },
-            ],
+            ],   
             buttons: [
                 {
                     extend: 'csv',
