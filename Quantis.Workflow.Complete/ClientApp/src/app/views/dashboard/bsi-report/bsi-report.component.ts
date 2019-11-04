@@ -386,7 +386,7 @@ export class BSIReportComponent implements OnInit {
             console.log('GetDayLevelKPIData -> ',data);
 
             if(data.length==0){
-                this.$toastr.error('Nessun dato per il periodo MM/YYYY');
+                this.$toastr.success('Nessun dato per il periodo '+month+'/'+year);
                 this.isDayDrill=0;
             }else{    
                 this.isDayDrill=1;
