@@ -93,31 +93,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngIf="allTickets.length === 0 && !loading">
-                                    <td colspan="15"><strong>Nessun Ticket Trovato.</strong></td>
-                                </tr>
+                                <!--tr *ngIf="allTickets.length === 0 && !loading">
+                                    <td colspan="17"><strong>Nessun Ticket Trovato.</strong></td>
+                                </tr -->
                                 <tr *ngFor="let ticket of allTickets; let i = index"
                                     [ngClass]="{'bg-secondary': ticket.isclosed}">
-                                    <ng-template #popCheckBox>
-                                        <ul class="list-group list-group-flush"
-                                            *ngFor="let obj of formatCheckColumn()">
-                                            <li class="list-group-item">
-                                                {{ obj }}
-                                            </li>
-                                        </ul>
-                                    </ng-template>
+                                  <ng-template #popCheckBox>
+                                    <ul class="list-group list-group-flush" *ngFor="let obj of formatCheckColumn()">
+                                      <li class="list-group-item">
+                                        {{ obj }}
+                                      </li>
+                                    </ul>
+                                  </ng-template>
 
-                                    <td class="pl-3" [popover]="popCheckBox" triggers="hover" placement="right">
-                                        <label class="checkbox-container border"
-                                               [ngClass]="ticket.description.includes('[Compliant]') ?
+                                  <td class="pl-3" [popover]="popCheckBox" triggers="hover" placement="right">
+                                    <label class="checkbox-container border"
+                                           [ngClass]="ticket.description.includes('[Compliant]') ?
                                              'checkbox-container-success border-success' : ticket.description.includes('[Non Compliant]') ?
                                               'checkbox-container-danger border-danger' : ticket.description.includes('[Non Calcolato]') ?
                                               'checkbox-container-default border-secondary' : ticket.description.includes('[Nessun Evento]') ? 'checkbox-container-primary border-primary' : 'checkbox-container-white border-white' ">
-                                            <input type="checkbox" [disabled]="ticket.isclosed"
-                                                   [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
-                                            <span class="checkbox-checkmark"></span>
-                                        </label>
-                                    </td>
+                                      <input type="checkbox" [disabled]="ticket.isclosed"
+                                             [(ngModel)]="ticket.selected" (change)="checkIfAllSelected();">
+                                      <span class="checkbox-checkmark"></span>
+                                    </label>
+                                  </td>
                                     <td>
                                         <ng-template #popSummary>
                                             <ul class="list-group list-group-flush"

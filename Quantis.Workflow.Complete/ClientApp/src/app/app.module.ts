@@ -77,7 +77,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         ReactiveFormsModule,
         HttpClientModule,
         BrowserAnimationsModule, // required animations module
-        ToastrModule.forRoot(), // ToastrModule added
+        ToastrModule.forRoot({
+          preventDuplicates: true,
+        }), // ToastrModule added
         FileSaverModule,
         SweetAlert2Module.forRoot(),
         ModalModule.forRoot(),
