@@ -327,6 +327,8 @@ export class BSIReportComponent implements OnInit {
         this.isLoadedDati=0;
         this.isLoadedDati2=0;
         this.isDayDrill=0;
+        this.dayDrillPeriod='';
+        this.dayDrillPeriod2='';
         this.loading = true;
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
@@ -383,52 +385,57 @@ export class BSIReportComponent implements OnInit {
         this.apiService.GetDayLevelKPIData(globalRuleId,month,year).subscribe((data) => {
             console.log('GetDayLevelKPIData -> ',data);
 
-            this.isDayDrill=1;
+            if(data.length==0){
+                this.$toastr.error('Nessun dato per il periodo MM/YYYY');
+                this.isDayDrill=0;
+            }else{    
+                this.isDayDrill=1;
 
-            const chartArray = data;
+                const chartArray = data;
 
-            let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
-            let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
-            
-            let allChartLabels = chartArray.map(label => label.xvalue);
-            
-            let allTargetData = targetData.map(data => data.yvalue);
-            let allProvidedData = providedData.map(data => data.yvalue);
+                let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
+                let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
+                
+                let allChartLabels = chartArray.map(label => label.xvalue);
+                
+                let allTargetData = targetData.map(data => data.yvalue);
+                let allProvidedData = providedData.map(data => data.yvalue);
 
-            this.dayChartOptions.xAxis = {
-                type: 'date',
-                categories: allChartLabels,
+                this.dayChartOptions.xAxis = {
+                    type: 'date',
+                    categories: allChartLabels,
+                }
+                this.dayChartOptions.yAxis.title = {
+                    text: 'Percent'
+                }
+                
+                this.dayChartOptions.series[0] = {
+                    type: 'scatter',
+                    name: 'Target',
+                    data: allTargetData,
+                    marker: {
+                        fillColor: '#1985ac'
+                    },
+                    dataLabels: {
+                        color: '#1985ac',
+                        // color: '#ffc107',
+                    },
+                };
+
+                this.dayChartOptions.series[1] = {
+                    type: 'scatter',
+                    name: 'Provided',
+                    data: allProvidedData,
+                    marker: {
+                        fillColor: '#379457'
+                    },
+                    dataLabels: {
+                        color: '#379457',
+                    },
+                };
+                
+                this.dayChartUpdateFlag = true;
             }
-            this.dayChartOptions.yAxis.title = {
-                text: 'Percent'
-            }
-            
-            this.dayChartOptions.series[0] = {
-                type: 'scatter',
-                name: 'Target',
-                data: allTargetData,
-                marker: {
-                    fillColor: '#1985ac'
-                },
-                dataLabels: {
-                    color: '#1985ac',
-                    // color: '#ffc107',
-                },
-            };
-
-            this.dayChartOptions.series[1] = {
-                type: 'scatter',
-                name: 'Provided',
-                data: allProvidedData,
-                marker: {
-                    fillColor: '#379457'
-                },
-                dataLabels: {
-                    color: '#379457',
-                },
-            };
-            
-            this.dayChartUpdateFlag = true;
 
         });
     }
