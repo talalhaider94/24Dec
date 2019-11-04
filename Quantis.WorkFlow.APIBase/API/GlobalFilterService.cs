@@ -97,6 +97,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 DateRange = map.DateRange,
                 KPIs = map.KPIs,
                 Measures = map.Measures,
+                Date = map.Date,
+                KPI = map.KPI
             };
             if (props.Properties.ContainsKey("aggregationoption"))
             {
