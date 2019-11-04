@@ -130,7 +130,6 @@ export class DoughnutChartComponent implements OnInit {
                 // Map Params for widget index when widgets initializes for first time
                 myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 const newParams = this.widgetHelper.initWidgetParameters(myWidgetParameters, this.filters, this.properties);
-                debugger
                 this.period = newParams.Filters.daterange;
                 this.incompletePeriod = newParams.Filters.incompletePeriod;
                 /// To be used -> getWidgetIndex method ////

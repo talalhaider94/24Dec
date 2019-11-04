@@ -183,12 +183,10 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
 			if (this.barChartWidgetParameters.getOrgHierarcy && this.barChartWidgetParameters.getOrgHierarcy.length > 0) {
-				// debugger
 				this.treeDataFields = { dataSource: this.barChartWidgetParameters.getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
 				// this.preSelectedNodes = this.barChartWidgetParameters.getOrgHierarcy.map (org => org.id);	
 				this.preSelectedNodes = [];
 				if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
-					// debugger
 					const allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 					setTimeout(() => {
 						this.preSelectedNodes = allOrganizationIds;
@@ -577,7 +575,8 @@ export class PublicComponent implements OnInit {
 
 	itemChange() {
 		this.dashboardCollection.dashboardwidgets = this.dashboardWidgetsArray;
-		let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
+		window.dispatchEvent(new Event('resize'));
+		// let changedDashboardWidgets: DashboardModel = this.dashboardCollection;
 		// this.serialize(changedDashboardWidgets.dashboardwidgets);
 	}
 
@@ -670,13 +669,11 @@ export class PublicComponent implements OnInit {
 		const formValues = this.widgetParametersForm.value;
 		let startDate;
 		let endDate;
-		debugger
 		if (formValues.Filters.dateTypes === '0') {
 			startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY');
-		} else {
+		} else if (!!formValues.Filters.dateTypes) {
 			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
-
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
@@ -684,7 +681,8 @@ export class PublicComponent implements OnInit {
 			// delete formValues.Filters.dateTypes;
 			formValues.Filters.daterange = `${startDate}-${endDate}`;
 		} else {
-			formValues.Filters.daterange = null;
+			// formValues.Filters.daterange = null;
+			delete formValues.Filters.daterange;
 		}
 		if (formValues.Filters.date) {
 			if (typeof formValues.Filters.date !== 'string') {

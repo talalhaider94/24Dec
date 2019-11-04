@@ -429,7 +429,7 @@ export class BSIReportComponent implements OnInit {
             };
             
             this.dayChartUpdateFlag = true;
-
+            window.dispatchEvent(new Event('resize'));
         });
     }
 
