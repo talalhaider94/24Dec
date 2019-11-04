@@ -39,7 +39,8 @@ export class LoginComponent implements OnInit {
 
         ////// START SITEMINDER LOGIN ///////////////////////////////////////////////////
     this.authService.checkLogin().pipe(first()).subscribe(data => {
-        if (data.userid.length > 0) {
+      console.log(data.userid);
+      if (data.userid !== null) {
           this.dashboardService.getLandingPageInfo().subscribe(row => {
             this.showLandingPage = row.showlandingpage;
             console.log("Landing Page Info -> ", this.showLandingPage);
