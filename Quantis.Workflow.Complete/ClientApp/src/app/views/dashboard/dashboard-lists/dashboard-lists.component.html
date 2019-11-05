@@ -18,9 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Dashboard ID</th>
                                     <th>Nome</th>
-                                    <th>Owner</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -30,9 +28,7 @@
                                 </tr> -->
                                 <tr *ngFor="let dashboard of dashboards; let i = index">
                                     <td>{{ i+1 }}</td>
-                                    <td>{{ dashboard.id }}</td>
                                     <td>{{ dashboard.name }}</td>
-                                    <td>{{ dashboard.owner }}</td>
                                     <td>
                                         <button *ngIf="dashboard.isactive && dashboard.id==-1"
                                                 [routerLink]="['/dashboard/landingpage']"
