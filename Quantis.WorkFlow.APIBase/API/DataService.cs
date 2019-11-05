@@ -2029,12 +2029,12 @@ namespace Quantis.WorkFlow.APIBase.API
                     while (reader.Read())
                     {
                         var tar = new XYZDTO();
-                        tar.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        tar.XValue = ((DateTime)reader[0]).ToString("dd/MM/yyyy");
                         tar.YValue = (double)reader[1];
                         tar.ZValue = "Target";
                         res.Add(tar);
                         var pro = new XYZDTO();
-                        pro.XValue = ((DateTime)reader[0]).ToString("yyyy-MM-dd");
+                        pro.XValue = ((DateTime)reader[0]).ToString("dd/MM/yyyy");
                         pro.YValue =(reader[2]==DBNull.Value)?null:(double?)reader[2];
                         pro.ZValue = "Provided";
                         res.Add(pro);
