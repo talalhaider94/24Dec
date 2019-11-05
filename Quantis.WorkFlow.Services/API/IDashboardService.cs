@@ -22,5 +22,6 @@ namespace Quantis.WorkFlow.Services.API
         void SetDefaultDashboard(int id, int userId);
 
         int GetDefaultDashboardId(int userId);
+        void DeleteDashboard(int Id);
     }
 }
