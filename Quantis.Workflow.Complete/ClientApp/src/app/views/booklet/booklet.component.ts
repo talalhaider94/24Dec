@@ -110,10 +110,10 @@ export class BookletComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        setTimeout(() => {
+        //setTimeout(() => {
             this.dtTrigger.next();
-            this.rerender()
-        }, 1800);
+            this.rerender();
+        //}, 1800);
       
         // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
         //this.contrattiDef=data;

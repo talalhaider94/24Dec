@@ -895,6 +895,7 @@ export class PublicComponent implements OnInit {
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.contracts1').enable();
 			this.barChartWidgetParameters.allContracts1 = result;
+			debugger
 			this.widgetParametersForm.patchValue({
 				Filters: {
 					contracts1: ''
@@ -914,6 +915,7 @@ export class PublicComponent implements OnInit {
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.kpi1').enable();
 			this.barChartWidgetParameters.allKpis1 = result;
+			debugger
 			this.filterKpis1 = [...this.filterKpis1, ...result];
 			this.widgetParametersForm.patchValue({
 				Filters: {
@@ -979,7 +981,8 @@ export class PublicComponent implements OnInit {
 		delete chartParams.Filters.contractParties1;
 		delete chartParams.Filters.contracts1;
 		delete chartParams.Filters.kpi1;
-
+		console.log('this.barChartWidgetParameters', this.barChartWidgetParameters)
+		debugger
 		this.dashboardService.getWidgetIndex(url, chartParams).subscribe(result => {
 			this.emitter.sendNext({
 				type: 'kpiReportTrendChart',
@@ -1002,9 +1005,14 @@ export class PublicComponent implements OnInit {
 		
 		if (submitFormValues.Filters.groupReportCheck) {
 			let chartParams1 = JSON.parse(JSON.stringify(submitFormValues));
-			delete chartParams1.Filters.contractParties;
-			delete chartParams1.Filters.contracts;
-			delete chartParams1.Filters.kpi;
+			chartParams1.Filters.contractParties = chartParams1.Filters.contractParties1;
+			chartParams1.Filters.contracts = chartParams1.Filters.contracts1;
+			chartParams1.Filters.kpi = chartParams1.Filters.kpi1;
+			delete chartParams1.Filters.contractParties1;
+			delete chartParams1.Filters.contracts1;
+			delete chartParams1.Filters.kpi1;
+			console.log('this.barChartWidgetParameters', this.barChartWidgetParameters)
+			debugger
 			this.dashboardService.getWidgetIndex(url, chartParams1).subscribe(result => {
 				this.emitter.sendNext({
 					type: 'kpiReportTrendChart1',

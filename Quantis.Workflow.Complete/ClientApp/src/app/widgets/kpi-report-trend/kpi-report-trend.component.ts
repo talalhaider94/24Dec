@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
 import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportChartButton } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
 import HC_exporting from 'highcharts/modules/exporting';
-import { ApiService } from '../../_services/api.service';
 HC_exporting(Highcharts);
 
 @Component({
@@ -15,7 +14,7 @@ HC_exporting(Highcharts);
     templateUrl: './kpi-report-trend.component.html',
     styleUrls: ['./kpi-report-trend.component.scss']
 })
-export class KpiReportTrendComponent implements OnInit {
+export class KpiReportTrendComponent implements OnInit, OnChanges {
     @Input() widgetname: string;
     @Input() url: string;
     @Input() filters: any;
@@ -178,7 +177,6 @@ export class KpiReportTrendComponent implements OnInit {
     incompletePeriod: boolean = false;
     constructor(
         private dashboardService: DashboardService,
-        private apiService: ApiService,
         private emitter: EmitterService,
         private dateTime: DateTimeService,
         private router: Router,
@@ -228,6 +226,8 @@ export class KpiReportTrendComponent implements OnInit {
                         this.toastr.error('Unable to get KPIs', this.widgetname);
                     });
                 } else {
+                    // This API call here is necessary because we need to display
+                    // contract Parties 1 for second chart in case user checked Group report
                     this.dashboardService.getContractParties().subscribe(contractParties => {
                         this.getChartParametersAndData1(this.url, { contractParties });
                     }, error => {
@@ -243,6 +243,10 @@ export class KpiReportTrendComponent implements OnInit {
         window.dispatchEvent(new Event('resize'));
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        // changes.prop contains the old and the new value...
+        window.dispatchEvent(new Event('resize'));
+    }
     subscriptionForDataChangesFromParent() {
         this.emitter.getData().subscribe(result => {
             const { type, data } = result;
@@ -257,10 +261,10 @@ export class KpiReportTrendComponent implements OnInit {
                     }
                     this.incompletePeriod = kpiReportTrendFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = kpiReportTrendFormValues;
+                    debugger
                     this.getContractParties(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getContracts(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getKPI(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
-
                     this.updateChart(data.result.body, data, null);
                 }
             }
@@ -281,6 +285,10 @@ export class KpiReportTrendComponent implements OnInit {
                         kpiReportTrendFormValues.Filters.daterange = this.dateTime.buildRangeDate(kpiReportTrendFormValues.Filters.daterange);
                     }
                     this.setWidgetFormValues1 = kpiReportTrendFormValues;
+                    debugger
+                    this.getContractParties1(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
+                    this.getContracts1(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
+                    this.getKPI1(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.updateChart1(data.result.body, data, null);
                 }
             }
@@ -352,7 +360,9 @@ export class KpiReportTrendComponent implements OnInit {
         const chart1Parameters = this.kpiReportTrendWidgetParameters1;
         const chart1SetFormValues = this.setWidgetFormValues1;
         if (chart1Parameters) {
+
             if (chart1Parameters.hasOwnProperty('allContractParties1')) {
+                debugger
                 this.kpiReportTrendWidgetParameters.allContractParties1 = chart1Parameters.allContractParties1;
             }
             if (chart1Parameters.hasOwnProperty('allContracts1')) {
@@ -567,6 +577,9 @@ export class KpiReportTrendComponent implements OnInit {
                 this.kpiReportTrendWidgetParameters1 = kpiReportTrendParams.data;
                 // setting initial Paramter form widget values
                 this.setWidgetFormValues1 = this.widgetHelper.setWidgetParameters(myWidgetParameters, this.filters, this.properties);
+                this.getContractParties1(this.kpiReportTrendWidgetParameters1, this.setWidgetFormValues1);
+                this.getContracts1(this.kpiReportTrendWidgetParameters1, this.setWidgetFormValues1);
+                this.getKPI1(this.kpiReportTrendWidgetParameters1, this.setWidgetFormValues1);
             }
             // popular chart data
             if (getWidgetIndex) {
@@ -602,17 +615,18 @@ export class KpiReportTrendComponent implements OnInit {
 
     getContractParties1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContractParties1) {
+            debugger
             const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
             if (contractPartyKey) {
                 const c = contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString());
-                return (c) ? c.value : 'N/A';
+                this.contractParties1 = (c) ? c.value : 'N/A';
             } else {
-                return 'N/A';
+                this.contractParties1 = 'N/A';
             }
 
         } else {
-            return 'N/A';
+            this.contractParties1 = 'N/A';
         }
     }
 
@@ -633,16 +647,17 @@ export class KpiReportTrendComponent implements OnInit {
 
     getContracts1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContracts1) {
+            debugger
             const contractParties = kpiReportTrendWidgetParameters.allContracts1;
             const contractPartyKey = setWidgetFormValues.Filters.contracts1;
             if (contractPartyKey) {
                 const c = contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString());
-                return (c) ? c.value : 'N/A';
+                this.contracts1 = (c) ? c.value : 'N/A';
             } else {
-                return 'N/A';
+                this.contracts1 = 'N/A';
             }
         } else {
-            return 'N/A';
+            this.contracts1 = 'N/A';
         }
     }
 
@@ -663,17 +678,18 @@ export class KpiReportTrendComponent implements OnInit {
 
     getKPI1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allKpis1) {
+            debugger
             const contractParties = kpiReportTrendWidgetParameters.allKpis1;
             const contractPartyKey = setWidgetFormValues.Filters.kpi1;
             if (contractPartyKey) {
                 const c = contractParties.find(contractParty => contractParty.key.toString() === contractPartyKey.toString());
-                return (c) ? c.value : 'N/A';
+                this.kpi1 = (c) ? c.value : 'N/A';
             } else {
-                return 'N/A';
+                this.kpi1 = 'N/A';
             }
 
         } else {
-            return 'N/A';
+            this.kpi1 = 'N/A';
         }
     }
 
@@ -913,7 +929,7 @@ export class KpiReportTrendComponent implements OnInit {
     //         this.countCampiData.push(i);
     //     }
     // }
-    
+
     // getCountCampiData2() {
     //     let maxLength = 0;
     //     this.fitroDataById2.forEach(f => {
@@ -935,7 +951,7 @@ export class KpiReportTrendComponent implements OnInit {
     //     let year = split[1];
 
     //     console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
-    
+
     //     this.selectedmonth = month;
     //     this.selectedyear = year;
 
@@ -949,7 +965,7 @@ export class KpiReportTrendComponent implements OnInit {
     //     let year = split[1];
 
     //     console.log('KPI ID -> ',this.ReportDetailsData.globalruleid,' - Selected Month -> ',month,' - Selected Year -> ',year);
-    
+
     //     this.selectedmonth = month;
     //     this.selectedyear = year;
 
@@ -957,7 +973,7 @@ export class KpiReportTrendComponent implements OnInit {
     // }
 
 
-    chartClicked(e){
+    chartClicked(e) {
         console.log(e);
     }
 

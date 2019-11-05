@@ -320,7 +320,7 @@ r.rule_name,
                                 AverageDeviation = t.Average(u => u.Deviation)
                             }).ToList()
                         }).ToList();
-                        return result;
+                        return result.OrderBy(o=>o.ContractPartyName).ToList();
                     }
                 }
             }
@@ -482,7 +482,7 @@ r.rule_name,
                             Value = o.Actual
                         }).ToList(),
                     }).ToList();
-                    return result;
+                    return result.OrderBy(o => o.ContractName).ToList();
                 }
             }
         }

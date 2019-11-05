@@ -15,7 +15,8 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     submitted: boolean = false;
     returnUrl: string;
-    loading: boolean = false;
+  loading: boolean = false;
+  checkSiteminder: boolean = false;
     public showLandingPage: any;
     constructor(
         private formBuilder: FormBuilder,
@@ -37,9 +38,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
 
-        ////// START SITEMINDER LOGIN ///////////////////////////////////////////////////
+    ////// START SITEMINDER LOGIN ///////////////////////////////////////////////////
+    this.checkSiteminder = true;
     this.authService.checkLogin().pipe(first()).subscribe(data => {
-        if (data.userid.length > 0) {
+      console.log(data.userid);
+      if (data.userid !== null) {
           this.dashboardService.getLandingPageInfo().subscribe(row => {
             this.showLandingPage = row.showlandingpage;
             console.log("Landing Page Info -> ", this.showLandingPage);
@@ -56,16 +59,16 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['dashboard/nodashboard']);
             }
             this.toastr.success('Login eseguito con successo.');
-            this.loading = false;
           });
         } else {
-          console.log('errore siteminder');
+        console.log('errore siteminder');
+        this.checkSiteminder = false;
         }
         }, error => {
           console.log('onLoginFormSubmit: error', error);
           //this.toastr.error(error.error, error.description);
-          this.loading = false;
-          });
+          this.checkSiteminder = false;
+         });
         ////// END SITEMINDER LOGIN ///////////////////////////////////////////////////
 
 

@@ -16,8 +16,9 @@ export class ErrorInterceptorService implements HttpInterceptor {
     private router: Router,
     private toastr: ToastrService
     ) { }
-
+  count = 0;
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log(this.count++);
     return next.handle(request).pipe(catchError(err => {
       console.log('Error Interceptor', err);
       console.log(request)

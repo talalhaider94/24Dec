@@ -199,7 +199,11 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
-                    result = result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).ToList();
+                    result = result.GroupBy(o => o.XValue.Split('/')[1]).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).OrderBy(o=>o.XValue).ToList();
+                }
+                if (dto.AggregationOption == AggregationOption.PERIOD.Key)
+                {
+                    result = result.GroupBy(o => o.XValue).Select(p => new XYDTO() { XValue = p.Key, YValue = p.Sum(q => q.YValue) }).OrderBy(o => o.XValue).ToList();
                 }
             }
             return result;
