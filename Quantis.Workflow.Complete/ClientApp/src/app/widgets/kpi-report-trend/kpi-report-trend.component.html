@@ -1,9 +1,17 @@
 <p class="float-left no-drag" *ngIf="editWidgetName">
     <input type="text" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
 </p>
+<!-- <h6 class="ml-1" style="color:#565656">Periodo:</h6>
+<select [(ngModel)]="dayDrillPeriod" class="form-control ml-2" style="width:9%;margin-top:-8px" (change)="selectedPeriod()">
+<option *ngFor="let month of months; index as i" value={{month}}>{{month}}</option>
+</select> -->
 <button type="button" [disabled]="loading" *ngIf="!editWidgetName"
     class="no-drag btn-sm btn btn-primary float-right" (click)="openDrillDownTable()">
     <i class="fa fa-table"></i>
+</button>
+<button type="button" [disabled]="loading" *ngIf="!editWidgetName"
+    class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openDayDrillDownTable()">
+    Day Drill Down
 </button>
 <button type="button" [disabled]="loading" *ngIf="!editWidgetName"
     class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
