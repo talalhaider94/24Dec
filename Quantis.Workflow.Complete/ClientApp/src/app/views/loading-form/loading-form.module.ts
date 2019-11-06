@@ -5,6 +5,7 @@ import { LoadingFormRoutingModule } from './loading-form-routing.module';
 import { LoadingFormDetailComponent } from './loading-form-detail/loading-form-detail.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
+import { ProveVarieComponentSecurity } from './prove-varie-securityuser/prove-varie.component';
 import { ProveVarieComponentNoTracking } from './prove-varie-notracking/prove-varie-notracking.component';
 import { DataTablesModule } from 'angular-datatables';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -58,6 +59,7 @@ import { LoadingFormCsvComponent } from './loading-form-csv/loading-form-csv.com
         LoadingFormComponent,
         LoadingFormDetailComponent,
         ProveVarieComponent,
+        ProveVarieComponentSecurity,
         ProveVarieComponentNoTracking,
         LoadingFormUserComponent,
         LoadingFormSecurityUserComponent,
