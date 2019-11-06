@@ -17,6 +17,8 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
         public bool ShowOrganization { get; set; }
         public bool ShowLevelWiseOrganization { get; set; }
         public bool ShowIncompletePeriodCheck { get; set; }
+        public bool ShowPropertyTab { get; set; }
+        public bool ShowFilterTab { get; set; }
         public string DefaultDateRange { get; set; }
 
         public Dictionary<int, string> Measures { get; set; }
@@ -31,6 +33,8 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             ShowDateRangeFilter = false;
             ShowMeasure = false;
             ShowDateFilter = false;
+            ShowPropertyTab = false;
+            ShowFilterTab = false;
             ShowOrganization = true;
             ShowLevelWiseOrganization = false;
             ShowIncompletePeriodCheck = false;
