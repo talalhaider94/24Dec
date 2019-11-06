@@ -154,4 +154,8 @@ export class DashboardService {
         const selectLandingPageEndPoint = `${environment.API_URL}/data/SelectLandingPage`;
         return this.http.get(selectLandingPageEndPoint);
     }
+    DeleteDashboard(id): Observable<any> {
+        const deleteDashboardEndPoint = `${environment.API_URL}/dashboard/DeleteDashboard?Id=${id}`;
+        return this.http.get(deleteDashboardEndPoint);
+    }
 }
