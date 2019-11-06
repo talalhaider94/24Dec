@@ -11,7 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiService } from '../../_services/api.service';
 // importing chart components
-import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
+import { DistributionByWorkflowComponent } from '../../widgets/distribution-by-workflow/distribution-by-workflow.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
     // move the component collection to dashboard service to access commonly in multiple components
     // uiidentifier is necessary
     componentCollection = [
-        { name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
+        { name: "Distribution by Workflow", componentInstance: DistributionByWorkflowComponent, uiidentifier: "distribution_by_verifica" },
         { name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
         { name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
         { name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },
@@ -331,7 +331,7 @@ export class DashboardComponent implements OnInit {
                     minItemRows: 4,
                     x: 0,
                     y: 0,
-                    component: DoughnutChartComponent,
+                    component: DistributionByWorkflowComponent,
                     widgetname: doughnutWidget.name,
                     uiidentifier: doughnutWidget.uiidentifier,
                     filters: {}, // need to update this code
