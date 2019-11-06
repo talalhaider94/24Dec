@@ -670,10 +670,14 @@ export class PublicComponent implements OnInit {
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
-			startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
-			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY');
+			let WidgetDateAndTime = this.dateTime.WidgetDateAndTime(formValues.Filters.startDate, formValues.Filters.endDate, formValues.Filters.incompletePeriod);
+			startDate = WidgetDateAndTime.startDate;
+			endDate = WidgetDateAndTime.endDate;
+			//incompletePeriod = WidgetDateAndTime.incompletePeriod;
+			/* startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
+			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY'); */
 		} else if (!!formValues.Filters.dateTypes) {
-			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes);
+			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes, formValues.Filters.incompletePeriod);
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
