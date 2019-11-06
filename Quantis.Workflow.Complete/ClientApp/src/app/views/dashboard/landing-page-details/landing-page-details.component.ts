@@ -303,16 +303,16 @@ export class LandingPageDetailsComponent implements OnInit {
         this.thresholdModal.hide();
     }
 
-     showCompliantModal(contract) {
-       var kpi= this.orignalArray
-       var filteredkpi = kpi.filter(a => a.contractname == contract)
-        if (filteredkpi[0].complaintkpis != 0){
-            this.KpiCompliants = filteredkpi[0].bestkpis;
-            console.log(this.KpiCompliants,'kpiCompiant')
-        }
-         this.rerender();
-    this.compliantModal.show();
-    }
+    showCompliantModal(contract) {
+        var kpi= this.orignalArray
+        var filteredkpi = kpi.filter(a => a.contractname == contract)
+         if (filteredkpi[0].complaintkpis != 0){
+             this.KpiCompliants = filteredkpi[0].bestkpis;
+             console.log(this.KpiCompliants,'kpiCompiant')
+         }
+          this.rerender();
+     this.compliantModal.show();
+     }
 
     hideCompliantModal() {
         this.compliantModal.hide();
@@ -321,11 +321,11 @@ export class LandingPageDetailsComponent implements OnInit {
     showNonCompliantModal(contract) {
         var kpi= this.orignalArray
         var filteredkpi = kpi.filter(a => a.contractname == contract)
-         if (filteredkpi[0].noncomplaintkpis != 0){
-             this.KpiNonCompliants = filteredkpi[0].bestkpis;
-             console.log(this.KpiNonCompliants,'kpiCompiant')
-         }
-          this.rerender();
+        if (filteredkpi[0].noncomplaintkpis != 0){
+            this.KpiNonCompliants = filteredkpi[0].bestkpis;
+            console.log(this.KpiNonCompliants,'non kpiCompiant')
+        }
+        this.rerender();
         this.nonCompliantModal.show();
     }
 

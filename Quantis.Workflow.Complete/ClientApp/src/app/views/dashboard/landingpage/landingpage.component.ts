@@ -417,7 +417,7 @@ export class LandingPageComponent implements OnInit {
 
     showCompliantModal(contractPartyId) {
         this.apiService.GetLandingPageKPIDetails(contractPartyId,this.monthVar,this.yearVar).subscribe((data: any) => {
-                this.KpiCompliants = data.filter(a => a.result == 'compliant')
+            this.KpiCompliants = data.filter(a => a.result == 'compliant')
             this.rerender();
         });
         this.compliantModal.show();

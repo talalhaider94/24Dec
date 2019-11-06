@@ -23,6 +23,8 @@ import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/k
 import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
+import { chartExportTranslations } from '../../../_helpers';
+import * as Highcharts from 'highcharts';
 
 @Component({
 	selector: 'app-public',
@@ -62,7 +64,8 @@ export class PublicComponent implements OnInit {
 	selectedmonth;
 	selectedyear;
 	months = [];
-	monthVar
+	monthVar;
+	highcharts = Highcharts;
 
 	isLoadedDati=0;
 	loadingModalDati: boolean = false;
@@ -130,14 +133,20 @@ export class PublicComponent implements OnInit {
 	loadingModalForm: boolean = false;
 	parametersArray: FormArray;
 	groupReportCheck: boolean = false;
+
+	dayDrillPeriod;
+	isDayDrill=0;
+	dayChartUpdateFlag: boolean = true;
+
 	@ViewChild('kpiReportDrillDownTableModal') public kpiReportDrillDownTableModal: ModalDirective;
+	@ViewChild('bsiChartModal') public bsiChartModal: ModalDirective;
 	kpiReportDrillDownTable: any;
 	constructor(
 		private dashboardService: DashboardService,
 		private apiService: ApiService,
+        private toastr: ToastrService,
 		private _route: ActivatedRoute,
 		private emitter: EmitterService,
-		private toastr: ToastrService,
 		private formBuilder: FormBuilder,
 		private dateTime: DateTimeService,
 		private _$localeService: BsLocaleService,
@@ -293,6 +302,89 @@ export class PublicComponent implements OnInit {
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
 			}
+			if (childData.type === 'openDayDrillDownTable') {
+				this.bsiChartModal.show();
+				this.kpiReportDrillDownTable = childData.data.setWidgetFormValues;
+
+				///////////////////////////////////////////////////
+
+				this.months.length = 0;
+				if(this.kpiReportDrillDownTable.Filters.kpi){
+					this.kpiId = this.kpiReportDrillDownTable.Filters.kpi;
+				}
+				else{
+					this.kpiId = 0;
+				}
+				if(this.kpiReportDrillDownTable.Filters.daterange){
+					this.startDate = this.kpiReportDrillDownTable.Filters.daterange[0];
+					this.endDate = this.kpiReportDrillDownTable.Filters.daterange[1];
+				}
+				else{
+					this.startDate = this.kpiReportDrillDownTable.Filters.startDate;
+					this.endDate = this.kpiReportDrillDownTable.Filters.endDate;
+				}
+				
+				
+				this.startDate = new Date(this.startDate).toUTCString();
+				this.endDate = new Date(this.endDate).toUTCString();
+
+				///////////////////// From Month and Year ////////////////////
+				let stringToSplit = this.startDate;
+				let split = stringToSplit.split(",");
+
+				let extra = split[1];
+				let fromSplit = extra.split(" ");
+
+				let day = fromSplit[1];
+				let month = fromSplit[2];
+				let fromMonth = moment().month(month).format("M");
+
+				let from_month = +fromMonth;
+				from_month=from_month+1;
+
+				let fromYear = fromSplit[3];
+
+				let fromDateString = day+'/'+fromMonth+'/'+fromYear;
+				
+				///////////////////// To Month and Year ////////////////////
+
+				let stringToSplit2 = this.endDate;
+				let split2 = stringToSplit2.split(",");
+
+				let extra2 = split2[1];
+				let toSplit = extra2.split(" ");
+
+				let day2 = toSplit[1];
+				let month2 = toSplit[2];
+				let toMonth = moment().month(month2).format("M");
+				let toYear = toSplit[3];
+
+				let to_month = +toMonth;
+				to_month=to_month+1;
+
+				console.log(to_month,toYear);
+
+				this.selectedmonth = to_month;
+				this.selectedyear = toYear;
+
+				/////////////////////////////////////////////
+
+				let toDateString = day2+'/'+toMonth+'/'+toYear;
+
+				console.log('fromtomonths -> ',fromDateString,toDateString);
+
+				var fromCheck = moment(fromDateString, 'DD/MM/YYYY').add(1, 'M');
+        		var toCheck = moment(toDateString, 'DD/MM/YYYY').add(1, 'M');
+
+				while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+					let monthyear = fromCheck.format('MM') + '/' + fromCheck.format('YYYY');
+					this.months.push(monthyear);
+					fromCheck.add(1,'month');
+				}
+
+				console.log('months -> ',this.months);
+
+			}
 			if (childData.type === 'openKpiReportDrillDownTable') {
 				this.kpiReportDrillDownTableModal.show();
 				this.kpiReportDrillDownTable = childData.data.setWidgetFormValues;
@@ -418,6 +510,50 @@ export class PublicComponent implements OnInit {
 	componentCreated(compRef: ComponentRef<any>) {
 	}
 
+	dayChartOptions = {
+        lang: chartExportTranslations,
+        credits: false,
+        title: {
+            text: 'KPI Report'
+        },
+        xAxis: {
+            type: 'date',
+            categories: []
+            // categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+        },
+        yAxis: {
+            title: {
+                text: 'Percent'
+            }
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                },
+                point: {
+                    events: {
+                        click: function () {
+                            
+                            this.bar_period = this.category;
+                            this.bar_value = this.y;
+                            alert('Period: ' + this.bar_period + ', Value: ' + this.bar_value);
+                           
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            crosshairs: true
+        },
+        series: [],
+        exporting: {
+            enabled: true
+        },
+	};
+	
 	ngOnInit(): void {
 		this.widgetParametersForm = this.formBuilder.group({
 			GlobalFilterId: [null],
@@ -899,7 +1035,7 @@ export class PublicComponent implements OnInit {
 		this.dashboardService.getContract(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.contracts1').enable();
 			this.barChartWidgetParameters.allContracts1 = result;
-			debugger
+			//debugger
 			this.widgetParametersForm.patchValue({
 				Filters: {
 					contracts1: ''
@@ -919,7 +1055,7 @@ export class PublicComponent implements OnInit {
 		this.dashboardService.getKPIs(0, +event.target.value).subscribe(result => {
 			this.widgetParametersForm.get('Filters.kpi1').enable();
 			this.barChartWidgetParameters.allKpis1 = result;
-			debugger
+			//debugger
 			this.filterKpis1 = [...this.filterKpis1, ...result];
 			this.widgetParametersForm.patchValue({
 				Filters: {
@@ -986,7 +1122,7 @@ export class PublicComponent implements OnInit {
 		delete chartParams.Filters.contracts1;
 		delete chartParams.Filters.kpi1;
 		console.log('this.barChartWidgetParameters', this.barChartWidgetParameters)
-		debugger
+		//debugger
 		this.dashboardService.getWidgetIndex(url, chartParams).subscribe(result => {
 			this.emitter.sendNext({
 				type: 'kpiReportTrendChart',
@@ -1016,7 +1152,7 @@ export class PublicComponent implements OnInit {
 			delete chartParams1.Filters.contracts1;
 			delete chartParams1.Filters.kpi1;
 			console.log('this.barChartWidgetParameters', this.barChartWidgetParameters)
-			debugger
+			//debugger
 			this.dashboardService.getWidgetIndex(url, chartParams1).subscribe(result => {
 				this.emitter.sendNext({
 					type: 'kpiReportTrendChart1',
@@ -1150,6 +1286,79 @@ export class PublicComponent implements OnInit {
         this.selectedyear = year;
 
         this.getdati1(this.kpiId,month,year);
+	}
+	
+	selectedPeriod(){
+        let stringToSplit = this.dayDrillPeriod;
+        let split = stringToSplit.split("/");
+        let month = split[0];
+        let year = split[1];
+
+        console.log('KPI ID -> ',this.kpiId,' - Selected Month -> ',month,' - Selected Year -> ',year);
+    
+        this.getDayLevelData(this.kpiId,month,year);
+	}
+	
+	getDayLevelData(globalRuleId, month, year){
+        this.apiService.GetDayLevelKPIData(4895,month,year).subscribe((data) => {
+            console.log('GetDayLevelKPIData -> ',data);
+
+            if(data.length==0){
+                this.toastr.success('Nessun dato per il periodo '+month+'/'+year);
+                this.isDayDrill=0;
+            }else{    
+                this.isDayDrill=1;
+
+                const chartArray = data;
+
+                let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
+                let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
+                
+                let allChartLabels = chartArray.map(label => label.xvalue);
+                
+                let allTargetData = targetData.map(data => data.yvalue);
+                let allProvidedData = providedData.map(data => data.yvalue);
+
+                this.dayChartOptions.xAxis = {
+                    type: 'date',
+                    categories: allChartLabels,
+                }
+                this.dayChartOptions.yAxis.title = {
+                    text: 'Percent'
+                }
+                
+                this.dayChartOptions.series[0] = {
+                    type: 'scatter',
+                    name: 'Target',
+                    data: allTargetData,
+                    marker: {
+                        fillColor: '#1985ac'
+                    },
+                    dataLabels: {
+                        color: '#1985ac',
+                        // color: '#ffc107',
+                    },
+                };
+
+                this.dayChartOptions.series[1] = {
+                    type: 'scatter',
+                    name: 'Provided',
+                    data: allProvidedData,
+                    marker: {
+                        fillColor: '#379457'
+                    },
+                    dataLabels: {
+                        color: '#379457',
+                    },
+                };
+                
+                this.dayChartUpdateFlag = true;
+            }
+        });
+	}
+	
+	hideModal(){
+        this.bsiChartModal.hide();
     }
 	
 }

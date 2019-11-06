@@ -697,6 +697,15 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         });
     }
 
+    openDayDrillDownTable() {
+        this.kpiReportTrendParent.emit({
+            type: 'openDayDrillDownTable',
+            data: {
+                setWidgetFormValues: this.setWidgetFormValues,
+            }
+        });
+    }
+
 
     // public chartClicked(): void {
     //     this.months.length = 0;
