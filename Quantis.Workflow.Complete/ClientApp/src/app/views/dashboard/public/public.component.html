@@ -17,8 +17,8 @@
 <gridster [options]="options" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
-    <div class="card" style="height:100%;padding-bottom: 1.5rem;">
-      <div class="card-body" style="height:100%">
+    <div class="card">
+      <div class="card-body">
 
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
                      [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">
@@ -321,3 +321,33 @@
   </div>
 </div>
 <!-- kpi report drill down table modal end -->
+
+
+<div bsModal #bsiChartModal="bs-modal" class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="width:90% !important;" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">KPI Day Drill Down</h4>
+        <button type="button" class="close" aria-label="Close" (click)="hideModal()"> 
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <br>
+          <div class="row">
+            <h6 class="ml-3" style="color:#565656">Periodo:</h6>
+            <select [(ngModel)]="dayDrillPeriod" class="form-control ml-2" style="width:9%;margin-top:-8px" (change)="selectedPeriod()">
+              <!-- <option value='' selected>Select</option> -->
+              <option *ngFor="let month of months; index as i" value={{month}}>{{month}}</option>
+            </select>
+          </div>
+          <highcharts-chart [hidden]="isDayDrill==0" [Highcharts]="highcharts" [options]="dayChartOptions" [(update)]="dayChartUpdateFlag"
+          [oneToOne]="true" style="width: 100%; display: block;">
+        </highcharts-chart><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

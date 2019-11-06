@@ -6,7 +6,8 @@ import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-HC_exporting(Highcharts);
+import offline from 'highcharts/modules/offline-exporting'
+offline(Highcharts);
 @Component({
     selector: 'app-barchart',
     templateUrl: './barchart.component.html',

@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import { ToastrService } from 'ngx-toastr';
-import HC_exporting from 'highcharts/modules/exporting';
+import HC_exporting from 'highcharts/modules/offline-exporting';
 HC_exporting(Highcharts);
 
 @Component({
@@ -244,9 +244,9 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        // changes.prop contains the old and the new value...
         window.dispatchEvent(new Event('resize'));
     }
+
     subscriptionForDataChangesFromParent() {
         this.emitter.getData().subscribe(result => {
             const { type, data } = result;
@@ -261,7 +261,6 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                     }
                     this.incompletePeriod = kpiReportTrendFormValues.Filters.incompletePeriod;
                     this.setWidgetFormValues = kpiReportTrendFormValues;
-                    debugger
                     this.getContractParties(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getContracts(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
                     this.getKPI(data.kpiReportTrendWidgetParameters, this.setWidgetFormValues);
@@ -362,7 +361,6 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         if (chart1Parameters) {
 
             if (chart1Parameters.hasOwnProperty('allContractParties1')) {
-                debugger
                 this.kpiReportTrendWidgetParameters.allContractParties1 = chart1Parameters.allContractParties1;
             }
             if (chart1Parameters.hasOwnProperty('allContracts1')) {
@@ -615,7 +613,6 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
 
     getContractParties1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContractParties1) {
-            debugger
             const contractParties = kpiReportTrendWidgetParameters.allContractParties1;
             const contractPartyKey = setWidgetFormValues.Filters.contractParties1;
             if (contractPartyKey) {
@@ -647,7 +644,6 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
 
     getContracts1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allContracts1) {
-            debugger
             const contractParties = kpiReportTrendWidgetParameters.allContracts1;
             const contractPartyKey = setWidgetFormValues.Filters.contracts1;
             if (contractPartyKey) {
@@ -678,7 +674,6 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
 
     getKPI1(kpiReportTrendWidgetParameters, setWidgetFormValues) {
         if (kpiReportTrendWidgetParameters && setWidgetFormValues && kpiReportTrendWidgetParameters.allKpis1) {
-            debugger
             const contractParties = kpiReportTrendWidgetParameters.allKpis1;
             const contractPartyKey = setWidgetFormValues.Filters.kpi1;
             if (contractPartyKey) {
@@ -696,6 +691,15 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
     openDrillDownTable() {
         this.kpiReportTrendParent.emit({
             type: 'openKpiReportDrillDownTable',
+            data: {
+                setWidgetFormValues: this.setWidgetFormValues,
+            }
+        });
+    }
+
+    openDayDrillDownTable() {
+        this.kpiReportTrendParent.emit({
+            type: 'openDayDrillDownTable',
             data: {
                 setWidgetFormValues: this.setWidgetFormValues,
             }

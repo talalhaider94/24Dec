@@ -1,5 +1,5 @@
 export const pageVersion = {
-    '/dashboard/list': '1.0.2',
+    '/dashboard/list': '1.0.4',
     '/workflow/verifica': '0.1.5',
     '/workflow/ricerca': '0.1.5',
     '/workflow/amministrazione': '0.0.2',
