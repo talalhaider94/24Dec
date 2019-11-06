@@ -76,6 +76,21 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
+        public void DeleteDashboard(int Id)
+        {
+            var dashboard= _dbcontext.DB_Dashboards.FirstOrDefault(o => o.Id==Id);
+            var widgets = _dbcontext.DB_DashboardWidgets.Include(o=>o.DashboardWidgetSettings).Where(o => o.DashboardId == Id);
+            var settings = widgets.SelectMany(o => o.DashboardWidgetSettings);
+            _dbcontext.DB_DashboardWidgetSettings.RemoveRange(settings);
+            _dbcontext.SaveChanges();
+            _dbcontext.DB_DashboardWidgets.RemoveRange(widgets);
+            _dbcontext.SaveChanges();
+            _dbcontext.DB_Dashboards.Remove(dashboard);
+            _dbcontext.SaveChanges();
+
+        }
+        
+
         public void SetDefaultDashboard(int id, int userId)
         {
             try

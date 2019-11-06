@@ -52,6 +52,12 @@ namespace Quantis.Workflow.Complete.Controllers
             }
             return dashboards;
         }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("DeleteDashboard")]
+        public void DeleteDashboard(int Id)
+        {
+            _dashboardAPI.DeleteDashboard(Id);
+        }
 
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("SetDefaultDashboard")]
