@@ -9,10 +9,10 @@ import { ToastrService } from 'ngx-toastr';
 HC_exporting(Highcharts);
 @Component({
     selector: 'app-doughnut-chart',
-    templateUrl: './doughnut-chart.component.html',
-    styleUrls: ['./doughnut-chart.component.scss']
+    templateUrl: './distribution-by-workflow.component.html',
+    styleUrls: ['./distribution-by-workflow.component.scss']
 })
-export class DoughnutChartComponent implements OnInit {
+export class DistributionByWorkflowComponent implements OnInit {
     @Input() widgetname: string;
     @Input() url: string;
     @Input() filters: Array<any>;
@@ -80,7 +80,7 @@ export class DoughnutChartComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log('DoughnutChartComponent Distribution by Verifica', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
+        console.log('DistributionByWorkflowComponent', this.widgetname, this.url, this.id, this.widgetid, this.filters, this.properties);
         if (this.router.url.includes('dashboard/public')) {
             this.isDashboardModeEdit = false;
             if (this.url) {
@@ -172,8 +172,6 @@ export class DoughnutChartComponent implements OnInit {
     }
 
     openModal() {
-        console.log('OPEN MODAL DoughnutChartComponent Distribution by Verifica PARAMS', this.verificaDoughnutChartWidgetParameters);
-        console.log('OPEN MODAL DoughnutChartComponent Distribution by Verifica VALUES', this.setWidgetFormValues);
         this.verificaDoughnutParent.emit({
             type: 'openVerificaDoughnutChartModal',
             data: {

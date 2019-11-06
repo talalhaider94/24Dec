@@ -244,9 +244,9 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        // changes.prop contains the old and the new value...
         window.dispatchEvent(new Event('resize'));
     }
+
     subscriptionForDataChangesFromParent() {
         this.emitter.getData().subscribe(result => {
             const { type, data } = result;
