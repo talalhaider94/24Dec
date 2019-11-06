@@ -159,4 +159,18 @@ export class DashboardListsComponent implements OnInit {
             })
         }
     }
+
+    deleteDashboard(id){
+        this.toastr.info('Valore in aggiornamento..', 'Confirm');
+        this.dashboardService.DeleteDashboard(id).subscribe(result => {
+            this.toastr.success('Dashboard deleted successfully');
+            this.getUserDashboards();
+        }, error => {
+            this.toastr.error('Error in deleting dashboard');
+        })
+    }
+    
+    onCancel(dismissMethod: string): void {
+        console.log('Cancel ', dismissMethod);
+    }
 }

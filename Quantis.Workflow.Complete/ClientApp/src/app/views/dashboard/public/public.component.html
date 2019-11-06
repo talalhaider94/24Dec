@@ -17,8 +17,8 @@
 <gridster [options]="options" class="bg-white">
   <!-- Earch grister-item is generated with *ngFor -->
   <gridster-item [item]="item" *ngFor="let item of dashboardWidgetsArray">
-    <div class="card" style="height:100%;padding-bottom: 1.5rem;">
-      <div class="card-body" style="height:100%">
+    <div class="card">
+      <div class="card-body">
 
         <ndc-dynamic class="no-drag" [ndcDynamicComponent]="item.component" [ndcDynamicInputs]="item"
                      [ndcDynamicOutputs]="outputs" (ndcDynamicCreated)="componentCreated($event)">

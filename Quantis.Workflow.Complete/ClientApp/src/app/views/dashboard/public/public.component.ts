@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
 import { TreeViewComponent, NodeSelectEventArgs } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
-import { DoughnutChartComponent } from '../../../widgets/doughnut-chart/doughnut-chart.component';
+import { DistributionByWorkflowComponent } from '../../../widgets/distribution-by-workflow/distribution-by-workflow.component';
 import { BarchartComponent } from '../../../widgets/barchart/barchart.component';
 import { KpiCountSummaryComponent } from '../../../widgets/kpi-count-summary/kpi-count-summary.component';
 import { CatalogPendingCountTrendsComponent } from '../../../widgets/catalog-pending-count-trends/catalog-pending-count-trends.component';
@@ -92,7 +92,7 @@ export class PublicComponent implements OnInit {
 	submitted: boolean = false;
 	// move to Dashboard service
 	componentCollection: Array<ComponentCollection> = [
-		{ name: "Distribution by Verifica", componentInstance: DoughnutChartComponent, uiidentifier: "distribution_by_verifica" },
+		{ name: "Distribution by Workflow", componentInstance: DistributionByWorkflowComponent, uiidentifier: "distribution_by_verifica" },
 		{ name: "Count Trend", componentInstance: BarchartComponent, uiidentifier: "count_trend" },
 		{ name: "KPI Count Summary", componentInstance: KpiCountSummaryComponent, uiidentifier: "kpi_count_summary" },
 		{ name: "Catalog Pending Count Trends", componentInstance: CatalogPendingCountTrendsComponent, uiidentifier: "catalog_pending_count_trends" },

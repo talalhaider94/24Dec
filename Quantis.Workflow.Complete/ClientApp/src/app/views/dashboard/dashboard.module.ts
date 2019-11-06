@@ -20,7 +20,7 @@ import { KeysPipePipe } from './bsi-report/bsi-pipe.pipe';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DoughnutChartComponent } from '../../widgets/doughnut-chart/doughnut-chart.component';
+import { DistributionByWorkflowComponent } from '../../widgets/distribution-by-workflow/distribution-by-workflow.component';
 import { BarchartComponent } from '../../widgets/barchart/barchart.component';
 import { MenuComponent } from '../../widgets/menu/menu.component';
 import { PublicComponent } from './public/public.component';
@@ -62,7 +62,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         SweetAlert2Module,
         MatProgressBarModule,
         DynamicModule.withComponents([
-            DoughnutChartComponent,
+            DistributionByWorkflowComponent,
             BarchartComponent,
             KpiCountSummaryComponent,
             DistributionByUserComponent,
@@ -79,7 +79,7 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
     ],
     declarations: [
         DashboardComponent,
-        DoughnutChartComponent,
+        DistributionByWorkflowComponent,
         MenuComponent,
         BarchartComponent,
         PublicComponent,
