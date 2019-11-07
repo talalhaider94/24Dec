@@ -3,14 +3,13 @@
     public static class WorkFlowConstants
     {
         public static string Configuration_SessionTimeOutKey = "";
-
+        //t.interval_length || ' ' || initcap(t.time_unit) ||
+        //decode(t.is_period, 1, ' (Rule''s tracking period)', '') ""Tracking Period"" ,
         public static string KPI_Calculation_Status_Query = @"select * from (
         select
         t.customer_name  ""Cliente"",
         t.sla_name ""Contratto"" ,
         t.rule_name ""KPI"" ,
-        t.interval_length || ' ' || initcap(t.time_unit) ||
-        decode(t.is_period, 1, ' (Rule''s tracking period)', '') ""Tracking Period"" ,
         to_char(to_date(decode (to_char (t.last_psl_record_date , 'dd/mm/yyyy') , '02/01/1970' , null , t.last_psl_record_date)),'dd/mm/yyyy HH:mm:ss') ""Aggiornato al"" 
         from
         (
@@ -43,6 +42,7 @@
         and sv.status         in ('EFFECTIVE', 'NOT_EFFECTIVE')
         and s.sla_status      not in ('ARCHIVED','PURGING')
         and t.status          = 'ON'
+        and t.is_period = 1
         and r.measurability_status = 'TXT_MEASURABILITY_STATUS_ACTIVE'
         and r.global_rule_id  = g.global_rule_id
         and {0}
