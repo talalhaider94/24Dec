@@ -19,7 +19,7 @@
       <select class="form-control" style="width:15%;margin-left:1%" #searchCol1 id="searchCol1" [(ngModel)]="viewModel.filters.tuttiClienti" name="tuttiClienti"><option value="">Tutti i Clienti</option></select>
 
       <button [disabled]="(documentId==0 || item==0) " style="margin-left:1%" class="btn btn-success float-right" (click)="addBooklet()">
-        Crea Booklet
+        <span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Crea Booklet
       </button>
     </div>
 

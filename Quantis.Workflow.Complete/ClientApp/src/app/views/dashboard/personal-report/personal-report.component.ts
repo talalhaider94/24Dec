@@ -180,8 +180,11 @@ export class PersonalReportComponent implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
+        //let tracking_period = this.personalReportForm.value.aggregationoption;
         this.startDate = this.personalReportForm.value.startDate;
         this.endDate = this.personalReportForm.value.endDate;
+
+        console.log('Object: ',this.personalReportForm.value);
 
         this.startDate = new Date(this.startDate).toUTCString();
         this.endDate = new Date(this.endDate).toUTCString();
@@ -218,12 +221,12 @@ export class PersonalReportComponent implements OnInit {
 
         let to_month = +toMonth;
 
-        console.log('fromMonthYear -> ',from_month,fromYear,'toMonthYear -> ',to_month,toYear);
+        console.log('From: ',from_month,fromYear,' - To: ',to_month,toYear);
 
         /////////////////////////////////////////////
 
         let toDateString = day2+'/'+toMonth+'/'+toYear;
 
-        console.log('fromtomonths -> ',fromDateString,toDateString);
+        //console.log('Start End Date -> ',fromDateString,toDateString);
     }
 }
