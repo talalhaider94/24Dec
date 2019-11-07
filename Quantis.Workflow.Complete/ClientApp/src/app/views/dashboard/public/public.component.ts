@@ -168,6 +168,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	showWidgetsModalAndSetFormValues(childData, identifier) {
+		if(!this.isFreeFormReportComponent){
+			this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+			while (this.parametersArray.length !== 0) {
+				this.parametersArray.removeAt(0)
+			}
+		}
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
@@ -192,6 +198,7 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
 			if (this.barChartWidgetParameters.getOrgHierarcy && this.barChartWidgetParameters.getOrgHierarcy.length > 0) {
+				debugger
 				this.treeDataFields = { dataSource: this.barChartWidgetParameters.getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
 				// this.preSelectedNodes = this.barChartWidgetParameters.getOrgHierarcy.map (org => org.id);	
 				this.preSelectedNodes = [];
@@ -209,6 +216,7 @@ export class PublicComponent implements OnInit {
 						if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
 							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 						} else {
+							debugger
 							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.split(',');
 						}
 					}
