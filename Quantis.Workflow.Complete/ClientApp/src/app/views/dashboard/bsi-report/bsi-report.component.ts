@@ -120,8 +120,7 @@ export class BSIReportComponent implements OnInit {
         },
         search: {
             caseInsensitive: true
-        },
-        destroy: true
+        }
     };
     loading: boolean = true;
     cartellaSelectOption : any;
