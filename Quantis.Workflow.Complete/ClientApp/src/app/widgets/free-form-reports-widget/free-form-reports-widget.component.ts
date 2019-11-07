@@ -136,7 +136,7 @@ export class FreeFormReportsWidgetComponent implements OnInit {
         this.dashboardService.getWidgetParameters(url).pipe(
             mergeMap((getWidgetParameters: any) => {
                 myWidgetParameters = getWidgetParameters;
-                myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
+                //myWidgetParameters.getOrgHierarcy = getOrgHierarcy;
                 let newParams = this.widgetHelper.initWidgetParameters(getWidgetParameters, this.filters, this.properties);
                 return this.dashboardService.getWidgetIndex(url, newParams);
             })
