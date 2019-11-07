@@ -171,7 +171,7 @@ export class WidgetHelpersService {
         buildParams.Filters.kpi1 = filters.kpi1 || '';
       }
 
-      if(!apiParams.showincompleteperiodcheck) {
+      if(apiParams.showincompleteperiodcheck) {
         buildParams.Filters.incompletePeriod = Boolean(filters.incompletePeriod) || false;
       }
       if(filters.groupReportCheck) {
