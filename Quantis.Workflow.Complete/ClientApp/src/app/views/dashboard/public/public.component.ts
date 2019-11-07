@@ -303,6 +303,7 @@ export class PublicComponent implements OnInit {
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
 			}
 			if (childData.type === 'openDayDrillDownTable') {
+				this.isDayDrill=0;
 				this.bsiChartModal.show();
 				this.kpiReportDrillDownTable = childData.data.setWidgetFormValues;
 
