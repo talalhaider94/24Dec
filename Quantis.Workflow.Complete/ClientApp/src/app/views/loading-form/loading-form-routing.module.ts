@@ -8,6 +8,7 @@ import { LoadingFormUserNotTrackingComponent } from './loading-form-user-nottrac
 import { LoadingFormSecurityUserComponent } from './loading-form-securityuser/loading-form-securityuser.component';
 import { ProveVarieComponent } from './prove-varie/prove-varie.component';
 import { ProveVarieComponentNoTracking } from './prove-varie-notracking/prove-varie-notracking.component';
+import { ProveVarieComponentSecurity } from './prove-varie-securityuser/prove-varie.component';
 import { LoadingFormAdminComponent } from './loading-form-admin/loading-form-admin.component';
 
 const routes: Routes = [
@@ -70,12 +71,19 @@ const routes: Routes = [
                     title: 'Utente'
                 }
             },
-           {
-                path: 'utente-notracking/:formId/:formName',
-                component: ProveVarieComponentNoTracking,
-                data: {
+            {
+              path: 'utente-notracking/:formId/:formName',
+              component: ProveVarieComponentNoTracking,
+              data: {
                 title: 'Utente'
-            }
+              }
+            },
+             {
+               path: 'securityuser/:formId/:formName',
+              component: ProveVarieComponentSecurity,
+              data: {
+                title: 'S-Utente'
+              }
           },
         ],
     }

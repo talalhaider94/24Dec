@@ -37,7 +37,7 @@ export class BookletComponent implements OnInit {
     @ViewChild(DataTableDirective)  datatableElement: DataTableDirective;
     validEmail;
 
-
+    loading: boolean = false;
     documentId=0;
     item=0;
     bookletStatus=0;
@@ -173,13 +173,14 @@ export class BookletComponent implements OnInit {
     getcontract(){
         this.apiService.getContractWithContractParties().subscribe((data:any)=>{
             this.contrat = data;
-            console.log('getContractsWithContractParties',data)
+            console.log('getContractsWithContractParties',data);
         })
     }
     getDocumenti() {
         this.apiService.getBooklet().subscribe((data: any) => {
             this.documentiDef = data;
             console.log('documentiDef', this.documentiDef);
+            //this.rerender();
         });
     }
 
@@ -261,13 +262,19 @@ export class BookletComponent implements OnInit {
                 this.bookletStatus=0;
             });
             console.log('bookletStatus: ',this.bookletStatus);
-            if(this.bookletStatus==1){
+            if(this.bookletStatus==0){
+                this.toastr.error('Error', 'Error in adding booklet');
+                this.loading = false;
+            }
+            else if(this.bookletStatus==1){
                 this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+                this.loading = false;
             }
         }
     }
     addBooklet(){
         let isValid ;
+        this.loading = true;
          this.apiService.getCatalogEmailByUser().subscribe((data: any) => {
             console.log('Email: ',data)
             isValid = data;
@@ -276,6 +283,7 @@ export class BookletComponent implements OnInit {
             }else{
                 this.validEmail = data;
                 this.createbooklet();
+                
             }
             // if(isValid == this.utente.useremail) {
             //   this.validEmail = data;

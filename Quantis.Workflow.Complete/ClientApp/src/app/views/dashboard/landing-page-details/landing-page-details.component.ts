@@ -270,6 +270,52 @@ export class LandingPageDetailsComponent implements OnInit {
         }
      }
 
+
+     async customFilter1(data){
+
+        let value:any = this.contractName;
+        if(value == 'ALL'){
+            this.loading = true;
+            if(this.setViewAll == 0){
+              this.limitedData = data
+            }else{
+              this.orignalArray = data;
+            }
+            this.loading = false;
+        }else{
+            this.loading = true;
+            var temp:any = data
+            var temp2:any = [];
+            await value.forEach(async element => {
+                await temp.forEach(ele =>  {
+                    let e = element.item_text?element.item_text:element
+                    if(ele.contractname == e){
+                    temp2.push(ele);
+                    }else{}});
+            });
+            await temp2.forEach((val, i) => temp2[i] =  {
+
+                bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+                complaintcontracts: temp2[i].complaintcontracts,
+                complaintkpis: temp2[i].complaintkpis,
+                contractpartyid: temp2[i].contractpartyid,
+                contractname: temp2[i].contractname,
+                noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+                noncomplaintkpis: temp2[i].noncomplaintkpis,
+                totalcontracts: temp2[i].totalcontracts,
+                totalkpis: temp2[i].totalkpis,
+                worstcontracts: temp2[i].worstcontracts
+            })
+            if(this.setViewAll == 0){
+              this.limitedData = temp2;
+            }else{
+              this.orignalArray = temp2;
+            }
+
+            this.loading = false;
+        }
+     }
+
     anni = [];
     //+(moment().add('months', 6).format('YYYY'))
     getAnno() {

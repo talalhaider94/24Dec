@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { PublicComponent } from '../views/dashboard/public/public.component'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DateTimeService {
   public moment: any = moment;
+  public incompletePeriod:PublicComponent;
   constructor() { }
 
   getDateTime() {
@@ -46,10 +48,13 @@ export class DateTimeService {
     }
   }
 
-  timePeriodRange(rangeType) {
+  timePeriodRange(rangeType, incompletePeriod) {
     let startDate;
     let endDate;
     endDate = moment().format('MM/YYYY');
+    if(!incompletePeriod){
+      endDate = moment().subtract(1, 'months').format('MM/YYYY');
+    }
     if(rangeType === '2') {
       startDate = moment().subtract(2, 'months').format('MM/YYYY');
     } else if(rangeType === '3') {
@@ -63,6 +68,16 @@ export class DateTimeService {
     }
     return { startDate, endDate }
   }
+
+  WidgetDateAndTime(startDate, endDate, incompletePeriod){
+    let startDate1 = moment(startDate).format('MM/YYYY');
+    let endDate1 = moment(endDate).format('MM/YYYY');
+    if(!incompletePeriod){
+      
+      endDate1 = moment(endDate).subtract(1, 'months').format('MM/YYYY');
+    }
+    return { startDate:startDate1, endDate:endDate1}
+  } 
 
   getStringDateRange(startDate, endDate) {
     let formatStartDate = moment(startDate).format('MM/YYYY');

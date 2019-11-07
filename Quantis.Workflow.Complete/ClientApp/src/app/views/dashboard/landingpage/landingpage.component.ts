@@ -88,12 +88,6 @@ export class LandingPageComponent implements OnInit {
             this.thresholdvalue = data;
         });
 
-        this.apiService.getThresholdDetails(this.thresholdkey1).subscribe((data: any) => {
-            this.thresholdvalue1 = data;
-            console.log(this.thresholdvalue1);
-            //this.customFilter1(this.thresholdvalue1);
-        });
-
         this.thresholdvalue = 0;
         this.month = moment().format('MMMM');
         this.selectedMonth?this.monthVar = this.selectedMonth:this.monthVar = moment().format('MM');
@@ -184,6 +178,16 @@ export class LandingPageComponent implements OnInit {
             },
             destroy:true
         };
+
+        this.apiService.getThresholdDetails(this.thresholdkey1).subscribe((data: any) => {
+            this.thresholdvalue1 = data;
+            let split = this.thresholdvalue1.split(",");
+            //this.limitedData = split;
+            //console.log('limitedData -> ',this.limitedData);
+            //this.customFilter1(this.thresholdvalue1);
+            //console.log('thresholdvalue1 -> ',this.thresholdvalue1);
+            
+        });
     }
 
     ngAfterViewInit() {
@@ -308,57 +312,49 @@ export class LandingPageComponent implements OnInit {
 
      }
 
-    async customFilter1(data){
-        this.contractName=data;
-        let value:any = this.contractName;
-        this.thresholdvalue1 = this.contractName;
-        //this.thresholdLength=this.thresholdvalue1.length;
+     async customFilter1(data){
 
-        console.log(this.contractName);
+        let value:any = this.contractName;
         if(value == 'ALL'){
             this.loading = true;
             if(this.setViewAll == 0){
-                this.limitedData = this.contName
+              this.limitedData = data
             }else{
-                this.orignalArray = this.contName;
+              this.orignalArray = data;
             }
-            //this.limitedData = this.contName;
-            //this.gridsData = this.contName;
             this.loading = false;
         }else{
             this.loading = true;
-        var temp:any = this.contName
-        var temp2:any = [];
-        await value.forEach(async element => {
-            await temp.forEach(ele =>  {
-                let e = element.item_text?element.item_text:element
-                if(ele.contractpartyname == e){
-                temp2.push(ele);
-                }else{}});
-        });
-        await temp2.forEach((val, i) => temp2[i] =  {
+            var temp:any = data
+            var temp2:any = [];
+            await value.forEach(async element => {
+                await temp.forEach(ele =>  {
+                    let e = element.item_text?element.item_text:element
+                    if(ele.contractname == e){
+                    temp2.push(ele);
+                    }else{}});
+            });
+            await temp2.forEach((val, i) => temp2[i] =  {
 
-            bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
-            complaintcontracts: temp2[i].complaintcontracts,
-            complaintkpis: temp2[i].complaintkpis,
-            contractpartyid: temp2[i].contractpartyid,
-            contractpartyname: temp2[i].contractpartyname,
-            noncomplaintcontracts: temp2[i].noncomplaintcontracts,
-            noncomplaintkpis: temp2[i].noncomplaintkpis,
-            totalcontracts: temp2[i].totalcontracts,
-            totalkpis: temp2[i].totalkpis,
-            worstcontracts: temp2[i].worstcontracts
-        })
-        if(this.setViewAll == 0){
-            this.limitedData = temp2;
-        }else{
-            this.orignalArray = temp2;
+                bestcontracts: temp2[i].bestcontracts?temp2[i].bestcontracts:'',
+                complaintcontracts: temp2[i].complaintcontracts,
+                complaintkpis: temp2[i].complaintkpis,
+                contractpartyid: temp2[i].contractpartyid,
+                contractname: temp2[i].contractname,
+                noncomplaintcontracts: temp2[i].noncomplaintcontracts,
+                noncomplaintkpis: temp2[i].noncomplaintkpis,
+                totalcontracts: temp2[i].totalcontracts,
+                totalkpis: temp2[i].totalkpis,
+                worstcontracts: temp2[i].worstcontracts
+            })
+            if(this.setViewAll == 0){
+              this.limitedData = temp2;
+            }else{
+              this.orignalArray = temp2;
+            }
+
+            this.loading = false;
         }
-
-
-        this.loading = false;
-        }
-
      }
 
     anni = [];
