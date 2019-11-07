@@ -21,6 +21,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         {
             vm.ShowMeasure = true;
             vm.ShowOrganization = false;
+            vm.ShowFilterTab = false;
             var selfqueries = _dataService.GetOwnedReportQueries(GetUserId());
             var assignedQueries = _dataService.GetAssignedReportQueries(GetUserId());
             foreach (var q in selfqueries)
