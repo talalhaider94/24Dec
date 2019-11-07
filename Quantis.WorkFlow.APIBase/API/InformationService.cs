@@ -47,8 +47,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 
                 AuthenticationMethod[] methods = new AuthenticationMethod[]
                 {
+                    new PasswordAuthenticationMethod(_configuration["SFTPUserName"],_configuration["SFTPPassword"]), 
                     //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
-                     new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile[]{new PrivateKeyFile(path) })
+                     //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile[]{new PrivateKeyFile(path) })
 
                 };
                 ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
