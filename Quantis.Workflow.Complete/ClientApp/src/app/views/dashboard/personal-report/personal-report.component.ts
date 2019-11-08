@@ -63,6 +63,12 @@ export class PersonalReportComponent implements OnInit {
     loading: boolean = false;
     dtTrigger: Subject<any> = new Subject();
     PersonalReportData: any = [];
+    reportObject = {
+        GlobalRuleId:0,
+        StartDate:'',
+        EndDate:'',
+        AggregationOption:''
+    }
     personalReportForm: FormGroup;
     allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
     filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
@@ -180,7 +186,6 @@ export class PersonalReportComponent implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
-        //let tracking_period = this.personalReportForm.value.aggregationoption;
         this.startDate = this.personalReportForm.value.startDate;
         this.endDate = this.personalReportForm.value.endDate;
 
@@ -201,10 +206,7 @@ export class PersonalReportComponent implements OnInit {
         let fromMonth = moment().month(month).format("M");
 
         let from_month = +fromMonth;
-
         let fromYear = fromSplit[3];
-
-        let fromDateString = day+'/'+fromMonth+'/'+fromYear;
         
         ///////////////////// To Month and Year ////////////////////
 
@@ -218,15 +220,40 @@ export class PersonalReportComponent implements OnInit {
         let month2 = toSplit[2];
         let toMonth = moment().month(month2).format("M");
         let toYear = toSplit[3];
-
         let to_month = +toMonth;
 
-        console.log('From: ',from_month,fromYear,' - To: ',to_month,toYear);
+        ////////////////////////////////////////////////////
 
-        /////////////////////////////////////////////
+        let fmonth: any;
+        let tmonth: any;
 
-        let toDateString = day2+'/'+toMonth+'/'+toYear;
+        if(from_month<10){
+            fmonth = '0' + from_month;
+        }else{
+            fmonth = from_month;
+        }
 
-        //console.log('Start End Date -> ',fromDateString,toDateString);
+        if(to_month<10){
+            tmonth = '0' + to_month;
+        }else{
+            tmonth = to_month;
+        }
+
+        let fromDate = fmonth+'/'+fromYear;
+        let toDate = tmonth+'/'+toYear;
+        
+        //console.log('From: ',fromDate,' - To: ',toDate);
+        
+        this.reportObject.GlobalRuleId = 0;
+        this.reportObject.AggregationOption = this.personalReportForm.value.aggregationoption;
+        this.reportObject.StartDate = fromDate;
+        this.reportObject.EndDate = toDate;
+
+        console.log('reportObject -> ',this.reportObject);
+        this.configModal.hide();
+
+        this.apiService.GetPersonalReport(this.reportObject).subscribe((data) => {
+            console.log('PersonalReportData -> ', data);
+        });
     }
 }
