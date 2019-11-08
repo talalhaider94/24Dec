@@ -85,8 +85,8 @@
                             <label for="aggregationoption">Aggregazioni</label>
                             <!-- Date Type -->
                             <select class="form-control" formControlName="aggregationoption">
-                  <option [selected]="!i" *ngFor="let aggr of allAggregationOptions; let i = index" [value]="allAggregationOptions[i].key">
-                    {{ allAggregationOptions[i].value }}
+                  <option [selected]="!i" *ngFor="let aggr of allAggregationOptions; let i = index" [value]="allAggregationOptions[i].value">
+                    {{ allAggregationOptions[i].key }}
                   </option>
                 </select>
                         </div>
