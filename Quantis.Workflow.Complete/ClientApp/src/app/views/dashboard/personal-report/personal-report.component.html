@@ -51,11 +51,7 @@
                         <div class="text-center" *ngIf="modalLoading">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="name">Nome</label>
-                            <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" placeholder="Nome" autocomplete="name">
-                        </div> -->
-                        <!-- <div class="form-group">
+                         <div class="form-group">
                             <label for="contractParties">Contract Parties</label>
                             <select class="form-control" formControlName="contractParties" (change)="contractPartiesDropDown($event)">
                   <option [selected]="!i" *ngFor="let org of allContractParties; let i = index"
@@ -63,8 +59,11 @@
                     {{ allContractParties[i].value }}
                   </option>
                 </select>
-                        </div> -->
-                        <!-- <div class="form-group">
+                        </div>
+                        <div *ngIf="personalReportForm.get('contractParties').hasError('required')" class='text-danger'>
+                            Please select contract parties!
+                          </div>
+                        <div class="form-group">
                             <label for="contracts">Contracts</label>
                             <select class="form-control" formControlName="contracts" (change)="contractsDropDown($event)">
                   <option [selected]="!i" *ngFor="let contract of filterContracts; let i = index"
@@ -73,14 +72,20 @@
                   </option>
                 </select>
                         </div>
+                        <div *ngIf="personalReportForm.get('contracts').hasError('required')" class='text-danger'>
+                            Please select contracts!
+                          </div>
                         <div class="form-group">
-                            <label for="kpi">KPI's</label>
-                            <select class="form-control" formControlName="kpi">
-                  <option [selected]="!i" *ngFor="let kpi of filterKpis; let i = index" [value]="filterKpis[i].key">
+                            <label for="GlobalRuleId">KPI's</label>
+                            <select class="form-control" formControlName="GlobalRuleId">
+                  <option [selected]="!i" *ngFor="let GlobalRuleId of filterKpis; let i = index" [value]="filterKpis[i].key">
                     {{ filterKpis[i].value }}
                   </option>
                 </select>
-                        </div> -->
+                        </div>
+                        <div *ngIf="personalReportForm.get('GlobalRuleId').hasError('required')" class='text-danger'>
+                            Please select KPI!
+                          </div>
                         <div class="form-group">
                             <label for="aggregationoption">Aggregazioni</label>
                             <!-- Date Type -->
@@ -90,6 +95,9 @@
                   </option>
                 </select>
                         </div>
+                        <div *ngIf="personalReportForm.get('aggregationoption').hasError('required')" class='text-danger'>
+                            Please select aggregationoption!
+                          </div>
                         <div class="form-row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -98,6 +106,9 @@
                                     <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date" autocomplete="startDate" bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}"
                                     />
                                 </div>
+                                <div *ngIf="personalReportForm.get('startDate').hasError('required')" class='text-danger'>
+                                    Please enter start date!
+                                  </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
@@ -105,6 +116,9 @@
                                     <!-- [ngClass]="{ 'is-invalid': submitted && f.endDate.errors }"  -->
                                     <input type="text" formControlName="endDate" class="form-control" placeholder="End Date" autocomplete="endDate" bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}">
                                 </div>
+                                <div *ngIf="personalReportForm.get('endDate').hasError('required')" class='text-danger'>
+                                    Please enter end date!
+                                  </div>
                             </div>
                         </div>
                         <!-- display name error -->

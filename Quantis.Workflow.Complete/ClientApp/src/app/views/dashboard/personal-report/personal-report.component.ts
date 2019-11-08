@@ -85,27 +85,26 @@ export class PersonalReportComponent implements OnInit {
 
     ngOnInit() {
         this.personalReportForm = this.formBuilder.group({
-            GlobalRuleId: [0],
-            // name: [null, Validators.required],
-            // contractParties: [null, Validators.required],
-            // contracts: [null, Validators.required],
-            // kpi: [null, Validators.required],
+            name: [null, Validators.required],
+            contractParties: [null, Validators.required],
+            contracts: [null, Validators.required],
+            GlobalRuleId: [null, Validators.required],
             aggregationoption: [null, Validators.required],
             startDate: [null, Validators.required],
 			endDate: [null, Validators.required],
         });
-        // this.personalReportForm.get('contracts').disable();
-        // this.personalReportForm.get('kpi').disable();
-        // this._dashboardService.getContractParties().subscribe(contractParties => {
-        //     this.loading = false;
-        //     contractParties.map(contractParty => this.allContractParties.push(contractParty));
-        //     this.personalReportForm.patchValue({
-        //         contractParties: ''
-        //     });
-        // }, error => {
-        //     this.loading = false;
-        //     this.toastr.error('unable to get contract parties', 'Error!')
-        // });
+        this.personalReportForm.get('contracts').disable();
+        this.personalReportForm.get('GlobalRuleId').disable();
+        this._dashboardService.getContractParties().subscribe(contractParties => {
+           this.loading = false;
+           contractParties.map(contractParty => this.allContractParties.push(contractParty));
+           this.personalReportForm.patchValue({
+               contractParties: ''
+           });
+        }, error => {
+           this.loading = false;
+           this.toastr.error('unable to get contract parties', 'Error!')
+    });
         this.personalReportForm.patchValue({
             aggregationoption: 'Select Aggregation'
         });
@@ -165,10 +164,10 @@ export class PersonalReportComponent implements OnInit {
     contractsDropDown(event) {
         this.modalLoading = true;
         this._dashboardService.getKPIs(0, +event.target.value).subscribe(kpis => {
-            this.personalReportForm.get('kpi').enable();
+            this.personalReportForm.get('GlobalRuleId').enable();
             kpis.map(kpi => this.filterKpis.push(kpi));
             this.personalReportForm.patchValue({
-                kpi: ''
+                GlobalRuleId: ''
             });
             this.modalLoading = false;
         }, error => {
@@ -179,6 +178,8 @@ export class PersonalReportComponent implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
+        console.log(this.personalReportForm.value)
+        debugger
         const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
         let reportData = this.personalReportForm.value;
         reportData.startDate = dateRange.startDate;
