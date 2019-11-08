@@ -383,4 +383,8 @@ export class ApiService {
         const getContract = `${environment.API_URL}/information/GetContractsWithContractParties`;
         return this.http.get(getContract);
     }
+    GetOrganizationUnits(): Observable<any> {
+      const getOrganization = `${environment.API_URL}/information/GetOrganizationUnits`;
+      return this.http.get(getOrganization);
+    }
 }
