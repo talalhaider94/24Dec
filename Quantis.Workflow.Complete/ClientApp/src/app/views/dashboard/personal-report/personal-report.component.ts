@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
+import { DateTimeService } from '../../../_helpers';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
@@ -18,9 +19,6 @@ export class PersonalReportComponent implements OnInit {
     @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
-    category_id: number = 0;
-    startDate;
-    endDate;
     dtOptions: any = {
         buttons: [
             {
@@ -63,20 +61,14 @@ export class PersonalReportComponent implements OnInit {
     loading: boolean = false;
     dtTrigger: Subject<any> = new Subject();
     PersonalReportData: any = [];
-    reportObject = {
-        GlobalRuleId:0,
-        StartDate:'',
-        EndDate:'',
-        AggregationOption:''
-    }
     personalReportForm: FormGroup;
     allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
     filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
     filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
     allAggregationOptions: Array<any> = [
-        { key: '', value: `Select Aggregation` },
-        { key: 0, value: 'Period' },
-        { key: 1, value: 'Tracking Period' },
+        { key: '', value: 'Select Aggregation' },
+        { key: 'Period', value: 'period' },
+        { key: 'Tracking Period', value: 'trackingperiod' },
     ];
     modalLoading: boolean = false;
     constructor(
@@ -85,6 +77,7 @@ export class PersonalReportComponent implements OnInit {
         private formBuilder: FormBuilder,
         private _dashboardService: DashboardService,
         private _$localeService: BsLocaleService,
+        private _dateTimeService: DateTimeService
     ) {
         $this = this;
         this._$localeService.use('it');
@@ -92,7 +85,7 @@ export class PersonalReportComponent implements OnInit {
 
     ngOnInit() {
         this.personalReportForm = this.formBuilder.group({
-            GlobalFilterId: [0],
+            GlobalRuleId: [0],
             // name: [null, Validators.required],
             // contractParties: [null, Validators.required],
             // contracts: [null, Validators.required],
@@ -114,7 +107,7 @@ export class PersonalReportComponent implements OnInit {
         //     this.toastr.error('unable to get contract parties', 'Error!')
         // });
         this.personalReportForm.patchValue({
-            aggregationoption: ''
+            aggregationoption: 'Select Aggregation'
         });
     }
 
@@ -186,74 +179,13 @@ export class PersonalReportComponent implements OnInit {
     }
 
     onPersonalReportFormSubmit() {
-        this.startDate = this.personalReportForm.value.startDate;
-        this.endDate = this.personalReportForm.value.endDate;
-
-        console.log('Object: ',this.personalReportForm.value);
-
-        this.startDate = new Date(this.startDate).toUTCString();
-        this.endDate = new Date(this.endDate).toUTCString();
-
-        ///////////////////// From Month and Year ////////////////////
-        let stringToSplit = this.startDate;
-        let split = stringToSplit.split(",");
-
-        let extra = split[1];
-        let fromSplit = extra.split(" ");
-
-        let day = fromSplit[1];
-        let month = fromSplit[2];
-        let fromMonth = moment().month(month).format("M");
-
-        let from_month = +fromMonth;
-        let fromYear = fromSplit[3];
-        
-        ///////////////////// To Month and Year ////////////////////
-
-        let stringToSplit2 = this.endDate;
-        let split2 = stringToSplit2.split(",");
-
-        let extra2 = split2[1];
-        let toSplit = extra2.split(" ");
-
-        let day2 = toSplit[1];
-        let month2 = toSplit[2];
-        let toMonth = moment().month(month2).format("M");
-        let toYear = toSplit[3];
-        let to_month = +toMonth;
-
-        ////////////////////////////////////////////////////
-
-        let fmonth: any;
-        let tmonth: any;
-
-        if(from_month<10){
-            fmonth = '0' + from_month;
-        }else{
-            fmonth = from_month;
-        }
-
-        if(to_month<10){
-            tmonth = '0' + to_month;
-        }else{
-            tmonth = to_month;
-        }
-
-        let fromDate = fmonth+'/'+fromYear;
-        let toDate = tmonth+'/'+toYear;
-        
-        //console.log('From: ',fromDate,' - To: ',toDate);
-        
-        this.reportObject.GlobalRuleId = 0;
-        this.reportObject.AggregationOption = this.personalReportForm.value.aggregationoption;
-        this.reportObject.StartDate = fromDate;
-        this.reportObject.EndDate = toDate;
-
-        console.log('reportObject -> ',this.reportObject);
-        this.configModal.hide();
-
-        this.apiService.GetPersonalReport(this.reportObject).subscribe((data) => {
+        const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
+        let reportData = this.personalReportForm.value;
+        reportData.startDate = dateRange.startDate;
+        reportData.endDate = dateRange.endDate;
+        this.apiService.GetPersonalReport(reportData).subscribe((data) => {
             console.log('PersonalReportData -> ', data);
+            this.configModal.hide();
         });
     }
 }
