@@ -33,8 +33,8 @@ namespace Quantis.WorkFlow.Services.DTOs.Widgets
             ShowDateRangeFilter = false;
             ShowMeasure = false;
             ShowDateFilter = false;
-            ShowPropertyTab = false;
-            ShowFilterTab = false;
+            ShowPropertyTab = true;
+            ShowFilterTab = true;
             ShowOrganization = true;
             ShowLevelWiseOrganization = false;
             ShowIncompletePeriodCheck = false;

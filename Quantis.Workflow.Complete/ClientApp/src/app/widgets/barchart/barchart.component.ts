@@ -110,6 +110,7 @@ export class BarchartComponent implements OnInit {
                     // updating parameter form widget setValues
                     let barChartFormValues = data.barChartWidgetParameterValues;
                     if (barChartFormValues.Filters.daterange) {
+                        this.period = barChartFormValues.Filters.daterange;
                         barChartFormValues.Filters.daterange = this.dateTime.buildRangeDate(barChartFormValues.Filters.daterange);
                     }
                     this.incompletePeriod = barChartFormValues.Filters.incompletePeriod;
