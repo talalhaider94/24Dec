@@ -72,6 +72,13 @@ namespace Quantis.WorkFlow.Complete.Controllers
             return _infomationAPI.GetAllRoles();
         }
 
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetOrganizationUnits")]
+        public List<string> GetOrganizationUnits()
+        {
+            return _infomationAPI.GetOrganizationUnits();
+        }
+
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_ROLES)]
         [HttpPost("AddUpdateRole")]
         public void AddUpdateRole([FromBody]BaseNameCodeDTO dto)

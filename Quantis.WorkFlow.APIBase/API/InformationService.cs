@@ -617,7 +617,26 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public List<string> GetOrganizationUnits()
+        {
+            var res = new List<String>();
+            string query = @"select distinct organization_unit from t_catalog_kpis where organization_unit is not null";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add((string)result[0]);
+                    }
+                }
+                return res;
+            }
+        }
         public List<UserProfilingDTO> GetUserProfilingCSV()
         {
             var res = new List<UserProfilingDTO>();
