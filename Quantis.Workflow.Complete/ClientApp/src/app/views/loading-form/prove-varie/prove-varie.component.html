@@ -90,7 +90,7 @@
                                          class="panel-body bg-white" [formGroupName]="i">
                                         <div class="row align-items-center mb-2">
                                             <div class="col-md-5 col-form-label"
-                                                 *ngIf="(arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer') && arrayFormElements[i].name != 'Is_Dato_Mancante'">
+                                                 *ngIf="(arrayFormElements[i].type ==='real' || arrayFormElements[i].type ==='string' || arrayFormElements[i].type ==='integer') && arrayFormElements[i].name != 'Is_Dato_Mancante' && arrayFormElements[i].name != 'Dato_Mancante'">
                                                 <div *ngIf="arrayFormElements[i].label.length > 0; then trueBlock else falseBlock"></div>
                                                 <ng-template #trueBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span><b>{{arrayFormElements[i].label}}</b></label></ng-template>
                                                 <ng-template #falseBlock><label><span *ngIf="arrayFormElements[i].mandatory == 'yes'"><b style="color:red">*</b></span>{{arrayFormElements[i].name}}</label></ng-template>
@@ -110,12 +110,12 @@
                                                        formControlName="valoreUtente" disabled>
 
                                                 <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
-                                                       *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
+                                                       *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length === 0 && arrayFormElements[i].name != 'Is_Dato_Mancante' && arrayFormElements[i].name != 'Dato_Mancante'"
                                                        [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]" [(ngModel)]="numero[i]"
                                                        placeholder="Input" class="form-control" formControlName="valoreUtente">
 
                                                 <input [readonly]="!readOnlyUserForm" type="number" [required]="arrayFormElements[i].mandatory == 'yes'"
-                                                       *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0 && arrayFormElements[i].name != 'Is_Dato_Mancante'"
+                                                       *ngIf="(arrayFormElements[i].type=='real' || arrayFormElements[i].type=='integer') && arrayFormElements[i].defaultvalue.length > 0 && arrayFormElements[i].name != 'Is_Dato_Mancante' && arrayFormElements[i].name != 'Dato_Mancante'"
                                                        [attr.maxlength]="numeroMax[i]" [attr.minlength]="numeroMin[i]"
                                                        [(ngModel)]="numero[i] = arrayFormElements[i].defaultvalue"
                                                        value='{{arrayFormElements[i].defaultvalue}}' placeholder="Input" class="form-control"
