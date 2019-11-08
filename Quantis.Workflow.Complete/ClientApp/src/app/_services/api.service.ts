@@ -189,8 +189,8 @@ export class ApiService {
         return this.http.post(booklet, data);
     }
     GetPersonalReport(PersonalReportFilterDTO): Observable<any> {
-        const booklet = `${environment.API_URL}/oracle/GetPersonalReport`;
-        return this.http.post(booklet, PersonalReportFilterDTO);
+        const personal_report = `${environment.API_URL}/oracle/GetPersonalReport`;
+        return this.http.post(personal_report, PersonalReportFilterDTO);
     }
 
     deleteRole(roleId): Observable<any> {

@@ -42,21 +42,25 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public void UploadFileToSFTPServer(BaseFileDTO fileDTO)
         {
-            try {
-                var path = @"/home/srv_addon/.ssh/id_rsa";
-                
-                AuthenticationMethod[] methods = new AuthenticationMethod[]
+            try
+            {
+                string method = _configuration["SFTP:Authentication"];
+                var methods= new List<AuthenticationMethod>();
+                if (method == "pass")
                 {
-                    new PasswordAuthenticationMethod(_configuration["SFTPUserName"],_configuration["SFTPPassword"]), 
-                    //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile(path) )
-                     //new PrivateKeyAuthenticationMethod(_configuration["SFTPUserName"], new PrivateKeyFile[]{new PrivateKeyFile(path) })
+                    methods.Add(new PasswordAuthenticationMethod(_configuration["SFTP:UserName"], _configuration["SFTP:Password"]));
+                }
+                else
+                {
+                    var path = _configuration["SFTP:KeyPath"];
+                    methods.Add(new PrivateKeyAuthenticationMethod(_configuration["SFTP:UserName"], new PrivateKeyFile(path)));
+                }
 
-                };
-                ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTPHost"], _configuration["SFTPUserName"], methods);
+                ConnectionInfo connectionInfo = new ConnectionInfo(_configuration["SFTP:Host"], _configuration["SFTP:UserName"], methods.ToArray());
                 using (var sftp = new SftpClient(connectionInfo))
                 {
                     sftp.Connect();
-                    sftp.ChangeDirectory("/oradata_sqmint/CSV_input");
+                    sftp.ChangeDirectory(_configuration["SFTP:DirectoryPath"]);
                     MemoryStream mStream = new MemoryStream();
                     mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
                     mStream.Position = 0;
