@@ -321,6 +321,7 @@ export class BSIReportComponent implements OnInit {
     }
 
     getReportDetails(reportId) {
+        console.log('reportId: ',reportId);
         this.months.length = 0;
         this.months2.length = 0;
         this.isLoadedDati=0;
