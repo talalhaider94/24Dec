@@ -346,6 +346,7 @@ export class PersonalReportComponent implements OnInit {
     }
 
     showConfigModal() {
+        this.loading = false;
         this.configModal.show();
     }
 
@@ -532,10 +533,9 @@ export class PersonalReportComponent implements OnInit {
 
     showHighChartsData(data) {
         const chartArray = data;
-        //const data1 = data.reports[0].data[2];
-        // Danial TODO: improve code later by modifying all data in a single loop
+        //console.log('Highcharts Data -> ',chartArray);
         let violationData = chartArray.filter(data => (data.result === 'Violation' || data.result === 'Violazione'));
-        let compliantData = chartArray.filter(data => (data.result === 'Compliant' || data.result === 'Conforme'));
+        let compliantData = chartArray.filter(data => (data.result === 'compliant' || data.result === 'Conforme'));
         let targetData = chartArray.filter(data => (data.result === 'Target' || data.result === 'Previsione' ));
         let minorData = chartArray.filter(data => (data.result === 'Minor' || data.result === 'Minore'));
         let criticalData = chartArray.filter(data => (data.result === 'Critical' || data.result === 'Critica'));
