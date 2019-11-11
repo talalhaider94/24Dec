@@ -215,6 +215,14 @@ export class ApiService {
         const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
         return this.http.get(getGlobalRulesByRoleIdEndPoint);
     }
+    GetContractParties(): Observable<any> {
+      const gteContractPartiesEndPoint = `${environment.API_URL}/information/GetContractParties`;
+      return this.http.get(gteContractPartiesEndPoint);
+    }
+    GetContractsByContractParty(contractPartyId): Observable<any> {
+      const gteContractPartiesEndPoint = `${environment.API_URL}/information/GetContractsByContractParty?contractPartyId=${contractPartyId}`;
+      return this.http.get(gteContractPartiesEndPoint);
+    }
     getContracts(userId, contractPartyId): Observable<any> {
         const getContractsEndPoint = `${environment.API_URL}/information/GetAllContractsByUserId?userId=${userId}&contractpartyId=${contractPartyId}`;
         return this.http.get(getContractsEndPoint);
@@ -383,8 +391,12 @@ export class ApiService {
         const getContract = `${environment.API_URL}/information/GetContractsWithContractParties`;
         return this.http.get(getContract);
     }
-    GetOrganizationUnits(): Observable<any> {
-      const getOrganization = `${environment.API_URL}/information/GetOrganizationUnits`;
+    GetOrganizationUnits(contractid): Observable<any> {
+      const getOrganization = `${environment.API_URL}/information/GetOrganizationUnits?contractid=${contractid}`;
       return this.http.get(getOrganization);
+    }
+  AssignCuttoffWorkflowDayByContractIdAndOrganization(contractid, organizationunit, daycuttoff, workflowday): Observable<any> {
+    const AssignWorkflowEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractIdAndOrganization?contractid=${contractid}&organizationunit=${organizationunit}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
+      return this.http.get(AssignWorkflowEndPoint);
     }
 }
