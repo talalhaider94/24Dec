@@ -477,9 +477,9 @@ export class BSIReportComponent implements OnInit {
                 const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
                         that
-                          .search($(this).val().replace(')','\\)').replace('(','\\(')+'$', true, false, false)
+                          .search($(this).val().replace(/\)/g, '\\)').replace(/\(/g, '\\(') + '$', true, false, false)
                             .draw();
-                    });
+                  });
             });
         });
     }
