@@ -529,6 +529,7 @@ export class FreeFormReportComponent implements OnInit {
           })
       }
       csv += rows.join("\r\n");
+      //var blob = new Blob([csv], { type: "application/vnd.ms-excel" });
       var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
       saveAs(blob, "ExportKPITable.csv");
   }
