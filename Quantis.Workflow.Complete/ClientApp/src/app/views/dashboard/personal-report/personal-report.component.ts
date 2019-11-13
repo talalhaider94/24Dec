@@ -135,12 +135,18 @@ export class PersonalReportComponent implements OnInit {
     allContractParties: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
     filterContracts: Array<any> = [{ key: '', value: 'Select Contracts' }];
     filterKpis: Array<any> = [{ key: '', value: `Select KPI's` }];
+
+    allContractParties1: Array<any> = [{ key: '', value: 'Select Contract Parties' }];
+	filterContracts1: Array<any> = [{ key: '', value: 'Select Contracts' }];
+    filterKpis1: Array<any> = [{ key: '', value: `Select KPI's` }];
+    
     allAggregationOptions: Array<any> = [
         { key: '', value: 'Select Aggregation' },
         { key: 'Period', value: 'period' },
         { key: 'Tracking Period', value: 'trackingperiod' },
     ];
     modalLoading: boolean = false;
+    groupReportCheck: boolean = false;
     reportArray;
 
     chartOptions = {
@@ -295,10 +301,21 @@ export class PersonalReportComponent implements OnInit {
             GlobalRuleId: [null, Validators.required],
             aggregationoption: [null, Validators.required],
             startDate: [null, Validators.required],
-			endDate: [null, Validators.required],
+            endDate: [null, Validators.required],
+            groupReportCheck: [false],
+            contractParties1: [null, Validators.required],
+			contracts1: [null, Validators.required],
+			GlobalRuleId1: [null, Validators.required],
         });
         this.personalReportForm.get('contracts').disable();
         this.personalReportForm.get('GlobalRuleId').disable();
+        this.personalReportForm.get('contracts1').disable();
+        this.personalReportForm.get('GlobalRuleId1').disable();
+
+        this.personalReportForm.get('groupReportCheck').valueChanges.subscribe((value) => {
+            this.groupReportCheck = value;
+        });
+
         this._dashboardService.getContractParties().subscribe(contractParties => {
            this.loading = false;
            contractParties.map(contractParty => this.allContractParties.push(contractParty));
@@ -308,6 +325,17 @@ export class PersonalReportComponent implements OnInit {
         }, error => {
            this.loading = false;
            this.toastr.error('unable to get contract parties', 'Error!')
+    });
+    // For contract Parties 1
+         this._dashboardService.getContractParties().subscribe(contractParties => {
+            this.loading = false;
+            contractParties.map(contractParty => this.allContractParties1.push(contractParty));
+            this.personalReportForm.patchValue({
+                contractParties1: ''
+            });
+        }, error => {
+            this.loading = false;
+            this.toastr.error('unable to get contract parties', 'Error!')
     });
         this.personalReportForm.patchValue({
             aggregationoption: 'Select Aggregation'
@@ -382,6 +410,38 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 
+    contractPartiesDropDown1(event) {
+        this.modalLoading = true;
+        this._dashboardService.getContract(0, +event.target.value).subscribe(contracts => {
+            this.personalReportForm.get('contracts1').enable();
+            contracts.map(contract => this.filterContracts1.push(contract));
+            this.personalReportForm.patchValue({
+                contracts1: ''
+            });
+            this.modalLoading = false;
+        }, error => {
+            this.modalLoading = false;
+            console.error('contractPartiesDropDown1', error);
+            this.toastr.error('Error', 'Unable to get Contracts');
+        });
+    }
+
+    contractsDropDown1(event) {
+        this.modalLoading = true;
+        this._dashboardService.getKPIs(0, +event.target.value).subscribe(kpis => {
+            this.personalReportForm.get('GlobalRuleId1').enable();
+            kpis.map(kpi => this.filterKpis1.push(kpi));
+            this.personalReportForm.patchValue({
+                GlobalRuleId1: ''
+            });
+            this.modalLoading = false;
+        }, error => {
+            this.modalLoading = false;
+            console.error('contractsDropDown1', error);
+            this.toastr.error('Error', 'Unable to get KPIs');
+        });
+    }
+
     onPersonalReportFormSubmit() {
         this.loading = true;
         this.months.length = 0;
@@ -408,6 +468,30 @@ export class PersonalReportComponent implements OnInit {
             this.showHighChartsData(data);
         });
         let reportId = 6497;
+        if(this.groupReportCheck == true){
+            this.formArray.personalReportForm.contractParties = this.formArray.personalReportForm.contractParties1;
+            this.formArray.personalReportForm.contracts = this.formArray.personalReportForm.contracts1;
+            this.formArray.personalReportForm.GlobalRuleId = this.formArray.personalReportForm.GlobalRuleId1;
+            delete this.formArray.personalReportForm.contractParties1;
+            delete this.formArray.personalReportForm.contracts1;
+            delete this.formArray.personalReportForm.GlobalRuleId1;
+
+            console.log('Form values -> ',this.personalReportForm.value);
+        this.formArray = this.personalReportForm.value;
+        //console.log('Form values 2 -> ',this.formArray);
+        const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
+        this.reportData = this.personalReportForm.value;
+        this.reportData.startDate = dateRange.startDate;
+        this.reportData.endDate = dateRange.endDate;
+        this.apiService.GetPersonalReport(this.reportData).subscribe((data) => {
+            console.log('PersonalReportData -> ', data);
+            this.reportArray=data;
+            this.loading = false;
+            this.personaliModal.show();
+            this.getPeriod();
+            this.showHighChartsData2(data);
+        });
+        }
         //this.getReportDetails(reportId); 
     }
 

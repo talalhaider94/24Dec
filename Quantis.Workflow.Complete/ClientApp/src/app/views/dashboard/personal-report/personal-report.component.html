@@ -37,7 +37,7 @@
     </div>
     
     <div bsModal #configModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-primary" role="document">
+        <div class="modal-dialog modal-primary modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Create Report</h4>
@@ -45,6 +45,7 @@
                     <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
+                
                 <div class="modal-body">
                     <!-- create dashboard model body start -->
                     <form [formGroup]="personalReportForm" (ngSubmit)="onPersonalReportFormSubmit()">
@@ -64,9 +65,6 @@
                             </option>
                             </select>
                         </div>
-                        <div *ngIf="personalReportForm.get('contractParties').hasError('required')" class='text-danger'>
-                            Please select contract parties!
-                          </div>
                         <div class="form-group">
                             <label for="contracts">Contracts</label>
                             <select class="form-control" formControlName="contracts" (change)="contractsDropDown($event)">
@@ -76,9 +74,6 @@
                             </option>
                             </select>
                         </div>
-                        <div *ngIf="personalReportForm.get('contracts').hasError('required')" class='text-danger'>
-                            Please select contracts!
-                          </div>
                         <div class="form-group">
                             <label for="GlobalRuleId">KPI's</label>
                             <select class="form-control" formControlName="GlobalRuleId">
@@ -87,9 +82,41 @@
                             </option>
                             </select>
                         </div>
-                        <div *ngIf="personalReportForm.get('GlobalRuleId').hasError('required')" class='text-danger'>
-                            Please select KPI!
+                        <div class="form-group form-check">
+                          <input type="checkbox" formControlName="groupReportCheck" class="form-check-input"
+                            id="groupReportCheck">
+                          <label class="form-check-label" for="groupReportCheck">Group Report</label>
+                        </div>
+                        <span *ngIf="groupReportCheck">
+                          <div class="form-group">
+                            <label for="contractParties1">Contract Parties</label>
+                            <select class="form-control" formControlName="contractParties1"
+                              (change)="contractPartiesDropDown1($event)">
+                              <option [selected]="!i" *ngFor="let org of allContractParties1; let i = index"
+                                [value]="allContractParties1[i].key">
+                                {{ allContractParties1[i].value }}
+                              </option>
+                            </select>
                           </div>
+                          <div class="form-group">
+                            <label for="contracts1">Contracts</label><!-- Date Type -->
+                            <select class="form-control" formControlName="contracts1" (change)="contractsDropDown1($event)">
+                              <option [selected]="!i" *ngFor="let contract of filterContracts1; let i = index"
+                                [value]="filterContracts1[i].key">
+                                {{ filterContracts1[i].value }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="GlobalRuleId1">KPI's</label><!-- Date Type -->
+                            <select class="form-control" formControlName="GlobalRuleId1">
+                              <option [selected]="!i" *ngFor="let GlobalRuleId of filterKpis1; let i = index"
+                                [value]="filterKpis1[i].key">
+                                {{ filterKpis1[i].value }}
+                              </option>
+                            </select>
+                          </div>
+                        </span>
                         <div class="form-group">
                             <label for="aggregationoption">Aggregazioni</label>
                             <!-- Date Type -->
@@ -99,9 +126,6 @@
                             </option>
                             </select>
                         </div>
-                        <div *ngIf="personalReportForm.get('aggregationoption').hasError('required')" class='text-danger'>
-                            Please select aggregationoption!
-                          </div>
                         <div class="form-row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -110,18 +134,12 @@
                                     <input type="text" formControlName="startDate" class="form-control" placeholder="Start Date" autocomplete="startDate" bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}"
                                     />
                                 </div>
-                                <div *ngIf="personalReportForm.get('startDate').hasError('required')" class='text-danger'>
-                                    Please enter start date!
-                                </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="endDate">End Date</label>
                                     <!-- [ngClass]="{ 'is-invalid': submitted && f.endDate.errors }"  -->
                                     <input type="text" formControlName="endDate" class="form-control" placeholder="End Date" autocomplete="endDate" bsDatepicker [bsConfig]="{dateInputFormat: 'MM/YYYY',minMode: 'month', adaptivePosition: true}">
-                                </div>
-                                <div *ngIf="personalReportForm.get('endDate').hasError('required')" class='text-danger'>
-                                    Please enter end date!
                                 </div>
                             </div>
                         </div>
@@ -189,6 +207,7 @@
             </table> -->
             <br>
             <div class="row">
+              
               <h6 class="ml-3" style="color:#565656">Periodo:</h6>
               <select [(ngModel)]="dayDrillPeriod" class="form-control ml-2" style="width:9%;margin-top:-8px" (change)="selectedPeriod()">
                 <option *ngFor="let month of months; index as i" value={{month}}>{{month}}</option>
