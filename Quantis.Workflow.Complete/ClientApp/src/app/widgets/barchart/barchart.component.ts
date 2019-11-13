@@ -46,7 +46,7 @@ export class BarchartComponent implements OnInit {
         },
         xAxis: {
             type: 'date',
-            categories: [],
+            categories: ['10/18', '11/18', '12/18', '01/19', '02/19'],
             crosshair: true
         },
         plotOptions: {
@@ -67,7 +67,11 @@ export class BarchartComponent implements OnInit {
             enabled: true,
             crosshairs: true
         },
-        series: [],
+        series: [{
+            name: 'Sample Data',
+            data: [2,4,5,6,7],
+            color: '#4dbd74'
+        }],
         exporting: exportChartButton
     };
     allLeafNodesIds: any = [];
@@ -251,7 +255,7 @@ export class BarchartComponent implements OnInit {
         this.myChartOptions.series[0] = {
             name: label,
             data: allData,
-            color: '#f86c6b'
+            color: '#4dbd74'
         };
         this.myChartUpdateFlag = true;
         this.closeModal();
@@ -267,20 +271,20 @@ export class BarchartComponent implements OnInit {
             }
         });
     }
-    getAllLeafNodesIds(complexJson) {
-        try {
-            if (complexJson) {
-                complexJson.forEach((item: any) => {
-                    if (item.children) {
-                        this.getAllLeafNodesIds(item.children);
-                    } else {
-                        this.allLeafNodesIds.push(item.id);
-                    }
-                });
-                return this.allLeafNodesIds;
-            }
-        } catch(error) {
-            console.error('getAllLeafNodesIds', error);
-        }
-    }
+    // getAllLeafNodesIds(complexJson) {
+    //     try {
+    //         if (complexJson) {
+    //             complexJson.forEach((item: any) => {
+    //                 if (item.children) {
+    //                     this.getAllLeafNodesIds(item.children);
+    //                 } else {
+    //                     this.allLeafNodesIds.push(item.id);
+    //                 }
+    //             });
+    //             return this.allLeafNodesIds;
+    //         }
+    //     } catch(error) {
+    //         console.error('getAllLeafNodesIds', error);
+    //     }
+    // }
 }

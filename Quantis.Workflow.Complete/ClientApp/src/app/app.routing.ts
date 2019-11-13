@@ -108,6 +108,10 @@ export const routes: Routes = [
                 loadChildren: './views/userprofiling/userprofiling.module#UserProfilingModule'
             },
             {
+              path: 'workfloworganizationunit',
+              loadChildren: './views/workfloworganizationunit/userprofiling.module#UserProfilingModule'
+            },
+            {
                 path: 'adminroles',
                 loadChildren: './views/adminroles/adminroles.module#AdminRolesModule'
             },

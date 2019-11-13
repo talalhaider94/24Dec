@@ -291,12 +291,19 @@ export const navItems: NavData[] = [
                 key: 'IMPORT_FREE_FORM_REPORT'
             },
             {
+                name: 'Workflow U.O.',
+                url: '/workfloworganizationunit/workflowunit',
+                icon: 'fa fa-file-text-o',
+                version: '0.0.1',
+                key: 'VIEW_CUTOFF_WORKFLOW_DAY'
+            },
+            /*{
                 name: 'Workflow',
                 url: '/tconfiguration/workflow',
                 icon: 'fa fa-file-text-o',
                 version: '0.0.1',
                 key: 'VIEW_CUTOFF_WORKFLOW_DAY'
-            }
+            }*/
         ]
     },
     // {

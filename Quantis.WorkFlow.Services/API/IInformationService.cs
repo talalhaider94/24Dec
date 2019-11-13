@@ -1,4 +1,5 @@
 ﻿using Quantis.WorkFlow.Services.DTOs.Information;
+using System;
 using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Services.API
@@ -75,7 +76,9 @@ namespace Quantis.WorkFlow.Services.API
         List<ContractPartyContractDTO> GetAllContractPartiesContracts();
         void UploadFileToSFTPServer(BaseFileDTO fileDTO);
         void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday);
-
+        void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId,string organizationunit, int daycuttoff, int workflowday);
         List<ContractPartyContractDTO> GetContractsWithContractParties(int userId);
+        List<ContractPartyContractDTO> GetContractsByContractParty(int contractPartyId, int userId);
+        List<OrganizationUnitDTO> GetOrganizationUnits(int contractid);
     }
 }

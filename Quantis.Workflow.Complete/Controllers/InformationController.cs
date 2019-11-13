@@ -6,6 +6,7 @@ using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.BusinessLogic;
 using Quantis.WorkFlow.Services.DTOs.Information;
 using Quantis.WorkFlow.Services.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace Quantis.WorkFlow.Complete.Controllers
@@ -70,6 +71,13 @@ namespace Quantis.WorkFlow.Complete.Controllers
         public List<BaseNameCodeDTO> GetAllRoles()
         {
             return _infomationAPI.GetAllRoles();
+        }
+
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetOrganizationUnits")]
+        public List<OrganizationUnitDTO> GetOrganizationUnits(int contractid)
+        {
+            return _infomationAPI.GetOrganizationUnits(contractid);
         }
 
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_ROLES)]
@@ -176,7 +184,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetAllContractPariesByUserId(userId);
         }
-
+        [HttpGet("GetContractParties")]
+        public List<BaseNameCodeDTO> GetContractParties()
+        {
+            var user = HttpContext.User as AuthUser;
+            return _infomationAPI.GetAllContractPariesByUserId(user.UserId);
+        }
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_PROFILING)]
         [HttpGet("GetAllContractsByUserId")]
         public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
@@ -295,6 +308,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             _infomationAPI.AssignCuttoffWorkflowDayByContractId(contractId, daycuttoff, workflowday);
         }
+        [Authorize(WorkFlowPermissions.VIEW_CUTOFF_WORKFLOW_DAY)]
+        [HttpGet("AssignCuttoffWorkflowDayByContractIdAndOrganization")]
+        public void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId, string organizationunit, int daycuttoff, int workflowday)
+        {
+            _infomationAPI.AssignCuttoffWorkflowDayByContractIdAndOrganization(contractId, organizationunit, daycuttoff, workflowday);
+        }
         [HttpPost("UploadFileToSFTPServer")]
         [DisableRequestSizeLimit]
         public void UploadFileToSFTPServer([FromBody]BaseFileDTO fileDTO)
@@ -307,6 +326,12 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             var user = HttpContext.User as AuthUser;
             return _infomationAPI.GetContractsWithContractParties(user.UserId);
+        }
+        [HttpGet("GetContractsByContractParty")]
+        public List<ContractPartyContractDTO> GetContractsByContractParty(int contractPartyId)
+        {
+            var user = HttpContext.User as AuthUser;
+            return _infomationAPI.GetContractsByContractParty(contractPartyId, user.UserId);
         }
     }
 }

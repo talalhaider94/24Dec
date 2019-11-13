@@ -189,8 +189,8 @@ export class ApiService {
         return this.http.post(booklet, data);
     }
     GetPersonalReport(PersonalReportFilterDTO): Observable<any> {
-        const booklet = `${environment.API_URL}/oracle/GetPersonalReport`;
-        return this.http.post(booklet, PersonalReportFilterDTO);
+        const personal_report = `${environment.API_URL}/oracle/GetPersonalReport`;
+        return this.http.post(personal_report, PersonalReportFilterDTO);
     }
 
     deleteRole(roleId): Observable<any> {
@@ -214,6 +214,14 @@ export class ApiService {
     getGlobalRulesByUserId(userId): Observable<any> {
         const getGlobalRulesByRoleIdEndPoint = `${environment.API_URL}/information/GetGlobalRulesByUserId/?userId=${userId}`;
         return this.http.get(getGlobalRulesByRoleIdEndPoint);
+    }
+    GetContractParties(): Observable<any> {
+      const gteContractPartiesEndPoint = `${environment.API_URL}/information/GetContractParties`;
+      return this.http.get(gteContractPartiesEndPoint);
+    }
+    GetContractsByContractParty(contractPartyId): Observable<any> {
+      const gteContractPartiesEndPoint = `${environment.API_URL}/information/GetContractsByContractParty?contractPartyId=${contractPartyId}`;
+      return this.http.get(gteContractPartiesEndPoint);
     }
     getContracts(userId, contractPartyId): Observable<any> {
         const getContractsEndPoint = `${environment.API_URL}/information/GetAllContractsByUserId?userId=${userId}&contractpartyId=${contractPartyId}`;
@@ -382,5 +390,13 @@ export class ApiService {
     getContractWithContractParties():Observable<any> {
         const getContract = `${environment.API_URL}/information/GetContractsWithContractParties`;
         return this.http.get(getContract);
+    }
+    GetOrganizationUnits(contractid): Observable<any> {
+      const getOrganization = `${environment.API_URL}/information/GetOrganizationUnits?contractid=${contractid}`;
+      return this.http.get(getOrganization);
+    }
+  AssignCuttoffWorkflowDayByContractIdAndOrganization(contractid, organizationunit, daycuttoff, workflowday): Observable<any> {
+    const AssignWorkflowEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractIdAndOrganization?contractid=${contractid}&organizationunit=${organizationunit}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
+      return this.http.get(AssignWorkflowEndPoint);
     }
 }

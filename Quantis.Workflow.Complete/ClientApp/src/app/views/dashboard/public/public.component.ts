@@ -205,14 +205,18 @@ export class PublicComponent implements OnInit {
 				if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
 					const allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 					setTimeout(() => {
-						this.preSelectedNodes = allOrganizationIds;
+						this.organizationTree.checkAll();
+						// this.preSelectedNodes = allOrganizationIds;
+						// console.log('ORG TREE CHECKD NODES 11: ', this.organizationTree.getAllCheckedNodes());
+						console.log('ORG TREE CHECKD NODES 22: ', this.organizationTree.checkedNodes);
+						console.log('this.preSelectedNodes If', this.preSelectedNodes);
 					}, 50);
-					console.log('this.preSelectedNodes if', JSON.stringify(this.preSelectedNodes));
 				} else {
 					let allOrganizationIds;
 					if(this.barChartWidgetParameters.filters.organizations) {
 						allOrganizationIds = this.barChartWidgetParameters.filters.organizations.split(',');
 					} else {
+						debugger;
 						if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
 							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 						} else {
@@ -223,9 +227,12 @@ export class PublicComponent implements OnInit {
 					setTimeout(() => {
 						this.preSelectedNodes = allOrganizationIds;
 					}, 50);
-					console.log('this.preSelectedNodes else', JSON.stringify(this.preSelectedNodes));
+					console.log('this.preSelectedNodes Else', JSON.stringify(this.preSelectedNodes));
 				}
+				// empty leaf node array to aviod pilling up values
+				this.allLeafNodesIds = [];
 				this.getAllLeafNodesIds(this.barChartWidgetParameters.getOrgHierarcy);
+				console.log('this.allLeafNodesIds', this.allLeafNodesIds);
 			}
 			//Danial: TODO: add isFreeFormReportCheck and getReportQueryDetailByID is no longer being used i suppose
 			// need to verify
@@ -787,12 +794,21 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeCheckEvent($event) {
-		// console.log("All Checked Nodes" + this.organizationTree.checkedNodes);
-		this.uncheckedNodes = this.allLeafNodesIds.filter(value => this.organizationTree.checkedNodes.indexOf(value.toString()) == -1);
+		console.log('OrganizationTreeNode CheckEvent', $event);
+		console.log("this.organizationTree.checkedNodes: ", this.organizationTree.checkedNodes);
+		console.log("this.organizationTree.getAllCheckedNodes(): ", this.organizationTree.getAllCheckedNodes());
+		console.log("this.allLeafNodesIds: ", this.allLeafNodesIds);
+		this.uncheckedNodes = this.allLeafNodesIds.filter(value => {
+			const truthy = this.organizationTree.checkedNodes.includes(value.toString());
+			return !truthy;
+		});
+		console.log('this.uncheckedNodes', this.uncheckedNodes)
 	}
 
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-		// console.log("The selected node's id: " + this.organizationTree.selectedNodes);
+		debugger
+		console.log('OrganizationTreeNode Selected', e);
+		console.log("The selected node's id: ", this.organizationTree.selectedNodes);
 	}
 
 	getAllLeafNodesIds(complexJson) {
@@ -804,7 +820,6 @@ export class PublicComponent implements OnInit {
 					this.allLeafNodesIds.push(item.id);
 				}
 			});
-			// console.log('allLeafNodesIds ->', this.allLeafNodesIds);
 		}
 	}
 
@@ -844,11 +859,7 @@ export class PublicComponent implements OnInit {
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
 		if (this.organizationTree) {
-			if (this.organizationTree.checkedNodes.length == 0) {
-				formValues.Filters.organizations = this.allLeafNodesIds.join(',');
-			} else {
-				formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
-			}
+			formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		if (formValues.Filters.hasOwnProperty('contractParties')) {

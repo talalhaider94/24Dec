@@ -45,7 +45,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 string method = _configuration["SFTP:Authentication"];
-                var methods= new List<AuthenticationMethod>();
+                var methods = new List<AuthenticationMethod>();
                 if (method == "pass")
                 {
                     methods.Add(new PasswordAuthenticationMethod(_configuration["SFTP:UserName"], _configuration["SFTP:Password"]));
@@ -68,7 +68,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     sftp.Disconnect();
                 } // sudo scp -i keypath utente@host file
             }
-            catch (Exception e){
+            catch (Exception e) {
                 throw e;
             }
         }
@@ -130,7 +130,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public void AddUpdateUserSettings(int userId,string key,string value)
+        public void AddUpdateUserSettings(int userId, string key, string value)
         {
             var settings = _dbcontext.UserSettings.FirstOrDefault(o => o.user_id == userId && o.key == key);
             if (settings == null)
@@ -150,16 +150,16 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-        public string GetUserSetting(int userId,string key)
+        public string GetUserSetting(int userId, string key)
         {
-            var setting= _dbcontext.UserSettings.FirstOrDefault(o => o.user_id == userId && o.key == key);
+            var setting = _dbcontext.UserSettings.FirstOrDefault(o => o.user_id == userId && o.key == key);
             if (setting != null)
             {
                 return setting.value;
             }
             return null;
         }
-        public List<KeyValuePair<string,string>> GetAllUserSettings(int userId)
+        public List<KeyValuePair<string, string>> GetAllUserSettings(int userId)
         {
             var settings = _dbcontext.UserSettings.Where(o => o.user_id == userId);
             return settings.Select(o => new KeyValuePair<string, string>(o.key, o.value)).ToList();
@@ -448,16 +448,16 @@ namespace Quantis.WorkFlow.APIBase.API
                             ContractId = Decimal.ToInt32((Decimal)result[0]),
                             ContractPartyId = (int)result[3],
                             ContractPartyName = (string)result[2],
-                            DayCuttOff= Decimal.ToInt32((Decimal)result[4]),
-                            DayWorkflow= Decimal.ToInt32((Decimal)result[5])
+                            DayCuttOff = Decimal.ToInt32((Decimal)result[4]),
+                            DayWorkflow = Decimal.ToInt32((Decimal)result[5])
                         });
                     }
                 }
-                
+
             }
             return res.OrderBy(o => o.ContractPartyName).ThenBy(o => o.ContractName).ToList();
         }
-        public void AssignCuttoffWorkflowDayByContractId(int contractId,int daycuttoff,int workflowday)
+        public void AssignCuttoffWorkflowDayByContractId(int contractId, int daycuttoff, int workflowday)
         {
             string query = "select r.global_rule_id from t_rules r left join t_sla_versions s on r.sla_version_id = s.sla_version_id left join t_slas m on m.sla_id = s.sla_id where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE' and m.sla_id=:sla_id";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
@@ -471,8 +471,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     while (result.Read())
                     {
-                        int globalRuleId=Decimal.ToInt32((Decimal)result[0]);
-                        var catalogKPI=_dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == globalRuleId);
+                        int globalRuleId = Decimal.ToInt32((Decimal)result[0]);
+                        var catalogKPI = _dbcontext.CatalogKpi.FirstOrDefault(o => o.global_rule_id_bsi == globalRuleId);
                         if (catalogKPI != null)
                         {
                             catalogKPI.day_cutoff = daycuttoff;
@@ -480,7 +480,62 @@ namespace Quantis.WorkFlow.APIBase.API
                             _dbcontext.SaveChanges();
                         }
                     }
-                }                
+                }
+            }
+        }
+        public void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId, string organizationunit, int cutoffday, int workflowday)
+        {
+            string select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit = :organization_unit";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                string query = "";
+                con.Open();
+                var command = new NpgsqlCommand(select, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":sla_id", contractId);
+                command.Parameters.AddWithValue(":organization_unit", organizationunit);
+                _dbcontext.Database.OpenConnection();
+                var configExists = command.ExecuteReader();
+                configExists.Read();
+                var numOfConfig = configExists.GetInt32(configExists.GetOrdinal("count"));
+
+
+                if (numOfConfig == 0)
+                {
+                    query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit, workflow_day, cutoff_day) VALUES (:sla_id, :organization_unit, :workflow_day, :cutoff_day)";
+                }
+                else
+                {
+                    query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit = :organization_unit";
+                }
+
+                using (var con2 = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                {
+                    con2.Open();
+                    var command2 = new NpgsqlCommand(query, con2);
+                    command2.CommandType = CommandType.Text;
+                    command2.Parameters.AddWithValue(":sla_id", contractId);
+                    command2.Parameters.AddWithValue(":organization_unit", organizationunit);
+                    command2.Parameters.AddWithValue(":workflow_day", workflowday);
+                    command2.Parameters.AddWithValue(":cutoff_day", cutoffday);
+                    _dbcontext.Database.OpenConnection();
+                    var result2 = command2.ExecuteReader();
+
+                    string assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND organization_unit = :organization_unit";
+                    using (var conAssign = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+                    {
+                        conAssign.Open();
+                        var command3 = new NpgsqlCommand(assignDays, conAssign);
+                        command3.CommandType = CommandType.Text;
+                        command3.Parameters.AddWithValue(":sla_id", contractId);
+                        command3.Parameters.AddWithValue(":day_workflow", workflowday);
+                        command3.Parameters.AddWithValue(":organization_unit", organizationunit);
+                        _dbcontext.Database.OpenConnection();
+                        var result3 = command3.ExecuteReader();
+
+                    }
+
+                }
             }
         }
         public List<BaseNameCodeDTO> GetAllContractsByUserId(int userId, int contractpartyId)
@@ -617,7 +672,36 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-
+        public List<OrganizationUnitDTO> GetOrganizationUnits(int contractid)
+        {
+            var res = new List<OrganizationUnitDTO> ();
+            string query = @"select org.organization_unit, workflow_day, cutoff_day, org.sla_id from (select  distinct organization_unit, sla_id from t_catalog_kpis
+                            left join t_global_rules on global_rule_id_bsi = global_rule_id
+                            where sla_id = :contractid and organization_unit is not null
+                            ) org left join t_organization_unit_workflow ow
+	                        on (ow.sla_id = org.sla_id and org.organization_unit = ow.organization_unit) order by 1 asc";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":contractid", contractid);
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new OrganizationUnitDTO(){
+                            organization_unit = result.GetString(result.GetOrdinal("organization_unit")),
+                            sla_id = result.IsDBNull(result.GetOrdinal("sla_id")) ? -1 : result.GetInt32(result.GetOrdinal("sla_id")),
+                            workflow_day = result.IsDBNull(result.GetOrdinal("workflow_day")) ? -1 : result.GetInt32(result.GetOrdinal("workflow_day")),
+                            cutoff_day = result.IsDBNull(result.GetOrdinal("cutoff_day")) ? -1 : result.GetInt32(result.GetOrdinal("cutoff_day"))
+                        });
+                    }
+                }
+                return res;
+            }
+        }
         public List<UserProfilingDTO> GetUserProfilingCSV()
         {
             var res = new List<UserProfilingDTO>();
@@ -657,7 +741,47 @@ namespace Quantis.WorkFlow.APIBase.API
                 return res;
             }
         }
-
+        public List<ContractPartyContractDTO> GetContractsByContractParty(int contractPartyId, int userid)
+        {
+            var res = new List<ContractPartyContractDTO>();
+            string query = @"select m.sla_id,m.sla_name,c.customer_name,c.customer_id
+                            from t_rules r
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id
+                            left join t_slas m on m.sla_id = s.sla_id
+                            left join t_customers c on m.customer_id = c.customer_id
+                            left join t_user_kpis uk on uk.global_rule_id=r.global_rule_id
+                            left join t_users u on uk.user_id=u.user_id
+                            left join t_catalog_kpis ck on ck.global_rule_id_bsi = r.global_rule_id
+                            WHERE s.sla_status = 'EFFECTIVE'
+                            AND m.sla_status = 'EFFECTIVE'
+                            AND u.user_id=:user_id
+                            AND c.customer_id=:customer_id
+                            and ck.organization_unit is not null 
+                            group by  m.sla_id,m.sla_name,c.customer_name,c.customer_id";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":user_id", userid);
+                command.Parameters.AddWithValue(":customer_id", contractPartyId);
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new ContractPartyContractDTO()
+                        {
+                            ContractId = Decimal.ToInt32((Decimal)result[0]),
+                            ContractName = (string)result[1],
+                            ContractPartyName = (string)result[2],
+                            ContractPartyId = (int)result[3]
+                        });
+                    }
+                }
+                return res;
+            }
+        }
         public List<ContractPartyContractDTO> GetContractsWithContractParties(int userId)
         {
             var res = new List<ContractPartyContractDTO>();
