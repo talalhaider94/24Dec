@@ -245,7 +245,7 @@ export class UserProfilingComponent implements OnInit {
     this.selectedData.contractName = data.contractname;
     this.selectedData.contractID = data.contractid;
         console.log('getContracts ==> ', this.selectedData.userid, this.selectedData.permid);
-        this.apiService.GetOrganizationUnits(data.contractid).subscribe(data => {
+        this.apiService.GetOrganizationUnitsByContract(data.contractid).subscribe(data => {
           this.contractsData = data;
           for (let i = 0; i < data.length; i++) {
             if (data[i].workflow_day != -1) {

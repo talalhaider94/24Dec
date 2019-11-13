@@ -186,6 +186,7 @@ export class CatalogoKpiComponent implements OnInit {
 
     kpiTableBodyData: any = [];
     allForms: any = [];
+    allOrganizationUnits: any = [];
 
     coloBtn(id: string): void {
         this.des = id;
@@ -256,7 +257,7 @@ export class CatalogoKpiComponent implements OnInit {
         };
 
         this.getForms();
-
+        this.getOrganizationUnits();
         this.userPermissions = this.auth.getUser().permissions;
         console.log('this.userPermissions =>', this.userPermissions);
 
@@ -689,7 +690,12 @@ export class CatalogoKpiComponent implements OnInit {
             console.log('forms ', data);
         });
     }
-
+  getOrganizationUnits() {
+    this.apiService.GetOrganizationUnits().subscribe((data: any) => {
+      this.allOrganizationUnits = data;
+      console.log('OrganizationUnits ', data);
+    });
+  }
     getPermissions() {
         console.log('999999999999999999999 => ', this.gatheredData);
         this.apiService.getPermissionsByRoldId(this.gatheredData.roleId).subscribe(data => {
@@ -703,7 +709,16 @@ export class CatalogoKpiComponent implements OnInit {
             });
         });
     }
-
+  getOrganizationName(organization_unit_id) {
+    let organizationFinal = '';
+    if (organization_unit_id != null) {
+      let organization = this.allOrganizationUnits.find(o => o.id.toString() === organization_unit_id);
+      organizationFinal = organization.organization_unit;
+    }
+    return organizationFinal;
+    
+    //return organization.organization_unit;
+    }
     showReferentiModal() {
         this.referentiModal.show();
     }

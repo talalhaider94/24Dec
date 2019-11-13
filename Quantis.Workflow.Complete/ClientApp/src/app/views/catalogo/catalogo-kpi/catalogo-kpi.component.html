@@ -77,7 +77,7 @@
                     <td>{{row.target}}</td>
                     <td style="text-align:center">{{row.kpi_type}}</td>
                     <td style="text-align:center">{{row.source_name}}</td>
-                    <td style="text-align:center">{{row.organization_unit}}</td>
+                    <td style="text-align:center">{{getOrganizationName(row.organization_unit)}}</td>
                     <td class="" align="center" *ngIf="row.enable; then trueBlock else falseBlock"></td>
                     <td class="notExportCsv" align="center" *ngIf="row.enable_rm; then trueBlock else falseBlock"></td>
                     <td class="notExportCsv" align="center" *ngIf="row.enable_wf; then trueBlock else falseBlock"></td>
@@ -187,8 +187,15 @@
                           <tr><th>CALCOLO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
                           <tr><th>ID KPI</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
                           <tr><th>TITOLO BREVE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
-                          <tr><th>UNITA ORGANIZZATIVA</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.organization_unit"></td></tr>
-
+                          <tr>
+                            <th>UNITA ORGANIZZATIVA</th>
+                            <td colspan="2">
+                              <select [disabled]="kpiButtonState !== '1'" class="form-control" [(ngModel)]="modalData.organization_unit">
+                                <option value="">Unità Organizativa: </option>
+                                <option *ngFor="let item of allOrganizationUnits " value="{{item.id}}">{{item.organization_unit}}</option>
+                              </select>
+                            </td>
+                          </tr>
                           <tr>
                             <th>CARICAMENTO</th>
                             <td colspan="2">
