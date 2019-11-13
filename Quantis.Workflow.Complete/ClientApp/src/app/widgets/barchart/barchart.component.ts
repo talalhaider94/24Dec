@@ -271,20 +271,20 @@ export class BarchartComponent implements OnInit {
             }
         });
     }
-    getAllLeafNodesIds(complexJson) {
-        try {
-            if (complexJson) {
-                complexJson.forEach((item: any) => {
-                    if (item.children) {
-                        this.getAllLeafNodesIds(item.children);
-                    } else {
-                        this.allLeafNodesIds.push(item.id);
-                    }
-                });
-                return this.allLeafNodesIds;
-            }
-        } catch(error) {
-            console.error('getAllLeafNodesIds', error);
-        }
-    }
+    // getAllLeafNodesIds(complexJson) {
+    //     try {
+    //         if (complexJson) {
+    //             complexJson.forEach((item: any) => {
+    //                 if (item.children) {
+    //                     this.getAllLeafNodesIds(item.children);
+    //                 } else {
+    //                     this.allLeafNodesIds.push(item.id);
+    //                 }
+    //             });
+    //             return this.allLeafNodesIds;
+    //         }
+    //     } catch(error) {
+    //         console.error('getAllLeafNodesIds', error);
+    //     }
+    // }
 }

@@ -571,12 +571,15 @@ export class PersonalReportComponent implements OnInit {
 
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
-                
+                                
                 let allChartLabels = chartArray.map(label => label.xvalue);
                 
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
 
+                this.dayChartOptions.title = {
+                    text: this.personalReportForm.value.name    
+                }
                 this.dayChartOptions.xAxis = {
                     type: 'date',
                     categories: allChartLabels,
@@ -617,7 +620,7 @@ export class PersonalReportComponent implements OnInit {
 
     showHighChartsData(data) {
         const chartArray = data;
-        //console.log('Highcharts Data -> ',chartArray);
+        console.log('Highcharts Data -> ',chartArray);
         let violationData = chartArray.filter(data => (data.result === 'Violation' || data.result === 'Violazione'));
         let compliantData = chartArray.filter(data => (data.result === 'compliant' || data.result === 'Conforme'));
         let targetData = chartArray.filter(data => (data.result === 'Target' || data.result === 'Previsione' ));
@@ -630,6 +633,9 @@ export class PersonalReportComponent implements OnInit {
         let allMinorData = minorData.map(data => data.actual);
         let allCriticalData = criticalData.map(data => data.actual);
 
+        this.chartOptions.title = {
+            text: this.personalReportForm.value.name    
+        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels,

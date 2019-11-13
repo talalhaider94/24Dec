@@ -477,9 +477,9 @@ export class BSIReportComponent implements OnInit {
                 const select = $($this.cartellaSelect.nativeElement)
                     .on('change', function () {
                         that
-                          .search($(this).val().replace(')','\\)').replace('(','\\(')+'$', true, false, false)
+                          .search($(this).val().replace(/\)/g, '\\)').replace(/\(/g, '\\(') + '$', true, false, false)
                             .draw();
-                    });
+                  });
             });
         });
     }
@@ -490,7 +490,7 @@ export class BSIReportComponent implements OnInit {
 
     showHighChartsData(data) {
         const chartArray = data.reports[0].data;
-        //console.log('Highcharts Data -> ',chartArray);
+        console.log('Highcharts Data -> ',chartArray);
         let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
         let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
