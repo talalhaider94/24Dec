@@ -2,14 +2,14 @@
     <input type="text" *ngIf="isDashboardModeEdit" [(ngModel)]="widgetname" (ngModelChange)="widgetnameChange($event)" />
     <span *ngIf="!isDashboardModeEdit"> {{ widgetname }}</span>
 </p>
+<div class="spinner-grow text-primary float-right" *ngIf="loading" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
 <button type="button" [disabled]="loading" *ngIf="!isDashboardModeEdit"
         class="no-drag btn-sm btn btn-primary float-right mr-1" (click)="openModal()">
     <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
-<div class="spinner-grow text-primary" *ngIf="loading" role="status">
-    <span class="sr-only">Loading...</span>
-</div>
 <div class="card text-white bg-success mt-3">
     <div class="card-body p-3 text-center">
         <div class="h1">{{ sumKPICount }}</div>

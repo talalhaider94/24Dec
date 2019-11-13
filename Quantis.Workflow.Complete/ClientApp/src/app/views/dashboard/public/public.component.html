@@ -104,11 +104,18 @@
                   <label>Contraente e Contratto</label>
                   <perfect-scrollbar style="max-height: 260px;">
                     <ejs-treeview #organizationTree id="organizationTreeId" [fields]='treeDataFields'
-                      [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
+                      [showCheckBox]='true'
                       (nodeChecked)='organizationTreeNodeCheckEvent($event)'
                       (nodeSelected)='organizationTreeNodeSelected($event)'>
                     </ejs-treeview>
                   </perfect-scrollbar>
+                  <!-- <perfect-scrollbar style="max-height: 260px;">
+                    <ejs-treeview #organizationTree id="organizationTreeId" [fields]='treeDataFields'
+                      [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
+                      (nodeChecked)='organizationTreeNodeCheckEvent($event)'
+                      (nodeSelected)='organizationTreeNodeSelected($event)'>
+                    </ejs-treeview>
+                  </perfect-scrollbar> -->
                 </span>
                 <span *ngIf="barChartWidgetParameters.allContractParties">
                   <div class="form-group">
