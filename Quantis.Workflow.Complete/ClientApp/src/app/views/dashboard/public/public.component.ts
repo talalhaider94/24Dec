@@ -859,7 +859,13 @@ export class PublicComponent implements OnInit {
 		delete formValues.Filters.endDate;
 		// Organization hierarchy as Customers
 		if (this.organizationTree) {
-			formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
+			if(this.organizationTree.checkedNodes && this.organizationTree.checkedNodes.length > 0){
+				formValues.Filters.organizations = this.organizationTree.checkedNodes.join(',');
+			}
+			else{
+				delete formValues.Filters.organizations
+			}
+			
 		}
 		let copyFormValues = { ...formValues, Filters: formValues.Filters, Properties: formValues.Properties };
 		if (formValues.Filters.hasOwnProperty('contractParties')) {
