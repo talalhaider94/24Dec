@@ -189,7 +189,7 @@
                 <div class="form-group" *ngIf="barChartWidgetParameters.showdatetype">
                   <label for="dateTypes">Tipi di data</label>
                   <!-- Date Type -->
-                  <select class="form-control" id="dateTypes" formControlName="dateTypes"
+                  <select class="form-control text-capitalize" id="dateTypes" formControlName="dateTypes"
                     (change)="customDateTypes($event)">
                     <option *ngFor="let datetype of barChartWidgetParameters.datetypes | keyvalue; let i = index"
                       [attr.selected]="!i" [ngValue]="datetype.key">
