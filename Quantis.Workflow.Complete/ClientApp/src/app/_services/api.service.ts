@@ -239,8 +239,8 @@ export class ApiService {
         const getCSVEndPoint = `${environment.API_URL}/information/GetUserProfilingCSV`;
         return this.http.get(getCSVEndPoint);
     }
-    getPersonalReports(): Observable<any> {
-        const getPREndPoint = `${environment.API_URL}/bsi/GetMyNormalReports`;
+    getPersonalReport(): Observable<any> {
+        const getPREndPoint = `${environment.API_URL}/data/GetPersonalReportDetail?id=1`;
         return this.http.get(getPREndPoint);
     }
     getAllNormalReports(): Observable<any> {

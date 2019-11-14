@@ -359,6 +359,8 @@ export class PersonalReportComponent implements OnInit {
         this.personalReportForm.patchValue({
             aggregationoption: 'Select Aggregation'
         });
+
+        this.getPersonalReport();
     }
 
     ngAfterViewInit() {
@@ -381,10 +383,10 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 
-    getPersonalReports() {
+    getPersonalReport() {
         this.loading = true;
         // this.apiService.getPersonalReports()
-        this.apiService.getAllNormalReports().subscribe((data) => {
+        this.apiService.getPersonalReport().subscribe((data) => {
             this.PersonalReportData = data;
 
             console.log('PersonalReportData -> ', data);
