@@ -28,6 +28,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     loadingDashboard: boolean = false;
     dashboardCollection: DashboardModel[];
     public showLandingPage: any;
+    showPowerBI=0;
 
     constructor(
         private toastr: ToastrService,
@@ -56,6 +57,14 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit() {
+        this.showPowerBI=0;
+        let x = JSON.parse(localStorage.getItem('currentUser'));
+        let perm = x.permissions;
+        console.log('perm -> ',perm);
+        if(perm.indexOf('VIEW_LINK_BSI') > -1){
+            this.showPowerBI=1;
+        }
+
         this.currentUser = this.authService.getUser();
         this.router.events.pipe(
             filter((event: any) => event instanceof NavigationEnd)
