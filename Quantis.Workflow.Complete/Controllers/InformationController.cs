@@ -72,12 +72,17 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetAllRoles();
         }
-
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("GetOrganizationUnits")]
-        public List<OrganizationUnitDTO> GetOrganizationUnits(int contractid)
+        public List<OrganizationUnitDTO> GetOrganizationUnits()
         {
-            return _infomationAPI.GetOrganizationUnits(contractid);
+            return _infomationAPI.GetOrganizationUnits();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetOrganizationUnitsByContract")]
+        public List<OrganizationUnitDTO> GetOrganizationUnitsByContract(int contractid)
+        {
+            return _infomationAPI.GetOrganizationUnitsByContract(contractid);
         }
 
         [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_USER_ROLES)]

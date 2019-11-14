@@ -17,6 +17,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FilterUsersFFRPipe } from './../../_pipes/filterUsersFFR.pipe';
 import {MatProgressBarModule} from '@angular/material';
 import { KeysPipePipe } from './bsi-report/bsi-pipe.pipe';
+// import { ExcelService } from '../../_services/excel.service';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -75,8 +76,9 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         ]),
         HighchartsChartModule,
         ModalModule.forRoot(),
-        BsDatepickerModule.forRoot()
+        BsDatepickerModule.forRoot(),
     ],
+    // providers: [ExcelService],
     declarations: [
         DashboardComponent,
         DistributionByWorkflowComponent,
