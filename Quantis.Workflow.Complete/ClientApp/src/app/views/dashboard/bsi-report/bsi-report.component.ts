@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services';
-import { chartExportTranslations, exportChartButton } from '../../../_helpers';
+import { chartExportTranslations, exportChartButton, formatDataLabelForNegativeValues } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -158,12 +158,16 @@ export class BSIReportComponent implements OnInit {
         yAxis: {
             title: {
                 text: 'Percent'
-            }
+            },
+            min: 0
         },
         plotOptions: {
             series: {
                 dataLabels: {
                     enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -182,8 +186,7 @@ export class BSIReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -204,12 +207,16 @@ export class BSIReportComponent implements OnInit {
         yAxis: {
             title: {
                 text: 'Percent'
-            }
+            },
+            min: 0
         },
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -226,8 +233,7 @@ export class BSIReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -250,12 +256,16 @@ export class BSIReportComponent implements OnInit {
         yAxis: {
             title: {
                 text: 'Percent'
-            }
+            }, 
+            min: 0
         },
         plotOptions: {
             series: {
                 dataLabels: {
                     enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -274,8 +284,7 @@ export class BSIReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -411,13 +420,7 @@ export class BSIReportComponent implements OnInit {
                     enabled:true,
                     crosshairs:true,
                     formatter: function () {
-                        // var symbol = '●';
-                        // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
-                        // + this.series.name + '<br>'
-                        // + 'y: <b>' + this.y + '</b>';
-
-                        return this.series.name + '<br>'
-                        + 'y: <b>' + this.y + '</b>';
+                        return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
                     }
                 }
                 this.dayChartOptions.xAxis = {
@@ -521,20 +524,6 @@ export class BSIReportComponent implements OnInit {
         let allTargetData = targetData.map(data => data.yvalue);
         let allMinorData = minorData.map(data => data.yvalue);
         let allCriticalData = criticalData.map(data => data.yvalue);
-
-        this.chartOptions.tooltip = {
-            enabled:true,
-            crosshairs:true,
-            formatter: function () {
-                // var symbol = '●';
-                // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
-                // + this.series.name + '<br>'
-                // + 'y: <b>' + this.y + '</b>';
-
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
-            }
-        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels,

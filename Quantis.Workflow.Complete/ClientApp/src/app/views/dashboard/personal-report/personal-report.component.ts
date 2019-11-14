@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
-import { chartExportTranslations } from '../../../_helpers';
+import { chartExportTranslations, formatDataLabelForNegativeValues } from '../../../_helpers';
 declare var $;
 var $this;
 
@@ -166,12 +166,16 @@ export class PersonalReportComponent implements OnInit {
         yAxis: {
             title: {
                 text: 'Percent'
-            }
+            },
+            min: 0
         },
         plotOptions: {
             series: {
                 dataLabels: {
                     enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -190,8 +194,7 @@ export class PersonalReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -217,7 +220,10 @@ export class PersonalReportComponent implements OnInit {
         plotOptions: {
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -234,8 +240,7 @@ export class PersonalReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -258,12 +263,16 @@ export class PersonalReportComponent implements OnInit {
         yAxis: {
             title: {
                 text: 'Percent'
-            }
+            },
+            min: 0
         },
         plotOptions: {
             series: {
                 dataLabels: {
                     enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 },
                 point: {
                     events: {
@@ -282,8 +291,7 @@ export class PersonalReportComponent implements OnInit {
             enabled: true,
             crosshairs: true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         },
         series: [],
@@ -606,8 +614,7 @@ export class PersonalReportComponent implements OnInit {
                     enabled:true,
                     crosshairs:true,
                     formatter: function () {
-                        return this.series.name + '<br>'
-                        + 'y: <b>' + this.y + '</b>';
+                        return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
                     }
                 }
                 this.dayChartOptions.xAxis = {
@@ -670,8 +677,7 @@ export class PersonalReportComponent implements OnInit {
             enabled:true,
             crosshairs:true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         }
         this.chartOptions.xAxis = {
@@ -766,8 +772,7 @@ export class PersonalReportComponent implements OnInit {
             enabled:true,
             crosshairs:true,
             formatter: function () {
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         }
         this.chartOptions2.xAxis = {
