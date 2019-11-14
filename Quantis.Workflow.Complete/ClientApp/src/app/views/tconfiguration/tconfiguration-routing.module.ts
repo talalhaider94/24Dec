@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { TConfigurationComponent } from './tconfiguration.component';
 import { TConfigurationAdvancedComponent } from './advanced/advanced.component';
+import { OrganizationComponent } from './organization/organization.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 
 const routes: Routes = [
@@ -24,6 +25,13 @@ const routes: Routes = [
         component: WorkflowComponent,
         data: {
             title: 'Workflow'
+        }
+    },
+    {
+        path: 'organization',
+        component: OrganizationComponent,
+        data: {
+            title: 'Organizzazione'
         }
     }
 ];
