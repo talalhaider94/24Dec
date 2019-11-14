@@ -48,6 +48,9 @@ export class PersonalReportComponent implements OnInit {
     isDayDrill=0;
     campoData: any = [];
     reportData;
+    reportData1;
+    globalRuleId1;
+    personalReportLength=0;
     fitroDataById: any = [
         {
             event_type_id: '   ',
@@ -185,7 +188,11 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: exportChartButton
@@ -225,7 +232,11 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: exportChartButton
@@ -269,7 +280,11 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: {
@@ -455,6 +470,7 @@ export class PersonalReportComponent implements OnInit {
         this.reportData = this.personalReportForm.value;
         this.reportData.startDate = dateRange.startDate;
         this.reportData.endDate = dateRange.endDate;
+        this.personalReportLength=1;
         this.apiService.GetPersonalReport(this.reportData).subscribe((data) => {
             console.log('PersonalReportData -> ', data);
             this.reportArray=data;
@@ -463,30 +479,40 @@ export class PersonalReportComponent implements OnInit {
             this.getPeriod();
             this.showHighChartsData(data);
         });
-        let reportId = 6497;
         if(this.groupReportCheck == true){
-            this.formArray.personalReportForm.contractParties = this.formArray.personalReportForm.contractParties1;
-            this.formArray.personalReportForm.contracts = this.formArray.personalReportForm.contracts1;
-            this.formArray.personalReportForm.GlobalRuleId = this.formArray.personalReportForm.GlobalRuleId1;
-            delete this.formArray.personalReportForm.contractParties1;
-            delete this.formArray.personalReportForm.contracts1;
-            delete this.formArray.personalReportForm.GlobalRuleId1;
+            let personalReportForm1 = {
+                name:'',
+                aggregationoption:'',
+                contractParties:'',
+                contracts:'',
+                GlobalRuleId:''
+            }
+            this.personalReportLength=2;
+            personalReportForm1.name = this.personalReportForm.value.name;
+            personalReportForm1.aggregationoption = this.personalReportForm.value.aggregationoption;
+            personalReportForm1.contractParties = this.personalReportForm.value.contractParties1;
+            personalReportForm1.contracts = this.personalReportForm.value.contracts1;
+            personalReportForm1.GlobalRuleId = this.personalReportForm.value.GlobalRuleId1;
+            this.globalRuleId1 = personalReportForm1.GlobalRuleId;
+            // delete this.personalReportForm.value.contractParties1;
+            // delete this.personalReportForm.value.contracts1;
+            // delete this.personalReportForm.value.GlobalRuleId1;
 
-            console.log('Form values -> ',this.personalReportForm.value);
-        this.formArray = this.personalReportForm.value;
-        //console.log('Form values 2 -> ',this.formArray);
-        const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
-        this.reportData = this.personalReportForm.value;
-        this.reportData.startDate = dateRange.startDate;
-        this.reportData.endDate = dateRange.endDate;
-        this.apiService.GetPersonalReport(this.reportData).subscribe((data) => {
-            console.log('PersonalReportData -> ', data);
-            this.reportArray=data;
-            this.loading = false;
-            this.personaliModal.show();
-            this.getPeriod();
-            this.showHighChartsData2(data);
-        });
+            
+            //this.formArray = this.personalReportForm.value;
+            console.log('Form values 2 -> ',personalReportForm1);
+           // const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
+            this.reportData1 = personalReportForm1;
+            this.reportData1.startDate = dateRange.startDate;
+            this.reportData1.endDate = dateRange.endDate;
+            this.apiService.GetPersonalReport(this.reportData1).subscribe((data) => {
+                console.log('PersonalReportData2 -> ', data);
+                this.reportArray=data;
+                this.loading = false;
+                //this.personaliModal.show();
+                //this.getPeriod();
+                this.showHighChartsData2(data);
+            });
         }
         //this.getReportDetails(reportId); 
     }
@@ -576,6 +602,14 @@ export class PersonalReportComponent implements OnInit {
                 this.dayChartOptions.title = {
                     text: this.personalReportForm.value.name    
                 }
+                this.dayChartOptions.tooltip = {
+                    enabled:true,
+                    crosshairs:true,
+                    formatter: function () {
+                        return this.series.name + '<br>'
+                        + 'y: <b>' + this.y + '</b>';
+                    }
+                }
                 this.dayChartOptions.xAxis = {
                     type: 'date',
                     categories: allChartLabels,
@@ -631,6 +665,14 @@ export class PersonalReportComponent implements OnInit {
 
         this.chartOptions.title = {
             text: this.personalReportForm.value.name    
+        }
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         }
         this.chartOptions.xAxis = {
             type: 'date',
@@ -703,29 +745,37 @@ export class PersonalReportComponent implements OnInit {
     }
 
     showHighChartsData2(data) {
-        const chartArray = data.reports[1].data;
-        // Danial TODO: improve code later by modifying all data in a single loop
-        let violationData = chartArray.filter(data => (data.zvalue === 'Violation' || data.zvalue === 'Violazione'));
-        let compliantData = chartArray.filter(data => (data.zvalue === 'Compliant' || data.zvalue === 'Conforme'));
-        let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
-
-        let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
-        let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
-
+        const chartArray = data;
+        console.log('Highcharts Data -> ',chartArray);
+        let violationData = chartArray.filter(data => (data.result === 'Violation' || data.result === 'Violazione'));
+        let compliantData = chartArray.filter(data => (data.result === 'compliant' || data.result === 'Conforme'));
+        let targetData = chartArray.filter(data => (data.result === 'Target' || data.result === 'Previsione' ));
+        let minorData = chartArray.filter(data => (data.result === 'Minor' || data.result === 'Minore'));
+        let criticalData = chartArray.filter(data => (data.result === 'Critical' || data.result === 'Critica'));
         let allChartLabels = chartArray.map(label => label.xvalue);
-        let allViolationData = violationData.map(data => data.yvalue);
-        let allCompliantData = compliantData.map(data => data.yvalue);
-        let allTargetData = targetData.map(data => data.yvalue);
+        let allViolationData = violationData.map(data => data.actual);
+        let allCompliantData = compliantData.map(data => data.actual);
+        let allTargetData = targetData.map(data => data.actual);
+        let allMinorData = minorData.map(data => data.actual);
+        let allCriticalData = criticalData.map(data => data.actual);
 
-        let allMinorData = minorData.map(data => data.yvalue);
-        let allCriticalData = criticalData.map(data => data.yvalue);
-
+        this.chartOptions2.title = {
+            text: this.personalReportForm.value.name    
+        }
+        this.chartOptions2.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions2.xAxis = {
             type: 'date',
             categories: allChartLabels,
         }
         this.chartOptions2.yAxis.title = {
-            text: data.reports[1].units
+            text: data.unit
         }
         this.chartOptions2.series[0] = {
             type: 'column',
@@ -753,13 +803,13 @@ export class PersonalReportComponent implements OnInit {
                 fillColor: '#1985ac'
             },
             dataLabels: {
-                color: '#1985ac'
+                color: '#1985ac',
             },
         };
         if(allMinorData && allMinorData.length > 0){
             this.chartOptions2.series[3] = {
                 type: 'scatter',
-                name: 'Escalation', // minor string is replaced with Escalation
+                name: 'Escalation',
                 data: allMinorData,
                 marker: {
                     fillColor: '#ffc107'
@@ -944,7 +994,7 @@ export class PersonalReportComponent implements OnInit {
         // let month = '10';
         //year = '2018';
         year = toYear;
-        let kpiId = this.personalReportForm.value.GlobalRuleId;
+        let kpiId = this.globalRuleId1;
         //let kpiId = 39412;
         this.loadingModalDati2 = true;
         this.isLoadedDati2=1;
@@ -1054,7 +1104,7 @@ export class PersonalReportComponent implements OnInit {
         let month = split[0];
         let year = split[1];
 
-        console.log('KPI ID -> ',this.personalReportForm.value.GlobalRuleId,' - Selected Month -> ',month,' - Selected Year -> ',year);
+        console.log('KPI ID -> ',this.globalRuleId1,' - Selected Month -> ',month,' - Selected Year -> ',year);
     
         this.selectedmonth = month;
         this.selectedyear = year;
@@ -1081,9 +1131,9 @@ export class PersonalReportComponent implements OnInit {
         let month = split[0];
         let year = split[1];
 
-        console.log('KPI ID -> ',this.personalReportForm.value.GlobalRuleId,' - Selected Month -> ',month,' - Selected Year -> ',year);
+        console.log('KPI ID -> ',this.globalRuleId1,' - Selected Month -> ',month,' - Selected Year -> ',year);
     
-        this.getDayLevelData(this.personalReportForm.value.GlobalRuleId,month,year);
+        this.getDayLevelData(this.globalRuleId1,month,year);
     }
 
     hideModal(){

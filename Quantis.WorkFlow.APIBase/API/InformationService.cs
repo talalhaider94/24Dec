@@ -672,14 +672,44 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
-        public List<OrganizationUnitDTO> GetOrganizationUnits(int contractid)
+        public List<OrganizationUnitDTO> GetOrganizationUnits()
+        {
+            var res = new List<OrganizationUnitDTO>();
+            string query = @"select * from t_organization_units";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new OrganizationUnitDTO()
+                        {
+                            id = result.GetInt32(result.GetOrdinal("id")),
+                            organization_unit = result.GetString(result.GetOrdinal("organization_unit")),
+                            sla_id = null,
+                            workflow_day = null,
+                            cutoff_day = null
+                        });
+                    }
+                }
+                return res;
+            }
+        }
+        public List<OrganizationUnitDTO> GetOrganizationUnitsByContract(int contractid)
         {
             var res = new List<OrganizationUnitDTO> ();
-            string query = @"select org.organization_unit, workflow_day, cutoff_day, org.sla_id from (select  distinct organization_unit, sla_id from t_catalog_kpis
+            string query = @"select ou.id, ou.organization_unit, workflow_day, cutoff_day, org.sla_id from (select  distinct organization_unit::integer, sla_id from t_catalog_kpis
                             left join t_global_rules on global_rule_id_bsi = global_rule_id
                             where sla_id = :contractid and organization_unit is not null
-                            ) org left join t_organization_unit_workflow ow
-	                        on (ow.sla_id = org.sla_id and org.organization_unit = ow.organization_unit) order by 1 asc";
+                            ) org 
+							left join t_organization_unit_workflow ow
+	                        on (ow.sla_id = org.sla_id and org.organization_unit::integer = organization_unit_id)
+							left join t_organization_units ou on org.organization_unit::integer = ou.id 
+							order by 1 asc";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
@@ -692,6 +722,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     while (result.Read())
                     {
                         res.Add(new OrganizationUnitDTO(){
+                            id = result.GetInt32(result.GetOrdinal("id")),
                             organization_unit = result.GetString(result.GetOrdinal("organization_unit")),
                             sla_id = result.IsDBNull(result.GetOrdinal("sla_id")) ? -1 : result.GetInt32(result.GetOrdinal("sla_id")),
                             workflow_day = result.IsDBNull(result.GetOrdinal("workflow_day")) ? -1 : result.GetInt32(result.GetOrdinal("workflow_day")),

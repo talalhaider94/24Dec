@@ -180,7 +180,11 @@ export class BSIReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: exportChartButton
@@ -220,7 +224,11 @@ export class BSIReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: exportChartButton
@@ -264,7 +272,11 @@ export class BSIReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: exportChartButton
@@ -395,6 +407,19 @@ export class BSIReportComponent implements OnInit {
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
 
+                this.dayChartOptions.tooltip = {
+                    enabled:true,
+                    crosshairs:true,
+                    formatter: function () {
+                        // var symbol = '●';
+                        // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
+                        // + this.series.name + '<br>'
+                        // + 'y: <b>' + this.y + '</b>';
+
+                        return this.series.name + '<br>'
+                        + 'y: <b>' + this.y + '</b>';
+                    }
+                }
                 this.dayChartOptions.xAxis = {
                     type: 'date',
                     categories: allChartLabels,
@@ -497,6 +522,19 @@ export class BSIReportComponent implements OnInit {
         let allMinorData = minorData.map(data => data.yvalue);
         let allCriticalData = criticalData.map(data => data.yvalue);
 
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                // var symbol = '●';
+                // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
+                // + this.series.name + '<br>'
+                // + 'y: <b>' + this.y + '</b>';
+
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels,
@@ -530,7 +568,7 @@ export class BSIReportComponent implements OnInit {
                 fillColor: '#1985ac'
             },
             dataLabels: {
-                color: '#1985ac',
+                //color: '#1985ac',
             },
         };
         if(allMinorData && allMinorData.length > 0){
@@ -585,6 +623,19 @@ export class BSIReportComponent implements OnInit {
         let allMinorData = minorData.map(data => data.yvalue);
         let allCriticalData = criticalData.map(data => data.yvalue);
 
+        this.chartOptions2.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                // var symbol = '●';
+                // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
+                // + this.series.name + '<br>'
+                // + 'y: <b>' + this.y + '</b>';
+
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions2.xAxis = {
             type: 'date',
             categories: allChartLabels,

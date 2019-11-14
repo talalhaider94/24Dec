@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from 'angular-datatables';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+// import {ExcelService} from '../../../_services/excel.service';
 
 let $this;
 @Component({
@@ -106,7 +107,8 @@ export class FreeFormReportComponent implements OnInit {
   constructor(
     private _freeFormReport: FreeFormReportService,
     private toastr: ToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    // private excelService:ExcelService
   ) {
     $this = this;
   }
@@ -482,6 +484,36 @@ export class FreeFormReportComponent implements OnInit {
       this.showViewModal();
     });
   }
+
+  // exportAsXLSX(){
+  //   let tableElm = '.executedQueryResult';
+  //   var csv = '';
+  //   var rows = [];
+  //   var headers = [];
+  //   $(tableElm + ' thead').each(function () {
+  //     var $th = $(this);
+  //     var text = $th.text();
+  //     var header = '"' + text + '"';
+  //     if (text != "") headers.push(header); 
+  //   });
+  //   csv+=headers;
+
+  //   let totalRows =  $(tableElm + ' tbody tr').length;
+  //   for (let i = 0; i < totalRows; i++) {
+  //       var row = [];
+  //       $($(tableElm).DataTable().row(i).node()).each((i, e) => {
+  //           var $td = $(e);
+  //           var text = $td.text();
+  //           var cell = '"' + text + '"';
+  //           row.push(cell);
+  //       })
+  //       rows.push(row);    
+  //   }
+  //   csv += rows;
+
+  //   this.excelService.exportAsExcelFile(rows, 'sample');
+  // }
+
   table2csv(exportmode, tableElm) {
       var csv = '';
       var headers = [];
