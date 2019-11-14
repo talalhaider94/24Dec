@@ -12,5 +12,7 @@
         public double Actual { get; set; }
         public string Result { get; set; }
         public double Deviation { get; set; }
+        public string Unit { get; set; }
+        public string Operator { get; set; }
     }
 }

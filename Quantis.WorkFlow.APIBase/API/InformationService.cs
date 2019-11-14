@@ -485,7 +485,7 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId, string organizationunit, int cutoffday, int workflowday)
         {
-            string select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit = :organization_unit";
+            string select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 string query = "";
@@ -502,11 +502,11 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 if (numOfConfig == 0)
                 {
-                    query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit, workflow_day, cutoff_day) VALUES (:sla_id, :organization_unit, :workflow_day, :cutoff_day)";
+                    query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit_id, workflow_day, cutoff_day) VALUES (:sla_id, (select id from t_organization_units where organization_unit = :organization_unit), :workflow_day, :cutoff_day)";
                 }
                 else
                 {
-                    query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit = :organization_unit";
+                    query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
                 }
 
                 using (var con2 = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
@@ -521,7 +521,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     _dbcontext.Database.OpenConnection();
                     var result2 = command2.ExecuteReader();
 
-                    string assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND organization_unit = :organization_unit";
+                    string assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND organization_unit = (select id::text from t_organization_units where organization_unit = :organization_unit)";
                     using (var conAssign = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                     {
                         conAssign.Open();
@@ -787,7 +787,6 @@ namespace Quantis.WorkFlow.APIBase.API
                             AND m.sla_status = 'EFFECTIVE'
                             AND u.user_id=:user_id
                             AND c.customer_id=:customer_id
-                            and ck.organization_unit is not null 
                             group by  m.sla_id,m.sla_name,c.customer_name,c.customer_id";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
@@ -1113,7 +1112,6 @@ namespace Quantis.WorkFlow.APIBase.API
         {
             try
             {
-                var res = new List<UserKPIDTO>();
                 var rules = _dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(p => p.global_rule_id).ToList();
                 return _dbcontext.CatalogKpi.Where(o => rules.Contains(o.global_rule_id_bsi)).Select(p => new ContractPartyDetailDTO()
                 {
@@ -1126,6 +1124,41 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
+        }
+
+        public List<UserKPIDTO> GetKPIDetails(List<int> KpiIds)
+        {
+            var res = new List<UserKPIDTO>();
+            string query = @"select r.rule_name, r.global_rule_id, m.sla_id,m.sla_name,c.customer_name,c.customer_id 
+                            from t_rules r 
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id 
+                            left join t_customers c on m.customer_id = c.customer_id 
+                            where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            and {0}";
+            var rules = QuantisUtilities.GetOracleGlobalRuleInQuery("r.global_rule_id", KpiIds);
+            query = string.Format(query, rules);
+            using (var command = _dbcontext.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = query;
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new UserKPIDTO()
+                        {
+                            Rule_Name = (string)result[0],
+                            Global_Rule_Id = Decimal.ToInt32((Decimal)result[1]),
+                            Sla_Id = Decimal.ToInt32((Decimal)result[2]),
+                            Sla_Name = (string)result[3],
+                            Customer_name = (string)result[4],
+                            Customer_Id = (int)result[5],
+                        });
+                    }
+                }
+            }
+            return res;
         }
     }
 }
