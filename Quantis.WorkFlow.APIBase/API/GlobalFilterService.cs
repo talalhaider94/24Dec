@@ -119,7 +119,9 @@ namespace Quantis.WorkFlow.APIBase.API
                             left join t_sla_versions s on r.sla_version_id = s.sla_version_id
                             left join t_slas m on m.sla_id = s.sla_id
                             left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
+                            left join t_catalog_kpis ck on ck.global_rule_id_bsi = r.global_rule_id
                             where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            and ck.enable=true
                             and uk.user_id =  :user_id
                             and m.sla_id in ({0})";
             query = string.Format(query, customerIds);
@@ -276,7 +278,9 @@ namespace Quantis.WorkFlow.APIBase.API
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join t_customers c on m.customer_id = c.customer_id
                                 left join t_user_kpis uk on r.global_rule_id = uk.global_rule_id
+                                left join t_catalog_kpis ck on ck.global_rule_id_bsi = r.global_rule_id
                                 where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                                and ck.enable=true
                                 and uk.user_id = :user_id
                                 and m.sla_id=:sla_id
                                 group by r.rule_name, r.global_rule_id";

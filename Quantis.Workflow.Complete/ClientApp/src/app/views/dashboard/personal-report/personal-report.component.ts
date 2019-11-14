@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
-import { DateTimeService } from '../../../_helpers';
+import { DateTimeService, exportChartButton } from '../../../_helpers';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
@@ -188,12 +188,14 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     chartOptions2 = {
@@ -230,12 +232,14 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     ///////////////////////////////////
@@ -276,7 +280,11 @@ export class PersonalReportComponent implements OnInit {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [],
         exporting: {
@@ -594,6 +602,14 @@ export class PersonalReportComponent implements OnInit {
                 this.dayChartOptions.title = {
                     text: this.personalReportForm.value.name    
                 }
+                this.dayChartOptions.tooltip = {
+                    enabled:true,
+                    crosshairs:true,
+                    formatter: function () {
+                        return this.series.name + '<br>'
+                        + 'y: <b>' + this.y + '</b>';
+                    }
+                }
                 this.dayChartOptions.xAxis = {
                     type: 'date',
                     categories: allChartLabels,
@@ -649,6 +665,14 @@ export class PersonalReportComponent implements OnInit {
 
         this.chartOptions.title = {
             text: this.personalReportForm.value.name    
+        }
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         }
         this.chartOptions.xAxis = {
             type: 'date',
@@ -737,6 +761,14 @@ export class PersonalReportComponent implements OnInit {
 
         this.chartOptions2.title = {
             text: this.personalReportForm.value.name    
+        }
+        this.chartOptions2.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
         }
         this.chartOptions2.xAxis = {
             type: 'date',

@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { DateTimeService, removeNullKeysFromObject } from '../../../_helpers';
+import { DateTimeService, removeNullKeysFromObject, exportChartButton } from '../../../_helpers';
 import { TreeViewComponent, NodeSelectEventArgs } from '@syncfusion/ej2-angular-navigations';
 // importing chart components
 import { DistributionByWorkflowComponent } from '../../../widgets/distribution-by-workflow/distribution-by-workflow.component';
@@ -565,9 +565,7 @@ export class PublicComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
 	};
 	
 	ngOnInit(): void {

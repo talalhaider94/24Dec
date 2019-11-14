@@ -7,7 +7,7 @@
         <div class="col-md-6">
           <a class="nav-link pointer-cursor text-gray" (click)="dashboardList()">Dashboards</a>
         </div>
-        <div class="col-md-6">
+        <div [hidden]="showPowerBI==0" class="col-md-6">
           <a class="nav-link pointer-cursor text-gray" (click)="powerBI()">Power BI</a>
         </div>
      </div>

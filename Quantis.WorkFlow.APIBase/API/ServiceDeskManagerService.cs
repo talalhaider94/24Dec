@@ -689,20 +689,30 @@ namespace Quantis.WorkFlow.APIBase.API
                     throw new Exception("No user Login to Get Tickets by user");
                 }
                 var userid = _dataService.GetUserIdByUserName(user.UserName);
-                var desc = GetTicketByID(dto.TicketId).Description;
-                if (desc.IndexOf("VALORE: [Non Calcolato]") == -1)
-                {
-                    throw new Exception("Description format saved in ticket is not correct");
-                }
+                string desc = GetTicketByID(dto.TicketId).Description;
+                int startindex=desc.IndexOf("VALORE:");
+                int endIndex=desc.IndexOf("\n",startindex);
+                string replaceableString = desc.Substring(startindex, endIndex- startindex);
+                var newViloreString = $"{dto.Value} {dto.Sign} {(dto.Type == 1 ? "[Compliant]":"[Non Compliant]")}";
                 var newstring = string.Format("VALORE: {0} {1} {2}", dto.Value, dto.Sign, dto.Type == 1 ? "[Compliant]" : "[Non Compliant]");
-                var newdesc = desc.Replace("VALORE: [Non Calcolato]", newstring).ToString();
+                var newdesc = desc.Replace(replaceableString, newstring).ToString();
 
                 var tickethandle = "cr:" + dto.TicketId;
                 LogIn();
-                var changeojb = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[2] { "description", newdesc }, new string[0]);
+                var changeojb = _sdmClient.updateObjectAsync(_sid, tickethandle, new string[4] { "description", newdesc, "zz_string2", newViloreString }, new string[0]);
                 changeojb.Wait();
                 var note = string.Format("Aggiornato il valore del ticket da parte dell’utente: {0}  Questa è la nota inserita: {1}", userid.Split('\\')[1], dto.Note);
                 _sdmClient.createActivityLogAsync(_sid, "", "cr:" + dto.TicketId, note, "LOG", 0, false).Wait();
+                var sdmFact = _dbcontext.SDMTicketFact.FirstOrDefault(o => o.ticket_id == dto.TicketId);
+                if (sdmFact != null)
+                {
+                    sdmFact.complaint = (newdesc.IndexOf("[Compliant]") != -1);
+                    sdmFact.notcalculated = (newdesc.IndexOf("[Non Calcolato]") != -1);
+                    sdmFact.notcomplaint = (newdesc.IndexOf("[Non Compliant]") != -1);
+                    sdmFact.result_value = newViloreString;
+                    _dbcontext.SaveChanges();
+                }
+                
             }
             catch (Exception e)
             {

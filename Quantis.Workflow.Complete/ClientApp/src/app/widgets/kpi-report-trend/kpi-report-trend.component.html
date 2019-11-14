@@ -18,6 +18,7 @@
     <i class="fa fa-cog"></i>
 </button>
 <div class="clearfix"></div>
+<br><br>
 <div class="spinner-grow text-primary" *ngIf="loading" role="status">
     <span class="sr-only">Loading...</span>
 </div>
@@ -37,6 +38,7 @@
     <p class="mb-0 font-12"><b>Contract Parties:</b> {{ contractParties1 }}</p>
     <p class="mb-0 font-12"><b>Contracts:</b> {{ contracts1 }}</p>
     <p class="mb-0 font-12"><b>KPI:</b> {{ kpi1 }}</p>
+    <p class="font-12 mb-0"><b>Periodo:</b> {{ period || 'N/A' }}</p>
     <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions1" [(update)]="chartUpdateFlag1"
         [oneToOne]="true" class="w-100p d-block">
     </highcharts-chart>
