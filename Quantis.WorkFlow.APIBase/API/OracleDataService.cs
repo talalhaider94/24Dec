@@ -339,7 +339,7 @@ r.rule_name,
                 return null;
             }
             string query = @"select temp.customer_id, temp.customer_name, temp.sla_id, temp.sla_name, temp.global_rule_name, temp.global_rule_id,
-                                psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce from (
+                                psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce,temp.RELATION,temp.unit_symbol from (
                                 select
                                 c.customer_id,
                                 c.customer_name,
@@ -352,6 +352,7 @@ r.rule_name,
                                 r.service_level_target,
                                 trf.yellow_thr as ESCALATION,
                                 h.DOMAIN_CATEGORY_RELATION AS RELATION,
+                                u.unit_symbol,
                                 r.RULE_PERIOD_TIME_UNIT,
                                 r.RULE_PERIOD_INTERVAL_LENGTH,
                                 h.DOMAIN_CATEGORY_ID,
@@ -367,6 +368,7 @@ r.rule_name,
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join T_GLOBAL_RULES gr on r.global_rule_id = gr.global_rule_id
                                 left join T_DOMAIN_CATEGORIES h on r.DOMAIN_CATEGORY_ID = h.DOMAIN_CATEGORY_ID
+                                left join t_units u on h.unit_id = u.unit_id
                                 left join t_customers c on c.customer_id = m.customer_id
                                 left join t_report_threshold_rules_flat trf on r.global_rule_id = trf.global_rule_id
                                 where s.status ='EFFECTIVE' AND m.sla_status ='EFFECTIVE'
@@ -456,6 +458,8 @@ r.rule_name,
                             Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                             Result = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
                             Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
+                            Operator = (reader[10] == DBNull.Value) ? "" : ((string)reader[10] == "NLT" ? ">" : "<"),
+                            Unit = (reader[11] == DBNull.Value) ? "" : (string)reader[11]
                         });
                     }
                     var result = basedtos.GroupBy(o => new { o.ContractId, o.ContractName }).Select(p => new LandingPageLevel1DTO()
@@ -472,14 +476,19 @@ r.rule_name,
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
                             Target = o.Target,
-                            Value = o.Actual
+                            Value = o.Actual,
+                            Unit = o.Unit,
+                            Operator = o.Operator
+                            
                         }).ToList(),
                         WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
                             Target = o.Target,
-                            Value = o.Actual
+                            Value = o.Actual,
+                            Unit = o.Unit,
+                            Operator = o.Operator
                         }).ToList(),
                     }).ToList();
                     return result.OrderBy(o => o.ContractName).ToList();
@@ -496,7 +505,7 @@ r.rule_name,
                 return null;
             }
             string query = @"select temp.customer_id, temp.customer_name, temp.sla_id, temp.sla_name, temp.global_rule_name, temp.global_rule_id,
-                                psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce from (
+                                psl.service_level_target_ce, psl.provided_ce, resultpsl, psl.deviation_ce,temp.RELATION,temp.unit_symbol from (
                                 select
                                 c.customer_id,
                                 c.customer_name,
@@ -509,6 +518,7 @@ r.rule_name,
                                 r.service_level_target,
                                 trf.yellow_thr as ESCALATION,
                                 h.DOMAIN_CATEGORY_RELATION AS RELATION,
+                                u.unit_symbol,
                                 r.RULE_PERIOD_TIME_UNIT,
                                 r.RULE_PERIOD_INTERVAL_LENGTH,
                                 h.DOMAIN_CATEGORY_ID,
@@ -524,6 +534,7 @@ r.rule_name,
                                 left join t_slas m on m.sla_id = s.sla_id
                                 left join T_GLOBAL_RULES gr on r.global_rule_id = gr.global_rule_id
                                 left join T_DOMAIN_CATEGORIES h on r.DOMAIN_CATEGORY_ID = h.DOMAIN_CATEGORY_ID
+                                left join t_units u on h.unit_id = u.unit_id
                                 left join t_customers c on c.customer_id = m.customer_id
                                 left join t_report_threshold_rules_flat trf on r.global_rule_id = trf.global_rule_id
                                 where s.status ='EFFECTIVE' AND m.sla_status ='EFFECTIVE'
@@ -613,6 +624,8 @@ r.rule_name,
                             Actual = (reader[7] == DBNull.Value) ? 0 : (double)reader[7],
                             Result = (reader[8] == DBNull.Value) ? "" : (string)reader[8],
                             Deviation = (reader[9] == DBNull.Value) ? 0 : (double)reader[9],
+                            Operator = (reader[10] == DBNull.Value) ? "" : ((string)reader[10]=="NLT"?">":"<"),
+                            Unit = (reader[11] == DBNull.Value) ? "" : (string)reader[11]
                         });
                     }
                     var result = basedtos.GroupBy(o => new { o.ContractId, o.ContractName }).Select(p => new LandingPageLevel1DTO()
@@ -629,14 +642,18 @@ r.rule_name,
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
                             Target = o.Target,
-                            Value = o.Actual
+                            Value = o.Actual,
+                            Unit = o.Unit,
+                            Operator = o.Operator
                         }).ToList(),
                         WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
                             Target = o.Target,
-                            Value = o.Actual
+                            Value = o.Actual,
+                            Unit = o.Unit,
+                            Operator = o.Operator
                         }).ToList(),
                     }).FirstOrDefault();
                     return result;
