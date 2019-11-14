@@ -47,7 +47,9 @@ export class UserProfilingComponent implements OnInit {
     };
 
   innerMostChildrenNodeIds = [];
+  organizationUnitsPresence = false;
   saveOrganization = [];
+  saveWFContract = [];
     gatheredData = {
         usersList: [],
         rolesList: [],
@@ -237,6 +239,7 @@ export class UserProfilingComponent implements OnInit {
   getContracts(data) {
     console.log(data)
     this.organizationLoading = true;
+    this.organizationUnitsPresence = false;
     this.contractsData = [];
     this.saveOrganization = [];
         this.selectedContractsObj = data;
@@ -250,8 +253,10 @@ export class UserProfilingComponent implements OnInit {
           for (let i = 0; i < data.length; i++) {
             if (data[i].workflow_day != -1) {
               this.saveOrganization[data[i].organization_unit] = data[i].workflow_day;
+              
             }
           }
+          if (data.length > 0) { this.organizationUnitsPresence = true; }
           this.selectedData.numOrganization = this.contractsData.length;
           console.log((this.contractsData))
           this.organizationLoading = false;

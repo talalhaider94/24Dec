@@ -128,7 +128,7 @@ export class AdminKpiComponent implements OnInit {
 
     kpiTableBodyData: any = [];
     allForms: any = [];
-
+  allOrganizationUnits: any = [];
     coloBtn(id: string): void {
         this.des = id;
     }
@@ -171,7 +171,8 @@ export class AdminKpiComponent implements OnInit {
                 }
             }
         };
-        this.getForms();
+      this.getForms();
+      this.getOrganizationUnits();
     }
 
     populateModalData(data) {
@@ -375,7 +376,12 @@ export class AdminKpiComponent implements OnInit {
     isNumber(val) {
         return !isNaN(val);
     }
-
+  getOrganizationUnits() {
+    this.apiService.GetOrganizationUnits().subscribe((data: any) => {
+      this.allOrganizationUnits = data;
+      console.log('OrganizationUnits ', data);
+    });
+  }
     table2csv(oTable, exportmode, tableElm) {
         var csv = 'sep=|\r\n';
         var headers = [];
