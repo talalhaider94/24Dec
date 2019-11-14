@@ -56,6 +56,7 @@ namespace Quantis.WorkFlow.APIBase
             services.AddTransient<IMappingService<DashboardDTO, DB_Dashboard>, DashboardMapper>();
             services.AddTransient<IMappingService<Services.DTOs.Dashboard.WidgetDTO, DB_Widget>, WidgetMapper>();
             services.AddTransient<IMappingService<DashboardWidgetDTO, DB_DashboardWidget>, DashboardWidgetMapper>();
+            services.AddTransient<IMappingService<PersonalReportDTO, T_PersonalReport>, PersonalReportMapper>();
         }
     }
 }

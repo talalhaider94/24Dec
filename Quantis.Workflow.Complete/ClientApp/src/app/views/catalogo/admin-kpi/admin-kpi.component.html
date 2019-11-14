@@ -65,8 +65,15 @@
                           <tr><th>CALCOLO</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
                           <tr><th>ID KPI</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
                           <tr><th>TITOLO BREVE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
-                          <tr><th>UNITA ORGANIZZATIVA</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.organization_unit"></td></tr>
-
+                          <tr>
+                            <th>UNITA ORGANIZZATIVA</th>
+                            <td colspan="2">
+                              <select class="form-control" [(ngModel)]="modalData.organization_unit">
+                                <option value="">Unità Organizativa: </option>
+                                <option *ngFor="let item of allOrganizationUnits " value="{{item.id}}">{{item.organization_unit}}</option>
+                              </select>
+                            </td>
+                          </tr>
                           <tr>
                             <th>CARICAMENTO</th>
                             <td colspan="2">

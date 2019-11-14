@@ -39,7 +39,7 @@
             <div class="col-md-7">
                 <div>
                     <label class="lbl-filter-user">
-                        Permessi: <strong class="selected-user-title"></strong>
+                        Contratti: <strong class="selected-user-title"></strong>
                     </label>
                 </div>
                 <div class="txt-filter-user-div">
@@ -70,7 +70,7 @@
     <div class="modal-dialog modal-md contractsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="approveModalLabel">WorkFlow - {{selectedData.contractName}} [{{selectedData.contractID}}]</h5>
+                <h5 class="modal-title" id="approveModalLabel">WorkFlow - {{selectedData.contractName}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideContractsModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -78,8 +78,18 @@
             <div class="modal-body">
                 <div class="table-responsive" style="background: #ffffff;">
                   <div class="role-permissions-lists col-md-12" style="padding:0px;">
-
                     <table class="table stripe text-center">
+                      <thead style="background-color: #20a8d8;color:white">
+                        <tr><th>Contratto</th><th>Workflow Day</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr >
+                          <td width="50%">{{selectedData.contractName}}</td>
+                          <td width="50%"><input type="number" class="form-control" [(ngModel)]="saveWFContract[selectedData.contractName]"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table class="table stripe text-center" *ngIf="organizationUnitsPresence">
                       <thead style="background-color: #20a8d8;color:white">
                         <tr><th>Unità Organizzativa</th><th>Workflow Day</th></tr>
                       </thead>
