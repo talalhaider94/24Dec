@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services';
-import { chartExportTranslations } from '../../../_helpers';
+import { chartExportTranslations, exportChartButton } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -183,9 +183,7 @@ export class BSIReportComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     chartOptions2 = {
@@ -225,9 +223,7 @@ export class BSIReportComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     ///////////////////////////////////
@@ -271,9 +267,7 @@ export class BSIReportComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     ngOnInit() {

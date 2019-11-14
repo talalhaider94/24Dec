@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
-import { DateTimeService } from '../../../_helpers';
+import { DateTimeService, exportChartButton } from '../../../_helpers';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
@@ -188,9 +188,7 @@ export class PersonalReportComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     chartOptions2 = {
@@ -230,9 +228,7 @@ export class PersonalReportComponent implements OnInit {
             crosshairs: true
         },
         series: [],
-        exporting: {
-            enabled: true
-        },
+        exporting: exportChartButton
     };
 
     ///////////////////////////////////
