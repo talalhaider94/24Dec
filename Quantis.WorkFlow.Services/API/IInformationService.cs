@@ -81,5 +81,6 @@ namespace Quantis.WorkFlow.Services.API
         List<ContractPartyContractDTO> GetContractsByContractParty(int contractPartyId, int userId);
         List<OrganizationUnitDTO> GetOrganizationUnits();
         List<OrganizationUnitDTO> GetOrganizationUnitsByContract(int contractid);
+        List<UserKPIDTO> GetKPIDetails(List<int> KpiIds);
     }
 }

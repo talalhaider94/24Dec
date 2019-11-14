@@ -38,6 +38,7 @@ namespace Quantis.WorkFlow.APIBase.API
         private readonly IMappingService<CatalogKpiDTO, T_CatalogKPI> _catalogKpiMapper;
         private readonly IMappingService<ApiDetailsDTO, T_APIDetail> _apiMapper;
         private readonly IMappingService<FormAttachmentDTO, T_FormAttachment> _fromAttachmentMapper;
+        private readonly IMappingService<PersonalReportDTO, T_PersonalReport> _personalReportMapper;
         private readonly IOracleDataService _oracleAPI;
         private readonly IConfiguration _configuration;
         private readonly ISMTPService _smtpService;
@@ -56,6 +57,7 @@ namespace Quantis.WorkFlow.APIBase.API
             IMappingService<CatalogKpiDTO, T_CatalogKPI> catalogKpiMapper,
             IMappingService<ApiDetailsDTO, T_APIDetail> apiMapper,
             IMappingService<FormAttachmentDTO, T_FormAttachment> fromAttachmentMapper,
+            IMappingService<PersonalReportDTO, T_PersonalReport> personalReportMapper,
             IConfiguration configuration,
             ISMTPService smtpService,
             IOracleDataService oracleAPI,
@@ -72,6 +74,7 @@ namespace Quantis.WorkFlow.APIBase.API
             _apiMapper = apiMapper;
             _oracleAPI = oracleAPI;
             _fromAttachmentMapper = fromAttachmentMapper;
+            _personalReportMapper = personalReportMapper;
             _configuration = configuration;
             _smtpService = smtpService;
             _dbcontext = context;
@@ -385,7 +388,6 @@ namespace Quantis.WorkFlow.APIBase.API
 
                     if (dto.id == 0)
                     {
-                        
                         var get_day_workflow = _dbcontext.CatalogKpi.FirstOrDefault(o => dto.sla_id_bsi == o.sla_id_bsi);
                         if (get_day_workflow != null)
                         {
@@ -460,7 +462,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 {
                     return new List<CatalogKpiDTO>();
                 }
-                var kpis = _dbcontext.CatalogKpi.Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).Include(o => o.GlobalRule).Include(o=>o.Form).Include(o => o.Sla).Where(o => globalruleIds.Contains(o.global_rule_id_bsi)).ToList();
+                var kpis = _dbcontext.CatalogKpi.Include(o => o.PrimaryCustomer).Include(o => o.SecondaryCustomer).Include(o => o.GlobalRule).Include(o => o.Form).Include(o => o.Sla).Where(o => globalruleIds.Contains(o.global_rule_id_bsi)).ToList();
                 return _catalogKpiMapper.GetDTOs(kpis.ToList());
             }
             catch (Exception e)
@@ -1477,7 +1479,7 @@ namespace Quantis.WorkFlow.APIBase.API
             try
             {
                 if (fakeUserID > 0) { UserID = fakeUserID; isSecurityMember = false; }
-                var isCsv = false; 
+                var isCsv = false;
                 if (type == "csvtracking" || type == "csvnotracking") { isCsv = true; }
                 var day_cutoffValue = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_restserver" && o.key == "day_cutoff");
                 int todayDay = Int32.Parse(DateTime.Now.ToString("dd"));
@@ -1490,7 +1492,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 string query = "";
                 if (isSecurityMember)
                 {
-                    if(isCsv)
+                    if (isCsv)
                     {
                         query = "select global_rule_name, global_rule_id, referent, monthtrigger, sla_name, file_name," +
                         " tracking_period, source_type, u.userid, u.ca_bsi_account, u.ca_bsi_user_id " +
@@ -1522,7 +1524,6 @@ namespace Quantis.WorkFlow.APIBase.API
                         "left join(select form_id, count(form_id) as attachments_count from t_form_attachments group by form_id) fa on f.form_id = fa.form_id " +
                         "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form ";
                     }
-
                 }
                 else
                 {
@@ -1619,7 +1620,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             }
                             else
                             {
-                                if(type != null && (type == "nottracking" || type == "csvnotracking"))
+                                if (type != null && (type == "nottracking" || type == "csvnotracking"))
                                 {
                                     string[] arraySplit = reader.GetString(reader.GetOrdinal("monthtrigger")).Split(",");
                                     if (!arraySplit.Contains(thisMonth))
@@ -1635,7 +1636,6 @@ namespace Quantis.WorkFlow.APIBase.API
                                         resultList.Add(form);
                                     }
                                 }
-                                
                             }
                         }
                         return resultList;
@@ -1681,7 +1681,6 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     return resultList;
                 }
-                
             }
             catch (Exception e)
             {
@@ -2003,6 +2002,7 @@ namespace Quantis.WorkFlow.APIBase.API
                 throw e;
             }
         }
+
         public List<XYZDTO> GetDayLevelKPIData(int globalRuleId, int month, int year)
         {
             var res = new List<XYZDTO>();
@@ -2035,7 +2035,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         res.Add(tar);
                         var pro = new XYZDTO();
                         pro.XValue = ((DateTime)reader[0]).ToString("dd/MM/yyyy");
-                        pro.YValue =(reader[2]==DBNull.Value)?null:(double?)reader[2];
+                        pro.YValue = (reader[2] == DBNull.Value) ? null : (double?)reader[2];
                         pro.ZValue = "Provided";
                         res.Add(pro);
                     }
@@ -2043,6 +2043,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return res;
         }
+
         public List<ATDtDeDTO> GetArchivedRawDataByKpiID(string id_kpi, string month, string year)
         {
             try
@@ -2311,14 +2312,14 @@ namespace Quantis.WorkFlow.APIBase.API
                 OwnerName = e.Owner.user_name,
                 QueryName = e.query_name,
                 ParameterCount = e.Parameters.Count,
-                IsEnabled=e.is_enable
+                IsEnabled = e.is_enable
             });
-            return dtos.OrderBy(o=>o.QueryName).ToList();
+            return dtos.OrderBy(o => o.QueryName).ToList();
         }
 
         public List<ReportQueryLVDTO> GetAssignedReportQueries(int userId)
         {
-            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).Where(o=>o.is_enable).ToList();
+            var entities = _dbcontext.ReportQueryAssignments.Include(o => o.Query).Where(o => o.user_id == userId).Select(o => o.Query).Where(o => o.is_enable).ToList();
             var dtos = entities.Select(e => new ReportQueryLVDTO()
             {
                 Id = e.id,
@@ -2341,7 +2342,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     Id = entity.id,
                     QueryName = entity.query_name,
                     QueryText = entity.query_text,
-                    OwnerId=entity.owner_id,
+                    OwnerId = entity.owner_id,
                     Parameters = entity.Parameters.Select(p => new KeyValuePairDTO()
                     {
                         Key = p.parameter_key,
@@ -2389,7 +2390,8 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
-        public void EnableDisableReportQuery(int id,bool isenable, int userId)
+
+        public void EnableDisableReportQuery(int id, bool isenable, int userId)
         {
             var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
             if (entity.owner_id == userId)
@@ -2398,11 +2400,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.SaveChanges();
             }
         }
+
         public string GetCatalogEmailByUser(int userId)
         {
             return _dbcontext.CatalogUsers.FirstOrDefault(o => o.ca_bsi_user_id == userId)?.mail;
         }
-        public int CreateBooklet(CreateBookletDTO dto,int userId)
+
+        public int CreateBooklet(CreateBookletDTO dto, int userId)
         {
             var sender = _cache.GetOrCreate("SMTP_from", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "notifier_from").value);
             var senderPassword = _cache.GetOrCreate("SMTP_senderPassword", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "sender_password").value);
@@ -2410,11 +2414,11 @@ namespace Quantis.WorkFlow.APIBase.API
             var serverHost = _cache.GetOrCreate("SMTP_serverHost", p => _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_notifier" && o.key == "server_host").value);
             var mailingList = new List<string>() { serverHost, senderUsername, senderPassword, sender, dto.RecipientEmail };
             string mainPath = _dbcontext.Configurations.FirstOrDefault(o => o.owner == "be_booklet" && o.key == "booklet_main_path").value;
-            var slas=_dbcontext.Slas.Where(o => dto.ContractIds.Contains(o.sla_id));
+            var slas = _dbcontext.Slas.Where(o => dto.ContractIds.Contains(o.sla_id));
             var listContract = new Dictionary<string, string>();
-            foreach(var sla in slas)
+            foreach (var sla in slas)
             {
-                listContract.Add(sla.current_version_id+"", sla.sla_name);
+                listContract.Add(sla.current_version_id + "", sla.sla_name);
             }
             var bookletDTO = new CreateBookletWebServiceDTO()
             {
@@ -2441,19 +2445,16 @@ namespace Quantis.WorkFlow.APIBase.API
                     respo = respo.Replace("\"", "");
                     _dbcontext.LogInformation($"The return from Create Booklet is not valid the input is:{dataAsString} and response as {respo}");
                     return 1;
-
                 }
                 else
                 {
                     throw new Exception("The return from Create Booklet is not valid the input is:" + dataAsString);
                 }
             }
-            
 
-
-
-                return 0;
+            return 0;
         }
+
         //public void DeleteReportQuery(int id, int userId)
         //{
         //    var entity = _dbcontext.ReportQueries.FirstOrDefault(o => o.id == id);
@@ -2486,22 +2487,22 @@ namespace Quantis.WorkFlow.APIBase.API
             }
         }
 
-        public object ExecuteReportQuery(ReportQueryDetailDTO dto,int userId)
+        public object ExecuteReportQuery(ReportQueryDetailDTO dto, int userId)
         {
             string query = dto.QueryText;
             foreach (var p in dto.Parameters)
             {
-                if(p.Key.Length > 0 && p.Value.Length > 0)
+                if (p.Key.Length > 0 && p.Value.Length > 0)
                 {
                     query = query.Replace(p.Key, p.Value);
                 }
             }
             if (query.Trim() == "$kpiCalculationStatus")
             {
-                var rules=_dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
-                var conditionString=QuantisUtilities.GetOracleGlobalRuleInQuery("g.global_rule_id", rules);
+                var rules = _dbcontext.UserKPIs.Where(o => o.user_id == userId).Select(o => o.global_rule_id).ToList();
+                var conditionString = QuantisUtilities.GetOracleGlobalRuleInQuery("g.global_rule_id", rules);
                 query = string.Format(WorkFlowConstants.KPI_Calculation_Status_Query, conditionString);
-                if(rules.Count == 0)
+                if (rules.Count == 0)
                 {
                     List<object> arrayerror = new List<object>();
                     arrayerror.Add(new { Errore = "Nessun KPI associato all'utente" });
@@ -2559,6 +2560,65 @@ namespace Quantis.WorkFlow.APIBase.API
             {
                 throw e;
             }
+        }
+
+        public List<PersonalReportLVDTO> GetPersonalReportsLV(int userId)
+        {
+            var reports = _dbcontext.PersonalReports.Where(o => o.user_id == userId);
+            var kpiIds = reports.Select(o => o.global_rule_id).ToList();
+            var kpisDetails=_infomationAPI.GetKPIDetails(kpiIds);
+            var dtos= (from r in reports
+                join d in kpisDetails on r.global_rule_id equals d.Global_Rule_Id
+                select new PersonalReportLVDTO()
+                {
+                    id = r.id,
+                    global_rule_id = r.global_rule_id,
+                    name = r.name,
+                    contract_name = d.Sla_Name,
+                    contract_party_name = d.Customer_name,
+                    kpi_name = d.Rule_Name
+
+                }).ToList();
+            return dtos;
+        }
+
+        public PersonalReportDTO GetPersonalReportDetail(int id)
+        {
+            var report = _dbcontext.PersonalReports.FirstOrDefault(o => o.id == id);
+            if (report == null)
+                return null;
+            var dto = _personalReportMapper.GetDTO(report);
+            return dto;
+        }
+
+        public void AddUpdatePersonalReport(PersonalReportDTO dto,int userId)
+        {
+            if (dto.id == 0)
+            {
+                var entity=new T_PersonalReport();
+                entity=_personalReportMapper.GetEntity(dto, entity);
+                entity.user_id = userId;
+                _dbcontext.PersonalReports.Add(entity);
+                _dbcontext.SaveChanges();
+
+            }
+            else
+            {
+                var entity = _dbcontext.PersonalReports.FirstOrDefault(o => o.id == dto.id);
+                entity = _personalReportMapper.GetEntity(dto, entity);
+                _dbcontext.SaveChanges();
+            }
+        }
+
+        public void DeletePersonalReport(int id)
+        {
+            var entity = _dbcontext.PersonalReports.FirstOrDefault(o => o.id == id);
+            if (entity != null)
+            {
+                _dbcontext.PersonalReports.Remove(entity);
+                _dbcontext.SaveChanges();
+            }
+            
         }
 
         #region privateFunctions
