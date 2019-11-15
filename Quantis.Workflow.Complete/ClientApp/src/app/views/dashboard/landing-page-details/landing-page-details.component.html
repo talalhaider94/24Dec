@@ -476,7 +476,7 @@
     </div>
 </div>
 
-<div id="compliantModal" bsModal #compliantModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+<div id="compliantModal" bsModal #compliantModal="bs-modal" class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="classInfo"
      aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -519,9 +519,9 @@
     </div>
 </div>
 
-<div id="nonCompliantModal" bsModal #nonCompliantModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+<div id="nonCompliantModal" bsModal #nonCompliantModal="bs-modal" class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="classInfo"
      aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="approveModalLabel">KPI non Compliants</h5>
@@ -535,13 +535,21 @@
                         <tr style="font-size:12px;color:white">
                             <th style="text-align:center;width: 60%">KPI</th>
                             <th style="text-align:center">TARGET</th>
-                            <th style="text-align:center">VALORE</th>
+                            <th style="text-align:center">CONTRACT PARTY</th>
+                            <th style="text-align:center; width:20%">CONTRACT</th>
+                            <th style="text-align:center">UNIT</th>
+                            <th style="text-align:center">OPERATOR</th>
+                            <th style="text-align:center">ESCALATION VALUE</th>
                         </tr>
                     </thead>
                     <tbody>
                             <tr *ngFor="let row of KpiNonCompliants; index as i">
                                     <td style="width:60%">{{row.kpiname}}</td>
                                     <td style="text-align:center">{{row.target}} <span [hidden]=true>{{i}}</span></td>
+                                    <td style="text-align:center">{{contractpartyname}} <span [hidden]=true>{{i}}</span></td>
+                                    <td style="text-align:center; width:20%">{{selectedContract}} <span [hidden]=true>{{i}}</span></td>
+                                    <td style="text-align:center">{{row.unit}} <span [hidden]=true>{{i}}</span></td>
+                                    <td style="text-align:center">{{row.operator}} <span [hidden]=true>{{i}}</span></td>
                                     <td style="text-align:center">{{row.value}} <span [hidden]=true>{{i}}</span></td>
                             </tr>
                     </tbody>

@@ -367,10 +367,11 @@ export class LandingPageDetailsComponent implements OnInit {
     }
 
     showNonCompliantModal(contract) {
+        this.selectedContract = contract;
         var kpi= this.orignalArray
         var filteredkpi = kpi.filter(a => a.contractname == contract)
         if (filteredkpi[0].noncomplaintkpis != 0){
-            this.KpiNonCompliants = filteredkpi[0].bestkpis;
+            this.KpiNonCompliants = filteredkpi[0].worstkpis;
             console.log(this.KpiNonCompliants,'non kpiCompiant')
         }
         this.rerender();
