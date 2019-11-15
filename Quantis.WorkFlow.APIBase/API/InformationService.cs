@@ -64,8 +64,9 @@ namespace Quantis.WorkFlow.APIBase.API
                     MemoryStream mStream = new MemoryStream();
                     mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
                     mStream.Position = 0;
-                    sftp.UploadFile(mStream, fileDTO.Name, true);
+                    sftp.UploadFile(mStream, fileDTO.Name.Replace(" ",""), true);
                     sftp.Disconnect();
+                    //log upload in db
                 } // sudo scp -i keypath utente@host file
             }
             catch (Exception e) {
@@ -485,7 +486,17 @@ namespace Quantis.WorkFlow.APIBase.API
         }
         public void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId, string organizationunit, int cutoffday, int workflowday)
         {
-            string select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
+            string select = "";
+            if(organizationunit != "-1")
+            {
+                select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
+
+            }
+            else
+            {
+                select = "select count(*) as count from t_organization_unit_workflow where sla_id = :sla_id AND organization_unit_id = -1";
+
+            }
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 string query = "";
@@ -502,11 +513,25 @@ namespace Quantis.WorkFlow.APIBase.API
 
                 if (numOfConfig == 0)
                 {
-                    query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit_id, workflow_day, cutoff_day) VALUES (:sla_id, (select id from t_organization_units where organization_unit = :organization_unit), :workflow_day, :cutoff_day)";
+                    if (organizationunit != "-1")
+                    {
+                        query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit_id, workflow_day, cutoff_day) VALUES (:sla_id, (select id from t_organization_units where organization_unit = :organization_unit), :workflow_day, :cutoff_day)";
+                    }
+                    else
+                    {
+                        query = "INSERT INTO t_organization_unit_workflow (sla_id, organization_unit_id, workflow_day, cutoff_day) VALUES (:sla_id, -1, :workflow_day, :cutoff_day)";
+                    }
                 }
                 else
                 {
-                    query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
+                    if (organizationunit != "-1")
+                    {
+                        query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit_id = (select id from t_organization_units where organization_unit = :organization_unit)";
+                    }
+                    else
+                    {
+                        query = "UPDATE t_organization_unit_workflow SET workflow_day = :workflow_day, cutoff_day = :cutoff_day WHERE sla_id = :sla_id AND organization_unit_id = -1";
+                    }
                 }
 
                 using (var con2 = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
@@ -520,8 +545,16 @@ namespace Quantis.WorkFlow.APIBase.API
                     command2.Parameters.AddWithValue(":cutoff_day", cutoffday);
                     _dbcontext.Database.OpenConnection();
                     var result2 = command2.ExecuteReader();
+                    string assignDays = "";
+                    if (organizationunit != "-1")
+                    {
+                        assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND organization_unit = (select id::text from t_organization_units where organization_unit = :organization_unit)";
+                    }
+                    else
+                    {
+                        assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND (organization_unit is null OR organization_unit = '')";
+                    }
 
-                    string assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND organization_unit = (select id::text from t_organization_units where organization_unit = :organization_unit)";
                     using (var conAssign = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                     {
                         conAssign.Open();
@@ -724,6 +757,36 @@ namespace Quantis.WorkFlow.APIBase.API
                         res.Add(new OrganizationUnitDTO(){
                             id = result.GetInt32(result.GetOrdinal("id")),
                             organization_unit = result.GetString(result.GetOrdinal("organization_unit")),
+                            sla_id = result.IsDBNull(result.GetOrdinal("sla_id")) ? -1 : result.GetInt32(result.GetOrdinal("sla_id")),
+                            workflow_day = result.IsDBNull(result.GetOrdinal("workflow_day")) ? -1 : result.GetInt32(result.GetOrdinal("workflow_day")),
+                            cutoff_day = result.IsDBNull(result.GetOrdinal("cutoff_day")) ? -1 : result.GetInt32(result.GetOrdinal("cutoff_day"))
+                        });
+                    }
+                }
+                return res;
+            }
+        }
+        public List<OrganizationUnitDTO> GetWorkflowByContract(int contractid)
+        {
+            var res = new List<OrganizationUnitDTO>();
+            string query = @"select * from t_organization_unit_workflow ow
+	                        where sla_id = :contractid and organization_unit_id = -1 
+							order by 1 asc";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":contractid", contractid);
+                _dbcontext.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        res.Add(new OrganizationUnitDTO()
+                        {
+                            id = result.GetInt32(result.GetOrdinal("id")),
+                            organization_unit = "-1",
                             sla_id = result.IsDBNull(result.GetOrdinal("sla_id")) ? -1 : result.GetInt32(result.GetOrdinal("sla_id")),
                             workflow_day = result.IsDBNull(result.GetOrdinal("workflow_day")) ? -1 : result.GetInt32(result.GetOrdinal("workflow_day")),
                             cutoff_day = result.IsDBNull(result.GetOrdinal("cutoff_day")) ? -1 : result.GetInt32(result.GetOrdinal("cutoff_day"))

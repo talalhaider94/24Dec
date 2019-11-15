@@ -338,5 +338,11 @@ namespace Quantis.WorkFlow.Complete.Controllers
             var user = HttpContext.User as AuthUser;
             return _infomationAPI.GetContractsByContractParty(contractPartyId, user.UserId);
         }
+        [HttpGet("GetWorkflowByContract")]
+        public List<OrganizationUnitDTO> GetWorkflowByContract(int contractId)
+        {
+            return _infomationAPI.GetWorkflowByContract(contractId);
+        }
+        
     }
 }
