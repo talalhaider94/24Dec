@@ -182,7 +182,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
     if (this.uploader.queue.length > 0) {
       this.uploader.queue.forEach((element, index) => {
         let file = element._file;
-        let uploadName = file.name;
+        let uploadName = file.name.replace(/ /g, '');
         if (this.loadingPattern != null && this.loadingPattern.length > 5) {
           let patternArray = this.loadingPattern.split('_');
           let patternExtArray = patternArray[2].split('.');
