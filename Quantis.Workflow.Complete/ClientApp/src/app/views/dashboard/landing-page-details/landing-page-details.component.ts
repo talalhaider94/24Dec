@@ -108,6 +108,7 @@ export class LandingPageDetailsComponent implements OnInit {
     thresholdvalue = 0;
     setThresholdValue = 0;
     gridLength = 0;
+    selectedContract;
     orignalArray:any = [];
     constructor(
         private apiService: ApiService,
@@ -350,6 +351,7 @@ export class LandingPageDetailsComponent implements OnInit {
     }
 
     showCompliantModal(contract) {
+        this.selectedContract = contract;
         var kpi= this.orignalArray
         var filteredkpi = kpi.filter(a => a.contractname == contract)
          if (filteredkpi[0].complaintkpis != 0){
