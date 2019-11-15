@@ -5,17 +5,18 @@ export * from './date-time.service';
 export * from './widgetsHelper';
 export * from './widget-helpers.service';
 export * from './file-helpers.service';
+export * from './chartHelpers';
 
 export function removeNullKeysFromObject(obj) {
-    const newObj = {};
-    Object.keys(obj).forEach(key => {
-      if (obj[key] !== 'date' && obj[key] && typeof obj[key] === "object") {
-        newObj[key] = removeNullKeysFromObject(obj[key]); // recurse
-      } else if (obj[key] !== null && obj[key] !== undefined) {
-        newObj[key] = obj[key].toString(); // copy value
-      }
-    });
-    return newObj;
+  const newObj = {};
+  Object.keys(obj).forEach(key => {
+    if (obj[key] !== 'date' && obj[key] && typeof obj[key] === "object") {
+      newObj[key] = removeNullKeysFromObject(obj[key]); // recurse
+    } else if (obj[key] !== null && obj[key] !== undefined) {
+      newObj[key] = obj[key].toString(); // copy value
+    }
+  });
+  return newObj;
 }
 
 export const chartExportTranslations = {
@@ -30,8 +31,8 @@ export const chartExportTranslations = {
 export const exportChartButton = {
   enabled: true,
   buttons: {
-  contextButton: {
+    contextButton: {
       menuItems: ['printChart', 'separator', 'downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG']
+    }
   }
-}
 }
