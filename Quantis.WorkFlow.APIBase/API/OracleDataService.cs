@@ -481,7 +481,7 @@ r.rule_name,
                             Operator = o.Operator
                             
                         }).ToList(),
-                        WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
@@ -646,7 +646,7 @@ r.rule_name,
                             Unit = o.Unit,
                             Operator = o.Operator
                         }).ToList(),
-                        WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Take(5).Select(o => new LandingPageKPIDTO()
+                        WorstKPIs = p.Where(q => q.Result == "non compliant").OrderBy(o => o.Deviation).Select(o => new LandingPageKPIDTO()
                         {
                             KPIID = o.GlobalRuleId,
                             KPIName = o.GlobalRuleName,
