@@ -39,7 +39,7 @@
         where s.sla_id          = sv.sla_id
         and sv.sla_version_id = r.sla_version_id
         and r.psl_rule_id     = t.rule_id
-        and sv.status         in ('EFFECTIVE', 'NOT_EFFECTIVE')
+        and sv.status         in ('EFFECTIVE')
         and s.sla_status      not in ('ARCHIVED','PURGING')
         and t.status          = 'ON'
         and t.is_period = 1
