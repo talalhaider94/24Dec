@@ -45,7 +45,7 @@
               </div>
               <div formGroupName="Properties">
                 <div class="form-group" *ngIf="barChartWidgetParameters.showcharttype">
-                  <label for="charttype">Typo di Grafico</label>
+                  <label for="charttype">Tipo di Grafico</label>
                   <!-- Chart Type -->
                   <select class="form-control" id="charttype" formControlName="charttype">
                     <option *ngFor="let type of barChartWidgetParameters.charttypes | keyvalue; let i = index"
