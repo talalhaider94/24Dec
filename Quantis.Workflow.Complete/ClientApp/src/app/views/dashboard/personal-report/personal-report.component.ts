@@ -51,6 +51,7 @@ export class PersonalReportComponent implements OnInit {
     reportData1;
     globalRuleId1;
     personalReportLength=0;
+    reportType='';
     fitroDataById: any = [
         {
             event_type_id: '   ',
@@ -90,6 +91,20 @@ export class PersonalReportComponent implements OnInit {
     dayChartUpdateFlag: boolean = true;
     highcharts = Highcharts;
     reportsDataLength;
+    AddUpdateObj = {
+        id: 0,
+        name: '',
+        global_rule_id: 0,
+        aggregation_option: '',
+        start_date: '',
+        end_date: '',
+        report_type: '',
+        modification_date: '',
+        global_rule2_id: 0,
+        aggregation_option2: '',
+        start_date2: '',
+        end_date2: '',
+    }
 
     dtOptions: any = {
         buttons: [
@@ -313,6 +328,7 @@ export class PersonalReportComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.reportType='normal';
         this.personalReportForm = this.formBuilder.group({
             name: [null, Validators.required],
             contractParties: [null, Validators.required],
@@ -360,7 +376,7 @@ export class PersonalReportComponent implements OnInit {
             aggregationoption: 'Select Aggregation'
         });
 
-        this.getPersonalReport();
+        this.getPersonalReports();
     }
 
     ngAfterViewInit() {
@@ -383,15 +399,57 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 
-    getPersonalReport() {
+    getPersonalReports() {
         this.loading = true;
-        // this.apiService.getPersonalReports()
-        this.apiService.getPersonalReport().subscribe((data) => {
+        this.apiService.getPersonalReports().subscribe((data) => {
             this.PersonalReportData = data;
-
             console.log('PersonalReportData -> ', data);
             this.rerender();
         });
+    }
+
+    getPersonalReport() {
+        this.apiService.getPersonalReport().subscribe((data) => {
+            console.log('PersonalReportData -> ', data);
+        });
+    }
+    
+    AddUpdatePersonalReport() {
+        this.AddUpdateObj.id=0;
+        this.AddUpdateObj.name=this.personalReportForm.value.name;
+        //this.AddUpdateObj.global_rule_id = this.personalReportForm.value.globalRuleId;
+        this.AddUpdateObj.global_rule_id = 37753;
+        this.AddUpdateObj.report_type = this.reportType;
+        this.AddUpdateObj.aggregation_option = this.personalReportForm.value.aggregationoption;
+        this.AddUpdateObj.start_date = this.personalReportForm.value.startDate;
+        this.AddUpdateObj.end_date = this.personalReportForm.value.endDate;
+        let date = new Date().toLocaleString()
+        this.AddUpdateObj.modification_date = date;
+
+        console.log(this.AddUpdateObj);
+
+        this.apiService.AddUpdatePersonalReport(this.AddUpdateObj).subscribe((data) => {
+            console.log('AddUpdatePersonalReport -> ', data);
+            this.toastr.success('Success', 'Record added successfully');
+            this.configModal.hide();
+            this.getPersonalReports();
+        }, error => {
+            this.toastr.error('Error', 'Error in adding record');
+        });
+    }
+
+    DeletePersonalReport(id) {
+        this.apiService.DeletePersonalReport(id).subscribe((data) => {
+            console.log('DeletePersonalReport -> ', data);
+            this.toastr.success('Success', 'Record deleted successfully');
+            this.getPersonalReports();
+        }, error => {
+            this.toastr.error('Error', 'Error in deleting record');
+        });
+    }
+
+    onCancel(dismissMethod: string): void {
+        console.log('Cancel ', dismissMethod);
     }
 
     showConfigModal() {
@@ -418,6 +476,7 @@ export class PersonalReportComponent implements OnInit {
     contractsDropDown(event) {
         this.modalLoading = true;
         this._dashboardService.getKPIs(0, +event.target.value).subscribe(kpis => {
+            console.log(kpis);
             this.personalReportForm.get('GlobalRuleId').enable();
             kpis.map(kpi => this.filterKpis.push(kpi));
             this.personalReportForm.patchValue({
@@ -463,68 +522,66 @@ export class PersonalReportComponent implements OnInit {
         });
     }
 
-    onPersonalReportFormSubmit() {
-        this.loading = true;
-        this.months.length = 0;
-        this.months2.length = 0;
-        this.isLoadedDati=0;
-        this.isLoadedDati2=0;
-        this.isDayDrill=0;
-        this.dayDrillPeriod='';
-        this.dayDrillPeriod2='';
+    onPersonalReportFormSubmit(event) {
+        if(event=='saveOnly'){
+            this.AddUpdatePersonalReport();
+        }else{
+            this.loading = true;
+            this.months.length = 0;
+            this.months2.length = 0;
+            this.isLoadedDati=0;
+            this.isLoadedDati2=0;
+            this.isDayDrill=0;
+            this.dayDrillPeriod='';
+            this.dayDrillPeriod2='';
 
-        console.log('Form values -> ',this.personalReportForm.value);
-        this.formArray = this.personalReportForm.value;
-        //console.log('Form values 2 -> ',this.formArray);
-        const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
-        this.reportData = this.personalReportForm.value;
-        this.reportData.startDate = dateRange.startDate;
-        this.reportData.endDate = dateRange.endDate;
-        this.personalReportLength=1;
-        this.apiService.GetPersonalReport(this.reportData).subscribe((data) => {
-            console.log('PersonalReportData -> ', data);
-            this.reportArray=data;
-            this.loading = false;
-            this.personaliModal.show();
-            this.getPeriod();
-            this.showHighChartsData(data);
-        });
-        if(this.groupReportCheck == true){
-            let personalReportForm1 = {
-                name:'',
-                aggregationoption:'',
-                contractParties:'',
-                contracts:'',
-                GlobalRuleId:''
-            }
-            this.personalReportLength=2;
-            personalReportForm1.name = this.personalReportForm.value.name;
-            personalReportForm1.aggregationoption = this.personalReportForm.value.aggregationoption;
-            personalReportForm1.contractParties = this.personalReportForm.value.contractParties1;
-            personalReportForm1.contracts = this.personalReportForm.value.contracts1;
-            personalReportForm1.GlobalRuleId = this.personalReportForm.value.GlobalRuleId1;
-            this.globalRuleId1 = personalReportForm1.GlobalRuleId;
-            // delete this.personalReportForm.value.contractParties1;
-            // delete this.personalReportForm.value.contracts1;
-            // delete this.personalReportForm.value.GlobalRuleId1;
-
+            console.log('Form values -> ',this.personalReportForm.value);
+            this.formArray = this.personalReportForm.value;
             
-            //this.formArray = this.personalReportForm.value;
-            console.log('Form values 2 -> ',personalReportForm1);
-           // const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
-            this.reportData1 = personalReportForm1;
-            this.reportData1.startDate = dateRange.startDate;
-            this.reportData1.endDate = dateRange.endDate;
-            this.apiService.GetPersonalReport(this.reportData1).subscribe((data) => {
-                console.log('PersonalReportData2 -> ', data);
+            const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
+            this.reportData = this.personalReportForm.value;
+            this.reportData.startDate = dateRange.startDate;
+            this.reportData.endDate = dateRange.endDate;
+            this.personalReportLength=1;
+            this.apiService.GetPersonalReport(this.reportData).subscribe((data) => {
+                console.log('PersonalReportData -> ', data);
                 this.reportArray=data;
                 this.loading = false;
-                //this.personaliModal.show();
-                //this.getPeriod();
-                this.showHighChartsData2(data);
+                this.personaliModal.show();
+                this.getPeriod();
+                this.showHighChartsData(data);
             });
+            if(this.groupReportCheck == true){
+                this.reportType='group';
+                let personalReportForm1 = {
+                    name:'',
+                    aggregationoption:'',
+                    contractParties:'',
+                    contracts:'',
+                    GlobalRuleId:''
+                }
+                this.personalReportLength=2;
+                personalReportForm1.name = this.personalReportForm.value.name;
+                personalReportForm1.aggregationoption = this.personalReportForm.value.aggregationoption;
+                personalReportForm1.contractParties = this.personalReportForm.value.contractParties1;
+                personalReportForm1.contracts = this.personalReportForm.value.contracts1;
+                personalReportForm1.GlobalRuleId = this.personalReportForm.value.GlobalRuleId1;
+                this.globalRuleId1 = personalReportForm1.GlobalRuleId;
+                //console.log('Form values 2 -> ',personalReportForm1);
+            // const dateRange = this._dateTimeService.WidgetDateAndTime(this.personalReportForm.value.startDate,this.personalReportForm.value.endDate, true);
+                this.reportData1 = personalReportForm1;
+                this.reportData1.startDate = dateRange.startDate;
+                this.reportData1.endDate = dateRange.endDate;
+                this.apiService.GetPersonalReport(this.reportData1).subscribe((data) => {
+                    console.log('PersonalReportData2 -> ', data);
+                    this.reportArray=data;
+                    this.loading = false;
+                    //this.getPeriod();
+                    this.showHighChartsData2(data);
+                });      
+            }
+            this.AddUpdatePersonalReport();
         }
-        //this.getReportDetails(reportId); 
     }
 
     // getReportDetails(reportId){

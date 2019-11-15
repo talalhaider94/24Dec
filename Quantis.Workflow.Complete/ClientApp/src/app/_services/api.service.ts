@@ -239,6 +239,10 @@ export class ApiService {
         const getCSVEndPoint = `${environment.API_URL}/information/GetUserProfilingCSV`;
         return this.http.get(getCSVEndPoint);
     }
+    getPersonalReports(): Observable<any> {
+        const getPREndPoint = `${environment.API_URL}/data/GetPersonalReportsLV`;
+        return this.http.get(getPREndPoint);
+    }
     getPersonalReport(): Observable<any> {
         const getPREndPoint = `${environment.API_URL}/data/GetPersonalReportDetail?id=1`;
         return this.http.get(getPREndPoint);
@@ -395,12 +399,19 @@ export class ApiService {
       const getOrganization = `${environment.API_URL}/information/GetOrganizationUnits`;
       return this.http.get(getOrganization);
     }
-  GetOrganizationUnitsByContract(contractid): Observable<any> {
-    const getOrganization = `${environment.API_URL}/information/GetOrganizationUnitsByContract?contractid=${contractid}`;
-    return this.http.get(getOrganization);
-  }
-  AssignCuttoffWorkflowDayByContractIdAndOrganization(contractid, organizationunit, daycuttoff, workflowday): Observable<any> {
-    const AssignWorkflowEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractIdAndOrganization?contractid=${contractid}&organizationunit=${organizationunit}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
-      return this.http.get(AssignWorkflowEndPoint);
+    GetOrganizationUnitsByContract(contractid): Observable<any> {
+        const getOrganization = `${environment.API_URL}/information/GetOrganizationUnitsByContract?contractid=${contractid}`;
+        return this.http.get(getOrganization);
+    }
+    AssignCuttoffWorkflowDayByContractIdAndOrganization(contractid, organizationunit, daycuttoff, workflowday): Observable<any> {
+        const AssignWorkflowEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractIdAndOrganization?contractid=${contractid}&organizationunit=${organizationunit}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
+        return this.http.get(AssignWorkflowEndPoint);
+    }
+    AddUpdatePersonalReport(obj) {
+        return this.http.post(`${environment.API_URL}/data/AddUpdatePersonalReport`, obj);
+    }
+    DeletePersonalReport(id): Observable<any> {
+        const DeletePersonalReportEP = `${environment.API_URL}/data/DeletePersonalReport?id=${id}`;
+        return this.http.get(DeletePersonalReportEP);
     }
 }
