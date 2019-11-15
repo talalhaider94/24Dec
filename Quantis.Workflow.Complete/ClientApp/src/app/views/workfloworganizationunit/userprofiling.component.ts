@@ -47,7 +47,9 @@ export class UserProfilingComponent implements OnInit {
     };
 
   innerMostChildrenNodeIds = [];
+  organizationUnitsPresence = false;
   saveOrganization = [];
+  saveWFContract = [];
     gatheredData = {
         usersList: [],
         rolesList: [],
@@ -55,6 +57,7 @@ export class UserProfilingComponent implements OnInit {
     }
     permissionsData: any;
     contractsData: any;
+    workflowContractData: any;
     kpisData: any;
     kpisId = [];
     storedIds = [];
@@ -237,14 +240,29 @@ export class UserProfilingComponent implements OnInit {
   getContracts(data) {
     console.log(data)
     this.organizationLoading = true;
+    this.organizationUnitsPresence = false;
     this.contractsData = [];
+    this.workflowContractData = [];
     this.saveOrganization = [];
+    this.saveWFContract = [];
         this.selectedContractsObj = data;
         this.selectedData.permid = data.id;
     this.selectedData.contractParty = data.name;
     this.selectedData.contractName = data.contractname;
     this.selectedData.contractID = data.contractid;
-        console.log('getContracts ==> ', this.selectedData.userid, this.selectedData.permid);
+    console.log('getContracts ==> ', this.selectedData.userid, this.selectedData.permid);
+    this.apiService.GetWorkflowByContract(data.contractid).subscribe(data => {
+      this.workflowContractData = data;
+      console.log('wf', data[0].workflow_day)
+      if (data.length > 0) {
+        if (data[0].workflow_day > 0) {
+          this.saveWFContract[data[0].sla_id] = data[0].workflow_day;
+        } else {
+          this.saveWFContract[data[0].sla_id] = null;
+        }
+        
+      }
+    })
         this.apiService.GetOrganizationUnitsByContract(data.contractid).subscribe(data => {
           this.contractsData = data;
           for (let i = 0; i < data.length; i++) {
@@ -252,6 +270,7 @@ export class UserProfilingComponent implements OnInit {
               this.saveOrganization[data[i].organization_unit] = data[i].workflow_day;
             }
           }
+          if (data.length > 0) { this.organizationUnitsPresence = true; }
           this.selectedData.numOrganization = this.contractsData.length;
           console.log((this.contractsData))
           this.organizationLoading = false;
@@ -402,6 +421,16 @@ export class UserProfilingComponent implements OnInit {
     }
     if (organizationCompiled == this.selectedData.numOrganization) {
       if (allFieldsFilled = true) {
+        if (this.saveWFContract[this.selectedData.contractID] >= 0) {
+          this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, '-1', -1, this.saveWFContract[this.selectedData.contractID]).subscribe(data => {
+            //this.toastr.success('Saved', 'Success');
+            this.toastr.success('Successo', 'Configurazione salvata');
+            this.hideContractsModal();
+          }, error => {
+            //this.toastr.error('Not Saved', 'Error');
+            this.toastr.error('Errore', 'Non tutte le configurazioni sono state salvate');
+          });
+        }
         for (let i = 0; i < keys.length; i++) {
           console.log('sla: ' + this.selectedData.contractID, 'organization: ' + keys[i], 'workflowDay: ' + this.saveOrganization[keys[i]])
           this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, keys[i], -1, this.saveOrganization[keys[i]]).subscribe(data => {

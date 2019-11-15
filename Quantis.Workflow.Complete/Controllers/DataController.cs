@@ -556,5 +556,32 @@ namespace Quantis.WorkFlow.Controllers
                 return StatusCode(StatusCodes.Status406NotAcceptable, json);
             }
         }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_CUSTOM)]
+        [HttpGet("GetPersonalReportsLV")]
+        public List<PersonalReportLVDTO> GetPersonalReportsLV()
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            return _dataAPI.GetPersonalReportsLV(usr.UserId);
+
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_CUSTOM)]
+        [HttpGet("GetPersonalReportDetail")]
+        public PersonalReportDTO GetPersonalReportDetail(int id)
+        {
+            return _dataAPI.GetPersonalReportDetail(id);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_CUSTOM)]
+        [HttpPost("AddUpdatePersonalReport")]
+        public void AddUpdatePersonalReport([FromBody]PersonalReportDTO dto)
+        {
+            var usr = (HttpContext.User) as AuthUser;
+            _dataAPI.AddUpdatePersonalReport(dto,usr.UserId);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_REPORT_CUSTOM)]
+        [HttpGet("DeletePersonalReport")]
+        public void DeletePersonalReport(int id)
+        {
+            _dataAPI.DeletePersonalReport(id);
+        }
     }
 }

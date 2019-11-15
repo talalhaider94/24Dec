@@ -193,7 +193,7 @@
 
                     <button (click)="fireEvent()" style="margin-left:20%">Esporta CSV</button>
                     <span class="event-type-wrapper">
-                      <label>Show event type</label>
+                      <label>Mostra Event Type</label>
                       <input type="checkbox" name="showevent" [checked]="showEventCol" (change)="showEventCol = !showEventCol"/>
                     </span>
                 </div>
@@ -201,7 +201,7 @@
                     <table id="classTable" class="table table-bordered" #table>
                         <thead style="background: #20a8d8; color:white">
                             <tr>
-                                <th style="text-align:center"></th>
+                                <!--th style="text-align:center"></th-->
                                 <th style="text-align:center">create date</th>
                                 <th style="text-align:center">modify date</th>
                                 <th style="text-align:center">raw data id</th>
@@ -222,7 +222,7 @@
                             </tr>
                             <tr *ngFor="let rec of fitroDataById | filter: filter  | paginate: { itemsPerPage: 100, currentPage: p }; index as i">
 
-                                <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td>
+                                <!--td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td-->
                                 <td style="text-align:center">{{rec.create_date }}</td>
                                 <td style="text-align:center">{{rec.modify_date }}</td>
                                 <td style="text-align:center">{{rec.raw_data_id}}</td>

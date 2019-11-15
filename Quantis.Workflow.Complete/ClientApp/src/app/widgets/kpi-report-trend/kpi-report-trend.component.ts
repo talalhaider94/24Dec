@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { DashboardService, EmitterService } from '../../_services';
-import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportChartButton } from '../../_helpers';
+import { DateTimeService,
+     WidgetHelpersService, 
+     chartExportTranslations, 
+     exportChartButton,
+     formatDataLabelForNegativeValues } from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -81,7 +85,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         yAxis: {
             title: {
                 text: '#'
-            }
+            },
+            min: 0
         },
         plotOptions: {
             column: {
@@ -89,17 +94,12 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             },
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 }
             }
-            //   column: {
-            //     zones: [{
-            //       value: 10, // Values up to 10 (not including) ...
-            //       color: 'green' // ... have the color blue.
-            //     }, {
-            //       color: 'red' // Values from 10 (including) and up have the color red
-            //     }]
-            //   }
         },
         tooltip: {
             enabled: true,
@@ -136,7 +136,10 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             },
             series: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+					}
                 }
             }
         },
@@ -151,7 +154,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         yAxis: {
             title: {
                 text: '#'
-            }
+            },
+            min: 0
         },
         series: [
             {

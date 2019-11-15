@@ -12,26 +12,26 @@
                     <th>Report Name</th>
                     <th>Contract Party</th>
                     <th>Contract</th>
-                    <th>kpi</th>
-                    <th>Type</th>
-                    <th>Modification Date</th>
+                    <th style="width:30%">kpi</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr *ngFor="let row of formArray; index as i">
-                    <td>{{row.name}}</td>
-                    <td>{{row.contractParties}}</td>
-                    <td>{{row.contracts}}</td>
-                    <td>{{row.GlobalRuleId}}</td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                    </td>
-                </tr> -->
+              <tr *ngFor="let row of PersonalReportData; index as i">
+                  <td>{{row.name}}</td>
+                  <td>{{row.contract_party_name}}</td>
+                  <td>{{row.contract_name}}</td>
+                  <td style="width:30%">{{row.kpi_name}}</td>
+                  <td>
+                      <button class="btn btn-primary btn-sm pointer-cursor" (click)="editReport(row.id)">
+                          <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-danger" [swal]="{title: 'Conferma', text: 'Eliminare il Report Personalli?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
+                      (confirm)="DeletePersonalReport(row.id)" (cancel)="onCancel($event)" style="font-size:10px">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+              </tr>
             </tbody>
         </table>
     </div>
@@ -48,7 +48,7 @@
                 
                 <div class="modal-body">
                     <!-- create dashboard model body start -->
-                    <form [formGroup]="personalReportForm" (ngSubmit)="onPersonalReportFormSubmit()">
+                    <form [formGroup]="personalReportForm" (ngSubmit)="onPersonalReportFormSubmit($event)">
                         <div class="text-center" *ngIf="modalLoading">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                         </div>
@@ -152,9 +152,10 @@
                     <div class="row">
                         <div class="col-6">
                             <!-- [disabled]="formLoading" -->
-                            <button type="submit" class="btn-sm btn btn-primary"><span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva
-                                <!-- <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva -->
-                            </button>
+                            <button class="btn-sm btn btn-success" type="button" name="saveOnly" (click)="onPersonalReportFormSubmit('saveOnly')">Salva</button>
+                            <button type="submit" class="btn-sm btn btn-primary"><span *ngIf="loading" class="fa fa-spinner fa-spin"></span> Salva & Apri
+                              <!-- <span *ngIf="formLoading" class="fa fa-spinner fa-spin"></span> Salva -->
+                          </button>
                         </div>
                     </div>
                 </form>

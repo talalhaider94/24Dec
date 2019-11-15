@@ -79,7 +79,10 @@ namespace Quantis.WorkFlow.Services.API
         void AssignCuttoffWorkflowDayByContractIdAndOrganization(int contractId,string organizationunit, int daycuttoff, int workflowday);
         List<ContractPartyContractDTO> GetContractsWithContractParties(int userId);
         List<ContractPartyContractDTO> GetContractsByContractParty(int contractPartyId, int userId);
+        List<OrganizationUnitDTO> GetWorkflowByContract(int contractId);
+        
         List<OrganizationUnitDTO> GetOrganizationUnits();
         List<OrganizationUnitDTO> GetOrganizationUnitsByContract(int contractid);
+        List<UserKPIDTO> GetKPIDetails(List<int> KpiIds);
     }
 }

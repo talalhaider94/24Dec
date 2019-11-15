@@ -60,6 +60,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_ReportQueryParameter> ReportQueryParameters { get; set; }
         public DbSet<T_ReportQueryAssignment> ReportQueryAssignments { get; set; }
         public DbSet<T_UserSetting> UserSettings { get; set; }
+        public DbSet<T_PersonalReport> PersonalReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -108,6 +109,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_ReportQueryParameter_Configuration());
             builder.ApplyConfiguration(new T_ReportQueryAssignment_Configuration());
             builder.ApplyConfiguration(new T_UserSetting_Configuration());
+            builder.ApplyConfiguration(new T_PersonalReport_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -159,6 +161,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_ReportQueryParameter>();
             updateUpdatedProperty<T_ReportQueryAssignment>();
             updateUpdatedProperty<T_UserSetting>();
+            updateUpdatedProperty<T_PersonalReport>();
             return base.SaveChanges();
         }
 
