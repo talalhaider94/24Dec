@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
-import { chartExportTranslations, formatDataLabelForNegativeValues } from '../../../_helpers';
+import { chartExportTranslations, formatDataLabelForNegativeValues, getDistinctArray } from '../../../_helpers';
 declare var $;
 var $this;
 
@@ -670,7 +670,7 @@ export class PersonalReportComponent implements OnInit {
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
                                 
-                let allChartLabels = chartArray.map(label => label.xvalue);
+                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
                 
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
