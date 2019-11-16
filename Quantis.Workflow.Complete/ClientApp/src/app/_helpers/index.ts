@@ -36,3 +36,13 @@ export const exportChartButton = {
     }
   }
 }
+
+export function getDistinctArray(arr) {
+  let dups = {};
+  return arr.filter(function(el) {
+      var hash = el.valueOf();
+      var isDup = dups[hash];
+      dups[hash] = true;
+      return !isDup;
+  });
+}
