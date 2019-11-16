@@ -19,6 +19,8 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Nome</th>
+                                    <th>Data di Creazione</th>
+                                    <th>Data di Modifica</th>
                                     <th>Azione</th>
                                 </tr>
                             </thead>
@@ -29,6 +31,8 @@
                                 <tr *ngFor="let dashboard of dashboards; let i = index">
                                     <td>{{ i+1 }}</td>
                                     <td>{{ dashboard.name }}</td>
+                                    <td>{{ getFormatDate(dashboard.createdon)}}</td>
+                                    <td>{{ getFormatDate(dashboard.modifiedDate)}}</td>
                                     <td>
                                         <button *ngIf="dashboard.isactive && dashboard.id==-1"
                                                 [routerLink]="['/dashboard/landingpage']"
