@@ -403,6 +403,10 @@ export class ApiService {
         const getOrganization = `${environment.API_URL}/information/GetOrganizationUnitsByContract?contractid=${contractid}`;
         return this.http.get(getOrganization);
     }
+    GetWorkflowByContract(contractid): Observable<any> {
+      const getOrganization = `${environment.API_URL}/information/GetWorkflowByContract?contractid=${contractid}`;
+      return this.http.get(getOrganization);
+    }
     AssignCuttoffWorkflowDayByContractIdAndOrganization(contractid, organizationunit, daycuttoff, workflowday): Observable<any> {
         const AssignWorkflowEndPoint = `${environment.API_URL}/information/AssignCuttoffWorkflowDayByContractIdAndOrganization?contractid=${contractid}&organizationunit=${organizationunit}&daycuttoff=${daycuttoff}&workflowday=${workflowday}`;
         return this.http.get(AssignWorkflowEndPoint);

@@ -89,6 +89,9 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             min: 0
         },
         plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
             series: {
                 dataLabels: {
                     enabled: true,
@@ -128,6 +131,9 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             text: 'KPI Report Trend'
         },
         plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
             series: {
                 dataLabels: {
                     enabled: true,

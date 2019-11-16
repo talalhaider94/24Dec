@@ -185,6 +185,9 @@ export class PersonalReportComponent implements OnInit {
             min: 0
         },
         plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
             series: {
                 dataLabels: {
                     enabled: true,
@@ -233,6 +236,9 @@ export class PersonalReportComponent implements OnInit {
             }
         },
         plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
             series: {
                 dataLabels: {
                     enabled: true,
@@ -282,6 +288,9 @@ export class PersonalReportComponent implements OnInit {
             min: 0
         },
         plotOptions: {
+            column: {
+                stacking: 'normal'
+            },
             series: {
                 dataLabels: {
                     enabled: true,
