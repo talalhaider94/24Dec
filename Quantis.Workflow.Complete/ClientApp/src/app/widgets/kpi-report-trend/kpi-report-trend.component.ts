@@ -4,7 +4,8 @@ import { DateTimeService,
      WidgetHelpersService, 
      chartExportTranslations, 
      exportChartButton,
-     formatDataLabelForNegativeValues } from '../../_helpers';
+     formatDataLabelForNegativeValues, 
+     updateChartLabelStyle1} from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -93,12 +94,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return formatDataLabelForNegativeValues(this.y);
-					}
-                }
+                dataLabels: updateChartLabelStyle1()
             }
         },
         tooltip: {
@@ -135,12 +131,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return formatDataLabelForNegativeValues(this.y);
-					}
-                }
+                dataLabels: updateChartLabelStyle1()
             }
         },
         tooltip: {

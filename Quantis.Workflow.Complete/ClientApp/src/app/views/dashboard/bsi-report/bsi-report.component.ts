@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services';
-import { chartExportTranslations, exportChartButton, formatDataLabelForNegativeValues } from '../../../_helpers';
+import { chartExportTranslations, exportChartButton, formatDataLabelForNegativeValues, updateChartLabelStyle } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -551,9 +551,7 @@ export class BSIReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions.series[2] = {
             type: 'scatter',
@@ -652,9 +650,7 @@ export class BSIReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle(),
         };
         this.chartOptions2.series[2] = {
             type: 'scatter',
