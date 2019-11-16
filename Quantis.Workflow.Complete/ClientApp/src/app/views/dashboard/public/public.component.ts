@@ -23,7 +23,7 @@ import { KpiStatusSummaryComponent } from '../../../widgets/kpi-status-summary/k
 import { FreeFormReportsWidgetComponent } from '../../../widgets/free-form-reports-widget/free-form-reports-widget.component';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
-import { chartExportTranslations } from '../../../_helpers';
+import { chartExportTranslations,getDistinctArray } from '../../../_helpers';
 import * as Highcharts from 'highcharts';
 
 @Component({
@@ -524,7 +524,7 @@ export class PublicComponent implements OnInit {
 	};
 
 	componentCreated(compRef: ComponentRef<any>) {
-	}
+	} 
 
 	dayChartOptions = {
         lang: chartExportTranslations,
@@ -1346,7 +1346,7 @@ export class PublicComponent implements OnInit {
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
                 
-                let allChartLabels = chartArray.map(label => label.xvalue);
+                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
                 
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
