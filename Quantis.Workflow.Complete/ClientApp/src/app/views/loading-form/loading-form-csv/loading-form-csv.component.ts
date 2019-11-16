@@ -11,6 +11,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, retryWhen } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-loading-form-csv',
@@ -177,12 +178,12 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
       this.fileUploadYear.push(year);
     });
   }
-
+  
   fileUploadUI() {
     if (this.uploader.queue.length > 0) {
       this.uploader.queue.forEach((element, index) => {
         let file = element._file;
-        let uploadName = file.name.replace(/ /g, '');
+        let uploadName = file.name;
         if (this.loadingPattern != null && this.loadingPattern.length > 5) {
           let patternArray = this.loadingPattern.split('_');
           let patternExtArray = patternArray[2].split('.');
@@ -216,6 +217,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
       this.toastr.info('Nessun documento da caricare');
     }
   }
+  
 
   _getUploadedFile(file, month, year) {
     this.fileUploading = true;

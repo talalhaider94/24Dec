@@ -47,7 +47,7 @@
         and r.global_rule_id  = g.global_rule_id
         and {0}
         and s.CUSTOMER_ID=cu.CUSTOMER_ID) t order by t.min_time , t.rule_tu_modify_date)
-        order by 1,2,3,4";
+        order by 4 DESC";
 
 
     }

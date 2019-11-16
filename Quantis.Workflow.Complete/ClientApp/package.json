@@ -71,6 +71,7 @@
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.5",
     "jszip": "^3.2.1",
+    "material-design-icons-iconfont": "^5.0.1",
     "moment": "^2.24.0",
     "mutationobserver-shim": "^0.3.3",
     "ng-dynamic-component": "^5.0.0",
