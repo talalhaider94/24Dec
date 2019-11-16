@@ -78,8 +78,8 @@
         public const string VIEW_BOOKLET = "VIEW_BOOKLET";
         public const string VIEW_WORKFLOW_ADMIN = "VIEW_WORKFLOW_ADMIN";
         public const string VIEW_DEBUG = "VIEW_DEBUG";
-        public const string VIEW_STANDARD_DASHBOARD = "VIEW_STANDARD_DASHBOARD";
-        public const string VIEW_REPORT_QUERIES = "VIEW_REPORT_QUERIES";
+        public const string VIEW_CONFIGURATION_STANDARD_DASHBOARD = "VIEW_CONFIGURATION_STANDARD_DASHBOARD";
+        public const string VIEW_FREE_FORM_REPORT = "VIEW_FREE_FORM_REPORT";
         public const string IMPORT_FREE_FORM_REPORT = "IMPORT_FREE_FORM_REPORT";
         public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
         public const string VIEW_REPORT_CUSTOM = "VIEW_REPORT_CUSTOM";
