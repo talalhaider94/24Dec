@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { DashboardService, AuthService } from '../../../_services';
+import { DateTimeService } from '../../../_helpers'
 
 @Component({
     selector: 'app-dashboard-lists',
@@ -53,7 +54,8 @@ export class DashboardListsComponent implements OnInit {
         private dashboardService: DashboardService,
         private toastr: ToastrService,
         private authService: AuthService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private dateTime: DateTimeService
     ) { }
 
     get f() { return this.createDashboardForm.controls; }
@@ -98,6 +100,7 @@ export class DashboardListsComponent implements OnInit {
         this.loading = true;
         this.dashboardService.getDashboards().subscribe(dashboards => {
             this.dashboards = dashboards;
+            debugger
             this.loading = false;
             this.rerender();
         }, error => {
@@ -105,6 +108,10 @@ export class DashboardListsComponent implements OnInit {
             this.toastr.error('Error while loading dashboards');
             this.loading = false;
         });
+    }
+
+    getFormatDate(date){
+        return this.dateTime.convertUtcToDateTime(date)
     }
 
     createDashboard() {

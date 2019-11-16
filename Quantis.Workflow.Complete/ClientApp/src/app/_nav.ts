@@ -164,8 +164,8 @@ export const navItems: NavData[] = [
         name: 'Report',
         url: '/report',
         icon: 'fa fa-bar-chart',
-      key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_BOOKLET', 'VIEW_REPORT_QUERIES', 'VIEW_REPORT_FROM_BSI', 'VIEW_REPORT_CUSTOM'],
-        children: [
+      key: ['VIEW_NOTIFIER_EMAILS', 'VIEW_RAW_DATA', 'VIEW_BOOKLET', 'VIEW_FREE_FORM_REPORT', 'VIEW_REPORT_FROM_BSI', 'VIEW_REPORT_CUSTOM'],
+        children: [ 
             {
                 name: 'Notifiche LoadingForm',
                 url: '/specialreporting',
@@ -199,7 +199,7 @@ export const navItems: NavData[] = [
                 url: '/dashboard/free-form-report',
                 icon: 'fa fa-file-text-o',
                 version: '0.0.1',
-                key: 'VIEW_REPORT_QUERIES'
+                key: 'VIEW_FREE_FORM_REPORT'
             },
             {
                 name: 'Report da BSI',
@@ -223,7 +223,7 @@ export const navItems: NavData[] = [
         icon: 'fa fa-gear',
         key: ['VIEW_CONFIGURATION_GENERAL', 'VIEW_CONFIGURATION_ADVANCED', 'VIEW_CONFIGURATION_SDM_GROUP',
             'VIEW_CONFIGURATION_SDM_TICKET_STATUS', 'VIEW_CONFIGURATION_ROLES', 'VIEW_CONFIGURATION_USER_ROLES',
-            'VIEW_CONFIGURATION_USER_PROFILING', 'VIEW_STANDARD_DASHBOARD', 'IMPORT_FREE_FORM_REPORT',
+            'VIEW_CONFIGURATION_USER_PROFILING', 'VIEW_CONFIGURATION_STANDARD_DASHBOARD', 'IMPORT_FREE_FORM_REPORT',
             'VIEW_CUTOFF_WORKFLOW_DAY','VIEW_CONFIGURATION_ORGANIZATION'
         ],
         children: [
@@ -281,7 +281,7 @@ export const navItems: NavData[] = [
                 url: '/standarddashboard',
                 icon: 'fa fa-gear',
                 version: '0.0.1',
-                key: 'VIEW_STANDARD_DASHBOARD'
+                key: 'VIEW_CONFIGURATION_STANDARD_DASHBOARD'
             },
             {
                 name: 'Import Free Form Report',

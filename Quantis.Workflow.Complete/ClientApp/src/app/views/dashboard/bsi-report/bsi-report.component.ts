@@ -562,7 +562,7 @@ export class BSIReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#1985ac'
+                fillColor: '#000'
             },
             dataLabels: {
                 //color: '#1985ac',
