@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services';
-import { chartExportTranslations, exportChartButton, formatDataLabelForNegativeValues, updateChartLabelStyle } from '../../../_helpers';
+import { chartExportTranslations, 
+    exportChartButton, 
+    formatDataLabelForNegativeValues,
+    getDistinctArray,
+    updateChartLabelStyle } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -417,8 +421,7 @@ export class BSIReportComponent implements OnInit {
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
                 
-                let allChartLabels = chartArray.map(label => label.xvalue);
-                
+                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
 

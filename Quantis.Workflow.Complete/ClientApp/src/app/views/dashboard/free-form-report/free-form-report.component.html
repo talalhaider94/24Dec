@@ -104,16 +104,14 @@
                         </h5>
                         <div class="row mb-2">
                             <div class="col-md-2">
-                                <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" placeholder="Cliente">
+                                <!-- <select [hidden]="isSpecialReport==0" [(ngModel)]="client" class="form-control" placeholder="Cliente">
                                     <option value="">Select</option>
-                                    <!-- <option *ngFor="let year of anni">{{year}}</option> -->
-                                </select>
+                                </select> -->
                             </div>
                             <div class="col-md-3">
-                                <select [hidden]="isSpecialReport==0" [(ngModel)]="contract" class="form-control" placeholder="Contratto">
+                                <!-- <select [hidden]="isSpecialReport==0" [(ngModel)]="contract" class="form-control" placeholder="Contratto">
                                     <option value="">Select</option>
-                                    <!-- <option *ngFor="let year of anni">{{year}}</option> -->
-                                </select>
+                                </select> -->
                             </div>
                             <div class="col-md-5"></div>
                             <div class="col-md-2" [hidden]="isDebug==0">
@@ -125,8 +123,8 @@
 
                         <!-- //////////////////////////////////// -->
                         <perfect-scrollbar style="max-height: 400px;">
-                        <table class="table stripe executedQueryResult">
-                            <thead class="text-center" style="background: #20a8d8">
+                        <table class="table stripe executedQueryResult no-padding">
+                            <thead class="text-center no-padding" style="background: #20a8d8;">
                                 <tr style="font-size:12px;color:white">
                                     <th *ngFor="let key of debugQueryData">{{key}}</th>
                                 </tr>
