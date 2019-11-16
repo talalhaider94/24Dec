@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
-import { DateTimeService, exportChartButton } from '../../../_helpers';
+import { DateTimeService, exportChartButton, updateChartLabelStyle } from '../../../_helpers';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
@@ -769,9 +769,7 @@ export class PersonalReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions.series[2] = {
             type: 'scatter',
@@ -864,9 +862,7 @@ export class PersonalReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions2.series[2] = {
             type: 'scatter',

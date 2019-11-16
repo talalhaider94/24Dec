@@ -4,7 +4,8 @@ import { ApiService } from '../../../_services';
 import { chartExportTranslations, 
     exportChartButton, 
     formatDataLabelForNegativeValues,
-    getDistinctArray } from '../../../_helpers';
+    getDistinctArray,
+    updateChartLabelStyle } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -553,9 +554,7 @@ export class BSIReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions.series[2] = {
             type: 'scatter',
@@ -654,9 +653,7 @@ export class BSIReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle(),
         };
         this.chartOptions2.series[2] = {
             type: 'scatter',

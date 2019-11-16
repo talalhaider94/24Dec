@@ -100,7 +100,7 @@ export class DashboardListsComponent implements OnInit {
         this.loading = true;
         this.dashboardService.getDashboards().subscribe(dashboards => {
             this.dashboards = dashboards;
-            debugger
+            //debugger
             this.loading = false;
             this.rerender();
         }, error => {
