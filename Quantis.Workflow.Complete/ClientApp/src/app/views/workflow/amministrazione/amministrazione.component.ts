@@ -160,11 +160,12 @@ export class AmministrazioneComponent implements OnInit {
             this.workFlowService.UpdateTicketValue(editTicketObj).pipe(first()).subscribe(data => {
                 this.toastr.success('Ticket edited successfully.');
                 this.loading = false;
-                this.editTicketModal.show();
+                this.editTicketModal.hide();
                 this.getTicketsForVilore();
             }, error => {
                 console.log('onEditTicketFormSubmit: error', error);
                 this.toastr.error(error.error, error.description);
+                this.editTicketModal.hide();
                 this.loading = false;
             })
         }
