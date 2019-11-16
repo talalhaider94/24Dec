@@ -410,46 +410,57 @@ export class UserProfilingComponent implements OnInit {
     console.log(this.saveOrganization);
     let organizationCompiled = 0;
     let allFieldsFilled = false;
+    let valueError = false;
     let keys = Object.keys(this.saveOrganization);
     for (let i = 0; i < keys.length; i++) {
-      if (this.saveOrganization[keys[i]].length > 0) {
-        allFieldsFilled = true
-      } else {
-        allFieldsFilled = false
+      if (this.saveOrganization[keys[i]] != null) {
+        if (this.saveOrganization[keys[i]] < 0 || this.saveOrganization[keys[i]] > 28) {
+          valueError = true;
+        } else {
+          allFieldsFilled = true
+        }
+        organizationCompiled++;
       }
-      organizationCompiled++;
+    }
+    if (this.saveWFContract[this.selectedData.contractID] != null) {
+      if (this.saveWFContract[this.selectedData.contractID] < 0 || this.saveWFContract[this.selectedData.contractID] > 28) {
+        valueError = true;
+      }
+    } else {
+      allFieldsFilled = false;
     }
     if (organizationCompiled == this.selectedData.numOrganization) {
-      if (allFieldsFilled = true) {
-        if (this.saveWFContract[this.selectedData.contractID] >= 0) {
+      if (allFieldsFilled == true && valueError == false) {
           this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, '-1', -1, this.saveWFContract[this.selectedData.contractID]).subscribe(data => {
-            //this.toastr.success('Saved', 'Success');
-            this.toastr.success('Successo', 'Configurazione salvata');
+            this.toastr.success('Successo', 'Configurazione Salvata');
             this.hideContractsModal();
           }, error => {
-            //this.toastr.error('Not Saved', 'Error');
             this.toastr.error('Errore', 'Non tutte le configurazioni sono state salvate');
           });
-        }
+    
         for (let i = 0; i < keys.length; i++) {
           console.log('sla: ' + this.selectedData.contractID, 'organization: ' + keys[i], 'workflowDay: ' + this.saveOrganization[keys[i]])
           this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, keys[i], -1, this.saveOrganization[keys[i]]).subscribe(data => {
-            //this.toastr.success('Saved', 'Success');
-            this.toastr.success('Successo', 'Configurazione salvata');
+            this.toastr.success('Successo', 'Configurazione Salvata');
             this.hideContractsModal();
           }, error => {
-            //this.toastr.error('Not Saved', 'Error');
             this.toastr.error('Errore', 'Non tutte le configurazioni sono state salvate');
           });
         }
       } else {
-        this.toastr.error('Tutti i campi deve essere compilati', 'Errore');
+        console.log(5,valueError, allFieldsFilled)
+        if (valueError == true) {
+          this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Errore');
+        } else {
+          this.toastr.error('Tutti i campi deve essere compilati', 'Errore');
+        }
       }
+
     } else {
       console.log(organizationCompiled, this.selectedData.numOrganization)
       this.toastr.error('Tutti i campi deve essere compilati', 'Errore');
     }
-    
+    console.log(valueError, allFieldsFilled)
   }
     showContractsModal() {
         this.contractsModal.show();
@@ -466,4 +477,26 @@ export class UserProfilingComponent implements OnInit {
     hideKpisModal() {
         this.kpisModal.hide();
     }
+  checkLimit(event, type, id) {
+    if (event < 0 || event > 28) {
+        this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Errore');
+    }
+    /*console.log(event,type,id)
+    if (event > 28) {
+      if (type == 'contract') {
+        this.saveWFContract[id] = 28;
+      }
+      if (type == 'organization') {
+        this.saveOrganization[id] = 28;
+      }
+    }
+    if (event < 0) {
+      if (type == 'contract') {
+        this.saveWFContract[id] = 0;
+      }
+      if (type == 'organization') {
+        this.saveOrganization[id] = 0;
+      }
+    }*/
+  }
 }
