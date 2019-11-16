@@ -99,7 +99,10 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [
             {
@@ -432,6 +435,14 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: data.description,
             color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
         }));
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels
