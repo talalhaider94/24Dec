@@ -60,12 +60,13 @@
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
                         </div>
                         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                               class="table table-responsive-sm table-hover table-outline mb-0 text-center">
+                               class="table table-responsive-sm table-hover table-outline mb-0 text-center mytable">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>No.</th>
+                                    <!-- <th>No.</th> -->
                                     <th>Rif. Num</th>
                                     <th>Periodo</th>
+                                    <th>Status</th>
                                     <th>Target</th>
                                     <th>Valore</th>
                                     <th>Azioni</th>
@@ -76,9 +77,10 @@
                                     <td colspan="6"><strong>Nessun Ticket Trovato</strong></td>
                                 </tr>
                                 <tr *ngFor="let ticket of searchedTickets; let i = index">
-                                    <td>{{ i+1 }}</td>
+                                    <!-- <td>{{ i+1 }}</td> -->
                                     <td>{{ ticket.ref_num || 'N/A' }}</td>
                                     <td>{{ ticket.period || 'N/A' }}</td>
+                                    <td>{{ ticket.status || 'N/A' }}</td>
                                     <td>{{ parseTargetValue(ticket.description) || 'N/A' }}</td>
                                     <td>{{ parseValoreValue(ticket.description) || 'N/A' }}</td>
                                     <td>
