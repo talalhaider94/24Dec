@@ -456,7 +456,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#ffc107'
+                fillColor: '#000'
             }
         };
 
