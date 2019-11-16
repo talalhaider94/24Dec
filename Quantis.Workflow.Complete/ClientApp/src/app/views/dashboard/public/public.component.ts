@@ -654,10 +654,12 @@ export class PublicComponent implements OnInit {
 	}
 
 	addParameters(item): void {
-		this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+      this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+      console.log('before',this.parametersArray);
 		while (this.parametersArray.length !== 0) {
 			this.parametersArray.removeAt(0)
-		  }
+      }
+      console.log('after',this.parametersArray);
 		this.parametersArray.push(this.formBuilder.group({
 			key: item.key,
 			value: item.value
@@ -1205,7 +1207,13 @@ export class PublicComponent implements OnInit {
 			this.loadingFiltersDropDown = true;
 			const reportId = event.target.value.split(':')[1].trim();
 			this._freeFormReportService.getReportQueryDetailByID(+reportId).subscribe(params => {
-				this.loadingFiltersDropDown = false;
+        this.loadingFiltersDropDown = false;
+              if (params.parameters.length == 0) {
+                this.parametersArray = this.widgetParametersForm.get('Properties').get('parameters') as FormArray;
+                while (this.parametersArray.length !== 0) {
+                  this.parametersArray.removeAt(0)
+                }
+              }
 				params.parameters.map(p => this.addParameters(p));
 			}, error => {
 				this.toastr.error('Unable to fetch report parameters', 'Error!')
