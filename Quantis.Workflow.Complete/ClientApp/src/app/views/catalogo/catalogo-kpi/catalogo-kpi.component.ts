@@ -497,7 +497,7 @@ export class CatalogoKpiComponent implements OnInit {
         $(this.searchCol3.nativeElement).on('keyup', function () {
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
                 datatable_Ref
-                    .columns(14)
+                    .columns(15)
                     .search(this.value)
                     .draw();
             });

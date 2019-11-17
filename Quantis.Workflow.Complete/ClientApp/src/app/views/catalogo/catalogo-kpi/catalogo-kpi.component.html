@@ -39,6 +39,7 @@
                     <th style="text-align:center">CARICAMENTO</th>
                     <th style="text-align:center">FREQUENZA</th>
                     <th style="text-align:center">TARGET</th>
+                    <th style="text-align:center">ESCALATION</th>
                     <th style="text-align:center">TIPO</th>
                     <th class="notExportCsv" style="text-align:center;display:none;">TIPOLOGIA</th>
                     <th style="text-align: center">FORNITURA</th>
@@ -75,6 +76,7 @@
                     <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
                     <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
                     <td>{{row.target}}</td>
+                    <td>{{row.escalation}}</td>
                     <td style="text-align:center">{{row.kpi_type}}</td>
                     <td style="text-align:center">{{row.source_name}}</td>
                     <td style="text-align:center">{{getOrganizationName(row.organization_unit)}}</td>
@@ -185,6 +187,7 @@
                           <tr><th>NOME KPI BSI</th><td colspan="2">[{{modalData.global_rule_id_bsi}}] {{modalData.kpi_name_bsi}}</td></tr>
                           <tr><th>DESCRIZIONE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_description"></td></tr>
                           <tr><th>CALCOLO</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.kpi_computing_description"></td></tr>
+                          <tr><th>ESCALATION</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.escalation"></td></tr>
                           <tr><th>ID KPI</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.id_kpi"></td></tr>
                           <tr><th>TITOLO BREVE</th><td colspan="2"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.short_name"></td></tr>
                           <tr>
