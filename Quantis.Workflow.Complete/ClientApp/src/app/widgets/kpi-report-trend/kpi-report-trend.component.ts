@@ -4,7 +4,8 @@ import { DateTimeService,
      WidgetHelpersService, 
      chartExportTranslations, 
      exportChartButton,
-     formatDataLabelForNegativeValues } from '../../_helpers';
+     formatDataLabelForNegativeValues, 
+     updateChartLabelStyle1} from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -93,17 +94,15 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return formatDataLabelForNegativeValues(this.y);
-					}
-                }
+                dataLabels: updateChartLabelStyle1()
             }
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [
             {
@@ -135,12 +134,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return formatDataLabelForNegativeValues(this.y);
-					}
-                }
+                dataLabels: updateChartLabelStyle1()
             }
         },
         tooltip: {
@@ -441,6 +435,14 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: data.description,
             color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
         }));
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels
@@ -456,7 +458,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#ffc107'
+                fillColor: '#000'
             }
         };
 

@@ -238,6 +238,7 @@ export class FreeFormReportComponent implements OnInit {
   }
 
   deleteParameters(id: number) {
+    console.log('remove index: ',id);
     this.Parameters.removeAt(id);
   }
 

@@ -64,7 +64,7 @@ namespace Quantis.WorkFlow.APIBase.API
                     MemoryStream mStream = new MemoryStream();
                     mStream.Write(fileDTO.Content, 0, fileDTO.Content.Length);
                     mStream.Position = 0;
-                    sftp.UploadFile(mStream, fileDTO.Name.Replace(" ",""), true);
+                    sftp.UploadFile(mStream, fileDTO.Name, true);
                     sftp.Disconnect();
                     //log upload in db
                 } // sudo scp -i keypath utente@host file

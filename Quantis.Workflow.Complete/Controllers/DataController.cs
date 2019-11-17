@@ -350,14 +350,14 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetDistributionByContract(period, sla_id);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_STANDARD_DASHBOARD)]
         [HttpGet("GetAllUsersLandingPage")]
         public List<UserLandingPageLVDTO> GetAllUsersLandingPage()
         {
             return _dataAPI.GetAllUsersLandingPage();
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_STANDARD_DASHBOARD)]
+        [Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_STANDARD_DASHBOARD)]
         [HttpGet("SetLandingPageByUser")]
         public void SetLandingPageByUser(int userId, bool set)
         {
@@ -380,7 +380,7 @@ namespace Quantis.WorkFlow.Controllers
             _dataAPI.SelectLandingPage(usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpGet("GetOwnedReportQueries")]
         public List<ReportQueryLVDTO> GetOwnedReportQueries()
         {
@@ -388,7 +388,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetOwnedReportQueries(usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpGet("GetAssignedReportQueries")]
         public List<ReportQueryLVDTO> GetAssignedReportQueries()
         {
@@ -396,7 +396,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetAssignedReportQueries(usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpGet("GetReportQueryDetailByID")]
         public ReportQueryDetailDTO GetReportQueryDetailByID(int id)
         {
@@ -404,7 +404,7 @@ namespace Quantis.WorkFlow.Controllers
             return _dataAPI.GetReportQueryDetailByID(id, usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpPost("AddEditReportQuery")]
         public void AddEditReportQuery([FromBody]ReportQueryDetailDTO dto)
         {
@@ -413,7 +413,7 @@ namespace Quantis.WorkFlow.Controllers
             _dataAPI.AddEditReportQuery(dto, (dto.OwnerId>0)?dto.OwnerId: usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpGet("EnableDisableReportQuery")]
         public void EnableDisableReportQuery(int id, bool isenable)
         {
@@ -421,7 +421,7 @@ namespace Quantis.WorkFlow.Controllers
             _dataAPI.EnableDisableReportQuery(id, isenable, usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpPost("AssignReportQuery")]
         public void AssignReportQuery([FromBody]MultipleRecordsDTO records)
         {
@@ -429,7 +429,7 @@ namespace Quantis.WorkFlow.Controllers
             _dataAPI.AssignReportQuery(records, usr.UserId);
         }
 
-        [Authorize(WorkFlowPermissions.VIEW_REPORT_QUERIES)]
+        [Authorize(WorkFlowPermissions.VIEW_FREE_FORM_REPORT)]
         [HttpGet("GetAllUsersAssignedQueries")]
         public List<UserReportQueryAssignmentDTO> GetAllUsersAssignedQueries(int queryid)
         {

@@ -19,7 +19,7 @@
     <thead class="bg-primary">
       <tr class="text-white">
         <th>Cartella</th>
-        <th>Nome</th>
+        <th style="width:40%">Nome</th>
         <th>Tipo</th>
         <th>Data Modifica</th>
         <th>Azioni</th>
@@ -27,12 +27,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of AllNormalReportsData; index as i">
-        <td style="padding:unset;vertical-align: middle;"><span [hidden]="true">{{i}}</span>{{row.foldername}}</td>
-        <td style="padding:unset;vertical-align: middle;">{{row.itemname}}</td>
+        <td style="padding:unset;vertical-align: middle;">{{row.foldername}}</td>
+        <td style="padding:unset;vertical-align: middle;width:40%">{{row.itemname}}</td>
         <td style="padding:unset;vertical-align: middle;">{{row.reporttype}}</td>
         <td style="padding:unset;vertical-align: middle;">{{row.modifieddate | date:'MM/dd/yyyy, hh:mm a'}}</td>
         <td style="padding:unset;vertical-align: middle;">
-          <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)">
+          <a class="btn btn-primary btn-sm pointer-cursor" (click)="getReportDetails(row.itemid)"
+          style="margin:2px">
             <i class="fa fa-eye"></i>
           </a>
         </td>

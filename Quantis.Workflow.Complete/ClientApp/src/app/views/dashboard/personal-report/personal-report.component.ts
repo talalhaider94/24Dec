@@ -4,12 +4,12 @@ import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ApiService, DashboardService } from '../../../_services';
-import { DateTimeService, exportChartButton } from '../../../_helpers';
+import { DateTimeService, exportChartButton, updateChartLabelStyle } from '../../../_helpers';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
 import * as Highcharts from 'highcharts';
-import { chartExportTranslations, formatDataLabelForNegativeValues } from '../../../_helpers';
+import { chartExportTranslations, formatDataLabelForNegativeValues, getDistinctArray } from '../../../_helpers';
 declare var $;
 var $this;
 
@@ -670,7 +670,7 @@ export class PersonalReportComponent implements OnInit {
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
                                 
-                let allChartLabels = chartArray.map(label => label.xvalue);
+                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
                 
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
@@ -769,16 +769,14 @@ export class PersonalReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions.series[2] = {
             type: 'scatter',
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#1985ac'
+                fillColor: '#000'
             },
             dataLabels: {
                 color: '#1985ac',
@@ -864,9 +862,7 @@ export class PersonalReportComponent implements OnInit {
             name: 'Compliant',
             color: '#379457',
             data: allCompliantData,
-            dataLabels: {
-                color: '#379457'
-            },
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions2.series[2] = {
             type: 'scatter',

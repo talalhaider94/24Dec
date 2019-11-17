@@ -34,6 +34,14 @@ export class DateTimeService {
     return period;
   }
 
+  convertUtcToDateTime(date){
+    if(date) {
+        return moment(date).format('MM/DD/YYYY, hh:mm a')
+    } else {
+      return 'N/A';
+    }
+  }
+
   buildRangeDate(dateRange) {
     if(Array.isArray(dateRange)) {
       console.log('buildRangeDate if', dateRange);
