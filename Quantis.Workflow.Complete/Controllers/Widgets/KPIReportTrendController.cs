@@ -19,7 +19,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         internal override void FillWidgetParameters(WidgetViewModel vm)
         {
             vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();
-            vm.ShowChartType = true;
+            vm.ShowChartType = false;
             vm.ShowDateType = true;
             vm.ShowDateRangeFilter = true;
             vm.ShowAggregationOption = true;
@@ -28,8 +28,6 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
             vm.ShowLevelWiseOrganization = true;
             vm.ShowOrganization = false;
-            vm.ChartTypes.Add(ChartType.BAR);
-            vm.ChartTypes.Add(ChartType.LINE);
         }
 
         internal override object GetData(WidgetParametersDTO props)
