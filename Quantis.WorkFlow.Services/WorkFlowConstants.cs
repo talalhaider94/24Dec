@@ -86,5 +86,6 @@
         public const string VIEW_CUTOFF_WORKFLOW_DAY = "VIEW_CUTOFF_WORKFLOW_DAY";
         public const string VIEW_LOADING_CSV = "VIEW_LOADING_CSV";
         public const string VIEW_LINK_POWERBI = "VIEW_LINK_POWERBI";
+        public const string VIEW_CONFIGURATION_ADVANCED_2 = "VIEW_CONFIGURATION_ADVANCED_2";
     }
 }
