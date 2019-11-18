@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using EventForm.bcfed9e1.Class5;
 using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@ namespace CreateBookletConsole
 {
     class Program
     {
+        private static volatile int currentNumber = 1;
         static int Main(string[] args)
         {
             string path = args[0];
@@ -14,9 +16,8 @@ namespace CreateBookletConsole
             var dto=JsonConvert.DeserializeObject<CreateBookletDTO>(text);
             var class5 = new Class5(dto.MainPath);
             int totalNumbers = dto.ListContract.Count;
-            int currentNumber = 1;
             string requestId = DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss");
-            foreach (var key in dto.ListContract.Keys)
+            Parallel.ForEach(dto.ListContract.Keys, (key) =>
             {
                 try
                 {
@@ -32,8 +33,7 @@ namespace CreateBookletConsole
                 {
                     currentNumber++;
                 }
-
-            }
+            });
 
             return 1;
             //return class5.CreateBooklet(dto.ListContract, dto.UserId, dto.BookletDocumentId, dto.MailSetup);

@@ -253,7 +253,7 @@ export class UserProfilingComponent implements OnInit {
     console.log('getContracts ==> ', this.selectedData.userid, this.selectedData.permid);
     this.apiService.GetWorkflowByContract(data.contractid).subscribe(data => {
       this.workflowContractData = data;
-      console.log('wf', data[0].workflow_day)
+      //console.log('wf', data[0].workflow_day)
       if (data.length > 0) {
         if (data[0].workflow_day > 0) {
           this.saveWFContract[data[0].sla_id] = data[0].workflow_day;

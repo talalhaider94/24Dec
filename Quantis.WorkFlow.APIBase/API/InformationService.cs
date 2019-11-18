@@ -708,7 +708,7 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<OrganizationUnitDTO> GetOrganizationUnits()
         {
             var res = new List<OrganizationUnitDTO>();
-            string query = @"select * from t_organization_units";
+            string query = @"select * from t_organization_units order by 2 asc";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
@@ -742,7 +742,7 @@ namespace Quantis.WorkFlow.APIBase.API
 							left join t_organization_unit_workflow ow
 	                        on (ow.sla_id = org.sla_id and org.organization_unit::integer = organization_unit_id)
 							left join t_organization_units ou on org.organization_unit::integer = ou.id 
-							order by 1 asc";
+							order by 2 asc";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();
@@ -850,7 +850,7 @@ namespace Quantis.WorkFlow.APIBase.API
                             AND m.sla_status = 'EFFECTIVE'
                             AND u.user_id=:user_id
                             AND c.customer_id=:customer_id
-                            group by  m.sla_id,m.sla_name,c.customer_name,c.customer_id";
+                            group by  m.sla_id,m.sla_name,c.customer_name,c.customer_id order by m.sla_name";
             using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
             {
                 con.Open();

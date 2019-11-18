@@ -299,7 +299,7 @@ r.rule_name,
                             NonComplaintContracts = p.GroupBy(q => q.ContractId).Where(r => r.Any(s => s.Result != "compliant")).Count(),
                             ComplaintKPIs = p.Where(q => q.Result == "compliant").Count(),
                             NonComplaintKPIs = p.Where(q => q.Result == "non compliant").Count(),
-                            BestContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).Where(o=>o.All(t=>t.Result== "compliant")).OrderByDescending(r => r.Count(s => s.Result == "compliant") / r.Count()).ThenByDescending(r=> r.Count(s => s.Result == "compliant")).Select(t => new LandingPageContractDTO()
+                            BestContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderByDescending(r => r.Count(s => s.Result == "compliant") / r.Count()).ThenByDescending(r=> r.Count(s => s.Result == "compliant")).Select(t => new LandingPageContractDTO()
                             {
                                 ContractId = t.Key.ContractId,
                                 ContractName = t.Key.ContractName,
@@ -309,7 +309,7 @@ r.rule_name,
                                 ComplaintPercentage = (t.Count(u => u.Result == "compliant") * 100) / t.Count(),
                                 AverageDeviation = t.Average(u => u.Deviation)
                             }).ToList(),
-                            WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).Where(o => o.Any(t => t.Result == "non compliant")).OrderByDescending(r => r.Count(s => s.Result == "non compliant") / r.Count()).ThenByDescending(r => r.Count(s => s.Result != "compliant")).Select(t => new LandingPageContractDTO()
+                            WorstContracts = p.GroupBy(q => new { q.ContractName, q.ContractId }).OrderByDescending(r => r.Count(s => s.Result == "non compliant") / r.Count()).ThenByDescending(r => r.Count(s => s.Result != "compliant")).Select(t => new LandingPageContractDTO()
                             {
                                 ContractId = t.Key.ContractId,
                                 ContractName = t.Key.ContractName,

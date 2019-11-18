@@ -19,7 +19,7 @@
                         <h5 *ngIf="loading.roles" class="text-center text-primary loader">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                         </h5>
-                        <li *ngFor="let user of gatheredData.usersList"
+                        <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
                             (click)="selectRoleItem(user, $event)">{{user.name}}</li>
                     </ul>
                 </perfect-scrollbar>

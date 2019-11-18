@@ -1,4 +1,5 @@
-﻿using Quantis.WorkFlow.APIBase.Framework;
+﻿using System;
+using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Models.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 
@@ -15,13 +16,15 @@ namespace Quantis.WorkFlow.APIBase.Mappers.Dashboard
                 Name = e.Name,
                 Owner = e.User.user_name,
                 IsActive = e.IsActive,
-                IsDefault = e.IsDefault
+                IsDefault = e.IsDefault,
+                ModifiedOn = e.ModifiedOn
             };
         }
 
         public override DB_Dashboard GetEntity(DashboardDTO o, DB_Dashboard e)
         {
             e.Name = o.Name;
+            e.ModifiedOn=DateTime.Now;
             return e;
         }
     }
