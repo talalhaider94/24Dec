@@ -33,47 +33,6 @@ export class CatalogoKpiComponent implements OnInit {
         private auth: AuthService
     ) {
         $this = this;
-
-        this.dtOptions = {
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'csv',
-                    text: '<i class="fa fa-file"></i> Esporta CSV',
-                    titleAttr: 'Esporta CSV',
-                    className: 'btn btn-primary mb-3'
-                },
-            ],
-            //'dom': 'rtip',
-            "columnDefs": [{
-                "targets": [11],
-                "visible": false,
-                "searchable": true
-            }],
-            deferRender: true,
-            language: {
-                processing: "Elaborazione...",
-                search: "Cerca:",
-                lengthMenu: "Visualizza _MENU_ elementi",
-                info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-                infoEmpty: "Vista da 0 a 0 di 0 elementi",
-                infoFiltered: "(filtrati da _MAX_ elementi totali)",
-                infoPostFix: "",
-                loadingRecords: "Caricamento...",
-                zeroRecords: "La ricerca non ha portato alcun risultato.",
-                emptyTable: "Nessun dato presente nella tabella.",
-                paginate: {
-                    first: "Primo",
-                    previous: "Precedente",
-                    next: "Seguente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                    sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-                }
-            }
-        };
     }
     loading: boolean = true;
     public des = '';
@@ -90,7 +49,7 @@ export class CatalogoKpiComponent implements OnInit {
         roleId: 0
     };
 
-    @ViewChild('kpiTable') block: ElementRef;
+  @ViewChild('kpiTable') block: ElementRef;
     @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild('searchCol2') searchCol2: ElementRef;
     @ViewChild('searchCol3') searchCol3: ElementRef;
@@ -208,30 +167,30 @@ export class CatalogoKpiComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
-        this.dtOptions = {
-            //dom: 'Bfrtip',
-            /*"columnDefs": [{
-                "targets": [20],
-                "visible": false,
-                "searchable": true
-            }],*/
-            // buttons: [
-            //   {
-            //     extend: 'csv',
-            //     text: '<i class="fa fa-file"></i> Esporta CSV',
-            //     titleAttr: 'Esporta CSV',
-            //     className: 'btn btn-primary mb-3'
-            //   },
-            // ],
-            // buttons: [
-            //   'copy',
-            //   'print',
-            //   'csv',
-            //   'excel',
-            //   'pdf'
-            // ],
-            deferRender: true,
+  ngOnInit() {
+    $('#kpiTable').hide();
+    $('#loadingDiv').show();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      drawCallback: function (settings) {
+        var api = this.api();
+        var rows = api.rows({ page: 'current' }).nodes();
+        var last = null;
+        api.column(0, { page: 'current' }).data().each(function (group, i) {
+          if (last !== group) {
+            /*$(rows).eq(i).before(
+              '<tr style="background-color:#eedc00" class="group"><th colspan="6">' + group + '</th></tr>'
+            );*/
+            last = group;
+          }
+        });
+      },
+      initComplete: function () {
+        $('#kpiTable').show();
+        $('#loadingDiv').hide();
+        
+      },
             language: {
                 processing: "Elaborazione...",
                 search: "Cerca:",
@@ -248,7 +207,7 @@ export class CatalogoKpiComponent implements OnInit {
                     previous: "Precedente",
                     next: "Seguente",
                     last: "Ultimo"
-                },
+              },
                 aria: {
                     sortAscending: ": attiva per ordinare la colonna in ordine crescente",
                     sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
@@ -257,7 +216,9 @@ export class CatalogoKpiComponent implements OnInit {
         };
 
         this.getForms();
-        this.getOrganizationUnits();
+    this.getOrganizationUnits();
+    
+    this.getKpis();
         this.userPermissions = this.auth.getUser().permissions;
         console.log('this.userPermissions =>', this.userPermissions);
 
@@ -285,6 +246,7 @@ export class CatalogoKpiComponent implements OnInit {
                 $(".wrapper1").scrollLeft($(".wrapper2").scrollLeft());
             });
         });
+    
     }
 
     populateModalData(data) {
@@ -452,11 +414,11 @@ export class CatalogoKpiComponent implements OnInit {
 
     // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
-        this.dtTrigger.next();
+       /*** this.dtTrigger.next();***/
 
         this.setUpDataTableDependencies();
         // this.getKpis1();
-        this.getKpis();
+       /*** this.getKpis();***/
         //this.rerender();
     }
 
@@ -497,12 +459,32 @@ export class CatalogoKpiComponent implements OnInit {
         $(this.searchCol3.nativeElement).on('keyup', function () {
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
                 datatable_Ref
-                    .columns(15)
+                    .columns(23)
                     .search(this.value)
                     .draw();
             });
         });
-
+      $(this.searchCol5.nativeElement).on('change', function () {
+          console.log(this.value)
+          $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+            datatable_Ref
+              .columns(6)
+              .search(this.value)
+              .draw();
+          });
+        });
+        /*$this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+          datatable_Ref.columns(5).every(function () {
+            const that = this;
+            // Create the select list and search operation
+            const select = $($this.searchCol5.nativeElement)
+              .on('change', function () {
+                that
+                  .search($(this).val())
+                  .draw();
+              });
+          });
+        });*/
         $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref.columns(0).every(function () {
                 const that = this;
@@ -526,18 +508,7 @@ export class CatalogoKpiComponent implements OnInit {
             });
         });
 
-        $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-            datatable_Ref.columns(5).every(function () {
-                const that = this;
-                // Create the select list and search operation
-                const select = $($this.searchCol5.nativeElement)
-                    .on('change', function () {
-                        that
-                            .search($(this).val())
-                            .draw();
-                    });
-            });
-        });
+       
 
         // export only what is visible right now (filters & paginationapplied)
         $(this.btnExporta.nativeElement).off('click');
@@ -676,7 +647,9 @@ export class CatalogoKpiComponent implements OnInit {
         }
             
             console.log('Kpis ', data);
-            this.rerender();
+            //this.rerender();
+        this.dtTrigger.next();
+        this.setUpDataTableDependencies();
         });
     }
 
