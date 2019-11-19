@@ -17,7 +17,7 @@ export const pageVersion = {
     '/formreport': '0.0.2',
     '/dashboard/free-form-report': '0.0.2',
     '/dashboard/bsi-report': '0.0.8',
-    '/dashboard/personal-report': '0.0.4',
+    '/dashboard/personal-report': '0.0.5',
     '/tconfiguration/general': '0.0.2',
     '/tconfiguration/advanced': '0.0.2',
     '/sdmgroup': '0.0.1',
