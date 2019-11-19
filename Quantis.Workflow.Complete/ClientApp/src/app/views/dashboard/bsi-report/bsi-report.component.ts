@@ -445,10 +445,10 @@ export class BSIReportComponent implements OnInit {
                     name: 'Target',
                     data: allTargetData,
                     marker: {
-                        fillColor: '#1985ac'
+                        fillColor: '#138496'
                     },
                     dataLabels: {
-                        color: '#1985ac',
+                        color: '#138496',
                         // color: '#ffc107',
                     },
                 };
@@ -527,7 +527,7 @@ export class BSIReportComponent implements OnInit {
         let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
         let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
         let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
-        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
         let allTargetData = targetData.map(data => data.yvalue);
@@ -561,10 +561,10 @@ export class BSIReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#000'
+                fillColor: '#138496'
             },
             dataLabels: {
-                //color: '#1985ac',
+                color: '#138496',
             },
         };
         if(allMinorData && allMinorData.length > 0){
@@ -611,7 +611,7 @@ export class BSIReportComponent implements OnInit {
         let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
         let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
 
-        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
         let allTargetData = targetData.map(data => data.yvalue);
@@ -660,10 +660,10 @@ export class BSIReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#1985ac'
+                fillColor: '#138496'
             },
             dataLabels: {
-                color: '#1985ac'
+                color: '#138496'
             },
         };
         if(allMinorData && allMinorData.length > 0){

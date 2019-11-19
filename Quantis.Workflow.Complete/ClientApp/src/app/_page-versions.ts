@@ -13,7 +13,7 @@ export const pageVersion = {
     '/loading-form/utente': '0.0.12',
     '/specialreporting': '0.0.4',
     '/datigrezzi': '0.0.1',
-    '/booklet': '0.0.2',
+    '/booklet': '0.0.3',
     '/formreport': '0.0.2',
     '/dashboard/free-form-report': '0.0.2',
     '/dashboard/bsi-report': '0.0.8',

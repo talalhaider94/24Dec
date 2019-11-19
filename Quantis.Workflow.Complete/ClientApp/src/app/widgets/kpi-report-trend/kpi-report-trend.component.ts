@@ -116,8 +116,11 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 name: 'Target',
                 data: [2, 2, 2, 2, 2],
                 marker: {
-                    fillColor: 'orange'
-                }
+                    fillColor: '#138496'
+                },
+                dataLabels: {
+                    color: '#138496',
+                },
             }
         ],
         exporting: exportChartButton
@@ -163,8 +166,11 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 name: 'Target',
                 data: [2, 2, 2, 2, 2],
                 marker: {
-                    fillColor: 'orange'
-                }
+                    fillColor: '#138496'
+                },
+                dataLabels: {
+                    color: '#138496',
+                },
             }
         ],
         exporting: exportChartButton
@@ -458,8 +464,11 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#000'
-            }
+                fillColor: '#138496'
+            },
+            dataLabels: {
+                color: '#138496',
+            },
         };
 
         this.chartUpdateFlag = true;
@@ -534,8 +543,11 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#ffc107'
-            }
+                fillColor: '#138496'
+            },
+            dataLabels: {
+                color: '#138496',
+            },
         };
 
         this.chartUpdateFlag1 = true;

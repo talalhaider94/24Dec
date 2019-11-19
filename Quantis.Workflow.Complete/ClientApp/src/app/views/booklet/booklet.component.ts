@@ -97,17 +97,17 @@ export class BookletComponent implements OnInit {
     }
 
     ngOnInit() {
+         
+    }
+
+    ngAfterViewInit() {
+        this.dtTrigger.next();
         this.getDocumenti();
         this.getContratti();
         this.getcontract();
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
-        this.datacorrente = moment().format('MM/YYYY');   
-    }
-
-    ngAfterViewInit() {
-        this.dtTrigger.next();
-        this.rerender();
+        this.datacorrente = moment().format('MM/YYYY');  
     }
 
     ngOnDestroy(): void {
@@ -159,13 +159,14 @@ export class BookletComponent implements OnInit {
         this.apiService.getContractWithContractParties().subscribe((data:any)=>{
             this.contrat = data;
             console.log('getContractsWithContractParties',data);
+            this.rerender();
         })
     }
     getDocumenti() {
         this.apiService.getBooklet().subscribe((data: any) => {
             this.documentiDef = data;
             console.log('documentiDef', this.documentiDef);
-            //this.rerender();
+            this.rerender();
         });
     }
 
@@ -243,18 +244,18 @@ export class BookletComponent implements OnInit {
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
                 console.log(data,' called createbooklet');
                 this.bookletStatus=1;
+                if(data==0 || data==null){
+                    this.toastr.error('Error', 'Error in adding booklet');
+                    this.loading = false;
+                }
+                else{
+                    this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+                    this.loading = false;
+                }
             },error=>{
                 this.bookletStatus=0;
             });
-            console.log('bookletStatus: ',this.bookletStatus);
-            if(this.bookletStatus==0){
-                this.toastr.error('Error', 'Error in adding booklet');
-                this.loading = false;
-            }
-            else if(this.bookletStatus==1){
-                this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
-                this.loading = false;
-            }
+            //console.log('bookletStatus: ',this.bookletStatus) 
         }
     }
     addBooklet(){
