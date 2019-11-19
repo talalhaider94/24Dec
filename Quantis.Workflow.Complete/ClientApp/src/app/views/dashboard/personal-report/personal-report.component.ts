@@ -723,10 +723,10 @@ export class PersonalReportComponent implements OnInit {
                     name: 'Target',
                     data: allTargetData,
                     marker: {
-                        fillColor: '#1985ac'
+                        fillColor: '#138496'
                     },
                     dataLabels: {
-                        color: '#1985ac',
+                        color: '#138496',
                         // color: '#ffc107',
                     },
                 };
@@ -801,10 +801,10 @@ export class PersonalReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#000'
+                fillColor: '#138496'
             },
             dataLabels: {
-                color: '#1985ac',
+                color: '#138496',
             },
         };
         if(allMinorData && allMinorData.length > 0){
@@ -894,10 +894,10 @@ export class PersonalReportComponent implements OnInit {
             name: 'Target',
             data: allTargetData,
             marker: {
-                fillColor: '#1985ac'
+                fillColor: '#138496'
             },
             dataLabels: {
-                color: '#1985ac',
+                color: '#138496',
             },
         };
         if(allMinorData && allMinorData.length > 0){
