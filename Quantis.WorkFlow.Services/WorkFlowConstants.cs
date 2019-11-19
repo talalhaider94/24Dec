@@ -78,13 +78,14 @@
         public const string VIEW_BOOKLET = "VIEW_BOOKLET";
         public const string VIEW_WORKFLOW_ADMIN = "VIEW_WORKFLOW_ADMIN";
         public const string VIEW_DEBUG = "VIEW_DEBUG";
-        public const string VIEW_STANDARD_DASHBOARD = "VIEW_STANDARD_DASHBOARD";
-        public const string VIEW_REPORT_QUERIES = "VIEW_REPORT_QUERIES";
+        public const string VIEW_CONFIGURATION_STANDARD_DASHBOARD = "VIEW_CONFIGURATION_STANDARD_DASHBOARD";
+        public const string VIEW_FREE_FORM_REPORT = "VIEW_FREE_FORM_REPORT";
         public const string IMPORT_FREE_FORM_REPORT = "IMPORT_FREE_FORM_REPORT";
         public const string VIEW_REPORT_FROM_BSI = "VIEW_REPORT_FROM_BSI";
         public const string VIEW_REPORT_CUSTOM = "VIEW_REPORT_CUSTOM";
         public const string VIEW_CUTOFF_WORKFLOW_DAY = "VIEW_CUTOFF_WORKFLOW_DAY";
         public const string VIEW_LOADING_CSV = "VIEW_LOADING_CSV";
         public const string VIEW_LINK_POWERBI = "VIEW_LINK_POWERBI";
+        public const string VIEW_CONFIGURATION_ADVANCED_2 = "VIEW_CONFIGURATION_ADVANCED_2";
     }
 }

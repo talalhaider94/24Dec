@@ -152,6 +152,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     entdb.GlobalFilterId = dto.GlobalFilterId;
                     entdb.DashboardWidgets = dbwidgets;
                     entdb.UserId = userId;
+                    entdb.CreatedOn=DateTime.Now;
+                    entdb.ModifiedOn=DateTime.Now;
 
                     _dbcontext.DB_Dashboards.Add(entdb);
                     _dbcontext.SaveChanges();
@@ -190,6 +192,8 @@ namespace Quantis.WorkFlow.APIBase.API
                     }
                     var dashboard = _dbcontext.DB_Dashboards.Single(o => o.Id == dto.Id);
                     dashboard.GlobalFilterId = dto.GlobalFilterId;
+                    dashboard.ModifiedOn=DateTime.Now;
+                    dashboard.Name = dto.Name;
                     _dbcontext.SaveChanges();
                     return dto.Id;
                 }

@@ -57,33 +57,30 @@ export class BookletComponent implements OnInit {
       tuttiClienti: ''
     }
   };
-    dtOptions: DataTables.Settings = {
-        pagingType: 'full_numbers',
-        pageLength: 25,
-        language: {
-            processing: "Elaborazione...",
-            search: "Cerca:",
-            lengthMenu: "Visualizza _MENU_ elementi",
-            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-            infoEmpty: "Vista da 0 a 0 di 0 elementi",
-            infoFiltered: "(filtrati da _MAX_ elementi totali)",
-            infoPostFix: "",
-            loadingRecords: "Caricamento...",
-            zeroRecords: "La ricerca non ha portato alcun risultato.",
-            emptyTable: "Nessun dato presente nella tabella.",
-            paginate: {
-                first: "Primo",
-                previous: "Precedente",
-                next: "Seguente",
-                last: "Ultimo"
-            },
-            aria: {
-                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-            }
+  dtOptions: DataTables.Settings = {
+    language: {
+        processing: "Elaborazione...",
+        search: "Cerca:",
+        lengthMenu: "Visualizza _MENU_ elementi",
+        info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        infoEmpty: "Vista da 0 a 0 di 0 elementi",
+        infoFiltered: "(filtrati da _MAX_ elementi totali)",
+        infoPostFix: "",
+        loadingRecords: "Caricamento...",
+        zeroRecords: "La ricerca non ha portato alcun risultato.",
+        emptyTable: "Nessun dato presente nella tabella.",
+        paginate: {
+            first: "Primo",
+            previous: "Precedente",
+            next: "Seguente",
+            last: "Ultimo"
         },
-        destroy:true
-    };
+        aria: {
+            sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+            sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+        }
+    }
+  };
     dtTrigger: Subject<any> = new Subject();
     // dtTrigger: Subject<any> = new Subject();
 
@@ -100,27 +97,17 @@ export class BookletComponent implements OnInit {
     }
 
     ngOnInit() {
+         
+    }
+
+    ngAfterViewInit() {
+        this.dtTrigger.next();
         this.getDocumenti();
         this.getContratti();
         this.getcontract();
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
-        this.datacorrente = moment().format('MM/YYYY');
-    
-    }
-
-    ngAfterViewInit() {
-        //setTimeout(() => {
-            this.dtTrigger.next();
-            this.rerender();
-        //}, 1800);
-      
-        // this.apiService.getDocumentiBooklet().subscribe((data:any)=>{
-        //this.contrattiDef=data;
-
-        // this.recuperoChildren();
-
-        // });
+        this.datacorrente = moment().format('MM/YYYY');  
     }
 
     ngOnDestroy(): void {
@@ -134,26 +121,24 @@ export class BookletComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
-            dtInstance.columns(1).every(function () {
-              const that = this;
+            // dtInstance.columns(1).every(function () {
+            //   const that = this;
 
-              // Create the select list and search operation
-              const select = $('#searchCol1')
-                .on('change', function () {
-                  that
-                    .search('^' + $(this).val().replace(')', '\\)').replace('(', '\\(') + '$', true, false, false)
-                    .draw();
-                });
+            //   const select = $('#searchCol1')
+            //     .on('change', function () {
+            //       that
+            //         .search('^' + $(this).val().replace(')', '\\)').replace('(', '\\(') + '$', true, false, false)
+            //         .draw();
+            //     });
 
-              // Get the search data for the first column and add to the select list
-              this
-                .cache('search')
-                .sort()
-                .unique()
-                .each(function (d) {
-                  select.append($('<option value="' + d + '">' + d + '</option>'));
-                });
-            });
+            //   this
+            //     .cache('search')
+            //     .sort()
+            //     .unique()
+            //     .each(function (d) {
+            //       select.append($('<option value="' + d + '">' + d + '</option>'));
+            //     });
+            // });
 
         });
         /*$this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
@@ -174,13 +159,14 @@ export class BookletComponent implements OnInit {
         this.apiService.getContractWithContractParties().subscribe((data:any)=>{
             this.contrat = data;
             console.log('getContractsWithContractParties',data);
+            this.rerender();
         })
     }
     getDocumenti() {
         this.apiService.getBooklet().subscribe((data: any) => {
             this.documentiDef = data;
             console.log('documentiDef', this.documentiDef);
-            //this.rerender();
+            this.rerender();
         });
     }
 
@@ -258,18 +244,18 @@ export class BookletComponent implements OnInit {
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
                 console.log(data,' called createbooklet');
                 this.bookletStatus=1;
+                if(data==0 || data==null){
+                    this.toastr.error('Error', 'Error in adding booklet');
+                    this.loading = false;
+                }
+                else{
+                    this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+                    this.loading = false;
+                }
             },error=>{
                 this.bookletStatus=0;
             });
-            console.log('bookletStatus: ',this.bookletStatus);
-            if(this.bookletStatus==0){
-                this.toastr.error('Error', 'Error in adding booklet');
-                this.loading = false;
-            }
-            else if(this.bookletStatus==1){
-                this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
-                this.loading = false;
-            }
+            //console.log('bookletStatus: ',this.bookletStatus) 
         }
     }
     addBooklet(){
@@ -315,7 +301,7 @@ export class BookletComponent implements OnInit {
         this.thresholdModal.show();
     }
 
-    async hideThresholdModal() {
+    hideThresholdModal() {
         this.thresholdModal.hide();
     }
 }

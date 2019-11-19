@@ -5,7 +5,7 @@ import { DateTimeService,
      chartExportTranslations, 
      exportChartButton,
      formatDataLabelForNegativeValues, 
-     updateChartLabelStyle1} from '../../_helpers';
+     updateChartLabelStyle1,getDistinctArray} from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -99,7 +99,10 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         },
         tooltip: {
             enabled: true,
-            crosshairs: true
+            crosshairs: true,
+            formatter: function () {
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
+            }
         },
         series: [
             {
@@ -430,7 +433,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 text: valueData[0].description.split('|')[1]
             }
         }
-        let allChartLabels = chartIndexData.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartIndexData.map(label => label.xvalue));
 
         let allTargetData = targetData.map(data => data.yvalue);
         let allValuesData = valueData.map(data => ({
@@ -438,6 +441,14 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             name: data.description,
             color: data.description.includes('non compliant') ? '#f86c6b' : '#379457',
         }));
+        this.chartOptions.tooltip = {
+            enabled:true,
+            crosshairs:true,
+            formatter: function () {
+                return this.series.name + '<br>'
+                + 'y: <b>' + this.y + '</b>';
+            }
+        }
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels

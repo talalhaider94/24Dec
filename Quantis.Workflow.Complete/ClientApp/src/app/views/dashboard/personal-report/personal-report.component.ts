@@ -52,6 +52,7 @@ export class PersonalReportComponent implements OnInit {
     globalRuleId1;
     personalReportLength=0;
     reportType='';
+    isEdit=0;
     fitroDataById: any = [
         {
             event_type_id: '   ',
@@ -166,6 +167,21 @@ export class PersonalReportComponent implements OnInit {
     modalLoading: boolean = false;
     groupReportCheck: boolean = false;
     reportArray;
+
+    patchObject = {
+        id:0,
+        name: '',
+        contractParties: '',
+        contracts: '',
+        GlobalRuleId: 0,
+        aggregationoption: '',
+        startDate: '',
+        endDate: '',
+        groupReportCheck: false,
+        contractParties1: '',
+        contracts1: '',
+        GlobalRuleId1: 0,
+    }
 
     chartOptions = {
         lang: chartExportTranslations,
@@ -337,6 +353,7 @@ export class PersonalReportComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isEdit=0;
         this.reportType='normal';
         this.personalReportForm = this.formBuilder.group({
             name: [null, Validators.required],
@@ -416,15 +433,13 @@ export class PersonalReportComponent implements OnInit {
             this.rerender();
         });
     }
-
-    getPersonalReport() {
-        this.apiService.getPersonalReport().subscribe((data) => {
-            console.log('PersonalReportData -> ', data);
-        });
-    }
     
     AddUpdatePersonalReport() {
-        this.AddUpdateObj.id=0;
+        if(this.isEdit==1){
+            this.AddUpdateObj.id=this.patchObject.id;
+        }else{
+            this.AddUpdateObj.id=0;
+        }
         this.AddUpdateObj.name=this.personalReportForm.value.name;
         //this.AddUpdateObj.global_rule_id = this.personalReportForm.value.globalRuleId;
         this.AddUpdateObj.global_rule_id = 37753;
@@ -591,6 +606,16 @@ export class PersonalReportComponent implements OnInit {
             }
             this.AddUpdatePersonalReport();
         }
+    }
+
+    editReport(id){
+        this.isEdit=1;
+        this.apiService.editPersonalReport(id).subscribe((data) => {
+            this.patchObject = data;
+            console.log('Edit Data -> ', this.patchObject, this.patchObject.id);
+            this.personalReportForm.patchValue(this.patchObject);
+            this.configModal.show();
+        });
     }
 
     // getReportDetails(reportId){
