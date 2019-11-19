@@ -756,7 +756,7 @@ export class PersonalReportComponent implements OnInit {
         let targetData = chartArray.filter(data => (data.result === 'Target' || data.result === 'Previsione' ));
         let minorData = chartArray.filter(data => (data.result === 'Minor' || data.result === 'Minore'));
         let criticalData = chartArray.filter(data => (data.result === 'Critical' || data.result === 'Critica'));
-        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
         let allViolationData = violationData.map(data => data.actual);
         let allCompliantData = compliantData.map(data => data.actual);
         let allTargetData = targetData.map(data => data.actual);
@@ -849,7 +849,7 @@ export class PersonalReportComponent implements OnInit {
         let targetData = chartArray.filter(data => (data.result === 'Target' || data.result === 'Previsione' ));
         let minorData = chartArray.filter(data => (data.result === 'Minor' || data.result === 'Minore'));
         let criticalData = chartArray.filter(data => (data.result === 'Critical' || data.result === 'Critica'));
-        let allChartLabels = chartArray.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
         let allViolationData = violationData.map(data => data.actual);
         let allCompliantData = compliantData.map(data => data.actual);
         let allTargetData = targetData.map(data => data.actual);
