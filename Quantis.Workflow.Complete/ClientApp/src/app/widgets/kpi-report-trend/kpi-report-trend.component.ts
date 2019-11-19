@@ -5,7 +5,7 @@ import { DateTimeService,
      chartExportTranslations, 
      exportChartButton,
      formatDataLabelForNegativeValues, 
-     updateChartLabelStyle1} from '../../_helpers';
+     updateChartLabelStyle1,getDistinctArray} from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -427,7 +427,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 text: valueData[0].description.split('|')[1]
             }
         }
-        let allChartLabels = chartIndexData.map(label => label.xvalue);
+        let allChartLabels = getDistinctArray(chartIndexData.map(label => label.xvalue));
 
         let allTargetData = targetData.map(data => data.yvalue);
         let allValuesData = valueData.map(data => ({
