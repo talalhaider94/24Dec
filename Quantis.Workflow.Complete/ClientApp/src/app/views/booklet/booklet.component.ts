@@ -244,18 +244,18 @@ export class BookletComponent implements OnInit {
             this.apiService.CreateBooklet(data).subscribe((data: any) => {
                 console.log(data,' called createbooklet');
                 this.bookletStatus=1;
+                if(data==0 || data==null){
+                    this.toastr.error('Error', 'Error in adding booklet');
+                    this.loading = false;
+                }
+                else{
+                    this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
+                    this.loading = false;
+                }
             },error=>{
                 this.bookletStatus=0;
             });
-            console.log('bookletStatus: ',this.bookletStatus);
-            if(this.bookletStatus==0){
-                this.toastr.error('Error', 'Error in adding booklet');
-                this.loading = false;
-            }
-            else if(this.bookletStatus==1){
-                this.toastr.success('Success', 'Al termine della elaborazione i booklet ('+count+') verranno inviati al seguente indirizzo : '+this.validEmail);
-                this.loading = false;
-            }
+            //console.log('bookletStatus: ',this.bookletStatus) 
         }
     }
     addBooklet(){
