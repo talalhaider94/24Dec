@@ -97,17 +97,17 @@ export class BookletComponent implements OnInit {
     }
 
     ngOnInit() {
+         
+    }
+
+    ngAfterViewInit() {
+        this.dtTrigger.next();
         this.getDocumenti();
         this.getContratti();
         this.getcontract();
         this.getCheckedItemList();
         this.dataprecedente = moment().subtract(1, 'month').format('MM/YYYY');
-        this.datacorrente = moment().format('MM/YYYY');   
-    }
-
-    ngAfterViewInit() {
-        this.dtTrigger.next();
-        this.rerender();
+        this.datacorrente = moment().format('MM/YYYY');  
     }
 
     ngOnDestroy(): void {
@@ -159,13 +159,14 @@ export class BookletComponent implements OnInit {
         this.apiService.getContractWithContractParties().subscribe((data:any)=>{
             this.contrat = data;
             console.log('getContractsWithContractParties',data);
+            this.rerender();
         })
     }
     getDocumenti() {
         this.apiService.getBooklet().subscribe((data: any) => {
             this.documentiDef = data;
             console.log('documentiDef', this.documentiDef);
-            //this.rerender();
+            this.rerender();
         });
     }
 
