@@ -607,5 +607,27 @@ namespace Quantis.WorkFlow.Controllers
 
         #endregion
 
+        #region reportSpecialValues
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllReportSpecialValues")]
+        public List<KeyValuePair<int, string>> GetAllReportSpecialValues()
+        {
+            return _dataAPI.GetAllReportSpecialValues();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("DeleteReportSpecialValue")]
+        public void DeleteReportSpecialValue(int key)
+        {
+            _dataAPI.DeleteReportSpecialValue(key);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("AddUpdateReportSpecialValue")]
+        public void AddUpdateReportSpecialValue([FromBody]KeyValuePair<int, string> dto)
+        {
+            _dataAPI.AddUpdateReportSpecialValue(dto);
+        }
+
+        #endregion
+
     }
 }

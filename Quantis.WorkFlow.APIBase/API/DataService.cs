@@ -2665,7 +2665,47 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return true;
         }
-        
+
+        #endregion
+
+        #region reportSpecialValues
+
+        public List<KeyValuePair<int, string>> GetAllReportSpecialValues()
+        {
+            var entities = _dbcontext.ReportSpecialValues.ToList();
+            var dtos = entities.Select(o => new KeyValuePair<int, string>(o.special_key, o.special_value)).ToList();
+            return dtos;
+        }
+        public void DeleteReportSpecialValue(int key)
+        {
+            var orgs = _dbcontext.ReportSpecialValues.FirstOrDefault(o => o.special_key == key);
+            if (orgs != null)
+            {
+                _dbcontext.ReportSpecialValues.Remove(orgs);
+                _dbcontext.SaveChanges();
+            }
+
+        }
+        public void AddUpdateReportSpecialValue(KeyValuePair<int, string> dto)
+        {
+            var entity = _dbcontext.ReportSpecialValues.FirstOrDefault(o => o.special_key == dto.Key);
+            if (entity==null)
+            {
+                entity = new T_ReportSpecialValue()
+                {
+                    special_key = dto.Key,
+                    special_value = dto.Value
+                };
+                _dbcontext.ReportSpecialValues.Add(entity);
+                _dbcontext.SaveChanges();
+            }
+            else
+            {
+                entity.special_value = dto.Value;
+                _dbcontext.SaveChanges();
+            }
+        }
+
         #endregion
 
         #region privateFunctions
