@@ -16,7 +16,6 @@ export class OrganizationComponent implements OnInit {
     @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
     @ViewChild('configModal') public configModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
-    // @ViewChild('searchCol1') searchCol1: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
     category_id: number = 0;
@@ -47,36 +46,18 @@ export class OrganizationComponent implements OnInit {
     };
 
     modalData = {
-        id: '',
-        handle: '',
-        name: '',
-        step: '',
-        category_id: 0
+        key: 0,
+        value: ''
     };
 
-    addData = {
-        handle: '',
-        name: '',
-        step: '',
-        category_id: 0
+    addOrganizationData = {
+        Key: 0,
+        Value: ''
     };
 
     dtTrigger: Subject<any> = new Subject();
-    ConfigTableBodyData: any = [
-        {
-            handle: 'handle',
-            name: 'name',
-            step: 1,
-            category: 'category'
-        }
-    ]
-
-    customersKP: any = [
-        {
-            key: '',
-            value: ''
-        }
-    ]
+    organizationsData: any = []
+    specialReportsData: any = []
 
     constructor(
         private apiService: ApiService,
@@ -84,114 +65,83 @@ export class OrganizationComponent implements OnInit {
     ) {
         $this = this;
     }
-    public handle: any;
-    public name: any;
-    public step: any;
-    public category: any;
+    value;
+    isEdit=0;
 
     ngOnInit() {
     }
 
     populateModalData(data) {
-        this.modalData.id = data.id;
-        this.modalData.handle = data.handle;
-        this.modalData.name = data.name;
-        this.modalData.step = data.step;
-        this.modalData.category_id = data.category_id;
-        this.showConfigModal();
+        this.isEdit=1;
+        this.modalData.key = data.key;
+        this.value = data.value;
+        this.showAddConfigModal();
     }
 
-    add() {
-        this.addData.handle = this.handle;
-        this.addData.name = this.name;
-        this.addData.step = this.step;
-        this.addData.category_id = this.category_id;
+    addOrganization() {
+        if(this.isEdit==1){
+            this.addOrganizationData.Key = this.modalData.key;
+        }else{
+            this.addOrganizationData.Key = 0;
+        }
+        this.addOrganizationData.Value = this.value;
+
+        console.log(this.isEdit,this.addOrganizationData.Key);
 
         this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.addSDMGroup(this.addData).subscribe(data => {
-            this.getCOnfigurations(); // this should refresh the main table on page
-            this.toastr.success('Valore Aggiornato', 'Success');
+        this.apiService.AddUpdateOrganizationUnit(this.addOrganizationData).subscribe(data => {
+            this.GetAllOrganizationUnits();
+            this.toastr.success('Valore aggiornato', 'Success');
             this.hideAddConfigModal();
-            //$('#addConfigModal').modal('toggle').hide();
         }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
-            //$('#addConfigModal').modal('toggle').hide();
+            this.toastr.error('Errore in aggiornato.', 'Error');
             this.hideAddConfigModal();
         });
     }
 
     updateConfig() {
-        //this.modalData.category_id = this.category_id;
         this.toastr.info('Valore in aggiornamento..', 'Info');
         this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
-            this.getCOnfigurations(); // this should refresh the main table on page
+            this.GetAllOrganizationUnits(); 
             this.toastr.success('Valore Aggiornato', 'Success');
             this.hideConfigModal();
-            //$('#configModal').modal('toggle').hide();
         }, error => {
             this.toastr.error('Errore durante update.', 'Error');
-            //$('#configModal').modal('toggle').hide();
             this.hideConfigModal();
         });
     }
 
-    deleteSDMRow(data) {
+    deleteOrganization(data) {
         this.toastr.info('Valore in aggiornamento..', 'Confirm');
-        this.apiService.deleteSDMGroupConfiguration(data.id).subscribe(data => {
-            this.getCOnfigurations(); // this should refresh the main table on page
+        this.apiService.DeleteOrganizationUnit(data.key).subscribe(data => {
+            this.GetAllOrganizationUnits(); 
             this.toastr.success('Valore Aggiornato', 'Success');
-            // $('#configModal').modal('toggle').hide();
         }, error => {
             this.toastr.error('Errore durante update.', 'Error');
-            // $('#configModal').modal('toggle').hide();
         });
     }
 
-    // tslint:disable-next-line:use-life-cycle-interface
     ngAfterViewInit() {
         this.dtTrigger.next();
 
         this.setUpDataTableDependencies();
-        this.getCOnfigurations();
-        this.getCustomersKP();
-
-        /*this.apiService.getConfigurations().subscribe((data:any)=>{
-          this.ConfigTableBodyData = data;
-          this.rerender();
-        });*/
+        this.GetAllOrganizationUnits();
+        this.GetAllReportSpecialValues();
     }
 
     ngOnDestroy(): void {
-        // Do not forget to unsubscribe the event
         this.dtTrigger.unsubscribe();
     }
 
     rerender(): void {
         this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            // Destroy the table first
             dtInstance.destroy();
-            // Call the dtTrigger to rerender again
             this.dtTrigger.next();
             this.setUpDataTableDependencies();
         });
     }
 
-    // getConfigTableRef(datatableElement: DataTableDirective): any {
-    //   return datatableElement.dtInstance;
-    //   // .then((dtInstance: DataTables.Api) => {
-    //   //     console.log(dtInstance);
-    //   // });
-    // }
-
     setUpDataTableDependencies() {
-        // $(this.searchCol1.nativeElement).on( 'keyup', function () {
-        //   $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-        //   datatable_Ref
-        //     .columns( 0 )
-        //     .search( this.value )
-        //     .draw();
-        // });
-        // });
     }
 
     strip_tags(html) {
@@ -200,24 +150,30 @@ export class OrganizationComponent implements OnInit {
         return tmp.textContent || tmp.innerText;
     }
 
-    getCOnfigurations() {
-        this.apiService.getSDMGroupConfigurations().subscribe((data) => {
-            this.ConfigTableBodyData = data;
-            console.log('Configs ', data);
+    GetAllOrganizationUnits() {
+        this.apiService.GetAllOrganizationUnits().subscribe((data) => {
+            this.organizationsData = data;
+            console.log('Organizations Data -> ', data);
             this.rerender();
         });
     }
 
-    getCustomersKP() {
-        this.apiService.getCustomersKP().subscribe((data) => {
-            this.customersKP = data;
-            console.log('CustomersKP ', data);
+    GetAllReportSpecialValues() {
+        this.apiService.GetAllReportSpecialValues().subscribe((data) => {
+            this.specialReportsData = data;
+            console.log('Special Reports Data -> ', data);
             this.rerender();
         });
     }
 
     onCancel(dismissMethod: string): void {
         console.log('Cancel ', dismissMethod);
+    }
+
+    addOrganizationModal(){
+        this.isEdit=0;
+        this.value='';
+        this.showAddConfigModal();
     }
 
     showConfigModal() {
