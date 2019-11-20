@@ -148,5 +148,11 @@ namespace Quantis.WorkFlow.Services.API
         PersonalReportDTO GetPersonalReportDetail(int id);
         void AddUpdatePersonalReport(PersonalReportDTO dto, int userId);
         void DeletePersonalReport(int id);
+        List<KeyValuePair<int, string>> GetAllOrganizationUnits();
+        void DeleteOrganizationUnit(int id);
+        bool AddUpdateOrganizationUnit(KeyValuePair<int, string> dto);
+        List<KeyValuePair<int, string>> GetAllReportSpecialValues();
+        void DeleteReportSpecialValue(int key);
+        void AddUpdateReportSpecialValue(KeyValuePair<int, string> dto);
     }
 }

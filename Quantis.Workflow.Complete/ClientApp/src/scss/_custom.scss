@@ -272,3 +272,11 @@ body {
     margin-top: 25px;
     flex: 0 0 40px;
 }
+.app-header .navbar-toggler-icon {
+  height: 23px;
+  background-image: url(../assets/img/menu.svg);
+}
+.sidebar .sidebar-minimizer::before {
+  height: 50px;
+  background-image: url(../assets/img/menu.svg);
+}
