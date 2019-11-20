@@ -612,18 +612,20 @@ export class FreeFormReportComponent implements OnInit {
         this.isSpecialReport = 0;
       }
 
-      console.log('data.parameters -> ',data.parameters.length);
+      //console.log('Parameters Length -> ',data.parameters.length);
       if(data.parameters.length==0){
       }else{
         this.editQueryData.Parameters = data.parameters;
-        let a = this.addEditQueryForm.get('Parameters') as FormArray;
-        a.push(this.createParameters());
+        console.log('Edit Parameters -> ',data.parameters);
+        for(let i=0;i<data.parameters.length;i++){
+          let a = this.addEditQueryForm.get('Parameters') as FormArray;
+          a.push(this.createParameters());
+        }
       }
       this.addEditQueryForm.patchValue(this.editQueryData);
       console.log('Edit Query -> ',this.addEditQueryForm);
       this.showParametersModal();
     });
-    //this.showViewModal();
     (this.addEditQueryForm.get("Parameters") as FormArray)['controls'].splice(0);
   }
 

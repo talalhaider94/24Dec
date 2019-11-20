@@ -21,21 +21,21 @@
             <button class="ml-2" #btnExporta>Esporta CSV</button>
             <!-- <button class="btn btn-primary ml-2" (click)="reload()">Refresh Table</button> -->
         </div><br />
-        <h5 *ngIf="loading" class="text-center text-primary">
-            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
-        </h5>
+              <div *ngIf="loading" class="text-center" id="loadingDiv">
+                <span class="fa fa-spinner text-primary fa-spin fa-3x"></span>
+              </div>
 
         <div class="top-scroll-container" #topScrollContainer>
             <div #topScroll>&nbsp;</div>
         </div>
         <div class="top-scroll-table-container" #topScrollTblContainer>
-            <table class="table stripe kpiTable" #kpiTable id="kpiTable" [ngStyle]="{'display': loading? 'none' : 'unset'}" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                <thead style="background: #20a8d8">
+            <table class="table stripe kpiTable" #kpiTable id="kpiTable"  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" style="width:100%">
+                <thead style="background: #20a8d8;width:100%">
                   <tr style="color:white;font-size:12px;">
                     <th style="text-align:center">CONTRATTO</th>
                     <th style="text-align:center">ID</th>
                     <th style="text-align:center">TITOLO BREVE</th>
-                    <th width="50%" style="text-align:center">KPI</th>
+                    <th  style="text-align:center">KPI</th>
                     <th style="text-align:center">CARICAMENTO</th>
                     <th style="text-align:center">FREQUENZA</th>
                     <th style="text-align:center">TARGET</th>
@@ -67,12 +67,12 @@
                 </thead>
                 <tbody>
 
-                  <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:13px">
+                  <tr *ngFor="let row of kpiTableBodyData; index as i" style="font-size:12px">
                     <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
                     <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
                     <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
-                    <td class="tagsTip notExportCsv" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
-                    <td class="tagsTip" style="display:none;" width="50%" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi}}</td>
+                    <td class="tagsTip notExportCsv"  [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
+                    <td class="tagsTip" style="display:none;"  [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi}}</td>
                     <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
                     <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
                     <td>{{row.target}}</td>

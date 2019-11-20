@@ -20,18 +20,3 @@ export const updateChartLabelStyle = (color: string = '#ffffff', shadow: boolean
     }
     return dataLabelsObj;
 }
-
-export const updateChartLabelStyle1 = (color: string = '#ffffff', shadow: boolean = false, outline: boolean = false) =>{
-    let dataLabelsObj = {
-        enabled: true,
-        color: color,
-        style: {
-            textShadow: shadow, 
-            textOutline: outline 
-        },
-        formatter: function() {
-            return formatDataLabelForNegativeValues(this.y);
-        }
-    }
-    return dataLabelsObj;
-}
