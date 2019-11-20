@@ -2621,6 +2621,53 @@ namespace Quantis.WorkFlow.APIBase.API
             
         }
 
+        #region organizationUnits
+
+        public List<KeyValuePair<int, string>> GetAllOrganizationUnits()
+        {
+            var entities = _dbcontext.OrganizationUnits.ToList();
+            var dtos = entities.Select(o => new KeyValuePair<int, string>(o.id, o.organization_unit)).ToList();
+            return dtos;
+        }
+
+        public void DeleteOrganizationUnit(int id)
+        {
+            var orgs=_dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == id);
+            if (orgs != null)
+            {
+                _dbcontext.OrganizationUnits.Remove(orgs);
+                _dbcontext.SaveChanges();
+            }
+
+        }
+
+        public bool AddUpdateOrganizationUnit(KeyValuePair<int, string> dto)
+        {
+            if (_dbcontext.OrganizationUnits.Any(o => o.organization_unit == dto.Value))
+            {
+                return false;
+            }
+            if (dto.Key == 0)
+            {
+                var enitity = new T_OrganizationUnit()
+                {
+                    organization_unit = dto.Value
+                };
+                _dbcontext.OrganizationUnits.Add(enitity);
+                _dbcontext.SaveChanges();
+
+            }
+            else
+            {
+                var entity = _dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == dto.Key);
+                entity.organization_unit = dto.Value;
+                _dbcontext.SaveChanges();
+            }
+            return true;
+        }
+        
+        #endregion
+
         #region privateFunctions
 
         /*       private List<int> GetRawIdsFromResource(List<EventResourceDTO> dto, string period)
