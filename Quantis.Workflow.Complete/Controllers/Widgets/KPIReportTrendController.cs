@@ -23,6 +23,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowDateType = true;
             vm.ShowDateRangeFilter = true;
             vm.ShowAggregationOption = true;
+            vm.ShowIncompletePeriodCheck = true;
             vm.AggregationOptions.Add(AggregationOption.PERIOD);
             vm.AggregationOptions.Add(AggregationOption.TRACKINGPERIOD);
 
