@@ -5,7 +5,7 @@ import { DateTimeService,
      chartExportTranslations, 
      exportChartButton,
      formatDataLabelForNegativeValues, 
-     updateChartLabelStyle1,getDistinctArray} from '../../_helpers';
+     getDistinctArray, updateChartLabelStyle} from '../../_helpers';
 import { mergeMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
@@ -94,7 +94,12 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: updateChartLabelStyle1()
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+                    }
+                }
             }
         },
         tooltip: {
@@ -109,7 +114,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 type: 'column',
                 name: 'Values',
                 data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
-                color: 'black'
+                color: 'black',
+                dataLabels: updateChartLabelStyle()
             },
             {
                 type: 'scatter',
@@ -137,7 +143,12 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 stacking: 'normal'
             },
             series: {
-                dataLabels: updateChartLabelStyle1()
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return formatDataLabelForNegativeValues(this.y);
+                    }
+                }
             }
         },
         tooltip: {
@@ -159,7 +170,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
                 type: 'column',
                 name: 'Values',
                 data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
-                color: 'black'
+                color: 'black',
+                dataLabels: updateChartLabelStyle()
             },
             {
                 type: 'scatter',
@@ -457,7 +469,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             type: 'column',
             name: 'Values',
             data: allValuesData,
-            color: 'black'
+            color: 'black',
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions.series[1] = {
             type: 'scatter',
@@ -536,7 +549,8 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             type: 'column',
             name: 'Values',
             data: allValuesData,
-            color: 'black'
+            color: 'black',
+            dataLabels: updateChartLabelStyle()
         };
         this.chartOptions1.series[1] = {
             type: 'scatter',
