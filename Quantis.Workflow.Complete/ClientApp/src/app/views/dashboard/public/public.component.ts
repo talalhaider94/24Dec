@@ -176,24 +176,48 @@ export class PublicComponent implements OnInit {
 		}
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
-				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
+				while(this.allContractParties.length > 0){
+					this.allContractParties.pop()
+				}
+				/* this.allContractParties= [{ key: '', value: 'Select Contract Parties' }]; */
+				this.allContractParties = [{ key: '', value: 'Select Contract Parties' }, ...this.barChartWidgetParameters.allContractParties];
 			}
 			if (this.barChartWidgetParameters.allContracts) {
-				this.filterContracts = [...this.filterContracts, ...this.barChartWidgetParameters.allContracts];
+				while(this.filterContracts.length > 0){
+					this.filterContracts.pop()
+				}
+				this.filterContracts= [{ key: '', value: 'Select Contracts' }];
+				this.filterContracts = [...this.filterContracts];
 			}
 			if (this.barChartWidgetParameters.allKpis) {
-				this.filterKpis = [...this.filterKpis, ...this.barChartWidgetParameters.allKpis];
+				while(this.filterKpis.length > 0){
+					this.filterKpis.pop()
+				}
+				this.filterKpis= [{ key: '', value: 'Select KPI' }];
+				this.filterKpis = [...this.filterKpis];
 				this.widgetParametersForm.get('Filters.contracts').enable();
 				this.widgetParametersForm.get('Filters.kpi').enable();
 			}
 			if (this.barChartWidgetParameters.allContractParties1) {
-				this.allContractParties1 = [...this.allContractParties1, ...this.barChartWidgetParameters.allContractParties1];
+				while(this.allContractParties1.length > 0){
+					this.allContractParties1.pop()
+				}
+				/* this.allContractParties1= [{ key: '', value: 'Select Contract Parties' }]; */
+				this.allContractParties1 = [{ key: '', value: 'Select Contract Parties' }, ...this.barChartWidgetParameters.allContractParties1];
 			}
 			if (this.barChartWidgetParameters.allContracts1) {
-				this.filterContracts1 = [...this.filterContracts1, ...this.barChartWidgetParameters.allContracts1];
+				while(this.filterContracts1.length > 0){
+					this.filterContracts1.pop()
+				}
+				this.filterContracts1= [{ key: '', value: 'Select Contracts' }];
+				this.filterContracts1 = [...this.filterContracts1];
 			}
 			if (this.barChartWidgetParameters.allKpis1) {
-				this.filterKpis1 = [...this.filterKpis1, ...this.barChartWidgetParameters.allKpis1];
+				while(this.filterKpis1.length > 0){
+					this.filterKpis1.pop()
+				}
+				this.filterKpis1= [{ key: '', value: 'Select KPI' }];
+				this.filterKpis1 = [...this.filterKpis1];
 				this.widgetParametersForm.get('Filters.contracts1').enable();
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
@@ -205,7 +229,7 @@ export class PublicComponent implements OnInit {
 				if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
 					const allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 					setTimeout(() => {
-						this.organizationTree.checkAll();
+						/* this.organizationTree.checkAll(); */
 						// this.preSelectedNodes = allOrganizationIds;
 						// console.log('ORG TREE CHECKD NODES 11: ', this.organizationTree.getAllCheckedNodes());
 						console.log('ORG TREE CHECKD NODES 22: ', this.organizationTree.checkedNodes);

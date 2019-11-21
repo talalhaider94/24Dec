@@ -26,5 +26,6 @@ export const pageVersion = {
     '/userprofiling/rolepermissions': '0.0.1',
     '/userprofiling/userpermissions': '0.0.6',
     '/standarddashboard': '0.0.3',
-    '/dashboard/import-form-report': '0.0.1'
+    '/dashboard/import-form-report': '0.0.1',
+    '/tconfiguration/organization': '0.0.1'
 }
