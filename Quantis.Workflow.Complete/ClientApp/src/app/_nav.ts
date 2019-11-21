@@ -224,7 +224,7 @@ export const navItems: NavData[] = [
         key: ['VIEW_CONFIGURATION_GENERAL', 'VIEW_CONFIGURATION_ADVANCED', 'VIEW_CONFIGURATION_SDM_GROUP',
             'VIEW_CONFIGURATION_SDM_TICKET_STATUS', 'VIEW_CONFIGURATION_ROLES', 'VIEW_CONFIGURATION_USER_ROLES',
             'VIEW_CONFIGURATION_USER_PROFILING', 'VIEW_CONFIGURATION_STANDARD_DASHBOARD', 'IMPORT_FREE_FORM_REPORT',
-            'VIEW_CUTOFF_WORKFLOW_DAY','VIEW_CONFIGURATION_ORGANIZATION'
+            'VIEW_CUTOFF_WORKFLOW_DAY','VIEW_CONFIGURATION_ADVANCED_2'
         ],
         children: [
             {
@@ -298,11 +298,11 @@ export const navItems: NavData[] = [
                 key: 'VIEW_CUTOFF_WORKFLOW_DAY'
             },
             {
-                name: 'Organizzazione',
+                name: 'Speciali',
                 url: '/tconfiguration/organization',
                 icon: 'fa fa-check-circle-o',
                 version: '0.0.1',
-                key: 'VIEW_CONFIGURATION_ORGANIZATION'
+                key: 'VIEW_CONFIGURATION_ADVANCED_2'
             }
             /*{
                 name: 'Workflow',
