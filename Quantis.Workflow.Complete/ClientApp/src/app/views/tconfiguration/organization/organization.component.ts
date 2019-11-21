@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
@@ -9,41 +9,21 @@ declare var $;
 var $this;
 
 @Component({
-    templateUrl: './organization.component.html'
+    templateUrl: './organization.component.html',
+    styleUrls: ['./organization.component.scss']
 })
 
 export class OrganizationComponent implements OnInit {
     @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
-    @ViewChild('configModal') public configModal: ModalDirective;
+    @ViewChild('specialModal') public specialModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
-    @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
+    @ViewChildren(DataTableDirective)
+    datatableElements: QueryList<DataTableDirective>;
+    dtOptions: DataTables.Settings = {};
+    dtTrigger = new Subject();
+    dtOptions2: DataTables.Settings = {};
+    dtTrigger2 = new Subject();
 
-    category_id: number = 0;
-
-    dtOptions: DataTables.Settings = {
-        language: {
-            processing: "Elaborazione...",
-            search: "Cerca:",
-            lengthMenu: "Visualizza _MENU_ elementi",
-            info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
-            infoEmpty: "Vista da 0 a 0 di 0 elementi",
-            infoFiltered: "(filtrati da _MAX_ elementi totali)",
-            infoPostFix: "",
-            loadingRecords: "Caricamento...",
-            zeroRecords: "La ricerca non ha portato alcun risultato.",
-            emptyTable: "Nessun dato presente nella tabella.",
-            paginate: {
-                first: "Primo",
-                previous: "Precedente",
-                next: "Seguente",
-                last: "Ultimo"
-            },
-            aria: {
-                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
-                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
-            }
-        }
-    };
 
     modalData = {
         key: 0,
@@ -55,7 +35,16 @@ export class OrganizationComponent implements OnInit {
         Value: ''
     };
 
-    dtTrigger: Subject<any> = new Subject();
+    modalSpecialData = {
+        key: 0,
+        value: ''
+    };
+
+    addSpecialData = {
+        Key: 0,
+        Value: ''
+    };
+
     organizationsData: any = []
     specialReportsData: any = []
 
@@ -66,9 +55,74 @@ export class OrganizationComponent implements OnInit {
         $this = this;
     }
     value;
+    specialKey;
+    specialValue;
     isEdit=0;
+    isSpecialEdit=0;
 
     ngOnInit() {
+        this.dtOptions = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            language: {
+              processing: "Elaborazione...",
+              search: "Cerca:",
+              lengthMenu: "Visualizza _MENU_ elementi",
+              info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+              infoEmpty: "Vista da 0 a 0 di 0 elementi",
+              infoFiltered: "(filtrati da _MAX_ elementi totali)",
+              infoPostFix: "",
+              loadingRecords: "Caricamento...",
+              zeroRecords: "La ricerca non ha portato alcun risultato.",
+              emptyTable: "Nessun dato presente nella tabella.",
+              paginate: {
+                first: "Primo",
+                previous: "Precedente",
+                next: "Seguente",
+                last: "Ultimo"
+              },
+              aria: {
+                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+              }
+            },
+            destroy:true
+        };
+        this.dtOptions2 = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            language: {
+              processing: "Elaborazione...",
+              search: "Cerca:",
+              lengthMenu: "Visualizza _MENU_ elementi",
+              info: "Vista da _START_ a _END_ di _TOTAL_ elementi",
+              infoEmpty: "Vista da 0 a 0 di 0 elementi",
+              infoFiltered: "(filtrati da _MAX_ elementi totali)",
+              infoPostFix: "",
+              loadingRecords: "Caricamento...",
+              zeroRecords: "La ricerca non ha portato alcun risultato.",
+              emptyTable: "Nessun dato presente nella tabella.",
+              paginate: {
+                first: "Primo",
+                previous: "Precedente",
+                next: "Seguente",
+                last: "Ultimo"
+              },
+              aria: {
+                sortAscending: ": attiva per ordinare la colonna in ordine crescente",
+                sortDescending: ":attiva per ordinare la colonna in ordine decrescente"
+              }
+            },
+            destroy:true
+        };
+    }
+
+    ngAfterViewInit() {
+        this.dtTrigger.next();
+        this.dtTrigger2.next();
+        
+        this.GetAllOrganizationUnits();
+        this.GetAllReportSpecialValues();
     }
 
     populateModalData(data) {
@@ -76,6 +130,13 @@ export class OrganizationComponent implements OnInit {
         this.modalData.key = data.key;
         this.value = data.value;
         this.showAddConfigModal();
+    }
+    
+    populateSpecialModalData(data) {
+        this.isSpecialEdit=1;
+        this.specialKey = data.key;
+        this.specialValue = data.value;
+        this.showSpecialModal();
     }
 
     addOrganization() {
@@ -85,8 +146,6 @@ export class OrganizationComponent implements OnInit {
             this.addOrganizationData.Key = 0;
         }
         this.addOrganizationData.Value = this.value;
-
-        console.log(this.isEdit,this.addOrganizationData.Key);
 
         this.toastr.info('Valore in aggiornamento..', 'Info');
         this.apiService.AddUpdateOrganizationUnit(this.addOrganizationData).subscribe(data => {
@@ -99,15 +158,18 @@ export class OrganizationComponent implements OnInit {
         });
     }
 
-    updateConfig() {
+    addSpecialValue() {
+        this.addSpecialData.Key = this.specialKey;
+        this.addSpecialData.Value = this.specialValue;
+
         this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.updateSDMGroupConfig(this.modalData).subscribe(data => {
-            this.GetAllOrganizationUnits(); 
-            this.toastr.success('Valore Aggiornato', 'Success');
-            this.hideConfigModal();
+        this.apiService.AddUpdateReportSpecialValue(this.addSpecialData).subscribe(data => {
+            this.GetAllReportSpecialValues();
+            this.toastr.success('Valore aggiornato', 'Success');
+            this.hideSpecialModal();
         }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
-            this.hideConfigModal();
+            this.toastr.error('Errore in aggiornato.', 'Error');
+            this.hideSpecialModal();
         });
     }
 
@@ -120,25 +182,31 @@ export class OrganizationComponent implements OnInit {
             this.toastr.error('Errore durante update.', 'Error');
         });
     }
-
-    ngAfterViewInit() {
-        this.dtTrigger.next();
-
-        this.setUpDataTableDependencies();
-        this.GetAllOrganizationUnits();
-        this.GetAllReportSpecialValues();
+    
+    deleteSpecialValue(data) {
+        this.toastr.info('Valore in aggiornamento..', 'Confirm');
+        this.apiService.DeleteReportSpecialValue(data.key).subscribe(data => {
+            this.GetAllReportSpecialValues(); 
+            this.toastr.success('Valore Aggiornato', 'Success');
+        }, error => {
+            this.toastr.error('Errore durante update.', 'Error');
+        });
     }
 
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
+        this.dtTrigger2.unsubscribe();
     }
 
     rerender(): void {
-        this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            dtInstance.destroy();
-            this.dtTrigger.next();
-            this.setUpDataTableDependencies();
+        this.datatableElements.forEach((dtElement: DataTableDirective) => {
+            dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+              dtInstance.destroy();
+              this.dtTrigger.next();
+              this.dtTrigger2.next();
+            });
         });
+        this.setUpDataTableDependencies();
     }
 
     setUpDataTableDependencies() {
@@ -176,12 +244,19 @@ export class OrganizationComponent implements OnInit {
         this.showAddConfigModal();
     }
 
-    showConfigModal() {
-        this.configModal.show();
+    addSpecialModal(){
+        this.isSpecialEdit=0;
+        this.specialKey='';
+        this.specialValue='';
+        this.showSpecialModal();
     }
 
-    hideConfigModal() {
-        this.configModal.hide();
+    showSpecialModal() {
+        this.specialModal.show();
+    }
+
+    hideSpecialModal() {
+        this.specialModal.hide();
     }
 
     showAddConfigModal() {
