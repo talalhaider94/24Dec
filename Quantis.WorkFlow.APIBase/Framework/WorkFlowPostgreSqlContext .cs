@@ -63,6 +63,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
         public DbSet<T_PersonalReport> PersonalReports { get; set; }
         public DbSet<T_OrganizationUnit> OrganizationUnits { get; set; }
         public DbSet<T_ReportSpecialValue> ReportSpecialValues { get; set; }
+        public DbSet<SDM_TicketException> SDMTicketExceptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -114,6 +115,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             builder.ApplyConfiguration(new T_PersonalReport_Configuration());
             builder.ApplyConfiguration(new T_OrganizationUnit_Configuration());
             builder.ApplyConfiguration(new T_ReportSpecialValue_Configuration());
+            builder.ApplyConfiguration(new SDM_TicketException_Configuration());
             base.OnModelCreating(builder);
         }
 
@@ -168,6 +170,7 @@ namespace Quantis.WorkFlow.APIBase.Framework
             updateUpdatedProperty<T_PersonalReport>();
             updateUpdatedProperty<T_OrganizationUnit>();
             updateUpdatedProperty<T_ReportSpecialValue>();
+            updateUpdatedProperty<SDM_TicketException>();
             return base.SaveChanges();
         }
 

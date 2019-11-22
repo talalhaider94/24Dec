@@ -348,7 +348,27 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
+                var entity = new SDM_TicketException()
+                {
+
+                    period_month = DateTime.Now.AddMonths(-1).Month,
+                    period_year = DateTime.Now.AddMonths(-1).Year
+                };
+                var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                if (kpi != null)
+                {
+                    entity.global_rule_id = kpi.global_rule_id_bsi;
+                    entity.exception_text = e.Message+"||||";
+                    var inner_exception = e.InnerException;
+                    while (inner_exception != null)
+                    {
+                        entity.exception_text += ">>>>>>" + inner_exception.Message;
+                        inner_exception = inner_exception.InnerException;
+                    }
+                    
+                }
                 throw e;
+
             }
             finally
             {
