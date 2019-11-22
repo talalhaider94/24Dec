@@ -1292,14 +1292,15 @@ r.rule_name,
         public List<BSIFreeFormReportDTO> GetBSIFreeFormReports()
         {
             var results = new List<BSIFreeFormReportDTO>();
-            string query = @"select rg.report_id, rg.report_name, rg.report_description, rg.report_xml, rg.report_owner, us.user_name
-                              from t_report_galleries rg , t_users us
+            string query = @"select fo.folder_id, rg.report_id, fo.folder_name,  rg.report_name, rg.report_description, rg.report_xml, fo.folder_owner, fus.user_name, rg.report_owner, rus.user_name
+                              from t_report_galleries rg , t_users rus, t_report_folders fo,  t_users fus
                               where rg.report_type ='FREEFORM'
                               and rg.is_executable=1
-                              and rg.report_owner=us.user_id
+                              and rg.report_owner=rus.user_id
+                              and fo.folder_owner=fus.user_id
+                              and rg.folder_id=fo.folder_id
                               and rg.report_name not like 'Admin%'
-                              order by rg.report_name
-                              ";
+                              order by fo.folder_name, rg.report_name";
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
                 using (OracleCommand cmd = con.CreateCommand())
@@ -1311,12 +1312,16 @@ r.rule_name,
                     while (reader.Read())
                     {
                         var result = new BSIFreeFormReportDTO();
-                        result.ReportId = Decimal.ToInt32((Decimal)reader[0]);
-                        result.ReportName = (string)reader[1];
-                        result.ReportDescription = (reader[2] == DBNull.Value) ? null : (string)reader[2];
-                        result.OwnerId = Decimal.ToInt32((Decimal)reader[4]);
-                        result.OwnerName = (string)reader[5];
-                        var xml = (string)reader[3];
+                        result.FolderId= Decimal.ToInt32((Decimal)reader[0]);
+                        result.ReportId = Decimal.ToInt32((Decimal)reader[1]);
+                        result.FolderName = (string)reader[2];
+                        result.ReportName = (string)reader[3];
+                        result.ReportDescription = (reader[4] == DBNull.Value) ? null : (string)reader[4];
+                        result.FolderOwnerId= Decimal.ToInt32((Decimal)reader[6]);
+                        result.FolderOwnerName = (string) reader[7];
+                        result.OwnerId = Decimal.ToInt32((Decimal)reader[8]);
+                        result.OwnerName = (string)reader[9];
+                        var xml = (string)reader[5];
                         XDocument xdoc = XDocument.Parse(xml);
                         var queryString = xdoc.Element("REPORT_GROUP").Element("REPORT_ITEM").Element("REPORT").Element("query_string").Value;
                         queryString = queryString.Replace("&gt;", ">");

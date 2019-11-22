@@ -28,13 +28,9 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<XYDTO> GetKPICountTrend(WidgetwithAggOptionDTO dto)
         {
             var result = new List<XYDTO>();
-            var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year);
-            if (dto.KPIs.Any())
-            {
-                facts = facts.Where(o => dto.KPIs.Contains(o.global_rule_id));
-            }
             if (dto.Measures.FirstOrDefault() == Measures.Number_of_ticket_in_KPI_in_Verifica)
             {
+                var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year && dto.KPIs.Contains(o.global_rule_id));
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
@@ -54,6 +50,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             else if (dto.Measures.FirstOrDefault() == Measures.Number_of_ticket_of_KPI_Compliant)
             {
+                var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year && dto.KPIs.Contains(o.global_rule_id));
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
@@ -73,6 +70,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             else if (dto.Measures.FirstOrDefault() == Measures.Number_of_ticket_of_KPI_Non_Calcolato)
             {
+                var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year && dto.KPIs.Contains(o.global_rule_id));
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
@@ -92,6 +90,7 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             else if (dto.Measures.FirstOrDefault() == Measures.Number_of_ticket_of_KPI_Non_Compliant)
             {
+                var facts = _dbcontext.SDMTicketFact.Where(o => o.period_month >= dto.DateRange.Item1.Month && o.period_year >= dto.DateRange.Item1.Year && o.period_month <= dto.DateRange.Item2.Month && o.period_year <= dto.DateRange.Item2.Year && dto.KPIs.Contains(o.global_rule_id));
                 if (dto.AggregationOption == AggregationOption.ANNAUL.Key)
                 {
                     result = facts.GroupBy(o => o.period_year).Select(p => new XYDTO()
