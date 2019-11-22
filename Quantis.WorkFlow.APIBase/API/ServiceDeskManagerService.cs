@@ -257,6 +257,7 @@ namespace Quantis.WorkFlow.APIBase.API
 
         public SDMTicketLVDTO CreateTicketByKPIID(int Id)
         {
+            bool ticketCreated = false;
             SDMTicketLVDTO ret = null;
             LogIn();
             try
@@ -312,7 +313,7 @@ namespace Quantis.WorkFlow.APIBase.API
                       "zz_string3",
                       dto.zz3_KpiIds
                     }, new string[0], "", new string[0], newRequestHandle, newRequestNumber)).Result.createRequestReturn;
-
+                ticketCreated = true;
                 ret = parseNewTicket(ticket);
                 var sdm_fact = new SDM_TicketFact()
                 {
@@ -331,6 +332,14 @@ namespace Quantis.WorkFlow.APIBase.API
                     ticket_refnum = int.Parse(ret.ref_num),
                     customer_id = _infomationAPI.GetContractIdByGlobalRuleId(int.Parse(dto.zz3_KpiIds.Split('|')[1]))
                 };
+                var deleteRecord = _dbcontext.SDMTicketExceptions.FirstOrDefault(o =>
+                    o.global_rule_id == sdm_fact.global_rule_id && o.period_month == sdm_fact.period_month &&
+                    o.period_year == sdm_fact.period_year);
+                if (deleteRecord != null)
+                {
+                    _dbcontext.SDMTicketExceptions.Remove(deleteRecord);
+                    _dbcontext.SaveChanges();
+                }
                 _dbcontext.SDMTicketFact.Add(sdm_fact);
                 _dbcontext.SaveChanges();
                 var attachments = _dataService.GetAttachmentsByKPIID(Id);
@@ -348,25 +357,29 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             catch (Exception e)
             {
-                var entity = new SDM_TicketException()
+                if (!ticketCreated)
                 {
-
-                    period_month = DateTime.Now.AddMonths(-1).Month,
-                    period_year = DateTime.Now.AddMonths(-1).Year
-                };
-                var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
-                if (kpi != null)
-                {
-                    entity.global_rule_id = kpi.global_rule_id_bsi;
-                    entity.exception_text = e.Message+"||||";
-                    var inner_exception = e.InnerException;
-                    while (inner_exception != null)
+                    var entity = new SDM_TicketException()
                     {
-                        entity.exception_text += ">>>>>>" + inner_exception.Message;
-                        inner_exception = inner_exception.InnerException;
+
+                        period_month = DateTime.Now.AddMonths(-1).Month,
+                        period_year = DateTime.Now.AddMonths(-1).Year
+                    };
+                    var kpi = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == Id);
+                    if (kpi != null)
+                    {
+                        entity.global_rule_id = kpi.global_rule_id_bsi;
+                        entity.exception_text = e.Message + "||||";
+                        var inner_exception = e.InnerException;
+                        while (inner_exception != null)
+                        {
+                            entity.exception_text += ">>>>>>" + inner_exception.Message;
+                            inner_exception = inner_exception.InnerException;
+                        }
+
                     }
-                    
                 }
+
                 throw e;
 
             }
