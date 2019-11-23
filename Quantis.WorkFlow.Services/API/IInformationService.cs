@@ -84,5 +84,12 @@ namespace Quantis.WorkFlow.Services.API
         List<OrganizationUnitDTO> GetOrganizationUnits();
         List<OrganizationUnitDTO> GetOrganizationUnitsByContract(int contractid);
         List<UserKPIDTO> GetKPIDetails(List<int> KpiIds);
+
+        List<KeyValuePair<int, string>> GetAllOrganizationUnits();
+        void DeleteOrganizationUnit(int id);
+        bool AddUpdateOrganizationUnit(KeyValuePair<int, string> dto);
+        List<ReportSpecialValueDTO> GetAllReportSpecialValues();
+        void DeleteReportSpecialValue(int key);
+        void AddUpdateReportSpecialValue(ReportSpecialValueDTO dto);
     }
 }
