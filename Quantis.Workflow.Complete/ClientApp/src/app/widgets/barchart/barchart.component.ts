@@ -45,7 +45,7 @@ export class BarchartComponent implements OnInit {
             type: 'column'
         },
         xAxis: {
-            type: 'date',
+            type: 'datetime',
             categories: ['10/18', '11/18', '12/18', '01/19', '02/19'],
             crosshair: true
         },
@@ -206,6 +206,7 @@ export class BarchartComponent implements OnInit {
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
         let label = 'Series';
+        debugger
         if (dashboardComponentData) {
             let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
             label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];
@@ -248,7 +249,7 @@ export class BarchartComponent implements OnInit {
         }
 
         this.myChartOptions.xAxis = {
-            type: 'date',
+            type: 'datetime',
             categories: allLabels,
             crosshair: true
         }
