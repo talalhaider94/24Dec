@@ -22,7 +22,7 @@ namespace FormAdapterService
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             var domain = AppDomain.CurrentDomain;
-            domain.AssemblyResolve += LoadAssembly;
+            //domain.AssemblyResolve += LoadAssembly;
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
         }
         private Assembly LoadAssembly(object sender, ResolveEventArgs args)

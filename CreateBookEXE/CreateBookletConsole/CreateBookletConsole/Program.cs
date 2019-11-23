@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EventForm.bcfed9e1.Class5;
+using BoC.g8almgr2.Class5;
 using Newtonsoft.Json;
 
 namespace CreateBookletConsole
@@ -17,7 +17,7 @@ namespace CreateBookletConsole
             var class5 = new Class5(dto.MainPath);
             int totalNumbers = dto.ListContract.Count;
             string requestId = DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss");
-            Parallel.ForEach(dto.ListContract.Keys, (key) =>
+            foreach (var key in dto.ListContract.Keys)
             {
                 try
                 {
@@ -33,7 +33,24 @@ namespace CreateBookletConsole
                 {
                     currentNumber++;
                 }
-            });
+            }
+            //Parallel.ForEach(dto.ListContract.Keys, (key) =>
+            //{
+            //    try
+            //    {
+            //        var intKey = int.Parse(key);
+            //        var value = dto.ListContract[key];
+            //        class5.CreateSingleBooklet(intKey, value, dto.UserId, dto.BookletDocumentId, dto.MailSetup, currentNumber, totalNumbers, requestId);
+            //    }
+            //    catch (Exception e)
+            //    {
+
+            //    }
+            //    finally
+            //    {
+            //        currentNumber++;
+            //    }
+            //});
 
             return 1;
             //return class5.CreateBooklet(dto.ListContract, dto.UserId, dto.BookletDocumentId, dto.MailSetup);

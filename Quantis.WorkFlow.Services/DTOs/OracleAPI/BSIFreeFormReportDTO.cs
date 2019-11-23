@@ -17,5 +17,9 @@ namespace Quantis.WorkFlow.Services.DTOs.OracleAPI
         public List<KeyValuePairDTO> Parameters { get; set; }
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
+        public int FolderId { get; set; }
+        public string FolderName { get; set; }
+        public int FolderOwnerId { get; set; }
+        public string FolderOwnerName { get; set; }
     }
 }
