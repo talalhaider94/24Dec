@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using Quantis.WorkFlow.Models;
 
 namespace Quantis.WorkFlow.APIBase.API
 {
@@ -1223,5 +1224,99 @@ namespace Quantis.WorkFlow.APIBase.API
             }
             return res;
         }
+
+        #region organizationUnits
+
+        public List<KeyValuePair<int, string>> GetAllOrganizationUnits()
+        {
+            var entities = _dbcontext.OrganizationUnits.ToList();
+            var dtos = entities.Select(o => new KeyValuePair<int, string>(o.id, o.organization_unit)).ToList();
+            return dtos;
+        }
+
+        public void DeleteOrganizationUnit(int id)
+        {
+            var orgs = _dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == id);
+            if (orgs != null)
+            {
+                _dbcontext.OrganizationUnits.Remove(orgs);
+                _dbcontext.SaveChanges();
+            }
+
+        }
+
+        public bool AddUpdateOrganizationUnit(KeyValuePair<int, string> dto)
+        {
+            if (_dbcontext.OrganizationUnits.Any(o => o.organization_unit == dto.Value))
+            {
+                return false;
+            }
+            if (dto.Key == 0)
+            {
+                var enitity = new T_OrganizationUnit()
+                {
+                    organization_unit = dto.Value
+                };
+                _dbcontext.OrganizationUnits.Add(enitity);
+                _dbcontext.SaveChanges();
+
+            }
+            else
+            {
+                var entity = _dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == dto.Key);
+                entity.organization_unit = dto.Value;
+                _dbcontext.SaveChanges();
+            }
+            return true;
+        }
+
+        #endregion
+
+        #region reportSpecialValues
+
+        public List<ReportSpecialValueDTO> GetAllReportSpecialValues()
+        {
+            var entities = _dbcontext.ReportSpecialValues.ToList();
+            var dtos = entities.Select(o => new ReportSpecialValueDTO()
+            {
+                Key = o.special_key,
+                Value = o.special_value,
+                Note = o.note
+            }).ToList();
+            return dtos;
+        }
+        public void DeleteReportSpecialValue(int key)
+        {
+            var orgs = _dbcontext.ReportSpecialValues.FirstOrDefault(o => o.special_key == key);
+            if (orgs != null)
+            {
+                _dbcontext.ReportSpecialValues.Remove(orgs);
+                _dbcontext.SaveChanges();
+            }
+
+        }
+        public void AddUpdateReportSpecialValue(ReportSpecialValueDTO dto)
+        {
+            var entity = _dbcontext.ReportSpecialValues.FirstOrDefault(o => o.special_key == dto.Key);
+            if (entity == null)
+            {
+                entity = new T_ReportSpecialValue()
+                {
+                    special_key = dto.Key,
+                    special_value = dto.Value,
+                    note = dto.Note
+                };
+                _dbcontext.ReportSpecialValues.Add(entity);
+                _dbcontext.SaveChanges();
+            }
+            else
+            {
+                entity.special_value = dto.Value;
+                entity.note = dto.Note;
+                _dbcontext.SaveChanges();
+            }
+        }
+
+        #endregion
     }
 }

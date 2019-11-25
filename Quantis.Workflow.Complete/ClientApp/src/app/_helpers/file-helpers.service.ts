@@ -24,16 +24,27 @@ export class FileHelpersService {
       prefix = `data:image/jpg;base64,${base64Data}`;
     } else if (extension === 'csv') {
       prefix = `data:application/octet-stream;base64,${base64Data}`;
-    } else if (extension === 'xlsx') {
+    } else if (extension === 'xlsx' || extension === 'xls') {
       prefix = `data:application/vnd.ms-excel;base64,${base64Data}`;
     } else if (extension === 'txt') {
       prefix = `data:text/plain;base64,${base64Data}`;
-    } else if (extension === 'docx') {
+    } else if (extension === 'docx' || extension == 'doc') {
       prefix = `data:application/vnd.ms-word;base64,${base64Data}`;
+    } else if (extension === 'ppt' || extension == 'pps') {
+      prefix = `data:application/vnd.ms-powerpoint;base64,${base64Data}`;
+    } else if (extension === 'msg') {
+      prefix = `data:application/vnd.ms-outlook;base64,${base64Data}`;
+    } else if (extension === 'gif') {
+      prefix = `data:image/gif;base64,${base64Data}`;
+    } else if (extension === 'jpeg') {
+      prefix = `data:image/jpeg;base64,${base64Data}`;
+    } else if (extension === 'eml') {
+      prefix = `data:message/rfc822;base64,${base64Data}`;
     } else {
       this.toastr.error('Error', 'Unknown file extension');
       return false;
     }
+    
     // fetch(prefix).then(res => res.blob()).then(blob => {
     //   this._FileSaverService.save(blob, fileName);
     // });

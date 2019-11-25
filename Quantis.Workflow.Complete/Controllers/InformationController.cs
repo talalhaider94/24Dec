@@ -343,6 +343,51 @@ namespace Quantis.WorkFlow.Complete.Controllers
         {
             return _infomationAPI.GetWorkflowByContract(contractId);
         }
-        
+
+        #region organizationUnits
+
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllOrganizationUnits")]
+        public List<KeyValuePair<int, string>> GetAllOrganizationUnits()
+        {
+            return _infomationAPI.GetAllOrganizationUnits();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("DeleteOrganizationUnit")]
+        public void DeleteOrganizationUnit(int id)
+        {
+            _infomationAPI.DeleteOrganizationUnit(id);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("AddUpdateOrganizationUnit")]
+        public bool AddUpdateOrganizationUnit([FromBody]KeyValuePair<int, string> dto)
+        {
+            return _infomationAPI.AddUpdateOrganizationUnit(dto);
+        }
+
+        #endregion
+
+        #region reportSpecialValues
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("GetAllReportSpecialValues")]
+        public List<ReportSpecialValueDTO> GetAllReportSpecialValues()
+        {
+            return _infomationAPI.GetAllReportSpecialValues();
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpGet("DeleteReportSpecialValue")]
+        public void DeleteReportSpecialValue(int key)
+        {
+            _infomationAPI.DeleteReportSpecialValue(key);
+        }
+        [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
+        [HttpPost("AddUpdateReportSpecialValue")]
+        public void AddUpdateReportSpecialValue([FromBody]ReportSpecialValueDTO dto)
+        {
+            _infomationAPI.AddUpdateReportSpecialValue(dto);
+        }
+
+        #endregion
+
     }
 }
