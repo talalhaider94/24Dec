@@ -65,6 +65,7 @@ export class PublicComponent implements OnInit {
 	selectedyear;
 	months = [];
 	monthVar;
+	isSelectedPeriod=0;
 	highcharts = Highcharts;
 
 	isLoadedDati=0;
@@ -508,7 +509,7 @@ export class PublicComponent implements OnInit {
 				console.log('months -> ',this.months);
 
 				/////////////////////////////////////////////
-
+				this.isSelectedPeriod=0;
 				this.getdati1(this.kpiId,to_month,toYear)
 			}
 
@@ -1251,11 +1252,15 @@ export class PublicComponent implements OnInit {
         this.periodFilter = 1;
         let month;
 		let year;
-        if(toMonth<10){
-            month = '0' + toMonth;
-        }else{
-            month = toMonth;
-        }
+		if(this.isSelectedPeriod==1){
+			month = toMonth;
+		}else{
+			if(toMonth<10){
+				month = '0' + toMonth;
+			}else{
+				month = toMonth;
+			}
+		}
         year = toYear;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
@@ -1331,6 +1336,7 @@ export class PublicComponent implements OnInit {
 	}
 	
     selectedMonth(e){
+		this.isSelectedPeriod=1;
         let stringToSplit = this.monthVar;
         let split = stringToSplit.split("/");
         let month = split[0];
