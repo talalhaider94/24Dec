@@ -605,7 +605,7 @@ export class CatalogoKpiComponent implements OnInit {
             })
             rows.push(row.join('|'));
           }
-          console.log(rows)
+          //console.log(rows)
         }
         csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
