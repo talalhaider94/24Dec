@@ -62,7 +62,8 @@
                     <th style="display:none;">FORM_NAME</th>
                     <th style="display:none;">ID_FORM</th>
                     <th style="display:none;">PROGRESSIVE</th>
-
+                    <th style="display:none;">CUTOFF_DAY</th>
+                    <th style="display:none;">WORKFLOW_DAY</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -101,10 +102,12 @@
                     <td style="display:none;" width="0" class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
                     <td class="notExportCsv" style="display:none;" width="0">{{row.kpi_name_bsi}}</td>
                     <td style="display:none;">{{row.global_rule_id_bsi}}</td>
-                    <td style="display:none;" >{{row.kpi_name_bsi}}</td>
+                    <td style="display:none;">{{row.kpi_name_bsi}}</td>
                     <td style="display:none;">{{row.form_name}}</td>
                     <td style="display:none;">{{row.id_form}}</td>
                     <td style="display:none;">{{row.progressive}}</td>
+                    <td style="display:none;">{{row.day_cutoff}}</td>
+                    <td style="display:none;">{{row.day_workflow}}</td>
                   </tr>
                 </tbody>
             </table>

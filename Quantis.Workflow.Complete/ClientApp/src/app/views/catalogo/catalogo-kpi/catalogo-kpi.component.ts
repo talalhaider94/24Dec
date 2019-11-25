@@ -106,6 +106,8 @@ export class CatalogoKpiComponent implements OnInit {
         frequency: '',
         month: '',
         day: '',
+      day_workflow: '',
+      day_cutoff: '',
         daytrigger: '',
         monthtrigger: '',
         enable: false,
@@ -272,6 +274,8 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.frequency = data.frequency;
         this.modalData.month = data.month;
         this.modalData.day = data.day;
+      this.modalData.day_workflow = data.day_workflow;
+      this.modalData.day_cutoff = data.day_cutoff;
         this.modalData.daytrigger = data.daytrigger;
         this.modalData.monthtrigger = data.monthtrigger;
         this.modalData.enable = data.enable;
@@ -325,6 +329,8 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.frequency = data.frequency;
         this.modalData.month = data.month;
         this.modalData.day = data.day;
+      this.modalData.day_workflow = data.day_workflow;
+      this.modalData.day_cutoff = data.day_cutoff;
         this.modalData.daytrigger = data.daytrigger;
         this.modalData.monthtrigger = data.monthtrigger;
         this.modalData.enable = data.enable;
