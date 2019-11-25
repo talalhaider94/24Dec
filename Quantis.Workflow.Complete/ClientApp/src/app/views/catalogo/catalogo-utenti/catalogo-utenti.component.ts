@@ -191,7 +191,7 @@ export class CatalogoUtentiComponent implements OnInit {
         $(tableElm + ' thead').find('th:not(.notExportCsv)').each(function () {
             var $th = $(this);
             var text = $th.text();
-            var header = '"' + text + '"';
+            var header = '"' + text + '"'; 
             if (text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
         });
         csv += headers.join(',') + "\n";
