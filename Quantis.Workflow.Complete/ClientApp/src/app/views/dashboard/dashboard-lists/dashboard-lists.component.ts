@@ -168,11 +168,13 @@ export class DashboardListsComponent implements OnInit {
     }
 
     deleteDashboard(id){
-        this.toastr.info('Valore in aggiornamento..', 'Confirm');
+        this.loading = true;
         this.dashboardService.DeleteDashboard(id).subscribe(result => {
             this.toastr.success('Dashboard deleted successfully');
+            this.loading = false;
             this.getUserDashboards();
         }, error => {
+            this.loading = false;
             this.toastr.error('Error in deleting dashboard');
         })
     }
