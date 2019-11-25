@@ -35,13 +35,12 @@
                     <th style="text-align:center">CONTRATTO</th>
                     <th style="text-align:center">ID</th>
                     <th style="text-align:center">TITOLO BREVE</th>
-                    <th  style="text-align:center">KPI</th>
+                    <th class="notExportCsv" style="text-align:center">KPI</th>
                     <th style="text-align:center">CARICAMENTO</th>
                     <th style="text-align:center">FREQUENZA</th>
                     <th style="text-align:center">TARGET</th>
                     <th style="text-align:center">ESCALATION</th>
                     <th style="text-align:center">TIPO</th>
-                    <th class="notExportCsv" style="text-align:center;display:none;">TIPOLOGIA</th>
                     <th style="text-align: center">FORNITURA</th>
                     <th style="text-align: center">U.O.</th>
                     <th style="text-align:center">A</th>
@@ -50,18 +49,19 @@
                     <th class="notExportCsv" style="text-align:center">REFERENTI</th>
 
                     <th class="notExportCsv" style="display:none;text-align:center"></th>
-                    <th style="display:none;text-align:center">REFERENTI-0</th>
-                    <th style="display:none;text-align:center">REFERENTI-1</th>
-                    <th style="display:none;text-align: center">REFERENTI-2</th>
-                    <th style="display:none;text-align:center">REFERENTI-3</th>
                     <th class="notExportCsv" style="text-align:center">CALCOLO</th>
                     <th class="notExportCsv" style="text-align:center"></th>
-                    <th class="notExportCsv" style="display:none;" width="0" >hide</th>
-                    <th class="notExportCsv" style="display:none;" width="0" >hide</th>
-                    <th style="display:none;text-align:center">GLOBAL</th>
-                    <th style="display:none;text-align:center">FORM_NAME</th>
-                    <th style="display:none;text-align:center">ID_FORM</th>
-                    <th style="display:none;text-align:center">PROGRESSIVE</th>
+                    <th class="notExportCsv" style="display:none;" width="0">hide</th>
+                    <th class="notExportCsv" style="display:none;" width="0">hide</th>
+                    <th style="display:none;">REFERENTI-0</th>
+                    <th style="display:none;">REFERENTI-1</th>
+                    <th style="display:none;">REFERENTI-2</th>
+                    <th style="display:none;">REFERENTI-3</th>
+                    <th style="display:none;">GLOBAL</th>
+                    <th style="display:none;">KPI_NAME</th>
+                    <th style="display:none;">FORM_NAME</th>
+                    <th style="display:none;">ID_FORM</th>
+                    <th style="display:none;">PROGRESSIVE</th>
 
                   </tr>
                 </thead>
@@ -71,8 +71,7 @@
                     <td [ngClass]="isNumber(row.contract) ? 'rightAlign' : 'leftAlign'">{{row.contract_name}}</td>
                     <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.id_kpi}}</td>
                     <td [ngClass]="isNumber(row.id_kpi) ? 'rightAlign' : 'leftAlign'">{{row.short_name}}</td>
-                    <td class="tagsTip notExportCsv"  [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
-                    <td class="tagsTip" style="display:none;"  [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi}}</td>
+                    <td class="tagsTip notExportCsv" [ngClass]="isNumber(row.kpi_name_bsi) ? 'rightAlign' : 'leftAlign'" data-ext="" attr.data-ext="{{row.kpi_name_bsi}}">{{row.kpi_name_bsi | slice:0:130}} [...]</td>
                     <td [ngClass]="isNumber(row.source_type) ? 'rightAlign' : 'leftAlign'">{{row.source_type}}</td>
                     <td [ngClass]="isNumber(row.tracking_period) ? 'rightAlign' : 'leftAlign'">{{row.tracking_period}}</td>
                     <td>{{row.target}}</td>
@@ -102,6 +101,7 @@
                     <td style="display:none;" width="0" class="notExportCsv">{{row.referent}},{{row.referent_1}},{{row.referent_2}},{{row.referent_3}}</td>
                     <td class="notExportCsv" style="display:none;" width="0">{{row.kpi_name_bsi}}</td>
                     <td style="display:none;">{{row.global_rule_id_bsi}}</td>
+                    <td style="display:none;" >{{row.kpi_name_bsi}}</td>
                     <td style="display:none;">{{row.form_name}}</td>
                     <td style="display:none;">{{row.id_form}}</td>
                     <td style="display:none;">{{row.progressive}}</td>

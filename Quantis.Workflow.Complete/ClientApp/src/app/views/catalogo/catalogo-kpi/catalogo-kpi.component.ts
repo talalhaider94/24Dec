@@ -451,7 +451,7 @@ export class CatalogoKpiComponent implements OnInit {
         $(this.searchCol3.nativeElement).on('keyup', function () {
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
                 datatable_Ref
-                    .columns(23)
+                    .columns(22)
                     .search(this.value)
                     .draw();
             });
@@ -460,7 +460,7 @@ export class CatalogoKpiComponent implements OnInit {
           console.log(this.value)
           $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref
-              .columns(6)
+              .columns(5)
               .search(this.value)
               .draw();
           });
