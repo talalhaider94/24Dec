@@ -121,6 +121,7 @@ export class DashboardListsComponent implements OnInit {
             owner: loggedInUser.username,
             globalfilterId: 0,
             createdon: new Date(),
+            modifiedon: new Date(),
             dashboardwidgets: []
         })
         this.createDashboardModal.show();
