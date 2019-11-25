@@ -177,25 +177,16 @@ export class PublicComponent implements OnInit {
 		}
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
-				while(this.allContractParties.length > 0){
-					this.allContractParties.pop()
-				}
 				/* this.allContractParties= [{ key: '', value: 'Select Contract Parties' }]; */
 				this.allContractParties = [{ key: '', value: 'Select Contract Parties' }, ...this.barChartWidgetParameters.allContractParties];
 			}
 			if (this.barChartWidgetParameters.allContracts) {
-				while(this.filterContracts.length > 0){
-					this.filterContracts.pop()
-				}
-				this.filterContracts= [{ key: '', value: 'Select Contracts' }];
-				this.filterContracts = [...this.filterContracts];
+				this.filterContracts= [{ key: '', value: 'Select Contracts' }, ... this.barChartWidgetParameters.allContracts];
+				// this.filterContracts = [...this.filterContracts];
 			}
 			if (this.barChartWidgetParameters.allKpis) {
-				while(this.filterKpis.length > 0){
-					this.filterKpis.pop()
-				}
-				this.filterKpis= [{ key: '', value: 'Select KPI' }];
-				this.filterKpis = [...this.filterKpis];
+				this.filterKpis= [{ key: '', value: 'Select KPI' }, ...this.barChartWidgetParameters.allKpis];
+				// this.filterKpis = [...this.filterKpis];
 				this.widgetParametersForm.get('Filters.contracts').enable();
 				this.widgetParametersForm.get('Filters.kpi').enable();
 			}
