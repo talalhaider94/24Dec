@@ -42,8 +42,12 @@ export class OrganizationComponent implements OnInit {
 
     addSpecialData = {
         Key: 0,
-        Value: ''
+        Value: '',
+        Note: '',
     };
+
+    modalTitle='';
+    buttonText='';
 
     organizationsData: any = []
     specialReportsData: any = []
@@ -57,6 +61,7 @@ export class OrganizationComponent implements OnInit {
     value;
     specialKey;
     specialValue;
+    specialNote;
     isEdit=0;
     isSpecialEdit=0;
 
@@ -129,6 +134,8 @@ export class OrganizationComponent implements OnInit {
         this.isEdit=1;
         this.modalData.key = data.key;
         this.value = data.value;
+        this.modalTitle='Modifica Unità Organizaztiva';
+        this.buttonText='Aggiorna';
         this.showAddConfigModal();
     }
     
@@ -136,6 +143,9 @@ export class OrganizationComponent implements OnInit {
         this.isSpecialEdit=1;
         this.specialKey = data.key;
         this.specialValue = data.value;
+        this.specialNote = data.note;
+        this.modalTitle='Aggiorna Valore Speciale';
+        this.buttonText='Aggiorna';
         this.showSpecialModal();
     }
 
@@ -161,6 +171,7 @@ export class OrganizationComponent implements OnInit {
     addSpecialValue() {
         this.addSpecialData.Key = this.specialKey;
         this.addSpecialData.Value = this.specialValue;
+        this.addSpecialData.Note = this.specialNote;
 
         this.toastr.info('Valore in aggiornamento..', 'Info');
         this.apiService.AddUpdateReportSpecialValue(this.addSpecialData).subscribe(data => {
@@ -241,6 +252,8 @@ export class OrganizationComponent implements OnInit {
     addOrganizationModal(){
         this.isEdit=0;
         this.value='';
+        this.modalTitle='Aggiungi Unità Organizaztiva';
+        this.buttonText='Aggiungi';
         this.showAddConfigModal();
     }
 
@@ -248,6 +261,9 @@ export class OrganizationComponent implements OnInit {
         this.isSpecialEdit=0;
         this.specialKey='';
         this.specialValue='';
+        this.specialNote='';
+        this.modalTitle='Nuovo Valore Speciale';
+        this.buttonText='Aggiungi';
         this.showSpecialModal();
     }
 
