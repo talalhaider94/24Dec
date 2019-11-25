@@ -678,7 +678,10 @@ export class CatalogoKpiComponent implements OnInit {
     let organizationFinal = '';
     if (organization_unit_id != null) {
       let organization = this.allOrganizationUnits.find(o => o.id.toString() === organization_unit_id);
-      organizationFinal = organization.organization_unit;
+      if (organization !== undefined) {
+        organizationFinal = organization.organization_unit;
+      }
+      
     }
     return organizationFinal;
     
