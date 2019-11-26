@@ -13,7 +13,7 @@ build:
         - prod
     script:
         - "rm -rf /opt/WorkFlowAPI/DotnetPublish/"
-        - "sudo dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
+        - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "systemctl stop supervisord"
         - "rm -rf /opt/WorkFlowAPI/dotnetcore_modules_backup"
         - "mv /opt/WorkFlowAPI/dotnetcore_modules /opt/WorkFlowAPI/dotnetcore_modules_backup"
