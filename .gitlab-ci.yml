@@ -9,6 +9,8 @@ build:
     stage: build
     only:
         - schedules
+    tags:
+        - prod
     script:
         - "rm -rf /opt/WorkFlowAPI/DotnetPublish/"
         - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
