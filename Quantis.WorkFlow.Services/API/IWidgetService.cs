@@ -17,7 +17,7 @@ namespace Quantis.WorkFlow.Services.API
 
         List<XYDTO> GetNotificationTrend(WidgetwithAggOptionDTO dto);
 
-        List<XYZDTO> GetKPIReportTrend(WidgetwithAggOptionDTO dto);
+        List<XYZDTO> GetKPIReportTrend(WidgetwithAggOptionDTO dto, int completeRecord = 1);
 
         List<KPIStatusSummaryDTO> GetKPIStatusSummary(BaseWidgetDTO dto);
     }

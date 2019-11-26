@@ -1,4 +1,5 @@
-﻿using Quantis.WorkFlow.APIBase.Framework;
+﻿using System;
+using Quantis.WorkFlow.APIBase.Framework;
 using Quantis.WorkFlow.Services.API;
 using Quantis.WorkFlow.Services.DTOs.Dashboard;
 using Quantis.WorkFlow.Services.DTOs.Widgets;
@@ -34,8 +35,22 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         internal override object GetData(WidgetParametersDTO props)
         {
             var dto = _globalfilterService.MapAggOptionWidget(props);
-            var result = _widgetService.GetKPIReportTrend(dto);
-            return result;
+            if (dto.IncompletePeriod && dto.DateRange.Item2.Year == DateTime.Now.Year &&
+                dto.DateRange.Item2.Month == DateTime.Now.Month)
+            {
+                dto.DateRange = new Tuple<DateTime, DateTime>(dto.DateRange.Item1, dto.DateRange.Item2.AddMonths(-1));
+                var result = _widgetService.GetKPIReportTrend(dto);
+                dto.DateRange = new Tuple<DateTime, DateTime>(DateTime.Now, DateTime.Now);
+                var result2 = _widgetService.GetKPIReportTrend(dto, 0);
+                result.AddRange(result2);
+                return result;
+            }
+            else
+            {
+                var result = _widgetService.GetKPIReportTrend(dto);
+                return result;
+            }
+            
         }
     }
 }
