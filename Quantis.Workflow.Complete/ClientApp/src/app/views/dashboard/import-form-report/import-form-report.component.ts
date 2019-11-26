@@ -101,6 +101,7 @@ export class ImportFormReportComponent implements OnInit {
 
     getCOnfigurations() {
         this.loading = true;
+        debugger
         this.apiService.getFreeFormReports().subscribe((data) =>{
           this.ConfigTableBodyData = data;
           console.log('import form data -> ', data);
@@ -119,6 +120,7 @@ export class ImportFormReportComponent implements OnInit {
             this.queryData.Parameters = row.parameters;
         }
         console.log('queryData -> ', this.queryData)
+        debugger
         this._freeFormReport.addEditReportQuery(this.queryData).subscribe(data => {
             this.toastr.success('Query created successfully');
         }, error => {

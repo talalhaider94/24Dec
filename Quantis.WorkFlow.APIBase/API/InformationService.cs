@@ -1243,14 +1243,17 @@ namespace Quantis.WorkFlow.APIBase.API
             return dtos;
         }
 
-        public void DeleteOrganizationUnit(int id)
+        public bool DeleteOrganizationUnit(int id)
         {
             var orgs = _dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == id);
-            if (orgs != null)
+            if (orgs != null && !_dbcontext.CatalogKpi.Any(o=>o.organization_unit==orgs.id+""))
             {
                 _dbcontext.OrganizationUnits.Remove(orgs);
                 _dbcontext.SaveChanges();
+                return true;
             }
+
+            return false;
 
         }
 

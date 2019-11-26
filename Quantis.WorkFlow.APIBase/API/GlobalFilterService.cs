@@ -86,6 +86,15 @@ namespace Quantis.WorkFlow.APIBase.API
                 dto.Measures = new List<Measures>();
             }
 
+            if (props.Properties.ContainsKey("incompleteperiod"))
+            {
+                dto.IncompletePeriod = (props.Properties["incompleteperiod"] == "true");
+            }
+            else
+            {
+                dto.IncompletePeriod = false;
+            }
+
             return dto;
         }
 

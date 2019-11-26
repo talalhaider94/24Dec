@@ -201,12 +201,12 @@ export class AdminUtentiComponent implements OnInit {
           //if(text != "") headers.push(header);
       });
       //csv += "'" + headers.join("','") + "'\n";
-      csv += '"' + headers.join('"|"') + '"\r\n';
+      csv += '"' + headers.join('""|""') + '"\r\n';
       // get table data
       if (exportmode == "full") { // total data
         var totalRows = oTable.data().length;
         for (let i = 0; i < totalRows; i++) {
-            rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('"|"') + '"');
+            rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('""|""') + '"');
         }
       }
       csv += rows.join("\r\n");
