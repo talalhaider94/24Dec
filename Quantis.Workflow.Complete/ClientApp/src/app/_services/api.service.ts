@@ -396,19 +396,19 @@ export class ApiService {
         return this.http.get(getContract);
     }
     GetAllOrganizationUnits(): Observable<any> {
-        const getOrganizations = `${environment.API_URL}/data/GetAllOrganizationUnits`;
+        const getOrganizations = `${environment.API_URL}/information/GetAllOrganizationUnits`;
         return this.http.get(getOrganizations);
     }
     GetAllReportSpecialValues(): Observable<any> {
-        const getOrganizations = `${environment.API_URL}/data/GetAllReportSpecialValues`;
+        const getOrganizations = `${environment.API_URL}/information/GetAllReportSpecialValues`;
         return this.http.get(getOrganizations);
     }
     DeleteOrganizationUnit(id): Observable<any> {
-        const DeleteOrganizationUnit = `${environment.API_URL}/data/DeleteOrganizationUnit?id=${id}`;
+        const DeleteOrganizationUnit = `${environment.API_URL}/information/DeleteOrganizationUnit?id=${id}`;
         return this.http.get(DeleteOrganizationUnit);
     }
     DeleteReportSpecialValue(id): Observable<any> {
-        const DeleteOrganizationUnit = `${environment.API_URL}/data/DeleteReportSpecialValue?key=${id}`;
+        const DeleteOrganizationUnit = `${environment.API_URL}/information/DeleteReportSpecialValue?key=${id}`;
         return this.http.get(DeleteOrganizationUnit);
     }
     GetOrganizationUnits(): Observable<any> {
@@ -435,9 +435,9 @@ export class ApiService {
         return this.http.get(DeletePersonalReportEP);
     }
     AddUpdateOrganizationUnit(obj) {
-        return this.http.post(`${environment.API_URL}/data/AddUpdateOrganizationUnit`, obj);
+        return this.http.post(`${environment.API_URL}/information/AddUpdateOrganizationUnit`, obj);
     }
     AddUpdateReportSpecialValue(obj) {
-        return this.http.post(`${environment.API_URL}/data/AddUpdateReportSpecialValue`, obj);
+        return this.http.post(`${environment.API_URL}/information/AddUpdateReportSpecialValue`, obj);
     }
 }

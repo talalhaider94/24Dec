@@ -4,9 +4,9 @@ export const pageVersion = {
     '/workflow/ricerca': '0.1.5',
     '/workflow/amministrazione': '0.0.2',
     '/catalogo/admin-kpi': '0.0.1',
-    '/catalogo/admin-utenti': '0.0.1',
+    '/catalogo/admin-utenti': '0.0.2',
     '/catalogo/kpi': '0.0.4',
-    '/catalogo/utenti': '0.0.1',
+    '/catalogo/utenti': '0.0.2',
     '/archivedkpi': '0.0.4',
     '/loading-form/admin': '0.0.1',
     '/loading-form/securityuser': '0.0.12',
@@ -27,5 +27,5 @@ export const pageVersion = {
     '/userprofiling/userpermissions': '0.0.6',
     '/standarddashboard': '0.0.3',
     '/dashboard/import-form-report': '0.0.1',
-    '/tconfiguration/organization': '0.0.1'
+    '/tconfiguration/organization': '0.0.2'
 }

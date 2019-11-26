@@ -169,53 +169,37 @@ export class CatalogoUtentiComponent implements OnInit {
         });
 
         // export only what is visible right now (filters & paginationapplied)
-        $(this.btnExportCSV.nativeElement).click(function (event) {
+        $(this.btnExportCSV.nativeElement).off('click');
+        $(this.btnExportCSV.nativeElement).on('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-                if ($this.viewModel.filters.nome || $this.viewModel.filters.cognome) {
-                    $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
-                } else {
-                    $this.table2csv(datatable_Ref, 'full', '.kpiTable');
-                }
+                $this.table2csv(datatable_Ref, 'full', '.kpiTable');
             });
         });
     }
 
     table2csv(oTable, exportmode, tableElm) {
-        var csv = '';
+        var csv = 'sep=|\r\n';
         var headers = [];
         var rows = [];
-
         // Get header names
-        $(tableElm + ' thead').find('th:not(.notExportCsv)').each(function () {
-            var $th = $(this);
-            var text = $th.text();
+        $(tableElm + ' thead tr th:not(.notExportCsv)').each(function () {
+            var text = $(this).text();
             var header = '"' + text + '"';
-            if (text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
+            headers.push(text); // original code
         });
-        csv += headers.join(',') + "\n";
-
+        csv += '"' + headers.join('""|""') + '"\r\n';
         // get table data
         if (exportmode == "full") { // total data
             var totalRows = oTable.data().length;
             for (let i = 0; i < totalRows; i++) {
-                rows.push(oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join(','));
+                rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('""|""') + '"');
             }
-        } else { // visible rows only
-            $(tableElm + ' tbody tr:visible').each(function (index) {
-                var row = [];
-                $(this).find('td:not(.notExportCsv)').each(function () {
-                    var $td = $(this);
-                    var text = $td.text();
-                    var cell = '"' + text + '"';
-                    row.push(cell);
-                });
-                rows.push(row);
-            })
         }
-        csv += rows.join("\n");
-        var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
+        csv += rows.join("\r\n");
+        console.log(csv)
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         saveAs(blob, "ExportUtentiTable.csv");
     }
 
