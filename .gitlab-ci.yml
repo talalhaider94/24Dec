@@ -9,6 +9,8 @@ build:
     stage: build
     only:
         - schedules
+    tags:
+        - prod
     script:
         - "dotnet publish -c Release -o /opt/WorkFlowAPI/DotnetPublish/"
         - "supervisorctl stop all"
