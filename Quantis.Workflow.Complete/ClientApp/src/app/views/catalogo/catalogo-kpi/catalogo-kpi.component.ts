@@ -106,6 +106,8 @@ export class CatalogoKpiComponent implements OnInit {
         frequency: '',
         month: '',
         day: '',
+      day_workflow: '',
+      day_cutoff: '',
         daytrigger: '',
         monthtrigger: '',
         enable: false,
@@ -272,6 +274,8 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.frequency = data.frequency;
         this.modalData.month = data.month;
         this.modalData.day = data.day;
+      this.modalData.day_workflow = data.day_workflow;
+      this.modalData.day_cutoff = data.day_cutoff;
         this.modalData.daytrigger = data.daytrigger;
         this.modalData.monthtrigger = data.monthtrigger;
         this.modalData.enable = data.enable;
@@ -325,6 +329,8 @@ export class CatalogoKpiComponent implements OnInit {
         this.modalData.frequency = data.frequency;
         this.modalData.month = data.month;
         this.modalData.day = data.day;
+      this.modalData.day_workflow = data.day_workflow;
+      this.modalData.day_cutoff = data.day_cutoff;
         this.modalData.daytrigger = data.daytrigger;
         this.modalData.monthtrigger = data.monthtrigger;
         this.modalData.enable = data.enable;
@@ -451,7 +457,7 @@ export class CatalogoKpiComponent implements OnInit {
         $(this.searchCol3.nativeElement).on('keyup', function () {
             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
                 datatable_Ref
-                    .columns(23)
+                    .columns(22)
                     .search(this.value)
                     .draw();
             });
@@ -460,7 +466,7 @@ export class CatalogoKpiComponent implements OnInit {
           console.log(this.value)
           $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
             datatable_Ref
-              .columns(6)
+              .columns(5)
               .search(this.value)
               .draw();
           });
@@ -605,7 +611,7 @@ export class CatalogoKpiComponent implements OnInit {
             })
             rows.push(row.join('|'));
           }
-          console.log(rows)
+          //console.log(rows)
         }
         csv += rows.join("\r\n");
         var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
@@ -678,7 +684,10 @@ export class CatalogoKpiComponent implements OnInit {
     let organizationFinal = '';
     if (organization_unit_id != null) {
       let organization = this.allOrganizationUnits.find(o => o.id.toString() === organization_unit_id);
-      organizationFinal = organization.organization_unit;
+      if (organization !== undefined) {
+        organizationFinal = organization.organization_unit;
+      }
+      
     }
     return organizationFinal;
     

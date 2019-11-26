@@ -11,6 +11,7 @@ namespace Quantis.WorkFlow.Models
         public int id { get; set; }
         public int special_key { get; set; }
         public string special_value { get; set; }
+        public string note { get; set; }
     }
 
     public class T_ReportSpecialValue_Configuration : IEntityTypeConfiguration<T_ReportSpecialValue>

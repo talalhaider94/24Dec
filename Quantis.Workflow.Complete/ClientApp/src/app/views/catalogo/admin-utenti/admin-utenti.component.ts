@@ -16,10 +16,8 @@ var $this;
 })
 export class AdminUtentiComponent implements OnInit {
     @ViewChild('configModal') public configModal: ModalDirective;
-    @ViewChild('UserTable') block: ElementRef;
-    @ViewChild('searchCol1') searchCol1: ElementRef;
-    @ViewChild('searchCol2') searchCol2: ElementRef;
-    @ViewChild('btnExportCSV') btnExportCSV: ElementRef;
+    @ViewChild('UserTable') UserTable: ElementRef;
+    @ViewChild('btnExporta') btnExporta: ElementRef;
     @ViewChild(DataTableDirective) private datatableElement: DataTableDirective;
 
     dtOptions: DataTables.Settings = {
@@ -150,7 +148,7 @@ export class AdminUtentiComponent implements OnInit {
     ngAfterViewInit() {
         this.dtTrigger.next();
 
-        //this.setUpDataTableDependencies();
+        this.setUpDataTableDependencies();
 
         //this.getUsers1(); can't get the meaning of this
         this.getUsers();
@@ -172,7 +170,7 @@ export class AdminUtentiComponent implements OnInit {
             dtInstance.destroy();
             // Call the dtTrigger to rerender again
             this.dtTrigger.next();
-            //this.setUpDataTableDependencies();
+            this.setUpDataTableDependencies();
         });
     }
 
@@ -180,75 +178,42 @@ export class AdminUtentiComponent implements OnInit {
     //   return datatableElement.dtInstance;
     // }
 
-    /* setUpDataTableDependencies(){
-         // #column3_search is a <input type="text"> element
-         $(this.searchCol1.nativeElement).on( 'keyup', function () {
-           $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-           datatable_Ref
-               .columns( 1 )
-               .search( this.value )
-               .draw();
-         });
-         });
-         $(this.searchCol2.nativeElement).on( 'keyup', function () {
-           $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-           datatable_Ref
-               .columns( 2 )
-               .search( this.value )
-               .draw();
-         });
-         });
+    setUpDataTableDependencies(){
+      $(this.btnExporta.nativeElement).off('click');
+      $(this.btnExporta.nativeElement).on('click', function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
+              $this.table2csv(datatable_Ref, 'full', '.UserTable');
+          });
+      });
+    }
 
-         // export only what is visible right now (filters & paginationapplied)
-         $(this.btnExportCSV.nativeElement).click(function (event) {
-             event.preventDefault();
-             $this.datatableElement.dtInstance.then((datatable_Ref: DataTables.Api) => {
-             $this.table2csv(datatable_Ref, 'visible', '.kpiTable');
-           });
-         });
-       }*/
-
-    /*  table2csv(oTable, exportmode, tableElm) {
-        var csv = '';
-        var headers = [];
-        var rows = [];
-
-        // Get header names
-        $(tableElm+' thead').find('th').each(function() {
-            var $th = $(this);
-            var text = $th.text();
-            var header = '"' + text + '"';
-            // headers.push(header); // original code
-            if(text != "") headers.push(header); // actually datatables seems to copy my original headers so there ist an amount of TH cells which are empty
-        });
-        csv += headers.join(',') + "\n";
-
-        // get table data
-        if (exportmode == "full") { // total data
-            var totalRows = oTable.data().length;
-            for(let i = 0; i < totalRows; i++) {
-                var row = oTable.row(i).data();
-                console.log(row)
-                row = $this.strip_tags(row);
-                rows.push(row);
-            }
-        } else { // visible rows only
-            $(tableElm+' tbody tr:visible').each(function(index) {
-                var row = [];
-                $(this).find('td').each(function(){
-                    var $td = $(this);
-                    var text = $td.text();
-                    var cell = '"' +text+ '"';
-                    row.push(cell);
-                });
-                rows.push(row);
-            })
+    table2csv(oTable, exportmode, tableElm) {
+      var csv = 'sep=|\r\n';
+      var headers = [];
+      var rows = [];
+      // Get header names
+      $(tableElm + ' thead tr th:not(.notExportCsv)').each(function () {
+          var text = $(this).text();
+          var header = '"' + text + '"';
+          headers.push(text); // original code
+          //if(text != "") headers.push(header);
+      });
+      //csv += "'" + headers.join("','") + "'\n";
+      csv += '"' + headers.join('"|"') + '"\r\n';
+      // get table data
+      if (exportmode == "full") { // total data
+        var totalRows = oTable.data().length;
+        for (let i = 0; i < totalRows; i++) {
+            rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('"|"') + '"');
         }
-        csv += rows.join("\n");
-         console.log(csv);
-        var blob = new Blob([csv], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, "CatalogUtenti.csv");
-      }*/
+      }
+      csv += rows.join("\r\n");
+      console.log(csv)
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, "ExportConsolidareTable.csv");
+    }
 
     strip_tags(html) {
         var tmp = document.createElement("div");

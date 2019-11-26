@@ -65,6 +65,7 @@ export class PublicComponent implements OnInit {
 	selectedyear;
 	months = [];
 	monthVar;
+	isSelectedPeriod=0;
 	highcharts = Highcharts;
 
 	isLoadedDati=0;
@@ -176,6 +177,7 @@ export class PublicComponent implements OnInit {
 		}
 		if (this.barChartWidgetParameters) {
 			if (this.barChartWidgetParameters.allContractParties) {
+<<<<<<< HEAD
 				this.allContractParties = [...this.allContractParties, ...this.barChartWidgetParameters.allContractParties];
 			}
 			if (this.barChartWidgetParameters.allContracts) {
@@ -187,6 +189,18 @@ export class PublicComponent implements OnInit {
 			}
 			if (this.barChartWidgetParameters.allKpis) {
 				this.filterKpis = [...this.filterKpis, ...this.barChartWidgetParameters.allKpis];
+=======
+				/* this.allContractParties= [{ key: '', value: 'Select Contract Parties' }]; */
+				this.allContractParties = [{ key: '', value: 'Select Contract Parties' }, ...this.barChartWidgetParameters.allContractParties];
+			}
+			if (this.barChartWidgetParameters.allContracts) {
+				this.filterContracts= [{ key: '', value: 'Select Contracts' }, ... this.barChartWidgetParameters.allContracts];
+				// this.filterContracts = [...this.filterContracts];
+			}
+			if (this.barChartWidgetParameters.allKpis) {
+				this.filterKpis= [{ key: '', value: 'Select KPI' }, ...this.barChartWidgetParameters.allKpis];
+				// this.filterKpis = [...this.filterKpis];
+>>>>>>> 5c4cf7991ab5b8cf3e2b4aa0411744087cdd0e79
 				this.widgetParametersForm.get('Filters.contracts').enable();
 				this.widgetParametersForm.get('Filters.kpi').enable();
 			}
@@ -488,7 +502,7 @@ export class PublicComponent implements OnInit {
 				console.log('months -> ',this.months);
 
 				/////////////////////////////////////////////
-
+				this.isSelectedPeriod=0;
 				this.getdati1(this.kpiId,to_month,toYear)
 			}
 
@@ -1231,11 +1245,15 @@ export class PublicComponent implements OnInit {
         this.periodFilter = 1;
         let month;
 		let year;
-        if(toMonth<10){
-            month = '0' + toMonth;
-        }else{
-            month = toMonth;
-        }
+		if(this.isSelectedPeriod==1){
+			month = toMonth;
+		}else{
+			if(toMonth<10){
+				month = '0' + toMonth;
+			}else{
+				month = toMonth;
+			}
+		}
         year = toYear;
         this.loadingModalDati = true;
         this.isLoadedDati=1;
@@ -1311,6 +1329,7 @@ export class PublicComponent implements OnInit {
 	}
 	
     selectedMonth(e){
+		this.isSelectedPeriod=1;
         let stringToSplit = this.monthVar;
         let split = stringToSplit.split("/");
         let month = split[0];
