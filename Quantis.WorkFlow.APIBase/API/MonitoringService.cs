@@ -87,9 +87,48 @@ namespace Quantis.WorkFlow.APIBase.API
                             OrganizationUnitId = o.Key.OrganizationUnitId,
                             ContractPartyName = o.Key.ContractPartyName,
                             ContractPartyId = o.Key.ContractPartyId,
-                            TicketsToBeOpenedForCompletePeriod = o.Count(),
-                            TicketsToBeOpenedTillToday = o.Count(p=>p.WorkflowDay<=DateTime.Now.Day),
-                            TicketsOpenedTillToday = o.Count(p=>p.TicketCreated)
+                            NoOfTicketsToBeOpenedForCompletePeriod = o.Count(),
+                            NoOfTicketsToBeOpenedTillToday = o.Count(p=>p.WorkflowDay<=DateTime.Now.Day),
+                            NoOfTicketsOpenedTillToday = o.Count(p=>p.TicketCreated),
+                            TicketsToBeOpenedForCompletePeriod = o.Select(p=>new MonitoringKPIDTO()
+                            {
+                                GlobalRuleId = p.GlobalRuleId,
+                                ContractId = o.Key.ContractId,
+                                WorkflowDay = p.WorkflowDay,
+                                ContractName = o.Key.ContractName,
+                                OrganizationUnitId = o.Key.OrganizationUnitId,
+                                OrganizationUnitName = o.Key.OrganizationUnitName,
+                                ContractPartyName = o.Key.ContractPartyName,
+                                ContractPartyId = o.Key.ContractPartyId,
+                                GlobalRuleName = p.GlobalRuleName
+                            }).ToList(),
+                            TicketsToBeOpenedTillToday = o.Where(q => q.WorkflowDay <= DateTime.Now.Day).Select(p => new MonitoringKPIDTO()
+                            {
+                                GlobalRuleId = p.GlobalRuleId,
+                                ContractId = o.Key.ContractId,
+                                WorkflowDay = p.WorkflowDay,
+                                ContractName = o.Key.ContractName,
+                                OrganizationUnitId = o.Key.OrganizationUnitId,
+                                OrganizationUnitName = o.Key.OrganizationUnitName,
+                                ContractPartyName = o.Key.ContractPartyName,
+                                ContractPartyId = o.Key.ContractPartyId,
+                                GlobalRuleName = p.GlobalRuleName
+                            }).ToList(),
+                            TicketsOpenedTillToday = ticketsCreated.Where(p=>o.Select(q=>q.GlobalRuleId).Contains(p.global_rule_id)).Select(r=>new MonitoringTicketDTO()
+                            {
+                                GlobalRuleId = r.global_rule_id,
+                                ContractName = o.Key.ContractName,
+                                OrganizationUnitId = o.Key.OrganizationUnitId,
+                                OrganizationUnitName = o.Key.OrganizationUnitName,
+                                ContractPartyName = o.Key.ContractPartyName,
+                                ContractPartyId = o.Key.ContractPartyId,
+                                ContractId = o.Key.ContractId,
+                                CreatedOn = r.created_on,
+                                ResultValue = r.result_value,
+                                TicketId = r.ticket_id,
+                                TicketRefNumber = r.ticket_refnum
+                                
+                            }).ToList()
                         }).ToList();
                     return returnResult;
                 }
