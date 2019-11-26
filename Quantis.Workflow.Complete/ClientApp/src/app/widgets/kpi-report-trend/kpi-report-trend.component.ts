@@ -87,7 +87,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             title: {
                 text: '#'
             },
-            min: 0
+            min: -0.01
         },
         plotOptions: {
             column: {
@@ -113,7 +113,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             {
                 type: 'column',
                 name: 'Values',
-                data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+                data: [{ "y": -999, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
                 color: 'black',
                 dataLabels: updateChartLabelStyle()
             },

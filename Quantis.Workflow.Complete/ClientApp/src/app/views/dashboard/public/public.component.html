@@ -104,7 +104,7 @@
                   <label>Contraente e Contratto</label>
                   <perfect-scrollbar style="max-height: 260px;">
                     <ejs-treeview #organizationTree id="organizationTreeId" [fields]='treeDataFields'
-                      [showCheckBox]='true'
+                      [showCheckBox]='true' [checkedNodes]="preSelectedNodes"
                       (nodeChecked)='organizationTreeNodeCheckEvent($event)'
                       (nodeSelected)='organizationTreeNodeSelected($event)'>
                     </ejs-treeview>
@@ -181,7 +181,7 @@
                     </div>
                   </span>
                 </span>
-                <div class="form-group form-check" *ngIf="!barChartWidgetParameters.showincompleteperiodcheck">
+                <div class="form-group form-check" *ngIf="barChartWidgetParameters.showincompleteperiodcheck">
                   <input type="checkbox" formControlName="incompletePeriod" class="form-check-input"
                     id="incompletePeriod">
                   <label class="form-check-label" for="incompletePeriod">Periodo incompleto</label>
