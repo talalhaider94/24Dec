@@ -81,8 +81,8 @@ export class WidgetHelpersService {
         if(filters.organizations) {
           buildParams.Filters.organizations = filters.organizations;
         } else {
-          const organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
-          buildParams.Filters.organizations = organizations.join(',');
+          // const organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
+          // buildParams.Filters.organizations = organizations.join(',');
         }
       }
 
@@ -181,7 +181,7 @@ export class WidgetHelpersService {
         if(filters.organizations) {
           buildParams.Filters.organizations = filters.organizations;
         } else {
-          buildParams.Filters.organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
+          // buildParams.Filters.organizations = this.getAllLeafNodesIds(apiParams.getOrgHierarcy);
         }
       }
       console.log('setWidgetParameters buildParams', buildParams);
