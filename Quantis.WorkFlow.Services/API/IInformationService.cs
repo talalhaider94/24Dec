@@ -86,7 +86,7 @@ namespace Quantis.WorkFlow.Services.API
         List<UserKPIDTO> GetKPIDetails(List<int> KpiIds);
 
         List<KeyValuePair<int, string>> GetAllOrganizationUnits();
-        void DeleteOrganizationUnit(int id);
+        bool DeleteOrganizationUnit(int id);
         bool AddUpdateOrganizationUnit(KeyValuePair<int, string> dto);
         List<ReportSpecialValueDTO> GetAllReportSpecialValues();
         void DeleteReportSpecialValue(int key);

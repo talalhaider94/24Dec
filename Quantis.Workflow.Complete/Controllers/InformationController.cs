@@ -354,9 +354,9 @@ namespace Quantis.WorkFlow.Complete.Controllers
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpGet("DeleteOrganizationUnit")]
-        public void DeleteOrganizationUnit(int id)
+        public bool DeleteOrganizationUnit(int id)
         {
-            _infomationAPI.DeleteOrganizationUnit(id);
+            return _infomationAPI.DeleteOrganizationUnit(id);
         }
         [Authorize(WorkFlowPermissions.BASIC_LOGIN)]
         [HttpPost("AddUpdateOrganizationUnit")]

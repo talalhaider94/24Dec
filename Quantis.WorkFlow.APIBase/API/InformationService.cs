@@ -555,6 +555,15 @@ namespace Quantis.WorkFlow.APIBase.API
                     {
                         assignDays = "UPDATE t_catalog_kpis SET day_workflow = :day_workflow WHERE sla_id_bsi = :sla_id AND (organization_unit is null OR organization_unit = '')";
                     }
+                    /*assignDays = "UPDATE t_catalog_kpis ck" +
+                        "SET    day_workflow = ou.workflow_day" +
+                        "FROM t_organization_unit_workflow ou" +
+                        "WHERE" +
+                        "(ck.sla_id_bsi = ou.sla_id AND(ck.organization_unit::integer not in (select organization_unit_id from t_organization_unit_workflow where sla_id = 1495)" +
+                            "OR ck.organization_unit is null)" +
+                            "AND ou.organization_unit_id < 0)" +
+                        "or" +
+                        "(ck.sla_id_bsi = ou.sla_id AND ck.organization_unit::integer = ou.organization_unit_id AND ou.organization_unit_id > 0)";*/
 
                     using (var conAssign = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
                     {
@@ -1234,14 +1243,17 @@ namespace Quantis.WorkFlow.APIBase.API
             return dtos;
         }
 
-        public void DeleteOrganizationUnit(int id)
+        public bool DeleteOrganizationUnit(int id)
         {
             var orgs = _dbcontext.OrganizationUnits.FirstOrDefault(o => o.id == id);
-            if (orgs != null)
+            if (orgs != null && !_dbcontext.CatalogKpi.Any(o=>o.organization_unit==orgs.id+""))
             {
                 _dbcontext.OrganizationUnits.Remove(orgs);
                 _dbcontext.SaveChanges();
+                return true;
             }
+
+            return false;
 
         }
 

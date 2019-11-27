@@ -508,13 +508,13 @@ namespace Quantis.WorkFlow.APIBase.API
             return res;
         }
 
-        public List<XYZDTO> GetKPIReportTrend(WidgetwithAggOptionDTO dto)
+        public List<XYZDTO> GetKPIReportTrend(WidgetwithAggOptionDTO dto,int completeRecord=1)
         {
             var result = new List<XYZDTO>();
-            string periodstring = "(psl.time_unit='MONTH' and psl.complete_record=1)";
+            string periodstring = $"(psl.time_unit='MONTH' and psl.complete_record={completeRecord})";
             if (dto.AggregationOption == AggregationOption.TRACKINGPERIOD.Key)
             {
-                periodstring = "((psl.time_unit='MONTH' and psl.complete_record=1) or (psl.time_unit='QUARTER' and psl.complete_record=1) or (psl.time_unit='YEAR' and psl.complete_record=1))";
+                periodstring = $"((psl.time_unit='MONTH' and psl.complete_record={completeRecord}) or (psl.time_unit='QUARTER' and psl.complete_record={completeRecord}) or (psl.time_unit='YEAR' and psl.complete_record={completeRecord}))";
             }
                 string query = @"select
                             psl.end_period,
