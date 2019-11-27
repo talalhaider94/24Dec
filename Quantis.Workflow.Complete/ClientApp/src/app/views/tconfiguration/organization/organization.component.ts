@@ -187,8 +187,13 @@ export class OrganizationComponent implements OnInit {
     deleteOrganization(data) {
         this.toastr.info('Valore in aggiornamento..', 'Confirm');
         this.apiService.DeleteOrganizationUnit(data.key).subscribe(data => {
-            this.GetAllOrganizationUnits(); 
-            this.toastr.success('Valore Aggiornato', 'Success');
+            console.log(data);
+            if(data==false){
+                this.toastr.error('This organization unit is already assigned to catalog and cannot be deleted', 'Error');
+            }else{
+                this.GetAllOrganizationUnits(); 
+                this.toastr.success('Valore Aggiornato', 'Success');
+            }
         }, error => {
             this.toastr.error('Errore durante update.', 'Error');
         });
