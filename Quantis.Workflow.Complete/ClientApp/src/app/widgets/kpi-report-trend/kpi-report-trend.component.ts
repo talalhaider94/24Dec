@@ -81,18 +81,18 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         },
         xAxis: {
             type: 'date',
-            categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+            categories: ['10/18', '11/18', '12/18', '01/19', '02/19', '03/19']
         },
         yAxis: {
             title: {
                 text: '#'
             },
-            min: -0.01
+            min: 0
         },
         plotOptions: {
-            column: {
+            /* column: {
                 stacking: 'normal'
-            },
+            }, */
             series: {
                 dataLabels: {
                     enabled: true,
@@ -113,14 +113,14 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             {
                 type: 'column',
                 name: 'Values',
-                data: [{ "y": -999, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+                data: [{ "y": 0.35081, "color": "#f86c6b" }, { "y": -999, "color": "#379457" }, {"y": 0, "color": "#379457"}, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
                 color: 'black',
                 dataLabels: updateChartLabelStyle()
             },
             {
                 type: 'scatter',
                 name: 'Target',
-                data: [2, 2, 2, 2, 2],
+                data: [2, 2, 2, 2, 2, 2],
                 marker: {
                     fillColor: '#138496'
                 },
@@ -139,9 +139,9 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             text: 'KPI Report Trend'
         },
         plotOptions: {
-            column: {
+            /* column: {
                 stacking: 'normal'
-            },
+            }, */
             series: {
                 dataLabels: {
                     enabled: true,
@@ -157,7 +157,7 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
         },
         xAxis: {
             type: 'date',
-            categories: ['10/18', '11/18', '12/18', '01/19', '02/19']
+            categories: ['10/18', '11/18', '12/18', '01/19', '02/19', '03/19']
         },
         yAxis: {
             title: {
@@ -169,14 +169,14 @@ export class KpiReportTrendComponent implements OnInit, OnChanges {
             {
                 type: 'column',
                 name: 'Values',
-                data: [{ "y": 0.35451, "color": "#379457" }, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
+                data: [{ "y": 0.35451, "color": "#379457" }, { "y": -999, "color": "#379457" }, {"y": 0, "color": "#379457"}, { "y": 0.35081, "color": "#f86c6b" }, { "y": 0.35702, "color": "#f86c6b" }, { "y": 0.39275, "color": "#379457" }, { "y": 0.38562, "color": "#379457" }],
                 color: 'black',
                 dataLabels: updateChartLabelStyle()
             },
             {
                 type: 'scatter',
                 name: 'Target',
-                data: [2, 2, 2, 2, 2],
+                data: [2, 2, 2, 2, 2, 2, 2],
                 marker: {
                     fillColor: '#138496'
                 },
