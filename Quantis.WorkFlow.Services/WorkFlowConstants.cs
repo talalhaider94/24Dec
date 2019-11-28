@@ -87,5 +87,7 @@
         public const string VIEW_LOADING_CSV = "VIEW_LOADING_CSV";
         public const string VIEW_LINK_POWERBI = "VIEW_LINK_POWERBI";
         public const string VIEW_CONFIGURATION_ADVANCED_2 = "VIEW_CONFIGURATION_ADVANCED_2";
+        public const string VIEW_WORKFLOW_MONITORING_ORG = "VIEW_WORKFLOW_MONITORING_ORG";
+        public const string VIEW_WORKFLOW_MONITORING_DAY = "VIEW_WORKFLOW_MONITORING_DAY";
     }
 }

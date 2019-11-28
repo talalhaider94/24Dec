@@ -24,11 +24,17 @@ namespace Quantis.Workflow.Complete.Controllers
         {
             _monitoringAPI = monitoringAPI;
         }
-        //[Authorize(WorkFlowPermissions.VIEW_CONFIGURATION_GENERAL)]
+        [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_MONITORING_ORG)]
         [HttpGet("GetTicketsMonitoringByPeriod")]
         public List<MonitoringDTO> GetTicketsMonitoringByPeriod(string period)
         {
             return _monitoringAPI.GetTicketsMonitoringByPeriod(period);
+        }
+        [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_MONITORING_DAY)]
+        [HttpGet("GetDayLevelTicketsMonitoring")]
+        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring()
+        {
+            return _monitoringAPI.GetDayLevelTicketsMonitoring();
         }
     }
 }

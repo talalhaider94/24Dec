@@ -134,5 +134,92 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring()
+        {
+            var periodDate = DateTime.Now.AddMonths(-1);
+            var Finalresult = new List<MonitoringDayLevelDTO>();
+            string query = @"select r.rule_name,ck.global_rule_id_bsi,m.sla_id,m.sla_name,c.customer_id,c.customer_name,CAST (ck.organization_unit AS INTEGER) as organization_unit_id,ou.organization_unit,ck.day_workflow,ck.month
+                            from t_catalog_kpis ck
+                            left join t_rules r on r.global_rule_id=ck.global_rule_id_bsi
+                            left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
+                            left join t_slas m on m.sla_id = s.sla_id
+                            left join t_customers c on m.customer_id=c.customer_id
+                            left join t_organization_units ou on CAST (ck.organization_unit AS INTEGER)=ou.id
+                            where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
+                            and ck.month is not null
+                            and ck.enable=true
+                            and ck.day_workflow!=0";
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                var baseResult = new List<BaseMonitoringDTO>();
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                using (var result = command.ExecuteReader())
+                {
+                    while (result.Read())
+                    {
+                        var monitorDTO = new BaseMonitoringDTO();
+                        monitorDTO.GlobalRuleName = result.GetString(result.GetOrdinal("rule_name"));
+                        monitorDTO.GlobalRuleId = result.GetInt32(result.GetOrdinal("global_rule_id_bsi"));
+                        monitorDTO.ContractId = result.GetInt32(result.GetOrdinal("sla_id"));
+                        monitorDTO.ContractName = result.GetString(result.GetOrdinal("sla_name"));
+                        monitorDTO.ContractPartyId = result.GetInt32(result.GetOrdinal("customer_id"));
+                        monitorDTO.ContractPartyName = result.GetString(result.GetOrdinal("customer_name"));
+                        monitorDTO.OrganizationUnitId = (result[result.GetOrdinal("organization_unit_id")] == DBNull.Value) ? null : (int?)result.GetInt32(result.GetOrdinal("organization_unit_id"));
+                        monitorDTO.OrganizationUnitName = (result[result.GetOrdinal("organization_unit")] == DBNull.Value) ? null : result.GetString(result.GetOrdinal("organization_unit"));
+                        monitorDTO.WorkflowDay = result.GetInt32(result.GetOrdinal("day_workflow"));
+                        monitorDTO.Months = result.GetString(result.GetOrdinal("month"));
+                        monitorDTO.TicketCreated = false;
+                        baseResult.Add(monitorDTO);
+                    }
+
+                    baseResult = baseResult.Where(o => o.Months.Split(',').Contains(DateTime.Now.Month + "")).ToList();
+                    var globalRuleIds = baseResult.Select(o => o.GlobalRuleId).ToList();
+                    var ticketsCreated = _dbcontext.SDMTicketFact.Where(o => o.period_year == periodDate.Year && o.period_month == periodDate.Month && globalRuleIds.Contains(o.global_rule_id)).ToList();
+
+                    int daysInMonth=DateTime.DaysInMonth(periodDate.Year, periodDate.Month);
+                    for (int day = 1; day <= daysInMonth; day++)
+                    {
+                        var res = new MonitoringDayLevelDTO()
+                        {
+                            DayNumber = day,
+                            NoOfTicketsToBeOpenedToday = baseResult.Count(o => o.WorkflowDay == day),
+                            NoOfTicketsOpenedToday = ticketsCreated.Count(o => o.created_on.Day == day),
+                            TicketsToBeOpenedToday = baseResult.Where(o => o.WorkflowDay == day).Select(p =>
+                                new MonitoringKPIDTO()
+                                {
+                                    ContractName = p.ContractName,
+                                    OrganizationUnitId = p.OrganizationUnitId,
+                                    OrganizationUnitName = p.OrganizationUnitName,
+                                    ContractPartyName = p.ContractPartyName,
+                                    ContractPartyId = p.ContractPartyId,
+                                    ContractId = p.ContractId,
+                                    GlobalRuleId = p.GlobalRuleId,
+                                    WorkflowDay = p.WorkflowDay,
+                                    GlobalRuleName = p.GlobalRuleName
+                                }).ToList(),
+                            TicketsOpenedToday = ticketsCreated.Where(o => o.created_on.Day == day).Select(p =>
+                                new MonitoringTicketDTO()
+                                {
+                                    OrganizationUnitId = baseResult.FirstOrDefault(o=>o.GlobalRuleId==p.global_rule_id).OrganizationUnitId,
+                                    GlobalRuleId = p.global_rule_id,
+                                    OrganizationUnitName = baseResult.FirstOrDefault(o => o.GlobalRuleId == p.global_rule_id).OrganizationUnitName,
+                                    ContractPartyName = baseResult.FirstOrDefault(o => o.GlobalRuleId == p.global_rule_id).ContractPartyName,
+                                    ContractPartyId = baseResult.FirstOrDefault(o => o.GlobalRuleId == p.global_rule_id).ContractPartyId,
+                                    ContractId = baseResult.FirstOrDefault(o => o.GlobalRuleId == p.global_rule_id).ContractId,
+                                    ContractName = baseResult.FirstOrDefault(o => o.GlobalRuleId == p.global_rule_id).ContractName,
+                                    CreatedOn = p.created_on,
+                                    TicketId = p.ticket_id,
+                                    ResultValue = p.result_value,
+                                    TicketRefNumber = p.ticket_refnum
+                                }).ToList()
+                        };
+                        Finalresult.Add(res);
+                    }
+                    return Finalresult;
+                }
+            }
+        }
     }
 }
