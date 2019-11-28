@@ -255,7 +255,7 @@ export class UserProfilingComponent implements OnInit {
       this.workflowContractData = data;
       //console.log('wf', data[0].workflow_day)
       if (data.length > 0) {
-        if (data[0].workflow_day > 0) {
+        if (data[0].workflow_day >= 0) {
           this.saveWFContract[data[0].sla_id] = data[0].workflow_day;
         } else {
           this.saveWFContract[data[0].sla_id] = null;
@@ -485,7 +485,7 @@ export class UserProfilingComponent implements OnInit {
 
     for (let i = 0; i < keys.length; i++) {
       if (this.saveOrganization[keys[i]] != null) {
-        if (this.saveOrganization[keys[i]] >= 0 || this.saveOrganization[keys[i]] <= 28) {
+        if (this.saveOrganization[keys[i]] >= 0 && this.saveOrganization[keys[i]] <= 28) {
           console.log('sla: ' + this.selectedData.contractID, 'organization: ' + keys[i], 'workflowDay: ' + this.saveOrganization[keys[i]])
           this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, keys[i], -1, this.saveOrganization[keys[i]]).subscribe(data => {
             this.toastr.success('Successo', 'Configurazione Salvata');
