@@ -163,7 +163,7 @@ export class OrganizationComponent implements OnInit {
             this.toastr.success('Valore aggiornato', 'Success');
             this.hideAddConfigModal();
         }, error => {
-            this.toastr.error('Errore in aggiornato.', 'Error');
+            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
             this.hideAddConfigModal();
         });
     }
@@ -179,33 +179,33 @@ export class OrganizationComponent implements OnInit {
             this.toastr.success('Valore aggiornato', 'Success');
             this.hideSpecialModal();
         }, error => {
-            this.toastr.error('Errore in aggiornato.', 'Error');
+            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
             this.hideSpecialModal();
         });
     }
 
     deleteOrganization(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Confirm');
+        this.toastr.info('Valore in aggiornamento..', 'Info');
         this.apiService.DeleteOrganizationUnit(data.key).subscribe(data => {
             console.log(data);
             if(data==false){
-                this.toastr.error('This organization unit is already assigned to catalog and cannot be deleted', 'Error');
+                this.toastr.error('Non è possibile eliminare un\'unità organizzativa associata ad un KPI', 'Error');
             }else{
                 this.GetAllOrganizationUnits(); 
                 this.toastr.success('Valore Aggiornato', 'Success');
             }
         }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
+            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
         });
     }
     
     deleteSpecialValue(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Confirm');
+        this.toastr.info('Valore in aggiornamento..', 'Info');
         this.apiService.DeleteReportSpecialValue(data.key).subscribe(data => {
             this.GetAllReportSpecialValues(); 
             this.toastr.success('Valore Aggiornato', 'Success');
         }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
+            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
         });
     }
 
