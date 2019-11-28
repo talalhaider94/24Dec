@@ -206,7 +206,6 @@ export class BarchartComponent implements OnInit {
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
         let label = 'Series';
-        debugger
         if (dashboardComponentData) {
             let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
             label = dashboardComponentData.barChartWidgetParameters.measures[measureIndex];

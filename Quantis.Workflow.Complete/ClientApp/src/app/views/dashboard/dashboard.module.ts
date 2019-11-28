@@ -44,6 +44,7 @@ import { BSIReportComponent } from './bsi-report/bsi-report.component';
 import { BlankPageComponent } from './blankpage/blankpage.component';
 import { PersonalReportComponent } from './personal-report/personal-report.component';
 import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-widget/free-form-reports-widget.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
     imports: [
@@ -104,7 +105,8 @@ import { FreeFormReportsWidgetComponent } from '../../widgets/free-form-reports-
         PersonalReportComponent,
         FreeFormReportsWidgetComponent,
         FilterUsersFFRPipe,
-        KeysPipePipe
+        KeysPipePipe,
+        AboutComponent
     ]
 })
 export class DashboardModule { }

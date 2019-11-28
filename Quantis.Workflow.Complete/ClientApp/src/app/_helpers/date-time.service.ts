@@ -56,11 +56,11 @@ export class DateTimeService {
     }
   }
 
-  timePeriodRange(rangeType, incompletePeriod) {
+  timePeriodRange(rangeType, incompletePeriod, isKpiReportTrend: boolean = false) {
     let startDate;
     let endDate;
     endDate = moment().format('MM/YYYY');
-    if(!incompletePeriod){
+    if(!incompletePeriod && isKpiReportTrend){
       endDate = moment().subtract(1, 'months').format('MM/YYYY');
     }
     if(rangeType === '2') {
@@ -77,11 +77,10 @@ export class DateTimeService {
     return { startDate, endDate }
   }
 
-  WidgetDateAndTime(startDate, endDate, incompletePeriod){
+  WidgetDateAndTime(startDate, endDate, incompletePeriod, isKpiReportTrend: boolean = false){
     let startDate1 = moment(startDate).format('MM/YYYY');
     let endDate1 = moment(endDate).format('MM/YYYY');
-    if(!incompletePeriod){
-      
+    if(!incompletePeriod && isKpiReportTrend){
       endDate1 = moment(endDate).subtract(1, 'months').format('MM/YYYY');
     }
     return { startDate:startDate1, endDate:endDate1}

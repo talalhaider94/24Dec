@@ -202,41 +202,31 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}
 			if (this.barChartWidgetParameters.getOrgHierarcy && this.barChartWidgetParameters.getOrgHierarcy.length > 0) {
-				debugger
+				// debugger
 				this.treeDataFields = { dataSource: this.barChartWidgetParameters.getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
 				// this.preSelectedNodes = this.barChartWidgetParameters.getOrgHierarcy.map (org => org.id);	
 				this.preSelectedNodes = [];
 				if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
+					// debugger
 					const allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
 					setTimeout(() => {
 						//this.organizationTree.checkAll();
-						// this.preSelectedNodes = allOrganizationIds;
+						this.preSelectedNodes = allOrganizationIds;
 						// console.log('ORG TREE CHECKD NODES 11: ', this.organizationTree.getAllCheckedNodes());
 						console.log('ORG TREE CHECKD NODES 22: ', this.organizationTree.checkedNodes);
 						console.log('this.preSelectedNodes If', this.preSelectedNodes);
 					}, 50);
 				} else {
-					let allOrganizationIds;
-					if(this.barChartWidgetParameters.filters.organizations) {
-						allOrganizationIds = this.barChartWidgetParameters.filters.organizations.split(',');
-					} else {
-						debugger;
-						if(Array.isArray(childData.setWidgetFormValues.Filters.organizations)) {
-							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.map(orgId => orgId.toString());
-						} else {
-							debugger
-							allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.split(',');
-						}
+					if(childData.setWidgetFormValues.Filters.organizations) {
+						let allOrganizationIds;
+						allOrganizationIds = childData.setWidgetFormValues.Filters.organizations.split(',');
+						setTimeout(() => { this.preSelectedNodes = allOrganizationIds; }, 50);
 					}
-					setTimeout(() => {
-						this.preSelectedNodes = allOrganizationIds;
-					}, 50);
-					console.log('this.preSelectedNodes Else', JSON.stringify(this.preSelectedNodes));
 				}
 				// empty leaf node array to aviod pilling up values
-				this.allLeafNodesIds = [];
-				this.getAllLeafNodesIds(this.barChartWidgetParameters.getOrgHierarcy);
-				console.log('this.allLeafNodesIds', this.allLeafNodesIds);
+				// this.allLeafNodesIds = [];
+				// this.getAllLeafNodesIds(this.barChartWidgetParameters.getOrgHierarcy);
+				// console.log('this.allLeafNodesIds', this.allLeafNodesIds);
 			}
 			//Danial: TODO: add isFreeFormReportCheck and getReportQueryDetailByID is no longer being used i suppose
 			// need to verify
@@ -270,11 +260,19 @@ export class PublicComponent implements OnInit {
 		return (Object.keys(filters).length) ? true : false;
 	}
 
+	emptyFormParametersModal(params) {
+		if(!params) {
+			this.toastr.info('Please refresh page. form parameters are not available');
+			return;
+		}
+	}
+
 	outputs = {
 		barChartParent: childData => {
 			console.log('barChartParent childData', childData);
 			if (childData.type === 'openBarChartModal') {
 				// this.barChartWidgetParameters should be a generic name
+				this.emptyFormParametersModal(childData.data.barChartWidgetParameters);
 				this.barChartWidgetParameters = childData.data.barChartWidgetParameters;
 				// setting the isBarChartComponent value to true on openning modal so that their
 				// state can be saved in their own instance when closing
@@ -317,6 +315,7 @@ export class PublicComponent implements OnInit {
 		kpiReportTrendParent: childData => {
 			console.log('kpiReportTrendParent childData', childData);
 			if (childData.type === 'openKpiReportTrendModal') {
+				this.emptyFormParametersModal(childData.data.kpiReportTrendWidgetParameters);
 				this.barChartWidgetParameters = childData.data.kpiReportTrendWidgetParameters;
 				this.isKpiReportTrendComponent = childData.data.isKpiReportTrendComponent;
 				this.showWidgetsModalAndSetFormValues(childData.data, 'kpi_report_trend');
@@ -691,11 +690,6 @@ export class PublicComponent implements OnInit {
 					this.dashboardWidgetsArray = this.dashboardCollection.dashboardwidgets.slice();
 				}
 
-				// if (getOrgHierarcy && getOrgHierarcy.length > 0) {
-				// 	this.treeDataFields = { dataSource: getOrgHierarcy, id: 'id', text: 'name', title: 'name', child: 'children' };
-				// 	this.getAllLeafNodesIds(getOrgHierarcy);
-				// }
-
 			} else {
 				console.log('WHY NO DASHBOARD DATA');
 			}
@@ -810,7 +804,6 @@ export class PublicComponent implements OnInit {
 	}
 
 	organizationTreeNodeSelected(e: NodeSelectEventArgs) {
-		debugger
 		console.log('OrganizationTreeNode Selected', e);
 		console.log("The selected node's id: ", this.organizationTree.selectedNodes);
 	}
@@ -834,14 +827,14 @@ export class PublicComponent implements OnInit {
 		let startDate;
 		let endDate;
 		if (formValues.Filters.dateTypes === '0') {
-			let WidgetDateAndTime = this.dateTime.WidgetDateAndTime(formValues.Filters.startDate, formValues.Filters.endDate, formValues.Filters.incompletePeriod);
+			let WidgetDateAndTime = this.dateTime.WidgetDateAndTime(formValues.Filters.startDate, formValues.Filters.endDate, formValues.Filters.incompletePeriod, this.isKpiReportTrendComponent);
 			startDate = WidgetDateAndTime.startDate;
 			endDate = WidgetDateAndTime.endDate;
 			//incompletePeriod = WidgetDateAndTime.incompletePeriod;
 			/* startDate = this.dateTime.moment(formValues.Filters.startDate).format('MM/YYYY');
 			endDate = this.dateTime.moment(formValues.Filters.endDate).format('MM/YYYY'); */
 		} else if (!!formValues.Filters.dateTypes) {
-			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes, formValues.Filters.incompletePeriod);
+			let timePeriodRange = this.dateTime.timePeriodRange(formValues.Filters.dateTypes, formValues.Filters.incompletePeriod, this.isKpiReportTrendComponent);
 			startDate = timePeriodRange.startDate;
 			endDate = timePeriodRange.endDate;
 		}
