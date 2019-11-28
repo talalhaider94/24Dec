@@ -191,13 +191,16 @@ export class PublicComponent implements OnInit {
 				this.widgetParametersForm.get('Filters.kpi').enable();
 			}
 			if (this.barChartWidgetParameters.allContractParties1) {
-				this.allContractParties1 = [...this.allContractParties1, ...this.barChartWidgetParameters.allContractParties1];
+				/* this.allContractParties1 = [...this.allContractParties1, ...this.barChartWidgetParameters.allContractParties1]; */
+				this.allContractParties1 = [{ key: '', value: 'Select Contract Parties' }, ...this.barChartWidgetParameters.allContractParties1];
 			}
 			if (this.barChartWidgetParameters.allContracts1) {
-				this.filterContracts1 = [...this.filterContracts1, ...this.barChartWidgetParameters.allContracts1];
+				/* this.filterContracts1 = [...this.filterContracts1, ...this.barChartWidgetParameters.allContracts1]; */
+				this.filterContracts1 = [{ key: '', value: 'Select Contracts' }, ...this.barChartWidgetParameters.allContracts1];
 			}
 			if (this.barChartWidgetParameters.allKpis1) {
-				this.filterKpis1 = [...this.filterKpis1, ...this.barChartWidgetParameters.allKpis1];
+				/* this.filterKpis1 = [...this.filterKpis1, ...this.barChartWidgetParameters.allKpis1]; */
+				this.filterKpis1 = [{ key: '', value: 'Select KPI' }, ...this.barChartWidgetParameters.allKpis1];
 				this.widgetParametersForm.get('Filters.contracts1').enable();
 				this.widgetParametersForm.get('Filters.kpi1').enable();
 			}

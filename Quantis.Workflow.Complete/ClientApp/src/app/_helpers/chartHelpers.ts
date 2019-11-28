@@ -12,7 +12,7 @@ export const formatDataLabelForNegativeValues = (dataLabel) => {
     }
 }
 
-export const updateChartLabelStyle = (color: string = '#ffffff', shadow: string = '#000000', outline: string = '2px contrast') =>{
+export const updateChartLabelStyle = (color: string = '#000000', shadow: string = '#000000', outline: string = '2px contrast') =>{
     let dataLabelsObj = {
         color: color,
         style: {
