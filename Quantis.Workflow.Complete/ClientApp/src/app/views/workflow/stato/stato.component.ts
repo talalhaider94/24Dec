@@ -4,6 +4,7 @@ import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 declare var $;
 var $this;
@@ -57,6 +58,7 @@ export class StatoComponent implements OnInit {
 
     modalTitle='';
     buttonText='';
+    anni = [];
 
     organizationsData: any = []
     specialReportsData: any = []
@@ -73,8 +75,14 @@ export class StatoComponent implements OnInit {
     specialNote;
     isEdit=0;
     isSpecialEdit=0;
+    month;
+    year;
 
     ngOnInit() {
+        this.getAnno();
+        this.month = moment().subtract(1, 'month').format('MM');
+        this.year = moment().subtract(1, 'month').format('YYYY');
+
         this.dtOptions = {
             pagingType: 'full_numbers',
             pageLength: 10,
@@ -136,86 +144,6 @@ export class StatoComponent implements OnInit {
         this.dtTrigger2.next();
         
         this.GetAllOrganizationUnits();
-        this.GetAllReportSpecialValues();
-    }
-
-    populateModalData(data) {
-        this.isEdit=1;
-        this.modalData.key = data.key;
-        this.value = data.value;
-        this.modalTitle='Modifica Unità Organizaztiva';
-        this.buttonText='Aggiorna';
-        this.showAddConfigModal();
-    }
-    
-    populateSpecialModalData(data) {
-        this.isSpecialEdit=1;
-        this.specialKey = data.key;
-        this.specialValue = data.value;
-        this.specialNote = data.note;
-        this.modalTitle='Aggiorna Valore Speciale';
-        this.buttonText='Aggiorna';
-        this.showSpecialModal();
-    }
-
-    addOrganization() {
-        if(this.isEdit==1){
-            this.addOrganizationData.Key = this.modalData.key;
-        }else{
-            this.addOrganizationData.Key = 0;
-        }
-        this.addOrganizationData.Value = this.value;
-
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.AddUpdateOrganizationUnit(this.addOrganizationData).subscribe(data => {
-            this.GetAllOrganizationUnits();
-            this.toastr.success('Valore aggiornato', 'Success');
-            this.hideAddConfigModal();
-        }, error => {
-            this.toastr.error('Errore in aggiornato.', 'Error');
-            this.hideAddConfigModal();
-        });
-    }
-
-    addSpecialValue() {
-        this.addSpecialData.Key = this.specialKey;
-        this.addSpecialData.Value = this.specialValue;
-        this.addSpecialData.Note = this.specialNote;
-
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.AddUpdateReportSpecialValue(this.addSpecialData).subscribe(data => {
-            this.GetAllReportSpecialValues();
-            this.toastr.success('Valore aggiornato', 'Success');
-            this.hideSpecialModal();
-        }, error => {
-            this.toastr.error('Errore in aggiornato.', 'Error');
-            this.hideSpecialModal();
-        });
-    }
-
-    deleteOrganization(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Confirm');
-        this.apiService.DeleteOrganizationUnit(data.key).subscribe(data => {
-            console.log(data);
-            if(data==false){
-                this.toastr.error('This organization unit is already assigned to catalog and cannot be deleted', 'Error');
-            }else{
-                this.GetAllOrganizationUnits(); 
-                this.toastr.success('Valore Aggiornato', 'Success');
-            }
-        }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
-        });
-    }
-    
-    deleteSpecialValue(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Confirm');
-        this.apiService.DeleteReportSpecialValue(data.key).subscribe(data => {
-            this.GetAllReportSpecialValues(); 
-            this.toastr.success('Valore Aggiornato', 'Success');
-        }, error => {
-            this.toastr.error('Errore durante update.', 'Error');
-        });
     }
 
     ngOnDestroy(): void {
@@ -237,49 +165,36 @@ export class StatoComponent implements OnInit {
     setUpDataTableDependencies() {
     }
 
+    getAnno() {
+        for (var i = 2016; i <= +(moment().add(7,'months').format('YYYY')); i++) {
+            this.anni.push(i);
+        }
+        return this.anni;
+        console.log("aaaa", this.anni);
+    }
+
     strip_tags(html) {
         var tmp = document.createElement("div");
         tmp.innerHTML = html;
         return tmp.textContent || tmp.innerText;
     }
 
+    populateDateFilter(){
+        this.loading=true;
+        this.GetAllOrganizationUnits();
+    }
+
     GetAllOrganizationUnits() {
-        this.apiService.GetAllMonitorings().subscribe((data) => {
+        this.apiService.GetAllMonitorings(this.month,this.year).subscribe((data) => {
             this.organizationsData = data;
-            console.log('Organizations Data -> ', data);
+            console.log('Monitoring Data -> ', data,this.month,this.year);
             this.rerender();
             this.loading=false;
         });
     }
 
-    GetAllReportSpecialValues() {
-        this.apiService.GetAllMonitorings().subscribe((data) => {
-            //this.specialReportsData = data;
-            //console.log('Special Reports Data -> ', data);
-            this.rerender();
-        });
-    }
-
     onCancel(dismissMethod: string): void {
         console.log('Cancel ', dismissMethod);
-    }
-
-    addOrganizationModal(){
-        this.isEdit=0;
-        this.value='';
-        this.modalTitle='Aggiungi Unità Organizaztiva';
-        this.buttonText='Aggiungi';
-        this.showAddConfigModal();
-    }
-
-    addSpecialModal(){
-        this.isSpecialEdit=0;
-        this.specialKey='';
-        this.specialValue='';
-        this.specialNote='';
-        this.modalTitle='Nuovo Valore Speciale';
-        this.buttonText='Aggiungi';
-        this.showSpecialModal();
     }
 
     noofticketsopenedtilltoday(data){
@@ -315,13 +230,5 @@ export class StatoComponent implements OnInit {
 
     hideSpecialModal() {
         this.specialModal.hide();
-    }
-
-    showAddConfigModal() {
-        this.addConfigModal.show();
-    }
-
-    hideAddConfigModal() {
-        this.addConfigModal.hide();
     }
 }

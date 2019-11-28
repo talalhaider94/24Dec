@@ -403,8 +403,8 @@ export class ApiService {
         const getOrganizations = `${environment.API_URL}/information/GetAllReportSpecialValues`;
         return this.http.get(getOrganizations);
     }
-    GetAllMonitorings(): Observable<any> {
-        const getMonitoring = `${environment.API_URL}/monitoring/GetTicketsMonitoringByPeriod?period=06/2019`;
+    GetAllMonitorings(month,year): Observable<any> {
+        const getMonitoring = `${environment.API_URL}/monitoring/GetTicketsMonitoringByPeriod?period=${month}/${year}`;
         return this.http.get(getMonitoring);
     }
     DeleteOrganizationUnit(id): Observable<any> {
