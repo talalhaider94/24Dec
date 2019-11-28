@@ -421,7 +421,9 @@ export class BSIReportComponent implements OnInit {
                 let targetData = chartArray.filter(data => (data.zvalue === 'Target' || data.zvalue === 'Previsione' ));
                 let providedData = chartArray.filter(data => (data.zvalue === 'Provided'));
                 
-                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
+                console.log('Labels -> ',chartArray.map(label => label.xvalue).sort());
+
+                let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue).sort());
                 let allTargetData = targetData.map(data => data.yvalue);
                 let allProvidedData = providedData.map(data => data.yvalue);
 
@@ -433,7 +435,7 @@ export class BSIReportComponent implements OnInit {
                     }
                 }
                 this.dayChartOptions.xAxis = {
-                    type: 'date',
+                    type: 'datetime',
                     categories: allChartLabels,
                 }
                 this.dayChartOptions.yAxis.title = {
