@@ -25,7 +25,7 @@ export class StatoComponent implements OnInit {
     dtTrigger2 = new Subject();
 
 
-    loading=false;
+    loading: boolean = true;
     title='';
     isticketsopenedtilltoday=false;
     isticketstobeopenedforcompleteperiod=false;
@@ -244,7 +244,6 @@ export class StatoComponent implements OnInit {
     }
 
     GetAllOrganizationUnits() {
-        this.loading=true;
         this.apiService.GetAllMonitorings().subscribe((data) => {
             this.organizationsData = data;
             console.log('Organizations Data -> ', data);
