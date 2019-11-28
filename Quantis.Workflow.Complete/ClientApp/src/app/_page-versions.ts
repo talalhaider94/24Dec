@@ -16,8 +16,8 @@ export const pageVersion = {
     '/booklet': '0.0.3',
     '/formreport': '0.0.2',
     '/dashboard/free-form-report': '0.0.2',
-    '/dashboard/bsi-report': '0.0.8',
-    '/dashboard/personal-report': '0.0.5',
+    '/dashboard/bsi-report': '0.0.9',
+    '/dashboard/personal-report': '0.0.6',
     '/tconfiguration/general': '0.0.2',
     '/tconfiguration/advanced': '0.0.2',
     '/sdmgroup': '0.0.1',
@@ -27,5 +27,6 @@ export const pageVersion = {
     '/userprofiling/userpermissions': '0.0.6',
     '/standarddashboard': '0.0.3',
     '/dashboard/import-form-report': '0.0.1',
-    '/tconfiguration/organization': '0.0.2'
+    '/tconfiguration/organization': '0.0.2',
+    '/workflow/stato': '0.0.1',
 }

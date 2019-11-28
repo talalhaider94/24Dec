@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RicercaComponent } from './ricerca/ricerca.component';
+import { StatoComponent } from './stato/stato.component';
 import { KPIComponent } from './kpi.component';
 import { AmministrazioneComponent } from './amministrazione/amministrazione.component';
 
@@ -34,6 +35,13 @@ const routes: Routes = [
                 component: AmministrazioneComponent,
                 data: {
                     title: 'Amministrazione'
+                }
+            }, 
+            {
+                path: 'stato',
+                component: StatoComponent,
+                data: {
+                    title: 'Stato'
                 }
             }
         ],

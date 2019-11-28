@@ -49,7 +49,7 @@ export const navItems: NavData[] = [
         name: 'Workflow',
         url: '/workflow-menu',
         icon: 'fa fa-code-fork',
-        key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN'],
+        key: ['VIEW_WORKFLOW_KPI_VERIFICA', 'VIEW_WORKFLOW_RICERCA', 'VIEW_WORKFLOW_ADMIN','VIEW_WORKFLOW_MONITORING'],
         children: [
             {
                 name: 'KPI in Verifica',
@@ -71,6 +71,13 @@ export const navItems: NavData[] = [
                 icon: 'fa fa-users',
                 version: '0.0.2',
                 key: ['VIEW_WORKFLOW_ADMIN']
+            },
+            {
+                name: 'Stato',
+                url: '/workflow/stato',
+                icon: 'fa fa-users',
+                version: '0.0.1',
+                key: ['VIEW_WORKFLOW_MONITORING']
             }
         ]
     },
