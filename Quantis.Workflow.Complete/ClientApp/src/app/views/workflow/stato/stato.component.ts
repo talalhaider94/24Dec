@@ -31,8 +31,12 @@ export class StatoComponent implements OnInit {
 
 
     loading: boolean = true;
+    loading1: boolean = true;
     title='';
+    title1='';
     isPeriodSelected=0;
+    isStatoPeriod=0;
+    selectedStatoPeriod=0;
     isticketsopenedtilltoday=false;
     isticketstobeopenedforcompleteperiod=false;
     isticketstobeopenedtilltoday=false;
@@ -255,6 +259,8 @@ export class StatoComponent implements OnInit {
     populateDateFilter(){
         this.loading=true;
         this.isPeriodSelected=1;
+        this.isStatoPeriod=1;
+        this.selectedStatoPeriod=1;
         this.GetAllOrganizationUnits();
     }
 
@@ -272,7 +278,7 @@ export class StatoComponent implements OnInit {
             this.monitringDayData = data;
             console.log('Day Monitoring Data -> ',data);
             this.rerender();
-            this.loading=false;
+            this.loading1=false;
         });
     }
 
@@ -280,16 +286,22 @@ export class StatoComponent implements OnInit {
         console.log('Cancel ', dismissMethod);
     }
 
-    noofticketsopenedtilltoday(data){
+    noofticketsopenedtilltoday(data){    
+        this.isStatoPeriod=0;
         this.isticketsopenedtilltoday=true;
         this.isticketstobeopenedforcompleteperiod=false;
         this.isticketstobeopenedtilltoday=false;
-        this.title='Tickets opened till today';
+        if(this.selectedStatoPeriod==1){
+            this.title='Tickets opened in the period '+this.month+'/'+this.year;
+        }else{
+            this.title='Tickets opened till today';
+        }
         this.ticketsopenedtilltoday = data;
         this.rerender();
     }
 
     noofticketstobeopenedforcompleteperiod(data){
+        this.isStatoPeriod=0;
         this.isticketstobeopenedforcompleteperiod=true;
         this.isticketsopenedtilltoday=false;
         this.isticketstobeopenedtilltoday=false;
@@ -299,6 +311,7 @@ export class StatoComponent implements OnInit {
     }
 
     noofticketstobeopenedtilltoday(data){
+        this.isStatoPeriod=0;
         this.isticketstobeopenedtilltoday=true;
         this.isticketstobeopenedforcompleteperiod=false;
         this.isticketsopenedtilltoday=false;
@@ -310,7 +323,7 @@ export class StatoComponent implements OnInit {
     noofticketstobeopenedtoday(data){
         this.isticketstobeopenedtoday=true;
         this.isticketsopenedtoday=false;
-        this.title='Tickets to be opened today';
+        this.title1='Tickets to be opened today';
         this.ticketstobeopenedtoday = data;
         this.rerender();
     }
@@ -318,7 +331,7 @@ export class StatoComponent implements OnInit {
     noofticketsopenedtoday(data){
         this.isticketsopenedtoday=true;
         this.isticketstobeopenedtoday=false;
-        this.title='Tickets opened today';
+        this.title1='Tickets opened today';
         this.ticketsopenedtoday = data;
         this.rerender();
     }

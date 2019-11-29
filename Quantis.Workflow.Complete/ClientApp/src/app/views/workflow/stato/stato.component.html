@@ -68,21 +68,22 @@
                     <td style="text-align:center">{{row.contractpartyname}}</td>
                     <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
-                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedforcompleteperiod(row.ticketstobeopenedforcompleteperiod)">{{row.noofticketstobeopenedforcompleteperiod}}</button></td>
+                    <td style="text-align:center"></td>
                     <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtilltoday(row.ticketsopenedtilltoday)">{{row.noofticketsopenedtilltoday}}</button></td>
-                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedtilltoday(row.ticketstobeopenedtilltoday)">{{row.noofticketstobeopenedtilltoday}}</button></td>
+                    <td style="text-align:center"></td>
                 </tr>
             </tbody>
         </table>
         </div>
     </div><br>
-    <div [hidden]="isticketsopenedtilltoday!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+    <div [hidden]="isticketsopenedtilltoday!=true || isStatoPeriod==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
         <h3 style="color:#565656">{{title}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
+                    <th style="text-align:center">Ticket Number</th>
                     <th style="text-align:center">Contract Party</th>
                     <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Organization Unit</th>
@@ -92,6 +93,7 @@
             <tbody>
                 <tr *ngFor="let row of ticketsopenedtilltoday; index as i">
                     <td style="text-align:center">{{row.globalruleid}}</td>
+                    <td style="text-align:center"></td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
                     <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
@@ -101,7 +103,7 @@
         </table>
     </div>
 
-    <div [hidden]="isticketstobeopenedforcompleteperiod!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+    <div [hidden]="isticketstobeopenedforcompleteperiod!=true || isStatoPeriod==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
         <h3 style="color:#565656">{{title}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
@@ -126,7 +128,7 @@
         </table>
     </div>
     <br>
-    <div [hidden]="isticketstobeopenedtilltoday!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+    <div [hidden]="isticketstobeopenedtilltoday!=true || isStatoPeriod==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
         <h3 style="color:#565656">{{title}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
@@ -154,7 +156,7 @@
     <div [hidden]="isPeriodSelected==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
         <h2 style="color:#565656">DAY</h2><br>
-        <h5 *ngIf="loading" class="text-center text-primary">
+        <h5 *ngIf="loading1" class="text-center text-primary">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3">
@@ -176,7 +178,7 @@
     </div><br>
     <div [hidden]="isticketstobeopenedtoday!=true || isPeriodSelected==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
-        <h3 style="color:#565656">{{title}}</h3>
+        <h3 style="color:#565656">{{title1}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions4" [dtTrigger]="dtTrigger4">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
@@ -201,7 +203,7 @@
 
     <div [hidden]="isticketsopenedtoday!=true || isPeriodSelected==1" class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
-        <h3 style="color:#565656">{{title}}</h3>
+        <h3 style="color:#565656">{{title1}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions4" [dtTrigger]="dtTrigger4">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
