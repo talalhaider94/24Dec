@@ -407,6 +407,10 @@ export class ApiService {
         const getMonitoring = `${environment.API_URL}/monitoring/GetTicketsMonitoringByPeriod?period=${month}/${year}`;
         return this.http.get(getMonitoring);
     }
+    GetMonitoringDay(): Observable<any> {
+        const getDayLevelMonitoring = `${environment.API_URL}/monitoring/GetDayLevelTicketsMonitoring`;
+        return this.http.get(getDayLevelMonitoring);
+    }
     DeleteOrganizationUnit(id): Observable<any> {
         const DeleteOrganizationUnit = `${environment.API_URL}/information/DeleteOrganizationUnit?id=${id}`;
         return this.http.get(DeleteOrganizationUnit);

@@ -8,6 +8,8 @@ import { KPIComponent } from './kpi.component';
 import { KPIRoutingModule } from './kpi-routing.module';
 import { RicercaComponent } from './ricerca/ricerca.component';
 import { StatoComponent } from './stato/stato.component';
+import { StatoDayComponent } from './statoDay/statoDay.component';
+
 import { DataTablesModule } from 'angular-datatables';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -36,6 +38,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         CollapseModule.forRoot(),
         SweetAlert2Module,
     ],
-    declarations: [KPIComponent, RicercaComponent, AmministrazioneComponent, StatoComponent]
+    declarations: [KPIComponent,RicercaComponent,AmministrazioneComponent,StatoComponent,StatoDayComponent]
 })
 export class KPIModule { }

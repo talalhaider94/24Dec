@@ -1242,7 +1242,7 @@ export class PublicComponent implements OnInit {
 
         console.log('getdati1 -> ',kpiId,month,year);
 
-        this.apiService.getKpiRawData(kpiId, month, 2018).subscribe((dati: any) => {
+        this.apiService.getKpiRawData(kpiId, month, year).subscribe((dati: any) => {
             this.fitroDataById = dati;
             //console.log(dati);
             Object.keys(this.fitroDataById).forEach(key => {

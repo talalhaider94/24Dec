@@ -30,21 +30,21 @@
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
-                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Contract Party</th>
+                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Organization Unit</th>
-                    <th style="text-align:center">Tickets opened till today</th>
                     <th style="text-align:center">Tickets to be opened for complete period</th>
+                    <th style="text-align:center">Tickets opened till today</th>
                     <th style="text-align:center">Tickets to be opened till today</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of organizationsData; index as i">
-                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
-                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtilltoday(row.ticketsopenedtilltoday)">{{row.noofticketsopenedtilltoday}}</button></td>
                     <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedforcompleteperiod(row.ticketstobeopenedforcompleteperiod)">{{row.noofticketstobeopenedforcompleteperiod}}</button></td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtilltoday(row.ticketsopenedtilltoday)">{{row.noofticketsopenedtilltoday}}</button></td>
                     <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedtilltoday(row.ticketstobeopenedtilltoday)">{{row.noofticketstobeopenedtilltoday}}</button></td>
                 </tr>
             </tbody>
@@ -57,19 +57,19 @@
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
-                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Contract Party</th>
-                    <th style="text-align:center">Global Rule</th>
+                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ticketsopenedtilltoday; index as i">
                     <td style="text-align:center">{{row.globalruleid}}</td>
-                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
-                    <td style="text-align:center">{{row.globalrulename}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
                 </tr>
             </tbody>
         </table>
@@ -82,19 +82,19 @@
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
-                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Contract Party</th>
-                    <th style="text-align:center">Global Rule</th>
+                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ticketstobeopenedforcompleteperiod; index as i">
                     <td style="text-align:center">{{row.globalruleid}}</td>
-                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
-                    <td style="text-align:center">{{row.globalrulename}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
                 </tr>
             </tbody>
         </table>
@@ -107,19 +107,19 @@
             <thead style="background: #20a8d8">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
-                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Contract Party</th>
-                    <th style="text-align:center">Global Rule</th>
+                    <th style="text-align:center">Contract</th>
                     <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let row of ticketstobeopenedtilltoday; index as i">
                     <td style="text-align:center">{{row.globalruleid}}</td>
-                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
-                    <td style="text-align:center">{{row.globalrulename}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
                 </tr>
             </tbody>
         </table>

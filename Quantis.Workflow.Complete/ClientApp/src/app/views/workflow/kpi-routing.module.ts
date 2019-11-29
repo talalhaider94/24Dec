@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RicercaComponent } from './ricerca/ricerca.component';
 import { StatoComponent } from './stato/stato.component';
+import { StatoDayComponent } from './statoDay/statoDay.component';
 import { KPIComponent } from './kpi.component';
 import { AmministrazioneComponent } from './amministrazione/amministrazione.component';
 
@@ -42,6 +43,13 @@ const routes: Routes = [
                 component: StatoComponent,
                 data: {
                     title: 'Stato'
+                }
+            }, 
+            {
+                path: 'statoday',
+                component: StatoDayComponent,
+                data: {
+                    title: 'Stato Day'
                 }
             }
         ],
