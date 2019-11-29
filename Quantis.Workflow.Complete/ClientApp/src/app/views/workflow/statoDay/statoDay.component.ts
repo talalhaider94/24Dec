@@ -196,7 +196,7 @@ export class StatoDayComponent implements OnInit {
         console.log('Cancel ', dismissMethod);
     }
 
-    noofticketsopenedtilltoday(data){
+    noofticketstobeopenedtoday(data){
         this.isticketstobeopenedtoday=true;
         this.isticketsopenedtoday=false;
         this.title='Tickets to be opened today';
@@ -204,7 +204,7 @@ export class StatoDayComponent implements OnInit {
         this.rerender();
     }
 
-    noofticketstobeopenedforcompleteperiod(data){
+    noofticketsopenedtoday(data){
         this.isticketsopenedtoday=true;
         this.isticketstobeopenedtoday=false;
         this.title='Tickets opened today';
