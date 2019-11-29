@@ -255,7 +255,7 @@ export class UserProfilingComponent implements OnInit {
       this.workflowContractData = data;
       //console.log('wf', data[0].workflow_day)
       if (data.length > 0) {
-        if (data[0].workflow_day > 0) {
+        if (data[0].workflow_day >= 0) {
           this.saveWFContract[data[0].sla_id] = data[0].workflow_day;
         } else {
           this.saveWFContract[data[0].sla_id] = null;
@@ -405,7 +405,7 @@ export class UserProfilingComponent implements OnInit {
         });*/
     }
 
-  saveOrganizationsWorkflow() {
+  /*saveOrganizationsWorkflow() {
     console.log('save', this.selectedData);
     console.log(this.saveOrganization);
     let organizationCompiled = 0;
@@ -461,6 +461,51 @@ export class UserProfilingComponent implements OnInit {
       this.toastr.error('Tutti i campi deve essere compilati', 'Errore');
     }
     console.log(valueError, allFieldsFilled)
+  }*/
+  saveOrganizationsWorkflow() {
+    console.log('save', this.selectedData);
+    console.log(this.saveOrganization);
+    /*let organizationCompiled = 0;
+    let allFieldsFilled = false;
+    let valueError = false;*/
+    let keys = Object.keys(this.saveOrganization);
+  
+    if (this.saveWFContract[this.selectedData.contractID] != null) {
+      if (this.saveWFContract[this.selectedData.contractID] >= 0 && this.saveWFContract[this.selectedData.contractID] <= 28) {
+        this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, '-1', -1, this.saveWFContract[this.selectedData.contractID]).subscribe(data => {
+          this.toastr.success('Successo', 'Configurazione Salvata');
+          this.hideContractsModal();
+        }, error => {
+          this.toastr.error('Errore', 'Non tutte le configurazioni sono state salvate, riprovare.');
+        });
+      } else {
+        this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Errore');
+      }
+    }
+
+    for (let i = 0; i < keys.length; i++) {
+      if (this.saveOrganization[keys[i]] != null) {
+        if (this.saveOrganization[keys[i]] >= 0 && this.saveOrganization[keys[i]] <= 28) {
+          console.log('sla: ' + this.selectedData.contractID, 'organization: ' + keys[i], 'workflowDay: ' + this.saveOrganization[keys[i]])
+          this.apiService.AssignCuttoffWorkflowDayByContractIdAndOrganization(this.selectedData.contractID, keys[i], -1, this.saveOrganization[keys[i]]).subscribe(data => {
+            this.toastr.success('Successo', 'Configurazione Salvata');
+            this.hideContractsModal();
+          }, error => {
+            this.toastr.error('Errore', 'Non tutte le configurazioni sono state salvate');
+          });
+        } else {
+          this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Errore');
+        }
+      }
+    }
+    /*  } else {
+        console.log(5, valueError, allFieldsFilled)
+        if (valueError == true) {
+          this.toastr.error('Il valore deve essere compreso tra 0 e 28', 'Errore');
+        } else {
+          this.toastr.error('Tutti i campi deve essere compilati', 'Errore');
+        }
+      }*/
   }
     showContractsModal() {
         this.contractsModal.show();

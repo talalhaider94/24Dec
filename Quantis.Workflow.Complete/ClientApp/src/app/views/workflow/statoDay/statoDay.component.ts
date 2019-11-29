@@ -4,16 +4,17 @@ import { ApiService } from '../../../_services/api.service';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import * as moment from 'moment';
 
 declare var $;
 var $this;
 
 @Component({
-    templateUrl: './organization.component.html',
-    styleUrls: ['./organization.component.scss']
+    templateUrl: './statoDay.component.html',
+    styleUrls: ['./statoDay.component.scss']
 })
 
-export class OrganizationComponent implements OnInit {
+export class StatoDayComponent implements OnInit {
     @ViewChild('addConfigModal') public addConfigModal: ModalDirective;
     @ViewChild('specialModal') public specialModal: ModalDirective;
     @ViewChild('ConfigurationTable') block: ElementRef;
@@ -25,6 +26,14 @@ export class OrganizationComponent implements OnInit {
     dtTrigger2 = new Subject();
 
 
+    loading: boolean = true;
+    title='';
+    isticketstobeopenedtoday=false;
+    isticketsopenedtoday=false;
+
+    ticketstobeopenedtoday: any = [];
+    ticketsopenedtoday: any = [];
+    
     modalData = {
         key: 0,
         value: ''
@@ -48,6 +57,7 @@ export class OrganizationComponent implements OnInit {
 
     modalTitle='';
     buttonText='';
+    anni = [];
 
     organizationsData: any = []
     specialReportsData: any = []
@@ -64,8 +74,14 @@ export class OrganizationComponent implements OnInit {
     specialNote;
     isEdit=0;
     isSpecialEdit=0;
+    month;
+    year;
 
     ngOnInit() {
+        // this.getAnno();
+        // this.month = moment().subtract(1, 'month').format('MM');
+        // this.year = moment().subtract(1, 'month').format('YYYY');
+
         this.dtOptions = {
             pagingType: 'full_numbers',
             pageLength: 10,
@@ -127,86 +143,6 @@ export class OrganizationComponent implements OnInit {
         this.dtTrigger2.next();
         
         this.GetAllOrganizationUnits();
-        this.GetAllReportSpecialValues();
-    }
-
-    populateModalData(data) {
-        this.isEdit=1;
-        this.modalData.key = data.key;
-        this.value = data.value;
-        this.modalTitle='Modifica Unità Organizaztiva';
-        this.buttonText='Aggiorna';
-        this.showAddConfigModal();
-    }
-    
-    populateSpecialModalData(data) {
-        this.isSpecialEdit=1;
-        this.specialKey = data.key;
-        this.specialValue = data.value;
-        this.specialNote = data.note;
-        this.modalTitle='Aggiorna Valore Speciale';
-        this.buttonText='Aggiorna';
-        this.showSpecialModal();
-    }
-
-    addOrganization() {
-        if(this.isEdit==1){
-            this.addOrganizationData.Key = this.modalData.key;
-        }else{
-            this.addOrganizationData.Key = 0;
-        }
-        this.addOrganizationData.Value = this.value;
-
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.AddUpdateOrganizationUnit(this.addOrganizationData).subscribe(data => {
-            this.GetAllOrganizationUnits();
-            this.toastr.success('Valore aggiornato', 'Success');
-            this.hideAddConfigModal();
-        }, error => {
-            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
-            this.hideAddConfigModal();
-        });
-    }
-
-    addSpecialValue() {
-        this.addSpecialData.Key = this.specialKey;
-        this.addSpecialData.Value = this.specialValue;
-        this.addSpecialData.Note = this.specialNote;
-
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.AddUpdateReportSpecialValue(this.addSpecialData).subscribe(data => {
-            this.GetAllReportSpecialValues();
-            this.toastr.success('Valore aggiornato', 'Success');
-            this.hideSpecialModal();
-        }, error => {
-            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
-            this.hideSpecialModal();
-        });
-    }
-
-    deleteOrganization(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.DeleteOrganizationUnit(data.key).subscribe(data => {
-            console.log(data);
-            if(data==false){
-                this.toastr.error('Non è possibile eliminare un\'unità organizzativa associata ad un KPI', 'Error');
-            }else{
-                this.GetAllOrganizationUnits(); 
-                this.toastr.success('Valore Aggiornato', 'Success');
-            }
-        }, error => {
-            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
-        });
-    }
-    
-    deleteSpecialValue(data) {
-        this.toastr.info('Valore in aggiornamento..', 'Info');
-        this.apiService.DeleteReportSpecialValue(data.key).subscribe(data => {
-            this.GetAllReportSpecialValues(); 
-            this.toastr.success('Valore Aggiornato', 'Success');
-        }, error => {
-            this.toastr.error('Errore durante l\'aggiornamento.', 'Error');
-        });
     }
 
     ngOnDestroy(): void {
@@ -228,25 +164,31 @@ export class OrganizationComponent implements OnInit {
     setUpDataTableDependencies() {
     }
 
+    // getAnno() {
+    //     for (var i = 2016; i <= +(moment().add(7,'months').format('YYYY')); i++) {
+    //         this.anni.push(i);
+    //     }
+    //     return this.anni;
+    //     console.log("aaaa", this.anni);
+    // }
+
     strip_tags(html) {
         var tmp = document.createElement("div");
         tmp.innerHTML = html;
         return tmp.textContent || tmp.innerText;
     }
 
-    GetAllOrganizationUnits() {
-        this.apiService.GetAllOrganizationUnits().subscribe((data) => {
-            this.organizationsData = data;
-            console.log('Organizations Data -> ', data);
-            this.rerender();
-        });
-    }
+    // populateDateFilter(){
+    //     this.loading=true;
+    //     this.GetAllOrganizationUnits();
+    // }
 
-    GetAllReportSpecialValues() {
-        this.apiService.GetAllReportSpecialValues().subscribe((data) => {
-            this.specialReportsData = data;
-            console.log('Special Reports Data -> ', data);
+    GetAllOrganizationUnits() {
+        this.apiService.GetMonitoringDay().subscribe((data) => {
+            this.organizationsData = data;
+            console.log('Day Monitoring Data -> ',data);
             this.rerender();
+            this.loading=false;
         });
     }
 
@@ -254,22 +196,20 @@ export class OrganizationComponent implements OnInit {
         console.log('Cancel ', dismissMethod);
     }
 
-    addOrganizationModal(){
-        this.isEdit=0;
-        this.value='';
-        this.modalTitle='Aggiungi Unità Organizaztiva';
-        this.buttonText='Aggiungi';
-        this.showAddConfigModal();
+    noofticketsopenedtilltoday(data){
+        this.isticketstobeopenedtoday=true;
+        this.isticketsopenedtoday=false;
+        this.title='Tickets to be opened today';
+        this.ticketstobeopenedtoday = data;
+        this.rerender();
     }
 
-    addSpecialModal(){
-        this.isSpecialEdit=0;
-        this.specialKey='';
-        this.specialValue='';
-        this.specialNote='';
-        this.modalTitle='Nuovo Valore Speciale';
-        this.buttonText='Aggiungi';
-        this.showSpecialModal();
+    noofticketstobeopenedforcompleteperiod(data){
+        this.isticketsopenedtoday=true;
+        this.isticketstobeopenedtoday=false;
+        this.title='Tickets opened today';
+        this.ticketsopenedtoday = data;
+        this.rerender();
     }
 
     showSpecialModal() {
@@ -278,13 +218,5 @@ export class OrganizationComponent implements OnInit {
 
     hideSpecialModal() {
         this.specialModal.hide();
-    }
-
-    showAddConfigModal() {
-        this.addConfigModal.show();
-    }
-
-    hideAddConfigModal() {
-        this.addConfigModal.hide();
     }
 }

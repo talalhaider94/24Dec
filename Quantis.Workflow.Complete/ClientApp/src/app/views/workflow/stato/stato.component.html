@@ -1,0 +1,171 @@
+<div style="margin-top: -20px;">
+    <div class="table-responsive" style="background: #ffffff; padding: 10px">
+        <br />
+        <h2 style="color:#565656">STATO</h2><br>
+        <h4 style="color:#565656;">Periodo:</h4>
+        <div class="row">
+
+            <select [(ngModel)]="month" class="form-control ml-3" style="width:10%;" (change)="populateDateFilter()">
+                <option value="01">Gennaio</option>
+                <option value="02">Febbraio</option>
+                <option value="03">Marzo</option>
+                <option value="04">Aprile</option>
+                <option value="05">Maggio</option>
+                <option value="06">Giugno</option>
+                <option value="07">Luglio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Settembre</option>
+                <option value="10">Ottobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Dicembre</option>
+            </select>
+            <select [(ngModel)]="year" class="form-control ml-1" style="width:8%;" (change)="populateDateFilter()">
+                <option value="">Anno</option>
+                <option *ngFor="let year of anni">{{year}}</option>
+            </select>
+        </div><br>
+        <h5 *ngIf="loading" class="text-center text-primary">
+            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+        </h5>
+        <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead style="background: #20a8d8">
+                <tr style="font-size:12px;color:white">
+                    <th style="text-align:center">Contract Party</th>
+                    <th style="text-align:center">Contract</th>
+                    <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">Tickets to be opened for complete period</th>
+                    <th style="text-align:center">Tickets opened till today</th>
+                    <th style="text-align:center">Tickets to be opened till today</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of organizationsData; index as i">
+                    <td style="text-align:center">{{row.contractpartyname}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
+                    <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedforcompleteperiod(row.ticketstobeopenedforcompleteperiod)">{{row.noofticketstobeopenedforcompleteperiod}}</button></td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtilltoday(row.ticketsopenedtilltoday)">{{row.noofticketsopenedtilltoday}}</button></td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedtilltoday(row.ticketstobeopenedtilltoday)">{{row.noofticketstobeopenedtilltoday}}</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div><br>
+    <div [hidden]="isticketsopenedtilltoday!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+        <br />
+        <h3 style="color:#565656">{{title}}</h3>
+        <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
+            <thead style="background: #20a8d8">
+                <tr style="font-size:12px;color:white">
+                    <th style="text-align:center">Global Rule ID</th>
+                    <th style="text-align:center">Contract Party</th>
+                    <th style="text-align:center">Contract</th>
+                    <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of ticketsopenedtilltoday; index as i">
+                    <td style="text-align:center">{{row.globalruleid}}</td>
+                    <td style="text-align:center">{{row.contractpartyname}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
+                    <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div [hidden]="isticketstobeopenedforcompleteperiod!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+        <br />
+        <h3 style="color:#565656">{{title}}</h3>
+        <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
+            <thead style="background: #20a8d8">
+                <tr style="font-size:12px;color:white">
+                    <th style="text-align:center">Global Rule ID</th>
+                    <th style="text-align:center">Contract Party</th>
+                    <th style="text-align:center">Contract</th>
+                    <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of ticketstobeopenedforcompleteperiod; index as i">
+                    <td style="text-align:center">{{row.globalruleid}}</td>
+                    <td style="text-align:center">{{row.contractpartyname}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
+                    <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div [hidden]="isticketstobeopenedtilltoday!=true" class="table-responsive" style="background: #ffffff; padding: 10px">
+        <br />
+        <h3 style="color:#565656">{{title}}</h3>
+        <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
+            <thead style="background: #20a8d8">
+                <tr style="font-size:12px;color:white">
+                    <th style="text-align:center">Global Rule ID</th>
+                    <th style="text-align:center">Contract Party</th>
+                    <th style="text-align:center">Contract</th>
+                    <th style="text-align:center">Organization Unit</th>
+                    <th style="text-align:center">KPI Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of ticketstobeopenedtilltoday; index as i">
+                    <td style="text-align:center">{{row.globalruleid}}</td>
+                    <td style="text-align:center">{{row.contractpartyname}}</td>
+                    <td style="text-align:center">{{row.contractname}}</td>
+                    <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- 
+<div id="addConfigModal" bsModal #addConfigModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">{{modalTitle}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideAddConfigModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="value" style="width:50%" /><br>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="addOrganization()">{{buttonText}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideAddConfigModal()">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="specialModal" bsModal #specialModal="bs-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">{{modalTitle}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideSpecialModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label><b>Valore</b></label><input type="text" class="form-control" placeholder="Valore" [(ngModel)]="specialKey" style="width:50%" /><br>
+                <label><b>Risultato</b></label><input type="text" class="form-control" placeholder="Risultato" [(ngModel)]="specialValue" style="width:50%" /><br>
+                <label><b>Nota Speciale</b></label><textarea class="form-control" placeholder="Nota Speciale" [(ngModel)]="specialNote" style="width:50%"></textarea><br>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="addSpecialValue()">{{buttonText}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="hideSpecialModal()">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div> -->

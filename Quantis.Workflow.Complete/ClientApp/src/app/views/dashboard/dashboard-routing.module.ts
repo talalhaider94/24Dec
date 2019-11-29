@@ -12,6 +12,7 @@ import { BSIReportComponent } from './bsi-report/bsi-report.component';
 import { PersonalReportComponent } from './personal-report/personal-report.component';
 import { LandingPageDetailsComponent } from './landing-page-details/landing-page-details.component';
 import { BlankPageComponent } from './blankpage/blankpage.component';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
     // {
@@ -106,6 +107,13 @@ const routes: Routes = [
     {
         path: 'nodashboard',
         component: BlankPageComponent,
+        data: {
+            title: ''
+        }
+    },
+    {
+        path: 'about',
+        component: AboutComponent,
         data: {
             title: ''
         }
