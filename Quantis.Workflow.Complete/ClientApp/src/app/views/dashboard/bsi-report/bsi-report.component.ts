@@ -166,9 +166,9 @@ export class BSIReportComponent implements OnInit {
             min: 0
         },
         plotOptions: {
-            /* column: {
+            column: {
                 stacking: 'normal'
-            }, */
+            },
             series: {
                 dataLabels: {
                     enabled: true,
@@ -218,9 +218,9 @@ export class BSIReportComponent implements OnInit {
             min: 0
         },
         plotOptions: {
-            /* column: {
+            column: {
                 stacking: 'normal'
-            }, */
+            },
             series: {
                 dataLabels: {
                     enabled: true,
