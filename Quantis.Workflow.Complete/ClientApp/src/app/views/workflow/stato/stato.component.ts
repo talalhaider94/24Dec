@@ -292,9 +292,9 @@ export class StatoComponent implements OnInit {
         this.isticketstobeopenedforcompleteperiod=false;
         this.isticketstobeopenedtilltoday=false;
         if(this.selectedStatoPeriod==1){
-            this.title='Tickets opened in the period '+this.month+'/'+this.year;
+            this.title='Ticket aperti nel periodo '+this.month+'/'+this.year;
         }else{
-            this.title='Tickets opened till today';
+            this.title='Ticket aperti ad oggi';
         }
         this.ticketsopenedtilltoday = data;
         this.rerender();
@@ -305,7 +305,7 @@ export class StatoComponent implements OnInit {
         this.isticketstobeopenedforcompleteperiod=true;
         this.isticketsopenedtilltoday=false;
         this.isticketstobeopenedtilltoday=false;
-        this.title='Tickets to be opened for complete period';
+        this.title ='Ticket da aprire nel periodo';
         this.ticketstobeopenedforcompleteperiod = data;
         this.rerender();
     }
@@ -315,7 +315,7 @@ export class StatoComponent implements OnInit {
         this.isticketstobeopenedtilltoday=true;
         this.isticketstobeopenedforcompleteperiod=false;
         this.isticketsopenedtilltoday=false;
-        this.title='Tickets to be opened till today';
+        this.title='Ticket da aprire ad oggi';
         this.ticketstobeopenedtilltoday = data;
         this.rerender();
     }
@@ -323,7 +323,7 @@ export class StatoComponent implements OnInit {
     noofticketstobeopenedtoday(data){
         this.isticketstobeopenedtoday=true;
         this.isticketsopenedtoday=false;
-        this.title1='Tickets to be opened today';
+        this.title1='Ticket da aprire oggi';
         this.ticketstobeopenedtoday = data;
         this.rerender();
     }
@@ -331,7 +331,7 @@ export class StatoComponent implements OnInit {
     noofticketsopenedtoday(data){
         this.isticketsopenedtoday=true;
         this.isticketstobeopenedtoday=false;
-        this.title1='Tickets opened today';
+        this.title1='Ticket aperti oggi';
         this.ticketsopenedtoday = data;
         this.rerender();
     }
