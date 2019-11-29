@@ -163,12 +163,12 @@ export class BSIReportComponent implements OnInit {
             title: {
                 text: 'Percent'
             },
-            min: -0.01
+            min: 0
         },
         plotOptions: {
-            column: {
+            /* column: {
                 stacking: 'normal'
-            },
+            }, */
             series: {
                 dataLabels: {
                     enabled: true,
@@ -218,9 +218,9 @@ export class BSIReportComponent implements OnInit {
             min: 0
         },
         plotOptions: {
-            column: {
+            /* column: {
                 stacking: 'normal'
-            },
+            }, */
             series: {
                 dataLabels: {
                     enabled: true,
@@ -530,12 +530,12 @@ export class BSIReportComponent implements OnInit {
         let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
         let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
         let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
-        allChartLabels.push('01/2018');
-        allChartLabels.push('02/2018');
+        /* allChartLabels.push('01/2018');
+        allChartLabels.push('02/2018'); */
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
-        allCompliantData.push(0);
-        allCompliantData.push(-999);
+        /* allCompliantData.push(0);
+        allCompliantData.push(-999); */
         let allTargetData = targetData.map(data => data.yvalue);
         let allMinorData = minorData.map(data => data.yvalue);
         let allCriticalData = criticalData.map(data => data.yvalue);
