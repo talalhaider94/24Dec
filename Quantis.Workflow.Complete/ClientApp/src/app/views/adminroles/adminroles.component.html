@@ -10,7 +10,7 @@
       </button>
     </div><br />
     <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-      <thead style="background: #0042be">
+      <thead class="thead-light2">
         <tr style="font-size:12px;color:white">
           <th style="text-align:center">RUOLO</th>
           <th style="text-align:center">AZIONE</th>
@@ -27,7 +27,7 @@
             <button class="btn btn-success" routerLink="adminRolePermissions/{{row.id}}/{{row.name}}" style="font-size:10px">
               <i class="fa fa-pencil"></i> Permessi
             </button>
-            <button class="btn btn-info" data-toggle="modal" (click)="populateUsersData(row)"
+            <button class="btn btn-primary" data-toggle="modal" (click)="populateUsersData(row)"
                     data-target="#usersModal" style="font-size:10px">
               Utenti
             </button>
@@ -72,7 +72,7 @@
       </div>
       <div class="modal-body">
         <table id="classTable" class="table table-bordered">
-          <thead style="background: #E6E6E6">
+          <thead class="thead-light2">
           </thead>
           <tbody>
             <tr><th>NOME</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.name"></td></tr>
@@ -105,7 +105,7 @@
         </div><br>
         <perfect-scrollbar style="max-height: 546px;">
           <table class="table stripe">
-            <thead style="background: #E6E6E6">
+            <thead class="thead-light2">
               <tr>
                 <th>Users</th>
               </tr>

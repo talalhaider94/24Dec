@@ -7,7 +7,7 @@
             Nuovo Gruppo
         </button><br /><br />
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background: #0042be">
+            <thead class="thead-light2">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">HANDLE</th>
                     <th style="text-align:center">NOME</th>
@@ -51,7 +51,7 @@
             </div>
             <div class="modal-body">
                 <table id="classTable" class="table table-bordered">
-                    <thead style="background: #E6E6E6">
+                    <thead class="thead-light2">
                     </thead>
                     <tbody>
                         <tr><th>HANDLE</th><td colspan="2"><input type="text" class="form-control" [(ngModel)]="modalData.handle"></td></tr>

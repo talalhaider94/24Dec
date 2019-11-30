@@ -9,7 +9,7 @@
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <table class="table stripe kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background:#0042be !important">
+            <thead class="thead-light2">
                 <tr style="color:white;font-size:12px;">
                     <th style="text-align:center">GLOBAL RULE ID</th>
                     <th style="text-align:center">CONTRATTO</th>
@@ -56,7 +56,7 @@
             <div class="modal-body">
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table stripe">
-                        <thead style="background: #0042be">
+                        <thead class="thead-light2">
                         </thead>
                         <tbody>
                           <tr><th>CONTRATTO</th><td colspan="2">{{modalData.contract}}</td></tr>
@@ -134,7 +134,7 @@
                         </tbody>
                     </table>
                     <table id="classTable" class="table stripe">
-                        <thead style="background: #E6E6E6">
+                        <thead class="thead-light2">
                         </thead>
                         <tbody>
                             <tr style="text-align:center"><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>

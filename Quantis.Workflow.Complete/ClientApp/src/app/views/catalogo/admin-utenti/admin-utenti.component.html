@@ -6,7 +6,7 @@
             <button class="ml-3" #btnExporta>Esporta CSV</button>
         </div><br />
         <table class="table stripe UserTable" #UserTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background: #0042be">
+            <thead class="thead-light2">
                 <tr style="color:white;font-size:12px;">
                     <th style="text-align:center">USER ID</th>
                     <th style="text-align:center">USERNAME</th>
@@ -48,7 +48,7 @@
             <div class="modal-body">
                 <!-->div class="table-responsive" style="background: #ffffff; padding: 10px"-->
                 <table id="classTable" class="table table-bordered">
-                    <thead style="background: #E6E6E6">
+                    <thead class="thead-light2">
                     </thead>
                     <tbody>
                         <tr><th>BSI ACCOUNT</th><td>{{modalData.ca_bsi_account}}</td></tr>

@@ -18,7 +18,7 @@
       <i class="fa fa-spin fa-spinner text-info fa-2x"></i>
     </li>
     <li style="padding-right:10px">
-      <a href="#" routerLink="/go-back" title="refresh"><i class="fa fa-refresh"></i></a>
+      <a href="#" routerLink="/go-back" title="refresh" style="color: #0042be;"><i class="fa fa-refresh"></i></a>
     </li>
 
     <!--li class="nav-item dropdown" dropdown placement="bottom right">
@@ -70,9 +70,6 @@
     </div><!-- /.container-fluid -->
   </main>
   <app-aside [fixed]="true" [display]="false">
-    <tabset>
-      <tab>
-        <ng-template tabHeading><i class="icon-settings"></i></ng-template>
         <div class="p-3">
           <h6>Home Page</h6>
           <p>Selezionare la Dashboard da visualizzare dopo il login.</p>
@@ -114,8 +111,7 @@
             </div>
           </div> -->
         </div>
-      </tab>
-    </tabset>
+
   </app-aside>
 </div>
 <app-footer style="position:fixed;bottom:0; width:100%;background-color: #eedc00;color:#0047bb">
