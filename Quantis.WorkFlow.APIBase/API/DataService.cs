@@ -380,6 +380,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 try
                 {
                     var entity = new T_CatalogKPI();
+                    var get_day_workflow = GetWorkflowDay(dto.organization_unit, dto.sla_id_bsi);
+                    dto.day_workflow = get_day_workflow;
+
                     if (dto.id > 0)
                     {
                         entity = _dbcontext.CatalogKpi.FirstOrDefault(o => o.id == dto.id);
@@ -388,12 +391,12 @@ namespace Quantis.WorkFlow.APIBase.API
 
                     if (dto.id == 0)
                     {
-                        var get_day_workflow = _dbcontext.CatalogKpi.FirstOrDefault(o => dto.sla_id_bsi == o.sla_id_bsi);
+                        /*var get_day_workflow = _dbcontext.CatalogKpi.FirstOrDefault(o => dto.sla_id_bsi == o.sla_id_bsi);
                         if (get_day_workflow != null)
-                        {
+                        { 
                             dto.day_workflow = get_day_workflow.day_workflow;
                             entity = _catalogKpiMapper.GetEntity(dto, entity);
-                        }
+                        }*/
                         var kpi = _dbcontext.TGlobalRules.FirstOrDefault(o => dto.global_rule_id_bsi == o.global_rule_id);
                         if (kpi != null)
                         {
@@ -2147,7 +2150,7 @@ namespace Quantis.WorkFlow.APIBase.API
                    }
                } */
 
-        public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
+                        public List<FormAttachmentDTO> GetAttachmentsByKPIID(int kpiId)
         {
             try
             {
@@ -2669,6 +2672,35 @@ namespace Quantis.WorkFlow.APIBase.API
                        throw e;
                    }
                }*/
+        private int GetWorkflowDay(string organizationUnit, int sla_id)
+        {
+            var query = "";
+            int workflow_day = 0;
+            int organizationUnitID = organizationUnit != null ? organizationUnit != "" ? Int32.Parse(organizationUnit) : 0 : 0;
+            if(organizationUnitID == 0)
+            {
+                query = "SELECT workflow_day FROM t_organization_unit_workflow WHERE sla_id = :sla_id and organization_unit_id = -1";
+            }
+            else
+            {
+                query = "SELECT workflow_day FROM t_organization_unit_workflow WHERE sla_id = :sla_id and organization_unit_id = :organizationUnitID";
+            }
+            
+            
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(query, con);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue(":sla_id", sla_id);
+                command.Parameters.AddWithValue(":organizationUnitID", organizationUnitID);
+                _dbcontext.Database.OpenConnection();
+                var configExists = command.ExecuteReader();
+                configExists.Read();
+                workflow_day = configExists.GetInt32(configExists.GetOrdinal("workflow_day"));
+            }
+            return workflow_day;
+        }
 
         private bool CallFormAdapter(FormAdapterDTO dto)
         {
