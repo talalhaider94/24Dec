@@ -34,6 +34,7 @@ export class StatoComponent implements OnInit {
     loading1: boolean = true;
     title='';
     title1='';
+    daynumber;
     isPeriodSelected=0;
     isStatoPeriod=0;
     selectedStatoPeriod=0;
@@ -155,7 +156,7 @@ export class StatoComponent implements OnInit {
         };
         this.dtOptions3 = {
             pagingType: 'full_numbers',
-            pageLength: 10,
+            pageLength: 50,
             language: {
               processing: "Elaborazione...",
               search: "Cerca:",
@@ -320,18 +321,18 @@ export class StatoComponent implements OnInit {
         this.rerender();
     }
 
-    noofticketstobeopenedtoday(data){
+    noofticketstobeopenedtoday(data,daynum){
         this.isticketstobeopenedtoday=true;
         this.isticketsopenedtoday=false;
-        this.title1='Ticket da aprire oggi';
+        this.title1='Ticket da aprire oggi (giorno '+daynum+')';
         this.ticketstobeopenedtoday = data;
         this.rerender();
     }
 
-    noofticketsopenedtoday(data){
+    noofticketsopenedtoday(data,daynum){
         this.isticketsopenedtoday=true;
         this.isticketstobeopenedtoday=false;
-        this.title1='Ticket aperti oggi';
+        this.title1='Ticket aperti oggi (giorno '+daynum+')';
         this.ticketsopenedtoday = data;
         this.rerender();
     }
