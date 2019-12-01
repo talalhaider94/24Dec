@@ -190,7 +190,7 @@ export class AdminUtentiComponent implements OnInit {
     }
 
     table2csv(oTable, exportmode, tableElm) {
-      var csv = 'sep=|\r\n';
+      var csv = '|';
       var headers = [];
       var rows = [];
       // Get header names
@@ -198,18 +198,16 @@ export class AdminUtentiComponent implements OnInit {
           var text = $(this).text();
           var header = '"' + text + '"';
           headers.push(text); // original code
-          //if(text != "") headers.push(header);
       });
-      //csv += "'" + headers.join("','") + "'\n";
-      csv += '"' + headers.join('""|""') + '"\r\n';
+      csv += '"' + headers.join('"|"') + '"|\r\n';
       // get table data
       if (exportmode == "full") { // total data
         var totalRows = oTable.data().length;
         for (let i = 0; i < totalRows; i++) {
-            rows.push('"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('""|""') + '"');
+            rows.push('|"' + oTable.cells(oTable.row(i).nodes(), ':not(.notExportCsv)').data().join('"|"') + '"');
         }
       }
-      csv += rows.join("\r\n");
+      csv += rows.join("|\r\n");
       console.log(csv)
       var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       saveAs(blob, "ExportConsolidareTable.csv");

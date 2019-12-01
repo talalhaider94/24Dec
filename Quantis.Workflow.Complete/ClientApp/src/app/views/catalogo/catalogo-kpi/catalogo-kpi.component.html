@@ -30,7 +30,7 @@
         </div>
         <div class="top-scroll-table-container" #topScrollTblContainer>
             <table class="table stripe kpiTable" #kpiTable id="kpiTable"  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" style="width:100%">
-                <thead style="background: #20a8d8;width:100%">
+                <thead class="thead-light2">
                   <tr style="color:white;font-size:12px;">
                     <th style="text-align:center">CONTRATTO</th>
                     <th style="text-align:center">ID</th>
@@ -129,7 +129,7 @@
             <div class="modal-body">
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table stripe">
-                        <thead style="background: #20a8d8">
+                        <thead class="thead-light2">
                         </thead>
                         <tbody>
                             <tr><th width="20%">REFERENTI_INPUT</th><td width="80%"><input [readonly]="kpiButtonState !== '1'" type="text" class="form-control" [(ngModel)]="modalData.referent"></td></tr>
@@ -182,7 +182,7 @@
             <div class="modal-body">
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table stripe">
-                        <thead style="background: #20a8d8">
+                        <thead class="thead-light2">
                         </thead>
                         <tbody>
                           <tr><th>CONTRAENTI</th><td><span *ngIf="modalData.primary_contract_party_name != 'Unknown'"><b>Primario: </b>[{{modalData.primary_contract_party}}] {{modalData.primary_contract_party_name}}</span></td><td><span *ngIf="modalData.secondary_contract_party_name != 'Unknow' && modalData.secondary_contract_party_name != null"><b>Secondario: </b>[{{modalData.secondary_contract_party}}] {{modalData.secondary_contract_party_name}}</span></td></tr>
@@ -254,7 +254,7 @@
                         </tbody>
                     </table>
                     <table id="classTable" class="table stripe">
-                        <thead style="background: #E6E6E6">
+                        <thead class="thead-light2">
                         </thead>
                         <tbody>
                             <tr style="text-align:center"><th>ABILITATO</th><th>REMINDER</th><th>WORKFLOW</th></tr>

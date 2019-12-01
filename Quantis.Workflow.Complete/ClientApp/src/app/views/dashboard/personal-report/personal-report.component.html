@@ -1,40 +1,40 @@
 <div class="table-responsive bg-white p-3">
-        <h2>Report personali</h2><br>
-        <!-- <h5 *ngIf="loading" class="text-center text-primary">
-            <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
-        </h5> -->
-        <button class="btn btn-primary btn-sm float-right mb-3" (click)="showConfigModal()">
-        <i class="fa fa-cog"></i> Generate Report
-      </button>
-        <table class="table stripe text-center" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead class="bg-primary">
-                <tr class="text-white">
-                    <th>Report Name</th>
-                    <th>Contract Party</th>
-                    <th>Contract</th>
-                    <th style="width:30%">kpi</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of PersonalReportData; index as i">
-                  <td>{{row.name}}</td>
-                  <td>{{row.contract_party_name}}</td>
-                  <td>{{row.contract_name}}</td>
-                  <td style="width:30%">{{row.kpi_name}}</td>
-                  <td>
-                      <button class="btn btn-primary btn-sm pointer-cursor" (click)="editReport(row.id)">
-                          <i class="fa fa-edit"></i>
-                      </button>
-                      <button class="btn btn-danger" [swal]="{title: 'Conferma', text: 'Eliminare il Report Personalli?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
-                      (confirm)="DeletePersonalReport(row.id)" (cancel)="onCancel($event)" style="font-size:10px">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                  </td>
-              </tr>
-            </tbody>
-        </table>
-    </div>
+  <h2>Report personali</h2><br>
+  <!-- <h5 *ngIf="loading" class="text-center text-primary" style="color:#eedc00 !important">
+      <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
+  </h5> -->
+  <button class="btn btn-primary btn-sm float-right mb-3" (click)="showConfigModal()">
+    <i class="fa fa-cog"></i> Generate Report
+  </button>
+  <table class="table stripe text-center" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead class="bg-primary">
+      <tr class="text-white">
+        <th>Report Name</th>
+        <th>Contract Party</th>
+        <th>Contract</th>
+        <th style="width:30%">kpi</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of PersonalReportData; index as i">
+        <td>{{row.name}}</td>
+        <td>{{row.contract_party_name}}</td>
+        <td>{{row.contract_name}}</td>
+        <td style="width:30%">{{row.kpi_name}}</td>
+        <td>
+          <button class="btn btn-primary btn-sm pointer-cursor" (click)="editReport(row.id)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-danger" [swal]="{title: 'Conferma', text: 'Eliminare il Report Personalli?', confirmButtonClass: 'btn btn-danger', showCancelButton: true, cancelButtonText: 'Annulla', confirmButtonText: 'Elimina'  }"
+                  (confirm)="DeletePersonalReport(row.id)" (cancel)="onCancel($event)" style="font-size:10px">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
     
     <div bsModal #configModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-primary modal-lg" role="document">
@@ -179,7 +179,7 @@
       </div>
       <div class="modal-body">
         <!-- <perfect-scrollbar style="max-height: 500px;">   -->
-        <h5 *ngIf="loading" class="text-center text-primary">
+        <h5 *ngIf="loading" class="text-center text-primary" style="color:#eedc00 !important">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <div>
@@ -272,7 +272,7 @@
                 
             </div><br>  
             <table id="classTable" class="table table-bordered  font-12" #table>
-                  <thead style="background: #20a8d8; color:white">
+                  <thead class="thead-light2">
                       <tr>
                           <th style="text-align:center">create date</th>
                           <th style="text-align:center">modify date</th>
@@ -322,7 +322,7 @@
                 
             </div><br>  
             <table id="classTable" class="table table-bordered  font-12" #table>
-                  <thead style="background: #20a8d8; color:white">
+                  <thead class="thead-light2">
                       <tr>
                           <th style="text-align:center">create date</th>
                           <th style="text-align:center">modify date</th>

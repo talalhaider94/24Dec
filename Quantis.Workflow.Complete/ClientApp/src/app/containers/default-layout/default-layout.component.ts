@@ -60,7 +60,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         this.showPowerBI=0;
         let x = JSON.parse(localStorage.getItem('currentUser'));
         let perm = x.permissions;
-        if(perm.indexOf('VIEW_LINK_BSI') > -1){
+        if(perm.indexOf('VIEW_LINK_POWERBI') > -1){
             this.showPowerBI=1;
         }
 

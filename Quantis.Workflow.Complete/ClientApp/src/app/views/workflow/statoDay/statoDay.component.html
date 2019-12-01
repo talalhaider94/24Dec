@@ -1,34 +1,12 @@
 <div style="margin-top: -20px;">
     <div class="table-responsive" style="background: #ffffff; padding: 10px">
         <br />
-        <h2 style="color:#565656">STATO DAY</h2><br>
-        <!-- <h4 style="color:#565656;">Periodo:</h4>
-        <div class="row">
-
-            <select [(ngModel)]="month" class="form-control ml-3" style="width:10%;" (change)="populateDateFilter()">
-                <option value="01">Gennaio</option>
-                <option value="02">Febbraio</option>
-                <option value="03">Marzo</option>
-                <option value="04">Aprile</option>
-                <option value="05">Maggio</option>
-                <option value="06">Giugno</option>
-                <option value="07">Luglio</option>
-                <option value="08">Agosto</option>
-                <option value="09">Settembre</option>
-                <option value="10">Ottobre</option>
-                <option value="11">Novembre</option>
-                <option value="12">Dicembre</option>
-            </select>
-            <select [(ngModel)]="year" class="form-control ml-1" style="width:8%;" (change)="populateDateFilter()">
-                <option value="">Anno</option>
-                <option *ngFor="let year of anni">{{year}}</option>
-            </select>
-        </div><br> -->
-        <h5 *ngIf="loading" class="text-center text-primary">
+        <h2 style="color:#565656">DAY</h2><br>
+        <h5 *ngIf="loading" class="text-center text-primary" style="color:#eedc00 !important">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <table class="table stripe" #ConfigurationTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background: #20a8d8">
+            <thead class="thead-light2">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Day Number</th>
                     <th style="text-align:center">Tickets to be opened today</th>
@@ -48,7 +26,7 @@
         <br />
         <h3 style="color:#565656">{{title}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
-            <thead style="background: #20a8d8">
+            <thead class="thead-light2">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
                     <th style="text-align:center">Contract Party</th>
@@ -73,7 +51,7 @@
         <br />
         <h3 style="color:#565656">{{title}}</h3>
         <table class="table stripe" #SpecialValueTable datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
-            <thead style="background: #20a8d8">
+            <thead class="thead-light2">
                 <tr style="font-size:12px;color:white">
                     <th style="text-align:center">Global Rule ID</th>
                     <th style="text-align:center">Contract Party</th>

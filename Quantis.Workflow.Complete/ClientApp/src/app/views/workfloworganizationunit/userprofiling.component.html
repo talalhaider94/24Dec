@@ -16,7 +16,7 @@
                 <perfect-scrollbar style="max-height: 500px;">
 
                     <ul class="users-list">
-                        <h5 *ngIf="loading.roles" class="text-center text-primary loader">
+                        <h5 *ngIf="loading.roles" class="text-center text-primary loader" style="color:#eedc00 !important">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                         </h5>
                         <li *ngFor="let user of gatheredData.usersList | filter : filters.searchUsersText; index as i"
@@ -68,7 +68,7 @@
                 <div class="table-responsive" style="background: #ffffff;">
                   <div class="role-permissions-lists col-md-12" style="padding:0px;">
                     <table class="table stripe text-center">
-                      <thead style="background-color: #20a8d8;color:white">
+                      <thead class="thead-light2">
                         <tr><th>Contratto</th><th>Workflow Day</th></tr>
                       </thead>
                       <tbody>
@@ -79,7 +79,7 @@
                       </tbody>
                     </table>
                     <table class="table stripe text-center" *ngIf="organizationUnitsPresence">
-                      <thead style="background-color: #20a8d8;color:white">
+                      <thead class="thead-light2">
                         <tr><th>Unità Organizzativa</th><th>Workflow Day</th></tr>
                       </thead>
                       <tbody>
@@ -89,7 +89,7 @@
                         </tr>
                       </tbody>
                     </table>
-                    <h5 *ngIf="organizationLoading" class="text-center text-primary loader">
+                    <h5 *ngIf="organizationLoading" class="text-center text-primary loader" style="color:#eedc00 !important">
                       <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                     </h5>
                   </div>
