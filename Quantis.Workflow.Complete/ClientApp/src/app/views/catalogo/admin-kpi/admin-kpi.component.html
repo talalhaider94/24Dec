@@ -5,7 +5,7 @@
         <div class="row">
             <button class="ml-3" #btnExporta>Esporta CSV</button>
         </div><br />
-        <h5 *ngIf="loading" class="text-center text-primary">
+        <h5 *ngIf="loading" class="text-center text-primary" style="color:#eedc00 !important">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <table class="table stripe kpiTable" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
