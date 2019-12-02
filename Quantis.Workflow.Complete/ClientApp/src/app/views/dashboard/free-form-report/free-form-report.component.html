@@ -99,7 +99,7 @@
                       <button [hidden]="hideExport" class="ml-2 mb-2" #btnExporta>Esporta CSV</button>
                       <!-- <button [hidden]="hideExport" class="ml-2" >Esporta PDF</button> -->
                         <br>
-                        <h5 *ngIf="loadingResult" class="text-center text-primary">
+                        <h5 *ngIf="loadingResult" class="text-center text-primary" style="color:#eedc00 !important">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
                         </h5>
                         <div class="row mb-2">
@@ -167,7 +167,7 @@ aria-hidden="true">
                     [(ngModel)]="filters.searchUsersText" /></div><br>
                 <perfect-scrollbar style="max-height: 400px;">
                     <table class="table stripe" #assignedQueriesTable>
-                        <thead style="background: #0042be">
+                        <thead class="thead-light2">
                             <tr style="font-size:12px;color:white">
                                 <th style="text-align:center">NAME</th>
                                 <th style="text-align:center">USERNAME</th>
@@ -209,7 +209,7 @@ aria-hidden="true">
                     [(ngModel)]="filters.searchUsersText" /></div><br>
                 <perfect-scrollbar style="max-height: 400px;">
                     <table class="table stripe" #assignedQueriesTable>
-                        <thead style="background: #0042be">
+                        <thead class="thead-light2">
                             <tr style="font-size:12px;color:white">
                                 <th style="text-align:center">NAME</th>
                             </tr>
@@ -244,7 +244,7 @@ aria-hidden="true">
         </div>
         <div class="modal-body">
           <table id="classTable" class="table table-bordered">
-            <thead style="background: #E6E6E6">
+            <thead class="thead-light2">
             </thead>
             <tbody>
               <tr><th>Nome Query</th><td colspan="2">{{viewAssignedData.queryname}}</td></tr>

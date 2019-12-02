@@ -21,7 +21,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
             vm.ShowMeasure = true;
             vm.ShowDateType = true;
             vm.ShowDateFilter = true;
-            vm.ShowIncompletePeriodCheck = true;
+            //vm.ShowIncompletePeriodCheck = true;
             vm.AddMeasure(Measures.Number_of_Total_KPI_in_verifica);
             vm.AddMeasure(Measures.Number_of_Total_KPI_compliant);
             vm.AddMeasure(Measures.Number_of_Total_KPI_not_compliant);

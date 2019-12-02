@@ -17,11 +17,11 @@
                 <option value="ANNUALE">ANNUALE</option>
             </select>
         </div><br />
-        <h5 *ngIf="loading" class="text-center text-primary">
+        <h5 *ngIf="loading" class="text-center text-primary" style="color:#eedc00 !important">
             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
         </h5>
         <table class="table stripe" #kpiTable datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-            <thead style="background: #0042be">
+            <thead class="thead-light2">
                 <tr style="color:white;font-size:12px;">
                     <th style="text-align:center">CONTRATTO</th>
                     <th style="text-align:center">ID</th>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="table-responsive" [hidden]="periodFilter!==1" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table table-bordered" #table>
-                        <thead style="background: #0042be; color:white">
+                        <thead class="thead-light2">
                             <tr>
                                 <th style="text-align:center"></th>
                                 <th style="text-align:center">create date</th>
@@ -199,7 +199,7 @@
                 </div>
                 <div class="table-responsive" style="background: #ffffff; padding: 10px">
                     <table id="classTable" class="table table-bordered" #table>
-                        <thead style="background: #0042be; color:white">
+                        <thead class="thead-light2">
                             <tr>
                                 <!--th style="text-align:center"></th-->
                                 <th style="text-align:center">create date</th>
@@ -258,7 +258,7 @@
             </div>
             <div class="modal-body">
                 <table id="classTable" class="table table-bordered">
-                    <thead style="background: #E6E6E6"></thead>
+                    <thead class="thead-light2"></thead>
                     <tbody>
                         <tr *ngFor="let row of campoData; index as i">
                             <th style="text-align:center">campo {{i+1}}</th>

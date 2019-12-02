@@ -38,14 +38,14 @@
         </div>
         <br>
         <div class="row col-lg-12">
-            <h5 *ngIf="loading" class="text-center text-primary col-lg-12">
+            <h5 *ngIf="loading" class="text-center text-primary col-lg-12" style="color:#eedc00 !important">
                 <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento in corso..
             </h5>
         </div>
         <br>
         <div [ngStyle]="{'display': loading? 'none' : 'unset'}">
             <table class="table stripe" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                <thead style="background: #0042be">
+                <thead class="thead-light2">
                   <tr style="font-size:12px;color:white">
                     <th class="text-center" style="display:none">DESTINATARIO</th>
                     <th style="text-align:center">TIPO</th>
