@@ -25,8 +25,6 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<MonitoringDTO> GetTicketsMonitoringByPeriod(string period)
         {
             var periodDate=new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
-            periodDate = periodDate.AddMonths(-1);
-
             string query = @"select r.rule_name,ck.global_rule_id_bsi,m.sla_id,m.sla_name,c.customer_id,c.customer_name,CAST (ck.organization_unit AS INTEGER) as organization_unit_id,ou.organization_unit,ck.day_workflow,ck.month
                             from t_catalog_kpis ck
                             left join t_rules r on r.global_rule_id=ck.global_rule_id_bsi
@@ -134,9 +132,9 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
-        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring()
+        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring(string period)
         {
-            var periodDate = DateTime.Now.AddMonths(-1);
+            var periodDate = new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
             var Finalresult = new List<MonitoringDayLevelDTO>();
             string query = @"select r.rule_name,ck.global_rule_id_bsi,m.sla_id,m.sla_name,c.customer_id,c.customer_name,CAST (ck.organization_unit AS INTEGER) as organization_unit_id,ou.organization_unit,ck.day_workflow,ck.month
                             from t_catalog_kpis ck

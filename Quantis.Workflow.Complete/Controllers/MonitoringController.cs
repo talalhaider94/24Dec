@@ -32,9 +32,9 @@ namespace Quantis.Workflow.Complete.Controllers
         }
         [Authorize(WorkFlowPermissions.VIEW_WORKFLOW_MONITORING_DAY)]
         [HttpGet("GetDayLevelTicketsMonitoring")]
-        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring()
+        public List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring(string period)
         {
-            return _monitoringAPI.GetDayLevelTicketsMonitoring();
+            return _monitoringAPI.GetDayLevelTicketsMonitoring(period);
         }
     }
 }
