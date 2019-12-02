@@ -169,8 +169,8 @@
             <tbody>
                 <tr *ngFor="let row of monitringDayData; index as i">
                     <td style="text-align:center">{{row.daynumber}}</td>
-                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedtoday(row.ticketstobeopenedtoday)">{{row.noofticketstobeopenedtoday}}</button></td>
-                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtoday(row.ticketsopenedtoday)">{{row.noofticketsopenedtoday}}</button></td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketstobeopenedtoday(row.ticketstobeopenedtoday,row.daynumber)">{{row.noofticketstobeopenedtoday}}</button></td>
+                    <td style="text-align:center"><button class="btn btn-success badge bg-green" (click)="noofticketsopenedtoday(row.ticketsopenedtoday,row.daynumber)">{{row.noofticketsopenedtoday}}</button></td>
                 </tr>
             </tbody>
         </table>
@@ -184,8 +184,8 @@
                     <th style="text-align:center">Global Rule ID</th>
                     <th style="text-align:center">Contraente</th>
                     <th style="text-align:center">Contratto</th>
-                    <th style="text-align:center">Global Rule</th>
                     <th style="text-align:center">Unità Organizzativa</th>
+                    <th style="text-align:center">KPI</th>
                 </tr>
             </thead>
             <tbody>
@@ -193,8 +193,8 @@
                     <td style="text-align:center">{{row.globalruleid}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
                     <td style="text-align:center">{{row.contractname}}</td>
-                    <td style="text-align:center">{{row.globalrulename}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
                 </tr>
             </tbody>
         </table>
@@ -209,8 +209,8 @@
                     <th style="text-align:center">Global Rule ID</th>
                     <th style="text-align:center">Contraente</th>
                     <th style="text-align:center">Contratto</th>
-                    <th style="text-align:center">Global Rule</th>
                     <th style="text-align:center">Unità Organizzativa</th>
+                    <th style="text-align:center">KPI</th>
                 </tr>
             </thead>
             <tbody>
@@ -218,8 +218,8 @@
                     <td style="text-align:center">{{row.globalruleid}}</td>
                     <td style="text-align:center">{{row.contractpartyname}}</td>
                     <td style="text-align:center">{{row.contractname}}</td>
-                    <td style="text-align:center">{{row.globalrulename}}</td>
                     <td style="text-align:center">{{row.organizationunitname}}</td>
+                    <td style="text-align:center">{{row.globalrulename}}</td>
                 </tr>
             </tbody>
         </table>
