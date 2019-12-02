@@ -2697,7 +2697,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.Database.OpenConnection();
                 var configExists = command.ExecuteReader();
                 configExists.Read();
-                workflow_day = configExists.GetInt32(configExists.GetOrdinal("workflow_day"));
+                if (configExists != null && configExists.HasRows)
+                {
+                    workflow_day = configExists.GetInt32(configExists.GetOrdinal("workflow_day"));
+                }
             }
             return workflow_day;
         }
