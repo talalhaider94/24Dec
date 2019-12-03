@@ -25,13 +25,13 @@ namespace Quantis.WorkFlow.APIBase.API
         public List<MonitoringDTO> GetTicketsMonitoringByPeriod(string period)
         {
             var periodDate=new DateTime(int.Parse(period.Split('/')[1]), int.Parse(period.Split('/')[0]), 1);
-            string query = @"select r.rule_name,ck.global_rule_id_bsi,m.sla_id,m.sla_name,c.customer_id,c.customer_name,CAST (ck.organization_unit AS INTEGER) as organization_unit_id,ou.organization_unit,ck.day_workflow,ck.month
+            string query = @"select r.rule_name,ck.global_rule_id_bsi,m.sla_id,m.sla_name,c.customer_id,c.customer_name,CASE WHEN ck.organization_unit='' THEN null ELSE CAST (ck.organization_unit AS INTEGER) END as organization_unit_id, ou.organization_unit,ck.day_workflow,ck.month
                             from t_catalog_kpis ck
                             left join t_rules r on r.global_rule_id=ck.global_rule_id_bsi
                             left join t_sla_versions s on r.sla_version_id = s.sla_version_id 
                             left join t_slas m on m.sla_id = s.sla_id
                             left join t_customers c on m.customer_id=c.customer_id
-                            left join t_organization_units ou on CAST (ck.organization_unit AS INTEGER)=ou.id
+                            left join t_organization_units ou on CASE WHEN ck.organization_unit='' THEN null ELSE CAST (ck.organization_unit AS INTEGER) END=ou.id
                             where s.sla_status = 'EFFECTIVE' AND m.sla_status = 'EFFECTIVE'
                             and ck.month is not null
                             and ck.enable=true
