@@ -184,7 +184,7 @@ export class StatoDayComponent implements OnInit {
     // }
 
     GetAllOrganizationUnits() {
-        this.apiService.GetMonitoringDay().subscribe((data) => {
+        this.apiService.GetMonitoringDay(this.month,this.year).subscribe((data) => {
             this.organizationsData = data;
             console.log('Day Monitoring Data -> ',data);
             this.rerender();
