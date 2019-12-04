@@ -8,6 +8,6 @@ namespace Quantis.WorkFlow.Services.API
     public interface IMonitoringService
     {
         List<MonitoringDTO> GetTicketsMonitoringByPeriod(string period);
-        List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring();
+        List<MonitoringDayLevelDTO> GetDayLevelTicketsMonitoring(string period);
     }
 }

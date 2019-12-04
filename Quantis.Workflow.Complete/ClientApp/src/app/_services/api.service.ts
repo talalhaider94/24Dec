@@ -407,8 +407,8 @@ export class ApiService {
         const getMonitoring = `${environment.API_URL}/monitoring/GetTicketsMonitoringByPeriod?period=${month}/${year}`;
         return this.http.get(getMonitoring);
     }
-    GetMonitoringDay(): Observable<any> {
-        const getDayLevelMonitoring = `${environment.API_URL}/monitoring/GetDayLevelTicketsMonitoring`;
+  GetMonitoringDay(month, year): Observable<any> {
+    const getDayLevelMonitoring = `${environment.API_URL}/monitoring/GetDayLevelTicketsMonitoring?period=${month}/${year}`;
         return this.http.get(getDayLevelMonitoring);
     }
     DeleteOrganizationUnit(id): Observable<any> {

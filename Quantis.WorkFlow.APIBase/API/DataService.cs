@@ -1507,7 +1507,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         "left join t_customers c2 on c2.customer_id = ck.secondary_contract_party " +
                         "left join t_slas s on s.sla_id = ck.sla_id_bsi ) temp " +
                         "left join t_catalog_users u on " +
-                        "(u.userid LIKE ('%\\' || split_part(temp.referent, '$', 1))  " +
+                        "(u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 1) = '' then 'a' else split_part(temp.referent, '$', 1)end)  " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 1)) " +
                         "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 2) = '' then 'a' else split_part(temp.referent, '$', 2)end) " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 2)) " +
@@ -1542,7 +1542,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         "left join t_customers c2 on c2.customer_id = ck.secondary_contract_party " +
                         "left join t_slas s on s.sla_id = ck.sla_id_bsi ) temp " +
                         "left join t_catalog_users u on " +
-                        "(u.userid LIKE ('%\\' || split_part(temp.referent, '$', 1))  " +
+                        "(u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 1) = '' then 'a' else split_part(temp.referent, '$', 1)end)  " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 1)) " +
                         "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 2) = '' then 'a' else split_part(temp.referent, '$', 2)end) " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 2)) " +
@@ -1572,7 +1572,7 @@ namespace Quantis.WorkFlow.APIBase.API
                         "left join(select id_form, max(time_stamp) as latest_modified_date from t_form_logs group by id_form) fl on f.form_id = fl.id_form " +
                         "where f.form_id is not null ) temp " +
                         "left join t_catalog_users u on " +
-                        "(u.userid LIKE ('%\\' || split_part(temp.referent, '$', 1))  " +
+                        "(u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 1) = '' then 'a' else split_part(temp.referent, '$', 1)end)  " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 1)) " +
                         "OR u.userid LIKE ('%\\' || case when split_part(temp.referent, '$', 2) = '' then 'a' else split_part(temp.referent, '$', 2)end) " +
                         "OR u.userid LIKE ('%/' || split_part(temp.referent, '$', 2)) " +
@@ -2697,7 +2697,10 @@ namespace Quantis.WorkFlow.APIBase.API
                 _dbcontext.Database.OpenConnection();
                 var configExists = command.ExecuteReader();
                 configExists.Read();
-                workflow_day = configExists.GetInt32(configExists.GetOrdinal("workflow_day"));
+                if (configExists != null && configExists.HasRows)
+                {
+                    workflow_day = configExists.GetInt32(configExists.GetOrdinal("workflow_day"));
+                }
             }
             return workflow_day;
         }

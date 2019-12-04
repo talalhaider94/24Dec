@@ -747,7 +747,7 @@ namespace Quantis.WorkFlow.APIBase.API
             var res = new List<OrganizationUnitDTO> ();
             string query = @"select ou.id, ou.organization_unit, workflow_day, cutoff_day, org.sla_id from (select  distinct organization_unit::integer, sla_id from t_catalog_kpis
                             left join t_global_rules on global_rule_id_bsi = global_rule_id
-                            where sla_id = :contractid and organization_unit is not null
+                            where sla_id = :contractid and organization_unit is not null and organization_unit != ''
                             ) org 
 							left join t_organization_unit_workflow ow
 	                        on (ow.sla_id = org.sla_id and org.organization_unit::integer = organization_unit_id)
