@@ -5,7 +5,6 @@ import { DateTimeService, WidgetHelpersService, chartExportTranslations, exportC
 import { mergeMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as Highcharts from 'highcharts';
-import HC_exporting from 'highcharts/modules/exporting';
 import offline from 'highcharts/modules/offline-exporting'
 offline(Highcharts);
 @Component({
@@ -167,6 +166,7 @@ export class BarchartComponent implements OnInit {
             }
             // popular chart data
             if (getWidgetIndex) {
+                debugger
                 const chartIndexData = getWidgetIndex.body;
                 // third params is current widgets settings current only used when
                 // widgets loads first time. may update later for more use cases
@@ -235,6 +235,8 @@ export class BarchartComponent implements OnInit {
                 }
             }
         }
+        debugger
+        //chartIndexData = this.dateTime.sortDate(chartIndexData.daterange)
         let allLabels = chartIndexData.map(label => label.xvalue);
         let allData = chartIndexData.map(data => data.yvalue);
         if (chartIndexData.length) {
