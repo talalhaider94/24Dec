@@ -11,7 +11,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         public DistributionByVerificaController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
-            _globalfilterService = globalfilterService;
+            _globalfilterService = globalfilterService;            _
             _widgetService = widgetService;
         }
 
@@ -19,6 +19,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         {
             vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();
             vm.ShowDateRangeFilter = true;
+            vm.ShowPropertyTab = false;
         }
 
         internal override object GetData(WidgetParametersDTO props)
