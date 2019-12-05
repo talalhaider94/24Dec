@@ -19,6 +19,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
         {
             vm.DefaultDateRange = _globalfilterService.GetDefualtDateRange();
             vm.ShowDateRangeFilter = true;
+            vm.ShowDateType = true;
             vm.ShowPropertyTab = false;
         }
 
