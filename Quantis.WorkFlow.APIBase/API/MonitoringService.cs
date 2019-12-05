@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Quantis.WorkFlow.APIBase.Framework;
@@ -219,5 +220,22 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
             }
         }
+
+        public DataTable ExecuteLocalDatabase(ExecuteLocalDatabaseDTO dto)
+        {
+            using (var con = new NpgsqlConnection(_configuration.GetConnectionString("DataAccessPostgreSqlProvider")))
+            {
+                con.Open();
+                var command = new NpgsqlCommand(dto.Query, con);
+                command.CommandType = CommandType.Text;
+                _dbcontext.Database.OpenConnection();
+                var result = command.ExecuteReader();
+                DataTable myTable = new DataTable();
+                myTable.Load(result);
+                return myTable;
+            }
+        }
+
+
     }
 }

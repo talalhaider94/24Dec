@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +40,11 @@ namespace Quantis.Workflow.Complete.Controllers
                 period = DateTime.Now.AddMonths(-1).ToString("MM/yyyy");
             }
             return _monitoringAPI.GetDayLevelTicketsMonitoring(period);
+        }
+        [HttpPost("ExecuteLocalDatabase")]
+        public DataTable ExecuteLocalDatabase([FromBody]ExecuteLocalDatabaseDTO dto)
+        {
+            return _monitoringAPI.ExecuteLocalDatabase(dto);
         }
     }
 }
