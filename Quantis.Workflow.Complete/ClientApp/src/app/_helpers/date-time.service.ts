@@ -42,6 +42,13 @@ export class DateTimeService {
     }
   }
 
+  sortDate(daterange){
+    if(daterange.length == 0){
+      return ''
+    }
+    return daterange.sort((a,b) => this.moment(a).format('DDMMYYYY') - this.moment(b).format('DDMMYYYY'))
+  }
+
   buildRangeDate(dateRange) {
     if(Array.isArray(dateRange)) {
       console.log('buildRangeDate if', dateRange);

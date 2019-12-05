@@ -38,7 +38,7 @@
                 <perfect-scrollbar style="max-height: 500px;">
 
                     <ul class="users-list permissions-list1">
-                        <h5 *ngIf="loading.roles" class="text-center text-primary loader">
+                        <h5 *ngIf="loading.roles" class="text-center text-primary loader" style="color:#eedc00 !important">
                             <span class="fa fa-spinner text-primary fa-spin fa-3x"></span><br /> Caricamento..
                         </h5>
                         <li [ngClass]="{'0':'redClr', '1':'orangeClr', '2':'greenClr'}[perm.code]" *ngFor="let perm of permissionsData | filter : filters.searchPermissionsText; index as i">
