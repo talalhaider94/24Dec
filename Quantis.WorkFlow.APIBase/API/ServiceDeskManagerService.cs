@@ -376,6 +376,8 @@ namespace Quantis.WorkFlow.APIBase.API
                             entity.exception_text += ">>>>>>" + inner_exception.Message;
                             inner_exception = inner_exception.InnerException;
                         }
+                        _dbcontext.SDMTicketExceptions.Add(entity);
+                        _dbcontext.SaveChanges();
 
                     }
                 }
