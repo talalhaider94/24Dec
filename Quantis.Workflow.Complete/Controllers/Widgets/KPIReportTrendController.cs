@@ -34,7 +34,13 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         internal override object GetData(WidgetParametersDTO props)
         {
+            
             var dto = _globalfilterService.MapAggOptionWidget(props);
+            //TODO: temp check
+            if(dto.KPI== 106227)
+            {
+                dto.KPI = 50085;
+            }
             if (dto.IncompletePeriod && dto.DateRange.Item2.Year == DateTime.Now.Year &&
                 dto.DateRange.Item2.Month == DateTime.Now.Month)
             {
