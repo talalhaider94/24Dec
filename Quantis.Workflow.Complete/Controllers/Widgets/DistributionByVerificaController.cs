@@ -11,7 +11,7 @@ namespace Quantis.Workflow.Complete.Controllers.Widgets
 
         public DistributionByVerificaController(IGlobalFilterService globalfilterService, IWidgetService widgetService)
         {
-            _globalfilterService = globalfilterService;            _
+            _globalfilterService = globalfilterService;
             _widgetService = widgetService;
         }
 
