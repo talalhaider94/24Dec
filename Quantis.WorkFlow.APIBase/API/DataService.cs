@@ -2012,7 +2012,8 @@ namespace Quantis.WorkFlow.APIBase.API
             string query = @"select time_stamp,service_level_target,provided_ce from t_psl_0_day
                             where global_rule_id =:global_rule_id
                             and TRUNC(begin_time_stamp) >= TO_DATE(:start_period,'yyyy-mm-dd')
-                            and TRUNC(time_stamp) <= TO_DATE(:end_period,'yyyy-mm-dd')";
+                            and TRUNC(time_stamp) <= TO_DATE(:end_period,'yyyy-mm-dd')
+                            and complete_record=1";
             using (OracleConnection con = new OracleConnection(_connectionstring))
             {
                 using (OracleCommand cmd = con.CreateCommand())
