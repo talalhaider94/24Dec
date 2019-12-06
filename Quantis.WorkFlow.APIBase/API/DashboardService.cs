@@ -282,6 +282,13 @@ namespace Quantis.WorkFlow.APIBase.API
                 }
                 _dbcontext.SaveChanges();
             }
+            if (dtos.Any())
+            {
+                var dashboardId=_dbcontext.DB_DashboardWidgets.FirstOrDefault(o => o.Id == dtos.FirstOrDefault().Id).DashboardId;
+                var dashboard=_dbcontext.DB_Dashboards.FirstOrDefault(o => o.Id == dashboardId);
+                dashboard.ModifiedOn = DateTime.Now;
+                _dbcontext.SaveChanges();
+            }
         }
     }
 }
