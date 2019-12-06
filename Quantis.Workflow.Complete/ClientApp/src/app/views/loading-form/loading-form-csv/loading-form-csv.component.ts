@@ -163,7 +163,7 @@ export class LoadingFormCsvComponent implements OnInit, OnDestroy {
             if (moment(date).isSame(moment('0001-01-01T00:00:00'))) {
                 return 'Nessun caricamento';
             } else {
-                return moment(date).format('DD/MM/YYYY, h:mm a');
+                return moment(date).format('YYYY/MM/DD HH:mm:ss');
             }
         } else {
             return 'N/A';
