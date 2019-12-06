@@ -87,10 +87,10 @@ export class LoadingFormSecurityUserComponent implements OnInit, OnDestroy {
 
     formatInputDate(date) {
         if (date) {
-            if (moment(date).isSame(moment('01/01/0001, 12:00 AM'))) {
+            if (moment(date).isSame(moment('0001/01/01, 00:00:00'))) {
                 return 'Nessun caricamento';
             } else {
-                return moment(date).format('DD/MM/YYYY, h:mm a');
+              return moment(date).format('YYYY/MM/DD, HH:mm:ss');
             }
         } else {
             return 'N/A';
