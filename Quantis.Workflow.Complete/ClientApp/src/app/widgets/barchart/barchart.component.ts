@@ -205,6 +205,11 @@ export class BarchartComponent implements OnInit {
     // dashboardComponentData is result of data coming from
     // posting data to parameters widget
     updateChart(chartIndexData, dashboardComponentData, currentWidgetComponentData) {
+        debugger
+        //In case of anuual chartIndexData value = "[{"xvalue":"18","yvalue":174,"description":null},{"xvalue":"19","yvalue":109,"description":null}]"
+        // (DO NOT USE IT) JUST FOR DEMO
+        //In case of perios ChartIndexData value = "[{"xvalue":"01/19","yvalue":57,"description":null},{"xvalue":"02/19","yvalue":51,"description":null},{"xvalue":"03/19","yvalue":1,"description":null},{"xvalue":"10/18","yvalue":61,"description":null},{"xvalue":"11/18","yvalue":56,"description":null},{"xvalue":"12/18","yvalue":57,"description":null}]"
+        // (DO NOT USE IT) JUST FOR DEMO
         let label = 'Series';
         if (dashboardComponentData) {
             let measureIndex = dashboardComponentData.barChartWidgetParameterValues.Properties.measure;
@@ -235,8 +240,9 @@ export class BarchartComponent implements OnInit {
                 }
             }
         }
+        
+        chartIndexData = this.dateTime.sortDate(chartIndexData);
         debugger
-        //chartIndexData = this.dateTime.sortDate(chartIndexData.daterange)
         let allLabels = chartIndexData.map(label => label.xvalue);
         let allData = chartIndexData.map(data => data.yvalue);
         if (chartIndexData.length) {

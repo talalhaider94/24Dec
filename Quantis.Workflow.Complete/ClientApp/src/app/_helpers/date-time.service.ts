@@ -42,11 +42,11 @@ export class DateTimeService {
     }
   }
 
-  sortDate(daterange){
-    if(daterange.length == 0){
-      return ''
+  sortDate(data){
+    if(data && data.length === 0){
+      return [];
     }
-    return daterange.sort((a,b) => this.moment(a).format('DDMMYYYY') - this.moment(b).format('DDMMYYYY'))
+    return data.sort((a,b) => this.moment(a.xvalue).format('DDMMYYYY') - this.moment(b.xvalue).format('DDMMYYYY'))
   }
 
   buildRangeDate(dateRange) {
@@ -67,9 +67,10 @@ export class DateTimeService {
     let startDate;
     let endDate;
     endDate = moment().format('MM/YYYY');
-    if(!incompletePeriod && isKpiReportTrend){
+    //WE DON'T WANT TO DEDUCT FROM CURRENT MONTH BECAUSE OF TICKET #598
+    /* if(!incompletePeriod && isKpiReportTrend){
       endDate = moment().subtract(1, 'months').format('MM/YYYY');
-    }
+    } */
     if(rangeType === '2') {
       startDate = moment().subtract(2, 'months').format('MM/YYYY');
     } else if(rangeType === '3') {
