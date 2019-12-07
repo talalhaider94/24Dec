@@ -73,7 +73,7 @@
         <div class="p-3">
           <h6>Home Page</h6>
           <p>Selezionare la Dashboard da visualizzare dopo il login.</p>
-          <a class="text-dark" routerLink='/dashboard/about'><strong>Page version</strong></a>
+          <a class="text-dark" routerLink='/dashboard/about' *ngIf='showAboutPage'><strong>Page version</strong></a>
           <p *ngIf="loadingDashboard" class="text-center">
             <i class="fa fa-spin fa-spinner text-info fa-2x"></i>
           </p>

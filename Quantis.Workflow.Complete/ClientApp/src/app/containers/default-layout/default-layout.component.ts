@@ -29,6 +29,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
     dashboardCollection: DashboardModel[];
     public showLandingPage: any;
     showPowerBI=0;
+    public showAboutPage: boolean = false;
 
     constructor(
         private toastr: ToastrService,
@@ -39,7 +40,7 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
         @Inject(DOCUMENT) _document?: any,
     ) {
         this.currentUser = this.authService.getUser();
-
+        debugger
         this.filterMenuByPermission(navItems, this.currentUser.permissions, this.permittedMenuItems);
         this.navItems = this.permittedMenuItems;
 
@@ -84,6 +85,9 @@ export class DefaultLayoutComponent implements OnDestroy, OnInit {
             this.showLandingPage = data.showlandingpage;
             //console.log("Landing Page Info -> ",data.showlandingpage);
         });
+
+        // if user is admin and can see about link
+        this.showAboutPage = this.authService.checkIfPermissionKeyExists('VIEW_ADMIN_PAGE_VERSION');
     }
 
     ngOnDestroy(): void {

@@ -122,4 +122,24 @@ export class AuthService {
                 return data;
             }))
     }
+
+    getUserPermissions() {
+        const loggedInUser = this.currentUserValue || this.getUser();
+        let permissionsArray = [];
+        if(loggedInUser) {
+            permissionsArray = loggedInUser.permissions;
+        }
+        return permissionsArray;
+
+    }
+
+    checkIfPermissionKeyExists(key: string): boolean {
+        let permission = false;
+        const userPermissions = this.getUserPermissions();
+        if(userPermissions && userPermissions.length) {
+            const formPermission = userPermissions.find(permission => permission === key);
+            permission = formPermission ? true : false;
+        }
+        return permission;
+    }
 }
