@@ -5,7 +5,8 @@ import { chartExportTranslations,
     exportChartButton, 
     formatDataLabelForNegativeValues,
     getDistinctArray,
-    updateChartLabelStyle } from '../../../_helpers';
+    updateChartLabelStyle,
+DateTimeService } from '../../../_helpers';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -144,6 +145,7 @@ export class BSIReportComponent implements OnInit {
     constructor(
         private apiService: ApiService,
         private $toastr: ToastrService,
+        private _dateTimeHelper: DateTimeService
     ) {
         $this = this;
     }
@@ -333,9 +335,9 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getAllNormalReports().subscribe((data) => {
             this.AllNormalReportsData = data;
             this.OrignalNormalReportData = data;
-            console.log('AllNormalReportsData -> ', data);
-            // pushing foldername to dropdown
             data.forEach( (element) => {
+                // cartellaList is the dropdown on top of table 
+                // to filter out the reports result base on dropdown selection
                 if(this.cartellaList.indexOf(element.foldername) == -1){
                   this.cartellaList.push(element.foldername);
                 }
@@ -358,25 +360,19 @@ export class BSIReportComponent implements OnInit {
         this.apiService.getReportDetails(reportId).subscribe((data) => {
             this.loading = false;
             this.bsiChartModal.show();
-            //for(let i=0; i<data.reports.length; i++){
-                this.reportsDataLength = data.reports.length;
-                this.ReportData = data;
-                //console.log('this.reportsDataLength -> ',this.reportsDataLength);
-                if(this.reportsDataLength==1){
-                    this.ReportDetailsData = data.reports[0];
-                    this.getPeriod();
-                    this.showHighChartsData(data);
-                }else if(this.reportsDataLength>1){
-                    this.ReportDetailsData = data.reports[0];
-                    this.ReportDetailsData1 = data.reports[1];
-                    this.getPeriod();
-                    this.showHighChartsData(data);
-                    this.showHighChartsData2(data);
-                }else{
-
-                }
-           // }
-            console.log('ReportDetailsData -> ', this.ReportDetailsData);
+            this.reportsDataLength = data.reports.length;
+            this.ReportData = data;
+            if(this.reportsDataLength==1){
+                this.ReportDetailsData = data.reports[0];
+                this.getPeriod();
+                this.showHighChartsData(data);
+            }else if(this.reportsDataLength>1){
+                this.ReportDetailsData = data.reports[0];
+                this.ReportDetailsData1 = data.reports[1];
+                this.getPeriod();
+                this.showHighChartsData(data);
+                this.showHighChartsData2(data);
+            }
         }, error => {
             console.error('getReportDetails', error);
             this.loading = false;
@@ -386,23 +382,26 @@ export class BSIReportComponent implements OnInit {
 
     getPeriod(){
         this.months.length = 0;
+        const {months, fromMonth, toMonth, fromYear, toYear} = this._dateTimeHelper.periodWithFalseIncompletePeriod(this.ReportDetailsData.fromdate, this.ReportDetailsData.todate, this.ReportDetailsData.incomplete)
+        this.months = months;
+        // if(this.ReportDetailsData.incomplete === null){
+        //     var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+        //     var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY').subtract(1, 'months');
+        // }
 
-        var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
-        var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+        // var fromMonth = fromCheck.format('M');
+        // var fromYear  = fromCheck.format('YYYY');
 
-        var fromMonth = fromCheck.format('M');
-        var fromYear  = fromCheck.format('YYYY');
+        // var toMonth = toCheck.format('M');
+        // var toYear  = toCheck.format('YYYY');
 
-        var toMonth = toCheck.format('M');
-        var toYear  = toCheck.format('YYYY');
+        // while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+        //     let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+        //     this.months.push(monthyear);
+        //     fromCheck.add(1,'month');
+        // }
 
-        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
-            let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
-            this.months.push(monthyear);
-            fromCheck.add(1,'month');
-        }
-
-        console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
+        // console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
         //console.log('Months -> ',this.months);
     }
 
@@ -530,16 +529,14 @@ export class BSIReportComponent implements OnInit {
         let minorData = chartArray.filter(data => (data.zvalue === 'Minor' || data.zvalue === 'Minore'));
         let criticalData = chartArray.filter(data => (data.zvalue === 'Critical' || data.zvalue === 'Critica'));
         let allChartLabels = getDistinctArray(chartArray.map(label => label.xvalue));
-        /* allChartLabels.push('01/2018');
-        allChartLabels.push('02/2018'); */
+       
         let allViolationData = violationData.map(data => data.yvalue);
         let allCompliantData = compliantData.map(data => data.yvalue);
-        /* allCompliantData.push(0);
-        allCompliantData.push(-999); */
+        
         let allTargetData = targetData.map(data => data.yvalue);
         let allMinorData = minorData.map(data => data.yvalue);
         let allCriticalData = criticalData.map(data => data.yvalue);
-        // debugger
+
         this.chartOptions.xAxis = {
             type: 'date',
             categories: allChartLabels,
@@ -630,13 +627,7 @@ export class BSIReportComponent implements OnInit {
             enabled:true,
             crosshairs:true,
             formatter: function () {
-                // var symbol = '●';
-                // return '<span style="color:' + this.series.color + '">' + symbol + '</span>' + ' ' 
-                // + this.series.name + '<br>'
-                // + 'y: <b>' + this.y + '</b>';
-
-                return this.series.name + '<br>'
-                + 'y: <b>' + this.y + '</b>';
+                return this.series.name + '<br>' + 'y: <b>' + this.y + '</b>';
             }
         }
         this.chartOptions2.xAxis = {
@@ -711,32 +702,26 @@ export class BSIReportComponent implements OnInit {
     public chartClicked(): void {
         this.months.length = 0;
         this.isLoadedDati2 = 0;
+        const {months, fromMonth, toMonth, fromYear, toYear} = this._dateTimeHelper.periodWithFalseIncompletePeriod(this.ReportDetailsData.fromdate, this.ReportDetailsData.todate, this.ReportDetailsData.incomplete)
+        this.months = months;
+        // var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
+        // var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
 
-        var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
-        var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
+        // var fromMonth = fromCheck.format('M');
+        // var fromYear  = fromCheck.format('YYYY');
 
-        var fromMonth = fromCheck.format('M');
-        var fromYear  = fromCheck.format('YYYY');
+        // var toMonth = toCheck.format('M');
+        // var toYear  = toCheck.format('YYYY');
 
-        var toMonth = toCheck.format('M');
-        var toYear  = toCheck.format('YYYY');
+        // this.selectedmonth = toMonth;
+        // this.selectedyear = toYear;
 
-        this.selectedmonth = toMonth;
-        this.selectedyear = toYear;
-
-        this.to_year = toYear;
-
-        //console.log('months -> ',fromCheck,toCheck);
-
-        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
-            let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
-            this.months.push(monthyear);
-            fromCheck.add(1,'month');
-        }
-
-        // console.log('Chart Clicked -> ',this.ReportDetailsData.globalruleid, this.ReportDetailsData.fromdate,
-        // this.ReportDetailsData.todate);
-
+        // this.to_year = toYear;
+        // while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+        //     let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+        //     this.months.push(monthyear);
+        //     fromCheck.add(1,'month');
+        // }
         console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
         console.log('Months -> ',this.months);
 
@@ -746,32 +731,30 @@ export class BSIReportComponent implements OnInit {
     public chartClicked2(): void {
         this.months2.length = 0;
         this.isLoadedDati = 0;
-
+        const {months, fromMonth, toMonth, fromYear, toYear} = this._dateTimeHelper.periodWithFalseIncompletePeriod(this.ReportDetailsData.fromdate, this.ReportDetailsData.todate, this.ReportDetailsData.incomplete)
+        this.months2 = months;
         var fromCheck = moment(this.ReportDetailsData.fromdate, 'DD/MM/YYYY');
         var toCheck = moment(this.ReportDetailsData.todate, 'DD/MM/YYYY');
 
-        var fromMonth = fromCheck.format('M');
-        var fromYear  = fromCheck.format('YYYY');
+        // var fromMonth = fromCheck.format('M');
+        // var fromYear  = fromCheck.format('YYYY');
 
-        var toMonth = toCheck.format('M');
-        var toYear  = toCheck.format('YYYY');
+        // var toMonth = toCheck.format('M');
+        // var toYear  = toCheck.format('YYYY');
 
         this.selectedmonth = toMonth;
         this.selectedyear = toYear;
 
         this.to_year2 = toYear;
 
-        while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
-            let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
-            this.months2.push(monthyear);
-            fromCheck.add(1,'month');
-        }
+        // while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+        //     let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+        //     this.months2.push(monthyear);
+        //     fromCheck.add(1,'month');
+        // }
 
         console.log('From Date -> ',fromMonth,fromYear,' - To Date -> ',toMonth,toYear);
         console.log('Months -> ',this.months2);
-
-        // console.log('Chart Clicked2 -> ',this.ReportDetailsData);
-
         this.getdati2(toMonth,toYear);
     }
 

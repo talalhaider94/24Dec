@@ -100,4 +100,24 @@ export class DateTimeService {
     let stringDateRange = `${formatStartDate}-${formatEndDate}`;
     return stringDateRange;
   }
+  // using in BSI chart
+  periodWithFalseIncompletePeriod(fromDate, toDate, incompletePeriod){
+    let fromCheck = moment(fromDate, 'DD/MM/YYYY');
+    let toCheck = moment(toDate, 'DD/MM/YYYY');
+    let months = [];
+    if(!incompletePeriod){ 
+        toCheck = moment(toDate, 'DD/MM/YYYY').subtract(1, 'months');
+    }
+    let fromMonth = fromCheck.format('M');
+    let fromYear  = fromCheck.format('YYYY');
+    let toMonth = toCheck.format('M');
+    let toYear  = toCheck.format('YYYY');
+
+    while(toCheck > fromCheck || fromCheck.format('M') === toCheck.format('M')){
+        let monthyear = fromCheck.format('M') + '/' + fromCheck.format('YYYY');
+        months.push(monthyear);
+        fromCheck.add(1,'month');
+    }
+    return {months, fromMonth, toMonth, fromYear, toYear};
+  }
 }

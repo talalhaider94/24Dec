@@ -110,18 +110,17 @@
             </div><br>  
             <table id="classTable" class="table table-bordered  font-12" #table>
                   <thead class="thead-light2">
-                      <tr>
-                          <!-- <th style="text-align:center"></th> -->
-                          <th style="text-align:center">create date</th>
-                          <th style="text-align:center">modify date</th>
-                          <th style="text-align:center">raw data id</th>
-                          <th style="text-align:center" [hidden]="!showEventCol">event type</th>
-                          <th style="text-align:center">resource</th>
-                          <th style="text-align:center">time stamp</th>
-                          <th style="text-align:center">reader id</th>
-                          <th style="text-align:center">event state id</th>
-                          <th style="text-align:center">partner raw_data id</th>
-                          <th *ngFor="let key of countCampiData" style="text-align:center">campo {{key}}</th>
+                      <tr class="text-center">
+                          <th>create date</th>
+                          <th>modify date</th>
+                          <th>raw data id</th>
+                          <th [hidden]="!showEventCol">event type</th>
+                          <th>resource</th>
+                          <th>time stamp</th>
+                          <th>reader id</th>
+                          <th>event state id</th>
+                          <th>partner raw_data id</th>
+                          <th *ngFor="let key of countCampiData">campo {{key}}</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -130,19 +129,19 @@
                               Nessun dato per il periodo selezionato
                           </td>
                       </tr>
-                      <tr *ngFor="let rec of fitroDataById; index as i">
+                      <tr *ngFor="let rec of fitroDataById; index as i" class="text-center">
 
                           <!-- <td style="text-align:center"><button type="button" class="btn btn-primary" (click)="populateEditModal(rec)" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button></td> -->
-                          <td style="text-align:center">{{rec.create_date }}</td>
-                          <td style="text-align:center">{{rec.modify_date }}</td>
-                          <td style="text-align:center">{{rec.raw_data_id}}</td>
-                          <td style="text-align:center" [hidden]="!showEventCol">{{rec.event_type_id}}</td>
-                          <td style="text-align:center">{{rec.resource_id}}</td>
-                          <td style="text-align:center">{{rec.time_stamp }}</td>
-                          <td style="text-align:center">{{rec.reader_id}}</td>
-                          <td style="text-align:center">{{rec.event_state_id}}</td>
-                          <td style="text-align:center">{{rec.partner_raw_data_id}}</td>
-                          <td style="text-align:center" *ngFor="let key of rec.data | keysPipe"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
+                          <td>{{rec.create_date }}</td>
+                          <td>{{rec.modify_date }}</td>
+                          <td>{{rec.raw_data_id}}</td>
+                          <td [hidden]="!showEventCol">{{rec.event_type_id}}</td>
+                          <td>{{rec.resource_id}}</td>
+                          <td>{{rec.time_stamp }}</td>
+                          <td>{{rec.reader_id}}</td>
+                          <td>{{rec.event_state_id}}</td>
+                          <td>{{rec.partner_raw_data_id}}</td>
+                          <td *ngFor="let key of rec.data | keysPipe"><span *ngIf="rec.data[key] !== '##empty##'"><b>{{key}} :</b> {{rec.data[key] }}</span></td>
                       </tr>
                   </tbody>
               </table>
