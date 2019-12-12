@@ -20,7 +20,7 @@ import { DataTableDirective } from 'angular-datatables';
     templateUrl: 'landing-page-details.component.html',
     styleUrls: ['landing-page-details.component.scss'],
     providers:[GlobalVarsService]
-
+  
 })
 export class LandingPageDetailsComponent implements OnInit {
     @ViewChild('thresholdModal') public thresholdModal: ModalDirective;

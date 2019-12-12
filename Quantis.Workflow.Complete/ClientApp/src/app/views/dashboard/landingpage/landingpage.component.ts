@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { GlobalVarsService } from '../../../_services/global-vars.service';
 import { forEach } from '@angular/router/src/utils/collection';
-
+  
 @Component({
     templateUrl: 'landingpage.component.html',
     styleUrls: ['landingpage.component.scss'],
